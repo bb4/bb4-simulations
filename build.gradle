@@ -1,4 +1,4 @@
-//  Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT  
+//  Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 description = 'A collection of java simulations.'
 group = 'com.barrybecker4'
@@ -187,7 +187,7 @@ uploadArchives {
             //http://stackoverflow.com/questions/7826652/how-to-upload-an-existing-collection-of-3rd-party-jars-to-a-maven-server-in-grad
             //http://www.gradle.org/docs/current/userguide/userguide_single.html#sub:multiple_artifacts_per_project
 
-            addFilter('bb4-game-common') {artifact, file ->
+            addFilter('bb4-simulation') {artifact, file ->
                 artifact.name == 'bb4-simulation'
             }
             addFilter('bb4-dice') {artifact, file ->

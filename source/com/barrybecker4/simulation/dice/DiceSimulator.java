@@ -1,11 +1,15 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.dice;
 
+import com.barrybecker4.common.app.AppContext;
 import com.barrybecker4.common.format.IntegerFormatter;
 import com.barrybecker4.common.math.function.LinearFunction;
 import com.barrybecker4.simulation.common.ui.DistributionSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.renderers.HistogramRenderer;
+import com.barrybecker4.ui.util.Log;
+
+import java.util.Arrays;
 
 /**
  * Simulates the rolling of N number of M sided dice lots of times
@@ -21,6 +25,7 @@ public class DiceSimulator extends DistributionSimulator {
 
     public DiceSimulator() {
         super("Dice Histogram");
+        AppContext.initialize("ENGLISH", Arrays.asList("com.barrybecker4.ui.message"), new Log());
         initHistogram();
     }
 
