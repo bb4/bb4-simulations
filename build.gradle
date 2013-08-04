@@ -70,6 +70,13 @@ task runTrebuchet(type: JavaExec, depends: classes) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runVerhulst(type: JavaExec, depends: classes) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.verhulst.VerhulstSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
 dependencies {
    compile 'com.barrybecker4:bb4-sound:1.1.2-SNAPSHOT'
    compile 'com.barrybecker4:bb4-optimization:1.1.2-SNAPSHOT'

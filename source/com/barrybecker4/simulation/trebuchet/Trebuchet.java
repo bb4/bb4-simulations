@@ -41,7 +41,6 @@ public class Trebuchet {
     protected static final Vector2d GRAVITY_VEC = new Vector2d(0, GRAVITY);
     protected static final double MAX_LEVER_ANGLE = PI - 0.1;
 
-
     // the parts
     private Base base_;
     private Lever lever_;
@@ -51,27 +50,26 @@ public class Trebuchet {
 
     private Vector2d forceFromHook_ = new Vector2d(0, 0);
 
-
     protected static final int NUM_PARTS = 5;
     private RenderablePart[] part_;
 
     // the time since the start of the simulation
     private static ILog logger_ = null;
 
-    // tweekable rendering parameters
+    // tweakable rendering parameters
     private boolean showVelocityVectors_ = false;
     private boolean showForceVectors_ = false;
-
 
     // scales the geometry of the trebuchet
     private double scale_ = SCALE;
 
 
-    //Constructor
-    // use a harcoded static data interface to initialize
-    // so it can be easily run in an applet without using resources.
-    public Trebuchet()
-    {
+    /**
+     * Constructor
+     * use a hard-coded static data interface to initialize
+     * so it can be easily run in an applet without using resources.
+     */
+    public Trebuchet(){
         commonInit();
     }
 
@@ -80,8 +78,7 @@ public class Trebuchet {
         commonInit();
     }
 
-    private void commonInit()
-    {
+    private void commonInit() {
         logger_ = new Log();
 
         part_ = new RenderablePart[NUM_PARTS];
@@ -101,15 +98,12 @@ public class Trebuchet {
         part_[4] = projectile_;
     }
 
-
-
     /**
      * steps the simulation forward in time
      * if the timestep is too big inaccuracy and instability may result.
      * @return the new timestep
      */
-    public double stepForward( double timeStep )
-    {
+    public double stepForward( double timeStep ) {
         //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
 
         double angle = RenderablePart.getAngle();
@@ -192,9 +186,9 @@ public class Trebuchet {
     }
 
     /**
-     * got this from a physics text
+     * Got this from a physics text
      * I = LEVER_MASS / 3  (b^3 + c^3) + projectileMass/3 * r^2
-     * @return
+     * @return the calculated interia
      */
     private double calculateInertia() {
         return lever_.getInertia() + projectile_.getInertia(lever_.getFulcrumPosition());
@@ -202,35 +196,29 @@ public class Trebuchet {
 
 
 
-    // api for tweeking Trebuchet params ////////////////////////////////////////
+    // api for tweaking Trebuchet params ////////////////////////////////////////
 
-    public void setScale( double scale )
-    {
+    public void setScale( double scale ) {
         scale_ = scale;
     }
 
-    public double getScale()
-    {
+    public double getScale() {
         return scale_;
     }
 
-    public void setShowVelocityVectors( boolean show )
-    {
+    public void setShowVelocityVectors( boolean show ) {
         showVelocityVectors_ = show;
     }
 
-    public boolean getShowVelocityVectors()
-    {
+    public boolean getShowVelocityVectors() {
         return showVelocityVectors_;
     }
 
-    public void setShowForceVectors( boolean show )
-    {
+    public void setShowForceVectors( boolean show ){
         showForceVectors_ = show;
     }
 
-    public boolean getShowForceVectors()
-    {
+    public boolean getShowForceVectors() {
         return showForceVectors_;
     }
 
@@ -289,8 +277,7 @@ public class Trebuchet {
     /**
      * Render the Environment on the screen
      */
-    public void render( Graphics2D g )
-    {
+    public void render( Graphics2D g ) {
         int i;
 
         g.setColor( Color.black ); // default
