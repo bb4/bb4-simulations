@@ -27,9 +27,6 @@ import java.awt.event.MouseListener;
  */
 public class LiquidSimulator extends Simulator implements MouseListener {
 
-    private static final String FILE_NAME_BASE =
-            ANIMATION_FRAME_FILE_NAME_PREFIX + "liquid/liquidFrame";
-
     private LiquidEnvironment environment_;
     private EnvironmentRenderer envRenderer_;
 
@@ -149,10 +146,10 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     public void doOptimization() {
 
         Optimizer optimizer;
-        if (GUIUtil.hasBasicService())   // need to verify
+        if (GUIUtil.hasBasicService())
             optimizer = new Optimizer( this );
         else
-            optimizer = new Optimizer( this, FileUtil.PROJECT_HOME + "performance/liquid/liquid_optimization.txt" );
+            optimizer = new Optimizer( this, FileUtil.getHomeDir()+ "performance/liquid/liquid_optimization.txt" );
         Parameter[] params = new Parameter[3];
         ParameterArray paramArray = new NumericParameterArray( params );
 
@@ -189,7 +186,7 @@ public class LiquidSimulator extends Simulator implements MouseListener {
 
     @Override
     protected String getFileNameBase() {
-        return FILE_NAME_BASE;
+        return FileUtil.getHomeDir() + "temp/animations/simulation/" + "liquid/liquidFrame";
     }
 
     public void mouseClicked(MouseEvent e) {

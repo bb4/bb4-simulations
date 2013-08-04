@@ -90,10 +90,10 @@ public class TrebuchetSimulator extends NewtonianSimulator
     @Override
     public void doOptimization() {
         Optimizer optimizer;
-        if (GUIUtil.hasBasicService())   // need to verify
+        if (GUIUtil.hasBasicService())
             optimizer = new Optimizer( this );
         else
-            optimizer = new Optimizer( this, FileUtil.PROJECT_HOME +"performance/trebuchet/trebuchet_optimization.txt" );
+            optimizer = new Optimizer( this, FileUtil.getHomeDir() +"performance/trebuchet/trebuchet_optimization.txt" );
         Parameter[] params = new Parameter[NUM_PARAMS];
         //params[0] = new Parameter( WAVE_SPEED, 0.0001, 0.02, "wave speed" );
         //params[1] = new Parameter( WAVE_AMPLITUDE, 0.001, 0.2, "wave amplitude" );

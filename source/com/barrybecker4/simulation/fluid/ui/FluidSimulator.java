@@ -31,7 +31,6 @@ import java.awt.*;
 public class FluidSimulator extends Simulator {
 
     public static final String CONFIG_FILE = "com/barrybecker4/fluid/initialStateTest.data";
-    private static final String FILE_NAME_BASE = ANIMATION_FRAME_FILE_NAME_PREFIX + "fluid/fluidFrame";
 
     FluidEnvironment environment_;
     EnvironmentRenderer envRenderer_;
@@ -151,10 +150,10 @@ public class FluidSimulator extends Simulator {
     public void doOptimization() {
 
         Optimizer optimizer;
-        if (GUIUtil.hasBasicService())    // need to verify
+        if (GUIUtil.hasBasicService())
             optimizer = new Optimizer( this );
         else
-            optimizer = new Optimizer( this, FileUtil.PROJECT_HOME +"performance/fluid/fluid_optimization.txt" );
+            optimizer = new Optimizer( this, FileUtil.getHomeDir() +"performance/fluid/fluid_optimization.txt" );
         Parameter[] params = new Parameter[3];
         ParameterArray paramArray = new NumericParameterArray( params );
 
@@ -189,7 +188,7 @@ public class FluidSimulator extends Simulator {
 
     @Override
     protected String getFileNameBase() {
-        return FILE_NAME_BASE;
+        return FileUtil.getHomeDir() + "temp/animations/simulation/" + "fluid/fluidFrame";
     }
 
 }

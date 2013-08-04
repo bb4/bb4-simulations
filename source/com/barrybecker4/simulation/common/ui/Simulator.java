@@ -22,9 +22,6 @@ import java.awt.event.ActionListener;
 public abstract class Simulator extends AnimationComponent
                                 implements Optimizee {
 
-    protected static final String CONFIG_FILE_PATH_PREFIX = FileUtil.PROJECT_HOME + "source/com/barrybecker4/simulation/";
-    protected static final String ANIMATION_FRAME_FILE_NAME_PREFIX = FileUtil.PROJECT_HOME + "temp/animations/simulation/";
-
     protected SimulatorOptionsDialog optionsDialog_ = null;
     protected static JFrame frame_ = null;
 
@@ -108,8 +105,7 @@ public abstract class Simulator extends AnimationComponent
 
     @Override
     protected String getFileNameBase() {
-
-        return ANIMATION_FRAME_FILE_NAME_PREFIX + getClass().getName();
+        return FileUtil.getHomeDir() + "temp/animations/simulation/" + getClass().getName();
     }
 
     /**
