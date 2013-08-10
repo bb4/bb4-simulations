@@ -1,14 +1,16 @@
-//  Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 description = 'A collection of java simulations.'
 group = 'com.barrybecker4'
 version = '1.1.2-SNAPSHOT'
-
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
-
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
 
+dependencies {
+   compile 'com.barrybecker4:bb4-sound:1.1.2-SNAPSHOT'
+   compile 'com.barrybecker4:bb4-optimization:1.1.2-SNAPSHOT'
+}
 
 task runDice(type: JavaExec, depends: classes) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
@@ -76,11 +78,6 @@ task runVerhulst(type: JavaExec, depends: classes) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-
-dependencies {
-   compile 'com.barrybecker4:bb4-sound:1.1.2-SNAPSHOT'
-   compile 'com.barrybecker4:bb4-optimization:1.1.2-SNAPSHOT'
-}
 
 task simulationJar(type: Jar) {
     from sourceSets.main.output
@@ -161,81 +158,14 @@ task verhulstJar(type: Jar) {
     baseName = 'bb4-verhulst'
 }
 
-artifacts {
-    archives simulationJar
-    archives diceJar
-    archives fluidJar
-    archives fractalexplorerJar
-    archives habitatJar
-    archives henonexplorerJar
-    archives liquidJar
-    archives lsystemJar
-    archives predpreyJar
-    archives reactiondiffusionJar
-    archives snakeJar
-    archives stockJar
-    archives trebuchetJar
-    archives verhulstJar
-
-    archives sourcesJar
-    archives javadocJar
-}
-
 jar {
     // skip building the default jar that contains everything
     enabled = false
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            // Maven does allow more than one jar per pom file. Filter is used to make many artifacts.
-            // There may be a better way to do this. See
-            //http://stackoverflow.com/questions/7826652/how-to-upload-an-existing-collection-of-3rd-party-jars-to-a-maven-server-in-grad
-            //http://www.gradle.org/docs/current/userguide/userguide_single.html#sub:multiple_artifacts_per_project
+ext.jarTasks = [
+    simulationJar, diceJar, fluidJar, fractalexplorerJar, habitatJar, henonexplorerJar, liquidJar,
+    lsystemJar, predpreyJar, reactiondiffusionJar, snakeJar, stockJar, trebuchetJar, verhulstJar
+]
 
-            addFilter('bb4-simulation') {artifact, file ->
-                artifact.name == 'bb4-simulation'
-            }
-            addFilter('bb4-dice') {artifact, file ->
-                artifact.name == 'bb4-dice'
-            }
-            addFilter('bb4-fluid') {artifact, file ->
-                artifact.name == 'bb4-fluid'
-            }
-            addFilter('bb4-fractalexplorer') {artifact, file ->
-                artifact.name == 'bb4-fractalexplorer'
-            }
-            addFilter('bb4-habitat') {artifact, file ->
-                artifact.name == 'bb4-habitat'
-            }
-            addFilter('bb4-henonexplorer') {artifact, file ->
-                artifact.name == 'bb4-henonexplorer'
-            }
-            addFilter('bb4-liquid') {artifact, file ->
-                artifact.name == 'bb4-liquid'
-            }
-            addFilter('bb4-lsystem') {artifact, file ->
-                artifact.name == 'bb4-lsystem'
-            }
-            addFilter('bb4-predprey') {artifact, file ->
-                artifact.name == 'bb4-predprey'
-            }
-            addFilter('bb4-reactiondiffusion') {artifact, file ->
-                artifact.name == 'bb4-reactiondiffusion'
-            }
-            addFilter('bb4-snake') {artifact, file ->
-                artifact.name == 'bb4-snake'
-            }
-            addFilter('bb4-stock') {artifact, file ->
-                artifact.name == 'bb4-stock'
-            }
-            addFilter('bb4-trebuchet') {artifact, file ->
-                artifact.name == 'bb4-trebuchet'
-            }
-			addFilter('bb4-verhulst') {artifact, file ->
-                artifact.name == 'bb4-verhulst'
-            }
-        }
-    }
-}
+apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4-publish.gradle'
