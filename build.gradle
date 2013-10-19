@@ -12,67 +12,67 @@ dependencies {
    compile 'com.barrybecker4:bb4-optimization:1.2-SNAPSHOT'
 }
 
-task runDice(type: JavaExec, depends: classes) {
+task runDice(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.dice.DiceSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 // this version uses the main method instead of the framework.
-task runDice2(type: JavaExec, depends: classes) {
+task runDice2(type: JavaExec) {
     main = 'com.barrybecker4.simulation.dice.DiceSimulator'
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runFluid(type: JavaExec, depends: classes) {
+task runFluid(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fluid.ui.FluidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runSnake(type: JavaExec, depends: classes) {
+task runSnake(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.snake.SnakeSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runReactionDiffusion(type: JavaExec, depends: classes) {
+task runReactionDiffusion(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.reactiondiffusion.RDSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runFractalExplorer(type: JavaExec, depends: classes) {
+task runFractalExplorer(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fractalexplorer.FractalExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runHenonPhaseExplorer(type: JavaExec, depends: classes) {
+task runHenonPhaseExplorer(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.henonphase.HenonPhaseExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runLSystemExplorer(type: JavaExec, depends: classes) {
+task runLSystemExplorer(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.lsystem.LSystemExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runLiquid(type: JavaExec, depends: classes) {
+task runLiquid(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.liquid.LiquidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runTrebuchet(type: JavaExec, depends: classes) {
+task runTrebuchet(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.trebuchet.TrebuchetSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runVerhulst(type: JavaExec, depends: classes) {
+task runVerhulst(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.verhulst.VerhulstSimulator"]
     classpath = sourceSets.main.runtimeClasspath

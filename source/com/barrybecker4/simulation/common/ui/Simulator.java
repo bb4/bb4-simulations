@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.common.ui;
 
 import com.barrybecker4.common.format.FormatUtil;
 import com.barrybecker4.common.util.FileUtil;
-import com.barrybecker4.optimization.Optimizee;
+import com.barrybecker4.optimization.optimizee.Optimizee;
 import com.barrybecker4.optimization.parameter.ParameterArray;
 import com.barrybecker4.ui.animation.AnimationComponent;
 import com.barrybecker4.ui.components.GradientButton;
