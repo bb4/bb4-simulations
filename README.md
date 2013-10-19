@@ -18,7 +18,7 @@ Here are the simulations added so far (hopefully others will contribute more)
 
 ### [How to Build](https://github.com/barrybecker4/bb4-common/wiki/Building-bb4-Projects)
 
-If you have not already done so, first install [Git](http://git-scm.com/), [Gradle](http://www.gradle.org/), and [Intellij](http://www.jetbrains.com/idea/).
+If you have not already done so, first install [Git](http://git-scm.com/), and [Intellij](http://www.jetbrains.com/idea/).
 
 Type 'gradle build' at the root.
 If you want to open the source in Intellij, then first run 'gradle idea'.
