@@ -20,7 +20,7 @@ Here are the simulations added so far (hopefully others will contribute more)
 
 If you have not already done so, first install [Git](http://git-scm.com/), and [Intellij](http://www.jetbrains.com/idea/).
 
-Type 'gradle build' at the root.
+Type 'gradlew build' at the root (./gradlew if running in Cygwin).
 If you want to open the source in Intellij, then first run 'gradle idea'.
 Use gradle tasks to see all the different simulations that can be run using a command like 'gradle runSnake'
 
