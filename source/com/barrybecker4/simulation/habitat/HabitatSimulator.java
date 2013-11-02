@@ -4,16 +4,18 @@ package com.barrybecker4.simulation.habitat;
 import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.simulation.common.ui.Simulator;
+import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.graphing.GraphOptionsDialog;
 import com.barrybecker4.simulation.habitat.creatures.Populations;
 import com.barrybecker4.simulation.habitat.creatures.SerengetiPopulations;
 import com.barrybecker4.simulation.habitat.options.DynamicOptions;
-import com.barrybecker4.ui.animation.AnimationFrame;
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
+import com.barrybecker4.ui.util.GUIUtil;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Graphics;
 
 /**
  * Simulates foxes (predators) and rabbits (prey) in the wild.
@@ -78,7 +80,7 @@ public class HabitatSimulator extends Simulator {
 
     /**
      * Draw the population graph under the hab.
-     * @param g
+     * @param g java graphics context
      */
     @Override
     public void paint( Graphics g ) {
@@ -107,6 +109,6 @@ public class HabitatSimulator extends Simulator {
         final HabitatSimulator sim = new HabitatSimulator();
 
         sim.setPaused(true);
-        new AnimationFrame( sim );
+        GUIUtil.showApplet(new SimulatorApplet(sim));
     }
 }

@@ -3,7 +3,8 @@ package com.barrybecker4.simulation.common.rendering;
 
 import com.barrybecker4.ui.util.ImageUtil;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Image;
 
 /**
  * Creates a uniformly colored rectangle.
@@ -11,6 +12,7 @@ import java.awt.*;
  */
 public class ColorRect {
 
+    /** 2d aray represented with a 1 dimensional array */
     private int[] pixels;
 
     private int width;
@@ -27,8 +29,14 @@ public class ColorRect {
 
 
     public void setColor(int x, int y, Color c) {
-
         setColor(x, y,  c.getRGB());
+    }
+
+    /**
+     * @return an image representing this rectangle of colors.
+     */
+    public Image getAsImage() {
+        return ImageUtil.getImageFromPixelArray(pixels, width, height);
     }
 
     /**
@@ -48,12 +56,5 @@ public class ColorRect {
         pixels[location] = color ;
     }
 
-    /**
-     * @return  an image representing this rectangle of colors.
-     */
-    public Image getAsImage() {
-
-        return ImageUtil.getImageFromPixelArray(pixels, width, height);
-    }
 
 }

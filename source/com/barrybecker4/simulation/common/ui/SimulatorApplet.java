@@ -37,6 +37,14 @@ public class SimulatorApplet extends ApplicationApplet {
         simulator_ = createSimulationFromClassName(simulatorClassName);
     }
 
+    /**
+     * Construct the applet
+     * @param sim the simulator to show.
+     */
+    public SimulatorApplet(Simulator sim) {
+        simulator_ = sim;
+    }
+
     @Override
     public String getName() {
         return simulator_.getName();

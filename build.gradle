@@ -36,6 +36,12 @@ task runSnake(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runStock(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.stock.StockSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runReactionDiffusion(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.reactiondiffusion.RDSimulator"]

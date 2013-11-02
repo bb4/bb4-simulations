@@ -1,8 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.stock;
 
-
-
+import com.barrybecker4.common.app.AppContext;
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.InvertibleFunction;
 import com.barrybecker4.common.math.function.LinearFunction;
@@ -10,6 +9,9 @@ import com.barrybecker4.common.math.function.LogFunction;
 import com.barrybecker4.simulation.common.ui.DistributionSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.renderers.HistogramRenderer;
+import com.barrybecker4.ui.util.Log;
+
+import java.util.Arrays;
 
 /**
  * Simulates the N stocks over M time periods (and other options).
@@ -26,6 +28,7 @@ public class StockSimulator extends DistributionSimulator {
 
     public StockSimulator() {
         super("Stock Market Simulation");
+        AppContext.initialize("ENGLISH", Arrays.asList("com.barrybecker4.ui.message"), new Log());
         initHistogram();
     }
 
