@@ -43,10 +43,10 @@ public class DiceOptionsDialog extends SimulatorOptionsDialog {
         innerPanel.setLayout( new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
         numDiceField_ =
-                new NumberInput("Number of Dice (1 - 200): ", 2,
+                new NumberInput("Number of Dice (1 - 200): ", DiceOptions.DEFAULT_NUMBER_OF_DICE,
                                 "This sets the number of dice to throw on each step of the simulation.", 1, 200, true);
         numSidesField_ =
-                new NumberInput( "Number of Sides on Dice (2 - 100): ", 6,
+                new NumberInput( "Number of Sides on Dice (2 - 100): ", DiceOptions.DEFAULT_NUMBER_OF_SIDES,
                                   "This sets the number of sides on each dice that is thrown.", 1, 100, true);
 
         innerPanel.add( numDiceField_ );

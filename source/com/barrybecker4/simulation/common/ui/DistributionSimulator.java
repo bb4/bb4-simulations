@@ -4,8 +4,8 @@ package com.barrybecker4.simulation.common.ui;
 import com.barrybecker4.ui.animation.AnimationFrame;
 import com.barrybecker4.ui.renderers.HistogramRenderer;
 
-import java.awt.*;
-import java.util.Random;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 /**
  * Simulates the the generation of a histogram based on
@@ -20,9 +20,6 @@ public abstract class DistributionSimulator extends Simulator {
 
     protected HistogramRenderer histogram_;
     protected int[] data_;
-
-    /** Seeded Random variable so results are reproducible. */
-    protected Random random_ = new Random(0);
 
     /** Constructor */
     public DistributionSimulator(String title) {

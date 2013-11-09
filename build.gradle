@@ -18,12 +18,6 @@ task runDice(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-// this version uses the main method instead of the framework.
-task runDice2(type: JavaExec) {
-    main = 'com.barrybecker4.simulation.dice.DiceSimulator'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runFluid(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fluid.ui.FluidSimulator"]

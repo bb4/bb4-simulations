@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.dice;
 
 import com.barrybecker4.common.app.AppContext;
 import com.barrybecker4.common.format.IntegerFormatter;
+import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.common.math.function.LinearFunction;
 import com.barrybecker4.simulation.common.ui.DistributionSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
@@ -19,9 +20,7 @@ import java.util.Arrays;
  */
 public class DiceSimulator extends DistributionSimulator {
 
-    private int numDice_ = 2;
-    private int numSides_ = 6;
-
+    private DiceOptions options = new DiceOptions();
 
     public DiceSimulator() {
         super("Dice Histogram");
@@ -30,19 +29,19 @@ public class DiceSimulator extends DistributionSimulator {
     }
 
     public void setNumDice(int numDice) {
-        numDice_ = numDice;
+        options.numDice = numDice;
         initHistogram();
     }
 
     public void setNumSides(int numSides) {
-        numSides_ = numSides;
+        options.numSides = numSides;
         initHistogram();
     }
 
     @Override
     protected void initHistogram() {
-        data_ = new int[numDice_ * (numSides_-1) + 1];
-        histogram_ = new HistogramRenderer(data_, new LinearFunction(1.0, -numDice_));
+        data_ = new int[options.numDice * (options.numSides - 1) + 1];
+        histogram_ = new HistogramRenderer(data_, new LinearFunction(1.0, - options.numDice));
         histogram_.setXFormatter(new IntegerFormatter());
     }
 
@@ -54,8 +53,8 @@ public class DiceSimulator extends DistributionSimulator {
     @Override
     protected double getXPositionToIncrement() {
         int total = 0;
-        for (int i=0; i < numDice_; i++) {
-           total += random_.nextInt(numSides_) + 1;
+        for (int i=0; i < options.numDice; i++) {
+           total += MathUtil.RANDOM.nextInt(options.numSides) + 1;
         }
         return total;
     }

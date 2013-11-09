@@ -1,6 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.parameter;
 
+import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.common.math.function.InvertibleFunction;
 import com.barrybecker4.common.math.function.LinearFunction;
 import com.barrybecker4.optimization.parameter.types.Parameter;
@@ -70,13 +71,13 @@ public class ParameterSimulator extends DistributionSimulator {
     protected double getXPositionToIncrement() {
 
         if (showRedistribution_) {
-            parameter_.randomizeValue(random_);
+            parameter_.randomizeValue(MathUtil.RANDOM);
         }
         else {
             //System.out.println("parameter_.getRange()="+parameter_.getRange());
             //double scale = parameter_.isIntegerOnly()?  parameter_.getRange() +1.0 : parameter_.getRange();
             double scale = parameter_.getRange();
-            double v = parameter_.getMinValue() + random_.nextDouble() * scale;
+            double v = parameter_.getMinValue() + MathUtil.RANDOM.nextDouble() * scale;
             parameter_.setValue(v);
         }
 

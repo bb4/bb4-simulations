@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.stock;
 
 /**
- * Options for a sample of stocks.
- * Use VerhulstOptionsDialog to set them.
+ * Defaults for stock app.
+ * Options for a sample of stocks being held for some number of years.
  *
  * @author Barry Becker
  */
@@ -28,6 +28,8 @@ public class StockSampleOptions {
     public boolean useRandomChange = DEFAULT_USE_RANDOM_CHANGE;
 
     /**
+     * This theoretical maximum is something that could occur but rarely
+     * ever would by chance. One use of it is used to set an upper limit on the axis.
      * @return upper limit on sample value.
      */
     public double getTheoreticalMaximum() {

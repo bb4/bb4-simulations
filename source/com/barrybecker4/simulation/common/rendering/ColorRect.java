@@ -12,7 +12,7 @@ import java.awt.Image;
  */
 public class ColorRect {
 
-    /** 2d aray represented with a 1 dimensional array */
+    /** 2d array represented with a 1 dimensional array */
     private int[] pixels;
 
     private int width;

@@ -21,6 +21,10 @@ import java.util.Arrays;
  */
 public class StockSimulator extends DistributionSimulator {
 
+    /**
+     * Sometime the numbers on the x axis can get very large. Scientific notation is used in those cases.
+     * If this is large, there will be fewer labels shown.
+     */
     private static final int LABEL_WIDTH = 70;
 
     private StockSampleOptions opts_ = new StockSampleOptions();
