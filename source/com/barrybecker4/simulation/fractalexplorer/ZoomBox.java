@@ -40,7 +40,7 @@ public class ZoomBox {
     }
 
     public boolean isValidBox(){
-        return firstCorner != null && !firstCorner.equals(secondCorner);
+        return box != null && firstCorner != null && !firstCorner.equals(secondCorner);
     }
 
     /**

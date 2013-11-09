@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.common.ui;
 
 import com.barrybecker4.common.format.FormatUtil;
@@ -9,13 +9,17 @@ import com.barrybecker4.ui.animation.AnimationComponent;
 import com.barrybecker4.ui.components.GradientButton;
 import com.barrybecker4.ui.util.GUIUtil;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  * Base class for all simulations.
+ * Extends from {@code AnimationComponent} because simulation involve
+ * showing an animation of a process.
  *
  * @author Barry Becker
  */
@@ -25,8 +29,10 @@ public abstract class Simulator extends AnimationComponent
     protected SimulatorOptionsDialog optionsDialog_ = null;
     protected static JFrame frame_ = null;
 
-    // rendering options
+    /** timestep for every step of the animation */
     protected double timeStep_;
+
+    /** whether or not to use anti-aliasing when rendering */
     protected boolean useAntialiasing_ = true;
 
     /**
@@ -91,7 +97,7 @@ public abstract class Simulator extends AnimationComponent
     protected abstract SimulatorOptionsDialog createOptionsDialog();
 
     /**
-     *return to the initial state.
+     * return to the initial state.
      */
     protected abstract void reset();
 
@@ -139,7 +145,7 @@ public abstract class Simulator extends AnimationComponent
 
 
     // the next methods implement the unused methods of the optimizee interface.
-    // Simulators must implement evaluateFitness ///
+    // Simulators must implement evaluateFitness
 
     public void doOptimization() {
        System.out.println("not implemented for this simulator");
@@ -149,7 +155,6 @@ public abstract class Simulator extends AnimationComponent
     public boolean evaluateByComparison() {
         return false;
     }
-
 
     /**
      * part of the Optimizee interface

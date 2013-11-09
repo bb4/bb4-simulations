@@ -127,14 +127,12 @@ public class ModelImage {
      * @return the accumulated image so far.
      */
     public Image getImage() {
-
         return image;
     }
 
     private void updateImageSizeIfNeeded() {
 
         if  (image.getWidth() != scale * model.getWidth() || image.getHeight() != scale * model.getHeight()) {
-
             createBufferedImage();
         }
     }

@@ -1,17 +1,17 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer;
 
-import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.rendering.ModelImage;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.fractalexplorer.algorithm.AlgorithmEnum;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalModel;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.MandelbrotAlgorithm;
+import com.barrybecker4.ui.util.ColorMap;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Graphics;
 
 /**
  * Interactively explores the Mandelbrot set.
@@ -19,18 +19,20 @@ import java.awt.*;
  */
 public class FractalExplorer extends Simulator {
 
+
+    static final AlgorithmEnum DEFAULT_ALGORITHM_ENUM = AlgorithmEnum.MANDELBROT;
+
     private FractalAlgorithm algorithm_;
+    private AlgorithmEnum algorithmEnum_;
     private FractalModel model_;
     private ModelImage modelImage_;
     private DynamicOptions options_;
     private ZoomHandler zoomHandler_;
+    private FractalColorMap colorMap_;
 
     private boolean useFixedSize_ = false;
 
-    protected static final double INITIAL_TIME_STEP = 10.0;
-    protected static final int DEFAULT_STEPS_PER_FRAME = 1;
-
-
+    /** Constructor */
     public FractalExplorer() {
         super("Fractal Explorer");
         commonInit();
@@ -47,21 +49,36 @@ public class FractalExplorer extends Simulator {
         return useFixedSize_;
     }
 
-
     private void commonInit() {
         initCommonUI();
+        algorithmEnum_ = DEFAULT_ALGORITHM_ENUM;
+        colorMap_ = new FractalColorMap();
         reset();
+    }
+
+    public void setAlgorithm(AlgorithmEnum alg) {
+        algorithmEnum_ = alg;
+        reset();
+    }
+
+    /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
+    public FractalAlgorithm getAlgorithm() {
+        return algorithm_;
     }
 
     @Override
     protected void reset() {
 
         model_ = new FractalModel();
-        modelImage_ = new ModelImage(model_, new FractalColorMap());
-        algorithm_ = new MandelbrotAlgorithm(model_);
+        algorithm_ = algorithmEnum_.createInstance(model_);
+        modelImage_ = new ModelImage(model_, colorMap_);
 
-        setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
+        setNumStepsPerFrame(DynamicOptions.DEFAULT_STEPS_PER_FRAME);
 
+        if (zoomHandler_ != null) {
+            this.removeMouseListener(zoomHandler_);
+            this.removeMouseMotionListener(zoomHandler_);
+        }
         zoomHandler_ = new ZoomHandler(algorithm_);
         this.addMouseListener(zoomHandler_);
         this.addMouseMotionListener(zoomHandler_);
@@ -71,25 +88,23 @@ public class FractalExplorer extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new OptionsDialog( frame_, this );
+        return new FractalOptionsDialog( frame_, this );
     }
-
 
     @Override
     protected double getInitialTimeStep() {
-        return INITIAL_TIME_STEP;
+        return DynamicOptions.INITIAL_TIME_STEP;
     }
 
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
             if (!useFixedSize_) {
-                model_.setSize(this.getWidth(), this.getHeight());
+                model_.setSize(getWidth(), getHeight());
             }
 
             algorithm_.timeStep( timeStep_ );
             modelImage_.updateImage(model_.getLastRow(), model_.getCurrentRow());
-
         }
         return timeStep_;
     }
@@ -99,7 +114,7 @@ public class FractalExplorer extends Simulator {
         super.paint(g);
 
         Profiler.getInstance().startRenderingTime();
-        if (g!=null) {
+        if (g != null) {
             g.drawImage(modelImage_.getImage(), 0, 0, null);
         }
         zoomHandler_.render(g, model_.getAspectRatio());
@@ -116,7 +131,7 @@ public class FractalExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(algorithm_, this);
+        options_ = new DynamicOptions(this);
         return options_;
     }
 

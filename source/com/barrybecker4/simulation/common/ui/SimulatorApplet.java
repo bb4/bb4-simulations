@@ -6,8 +6,8 @@ import com.barrybecker4.ui.animation.AnimationPanel;
 import com.barrybecker4.ui.application.ApplicationApplet;
 import com.barrybecker4.ui.util.GUIUtil;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
 /**
  * Base class for all simulator applets.
@@ -20,7 +20,7 @@ public class SimulatorApplet extends ApplicationApplet {
     private Simulator simulator_;
 
     private static final boolean RUN_OPTIMIZATION = false;
-    private static final String DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fluid.ui.FluidSimulator";
+    private static final String DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer";
 
     public SimulatorApplet() {
         super(new String[] {});
@@ -28,12 +28,11 @@ public class SimulatorApplet extends ApplicationApplet {
 
     /**
      * Construct the applet
-     * @param simulatorClassName  name of the simulator class to show.
+     * @param simulatorClassName name of the simulator class to show.
      */
     public SimulatorApplet(String[] args, String simulatorClassName) {
 
         super(args);
-        System.out.println("simulatorClassName=" + simulatorClassName);
         simulator_ = createSimulationFromClassName(simulatorClassName);
     }
 

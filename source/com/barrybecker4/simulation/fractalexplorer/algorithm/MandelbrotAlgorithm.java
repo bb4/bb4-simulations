@@ -25,7 +25,7 @@ public class MandelbrotAlgorithm extends FractalAlgorithm  {
         ComplexNumber z = initialValue;
         int numIterations = 0;
 
-        while (z.getMagnitude() < 2.0 && numIterations <  getMaxIterations()) {
+        while (z.getMagnitude() < 2.0 && numIterations < getMaxIterations()) {
             z = z.power(2).add(initialValue);
             numIterations++;
         }

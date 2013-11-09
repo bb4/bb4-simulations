@@ -6,24 +6,25 @@ import com.barrybecker4.common.math.ComplexNumberRange;
 import java.util.LinkedList;
 
 /**
- * Maintains regions (ranges) in the complex space that were visited, so
- * we can back up.
+ * Maintains regions (ranges) in the complex space that were visited, so we can back up.
  * @author Barry Becker
  */
 public class History {
-
 
     /** range of bounding box in complex plane. */
     private LinkedList<ComplexNumberRange> stack;
 
 
     public History() {
-        stack = new LinkedList<ComplexNumberRange>();
+        stack = new LinkedList<>();
     }
-
 
     public void addRangeToHistory(ComplexNumberRange range)  {
         stack.push(range);
+    }
+
+    public boolean hasHistory() {
+        return !stack.isEmpty();
     }
 
     /**

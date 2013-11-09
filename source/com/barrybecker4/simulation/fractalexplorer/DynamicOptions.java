@@ -13,14 +13,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Dynamic controls for the RD simulation that will show on the right.
+ * Dynamic controls for the Fractal explorer simulation that will show on the right.
  * They change the behavior of the simulation while it is running.
  * @author Barry Becker
  */
 class DynamicOptions extends JPanel
                      implements ActionListener, SliderGroupChangeListener {
 
-    private FractalAlgorithm algorithm_;
+    static final double INITIAL_TIME_STEP = 10.0;
+    static final int DEFAULT_STEPS_PER_FRAME = 1;
+
     private FractalExplorer simulator_;
     private JCheckBox useConcurrency_;
     private JCheckBox useFixedSize_;
@@ -31,25 +33,24 @@ class DynamicOptions extends JPanel
     private static final String TIMESTEP_SLIDER = "Num Rows per Frame";
 
     private SliderGroup sliderGroup_;
-    private static final int MIN_NUM_STEPS = (int)(FractalExplorer.INITIAL_TIME_STEP/10.0);
-    private static final int MAX_NUM_STEPS = (int)(10.0 * FractalExplorer.INITIAL_TIME_STEP);
+    private static final int MIN_NUM_STEPS = (int)(INITIAL_TIME_STEP/10.0);
+    private static final int MAX_NUM_STEPS = (int)(10.0 * INITIAL_TIME_STEP);
 
     private static final SliderProperties[] SLIDER_PROPS = {
         new SliderProperties(ITER_SLIDER,      100,           10000,      FractalAlgorithm.DEFAULT_MAX_ITERATIONS,   1),
-        new SliderProperties(TIMESTEP_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   FractalExplorer.INITIAL_TIME_STEP, 1),
+        new SliderProperties(TIMESTEP_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   INITIAL_TIME_STEP, 1),
     };
 
 
     /**
      * Constructor
      */
-    DynamicOptions(FractalAlgorithm algorithm, FractalExplorer simulator) {
+    DynamicOptions(FractalExplorer simulator) {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        algorithm_ = algorithm;
         simulator_ = simulator;
 
         sliderGroup_ = new SliderGroup(SLIDER_PROPS);
@@ -76,7 +77,8 @@ class DynamicOptions extends JPanel
 
     private JPanel createCheckBoxes() {
 
-        useConcurrency_ = new JCheckBox("Parallel", algorithm_.isParallelized());
+        FractalAlgorithm algorithm = simulator_.getAlgorithm();
+        useConcurrency_ = new JCheckBox("Parallel", algorithm.isParallelized());
         useConcurrency_.setToolTipText(
                 "Take advantage of multiple processors for calculation and rendering if present.");
         useConcurrency_.addActionListener(this);
@@ -84,7 +86,7 @@ class DynamicOptions extends JPanel
         useFixedSize_ = new JCheckBox("Fixed Size", simulator_.getUseFixedSize());
         useFixedSize_.addActionListener(this);
 
-        useRunLengthOptimization_ = new JCheckBox("Run Length Optimization", algorithm_.getUseRunLengthOptimization());
+        useRunLengthOptimization_ = new JCheckBox("Run Length Optimization", algorithm.getUseRunLengthOptimization());
         useRunLengthOptimization_.addActionListener(this);
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 1));
@@ -107,19 +109,20 @@ class DynamicOptions extends JPanel
      */
     public void actionPerformed(ActionEvent e) {
         //RDRenderingOptions renderingOptions = simulator_.getRenderingOptions();
+        FractalAlgorithm algorithm = simulator_.getAlgorithm();
 
         if (e.getSource() == useConcurrency_) {
-            boolean isParallelized = !algorithm_.isParallelized();
-            algorithm_.setParallelized(isParallelized);
+            boolean isParallelized = !algorithm.isParallelized();
+            algorithm.setParallelized(isParallelized);
         }
         else if (e.getSource() == useFixedSize_) {
             simulator_.setUseFixedSize(useFixedSize_.isSelected());
         }
         else if (e.getSource() == useRunLengthOptimization_) {
-            algorithm_.setUseRunLengthOptimization(useRunLengthOptimization_.isSelected());
+            algorithm.setUseRunLengthOptimization(useRunLengthOptimization_.isSelected());
         }
         else if (e.getSource() == backButton_) {
-            algorithm_.goBack();
+            algorithm.goBack();
         }
     }
 
@@ -128,8 +131,10 @@ class DynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
+        FractalAlgorithm algorithm = simulator_.getAlgorithm();
+
         if (sliderName.equals(ITER_SLIDER)) {
-            algorithm_.setMaxIterations((int)value);
+            algorithm.setMaxIterations((int)value);
         }
         else if (sliderName.equals(TIMESTEP_SLIDER)) {
             simulator_.setTimeStep(value);

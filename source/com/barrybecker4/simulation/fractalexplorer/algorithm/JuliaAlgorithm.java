@@ -11,12 +11,20 @@ import com.barrybecker4.common.math.ComplexNumberRange;
  */
 public class JuliaAlgorithm extends FractalAlgorithm  {
 
+    private static final ComplexNumber DEFAULT_JULIA_SEED = new ComplexNumber(0.233, 0.5378);
+
     private static final ComplexNumberRange INITIAL_RANGE =
             new ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7));
+
+    private ComplexNumber seed = DEFAULT_JULIA_SEED;
 
     public JuliaAlgorithm(FractalModel model) {
         super(model, INITIAL_RANGE);
         model.setCurrentRow(0);
+    }
+
+    public void setJuliaSeed(ComplexNumber seed) {
+        this.seed = seed;
     }
 
     @Override
@@ -26,9 +34,10 @@ public class JuliaAlgorithm extends FractalAlgorithm  {
         int numIterations = 0;
 
         while (z.getMagnitude() < 2.0 && numIterations < getMaxIterations()) {
-            z = z.power(2).add(initialValue);
+            z = z.power(2).add(seed);
             numIterations++;
         }
+
         return (double) numIterations / getMaxIterations();
     }
 

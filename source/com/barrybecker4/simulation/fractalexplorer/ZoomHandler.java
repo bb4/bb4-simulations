@@ -1,11 +1,10 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer;
 
-import com.barrybecker4.common.math.ComplexNumber;
 import com.barrybecker4.common.math.ComplexNumberRange;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;

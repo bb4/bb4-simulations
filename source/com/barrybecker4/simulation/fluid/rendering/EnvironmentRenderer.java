@@ -1,11 +1,12 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fluid.rendering;
 
-import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.simulation.common.rendering.ModelImage;
 import com.barrybecker4.simulation.fluid.model.Grid;
+import com.barrybecker4.ui.util.ColorMap;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public final class EnvironmentRenderer {
     private RenderingOptions options;
 
 
-
+    /** Constructor */
     public EnvironmentRenderer(Grid grid, RenderingOptions options) {
 
         this.grid = grid;

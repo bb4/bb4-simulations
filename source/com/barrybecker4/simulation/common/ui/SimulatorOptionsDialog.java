@@ -101,7 +101,7 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
         return "Simulation Configuration";
     }
 
-    private JPanel createRenderingParamPanel() {
+    protected JPanel createRenderingParamPanel() {
         JPanel paramPanel = new JPanel();
         paramPanel.setLayout( new BorderLayout() );
 
@@ -129,8 +129,8 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
 
         timeStepField_ =
                 new NumberInput("Time Step (.001 slow - .9 fast but unstable):  ",  simulator_.getTimeStep(),
-                                "This controls the size of the numerical intergration steps",
-                                0.001, 0.9, false);
+                                "This controls the size of the numerical integration steps",
+                                0.001, 10.0, false);
         numStepsPerFrameField_ =
                 new NumberInput("Num Steps Per Frame (1 slow but smooth - "+MAX_NUM_STEPS_PER_FRAME+" (fast but choppy):  ",
                                 simulator_.getNumStepsPerFrame(),
