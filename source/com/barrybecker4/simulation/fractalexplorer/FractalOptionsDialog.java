@@ -4,6 +4,8 @@ package com.barrybecker4.simulation.fractalexplorer;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.AlgorithmEnum;
+import com.barrybecker4.simulation.fractalexplorer.algorithm.JuliaAlgorithm;
+import com.barrybecker4.ui.components.ComplexNumberInput;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -21,6 +23,8 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
 
     private Choice algorithmChoice_;
 
+    private ComplexNumberInput juliaSeedField;
+
     public FractalOptionsDialog(Component parent, Simulator simulator) {
         super(parent, simulator);
     }
@@ -32,10 +36,9 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
 
     @Override
     protected JPanel createCustomParamPanel() {
-        setResizable( true );
+        setResizable(true);
         JPanel mainPanel = new JPanel(new BorderLayout() );
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
 
         JLabel label = new JLabel("Select a fractal algorithm to use:");
         algorithmChoice_ = createAlgorithmDropdown();
@@ -43,12 +46,16 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
         JPanel panel = new JPanel();
         panel.add(label);
         panel.add(algorithmChoice_);
+        JPanel cnPanel = new JPanel();
+
+        juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED);
+        cnPanel.add(juliaSeedField);
 
         mainPanel.add(panel, BorderLayout.NORTH);
+        mainPanel.add(cnPanel, BorderLayout.NORTH);
 
         return mainPanel;
     }
-
 
     /**
      * The dropdown menu at the top for selecting an algorithm for solving the puzzle.
@@ -64,13 +71,21 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
     }
 
 
+    @Override
+    public FractalExplorer getSimulator() {
+        return (FractalExplorer) super.getSimulator();
+    }
+
+
     protected void ok() {
 
         // set the common rendering and global options
-        FractalExplorer sim = (FractalExplorer) getSimulator();
+        FractalExplorer sim = getSimulator();
 
         int selected = algorithmChoice_.getSelectedIndex();
         sim.setAlgorithm(ALGORITHM_VALUES[selected]);
+        System.out.println("from field seed = "+ juliaSeedField.getValue());
+        sim.setJuliaSeed(juliaSeedField.getValue());
 
         this.setVisible( false );
         sim.repaint();

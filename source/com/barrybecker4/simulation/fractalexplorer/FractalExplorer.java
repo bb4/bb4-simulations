@@ -1,6 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer;
 
+import com.barrybecker4.common.math.ComplexNumber;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.rendering.ModelImage;
 import com.barrybecker4.simulation.common.ui.Simulator;
@@ -8,6 +9,7 @@ import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.AlgorithmEnum;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalModel;
+import com.barrybecker4.simulation.fractalexplorer.algorithm.JuliaAlgorithm;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.JPanel;
@@ -24,6 +26,7 @@ public class FractalExplorer extends Simulator {
 
     private FractalAlgorithm algorithm_;
     private AlgorithmEnum algorithmEnum_;
+    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED;
     private FractalModel model_;
     private ModelImage modelImage_;
     private DynamicOptions options_;
@@ -61,6 +64,10 @@ public class FractalExplorer extends Simulator {
         reset();
     }
 
+    public void setJuliaSeed(ComplexNumber seed) {
+       juliaSeed_ = seed;
+    }
+
     /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
     public FractalAlgorithm getAlgorithm() {
         return algorithm_;
@@ -71,6 +78,11 @@ public class FractalExplorer extends Simulator {
 
         model_ = new FractalModel();
         algorithm_ = algorithmEnum_.createInstance(model_);
+
+        // this is a hack. The Options dialog should only know about this seed
+        if (algorithm_ instanceof JuliaAlgorithm) {
+            ((JuliaAlgorithm) algorithm_).setJuliaSeed(juliaSeed_);
+        }
         modelImage_ = new ModelImage(model_, colorMap_);
 
         setNumStepsPerFrame(DynamicOptions.DEFAULT_STEPS_PER_FRAME);

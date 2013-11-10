@@ -37,7 +37,7 @@ public class FractalModel implements RectangularModel {
     }
 
     public void setValue(int x, int y, double value) {
-        if (x<getWidth() && y<getHeight())
+        if (x < getWidth() && y < getHeight())
             values[x][y] = value;
     }
 
