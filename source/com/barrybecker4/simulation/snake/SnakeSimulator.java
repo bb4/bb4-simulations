@@ -174,9 +174,9 @@ public class SnakeSimulator extends NewtonianSimulator {
     public void doOptimization()  {
         Optimizer optimizer;
         if (GUIUtil.hasBasicService())   // need to verify
-            optimizer = new Optimizer( this );
+            optimizer = new Optimizer(this);
         else
-            optimizer = new Optimizer( this, FileUtil.getHomeDir() +"performance/snake/snake_optimization.txt" );
+            optimizer = new Optimizer(this, FileUtil.getHomeDir() +"performance/snake/snake_optimization.txt" );
 
         setPaused(false);
         optimizer.doOptimization(  OptimizationStrategyType.GENETIC_SEARCH, INITIAL_PARAMS, 0.3);
@@ -259,10 +259,10 @@ public class SnakeSimulator extends NewtonianSimulator {
         }
         if ( !stable )   {
             System.out.println( "SnakeSim unstable" );
-            return 0.0;
+            return 100000.0;
         }
         else {
-            return oldVelocity;
+            return 1.0 / oldVelocity;
         }
     }
 }

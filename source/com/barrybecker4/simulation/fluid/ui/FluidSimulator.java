@@ -161,17 +161,6 @@ public class FluidSimulator extends Simulator {
         optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, paramArray, 0.3);
     }
 
-    /**
-     * part of the Optimizee interface
-     * evaluates the fluid's fitness.
-     */
-    @Override
-    public double evaluateFitness( ParameterArray params ) {
-
-        assert false : "not implemented yet";
-        return 0.0;
-    }
-
     @Override
     public Color getBackground() {
         return BG_COLOR;

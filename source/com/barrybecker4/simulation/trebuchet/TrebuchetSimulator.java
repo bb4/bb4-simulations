@@ -231,9 +231,6 @@ public class TrebuchetSimulator extends NewtonianSimulator
      */
     @Override
     public double evaluateFitness( ParameterArray params ) {
-        //trebuchet_.setWaveSpeed( params.get( 0 ).value );
-        //trebuchet_.setWaveAmplitude( params.get( 1 ).value );
-        //trebuchet_.setWavePeriod( params.get( 2 ).value );
 
         boolean stable = true;
         boolean improved = true;
@@ -249,10 +246,11 @@ public class TrebuchetSimulator extends NewtonianSimulator
         }
         if ( !stable )   {
             System.out.println( "Trebuchet Sim unstable" );
-            return 0.0;
+            return 10000.0;
         }
-        else
-            return oldVelocity;
+        else {
+            return 1.0/oldVelocity;
+        }
     }
 
 
