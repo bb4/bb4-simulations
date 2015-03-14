@@ -76,6 +76,7 @@ public class TradingOptionsPanel extends JPanel {
         tradingOptions.startingInvestmentPercent = startingInvestmentPercentField.getValue() / 100.0;
         tradingOptions.gainPolicy = gainPolicyPanel.getChangePolicy();
         tradingOptions.lossPolicy = lossPolicyPanel.getChangePolicy();
+        tradingOptions.theoreticalMaxGain = theoreticalMaxGainField.getValue();
 
         return tradingOptions;
     }

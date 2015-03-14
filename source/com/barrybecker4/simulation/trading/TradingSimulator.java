@@ -86,6 +86,8 @@ public class TradingSimulator extends DistributionSimulator {
 
         GainCalculator calculator = new GainCalculator(tradingOpts);
 
+        System.out.println("up pct: " + generationOpts.percentIncrease + " down pct: " + generationOpts.percentDecrease);
+
         double total = 0;
         for (int j = 0; j < generationOpts.numStocks; j++) {
             //total += calculator.calculateFinalStockPrice(generationOpts);

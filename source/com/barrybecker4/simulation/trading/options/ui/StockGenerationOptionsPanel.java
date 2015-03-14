@@ -52,14 +52,14 @@ public class StockGenerationOptionsPanel extends JPanel {
                         1, 1000, true);
         percentIncreaseField_ =
                 new NumberInput("% to increase each time period if heads (0 - 100): ",
-                        100* generationOptions_.percentIncrease,
+                        100 * generationOptions_.percentIncrease,
                         "Amount to increase after each time period if coin toss is heads.",
-                        0, 100, true);
+                        0, 100, false);
         percentDecreaseField_ =
                 new NumberInput("% to decrease each time period if tails (0 - 100): ",
-                        100* generationOptions_.percentDecrease,
+                        100 * generationOptions_.percentDecrease,
                         "Amount to decrease after each time period if coin toss is tails.",
-                        0, 100, true);
+                        0, 100, false);
         startingValueField_ =
                 new NumberInput("Starting stock value : ", generationOptions_.startingValue,
                         "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
@@ -83,8 +83,8 @@ public class StockGenerationOptionsPanel extends JPanel {
     StockGenerationOptions getOptions() {
 
         generationOptions_.numStocks = numStocksField_.getIntValue();
-        generationOptions_.percentDecrease = (double) percentDecreaseField_.getIntValue() / 100.0;
-        generationOptions_.percentIncrease = (double) percentIncreaseField_.getIntValue() / 100.0;
+        generationOptions_.percentDecrease = percentDecreaseField_.getValue() / 100.0;
+        generationOptions_.percentIncrease = percentIncreaseField_.getValue() / 100.0;
         generationOptions_.numTimePeriods = numTimePeriodsField_.getIntValue();
         generationOptions_.startingValue = startingValueField_.getValue();
         generationOptions_.useRandomChange = useRandomChange_.isSelected();
