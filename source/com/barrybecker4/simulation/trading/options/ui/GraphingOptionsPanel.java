@@ -39,7 +39,7 @@ public class GraphingOptionsPanel extends JPanel {
 
         add(xResolutionField);
         add(useLogScale);
-        setBorder(BorderFactory.createTitledBorder("Graphing Options"));
+        setBorder(Section.createBorder("Graphing Options"));
     }
 
 

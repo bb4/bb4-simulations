@@ -1,16 +1,10 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.trading.TradingSimulator;
-import com.barrybecker4.simulation.trading.options.GraphingOptions;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
-import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author Barry Becker
@@ -82,7 +76,7 @@ public class StockGenerationOptionsPanel extends JPanel {
         add(percentDecreaseField_);
         add(startingValueField_);
         add(useRandomChange_);
-        setBorder(BorderFactory.createTitledBorder("Stock Generation Options"));
+        setBorder(Section.createBorder("Stock Generation Options"));
 
     }
 

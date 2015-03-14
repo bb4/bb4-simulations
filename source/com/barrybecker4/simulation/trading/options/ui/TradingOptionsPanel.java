@@ -23,18 +23,9 @@ public class TradingOptionsPanel extends JPanel {
     /** The amount of money to use to purchase stock(s) at the starting price.  */
     private NumberInput startingInvestmentPercentField;
 
-    /** The % market gain necessary to trigger next transaction.  */
-    private NumberInput gainThresholdPercentField;
 
-    /** Percent of current investment to sell when gain threshold reached.  */
-    private NumberInput gainSellPercentField;
-
-    /** The % market loss necessary to trigger next transaction.  */
-    private NumberInput lossThresholdPercentField;
-
-    /** Percent of current reserve to use to buy with when loss threshold reached.  */
-    private NumberInput lossBuyPercentField;
-
+    private ChangePolicyPanel gainPolicyPanel;
+    private ChangePolicyPanel lossPolicyPanel;
     private TradingOptions tradingOptions;
 
     /**
@@ -54,11 +45,19 @@ public class TradingOptionsPanel extends JPanel {
                         "The percent of total funds to invest initially.",
                         0, 100, false);
 
+        gainPolicyPanel = new ChangePolicyPanel("% gain which triggers next transaction",
+                "% of current investment to sell on gain",
+                tradingOptions.gainStrategy);
+        lossPolicyPanel = new ChangePolicyPanel("% market loss which triggers next transaction",
+                "% of current reserve to use to buy on loss",
+                tradingOptions.lossStrategy);
 
         add(startingTotalField);
         add(startingInvestmentPercentField);
+        add(gainPolicyPanel);
+        add(lossPolicyPanel);
 
-        setBorder(BorderFactory.createTitledBorder("Trading Strategy Options"));
+        setBorder(Section.createBorder("Trading Strategy Options"));
     }
 
 
@@ -66,6 +65,8 @@ public class TradingOptionsPanel extends JPanel {
 
         tradingOptions.startingTotal = startingTotalField.getValue();
         tradingOptions.startingInvestmentPercent = startingInvestmentPercentField.getValue();
+        tradingOptions.gainStrategy = gainPolicyPanel.getChangePolicy();
+        tradingOptions.lossStrategy = lossPolicyPanel.getChangePolicy();
 
         return tradingOptions;
     }

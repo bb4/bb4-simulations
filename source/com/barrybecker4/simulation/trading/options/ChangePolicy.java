@@ -14,7 +14,7 @@ public class ChangePolicy {
     /** Either the percent of current investment to sell, or percent of current reserve to buy more with */
     private double transactPercent;
 
-    public ChangePolicy(float changePercent, float transactPercent) {
+    public ChangePolicy(double changePercent, double transactPercent) {
         this.changePercent = changePercent;
         this.transactPercent = transactPercent;
     }
