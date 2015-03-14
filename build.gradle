@@ -32,7 +32,13 @@ task runSnake(type: JavaExec) {
 
 task runStock(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["com.barrybecker4.simulation.stock.StockSimulator"]
+    args = ["com.barrybecker4.simulation.stock.TradingSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runTrading(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.trading.TradingSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
