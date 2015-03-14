@@ -51,10 +51,13 @@ public class OptionsDialog extends SimulatorOptionsDialog {
     @Override
     protected void ok() {
 
+        super.ok();
+
         TradingSimulator simulator = (TradingSimulator) getSimulator();
-        simulator.setSampleOptions(stockGenerationOptionsPanel.getOptions());
-        //simulator.setTradingOptions(tradingOptionsPanel.getOptions());
-        simulator.setGraphingOptions(graphingOptionsPanel.getOptions());
+        simulator.setOptions(
+                stockGenerationOptionsPanel.getOptions(),
+                tradingOptionsPanel.getOptions(),
+                graphingOptionsPanel.getOptions());
     }
 
 }

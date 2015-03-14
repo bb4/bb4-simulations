@@ -9,6 +9,7 @@ import com.barrybecker4.common.math.function.LogFunction;
 import com.barrybecker4.simulation.common.ui.DistributionSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.trading.options.GraphingOptions;
+import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.renderers.HistogramRenderer;
@@ -31,8 +32,9 @@ public class TradingSimulator extends DistributionSimulator {
      */
     private static final int LABEL_WIDTH = 70;
 
-    private StockGenerationOptions generationOpts_ = new StockGenerationOptions();
-    private GraphingOptions graphingOpts_ = new GraphingOptions();
+    private StockGenerationOptions generationOpts = new StockGenerationOptions();
+    private TradingOptions tradingOpts = new TradingOptions();
+    private GraphingOptions graphingOpts = new GraphingOptions();
 
 
     public TradingSimulator() {
@@ -41,25 +43,23 @@ public class TradingSimulator extends DistributionSimulator {
         initHistogram();
     }
 
-    public void setSampleOptions(StockGenerationOptions stockSampleOptions) {
-        generationOpts_ = stockSampleOptions;
-        initHistogram();
-    }
-
-    public void setGraphingOptions(GraphingOptions graphingOptions) {
-        graphingOpts_ = graphingOptions;
+    public void setOptions(
+            StockGenerationOptions stockSampleOpts, TradingOptions tradingOpts, GraphingOptions graphingOpts) {
+        generationOpts = stockSampleOpts;
+        this.tradingOpts = tradingOpts;
+        this.graphingOpts = graphingOpts;
         initHistogram();
     }
 
     @Override
     protected void initHistogram() {
 
-        double max = generationOpts_.getTheoreticalMaximum();
-        double xScale = Math.pow(10, Math.max(0, Math.log10(max) - graphingOpts_.xResolution));
-        double xLogScale = 3 * graphingOpts_.xResolution * graphingOpts_.xResolution;
+        double max = generationOpts.getTheoreticalMaximum();
+        double xScale = Math.pow(10, Math.max(0, Math.log10(max) - graphingOpts.xResolution));
+        double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
 
         InvertibleFunction xFunction =
-                graphingOpts_.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
+                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
 
         int maxX = (int)xFunction.getValue(max);
         data_ = new int[maxX + 1];
@@ -85,10 +85,10 @@ public class TradingSimulator extends DistributionSimulator {
     private double createSample() {
 
         double total = 0;
-        for (int j = 0; j < generationOpts_.numStocks; j++) {
+        for (int j = 0; j < generationOpts.numStocks; j++) {
             total += calculateFinalStockPrice();
         }
-        return total / generationOpts_.numStocks;
+        return total / generationOpts.numStocks;
     }
 
     /**
@@ -96,11 +96,11 @@ public class TradingSimulator extends DistributionSimulator {
      */
     private double calculateFinalStockPrice() {
 
-        double stockPrice = generationOpts_.startingValue;
-        for (int i = 0; i < generationOpts_.numTimePeriods; i++) {
+        double stockPrice = generationOpts.startingValue;
+        for (int i = 0; i < generationOpts.numTimePeriods; i++) {
             double percentChange =
-                    Math.random() > 0.5 ? generationOpts_.percentIncrease : -generationOpts_.percentDecrease;
-            if (generationOpts_.useRandomChange)
+                    Math.random() > 0.5 ? generationOpts.percentIncrease : -generationOpts.percentDecrease;
+            if (generationOpts.useRandomChange)
                 stockPrice *= (1.0 + Math.random() * percentChange);
             else
                 stockPrice *= (1.0 + percentChange);
