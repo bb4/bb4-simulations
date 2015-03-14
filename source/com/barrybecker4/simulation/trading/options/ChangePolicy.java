@@ -8,10 +8,10 @@ package com.barrybecker4.simulation.trading.options;
  */
 public class ChangePolicy {
 
-    /** the percent increase or decrease in the market */
+    /** the percent increase or decrease in the market.  (0 - 1.0) */
     private double changePercent;
 
-    /** Either the percent of current investment to sell, or percent of current reserve to buy more with */
+    /** Either the percent of current investment to sell, or percent of current reserve to buy more with. (0 - 1.0) */
     private double transactPercent;
 
     public ChangePolicy(double changePercent, double transactPercent) {

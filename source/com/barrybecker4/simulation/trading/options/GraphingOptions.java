@@ -10,7 +10,7 @@ package com.barrybecker4.simulation.trading.options;
 public class GraphingOptions {
 
     private static final int DEFAULT_X_RESOLUTION = 2;
-    private static final boolean DEFAULT_USE_LOG_SCALE = true;
+    private static final boolean DEFAULT_USE_LOG_SCALE = false;
 
     public int xResolution = DEFAULT_X_RESOLUTION;
     public boolean useLogScale = DEFAULT_USE_LOG_SCALE;

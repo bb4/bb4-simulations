@@ -54,12 +54,12 @@ public class TradingSimulator extends DistributionSimulator {
     @Override
     protected void initHistogram() {
 
-        double max = generationOpts.getTheoreticalMaximum();
+        double max = tradingOpts.theoreticalMaxGain;
         double xScale = Math.pow(10, Math.max(0, Math.log10(max) - graphingOpts.xResolution));
         double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
 
         InvertibleFunction xFunction =
-                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
+                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, false) : new LinearFunction(1/xScale, 20.0);
 
         int maxX = (int)xFunction.getValue(max);
         data_ = new int[maxX + 1];
@@ -80,33 +80,20 @@ public class TradingSimulator extends DistributionSimulator {
     }
 
     /**
-     * @return value of a set of numStocks after numTimePeriods.
+     * @return value gain achieved by applying a trading strategy to a set of numStocks after numTimePeriods.
      */
     private double createSample() {
 
+        GainCalculator calculator = new GainCalculator(tradingOpts);
+
         double total = 0;
         for (int j = 0; j < generationOpts.numStocks; j++) {
-            total += calculateFinalStockPrice();
+            //total += calculator.calculateFinalStockPrice(generationOpts);
+            total += calculator.calculateGain(generationOpts);
         }
         return total / generationOpts.numStocks;
     }
 
-    /**
-     * @return final stock price for a single stock after numTimePeriods.
-     */
-    private double calculateFinalStockPrice() {
-
-        double stockPrice = generationOpts.startingValue;
-        for (int i = 0; i < generationOpts.numTimePeriods; i++) {
-            double percentChange =
-                    Math.random() > 0.5 ? generationOpts.percentIncrease : -generationOpts.percentDecrease;
-            if (generationOpts.useRandomChange)
-                stockPrice *= (1.0 + Math.random() * percentChange);
-            else
-                stockPrice *= (1.0 + percentChange);
-        }
-        return stockPrice;
-    }
 
     public static void main( String[] args ) {
         final TradingSimulator sim = new TradingSimulator();

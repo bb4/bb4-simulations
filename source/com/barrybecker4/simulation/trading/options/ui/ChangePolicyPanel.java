@@ -30,11 +30,11 @@ public class ChangePolicyPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         thresholdChangePercentField =
-                new NumberInput(threshChangePercentLabel, defaultPolicy.getChangePercent(),
+                new NumberInput(threshChangePercentLabel, defaultPolicy.getChangePercent() * 100,
                         "When gain/loss percent happens, execute the specified transaction.",
                         0, 100, false);
         transactPercentField =
-                new NumberInput(transactPercentLabel, defaultPolicy.getTransactPercent(),
+                new NumberInput(transactPercentLabel, defaultPolicy.getTransactPercent() * 100,
                         "Percent of current investment/reserve to sell/buy when threshold reached. ",
                         0, 100, false);
 
@@ -47,7 +47,7 @@ public class ChangePolicyPanel extends JPanel {
 
     ChangePolicy getChangePolicy() {
 
-        return new ChangePolicy(thresholdChangePercentField.getValue(), transactPercentField.getValue());
+        return new ChangePolicy(thresholdChangePercentField.getValue() / 100.0, transactPercentField.getValue() / 100.0);
     }
 
 }

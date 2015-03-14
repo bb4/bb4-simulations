@@ -8,14 +8,18 @@ package com.barrybecker4.simulation.trading.options;
  */
 public class TradingOptions {
 
-    private static final float DEFAULT_STARTING_TOTAL = 100000;
-    private static final float DEFAULT_STARTING_INVESTMENT_PERCENT = 10;
-    private static final ChangePolicy DEFAULT_GAIN_POLICY = new ChangePolicy(2, 5);
-    private static final ChangePolicy DEFAULT_LOSS_POLICY = new ChangePolicy(2, 5);
+    private static final double DEFAULT_STARTING_TOTAL = 10000;
+    private static final double DEFAULT_STARTING_INVESTMENT_PERCENT = 0.1;
+    private static final ChangePolicy DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05);
+    private static final ChangePolicy DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05);
+    private static final double DEFAULT_THEORETICAL_MAX_GAIN = 100000;
 
     public double startingTotal = DEFAULT_STARTING_TOTAL;
     public double startingInvestmentPercent = DEFAULT_STARTING_INVESTMENT_PERCENT;
-    public ChangePolicy gainStrategy = DEFAULT_GAIN_POLICY;
-    public ChangePolicy lossStrategy = DEFAULT_LOSS_POLICY;
+
+    public ChangePolicy gainPolicy = DEFAULT_GAIN_POLICY;
+    public ChangePolicy lossPolicy = DEFAULT_LOSS_POLICY;
+
+    public double theoreticalMaxGain = DEFAULT_THEORETICAL_MAX_GAIN;
 
 }
