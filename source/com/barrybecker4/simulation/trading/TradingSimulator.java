@@ -2,19 +2,19 @@
 package com.barrybecker4.simulation.trading;
 
 import com.barrybecker4.common.app.AppContext;
-import com.barrybecker4.common.format.CurrencyFormatter;
-import com.barrybecker4.common.math.function.InvertibleFunction;
-import com.barrybecker4.common.math.function.LinearFunction;
-import com.barrybecker4.common.math.function.LogFunction;
-import com.barrybecker4.simulation.common.ui.DistributionSimulator;
+import com.barrybecker4.simulation.common.ui.Simulator;
+import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.trading.options.GraphingOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
-import com.barrybecker4.ui.renderers.HistogramRenderer;
+import com.barrybecker4.ui.animation.AnimationFrame;
+import com.barrybecker4.ui.util.GUIUtil;
 import com.barrybecker4.ui.util.Log;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 
 /**
@@ -24,13 +24,13 @@ import java.util.Arrays;
  *
  * @author Barry Becker
  */
-public class TradingSimulator extends DistributionSimulator {
+public class TradingSimulator extends Simulator {
 
-    /**
-     * Sometime the numbers on the x axis can get very large. Scientific notation is used in those cases.
-     * If this is large, there will be fewer labels shown.
-     */
-    private static final int LABEL_WIDTH = 70;
+    private static final double TIME_STEP = 1.0;
+    private static final int DEFAULT_STEPS_PER_FRAME = 100;
+
+    private JSplitPane splitPane;
+    private ProfitHistogramPanel profitPanel;
 
     private StockGenerationOptions generationOpts = new StockGenerationOptions();
     private TradingOptions tradingOpts = new TradingOptions();
@@ -40,7 +40,7 @@ public class TradingSimulator extends DistributionSimulator {
     public TradingSimulator() {
         super("Stock Market Simulation");
         AppContext.initialize("ENGLISH", Arrays.asList("com.barrybecker4.ui.message"), new Log());
-        initHistogram();
+        initUI();
     }
 
     public void setOptions(
@@ -48,27 +48,31 @@ public class TradingSimulator extends DistributionSimulator {
         generationOpts = stockSampleOpts;
         this.tradingOpts = tradingOpts;
         this.graphingOpts = graphingOpts;
-        initHistogram();
+        initUI();
+        setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
     }
 
     @Override
-    protected void initHistogram() {
+    protected void reset() {
+        initUI();
+    }
 
-        double max = tradingOpts.theoreticalMaxGain;
-        double xScale = Math.pow(10, Math.max(0, Math.log10(max) - graphingOpts.xResolution));
-        double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
-        int maxX = (int) (max / xScale);
+    private void initUI() {
+        profitPanel = new ProfitHistogramPanel(tradingOpts.theoreticalMaxGain, graphingOpts);
 
-        // go from domain to bin index
-        InvertibleFunction xFunction =
-                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, false) : new LinearFunction(1/(1.5 * xScale), maxX / 4.0);
+        JPanel testPanel = new JPanel();
 
+        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                           testPanel, profitPanel);
 
-        data_ = new int[maxX + 1];
+        //Provide minimum sizes for the two components in the split pane
+        Dimension minimumSize = new Dimension(100, 50);
+        testPanel.setMinimumSize(minimumSize);
+        profitPanel.setMinimumSize(minimumSize);
 
-        histogram_ = new HistogramRenderer(data_, xFunction);
-        histogram_.setXFormatter(new CurrencyFormatter());
-        histogram_.setMaxLabelWidth(LABEL_WIDTH);
+        splitPane.setDividerLocation(350);
+
+        this.add(splitPane);
     }
 
     @Override
@@ -77,6 +81,29 @@ public class TradingSimulator extends DistributionSimulator {
     }
 
     @Override
+    protected double getInitialTimeStep() {
+        return TIME_STEP;
+    }
+
+    @Override
+    public double timeStep() {
+        if ( !isPaused() ) {
+            profitPanel.increment(getXPositionToIncrement());
+        }
+        return timeStep_;
+    }
+
+
+    @Override
+    public void paint( Graphics g ) {
+
+        System.out.println("size = " + getSize() + " w = "+ this.getWidth());
+        splitPane.setSize(getSize());
+        splitPane.paint(g);
+        //profitPanel.paint(g);
+    }
+
+
     protected double getXPositionToIncrement() {
         return createSample();
     }
@@ -98,7 +125,9 @@ public class TradingSimulator extends DistributionSimulator {
 
 
     public static void main( String[] args ) {
-        final TradingSimulator sim = new TradingSimulator();
-        runSimulation(sim);
+        final TradingSimulator simulator = new TradingSimulator();
+        simulator.setPaused(false);
+        new AnimationFrame( simulator );
     }
+
 }

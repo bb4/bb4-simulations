@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.habitat;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
@@ -6,12 +6,10 @@ import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.graphing.GraphOptionsDialog;
 import com.barrybecker4.simulation.habitat.creatures.Populations;
 import com.barrybecker4.simulation.habitat.creatures.SerengetiPopulations;
 import com.barrybecker4.simulation.habitat.options.DynamicOptions;
 import com.barrybecker4.simulation.habitat.options.HabitatOptionsDialog;
-import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;
@@ -88,7 +86,7 @@ public class HabitatSimulator extends Simulator {
      */
     @Override
     public void paint( Graphics g ) {
-        splitPane.setSize(getWidth(), getHeight());
+        splitPane.setSize(getSize());
         splitPane.paint(g);
     }
 
