@@ -2,20 +2,21 @@
 package com.barrybecker4.simulation.trading;
 
 import com.barrybecker4.common.app.AppContext;
+import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.trading.options.GraphingOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.animation.AnimationFrame;
-import com.barrybecker4.ui.util.GUIUtil;
 import com.barrybecker4.ui.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Simulates applying a specific trading strategy to a simulated stock market time series.
@@ -31,10 +32,13 @@ public class TradingSimulator extends Simulator {
 
     private JSplitPane splitPane;
     private ProfitHistogramPanel profitPanel;
+    private StockChartPanel stockChartPanel;
 
     private StockGenerationOptions generationOpts = new StockGenerationOptions();
     private TradingOptions tradingOpts = new TradingOptions();
     private GraphingOptions graphingOpts = new GraphingOptions();
+
+    private List<Function> stockSeries = new LinkedList<>();
 
 
     public TradingSimulator() {
@@ -58,16 +62,16 @@ public class TradingSimulator extends Simulator {
     }
 
     private void initUI() {
+        stockSeries.clear();
+        stockChartPanel = new StockChartPanel();
         profitPanel = new ProfitHistogramPanel(tradingOpts.theoreticalMaxGain, graphingOpts);
 
-        JPanel testPanel = new JPanel();
-
         splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                           testPanel, profitPanel);
+                           stockChartPanel, profitPanel);
 
         //Provide minimum sizes for the two components in the split pane
         Dimension minimumSize = new Dimension(100, 50);
-        testPanel.setMinimumSize(minimumSize);
+        stockChartPanel.setMinimumSize(minimumSize);
         profitPanel.setMinimumSize(minimumSize);
 
         splitPane.setDividerLocation(350);
@@ -88,6 +92,7 @@ public class TradingSimulator extends Simulator {
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
+            stockChartPanel.setSeries(stockSeries);
             profitPanel.increment(getXPositionToIncrement());
         }
         return timeStep_;
@@ -96,11 +101,8 @@ public class TradingSimulator extends Simulator {
 
     @Override
     public void paint( Graphics g ) {
-
-        System.out.println("size = " + getSize() + " w = "+ this.getWidth());
         splitPane.setSize(getSize());
         splitPane.paint(g);
-        //profitPanel.paint(g);
     }
 
 
@@ -113,12 +115,13 @@ public class TradingSimulator extends Simulator {
      */
     private double createSample() {
 
-        GainCalculator calculator = new GainCalculator(tradingOpts);
+        StockRunner runner = new StockRunner(tradingOpts);
 
         double total = 0;
         for (int j = 0; j < generationOpts.numStocks; j++) {
-            //total += calculator.calculateFinalStockPrice(generationOpts);
-            total += calculator.calculateGain(generationOpts);
+            StockRunResult result = runner.doRun(generationOpts);
+            stockSeries.add(result.getStockSeries());
+            total += result.getFinalGain();
         }
         return total / generationOpts.numStocks;
     }

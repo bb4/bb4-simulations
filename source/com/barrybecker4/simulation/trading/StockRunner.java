@@ -1,5 +1,6 @@
 package com.barrybecker4.simulation.trading;
 
+import com.barrybecker4.common.math.function.HeightFunction;
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
@@ -10,11 +11,11 @@ import com.barrybecker4.simulation.trading.options.TradingOptions;
  *
  * @author Barry Becker
  */
-public class GainCalculator {
+public class StockRunner {
 
     private TradingOptions tradingOpts;
 
-    GainCalculator(TradingOptions tradingOpts) {
+    StockRunner(TradingOptions tradingOpts) {
         this.tradingOpts = tradingOpts;
     }
 
@@ -23,10 +24,11 @@ public class GainCalculator {
      * @return amount of gain (or loss if negative) achieved by applying a certain trading strategy to a generated
      *   time series simulating a changing stock price over time.
      */
-    public double calculateGain(StockGenerationOptions generationOpts) {
+    public StockRunResult doRun(StockGenerationOptions generationOpts) {
 
         double stockPrice = generationOpts.startingValue;
         double reserve = tradingOpts.startingTotal;
+
 
         ChangePolicy gainPolicy = tradingOpts.gainPolicy;
         ChangePolicy lossPolicy = tradingOpts.lossPolicy;
@@ -36,10 +38,12 @@ public class GainCalculator {
         reserve -= initialInvestment;
         double sharesOwned = initialInvestment / stockPrice;
         double priceAtLastTransaction = stockPrice;
+        double[] yValues = new double[generationOpts.numTimePeriods];
 
 
         for (int i = 0; i < generationOpts.numTimePeriods; i++) {
             stockPrice = calcNewPrice(generationOpts, stockPrice);
+            yValues[i] = stockPrice;
 
             // if this new price triggers a transaction, then do it
             double pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction;
@@ -71,19 +75,7 @@ public class GainCalculator {
 
         System.out.println("*** final sell = " + finalSell + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
 
-        return totalGain;
-    }
-
-    /**
-     * @return final stock price for a single stock after numTimePeriods.
-     */
-    public double calculateFinalStockPrice(StockGenerationOptions generationOpts) {
-
-        double stockPrice = generationOpts.startingValue;
-        for (int i = 0; i < generationOpts.numTimePeriods; i++) {
-            stockPrice = calcNewPrice(generationOpts, stockPrice);
-        }
-        return stockPrice;
+        return new StockRunResult(new HeightFunction(yValues),  totalGain);
     }
 
 
