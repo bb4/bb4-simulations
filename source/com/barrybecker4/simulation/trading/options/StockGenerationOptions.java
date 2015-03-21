@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options;
 
 /**
@@ -14,7 +14,7 @@ public class StockGenerationOptions {
     private static final double DEFAULT_PERCENT_INCREASE = 0.04;
     private static final double DEFAULT_PERCENT_DECREASE = 0.03;
     private static final double DEFAULT_STARTING_VALUE = 100;
-    private static final boolean DEFAULT_USE_RANDOM_CHANGE = false;
+    private static final boolean DEFAULT_USE_RANDOM_CHANGE = true;
 
     public int numStocks = DEFAULT_NUM_STOCKS;
     public int numTimePeriods = DEFAULT_NUM_TIME_PERIODS;

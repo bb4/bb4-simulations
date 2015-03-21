@@ -1,3 +1,4 @@
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
@@ -17,17 +18,30 @@ public class StockRunResult {
 
 
     private HeightFunction stockSeries;
+    private HeightFunction investmentSeries;
+    private HeightFunction reserveSeries;
     private double finalGain;
 
 
-    StockRunResult(HeightFunction stockSeries, double finalGain) {
+    /** Constructor */
+    StockRunResult(HeightFunction stockSeries, HeightFunction investmentSeries, HeightFunction reserveSeries, double finalGain) {
         this.stockSeries = stockSeries;
+        this.investmentSeries = investmentSeries;
+        this.reserveSeries = reserveSeries;
         this.finalGain = finalGain;
     }
 
 
     public HeightFunction getStockSeries() {
         return stockSeries;
+    }
+
+    public HeightFunction getInvestmentSeries() {
+        return investmentSeries;
+    }
+
+    public HeightFunction getReserveSeries() {
+        return reserveSeries;
     }
 
     public double getFinalValuation() {

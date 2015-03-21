@@ -1,6 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options;
 
+import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.PercentOfReserveStrategy;
+
 /**
  * Stock trading strategy options and default values.
  *
@@ -9,10 +12,14 @@ package com.barrybecker4.simulation.trading.options;
 public class TradingOptions {
 
     private static final double DEFAULT_STARTING_TOTAL = 100000;
-    private static final double DEFAULT_STARTING_INVESTMENT_PERCENT = 0.1;
+    private static final double DEFAULT_STARTING_INVESTMENT_PERCENT = 0.5;
+    private static final double DEFAULT_THEORETICAL_MAX_GAIN = 100000;
+
+
+
     private static final ChangePolicy DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05);
     private static final ChangePolicy DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05);
-    private static final double DEFAULT_THEORETICAL_MAX_GAIN = 100000;
+
 
     public double startingTotal = DEFAULT_STARTING_TOTAL;
     public double startingInvestmentPercent = DEFAULT_STARTING_INVESTMENT_PERCENT;
@@ -21,5 +28,9 @@ public class TradingOptions {
     public ChangePolicy lossPolicy = DEFAULT_LOSS_POLICY;
 
     public double theoreticalMaxGain = DEFAULT_THEORETICAL_MAX_GAIN;
+
+    public ITradingStrategy getTradingStrategy() {
+        return new PercentOfReserveStrategy(gainPolicy, lossPolicy);
+    }
 
 }

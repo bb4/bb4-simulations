@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Show histogram of expected profit distribution given current strategy.
+ *
  * @author Barry Becker
  */
 public class ProfitHistogramPanel extends JPanel {

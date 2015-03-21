@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.trading;
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.common.math.function.HeightFunction;
+import com.barrybecker4.simulation.trading.model.StockSeries;
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Shows series of generated stock market simulations represented as height functions.
  * @author Barry Becker
  */
 public class StockChartPanel extends JPanel {
@@ -21,6 +23,8 @@ public class StockChartPanel extends JPanel {
      */
     private static final int LABEL_WIDTH = 70;
 
+    private StockSeries stockSeries = new StockSeries(100);
+
     MultipleFunctionRenderer stockChart;
 
     StockChartPanel() {
@@ -30,8 +34,13 @@ public class StockChartPanel extends JPanel {
         stockChart.setMaxLabelWidth(LABEL_WIDTH);
     }
 
-    public void setSeries(List<Function> functions) {
-        stockChart.setFunctions(functions);
+    public void addSeries(Function function) {
+        stockSeries.add(function);
+        stockChart.setFunctions(stockSeries);
+    }
+
+    public void clear() {
+        stockSeries.clear();
     }
 
     public void paint(Graphics g) {

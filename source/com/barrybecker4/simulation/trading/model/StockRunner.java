@@ -1,3 +1,4 @@
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
@@ -29,21 +30,26 @@ public class StockRunner {
         double stockPrice = generationOpts.startingValue;
         double reserve = tradingOpts.startingTotal;
 
-
         ChangePolicy gainPolicy = tradingOpts.gainPolicy;
         ChangePolicy lossPolicy = tradingOpts.lossPolicy;
+        int numPeriods = generationOpts.numTimePeriods;
 
         // initial buy
         double initialInvestment = tradingOpts.startingInvestmentPercent * reserve;
         reserve -= initialInvestment;
         double sharesOwned = initialInvestment / stockPrice;
         double priceAtLastTransaction = stockPrice;
-        double[] yValues = new double[generationOpts.numTimePeriods];
+        double[] yValues = new double[numPeriods + 1];
+        double[] investValues = new double[numPeriods + 1];
+        double[] reserveValues = new double[numPeriods + 1];
 
 
-        for (int i = 0; i < generationOpts.numTimePeriods; i++) {
-            stockPrice = calcNewPrice(generationOpts, stockPrice);
+        for (int i = 0; i < numPeriods; i++) {
             yValues[i] = stockPrice;
+            investValues[i] = sharesOwned * stockPrice;
+            reserveValues[i] = reserve;
+
+            stockPrice = calcNewPrice(generationOpts, stockPrice);
 
             // if this new price triggers a transaction, then do it
             double pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction;
@@ -73,9 +79,15 @@ public class StockRunner {
         reserve += finalSell;
         double totalGain = reserve - tradingOpts.startingTotal;
 
-        System.out.println("*** final sell = " + finalSell + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
+        yValues[numPeriods] = stockPrice;
+        investValues[numPeriods] = 0;
+        reserveValues[numPeriods] = reserve;
 
-        return new StockRunResult(new HeightFunction(yValues),  totalGain);
+        System.out.println("*** final sell = " + finalSell
+                + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
+
+        return new StockRunResult(
+                new HeightFunction(yValues), new HeightFunction(investValues), new HeightFunction(reserveValues), totalGain);
     }
 
 

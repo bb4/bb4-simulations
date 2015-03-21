@@ -23,7 +23,7 @@ public class StockSeries extends LinkedList<Function> {
 
     public boolean add(Function func) {
         boolean success = super.add(func);
-        if (size() >= maxNum) {
+        if (size() > maxNum) {
             remove(0);
         }
         return success;
