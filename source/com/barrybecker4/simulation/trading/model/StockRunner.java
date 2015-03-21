@@ -2,6 +2,8 @@
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.MarketPosition;
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
@@ -22,23 +24,19 @@ public class StockRunner {
 
 
     /**
-     * @return amount of gain (or loss if negative) achieved by applying a certain trading strategy to a generated
-     *   time series simulating a changing stock price over time.
+     * @return everything about the run including the time series for the stock, the amounts invested in the stock and
+     *   in the reserve account, and the amount of gain (or loss if negative) achieved by applying a certain
+     *   trading strategy to a generated time series simulating a changing stock price over time.
      */
     public StockRunResult doRun(StockGenerationOptions generationOpts) {
 
+        ITradingStrategy strategy = tradingOpts.getTradingStrategy();
         double stockPrice = generationOpts.startingValue;
-        double reserve = tradingOpts.startingTotal;
-
-        ChangePolicy gainPolicy = tradingOpts.gainPolicy;
-        ChangePolicy lossPolicy = tradingOpts.lossPolicy;
         int numPeriods = generationOpts.numTimePeriods;
 
         // initial buy
-        double initialInvestment = tradingOpts.startingInvestmentPercent * reserve;
-        reserve -= initialInvestment;
-        double sharesOwned = initialInvestment / stockPrice;
-        double priceAtLastTransaction = stockPrice;
+        MarketPosition position = strategy.initialInvestment(stockPrice);
+
         double[] yValues = new double[numPeriods + 1];
         double[] investValues = new double[numPeriods + 1];
         double[] reserveValues = new double[numPeriods + 1];
@@ -46,48 +44,28 @@ public class StockRunner {
 
         for (int i = 0; i < numPeriods; i++) {
             yValues[i] = stockPrice;
-            investValues[i] = sharesOwned * stockPrice;
-            reserveValues[i] = reserve;
+            investValues[i] = position.getInvested();
+            reserveValues[i] = position.getReserve();
 
             stockPrice = calcNewPrice(generationOpts, stockPrice);
 
-            // if this new price triggers a transaction, then do it
-            double pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction;
-            if (pctChange >= gainPolicy.getChangePercent()) {
-                // sell, and take some profit. Assume we can sell partial shares
-                double sharesToSell = gainPolicy.getTransactPercent() * sharesOwned;
-                //System.out.println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
-                sharesOwned -= sharesToSell;
-                reserve += sharesToSell * stockPrice;
-                priceAtLastTransaction = stockPrice;
-            }
-            else if (-pctChange >= lossPolicy.getChangePercent()) {
-                // buy more because its cheaper
-                double amountToInvest = lossPolicy.getTransactPercent() * reserve;
-                reserve -= amountToInvest;
-                double sharesToBuy = amountToInvest / stockPrice;
-                //System.out.println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
-                sharesOwned += sharesToBuy;
-                priceAtLastTransaction = stockPrice;
-            }
-            //System.out.println("reserve = "+ reserve  +  "   num shares = " + sharesOwned + " @"+ stockPrice);
+            position = strategy.updateInvestment(stockPrice);
         }
 
-        // at the end of the last time step we need to sell everything and take the ultimate profit/loss.
-        double finalSell = sharesOwned * stockPrice;
-
-        reserve += finalSell;
-        double totalGain = reserve - tradingOpts.startingTotal;
+        position = strategy.finalizeInvestment(stockPrice);
 
         yValues[numPeriods] = stockPrice;
         investValues[numPeriods] = 0;
-        reserveValues[numPeriods] = reserve;
+        reserveValues[numPeriods] = position.getReserve();
 
-        System.out.println("*** final sell = " + finalSell
-                + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
+        //System.out.println("*** final sell = " + finalSell
+        //        + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
 
         return new StockRunResult(
-                new HeightFunction(yValues), new HeightFunction(investValues), new HeightFunction(reserveValues), totalGain);
+                new HeightFunction(yValues),
+                new HeightFunction(investValues),
+                new HeightFunction(reserveValues),
+                strategy.getGain());
     }
 
 

@@ -30,7 +30,7 @@ public class TradingOptions {
     public double theoreticalMaxGain = DEFAULT_THEORETICAL_MAX_GAIN;
 
     public ITradingStrategy getTradingStrategy() {
-        return new PercentOfReserveStrategy(gainPolicy, lossPolicy);
+        return new PercentOfReserveStrategy(startingTotal, startingInvestmentPercent, gainPolicy, lossPolicy);
     }
 
 }
