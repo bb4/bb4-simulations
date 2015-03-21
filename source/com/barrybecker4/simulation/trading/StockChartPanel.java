@@ -1,8 +1,8 @@
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading;
 
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.Function;
-import com.barrybecker4.common.math.function.HeightFunction;
 import com.barrybecker4.simulation.trading.model.StockSeries;
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
 

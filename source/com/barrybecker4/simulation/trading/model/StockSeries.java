@@ -1,10 +1,9 @@
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.Function;
-import com.barrybecker4.common.math.function.HeightFunction;
 
 import java.util.LinkedList;
-import java.util.List;
 
 
 /**

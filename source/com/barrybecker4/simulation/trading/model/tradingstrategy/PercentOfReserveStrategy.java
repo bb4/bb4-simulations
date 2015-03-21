@@ -1,3 +1,4 @@
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
@@ -8,15 +9,7 @@ import com.barrybecker4.simulation.trading.options.ChangePolicy;
  *
  * @author Barry Becker
  */
-public class PercentOfReserveStrategy implements ITradingStrategy {
-
-    public double startingTotal;
-    public double startingInvestmentPercent;
-
-    double reserve;
-    double invested;
-    double sharesOwned;
-    double priceAtLastTransaction;
+public class PercentOfReserveStrategy extends AbstractTradingStrategy {
 
     private ChangePolicy gainPolicy;
     private ChangePolicy lossPolicy;
@@ -24,22 +17,11 @@ public class PercentOfReserveStrategy implements ITradingStrategy {
 
     public PercentOfReserveStrategy(double startingTotal, double startingInvestmentPercent,
                                     ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
-        this.startingTotal = startingTotal;
-        this.startingInvestmentPercent = startingInvestmentPercent;
+        super(startingTotal, startingInvestmentPercent);
         this.gainPolicy = gainPolicy;
         this.lossPolicy = lossPolicy;
     }
 
-
-    @Override
-    public MarketPosition initialInvestment(double stockPrice) {
-
-        invested = startingInvestmentPercent * startingTotal;
-        sharesOwned = invested / stockPrice;
-        reserve = startingTotal - invested;
-        priceAtLastTransaction = stockPrice;
-        return new MarketPosition(invested, reserve, sharesOwned);
-    }
 
     /**
      * if this new price triggers a transaction, then do it
@@ -68,22 +50,6 @@ public class PercentOfReserveStrategy implements ITradingStrategy {
             priceAtLastTransaction = stockPrice;
         }
         return new MarketPosition(invested, reserve, sharesOwned);
-    }
-
-    @Override
-    public MarketPosition finalizeInvestment(double stockPrice) {
-
-        double finalSell = sharesOwned * stockPrice;
-        reserve += finalSell;
-        sharesOwned = 0;
-        invested = 0;
-
-        return new MarketPosition(invested, reserve, sharesOwned);
-    }
-
-
-    public double getGain() {
-        return reserve - startingTotal;
     }
 
 }
