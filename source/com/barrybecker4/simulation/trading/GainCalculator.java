@@ -37,29 +37,30 @@ public class GainCalculator {
         double sharesOwned = initialInvestment / stockPrice;
         double priceAtLastTransaction = stockPrice;
 
+
         for (int i = 0; i < generationOpts.numTimePeriods; i++) {
             stockPrice = calcNewPrice(generationOpts, stockPrice);
 
             // if this new price triggers a transaction, then do it
             double pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction;
-            if (pctChange >= tradingOpts.gainPolicy.getChangePercent()) {
+            if (pctChange >= gainPolicy.getChangePercent()) {
                 // sell, and take some profit. Assume we can sell partial shares
                 double sharesToSell = gainPolicy.getTransactPercent() * sharesOwned;
-                //System.out.println(" - selling " + sharesToSell + " shares");
+                //System.out.println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
                 sharesOwned -= sharesToSell;
                 reserve += sharesToSell * stockPrice;
                 priceAtLastTransaction = stockPrice;
             }
-            else if (-pctChange > tradingOpts.lossPolicy.getChangePercent()) {
+            else if (-pctChange >= lossPolicy.getChangePercent()) {
                 // buy more because its cheaper
                 double amountToInvest = lossPolicy.getTransactPercent() * reserve;
                 reserve -= amountToInvest;
                 double sharesToBuy = amountToInvest / stockPrice;
-                //System.out.println(" + buying " + sharesToBuy + " shares");
+                //System.out.println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
                 sharesOwned += sharesToBuy;
                 priceAtLastTransaction = stockPrice;
             }
-            //System.out.println("reserve = "+ reserve  +  "   num shares = " + sharesOwned);
+            //System.out.println("reserve = "+ reserve  +  "   num shares = " + sharesOwned + " @"+ stockPrice);
         }
 
         // at the end of the last time step we need to sell everything and take the ultimate profit/loss.
@@ -68,7 +69,7 @@ public class GainCalculator {
         reserve += finalSell;
         double totalGain = reserve - tradingOpts.startingTotal;
 
-        System.out.println("*** final sell = " + finalSell + " reserve = " + reserve + " totalGain = " + totalGain);
+        System.out.println("*** final sell = " + finalSell + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
 
         return totalGain;
     }

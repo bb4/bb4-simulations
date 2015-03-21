@@ -32,7 +32,7 @@ task runSnake(type: JavaExec) {
 
 task runStock(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["com.barrybecker4.simulation.stock.TradingSimulator"]
+    args = ["com.barrybecker4.simulation.stock.StockSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -57,6 +57,12 @@ task runFractalExplorer(type: JavaExec) {
 task runHenonPhaseExplorer(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.henonphase.HenonPhaseExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runHabitatExplorer(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.habitat.HabitatSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 

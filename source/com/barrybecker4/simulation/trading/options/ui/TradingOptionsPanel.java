@@ -55,7 +55,7 @@ public class TradingOptionsPanel extends JPanel {
                 tradingOptions.lossPolicy);
 
         theoreticalMaxGainField =
-                new NumberInput("Theoretical max gain: ", 100 *tradingOptions.theoreticalMaxGain,
+                new NumberInput("Theoretical max gain: ", tradingOptions.theoreticalMaxGain,
                         "Enter value for the biggest profit you could hope to get from this model. "
                                 + "Used only to determine the max extent of the x axis.",
                         0, 100000000, false);

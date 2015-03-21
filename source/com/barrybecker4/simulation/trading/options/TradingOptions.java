@@ -8,7 +8,7 @@ package com.barrybecker4.simulation.trading.options;
  */
 public class TradingOptions {
 
-    private static final double DEFAULT_STARTING_TOTAL = 10000;
+    private static final double DEFAULT_STARTING_TOTAL = 100000;
     private static final double DEFAULT_STARTING_INVESTMENT_PERCENT = 0.1;
     private static final ChangePolicy DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05);
     private static final ChangePolicy DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05);

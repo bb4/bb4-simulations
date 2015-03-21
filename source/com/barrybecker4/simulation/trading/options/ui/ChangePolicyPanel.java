@@ -36,7 +36,7 @@ public class ChangePolicyPanel extends JPanel {
         transactPercentField =
                 new NumberInput(transactPercentLabel, defaultPolicy.getTransactPercent() * 100,
                         "Percent of current investment/reserve to sell/buy when threshold reached. ",
-                        0, 100, false);
+                        -100, 100, false);
 
         add(thresholdChangePercentField);
         add(transactPercentField);

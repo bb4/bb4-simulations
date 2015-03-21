@@ -11,8 +11,8 @@ public class StockGenerationOptions {
 
     private static final int DEFAULT_NUM_STOCKS = 1;
     private static final int DEFAULT_NUM_TIME_PERIODS = 100;
-    private static final double DEFAULT_PERCENT_INCREASE = 0.1;
-    private static final double DEFAULT_PERCENT_DECREASE = 0.08;
+    private static final double DEFAULT_PERCENT_INCREASE = 0.04;
+    private static final double DEFAULT_PERCENT_DECREASE = 0.03;
     private static final double DEFAULT_STARTING_VALUE = 100;
     private static final boolean DEFAULT_USE_RANDOM_CHANGE = false;
 

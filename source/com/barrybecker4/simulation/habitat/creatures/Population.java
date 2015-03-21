@@ -20,12 +20,13 @@ public class Population {
 
     private CreatureType type;
 
+    private int initialSize;
     private List<Creature> creatures;
 
 
     public Population(CreatureType type) {
         this.type = type;
-        creatures = new ArrayList<Creature>();
+        creatures = new ArrayList<>();
     }
 
     /**
@@ -35,13 +36,25 @@ public class Population {
      * @return new population
      */
     public static Population createPopulation(CreatureType type, int initialSize)  {
+
         Population pop = new Population(type);
         pop.createInitialSet(initialSize);
         return pop;
     }
 
     public void createInitialSet(int num) {
-        for (int i=0; i<num; i++) {
+        this.initialSize = num;
+        create();
+    }
+
+    /** Reset the population to its original size */
+    public void reset() {
+        create();
+    }
+
+    private void create() {
+        creatures.clear();
+        for (int i=0; i<initialSize; i++) {
             creatures.add(new Creature(type, new Point2d(MathUtil.RANDOM.nextDouble(), MathUtil.RANDOM.nextDouble())));
         }
     }

@@ -57,11 +57,13 @@ public class TradingSimulator extends DistributionSimulator {
         double max = tradingOpts.theoreticalMaxGain;
         double xScale = Math.pow(10, Math.max(0, Math.log10(max) - graphingOpts.xResolution));
         double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
+        int maxX = (int) (max / xScale);
 
+        // go from domain to bin index
         InvertibleFunction xFunction =
-                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, false) : new LinearFunction(1/xScale, 20.0);
+                graphingOpts.useLogScale ? new LogFunction(xLogScale, 10.0, false) : new LinearFunction(1/(1.5 * xScale), maxX / 4.0);
 
-        int maxX = (int)xFunction.getValue(max);
+
         data_ = new int[maxX + 1];
 
         histogram_ = new HistogramRenderer(data_, xFunction);
@@ -85,8 +87,6 @@ public class TradingSimulator extends DistributionSimulator {
     private double createSample() {
 
         GainCalculator calculator = new GainCalculator(tradingOpts);
-
-        System.out.println("up pct: " + generationOpts.percentIncrease + " down pct: " + generationOpts.percentDecrease);
 
         double total = 0;
         for (int j = 0; j < generationOpts.numStocks; j++) {

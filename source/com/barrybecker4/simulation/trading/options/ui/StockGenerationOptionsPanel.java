@@ -59,7 +59,7 @@ public class StockGenerationOptionsPanel extends JPanel {
                 new NumberInput("% to decrease each time period if tails (0 - 100): ",
                         100 * generationOptions_.percentDecrease,
                         "Amount to decrease after each time period if coin toss is tails.",
-                        0, 100, false);
+                        -100, 100, false);
         startingValueField_ =
                 new NumberInput("Starting stock value : ", generationOptions_.startingValue,
                         "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",

@@ -32,16 +32,25 @@ public abstract class Populations extends ArrayList<Population> {
      * Constructor
      */
     public Populations() {
-
+        functionMap = new HashMap<>();
         initialize();
     }
 
-    public void initialize() {
-        functionMap = new HashMap<Population, CountFunction>();
+    private void initialize() {
         grid = new HabitatGrid(20, 15);
 
         this.clear();
         addPopulations();
+
+        updateGridCellCounts();
+    }
+
+    public void reset() {
+        grid = new HabitatGrid(20, 15);
+
+        for (Population pop : this) {
+            pop.reset();
+        }
 
         updateGridCellCounts();
     }
@@ -62,8 +71,8 @@ public abstract class Populations extends ArrayList<Population> {
 
     public MultipleFunctionRenderer createFunctionRenderer() {
 
-        List<Function> functions = new ArrayList<Function>();
-        List<Color> lineColors = new LinkedList<Color>();
+        List<Function> functions = new ArrayList<>();
+        List<Color> lineColors = new LinkedList<>();
 
         for (Population pop : this) {
             CountFunction func = new CountFunction(pop.getSize());
@@ -79,7 +88,8 @@ public abstract class Populations extends ArrayList<Population> {
     private void updateFunctions(long iteration) {
 
         for (Population pop : this) {
-            functionMap.get(pop).addValue(iteration, pop.getSize());
+            CountFunction func = functionMap.get(pop);
+            func.addValue(iteration, pop.getSize());
         }
     }
 
