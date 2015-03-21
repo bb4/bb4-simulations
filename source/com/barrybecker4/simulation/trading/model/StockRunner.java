@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.trading;
+package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
@@ -15,7 +15,7 @@ public class StockRunner {
 
     private TradingOptions tradingOpts;
 
-    StockRunner(TradingOptions tradingOpts) {
+    public StockRunner(TradingOptions tradingOpts) {
         this.tradingOpts = tradingOpts;
     }
 

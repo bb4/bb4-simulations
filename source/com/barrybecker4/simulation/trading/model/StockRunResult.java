@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.trading;
+package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
 import com.barrybecker4.simulation.trading.options.ChangePolicy;

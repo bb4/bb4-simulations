@@ -21,10 +21,12 @@ public class ProfitHistogramPanel extends JPanel {
      */
     private static final int LABEL_WIDTH = 70;
 
-    HistogramRenderer histogram;
+    private HistogramRenderer histogram;
 
-    ProfitHistogramPanel(double maxGain, GraphingOptions graphingOpts) {
+    ProfitHistogramPanel() {
+    }
 
+    void setOptions(double maxGain, GraphingOptions graphingOpts)  {
         double xScale = Math.pow(10, Math.max(0, Math.log10(maxGain) - graphingOpts.xResolution));
         double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
         int maxX = (int) (maxGain / xScale);
@@ -44,6 +46,7 @@ public class ProfitHistogramPanel extends JPanel {
     public void increment(double xpos) {
         histogram.increment(xpos);
     }
+
     public void paint(Graphics g) {
         histogram.setSize(getWidth(), getHeight());
         histogram.paint(g);

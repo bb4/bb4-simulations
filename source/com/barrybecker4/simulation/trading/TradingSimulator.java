@@ -5,6 +5,9 @@ import com.barrybecker4.common.app.AppContext;
 import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.trading.model.StockRunResult;
+import com.barrybecker4.simulation.trading.model.StockRunner;
+import com.barrybecker4.simulation.trading.model.StockSeries;
 import com.barrybecker4.simulation.trading.options.GraphingOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog;
@@ -38,7 +41,7 @@ public class TradingSimulator extends Simulator {
     private TradingOptions tradingOpts = new TradingOptions();
     private GraphingOptions graphingOpts = new GraphingOptions();
 
-    private List<Function> stockSeries = new LinkedList<>();
+    private StockSeries stockSeries = new StockSeries(100);
 
 
     public TradingSimulator() {
@@ -52,19 +55,19 @@ public class TradingSimulator extends Simulator {
         generationOpts = stockSampleOpts;
         this.tradingOpts = tradingOpts;
         this.graphingOpts = graphingOpts;
-        initUI();
+        update();
         setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
     }
 
     @Override
     protected void reset() {
-        initUI();
+        update();
     }
 
     private void initUI() {
-        stockSeries.clear();
+
         stockChartPanel = new StockChartPanel();
-        profitPanel = new ProfitHistogramPanel(tradingOpts.theoreticalMaxGain, graphingOpts);
+        profitPanel = new ProfitHistogramPanel();
 
         splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                            stockChartPanel, profitPanel);
@@ -77,6 +80,12 @@ public class TradingSimulator extends Simulator {
         splitPane.setDividerLocation(350);
 
         this.add(splitPane);
+        update();
+    }
+
+    private void update() {
+        stockSeries.clear();
+        profitPanel.setOptions(tradingOpts.theoreticalMaxGain, graphingOpts);
     }
 
     @Override
