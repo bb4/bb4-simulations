@@ -139,7 +139,7 @@ public class TrebuchetSimulator extends NewtonianSimulator
 
         g2.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
-                useAntialiasing_ ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF );
+                getAntialiasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF );
 
 
         // draw the trebuchet in its current position

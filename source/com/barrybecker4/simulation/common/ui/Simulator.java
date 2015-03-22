@@ -33,7 +33,7 @@ public abstract class Simulator extends AnimationComponent
     protected double timeStep_;
 
     /** whether or not to use anti-aliasing when rendering */
-    protected boolean useAntialiasing_ = true;
+    private boolean useAntialiasing_ = true;
 
     /**
      * Constructor

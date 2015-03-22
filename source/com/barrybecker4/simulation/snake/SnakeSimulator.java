@@ -197,7 +197,7 @@ public class SnakeSimulator extends NewtonianSimulator {
 
         g2.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
-                useAntialiasing_ ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF );
+                getAntialiasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF );
 
         Point2d newCenter = snake_.getCenter();
         Vector2d distanceDelta = new Vector2d( oldCenter_.x - newCenter.x, oldCenter_.y - newCenter.y );

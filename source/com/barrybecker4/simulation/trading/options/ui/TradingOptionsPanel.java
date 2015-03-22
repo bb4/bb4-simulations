@@ -28,13 +28,14 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     /** The amount of money to use to purchase stock(s) at the starting price.  */
     private NumberInput startingInvestmentPercentField;
 
-    private ChangePolicyPanel gainPolicyPanel;
-    private ChangePolicyPanel lossPolicyPanel;
-
     /** The amount of money to use to purchase stock(s) at the starting price.  */
     private NumberInput theoreticalMaxGainField;
 
     private TradingOptions tradingOptions;
+
+    // these will come from the trading strategy
+    private ChangePolicyPanel gainPolicyPanel;
+    private ChangePolicyPanel lossPolicyPanel;
 
     private JComboBox<String> strategyCombo;
 
@@ -42,7 +43,6 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
      * constructor
      */
     public TradingOptionsPanel() {
-
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -62,6 +62,10 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
                                 + "Used only to determine the max extent of the x axis.",
                         0, 100000000, false);
 
+        // needed to get the field to extend to the left.
+        startingTotalField.setAlignmentX(CENTER_ALIGNMENT);
+        startingInvestmentPercentField.setAlignmentX(CENTER_ALIGNMENT);
+        theoreticalMaxGainField.setAlignmentX(CENTER_ALIGNMENT);
 
         // these are common to all strategies
         add(startingTotalField);
@@ -85,21 +89,16 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
         List<String> choices = Arrays.asList("foo", "bar");
         strategyCombo = new JComboBox<>((String[]) choices.toArray());
-        //strategyCombo.setPreferredSize(new Dimension(200, 20));
         strategyCombo.addItemListener(this);
-
-        //JPanel fill = new JPanel();
-        //fill.setPreferredSize(new Dimension(200, 10));
 
         panel.add(label);
         panel.add(strategyCombo);
-        //panel.add(fill);
         return panel;
     }
 
+
     private JPanel createStrategyOptions() {
-        JPanel strategyPanel = new JPanel();
-        strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS));
+        JPanel strategyPanel = new JPanel(new BorderLayout());
         strategyPanel.setBorder(BorderFactory.createEtchedBorder());
 
         gainPolicyPanel = new ChangePolicyPanel("% gain which triggers next transaction",
@@ -109,8 +108,12 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
                 "% of current reserve to use to buy on loss",
                 tradingOptions.lossPolicy);
 
-        strategyPanel.add(gainPolicyPanel);
-        strategyPanel.add(lossPolicyPanel);
+        gainPolicyPanel.setAlignmentX(CENTER_ALIGNMENT);
+        lossPolicyPanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        strategyPanel.add(gainPolicyPanel, BorderLayout.NORTH);
+        strategyPanel.add(lossPolicyPanel, BorderLayout.CENTER);
+
         return strategyPanel;
     }
 

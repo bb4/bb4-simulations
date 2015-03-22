@@ -1,4 +1,6 @@
-/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/*
+ * Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/license.MIT
+ */
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
@@ -9,19 +11,18 @@ import com.barrybecker4.simulation.trading.options.ChangePolicy;
  *
  * @author Barry Becker
  */
-public class PercentOfReserveStrategy extends AbstractTradingStrategy {
+public class BuyPercentOfInvestmentStrategy extends AbstractTradingStrategy {
 
     private ChangePolicy gainPolicy;
     private ChangePolicy lossPolicy;
 
 
-    public PercentOfReserveStrategy(double startingTotal, double startingInvestmentPercent,
-                                    ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
+    public BuyPercentOfInvestmentStrategy(double startingTotal, double startingInvestmentPercent,
+                                          ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
         super(startingTotal, startingInvestmentPercent);
         this.gainPolicy = gainPolicy;
         this.lossPolicy = lossPolicy;
     }
-
 
     /**
      * if this new price triggers a transaction, then do it
@@ -32,7 +33,7 @@ public class PercentOfReserveStrategy extends AbstractTradingStrategy {
         double pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction;
         if (pctChange >= gainPolicy.getChangePercent()) {
             // sell, and take some profit. Assume we can sell partial shares
-            double sharesToSell = gainPolicy.getTransactPercent() * sharesOwned;
+            double sharesToSell = Math.min(sharesOwned, gainPolicy.getTransactPercent() * reserve / stockPrice);
             //System.out.println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
             sharesOwned -= sharesToSell;
             reserve += sharesToSell * stockPrice;
@@ -41,7 +42,7 @@ public class PercentOfReserveStrategy extends AbstractTradingStrategy {
         }
         else if (-pctChange >= lossPolicy.getChangePercent()) {
             // buy more because its cheaper
-            double amountToInvest = lossPolicy.getTransactPercent() * reserve;
+            double amountToInvest = Math.min(reserve, lossPolicy.getTransactPercent() * sharesOwned * stockPrice);
             reserve -= amountToInvest;
             double sharesToBuy = amountToInvest / stockPrice;
             //System.out.println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
