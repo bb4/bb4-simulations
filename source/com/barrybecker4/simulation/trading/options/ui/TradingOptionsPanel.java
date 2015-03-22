@@ -5,6 +5,12 @@ import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * public float startingTotal = DEFAULT_STARTING_TOTAL;
@@ -14,7 +20,7 @@ import javax.swing.*;
 
  * @author Barry Becker
  */
-public class TradingOptionsPanel extends JPanel {
+public class TradingOptionsPanel extends JPanel implements ItemListener{
 
     /** Starting total in dollars */
     private NumberInput startingTotalField;
@@ -30,14 +36,17 @@ public class TradingOptionsPanel extends JPanel {
 
     private TradingOptions tradingOptions;
 
+    private JComboBox<String> strategyCombo;
+
     /**
      * constructor
      */
     public TradingOptionsPanel() {
 
-        tradingOptions = new TradingOptions();
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        tradingOptions = new TradingOptions();
         startingTotalField =
                 new NumberInput("Starting Total Funds (1000 - 1000000): ", tradingOptions.startingTotal,
                         "The total amount of money that you start with. you will choose to invest some portion of it initially.",
@@ -47,6 +56,52 @@ public class TradingOptionsPanel extends JPanel {
                         "The percent of total funds to invest initially.",
                         0, 100, false);
 
+        theoreticalMaxGainField =
+                new NumberInput("Theoretical max gain: ", tradingOptions.theoreticalMaxGain,
+                        "Enter value for the biggest profit you could hope to get from this model. "
+                                + "Used only to determine the max extent of the x axis.",
+                        0, 100000000, false);
+
+
+        // these are common to all strategies
+        add(startingTotalField);
+        add(startingInvestmentPercentField);
+        add(theoreticalMaxGainField);
+
+        add(createStrategyDropDown());
+
+        // these are strategy specific
+        add(createStrategyOptions());
+
+        setBorder(Section.createBorder("Trading Options"));
+    }
+
+    private JPanel createStrategyDropDown() {
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        JLabel label = new JLabel("Trading strategy : ");
+
+        List<String> choices = Arrays.asList("foo", "bar");
+        strategyCombo = new JComboBox<>((String[]) choices.toArray());
+        //strategyCombo.setPreferredSize(new Dimension(200, 20));
+        strategyCombo.addItemListener(this);
+
+        //JPanel fill = new JPanel();
+        //fill.setPreferredSize(new Dimension(200, 10));
+
+        panel.add(label);
+        panel.add(strategyCombo);
+        //panel.add(fill);
+        return panel;
+    }
+
+    private JPanel createStrategyOptions() {
+        JPanel strategyPanel = new JPanel();
+        strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS));
+        strategyPanel.setBorder(BorderFactory.createEtchedBorder());
+
         gainPolicyPanel = new ChangePolicyPanel("% gain which triggers next transaction",
                 "% of current investment to sell on gain",
                 tradingOptions.gainPolicy);
@@ -54,19 +109,9 @@ public class TradingOptionsPanel extends JPanel {
                 "% of current reserve to use to buy on loss",
                 tradingOptions.lossPolicy);
 
-        theoreticalMaxGainField =
-                new NumberInput("Theoretical max gain: ", tradingOptions.theoreticalMaxGain,
-                        "Enter value for the biggest profit you could hope to get from this model. "
-                                + "Used only to determine the max extent of the x axis.",
-                        0, 100000000, false);
-
-        add(startingTotalField);
-        add(startingInvestmentPercentField);
-        add(gainPolicyPanel);
-        add(lossPolicyPanel);
-        add(theoreticalMaxGainField);
-
-        setBorder(Section.createBorder("Trading Strategy Options"));
+        strategyPanel.add(gainPolicyPanel);
+        strategyPanel.add(lossPolicyPanel);
+        return strategyPanel;
     }
 
 
@@ -81,4 +126,8 @@ public class TradingOptionsPanel extends JPanel {
         return tradingOptions;
     }
 
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        System.out.println("selected = " + strategyCombo.getSelectedItem());
+    }
 }

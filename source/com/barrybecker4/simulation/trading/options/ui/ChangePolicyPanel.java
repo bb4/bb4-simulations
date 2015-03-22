@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Allow the user to add a change policy from the UI.
@@ -27,7 +28,10 @@ public class ChangePolicyPanel extends JPanel {
     public ChangePolicyPanel(String threshChangePercentLabel, String transactPercentLabel, ChangePolicy defaultPolicy) {
 
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new FlowLayout(FlowLayout.LEADING));
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
 
         thresholdChangePercentField =
                 new NumberInput(threshChangePercentLabel, defaultPolicy.getChangePercent() * 100,
@@ -38,10 +42,12 @@ public class ChangePolicyPanel extends JPanel {
                         "Percent of current investment/reserve to sell/buy when threshold reached. ",
                         -100, 100, false);
 
-        add(thresholdChangePercentField);
-        add(transactPercentField);
+        panel.add(thresholdChangePercentField);
+        panel.add(transactPercentField);
 
-        setBorder(BorderFactory.createEtchedBorder());
+        panel.setBorder(BorderFactory.createEtchedBorder());
+
+        this.add(panel);
     }
 
 
