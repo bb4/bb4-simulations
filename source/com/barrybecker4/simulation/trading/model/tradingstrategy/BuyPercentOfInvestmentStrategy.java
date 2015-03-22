@@ -17,9 +17,7 @@ public class BuyPercentOfInvestmentStrategy extends AbstractTradingStrategy {
     private ChangePolicy lossPolicy;
 
 
-    public BuyPercentOfInvestmentStrategy(double startingTotal, double startingInvestmentPercent,
-                                          ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
-        super(startingTotal, startingInvestmentPercent);
+    public BuyPercentOfInvestmentStrategy(ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
         this.gainPolicy = gainPolicy;
         this.lossPolicy = lossPolicy;
     }

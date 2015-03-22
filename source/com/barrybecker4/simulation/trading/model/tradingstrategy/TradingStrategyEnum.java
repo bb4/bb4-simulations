@@ -33,9 +33,9 @@ public enum TradingStrategyEnum  {
 
         switch (this) {
             case BUY_AND_HOLD :
-                return new BuyAndHoldStrategy(startingTotal);
+                return new BuyAndHoldStrategy();
             case PERCENT_OF_RESERVE :
-                return new BuyPercentOfReserveStrategy(startingTotal, startingInvestmentPercent, null, null);
+                return new BuyPercentOfReserveStrategy(null, null);
         }
         return null;
     }

@@ -35,7 +35,8 @@ public class StockRunner {
         int numPeriods = generationOpts.numTimePeriods;
 
         // initial buy
-        MarketPosition position = strategy.initialInvestment(stockPrice);
+        MarketPosition position =
+                strategy.initialInvestment(stockPrice, tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent);
 
         double[] yValues = new double[numPeriods + 1];
         double[] investValues = new double[numPeriods + 1];

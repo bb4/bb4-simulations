@@ -10,11 +10,6 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy;
 public class BuyAndHoldStrategy extends AbstractTradingStrategy {
 
 
-    public BuyAndHoldStrategy(double startingTotal) {
-        super(startingTotal, 1.0);
-    }
-
-
     /**
      * do nothing
      */

@@ -10,8 +10,11 @@ public interface ITradingStrategy {
 
     /**
      * How the investor initially gets started with their strategy.
+     * @param stockPrice the initial stock price of the stop or index
+     * @param startingTotal the total amount of money available to invest
+     * @param startingInvestmentPercent the percent of that total to put in the marke initially.
      */
-    MarketPosition initialInvestment(double stockPrice);
+    MarketPosition initialInvestment(double stockPrice, double startingTotal, double startingInvestmentPercent);
 
     /**
      * The incremental update to the investment on a time change.

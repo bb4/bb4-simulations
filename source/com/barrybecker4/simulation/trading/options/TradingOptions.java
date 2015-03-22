@@ -34,7 +34,7 @@ public class TradingOptions {
 
     public ITradingStrategy getTradingStrategy() {
         //return new BuyAndHoldStrategy(startingTotal);
-        return new BuyPercentOfReserveStrategy(startingTotal, startingInvestmentPercent, gainPolicy, lossPolicy);
+        return new BuyPercentOfReserveStrategy(gainPolicy, lossPolicy);
     }
 
 }

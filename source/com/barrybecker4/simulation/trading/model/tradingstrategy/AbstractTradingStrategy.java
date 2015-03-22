@@ -9,7 +9,6 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy;
 public abstract class AbstractTradingStrategy implements ITradingStrategy {
 
     private double startingTotal;
-    private double startingInvestmentPercent;
 
     protected double reserve;
     protected double invested;
@@ -17,15 +16,10 @@ public abstract class AbstractTradingStrategy implements ITradingStrategy {
     protected double priceAtLastTransaction;
 
 
-    public AbstractTradingStrategy(double startingTotal, double startingInvestmentPercent) {
-        this.startingTotal = startingTotal;
-        this.startingInvestmentPercent = startingInvestmentPercent;
-    }
-
-
     @Override
-    public MarketPosition initialInvestment(double stockPrice) {
+    public MarketPosition initialInvestment(double stockPrice, double startingTotal, double startingInvestmentPercent) {
 
+        this.startingTotal = startingTotal;
         invested = startingInvestmentPercent * startingTotal;
         sharesOwned = invested / stockPrice;
         reserve = startingTotal - invested;
