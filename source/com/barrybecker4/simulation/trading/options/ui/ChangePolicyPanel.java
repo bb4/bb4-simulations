@@ -53,7 +53,9 @@ public class ChangePolicyPanel extends JPanel {
 
     public ChangePolicy getChangePolicy() {
 
-        return new ChangePolicy(thresholdChangePercentField.getValue() / 100.0, transactPercentField.getValue() / 100.0);
+        return new ChangePolicy(
+                thresholdChangePercentField.getValue() / 100.0,
+                transactPercentField.getValue() / 100.0);
     }
 
 }

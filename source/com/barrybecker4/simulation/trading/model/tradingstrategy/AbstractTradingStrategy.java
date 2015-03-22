@@ -51,6 +51,33 @@ public abstract class AbstractTradingStrategy implements ITradingStrategy {
     }
 
 
+    /**
+     * buy some shares
+     */
+    protected void buy(double amountToInvest, double stockPrice) {
+        assert amountToInvest <= reserve;
+        reserve -= amountToInvest;
+        double sharesToBuy = amountToInvest / stockPrice;
+        //System.out.println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
+        sharesOwned += sharesToBuy;
+        invested = sharesOwned * stockPrice;
+        priceAtLastTransaction = stockPrice;
+    }
+
+    /**
+     * Sell the specified number of shares at the specified price.
+     */
+    protected void sell(double sharesToSell, double stockPrice) {
+        assert sharesToSell >= 0: "you cannot sell " + sharesToSell + " shares";
+        assert sharesToSell <= sharesOwned : "You cannot sell more shares ("+sharesToSell+") than you have ("+sharesOwned +")";
+        sharesOwned -= sharesToSell;
+        reserve += sharesToSell * stockPrice;
+        invested = sharesOwned * stockPrice;
+        priceAtLastTransaction = stockPrice;
+        //System.out.println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
+    }
+
+
     /** The UI to allow the user to configure the options */
     public JPanel getOptionsUI() {
         return new JPanel();

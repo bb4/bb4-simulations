@@ -8,6 +8,7 @@ import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.util.Arrays;
 
 /**
  * Base class for all simulator applets.
@@ -122,6 +123,7 @@ public class SimulatorApplet extends ApplicationApplet {
         } else if (args.length > 1) {
             simulatorClassName = args[1];
         }
+        System.out.println("ARGS = "+ Arrays.toString(args));
 
         SimulatorApplet applet = new SimulatorApplet(args, simulatorClassName);
         GUIUtil.showApplet( applet );

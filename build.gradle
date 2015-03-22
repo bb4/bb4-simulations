@@ -28,6 +28,7 @@ task runSnake(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.snake.SnakeSimulator"]
     classpath = sourceSets.main.runtimeClasspath
+    enableAssertions = true
 }
 
 task runStock(type: JavaExec) {
@@ -40,6 +41,7 @@ task runTrading(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.trading.TradingSimulator"]
     classpath = sourceSets.main.runtimeClasspath
+    enableAssertions = true
 }
 
 task runReactionDiffusion(type: JavaExec) {

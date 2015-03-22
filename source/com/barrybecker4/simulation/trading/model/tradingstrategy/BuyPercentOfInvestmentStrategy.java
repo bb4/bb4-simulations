@@ -37,21 +37,12 @@ public class BuyPercentOfInvestmentStrategy extends AbstractTradingStrategy {
         if (pctChange >= gainPolicy.getChangePercent()) {
             // sell, and take some profit. Assume we can sell partial shares
             double sharesToSell = Math.min(sharesOwned, gainPolicy.getTransactPercent() * reserve / stockPrice);
-            //System.out.println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
-            sharesOwned -= sharesToSell;
-            reserve += sharesToSell * stockPrice;
-            invested = sharesOwned * stockPrice;
-            priceAtLastTransaction = stockPrice;
+            sell(sharesToSell, stockPrice);
         }
         else if (-pctChange >= lossPolicy.getChangePercent()) {
             // buy more because its cheaper
             double amountToInvest = Math.min(reserve, lossPolicy.getTransactPercent() * sharesOwned * stockPrice);
-            reserve -= amountToInvest;
-            double sharesToBuy = amountToInvest / stockPrice;
-            //System.out.println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
-            sharesOwned += sharesToBuy;
-            invested = sharesOwned * stockPrice;
-            priceAtLastTransaction = stockPrice;
+            buy(amountToInvest, stockPrice);
         }
         return new MarketPosition(invested, reserve, sharesOwned);
     }

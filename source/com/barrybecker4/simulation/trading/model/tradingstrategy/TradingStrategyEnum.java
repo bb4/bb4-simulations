@@ -11,7 +11,8 @@ public enum TradingStrategyEnum  {
 
     BUY_AND_HOLD,
     PERCENT_OF_RESERVE,
-    PERCENT_OF_INVESTMENT;
+    PERCENT_OF_INVESTMENT,
+    SELL_WHAT_WAS_BOUGHT;
 
     private String label;
 
@@ -39,6 +40,8 @@ public enum TradingStrategyEnum  {
                 return new BuyPercentOfReserveStrategy();
             case PERCENT_OF_INVESTMENT :
                 return new BuyPercentOfInvestmentStrategy();
+            case SELL_WHAT_WAS_BOUGHT :
+                return new SellWhatWasBoughtStrategy();
         }
         return null;
     }
