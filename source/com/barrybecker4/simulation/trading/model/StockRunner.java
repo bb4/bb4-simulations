@@ -30,7 +30,7 @@ public class StockRunner {
      */
     public StockRunResult doRun(StockGenerationOptions generationOpts) {
 
-        ITradingStrategy strategy = tradingOpts.getTradingStrategy();
+        ITradingStrategy strategy = tradingOpts.tradingStrategy;
         double stockPrice = generationOpts.startingValue;
         int numPeriods = generationOpts.numTimePeriods;
 

@@ -10,7 +10,8 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy;
 public enum TradingStrategyEnum  {
 
     BUY_AND_HOLD,
-    PERCENT_OF_RESERVE;
+    PERCENT_OF_RESERVE,
+    PERCENT_OF_INVESTMENT;
 
     private String label;
 
@@ -29,14 +30,25 @@ public enum TradingStrategyEnum  {
     /**
      * Create an instance of the algorithm given the controller and a refreshable.
      */
-    public ITradingStrategy getStrategy(double startingTotal, double startingInvestmentPercent) {
+    public ITradingStrategy getStrategy() {
 
         switch (this) {
             case BUY_AND_HOLD :
                 return new BuyAndHoldStrategy();
             case PERCENT_OF_RESERVE :
-                return new BuyPercentOfReserveStrategy(null, null);
+                return new BuyPercentOfReserveStrategy();
+            case PERCENT_OF_INVESTMENT :
+                return new BuyPercentOfInvestmentStrategy();
         }
         return null;
+    }
+
+    public static String[] getLabels() {
+        String[] labels = new String[TradingStrategyEnum.values().length];
+        int i = 0;
+        for (TradingStrategyEnum v : TradingStrategyEnum.values()) {
+           labels[i++] =  v.getLabel();
+        }
+        return labels;
     }
 }

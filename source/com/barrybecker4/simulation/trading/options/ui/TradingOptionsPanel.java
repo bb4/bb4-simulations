@@ -1,6 +1,8 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
+import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategyEnum;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
@@ -13,11 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * public float startingTotal = DEFAULT_STARTING_TOTAL;
-    public float startingInvestment = DEFAULT_STARTING_INVESTMENT;
-    public ChangePolicy gainPolicy = DEFAULT_GAIN_POLICY;
-    public ChangePolicy lossPolicy = DEFAULT_LOSS_POLICY;
-
+ * There are basic trading options, and then there is the trading strategy.
+ *
  * @author Barry Becker
  */
 public class TradingOptionsPanel extends JPanel implements ItemListener{
@@ -33,11 +32,9 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
     private TradingOptions tradingOptions;
 
-    // these will come from the trading strategy
-    private ChangePolicyPanel gainPolicyPanel;
-    private ChangePolicyPanel lossPolicyPanel;
-
     private JComboBox<String> strategyCombo;
+    private JPanel strategyOptionsPanel;
+
 
     /**
      * constructor
@@ -67,15 +64,19 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
         startingInvestmentPercentField.setAlignmentX(CENTER_ALIGNMENT);
         theoreticalMaxGainField.setAlignmentX(CENTER_ALIGNMENT);
 
+        JPanel strategyDropDownElement = createStrategyDropDown();
+
+        strategyOptionsPanel = new JPanel(new BorderLayout());
+        strategyOptionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground()));
+        strategyOptionsPanel.add(tradingOptions.tradingStrategy.getOptionsUI(), BorderLayout.CENTER);
+
         // these are common to all strategies
         add(startingTotalField);
         add(startingInvestmentPercentField);
         add(theoreticalMaxGainField);
 
-        add(createStrategyDropDown());
-
-        // these are strategy specific
-        add(createStrategyOptions());
+        add(strategyDropDownElement);
+        add(strategyOptionsPanel);
 
         setBorder(Section.createBorder("Trading Options"));
     }
@@ -87,8 +88,10 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
         JLabel label = new JLabel("Trading strategy : ");
 
-        List<String> choices = Arrays.asList("foo", "bar");
+        List<String> choices = Arrays.asList(TradingStrategyEnum.getLabels());
         strategyCombo = new JComboBox<>((String[]) choices.toArray());
+        strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.getLabel());
+        tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
         strategyCombo.addItemListener(this);
 
         panel.add(label);
@@ -97,34 +100,13 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     }
 
 
-    private JPanel createStrategyOptions() {
-        JPanel strategyPanel = new JPanel(new BorderLayout());
-        strategyPanel.setBorder(BorderFactory.createEtchedBorder());
-
-        gainPolicyPanel = new ChangePolicyPanel("% gain which triggers next transaction",
-                "% of current investment to sell on gain",
-                tradingOptions.gainPolicy);
-        lossPolicyPanel = new ChangePolicyPanel("% market loss which triggers next transaction",
-                "% of current reserve to use to buy on loss",
-                tradingOptions.lossPolicy);
-
-        gainPolicyPanel.setAlignmentX(CENTER_ALIGNMENT);
-        lossPolicyPanel.setAlignmentX(CENTER_ALIGNMENT);
-
-        strategyPanel.add(gainPolicyPanel, BorderLayout.NORTH);
-        strategyPanel.add(lossPolicyPanel, BorderLayout.CENTER);
-
-        return strategyPanel;
-    }
-
-
     TradingOptions getOptions() {
 
         tradingOptions.startingTotal = startingTotalField.getValue();
         tradingOptions.startingInvestmentPercent = startingInvestmentPercentField.getValue() / 100.0;
-        tradingOptions.gainPolicy = gainPolicyPanel.getChangePolicy();
-        tradingOptions.lossPolicy = lossPolicyPanel.getChangePolicy();
+
         tradingOptions.theoreticalMaxGain = theoreticalMaxGainField.getValue();
+        tradingOptions.tradingStrategy.acceptSelectedOptions();
 
         return tradingOptions;
     }
@@ -132,5 +114,19 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     @Override
     public void itemStateChanged(ItemEvent e) {
         System.out.println("selected = " + strategyCombo.getSelectedItem());
+
+        tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
+        strategyOptionsPanel.removeAll();
+        strategyOptionsPanel.add(tradingOptions.tradingStrategy.getOptionsUI());
+
+        // This will allow the dialog to resize appropriately fiven the new content.
+        Container dlg = SwingUtilities.getAncestorOfClass(JDialog.class, this);
+        if (dlg != null) ((JDialog) dlg).pack();
+
     }
+
+    private ITradingStrategy getCurrentlySelectedStrategy() {
+        return TradingStrategyEnum.valueOf((String)strategyCombo.getSelectedItem()).getStrategy();
+    }
+
 }

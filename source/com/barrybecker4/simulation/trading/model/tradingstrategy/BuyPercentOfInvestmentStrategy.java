@@ -4,6 +4,10 @@
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
+import com.barrybecker4.simulation.trading.options.ui.ChangePolicyPanel;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * When the market dips, we buy with a percentage of our reserve.
@@ -13,14 +17,15 @@ import com.barrybecker4.simulation.trading.options.ChangePolicy;
  */
 public class BuyPercentOfInvestmentStrategy extends AbstractTradingStrategy {
 
-    private ChangePolicy gainPolicy;
-    private ChangePolicy lossPolicy;
+    private static final ChangePolicy DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05);
+    private static final ChangePolicy DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05);
 
+    private ChangePolicy gainPolicy = DEFAULT_GAIN_POLICY;
+    private ChangePolicy lossPolicy = DEFAULT_LOSS_POLICY;
 
-    public BuyPercentOfInvestmentStrategy(ChangePolicy gainPolicy, ChangePolicy lossPolicy) {
-        this.gainPolicy = gainPolicy;
-        this.lossPolicy = lossPolicy;
-    }
+    private ChangePolicyPanel gainPolicyPanel;
+    private ChangePolicyPanel lossPolicyPanel;
+
 
     /**
      * if this new price triggers a transaction, then do it
@@ -51,4 +56,32 @@ public class BuyPercentOfInvestmentStrategy extends AbstractTradingStrategy {
         return new MarketPosition(invested, reserve, sharesOwned);
     }
 
+
+
+    /** The UI to allow the user to configure the options */
+    public JPanel getOptionsUI() {
+        JPanel strategyPanel = new JPanel(new BorderLayout());
+        strategyPanel.setBorder(BorderFactory.createEtchedBorder());
+
+        gainPolicyPanel = new ChangePolicyPanel("% gain which triggers next transaction",
+                "% of current reserve to sell on gain",
+                gainPolicy);
+        lossPolicyPanel = new ChangePolicyPanel("% market loss which triggers next transaction",
+                "% of current investment to use to buy on loss",
+                lossPolicy);
+
+        gainPolicyPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lossPolicyPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        strategyPanel.add(gainPolicyPanel, BorderLayout.NORTH);
+        strategyPanel.add(lossPolicyPanel, BorderLayout.CENTER);
+
+        return strategyPanel;
+    }
+
+    /** Call when OK button is pressed to persist selections */
+    public void acceptSelectedOptions() {
+        this.gainPolicy = gainPolicyPanel.getChangePolicy();
+        this.lossPolicy = lossPolicyPanel.getChangePolicy();
+    }
 }

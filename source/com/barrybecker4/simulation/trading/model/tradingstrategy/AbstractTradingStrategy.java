@@ -1,6 +1,8 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
+import javax.swing.*;
+
 /**
  * This naive strategy puts everything in the market at the start and sells it all at the end.
  *
@@ -47,5 +49,14 @@ public abstract class AbstractTradingStrategy implements ITradingStrategy {
     public double getGain() {
         return reserve - startingTotal;
     }
+
+
+    /** The UI to allow the user to configure the options */
+    public JPanel getOptionsUI() {
+        return new JPanel();
+    }
+
+    /** Call when OK button is pressed to persist selections */
+    public void acceptSelectedOptions() {}
 
 }

@@ -1,6 +1,8 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
+import javax.swing.*;
+
 /**
  * Defines how a trading strategy and how it is applied.
  *
@@ -32,4 +34,10 @@ public interface ITradingStrategy {
      * Typically called after finalizeInvestment.
      */
     double getGain();
+
+    /** The UI to allow the user to configure the options */
+    JPanel getOptionsUI();
+
+    /** Call when OK button is pressed to persist selections */
+    void acceptSelectedOptions();
 }
