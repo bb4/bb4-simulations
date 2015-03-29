@@ -50,6 +50,12 @@ public class StockGenerationOptionsPanel extends JPanel {
                 new NumberInput("Number of time periods (1 - 1000): ", generationOptions_.numTimePeriods,
                         "Number of time periods (for example months or years).",
                         1, 1000, true);
+
+        startingValueField_ =
+                new NumberInput("Starting stock value : ", generationOptions_.startingValue,
+                        "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
+                        1, 1000000, false);
+
         percentIncreaseField_ =
                 new NumberInput("% to increase each time period if heads (0 - 100): ",
                         100 * generationOptions_.percentIncrease,
@@ -60,10 +66,7 @@ public class StockGenerationOptionsPanel extends JPanel {
                         100 * generationOptions_.percentDecrease,
                         "Amount to decrease after each time period if coin toss is tails.",
                         -100, 100, false);
-        startingValueField_ =
-                new NumberInput("Starting stock value : ", generationOptions_.startingValue,
-                        "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
-                        1, 1000000, false);
+
 
         useRandomChange_ = new JCheckBox("Use random change", generationOptions_.useRandomChange);
         useRandomChange_.setToolTipText("If checked, " +
@@ -72,12 +75,13 @@ public class StockGenerationOptionsPanel extends JPanel {
 
         add(numStocksField_);
         add(numTimePeriodsField_);
+        add(startingValueField_);
+
         add(percentIncreaseField_);
         add(percentDecreaseField_);
-        add(startingValueField_);
         add(useRandomChange_);
-        setBorder(Section.createBorder("Stock Generation Options"));
 
+        setBorder(Section.createBorder("Stock Generation Options"));
     }
 
     StockGenerationOptions getOptions() {

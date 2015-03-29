@@ -91,8 +91,10 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
         List<String> choices = Arrays.asList(TradingStrategyEnum.getLabels());
         strategyCombo = new JComboBox<>((String[]) choices.toArray());
         strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.getLabel());
+
         tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
         strategyCombo.addItemListener(this);
+        setStrategyTooltip();
 
         panel.add(label);
         panel.add(strategyCombo);
@@ -113,20 +115,25 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        System.out.println("selected = " + strategyCombo.getSelectedItem());
+        String selected = (String) strategyCombo.getSelectedItem();
+        setStrategyTooltip();
 
         tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
         strategyOptionsPanel.removeAll();
         strategyOptionsPanel.add(tradingOptions.tradingStrategy.getOptionsUI());
 
-        // This will allow the dialog to resize appropriately fiven the new content.
+        // This will allow the dialog to resize appropriately given the new content.
         Container dlg = SwingUtilities.getAncestorOfClass(JDialog.class, this);
         if (dlg != null) ((JDialog) dlg).pack();
-
     }
 
     private ITradingStrategy getCurrentlySelectedStrategy() {
-        return TradingStrategyEnum.valueOf((String)strategyCombo.getSelectedItem()).getStrategy();
+        return TradingStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getStrategy();
+    }
+
+    private void setStrategyTooltip() {
+        strategyCombo.setToolTipText(
+                TradingStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getDescription());
     }
 
 }
