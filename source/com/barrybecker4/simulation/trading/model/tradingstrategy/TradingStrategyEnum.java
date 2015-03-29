@@ -19,7 +19,7 @@ public enum TradingStrategyEnum  {
     PERCENT_OF_INVESTMENT("percent of investment", ""),
     SELL_WHAT_WAS_BOUGHT("sell what was bought",
             "Initial investment is never sold, but a fixed percentage is bought when market drops, " +
-             "and that same amount is then sold when market rises some threshold above the price that it was bought at.");
+             "and that same amount is then sold when market rises some threshold above the price that it was bought at."), ;
 
     private String label;
     private String description;
@@ -77,6 +77,9 @@ public enum TradingStrategyEnum  {
     }
 
     public static TradingStrategyEnum valueForLabel(String label) {
+        if (!valueMap.containsKey(label))  {
+            throw new IllegalArgumentException("Unknown strategy label : " + label);
+        }
         return valueMap.get(label);
     }
 }

@@ -1,36 +1,40 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
+import com.barrybecker4.simulation.trading.model.generationstrategy.GenerationStrategyEnum;
+import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategyEnum;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
+import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.*;
 
 /**
  * @author Barry Becker
  */
-public class StockGenerationOptionsPanel extends JPanel {
+public class StockGenerationOptionsPanel extends JPanel implements ItemListener {
 
     /** number of dice to use.  */
-    private NumberInput numStocksField_;
+    private NumberInput numStocksField;
 
     /** Number of time periods (for example months or years)  */
-    private NumberInput numTimePeriodsField_;
+    private NumberInput numTimePeriodsField;
 
-    /** Amount to increase after each time period if heads   */
-    private NumberInput percentIncreaseField_;
-
-    /** Amount to decrease after each time period if tails  */
-    private NumberInput percentDecreaseField_;
 
     /** Starting value of each stock in dollars  */
-    private NumberInput startingValueField_;
+    private NumberInput startingValueField;
 
 
-    /** if true changes are between 0 and percent change. */
-    private JCheckBox useRandomChange_;
+    private StockGenerationOptions generationOptions;
 
-    private StockGenerationOptions generationOptions_;
+    private JComboBox<String> strategyCombo;
+    private JPanel strategyOptionsPanel;
 
 
     /**
@@ -38,62 +42,93 @@ public class StockGenerationOptionsPanel extends JPanel {
      */
     public StockGenerationOptionsPanel() {
 
-        generationOptions_ = new StockGenerationOptions();
+        generationOptions = new StockGenerationOptions();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-         numStocksField_ =
-                new NumberInput("Number of stocks in each sample (1 - 1000): ", generationOptions_.numStocks,
+         numStocksField =
+                new NumberInput("Number of stocks in each sample (1 - 1000): ", generationOptions.numStocks,
                         "The number of stocks in each trial. The average value of which will be one data point.",
                         1, 1000, true);
-        numTimePeriodsField_ =
-                new NumberInput("Number of time periods (1 - 1000): ", generationOptions_.numTimePeriods,
+        numTimePeriodsField =
+                new NumberInput("Number of time periods (1 - 1000): ", generationOptions.numTimePeriods,
                         "Number of time periods (for example months or years).",
                         1, 1000, true);
 
-        startingValueField_ =
-                new NumberInput("Starting stock value : ", generationOptions_.startingValue,
+        startingValueField =
+                new NumberInput("Starting stock value : ", generationOptions.startingValue,
                         "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
                         1, 1000000, false);
 
-        percentIncreaseField_ =
-                new NumberInput("% to increase each time period if heads (0 - 100): ",
-                        100 * generationOptions_.percentIncrease,
-                        "Amount to increase after each time period if coin toss is heads.",
-                        0, 100, false);
-        percentDecreaseField_ =
-                new NumberInput("% to decrease each time period if tails (0 - 100): ",
-                        100 * generationOptions_.percentDecrease,
-                        "Amount to decrease after each time period if coin toss is tails.",
-                        -100, 100, false);
+        JPanel strategyDropDownElement = createStrategyDropDown();
 
+        strategyOptionsPanel = new JPanel(new BorderLayout());
+        strategyOptionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground()));
+        strategyOptionsPanel.add(generationOptions.generationStrategy.getOptionsUI(), BorderLayout.CENTER);
 
-        useRandomChange_ = new JCheckBox("Use random change", generationOptions_.useRandomChange);
-        useRandomChange_.setToolTipText("If checked, " +
-                "then the amount of change at each time step will be a " +
-                "random amount between 0 and the percent increase or decrease.");
+        add(numStocksField);
+        add(numTimePeriodsField);
+        add(startingValueField);
 
-        add(numStocksField_);
-        add(numTimePeriodsField_);
-        add(startingValueField_);
-
-        add(percentIncreaseField_);
-        add(percentDecreaseField_);
-        add(useRandomChange_);
+        add(strategyDropDownElement);
+        add(strategyOptionsPanel);
 
         setBorder(Section.createBorder("Stock Generation Options"));
     }
 
+
+    private JPanel createStrategyDropDown() {
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        JLabel label = new JLabel("Stock generation strategy : ");
+
+        java.util.List<String> choices = Arrays.asList(GenerationStrategyEnum.getLabels());
+        strategyCombo = new JComboBox<>((String[]) choices.toArray());
+        strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getLabel());
+
+        generationOptions.generationStrategy = getCurrentlySelectedStrategy();
+        strategyCombo.addItemListener(this);
+        setStrategyTooltip();
+
+        panel.add(label);
+        panel.add(strategyCombo);
+        return panel;
+    }
+
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        setStrategyTooltip();
+
+        generationOptions.generationStrategy = getCurrentlySelectedStrategy();
+        strategyOptionsPanel.removeAll();
+        strategyOptionsPanel.add(generationOptions.generationStrategy.getOptionsUI());
+
+        // This will allow the dialog to resize appropriately given the new content.
+        Container dlg = SwingUtilities.getAncestorOfClass(JDialog.class, this);
+        if (dlg != null) ((JDialog) dlg).pack();
+    }
+
+    private IGenerationStrategy getCurrentlySelectedStrategy() {
+        return GenerationStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getStrategy();
+    }
+
+    private void setStrategyTooltip() {
+        strategyCombo.setToolTipText(
+                GenerationStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getDescription());
+    }
+
     StockGenerationOptions getOptions() {
 
-        generationOptions_.numStocks = numStocksField_.getIntValue();
-        generationOptions_.percentDecrease = percentDecreaseField_.getValue() / 100.0;
-        generationOptions_.percentIncrease = percentIncreaseField_.getValue() / 100.0;
-        generationOptions_.numTimePeriods = numTimePeriodsField_.getIntValue();
-        generationOptions_.startingValue = startingValueField_.getValue();
-        generationOptions_.useRandomChange = useRandomChange_.isSelected();
+        generationOptions.numStocks = numStocksField.getIntValue();
+        generationOptions.numTimePeriods = numTimePeriodsField.getIntValue();
+        generationOptions.startingValue = startingValueField.getValue();
 
-        return generationOptions_;
+        generationOptions.generationStrategy.acceptSelectedOptions();
+
+        return generationOptions;
     }
 
 }

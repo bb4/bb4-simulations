@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
+import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.MarketPosition;
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
@@ -30,30 +31,30 @@ public class StockRunner {
      */
     public StockRunResult doRun(StockGenerationOptions generationOpts) {
 
-        ITradingStrategy strategy = tradingOpts.tradingStrategy;
+        IGenerationStrategy generationStrategy = generationOpts.generationStrategy;
+        ITradingStrategy tradingStrategy = tradingOpts.tradingStrategy;
+
         double stockPrice = generationOpts.startingValue;
         int numPeriods = generationOpts.numTimePeriods;
 
         // initial buy
         MarketPosition position =
-                strategy.initialInvestment(stockPrice, tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent);
+                tradingStrategy.initialInvestment(stockPrice, tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent);
 
         double[] yValues = new double[numPeriods + 1];
         double[] investValues = new double[numPeriods + 1];
         double[] reserveValues = new double[numPeriods + 1];
-
 
         for (int i = 0; i < numPeriods; i++) {
             yValues[i] = stockPrice;
             investValues[i] = position.getInvested();
             reserveValues[i] = position.getReserve();
 
-            stockPrice = calcNewPrice(generationOpts, stockPrice);
-
-            position = strategy.updateInvestment(stockPrice);
+            stockPrice = generationStrategy.calcNewPrice(stockPrice);
+            position = tradingStrategy.updateInvestment(stockPrice);
         }
 
-        position = strategy.finalizeInvestment(stockPrice);
+        position = tradingStrategy.finalizeInvestment(stockPrice);
 
         yValues[numPeriods] = stockPrice;
         investValues[numPeriods] = 0;
@@ -66,17 +67,7 @@ public class StockRunner {
                 new HeightFunction(yValues),
                 new HeightFunction(investValues),
                 new HeightFunction(reserveValues),
-                strategy.getGain());
+                tradingStrategy.getGain());
     }
 
-
-    private double calcNewPrice(StockGenerationOptions generationOpts, double stockPrice) {
-        double percentChange =
-                Math.random() > 0.5 ? generationOpts.percentIncrease : -generationOpts.percentDecrease;
-        if (generationOpts.useRandomChange)
-            stockPrice *= (1.0 + Math.random() * percentChange);
-        else
-            stockPrice *= (1.0 + percentChange);
-        return stockPrice;
-    }
 }

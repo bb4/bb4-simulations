@@ -115,7 +115,6 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        String selected = (String) strategyCombo.getSelectedItem();
         setStrategyTooltip();
 
         tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
