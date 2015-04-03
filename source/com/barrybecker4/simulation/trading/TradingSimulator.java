@@ -2,15 +2,14 @@
 package com.barrybecker4.simulation.trading;
 
 import com.barrybecker4.common.app.AppContext;
-import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.trading.model.StockRunResult;
 import com.barrybecker4.simulation.trading.model.StockRunner;
 import com.barrybecker4.simulation.trading.options.GraphingOptions;
+import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog;
-import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.animation.AnimationFrame;
 import com.barrybecker4.ui.util.Log;
 

@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.trading.options.ui;
 
 import com.barrybecker4.simulation.trading.options.ChangePolicy;
-import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;

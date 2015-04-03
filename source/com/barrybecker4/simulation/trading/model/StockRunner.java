@@ -5,7 +5,6 @@ import com.barrybecker4.common.math.function.HeightFunction;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.MarketPosition;
-import com.barrybecker4.simulation.trading.options.ChangePolicy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 

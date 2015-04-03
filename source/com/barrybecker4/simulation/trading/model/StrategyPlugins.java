@@ -4,7 +4,6 @@
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.util.PackageReflector;
-import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;

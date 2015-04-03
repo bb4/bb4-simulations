@@ -3,9 +3,6 @@
  */
 package com.barrybecker4.simulation.trading.model.generationstrategy;
 
-import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.MarketPosition;
-
 import javax.swing.*;
 
 /**

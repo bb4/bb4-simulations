@@ -2,9 +2,6 @@
 package com.barrybecker4.simulation.trading.model;
 
 import com.barrybecker4.common.math.function.HeightFunction;
-import com.barrybecker4.simulation.trading.options.ChangePolicy;
-import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
-import com.barrybecker4.simulation.trading.options.TradingOptions;
 
 /**
  * Contains the result of a stock simulation run.
