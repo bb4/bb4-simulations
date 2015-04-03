@@ -10,6 +10,9 @@ import javax.swing.*;
  */
 public interface ITradingStrategy {
 
+    String getName();
+    String getDescription();
+
     /**
      * How the investor initially gets started with their strategy.
      * @param stockPrice the initial stock price of the stop or index

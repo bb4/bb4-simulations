@@ -10,6 +10,14 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy;
 public class BuyAndHoldStrategy extends AbstractTradingStrategy {
 
 
+    public String getName() {
+        return "buy and hold";
+    }
+
+    public String getDescription() {
+        return "No transactions are made after the initial investment";
+    }
+
     /**
      * do nothing
      */

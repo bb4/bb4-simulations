@@ -14,6 +14,9 @@ import javax.swing.*;
  */
 public interface IGenerationStrategy {
 
+    String getName();
+    String getDescription();
+
     double calcNewPrice(double stockPrice);
 
     /** The UI to allow the user to configure the generation options */

@@ -33,6 +33,16 @@ public class RandomUpsAndDownsStrategy extends AbstractGenerationStrategy {
     private JCheckBox useRandomChangeCB;
 
 
+    public String getName() {
+        return "random ups and downs";
+    }
+
+    public String getDescription() {
+        return "Each time period the market goes up by some random percent or " +
+                "down some sandom percent, according to a coin toss.";
+    }
+
+
     @Override
     public double calcNewPrice(double stockPrice) {
         double percentChange =
@@ -43,8 +53,6 @@ public class RandomUpsAndDownsStrategy extends AbstractGenerationStrategy {
             stockPrice *= (1.0 + percentChange);
         return stockPrice;
     }
-
-
 
 
     /** The UI to allow the user to configure the options */

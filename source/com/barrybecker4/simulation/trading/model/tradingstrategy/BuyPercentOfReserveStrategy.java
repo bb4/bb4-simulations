@@ -25,6 +25,14 @@ public class BuyPercentOfReserveStrategy extends AbstractTradingStrategy {
     private ChangePolicyPanel lossPolicyPanel;
 
 
+    public String getName() {
+        return "percent of reserve";
+    }
+
+    public String getDescription() {
+        return "When the marked goes up, we sell a percent of investment; when it goes down we buy a percent of reserve";
+    }
+
     /**
      * if this new price triggers a transaction, then do it
      */

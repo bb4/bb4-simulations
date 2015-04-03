@@ -1,17 +1,15 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
+import com.barrybecker4.simulation.trading.model.TradingStrategyPlugins;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategyEnum;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,6 +33,7 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
+    private TradingStrategyPlugins tradingPlugins = new TradingStrategyPlugins();
 
     /**
      * constructor
@@ -88,9 +87,9 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
         JLabel label = new JLabel("Trading strategy : ");
 
-        List<String> choices = Arrays.asList(TradingStrategyEnum.getLabels());
-        strategyCombo = new JComboBox<>((String[]) choices.toArray());
-        strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.getLabel());
+        List<String> choices = tradingPlugins.getStrategies();
+        strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
+        strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.getName());
 
         tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();
         strategyCombo.addItemListener(this);
@@ -127,12 +126,12 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     }
 
     private ITradingStrategy getCurrentlySelectedStrategy() {
-        return TradingStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getStrategy();
+        return tradingPlugins.getStrategy((String) strategyCombo.getSelectedItem());
     }
 
     private void setStrategyTooltip() {
         strategyCombo.setToolTipText(
-                TradingStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getDescription());
+                tradingPlugins.getStrategy((String) strategyCombo.getSelectedItem()).getDescription());
     }
 
 }

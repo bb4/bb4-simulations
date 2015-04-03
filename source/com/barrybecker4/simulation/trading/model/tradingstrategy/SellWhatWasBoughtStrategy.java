@@ -52,6 +52,16 @@ public class SellWhatWasBoughtStrategy extends AbstractTradingStrategy {
     private NumberInput gainThresholdField;
     private NumberInput lossThresholdField;
 
+
+    public String getName() {
+        return "sell what was bought";
+    }
+
+    public String getDescription() {
+        return "Initial investment is never sold, but a fixed percentage is bought when market drops, " +
+             "and that same amount is then sold when market rises some threshold above the price that it was bought at.";
+    }
+
     @Override
     public MarketPosition initialInvestment(double stockPrice, double startingTotal, double startingInvestmentPercent) {
         fixedPurchaseAmount = fixedPurchasePercent * startingTotal;
@@ -85,7 +95,6 @@ public class SellWhatWasBoughtStrategy extends AbstractTradingStrategy {
         }
         return new MarketPosition(invested, reserve, sharesOwned);
     }
-
 
 
     /** The UI to allow the user to configure the options */

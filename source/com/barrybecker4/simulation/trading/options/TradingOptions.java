@@ -2,10 +2,7 @@
 package com.barrybecker4.simulation.trading.options;
 
 import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyAndHoldStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyPercentOfInvestmentStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyPercentOfReserveStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategyEnum;
 
 /**
  * Stock trading strategy options and default values.
@@ -14,7 +11,7 @@ import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategy
  */
 public class TradingOptions {
 
-    public static final TradingStrategyEnum DEFAULT_TRADING_STRATEGY = TradingStrategyEnum.BUY_AND_HOLD;
+    public static final ITradingStrategy DEFAULT_TRADING_STRATEGY = new BuyAndHoldStrategy();
 
     private static final double DEFAULT_STARTING_TOTAL = 100000;
     private static final double DEFAULT_STARTING_INVESTMENT_PERCENT = 0.5;
@@ -25,5 +22,5 @@ public class TradingOptions {
 
     public double theoreticalMaxGain = DEFAULT_THEORETICAL_MAX_GAIN;
 
-    public ITradingStrategy tradingStrategy = DEFAULT_TRADING_STRATEGY.getStrategy();
+    public ITradingStrategy tradingStrategy = DEFAULT_TRADING_STRATEGY;
 }

@@ -1,8 +1,9 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options;
 
-import com.barrybecker4.simulation.trading.model.generationstrategy.GenerationStrategyEnum;
+import com.barrybecker4.simulation.trading.model.GenerationStrategyPlugins;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.RandomUpsAndDownsStrategy;
 
 /**
  * Defaults for stock time series generation.
@@ -12,7 +13,8 @@ import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationS
  */
 public class StockGenerationOptions {
 
-    public static final GenerationStrategyEnum DEFAULT_GENERATION_STRATEGY = GenerationStrategyEnum.RANDOM_UPS_AND_DOWNS;
+
+    public static final IGenerationStrategy DEFAULT_GENERATION_STRATEGY = new RandomUpsAndDownsStrategy();
 
     private static final int DEFAULT_NUM_STOCKS = 1;
     private static final int DEFAULT_NUM_TIME_PERIODS = 100;
@@ -22,5 +24,5 @@ public class StockGenerationOptions {
     public int numTimePeriods = DEFAULT_NUM_TIME_PERIODS;
     public double startingValue = DEFAULT_STARTING_VALUE;
 
-    public IGenerationStrategy generationStrategy = DEFAULT_GENERATION_STRATEGY.getStrategy();
+    public IGenerationStrategy generationStrategy = DEFAULT_GENERATION_STRATEGY;
 }

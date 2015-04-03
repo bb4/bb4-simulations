@@ -1,19 +1,16 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.trading.model.generationstrategy.GenerationStrategyEnum;
+import com.barrybecker4.simulation.trading.model.GenerationStrategyPlugins;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
-import com.barrybecker4.simulation.trading.model.tradingstrategy.TradingStrategyEnum;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
-import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.*;
+import java.util.List;
 
 /**
  * @author Barry Becker
@@ -36,6 +33,8 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
+    private GenerationStrategyPlugins generationStrategies = new GenerationStrategyPlugins();
+
 
     /**
      * constructor
@@ -46,7 +45,7 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-         numStocksField =
+        numStocksField =
                 new NumberInput("Number of stocks in each sample (1 - 1000): ", generationOptions.numStocks,
                         "The number of stocks in each trial. The average value of which will be one data point.",
                         1, 1000, true);
@@ -59,6 +58,11 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
                 new NumberInput("Starting stock value : ", generationOptions.startingValue,
                         "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
                         1, 1000000, false);
+
+        // needed to get the field to extend to the left.
+        numStocksField.setAlignmentX(CENTER_ALIGNMENT);
+        numTimePeriodsField.setAlignmentX(CENTER_ALIGNMENT);
+        startingValueField.setAlignmentX(CENTER_ALIGNMENT);
 
         JPanel strategyDropDownElement = createStrategyDropDown();
 
@@ -84,9 +88,11 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
 
         JLabel label = new JLabel("Stock generation strategy : ");
 
-        java.util.List<String> choices = Arrays.asList(GenerationStrategyEnum.getLabels());
-        strategyCombo = new JComboBox<>((String[]) choices.toArray());
-        strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getLabel());
+        List<String> choices = generationStrategies.getStrategies();
+        System.out.println("choices = " + choices);
+
+        strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
+        strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getName());
 
         generationOptions.generationStrategy = getCurrentlySelectedStrategy();
         strategyCombo.addItemListener(this);
@@ -112,12 +118,12 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     }
 
     private IGenerationStrategy getCurrentlySelectedStrategy() {
-        return GenerationStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getStrategy();
+        return generationStrategies.getStrategy((String) strategyCombo.getSelectedItem());
     }
 
     private void setStrategyTooltip() {
         strategyCombo.setToolTipText(
-                GenerationStrategyEnum.valueForLabel((String) strategyCombo.getSelectedItem()).getDescription());
+                generationStrategies.getStrategy((String) strategyCombo.getSelectedItem()).getDescription());
     }
 
     StockGenerationOptions getOptions() {
