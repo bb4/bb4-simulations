@@ -8,8 +8,11 @@ project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
 
 dependencies {
-   compile 'com.barrybecker4:bb4-sound:1.2-SNAPSHOT'
-   compile 'com.barrybecker4:bb4-optimization:1.2-SNAPSHOT'
+    def javaHome = System.properties.'java.home'
+    compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
+
+    compile 'com.barrybecker4:bb4-sound:1.2-SNAPSHOT'
+    compile 'com.barrybecker4:bb4-optimization:1.2-SNAPSHOT'
 }
 
 task runDice(type: JavaExec) {
@@ -105,6 +108,7 @@ appMap.put('predprey',   [include:['com/barrybecker4/simulation/predprey/**']])
 appMap.put('reactiondiffusion', [include:['com/barrybecker4/simulation/reactiondiffusion/**']])
 appMap.put('snake',      [include:['com/barrybecker4/simulation/snake/**']])
 appMap.put('stock',      [include:['com/barrybecker4/simulation/stock/**']])
+appMap.put('trading',      [include:['com/barrybecker4/simulation/trading/**']])
 appMap.put('trebuchet',  [include:['com/barrybecker4/simulation/trebuchet/**']])
 appMap.put('verhulst',   [include:['com/barrybecker4/simulation/verhulst/**']])
 
