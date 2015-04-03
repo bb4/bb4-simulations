@@ -1,6 +1,8 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.model.tradingstrategy;
 
+import com.barrybecker4.simulation.trading.model.IStrategyPlugin;
+
 import javax.swing.*;
 
 /**
@@ -8,10 +10,7 @@ import javax.swing.*;
  *
  * @author Barry Becker
  */
-public interface ITradingStrategy {
-
-    String getName();
-    String getDescription();
+public interface ITradingStrategy extends IStrategyPlugin {
 
     /**
      * How the investor initially gets started with their strategy.

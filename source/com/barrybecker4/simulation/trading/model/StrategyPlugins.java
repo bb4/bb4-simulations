@@ -6,7 +6,6 @@ package com.barrybecker4.simulation.trading.model;
 import com.barrybecker4.common.util.PackageReflector;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 
-
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,24 +18,30 @@ import java.util.Map;
  *
  * @author Barry Becker
  */
-public class GenerationStrategyPlugins {
+public class StrategyPlugins<E extends IStrategyPlugin> {
 
 
-    private static final List<String> strategyNames;
-    private static Map<String, IGenerationStrategy> valueMap = new HashMap<>();
+    private List<String> strategyNames = new ArrayList<>();
+    private Map<String, E> valueMap = new HashMap<>();
 
-    static {
 
-        strategyNames = new ArrayList<>();
+    /**
+     * Constructor
+     *
+     * @param packageName nam of the package to get the plugin classes from
+     *   Something like "com.barrybecker4.simulation.trading.model.generationstrategy"
+     */
+    public StrategyPlugins(String packageName, Class<?> clzz)  {
+
 
         try {
             List<Class> strategyClasses =
-                    new PackageReflector().getClasses("com.barrybecker4.simulation.trading.model.generationstrategy");
+                    new PackageReflector().getClasses(packageName);
 
             for (Class<?> c : strategyClasses) {
                 // Skip the abstract class (if any) because it cannot (and should not) be instantiated.
-                if (!Modifier.isAbstract(c.getModifiers()) && IGenerationStrategy.class.isAssignableFrom(c)) {
-                    IGenerationStrategy strategy = (IGenerationStrategy) c.newInstance();
+                if (!Modifier.isAbstract(c.getModifiers()) && clzz.isAssignableFrom(c)) {
+                    E strategy = (E) c.newInstance();
                     strategyNames.add(strategy.getName());
                     valueMap.put(strategy.getName(), strategy);
                 }
@@ -47,7 +52,6 @@ public class GenerationStrategyPlugins {
     }
 
 
-
     public List<String> getStrategies() {
         return strategyNames;
     }
@@ -55,7 +59,7 @@ public class GenerationStrategyPlugins {
     /**
      * Create an instance of the algorithm given the controller and a refreshable.
      */
-    public IGenerationStrategy getStrategy(String name) {
+    public E getStrategy(String name) {
         if (!valueMap.containsKey(name)) {
             throw new IllegalArgumentException("Could not find strategy with name " + name);
         }

@@ -4,6 +4,8 @@
 package com.barrybecker4.simulation.trading.model.generationstrategy;
 
 
+import com.barrybecker4.simulation.trading.model.IStrategyPlugin;
+
 import javax.swing.*;
 
 /**
@@ -12,10 +14,8 @@ import javax.swing.*;
  *
  * @author Barry Becker
  */
-public interface IGenerationStrategy {
+public interface IGenerationStrategy extends IStrategyPlugin {
 
-    String getName();
-    String getDescription();
 
     double calcNewPrice(double stockPrice);
 

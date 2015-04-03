@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.trading.model.TradingStrategyPlugins;
+import com.barrybecker4.simulation.trading.model.StrategyPlugins;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +34,8 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
-    private TradingStrategyPlugins tradingPlugins = new TradingStrategyPlugins();
+    private StrategyPlugins<ITradingStrategy> tradingPlugins =
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.tradingstrategy", ITradingStrategy.class);
 
     /**
      * constructor
@@ -87,8 +89,9 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
 
         JLabel label = new JLabel("Trading strategy : ");
 
-        List<String> choices = tradingPlugins.getStrategies();
-        strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
+        List<String> choices = tradingPlugins.getStrategies();;
+        String[] ch = choices.toArray(new String[choices.size()]);
+        strategyCombo = new JComboBox<>(ch);
         strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.getName());
 
         tradingOptions.tradingStrategy = getCurrentlySelectedStrategy();

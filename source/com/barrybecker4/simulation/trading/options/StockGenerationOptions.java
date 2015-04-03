@@ -1,7 +1,6 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options;
 
-import com.barrybecker4.simulation.trading.model.GenerationStrategyPlugins;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.model.generationstrategy.RandomUpsAndDownsStrategy;
 

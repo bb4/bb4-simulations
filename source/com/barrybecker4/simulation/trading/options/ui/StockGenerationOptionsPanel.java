@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.trading.model.GenerationStrategyPlugins;
+import com.barrybecker4.simulation.trading.model.StrategyPlugins;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.components.NumberInput;
@@ -33,7 +33,8 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
-    private GenerationStrategyPlugins generationStrategies = new GenerationStrategyPlugins();
+    private StrategyPlugins<IGenerationStrategy> generationStrategies =
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.generationstrategy", IGenerationStrategy.class);
 
 
     /**
@@ -89,7 +90,6 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
         JLabel label = new JLabel("Stock generation strategy : ");
 
         List<String> choices = generationStrategies.getStrategies();
-        System.out.println("choices = " + choices);
 
         strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
         strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getName());
