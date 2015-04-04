@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trading;
+package com.barrybecker4.simulation.trading.charts;
 
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.Function;
@@ -19,13 +19,13 @@ import java.util.List;
  */
 public class InvestmentChartPanel extends JPanel {
 
-    private static Color INVESTMENT_COLOR = new Color(200, 10,30, 50);
-    private static Color RESERVE_COLOR = new Color(0, 100, 190, 50);
-    private static Color TEXT_COLOR = new Color(10, 10, 80);
+    private static final Color INVESTMENT_COLOR = new Color(200, 10,30, 50);
+    private static final Color RESERVE_COLOR = new Color(0, 100, 190, 50);
+    private static final Color TEXT_COLOR = new Color(10, 10, 80);
 
-    private static int LEGEND_X = 140;
-    private static int LEGEND_Y = 10;
-    private static int LEGEND_SWATCH_SIZE = 12;
+    private static final int LEGEND_X = 140;
+    private static final int LEGEND_Y = 10;
+    private static final int LEGEND_SWATCH_SIZE = 12;
 
     /**
      * Sometime the numbers on the x axis can get very large. Scientific notation is used in those cases.
@@ -38,9 +38,9 @@ public class InvestmentChartPanel extends JPanel {
     MultipleFunctionRenderer investmentChart;
 
 
-    InvestmentChartPanel() {
-        List<Function> funcs = Collections.<Function>emptyList();
-        investmentChart = new MultipleFunctionRenderer(funcs);
+    public InvestmentChartPanel() {
+        List<Function> functions = Collections.emptyList();
+        investmentChart = new MultipleFunctionRenderer(functions);
         investmentChart.setXFormatter(new CurrencyFormatter());
         investmentChart.setMaxLabelWidth(LABEL_WIDTH);
     }

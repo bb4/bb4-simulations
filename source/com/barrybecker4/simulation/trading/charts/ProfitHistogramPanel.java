@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trading;
+package com.barrybecker4.simulation.trading.charts;
 
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.InvertibleFunction;
@@ -26,10 +26,8 @@ public class ProfitHistogramPanel extends JPanel {
 
     private HistogramRenderer histogram;
 
-    ProfitHistogramPanel() {
-    }
 
-    void setOptions(double maxGain, GraphingOptions graphingOpts)  {
+    public void setOptions(double maxGain, GraphingOptions graphingOpts)  {
         double xScale = Math.pow(10, Math.max(0, Math.log10(maxGain) - graphingOpts.xResolution));
         double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
         int maxX = (int) (maxGain / xScale);

@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trading;
+package com.barrybecker4.simulation.trading.charts;
 
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.Function;
@@ -27,9 +27,9 @@ public class StockChartPanel extends JPanel {
 
     MultipleFunctionRenderer stockChart;
 
-    StockChartPanel() {
-        List<Function> funcs = Collections.<Function>emptyList();
-        stockChart = new MultipleFunctionRenderer(funcs);
+    public StockChartPanel() {
+        List<Function> functions = Collections.emptyList();
+        stockChart = new MultipleFunctionRenderer(functions);
         stockChart.setXFormatter(new CurrencyFormatter());
         stockChart.setMaxLabelWidth(LABEL_WIDTH);
     }
