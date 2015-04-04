@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.trading.model.StrategyPlugins;
+import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins;
 import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.components.NumberInput;

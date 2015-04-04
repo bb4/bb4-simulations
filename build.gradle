@@ -108,7 +108,7 @@ appMap.put('predprey',   [include:['com/barrybecker4/simulation/predprey/**']])
 appMap.put('reactiondiffusion', [include:['com/barrybecker4/simulation/reactiondiffusion/**']])
 appMap.put('snake',      [include:['com/barrybecker4/simulation/snake/**']])
 appMap.put('stock',      [include:['com/barrybecker4/simulation/stock/**']])
-appMap.put('trading',      [include:['com/barrybecker4/simulation/trading/**']])
+appMap.put('trading',    [include:['com/barrybecker4/simulation/trading/**']])
 appMap.put('trebuchet',  [include:['com/barrybecker4/simulation/trebuchet/**']])
 appMap.put('verhulst',   [include:['com/barrybecker4/simulation/verhulst/**']])
 

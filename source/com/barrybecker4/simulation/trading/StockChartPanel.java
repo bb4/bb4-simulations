@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.trading;
 
 import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.Function;
-import com.barrybecker4.simulation.trading.model.StockSeries;
+import com.barrybecker4.simulation.trading.model.runner.StockSeries;
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
 
 import javax.swing.*;

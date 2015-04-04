@@ -1,7 +1,7 @@
 /*
  * Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/license.MIT
  */
-package com.barrybecker4.simulation.trading.model;
+package com.barrybecker4.simulation.trading.model.plugin;
 
 import com.barrybecker4.common.util.PackageReflector;
 
@@ -41,8 +41,9 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
                 // Skip the abstract class (if any) because it cannot (and should not) be instantiated.
                 if (!Modifier.isAbstract(c.getModifiers()) && clzz.isAssignableFrom(c)) {
                     E strategy = (E) c.newInstance();
-                    strategyNames.add(strategy.getName());
-                    valueMap.put(strategy.getName(), strategy);
+                    String name = strategy.getName();
+                    strategyNames.add(name);
+                    valueMap.put(name, strategy);
                 }
             }
         } catch (Exception e) {

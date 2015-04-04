@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.trading.model;
+package com.barrybecker4.simulation.trading.model.plugin;
 
 /**
  * @author Barry Becker

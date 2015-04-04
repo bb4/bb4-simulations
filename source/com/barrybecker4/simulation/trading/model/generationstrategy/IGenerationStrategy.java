@@ -4,7 +4,7 @@
 package com.barrybecker4.simulation.trading.model.generationstrategy;
 
 
-import com.barrybecker4.simulation.trading.model.IStrategyPlugin;
+import com.barrybecker4.simulation.trading.model.plugin.IStrategyPlugin;
 
 import javax.swing.*;
 
