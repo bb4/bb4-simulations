@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fluid.rendering;
 
-import com.barrybecker4.common.concurrency.Parallelizer;
+import com.barrybecker4.common.concurrency.*;
 
 
 /**
@@ -21,7 +21,7 @@ public class RenderingOptions {
     private boolean showGrid = false;
 
     /** Manages the worker threads. */
-    private Parallelizer<RenderWorker> parallelizer;
+    private RunnableParallelizer parallelizer;
 
 
     /**
@@ -35,14 +35,14 @@ public class RenderingOptions {
     public void setParallelized(boolean useParallelization) {
 
         parallelizer =
-             useParallelization ? new Parallelizer<RenderWorker>() : new Parallelizer<RenderWorker>(1);
+             useParallelization ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
 
     public boolean isParallelized() {
         return parallelizer.getNumThreads() > 1;
     }
 
-    public Parallelizer<RenderWorker> getParallelizer() {
+    public RunnableParallelizer getParallelizer() {
         return parallelizer;
     }
 

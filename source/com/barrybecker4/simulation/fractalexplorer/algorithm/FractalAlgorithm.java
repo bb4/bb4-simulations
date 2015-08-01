@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm;
 
-import com.barrybecker4.common.concurrency.Parallelizer;
+import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.common.geometry.Box;
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.math.ComplexNumber;
@@ -36,7 +36,7 @@ public abstract class FractalAlgorithm {
     private ComplexNumberRange range;
 
     /** Manages the worker threads. */
-    private Parallelizer<Worker> parallelizer_;
+    private RunnableParallelizer parallelizer_;
 
     private int maxIterations_ = DEFAULT_MAX_ITERATIONS;
 
@@ -88,7 +88,7 @@ public abstract class FractalAlgorithm {
         if (parallelizer_ == null || parallelized != isParallelized()) {
 
             parallelizer_ =
-                 parallelized ? new Parallelizer<Worker>() : new Parallelizer<Worker>(1);
+                 parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
             model.setCurrentRow(0);
         }
     }

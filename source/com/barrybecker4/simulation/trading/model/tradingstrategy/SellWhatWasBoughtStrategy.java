@@ -80,7 +80,7 @@ public class SellWhatWasBoughtStrategy extends AbstractTradingStrategy {
         while (it.hasNext()) {
             Transaction trans = it.next();
             if (stockPrice >= (1.0 + gainThresholdPct) * trans.stockPrice) {
-                sell(trans.numShares, stockPrice);
+                sell(Math.max(trans.numShares, sharesOwned), stockPrice);
                 it.remove();
              }
         }

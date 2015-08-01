@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.reactiondiffusion.algorithm;
 
 import com.barrybecker4.common.concurrency.Parallelizer;
+import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler;
 
 import java.awt.*;
@@ -63,7 +64,7 @@ public final class GrayScottController {
     public static final double H0 = 0.01;
 
     /** Manages the worker threads. */
-    private Parallelizer<Worker> parallelizer;
+    private RunnableParallelizer parallelizer;
 
     private GrayScottModel model_;
 
@@ -115,7 +116,7 @@ public final class GrayScottController {
      */
     public void setParallelized(boolean parallelized) {
          parallelizer =
-             parallelized ? new Parallelizer<Worker>() : new Parallelizer<Worker>(1);
+             parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
 
     public boolean isParallelized() {
@@ -131,7 +132,7 @@ public final class GrayScottController {
     public void timeStep(final double dt) {
 
         int numThreads = parallelizer.getNumThreads();
-        List<Runnable> workers = new ArrayList<Runnable>(numThreads + 1);
+        List<Runnable> workers = new ArrayList<>(numThreads + 1);
         int range = model_.getWidth() / numThreads;
         RDProfiler prof = RDProfiler.getInstance();
 
