@@ -1,7 +1,6 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm;
 
-import com.barrybecker4.common.concurrency.Parallelizer;
 import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler;
 

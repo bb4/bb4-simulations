@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering;
 
-import com.barrybecker4.common.concurrency.Parallelizer;
+import com.barrybecker4.common.concurrency.RunnableParallelizer;
 
 import javax.vecmath.Vector3d;
 
@@ -28,7 +28,7 @@ public class RDRenderingOptions {
     private static final Vector3d HALF_ANGLE;
 
     /** Manages the worker threads. */
-    private Parallelizer<RenderWorker> parallelizer_;
+    private RunnableParallelizer parallelizer_;
 
 
     static {
@@ -49,10 +49,10 @@ public class RDRenderingOptions {
     public void setParallelized(boolean useParallelization) {
 
         parallelizer_ =
-             useParallelization ? new Parallelizer<RenderWorker>() : new Parallelizer<RenderWorker>(1);
+             useParallelization ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
 
-    public Parallelizer<RenderWorker> getParallelizer() {
+    public RunnableParallelizer getParallelizer() {
         return parallelizer_;
     }
 
