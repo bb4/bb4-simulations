@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * @author Barry Becker
  */
-public class GaussianStrategy extends AbstractGenerationStrategy {
+public class GaussianStrategy extends AbstractGenerationStrategy implements IGenerationStrategy {
 
     private static final double DEFAULT_MEAN = 0.01;
     private static final double DEFAULT_VARIANCE = 0.1;

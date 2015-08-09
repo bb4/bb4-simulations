@@ -12,7 +12,6 @@ import javax.swing.*;
  */
 public abstract class AbstractGenerationStrategy implements IGenerationStrategy {
 
-
     /** The UI to allow the user to configure the options */
     public JPanel getOptionsUI() {
         return new JPanel();

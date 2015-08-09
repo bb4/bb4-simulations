@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
+import com.barrybecker4.simulation.trading.model.generationstrategy.*;
 import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins;
-import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,8 +35,13 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
-    private StrategyPlugins<IGenerationStrategy> generationStrategies =
-            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.generationstrategy", IGenerationStrategy.class);
+    private StrategyPlugins<? extends IGenerationStrategy> generationStrategies =
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.generationstrategy",
+                    IGenerationStrategy.class,
+                    Arrays.asList(
+                            new FlatStrategy(), new GaussianStrategy(),  new SineStrategy(),
+                            new RandomUpsAndDownsStrategy(), new RandomWithAdditiveMomentumStrategy()
+                    ));
 
 
     /**

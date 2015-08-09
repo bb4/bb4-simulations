@@ -2,7 +2,11 @@
 package com.barrybecker4.simulation.trading.options.ui;
 
 import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyAndHoldStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyPercentOfInvestmentStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.BuyPercentOfReserveStrategy;
 import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.SellWhatWasBoughtStrategy;
 import com.barrybecker4.simulation.trading.options.TradingOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
@@ -10,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,8 +38,13 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     private JComboBox<String> strategyCombo;
     private JPanel strategyOptionsPanel;
 
-    private StrategyPlugins<ITradingStrategy> tradingPlugins =
-            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.tradingstrategy", ITradingStrategy.class);
+    private StrategyPlugins<? extends ITradingStrategy> tradingPlugins =
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.tradingstrategy",
+                    ITradingStrategy.class,
+                    Arrays.asList(
+                            new BuyAndHoldStrategy(), new BuyPercentOfInvestmentStrategy(),
+                            new BuyPercentOfReserveStrategy(), new SellWhatWasBoughtStrategy()
+                    ));
 
     /**
      * constructor

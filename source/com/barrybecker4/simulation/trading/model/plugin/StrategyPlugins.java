@@ -4,8 +4,11 @@
 package com.barrybecker4.simulation.trading.model.plugin;
 
 import com.barrybecker4.common.util.PackageReflector;
+import com.barrybecker4.simulation.trading.model.tradingstrategy.ITradingStrategy;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +29,12 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
 
     /**
      * Constructor
+     * Uses reflection to dynamically load available strategies.
      *
-     * @param packageName nam of the package to get the plugin classes from
+     * @param packageName name of the package to get the plugin classes from
      *   Something like "com.barrybecker4.simulation.trading.model.generationstrategy"
      */
-    public StrategyPlugins(String packageName, Class<?> clzz)  {
-
+    public StrategyPlugins(String packageName, Class<?> clzz, List<E> defaultStrategies)  {
 
         try {
             List<Class> strategyClasses =
@@ -46,7 +49,14 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
                     valueMap.put(name, strategy);
                 }
             }
-        } catch (Exception e) {
+            System.out.println("Trading strategy plugins found: " + valueMap);
+        } catch (AccessControlException e) {
+            // fallback to local strategies if cannot access filesystem (as for applet or webstart)
+            System.out.println("Unable to access filesystem to load plug. Will use default strategies only");
+            for (E s : defaultStrategies) {
+                valueMap.put(s.getName(), s);
+            }
+        } catch (ClassNotFoundException | InstantiationException | IOException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
