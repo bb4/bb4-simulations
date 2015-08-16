@@ -39,7 +39,7 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
             new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.generationstrategy",
                     IGenerationStrategy.class,
                     Arrays.asList(
-                            new FlatStrategy(), new GaussianStrategy(),  new SineStrategy(),
+                            new FlatStrategy(), new GaussianStrategy(), new SineStrategy(),
                             new RandomUpsAndDownsStrategy(), new RandomWithAdditiveMomentumStrategy()
                     ));
 
@@ -99,6 +99,7 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
         List<String> choices = generationStrategies.getStrategies();
 
         strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
+        System.out.println("Default generation strategy = "+  StockGenerationOptions.DEFAULT_GENERATION_STRATEGY);
         strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getName());
 
         generationOptions.generationStrategy = getCurrentlySelectedStrategy();

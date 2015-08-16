@@ -19,4 +19,9 @@ public abstract class AbstractGenerationStrategy implements IGenerationStrategy 
 
     /** Call when OK button is pressed to persist selections */
     public void acceptSelectedOptions() {}
+
+
+    public String toString() {
+        return getName() + ": " + getDescription();
+    }
 }
