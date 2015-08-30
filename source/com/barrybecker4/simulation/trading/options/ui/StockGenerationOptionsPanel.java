@@ -126,6 +126,9 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     }
 
     private IGenerationStrategy getCurrentlySelectedStrategy() {
+        for (int i = 0; i< strategyCombo.getItemCount(); i++) {
+            System.out.println("Available strategy " + i + " = " +strategyCombo.getItemAt(i) );
+        }
         return generationStrategies.getStrategy((String) strategyCombo.getSelectedItem());
     }
 

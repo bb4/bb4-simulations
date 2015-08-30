@@ -50,9 +50,9 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
                 }
             }
             System.out.println("Trading strategy plugins found: " + valueMap);
-        } catch (AccessControlException e) {
+        } catch (AccessControlException | NullPointerException e) {
             // fallback to local strategies if cannot access filesystem (as for applet or webstart)
-            System.out.println("Unable to access filesystem to load plug. Will use default strategies only");
+            System.out.println("Unable to access filesystem to load plugin. Will use default strategies only");
             for (E s : defaultStrategies) {
                 valueMap.put(s.getName(), s);
             }
@@ -71,7 +71,7 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
      */
     public E getStrategy(String name) {
         if (!valueMap.containsKey(name)) {
-            throw new IllegalArgumentException("Could not find strategy with name " + name);
+            System.out.println("Could not find strategy with name " + name + " among " + valueMap);
         }
         return valueMap.get(name);
     }
