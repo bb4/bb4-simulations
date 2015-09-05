@@ -22,10 +22,8 @@ import java.util.Map;
  */
 public class StrategyPlugins<E extends IStrategyPlugin> {
 
-
     private List<String> strategyNames = new ArrayList<>();
     private Map<String, E> valueMap = new HashMap<>();
-
 
     /**
      * Constructor
@@ -50,12 +48,15 @@ public class StrategyPlugins<E extends IStrategyPlugin> {
                 }
             }
             System.out.println("Trading strategy plugins found: " + valueMap);
+
         } catch (AccessControlException | NullPointerException e) {
             // fallback to local strategies if cannot access filesystem (as for applet or webstart)
             System.out.println("Unable to access filesystem to load plugin. Will use default strategies only");
             for (E s : defaultStrategies) {
+                strategyNames.add(s.getName());
                 valueMap.put(s.getName(), s);
             }
+            System.out.println("default strategies are : " + valueMap);
         } catch (ClassNotFoundException | InstantiationException | IOException | IllegalAccessException e) {
             e.printStackTrace();
         }

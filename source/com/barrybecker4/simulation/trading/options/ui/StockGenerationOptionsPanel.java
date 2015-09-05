@@ -97,10 +97,12 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
         JLabel label = new JLabel("Stock generation strategy : ");
 
         List<String> choices = generationStrategies.getStrategies();
+        System.out.println("generation strategies: " + choices);
 
         strategyCombo = new JComboBox<>(choices.toArray(new String[choices.size()]));
-        System.out.println("Default generation strategy = "+  StockGenerationOptions.DEFAULT_GENERATION_STRATEGY);
+        System.out.println("Default generation strategy = " +  StockGenerationOptions.DEFAULT_GENERATION_STRATEGY);
         strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getName());
+        System.out.println("currently selected strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.getName());
 
         generationOptions.generationStrategy = getCurrentlySelectedStrategy();
         strategyCombo.addItemListener(this);
@@ -110,7 +112,6 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
         panel.add(strategyCombo);
         return panel;
     }
-
 
     @Override
     public void itemStateChanged(ItemEvent e) {
@@ -126,15 +127,13 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     }
 
     private IGenerationStrategy getCurrentlySelectedStrategy() {
-        for (int i = 0; i< strategyCombo.getItemCount(); i++) {
-            System.out.println("Available strategy " + i + " = " +strategyCombo.getItemAt(i) );
-        }
+        System.out.println("Currently selected = " + strategyCombo.getSelectedItem()
+                + " out of " + strategyCombo.getItemCount());
         return generationStrategies.getStrategy((String) strategyCombo.getSelectedItem());
     }
 
     private void setStrategyTooltip() {
-        strategyCombo.setToolTipText(
-                generationStrategies.getStrategy((String) strategyCombo.getSelectedItem()).getDescription());
+        strategyCombo.setToolTipText(getCurrentlySelectedStrategy().getDescription());
     }
 
     StockGenerationOptions getOptions() {
