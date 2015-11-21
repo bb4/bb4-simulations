@@ -157,9 +157,7 @@ public final class GrayScottController {
         parallelizer.invokeAllRunnables(workers);
         prof.stopConcurrentCalculationTime();
 
-        prof.startCommitChangesTime();
         model_.commitChanges();
-        prof.stopCommitChangesTime();
 
         if (requestedNewSize != null) {
              model_.setSize(requestedNewSize);

@@ -85,7 +85,7 @@ public final class GrayScottModel {
      * Exchange the u, v fields with the tmp versions.
      */
     public void commitChanges() {
-        double[][]  temp = tmpU;
+        double[][] temp = tmpU;
         tmpU = u;
         u = temp;
 

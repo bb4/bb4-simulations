@@ -20,7 +20,6 @@ public class RDOnscreenRenderer extends RDRenderer {
         super(model, cmap, options);
     }
 
-
     /**
      * Renders a rectangular strip of pixels.
      */

@@ -4,6 +4,8 @@ package com.barrybecker4.simulation.reactiondiffusion;
 import com.barrybecker4.common.format.FormatUtil;
 import com.barrybecker4.simulation.common.Profiler;
 
+import java.text.Normalizer;
+
 
 /**
  * Singleton for RD profiling.
@@ -13,10 +15,8 @@ import com.barrybecker4.simulation.common.Profiler;
 public class RDProfiler extends Profiler {
 
     protected static final String CONCURRENT_CALCULATION = "concurrent_calculation";
-    protected static final String COMMIT_CHANGES = "commit_changes";
 
     private static RDProfiler instance;
-
     private int numFrames;
 
 
@@ -36,8 +36,7 @@ public class RDProfiler extends Profiler {
     protected RDProfiler() {
         super();
         add(CONCURRENT_CALCULATION, CALCULATION);
-        add(COMMIT_CHANGES, CALCULATION);
-
+        //add(COMMIT_CHANGES, CALCULATION);
     }
 
     @Override
@@ -46,10 +45,11 @@ public class RDProfiler extends Profiler {
         super.print();
         double calcTime = getCalcTime();
         double renderingTime = getRenderingTime();
+
         printMessage("Number of Frames: " + FormatUtil.formatNumber(numFrames));
         printMessage("Calculation time per frame (sec):" + FormatUtil.formatNumber(calcTime / numFrames));
         printMessage("Rendering time per frame   (sec):" + FormatUtil.formatNumber(renderingTime / numFrames));
-        super.print();
+        printMessage("FPS: " + FormatUtil.formatNumber((calcTime + renderingTime)/ numFrames));
     }
 
     @Override
@@ -65,12 +65,11 @@ public class RDProfiler extends Profiler {
     public void stopConcurrentCalculationTime() {
         this.stop(CONCURRENT_CALCULATION);
     }
-    public void startCommitChangesTime() {
-        this.start(COMMIT_CHANGES);
-    }
 
-    public void stopCommitChangesTime() {
-        this.stop(COMMIT_CHANGES);
+    @Override
+    public void stopRenderingTime() {
+        super.stopRenderingTime();
+        numFrames++;
     }
 
 }

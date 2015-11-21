@@ -19,7 +19,6 @@ public abstract class RDRenderer {
     protected RDRenderingOptions options_;
     private RenderingColorModel renderingModel_;
 
-
     /**
      * Constructor
      */
@@ -28,7 +27,6 @@ public abstract class RDRenderer {
         options_ = options;
         renderingModel_ = new RenderingColorModel(model, cmap, options);
     }
-
 
     public ColorMap getColorMap() {
         return renderingModel_.getColorMap();
@@ -58,7 +56,6 @@ public abstract class RDRenderer {
 
         postRender(g2);
     }
-
 
     /**
      * Determine the colors for a rectangular strip of pixels.

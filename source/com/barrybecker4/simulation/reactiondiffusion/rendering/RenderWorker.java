@@ -23,8 +23,9 @@ public class RenderWorker implements Runnable {
     }
 
     public void run() {
-
-        ColorRect colorRect = renderer_.getColorRect(minX_, maxX_);
-        renderer_.renderStrip(minX_, colorRect, g2_);
+        if (maxX_ - minX_ > 0) {
+            ColorRect colorRect = renderer_.getColorRect(minX_, maxX_);
+            renderer_.renderStrip(minX_, colorRect, g2_);
+        }
     }
 }
