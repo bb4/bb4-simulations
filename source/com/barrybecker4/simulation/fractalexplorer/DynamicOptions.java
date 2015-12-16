@@ -37,7 +37,7 @@ class DynamicOptions extends JPanel
     private static final int MAX_NUM_STEPS = (int)(10.0 * INITIAL_TIME_STEP);
 
     private static final SliderProperties[] SLIDER_PROPS = {
-        new SliderProperties(ITER_SLIDER,      100,           10000,      FractalAlgorithm.DEFAULT_MAX_ITERATIONS,   1),
+        new SliderProperties(ITER_SLIDER,      100,           10000,      FractalAlgorithm.DEFAULT_MAX_ITERATIONS(),   1),
         new SliderProperties(TIMESTEP_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   INITIAL_TIME_STEP, 1),
     };
 

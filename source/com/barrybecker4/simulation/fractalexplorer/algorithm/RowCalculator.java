@@ -29,7 +29,7 @@ public class RowCalculator {
 
     public RowCalculator(FractalAlgorithm algorithm) {
         this.algorithm = algorithm;
-        this.model = algorithm.model;
+        this.model = algorithm.getModel();
     }
 
 
