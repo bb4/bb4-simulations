@@ -3,9 +3,11 @@
 description = 'A collection of java simulations.'
 group = 'com.barrybecker4'
 version = '1.4-SNAPSHOT'
-apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
+apply from: 'bb4.gradle' //'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'     // 'bb4.gradle'
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
+
+//apply plugin: 'scala'
 
 dependencies {
     def javaHome = System.properties.'java.home'
@@ -13,6 +15,15 @@ dependencies {
 
     compile 'com.barrybecker4:bb4-sound:1.4-SNAPSHOT'
     compile 'com.barrybecker4:bb4-optimization:1.4-SNAPSHOT'
+
+    // SCALA
+    compile 'org.scala-lang:scala-library:2.11.1'
+}
+
+task runHello(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.Hello'
+    classpath sourceSets.main.runtimeClasspath
+    //classpath configurations.runtime
 }
 
 task runDice(type: JavaExec) {

@@ -9,7 +9,7 @@ import com.barrybecker4.common.math.ComplexNumberRange;
  *
  * @author Barry Becker
  */
-public class JuliaAlgorithm extends FractalAlgorithm  {
+public class JuliaAlgorithmJava extends FractalAlgorithm  {
 
     public static final ComplexNumber DEFAULT_JULIA_SEED = new ComplexNumber(0.233, 0.5378);
 
@@ -18,7 +18,7 @@ public class JuliaAlgorithm extends FractalAlgorithm  {
 
     private ComplexNumber seed = DEFAULT_JULIA_SEED;
 
-    public JuliaAlgorithm(FractalModel model) {
+    public JuliaAlgorithmJava(FractalModel model) {
         super(model, INITIAL_RANGE);
         model.setCurrentRow(0);
     }

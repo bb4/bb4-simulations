@@ -48,7 +48,7 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
         panel.add(algorithmChoice_);
         JPanel cnPanel = new JPanel();
 
-        juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED);
+        juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED());
         cnPanel.add(juliaSeedField);
 
         mainPanel.add(panel, BorderLayout.NORTH);

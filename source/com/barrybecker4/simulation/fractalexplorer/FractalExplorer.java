@@ -26,7 +26,7 @@ public class FractalExplorer extends Simulator {
 
     private FractalAlgorithm algorithm_;
     private AlgorithmEnum algorithmEnum_;
-    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED;
+    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED();
     private FractalModel model_;
     private ModelImage modelImage_;
     private DynamicOptions options_;
