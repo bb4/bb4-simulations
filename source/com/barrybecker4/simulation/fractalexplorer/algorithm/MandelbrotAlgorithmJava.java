@@ -9,12 +9,12 @@ import com.barrybecker4.common.math.ComplexNumberRange;
  *
  * @author Barry Becker
  */
-public class MandelbrotAlgorithm extends FractalAlgorithm  {
+public class MandelbrotAlgorithmJava extends FractalAlgorithm  {
 
     private static final ComplexNumberRange INITIAL_RANGE =
             new ComplexNumberRange(new ComplexNumber(-2.1, -1.5), new ComplexNumber(1.1, 1.5));
 
-    public MandelbrotAlgorithm(FractalModel model) {
+    public MandelbrotAlgorithmJava(FractalModel model) {
         super(model, INITIAL_RANGE);
         model.setCurrentRow(0);
     }

@@ -5,31 +5,23 @@ import com.barrybecker4.common.math.ComplexNumber
 import com.barrybecker4.common.math.ComplexNumberRange
 
 /**
-  * Populates the FractalModel using the iterative Julia set algorithm.
-  *
+  * Populates the FractalModel using the iterative Mandelbrot algorithm..
   * @author Barry Becker
   */
-object JuliaAlgorithm {
-  val DEFAULT_JULIA_SEED: ComplexNumber = new ComplexNumber(0.233, 0.5378)
-  private val INITIAL_RANGE: ComplexNumberRange = new ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7))
+object MandelbrotAlgorithm {
+  private val INITIAL_RANGE: ComplexNumberRange =
+    new ComplexNumberRange(new ComplexNumber(-2.1, -1.5), new ComplexNumber(1.1, 1.5))
 }
 
-class JuliaAlgorithm(model: FractalModel) extends FractalAlgorithm(model, JuliaAlgorithm.INITIAL_RANGE) {
-
-  private var seed: ComplexNumber = JuliaAlgorithm.DEFAULT_JULIA_SEED
+class MandelbrotAlgorithm(model: FractalModel) extends FractalAlgorithm(model, MandelbrotAlgorithm.INITIAL_RANGE) {
 
   model.setCurrentRow(0)
-
-  def setJuliaSeed(seed: ComplexNumber) {
-    println("setting jSeed to " + seed)
-    this.seed = seed
-  }
 
   def getFractalValue(initialValue: ComplexNumber): Double = {
     var z: ComplexNumber = initialValue
     var numIterations: Int = 0
     while (z.getMagnitude < 2.0 && numIterations < getMaxIterations) {
-      z = z.power(2).add(seed)
+      z = z.power(2).add(initialValue)
       numIterations += 1
     }
     numIterations.toDouble / getMaxIterations
