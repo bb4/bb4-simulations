@@ -20,12 +20,6 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.11.1'
 }
 
-task runHello(type: JavaExec) {
-    main = 'com.barrybecker4.simulation.Hello'
-    classpath sourceSets.main.runtimeClasspath
-    //classpath configurations.runtime
-}
-
 task runDice(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.dice.DiceSimulator"]
