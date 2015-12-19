@@ -38,7 +38,8 @@ class FractalModel extends RectangularModel {
   def getValue(x: Int, y: Int): Double = {
     if (x < 0 || x >= getWidth || y < 0 || y >= getHeight)
       0
-    values(x)(y)
+    else
+      values(x)(y)
   }
 
   def getWidth: Int = values.length

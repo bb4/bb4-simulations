@@ -21,7 +21,6 @@ import java.awt.Graphics;
  */
 public class FractalExplorer extends Simulator {
 
-
     static final AlgorithmEnum DEFAULT_ALGORITHM_ENUM = AlgorithmEnum.MANDELBROT;
 
     private FractalAlgorithm algorithm_;
@@ -117,6 +116,7 @@ public class FractalExplorer extends Simulator {
 
             algorithm_.timeStep( timeStep_ );
             modelImage_.updateImage(model_.getLastRow(), model_.getCurrentRow());
+            options_.setCoordinates(algorithm_.getRange());
         }
         return timeStep_;
     }

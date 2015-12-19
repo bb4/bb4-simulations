@@ -1,6 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer;
 
+import com.barrybecker4.common.math.ComplexNumberRange;
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
@@ -28,6 +29,8 @@ class DynamicOptions extends JPanel
     private JCheckBox useFixedSize_;
     private JCheckBox useRunLengthOptimization_;
     private JButton backButton_;
+    private JLabel coordinate1;
+    private JLabel coordinate2;
 
     private static final String ITER_SLIDER = "Max Iterations";;
     private static final String TIMESTEP_SLIDER = "Num Rows per Frame";
@@ -60,11 +63,14 @@ class DynamicOptions extends JPanel
                 new ContinuousColorLegend(null, simulator_.getColorMap(), true);
 
         JPanel checkBoxes = createCheckBoxes();
+        JPanel coordinates = createCoordinatesView();
+
         add(sliderGroup_);
         add(Box.createVerticalStrut(10));
         add(checkBoxes);
         add(Box.createVerticalStrut(10));
         add(legend_);
+        add(coordinates);
 
         backButton_ = new JButton("Go Back");
         backButton_.addActionListener(this);
@@ -73,6 +79,11 @@ class DynamicOptions extends JPanel
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(10, 1000));
         add(fill);
+    }
+
+    public void setCoordinates(ComplexNumberRange range) {
+        coordinate1.setText("c1: " + range.getPoint1());
+        coordinate2.setText("c2: " + range.getPoint2());
     }
 
     private JPanel createCheckBoxes() {
@@ -99,6 +110,16 @@ class DynamicOptions extends JPanel
         return checkBoxes;
     }
 
+    private JPanel createCoordinatesView() {
+        JPanel view = new JPanel();
+        view.setLayout(new BorderLayout());
+        coordinate1 = new JLabel("Upper Left: ");
+        coordinate2 = new JLabel("Lower Right: ");
+
+        view.add(coordinate1, BorderLayout.NORTH);
+        view.add(coordinate2, BorderLayout.CENTER);
+        return view;
+    }
 
     public void reset() {
         sliderGroup_.reset();

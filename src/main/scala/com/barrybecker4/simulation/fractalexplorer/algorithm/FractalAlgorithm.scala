@@ -24,12 +24,11 @@ import com.barrybecker4.simulation.common.Profiler
   * @author Barry Becker
   */
 object FractalAlgorithm {
-  val DEFAULT_MAX_ITERATIONS: Int = 500
+  val DEFAULT_MAX_ITERATIONS: Int = 2000
 }
 
 abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumberRange) {
 
-  //protected final val model: FractalModel = null
   /** range of bounding box in complex plane. */
   private var range: ComplexNumberRange = initialRange
   /** Manages the worker threads. */
@@ -38,9 +37,9 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   private var rowCalculator_ : RowCalculator = null
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
-  private var history_ : History = new History
+  private val history_ : History = new History
 
-  setParallelized(true)
+  setParallelized(false)
   rowCalculator_ = new RowCalculator(this)
 
   def setRange(range: ComplexNumberRange) {
@@ -147,6 +146,8 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     val secondCorner: ComplexNumber = getComplexPosition(box.getBottomRightCorner)
     new ComplexNumberRange(firstCorner, secondCorner)
   }
+
+  def getRange = range
 
   private def startProfileTimeIfNeeded(currentRow: Int) {
     if (currentRow == 0) {
