@@ -45,9 +45,7 @@ class DynamicOptions extends JPanel
     };
 
 
-    /**
-     * Constructor
-     */
+    /** Constructor */
     DynamicOptions(FractalExplorer simulator) {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

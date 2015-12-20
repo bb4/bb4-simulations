@@ -1,7 +1,6 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
-import com.barrybecker4.common.concurrency.RunnableParallelizer
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.math.ComplexNumber
@@ -31,15 +30,14 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
   /** range of bounding box in complex plane. */
   private var range: ComplexNumberRange = initialRange
-  /** Manages the worker threads. */
-  private var parallelizer_ : RunnableParallelizer = null
+  private var parallelize = true
   private var maxIterations_ : Int = FractalAlgorithm.DEFAULT_MAX_ITERATIONS
   private var rowCalculator_ : RowCalculator = null
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
   private val history_ : History = new History
 
-  setParallelized(false)
+  setParallelized(true)
   rowCalculator_ = new RowCalculator(this)
 
   def setRange(range: ComplexNumberRange) {
@@ -63,11 +61,11 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     restartRequested = true
   }
 
-  def isParallelized: Boolean = parallelizer_.getNumThreads > 1
+  def isParallelized: Boolean = parallelize //parallelizer_.getNumThreads > 1
 
   def setParallelized(parallelized: Boolean) {
-    if (parallelizer_ == null || parallelized != isParallelized) {
-      parallelizer_ = if (parallelized) new RunnableParallelizer else new RunnableParallelizer(1)
+    if (parallelized != parallelize) {
+      parallelize = parallelized
       model.setCurrentRow(0)
     }
   }
@@ -85,8 +83,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   def setUseRunLengthOptimization(value: Boolean) = rowCalculator_.setUseRunLengthOptimization(value)
   def getModel: FractalModel = model
 
-  /**
-    * @param timeStep number of rows to compute on this timestep.
+  /** @param timeStep number of rows to compute on this timestep.
     * @return true when done computing whole model.
     */
   def timeStep(timeStep: Double): Boolean = {
@@ -98,8 +95,8 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
       showProfileInfoWhenFinished()
       return true
     }
-    val numProcs: Int = parallelizer_.getNumThreads
-    val workers: java.util.List[Runnable] = new java.util.LinkedList()
+    val numProcs: Int = Runtime.getRuntime.availableProcessors
+    var workers: List[Worker] = List()
     var currentRow: Int = model.getCurrentRow
     startProfileTimeIfNeeded(currentRow)
     val height: Int = model.getHeight
@@ -111,24 +108,26 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     var i: Int = 0
     while (i < numProcs) {
         val nextRow: Int = Math.min(height, currentRow + chunk)
-        workers.add(new Worker(currentRow, nextRow))
+        workers = new Worker(currentRow, nextRow) :: workers
         currentRow = nextRow
-        i += 1; i - 1
+        i += 1
     }
 
-    parallelizer_.invokeAllRunnables(workers)
+    if (parallelize)
+      workers.par.foreach(x => x.run())
+    else
+      workers.foreach(x => x.run())
+
     model.setCurrentRow(currentRow)
     false
   }
 
-  /**
-    * @return a number between 0 and 1.
-    *         Typically corresponds to the number times we had to iterate before the point escaped (or not).
+  /** @return a number between 0 and 1.
+    *   Typically corresponds to the number times we had to iterate before the point escaped (or not).
     */
   def getFractalValue(seed: ComplexNumber): Double
 
-  /**
-    * Converts from screen coordinates to data coordinates.
+  /** Converts from screen coordinates to data coordinates.
     * @param x real valued coordinate
     * @param y pure imaginary coordinate
     * @return corresponding position in complex number plane represented by the model.
@@ -137,9 +136,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     range.getInterpolatedPosition(x.toDouble / model.getWidth, y.toDouble / model.getHeight)
   }
 
-  def getComplexPosition(loc: IntLocation): ComplexNumber = {
-    getComplexPosition(loc.getX, loc.getY)
-  }
+  def getComplexPosition(loc: IntLocation): ComplexNumber = getComplexPosition(loc.getX, loc.getY)
 
   def getRange(box: Box): ComplexNumberRange = {
     val firstCorner: ComplexNumber = getComplexPosition(box.getTopLeftCorner)
@@ -167,15 +164,9 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   }
 
   /** Runs one of the chunks. */
-  private class Worker extends Runnable {
-    private var fromRow_ : Int = 0
-    private var toRow_ : Int = 0
-
-    def this(fromRow: Int, toRow: Int) {
-      this()
-      fromRow_ = fromRow
-      toRow_ = toRow
-    }
+  private class Worker(fromRow: Int, toRow: Int) extends Runnable {
+    private val fromRow_ : Int = fromRow
+    private val toRow_ : Int = toRow
 
     def run() = computeChunk(fromRow_, toRow_)
 
@@ -186,7 +177,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
       var y: Int = fromRow
       while (y < toRow) {
           rowCalculator_.calculateRow(width, y)
-          y += 1; y - 1
+          y += 1
       }
     }
   }
