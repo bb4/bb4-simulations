@@ -24,6 +24,24 @@ import java.util.List;
  *     original                     after rendering optimization.
  *  - not-parallel  16.0  seconds         6.1
  *  - parallel       5.1 seconds          2.1
+ *
+ *  Scala Experiments (see scala-fractal branch)
+ *
+ *  Max it 2000
+ * -1.1601118453945314 0.26972512394950576i
+ * -1.1601108213311082 0.2697274120216164
+ *
+ * Initial benchmark
+ *                                         calcTime     renderTime
+ * Scala with java style parallelization:     7.8         2.4 - 6.8
+ * Scala with java style                     18.6         2.0 - 7.09
+ *
+ * Scala with scala style parallelization      4.0        0.02 - 2.4
+ * Scala with scala style                     8.8         0.02 - 2.4
+ *
+ * scala parallel overview                   0.2 - 0.4        2.0
+ * Java parallel overview                    0.5 - 0.9        2.0
+ *
  * @author Barry Becker
  */
 public abstract class FractalAlgorithm {
