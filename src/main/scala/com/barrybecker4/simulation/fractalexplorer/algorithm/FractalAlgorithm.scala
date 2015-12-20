@@ -23,7 +23,7 @@ import com.barrybecker4.simulation.common.Profiler
   * @author Barry Becker
   */
 object FractalAlgorithm {
-  val DEFAULT_MAX_ITERATIONS: Int = 2000
+  val DEFAULT_MAX_ITERATIONS: Int = 500
 }
 
 abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumberRange) {
