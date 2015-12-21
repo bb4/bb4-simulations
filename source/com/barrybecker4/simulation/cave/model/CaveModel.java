@@ -18,12 +18,8 @@ public class CaveModel {
     public static final int DEFAULT_MAX_ITERATIONS = 2;
     public static final double DEFAULT_SCALE = 5.0;
 
-    //private static final int DEFAULT_CAVE_WIDTH = 50;
-    //private static final int DEFAULT_CAVE_HEIGHT = 50;
-
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
-
 
     private CaveMap cave;
     private CaveRenderer renderer;
@@ -34,7 +30,6 @@ public class CaveModel {
     private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
     private int starvationLimit = DEFAULT_STARVATION_LIMIT;
     private double scale = DEFAULT_SCALE;
-
 
     private boolean restartRequested = false;
 
@@ -52,7 +47,6 @@ public class CaveModel {
 
     public void reset() {
         density = DEFAULT_DENSITY;
-        //numIterations = DEFAULT_NUM_ITERATIONS;
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
         CaveMap cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);

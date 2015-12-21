@@ -16,8 +16,8 @@ import java.awt.image.BufferedImage;
  */
 public class CaveRenderer {
 
-    private static final Color WALL_COLOR = new Color(160, 100, 30);
-    private static final Color FLOOR_COLOR = new Color(150, 190, 255);
+    private static final Color WALL_COLOR = new Color(80, 150, 10);
+    private static final Color FLOOR_COLOR = new Color(110, 255, 215);
 
     private final double width;
     private final double height;

@@ -37,8 +37,8 @@ class DynamicOptions extends JPanel
 
         new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
         new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveMap.DEFAULT_DENSITY, 100),
-        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   1,    7,   CaveMap.DEFAULT_BIRTH_THRESHOLD),
-        new SliderProperties(STARVATION_LIMIT_SLIDER,   1,    7,   CaveMap.DEFAULT_STARVATION_LIMIT),
+        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveMap.DEFAULT_BIRTH_THRESHOLD),
+        new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveMap.DEFAULT_STARVATION_LIMIT),
         new SliderProperties(SCALE_SLIDER,             1,    20,   CaveModel.DEFAULT_SCALE, 100),
     };
 
