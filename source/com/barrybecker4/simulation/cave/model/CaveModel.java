@@ -96,8 +96,8 @@ public class CaveModel {
 
     private void requestRestart(int width, int height) {
         try {
-            int caveWidth = (int)(DEFAULT_WIDTH / scale);
-            int caveHeight = (int)(DEFAULT_HEIGHT / scale);
+            int caveWidth = (int)(width / scale);
+            int caveHeight = (int)(height / scale);
             cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);
             numIterations = 0;
             renderer = new CaveRenderer(width, height, cave);

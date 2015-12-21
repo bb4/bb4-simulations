@@ -10,6 +10,7 @@ import java.util.Random;
  */
 public class CaveMap {
 
+    /** The density is the chance that a cell starts as part of the cave area (alive) */
     public static final double DEFAULT_DENSITY = .35;
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
@@ -26,6 +27,7 @@ public class CaveMap {
     private double density;
     private int starvationLimit;
     private int birthThreshold;
+    /** boolean array. A true value indicates solid rock */
     private boolean[][] map;
 
     /** Default no argument constructor */
@@ -60,9 +62,11 @@ public class CaveMap {
             for (int y = 0; y < map[0].length; y++) {
                 int neibNum = neighborCount(x, y);
                 if (map[x][y]) {
-                    newMap[x][y] = neibNum < starvationLimit;
+                    // if rock, it continues to be rock if not enough neighbors
+                    newMap[x][y] = neibNum > starvationLimit;
                 }
                 else {
+                    // becomes rock if enough rock neighbors
                     newMap[x][y] = neibNum > birthThreshold;
                 }
             }

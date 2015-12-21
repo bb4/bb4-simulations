@@ -19,8 +19,8 @@ public class CaveRenderer {
     private static final Color WALL_COLOR = new Color(160, 100, 30);
     private static final Color FLOOR_COLOR = new Color(150, 190, 255);
 
-    private final int width;
-    private final int height;
+    private final double width;
+    private final double height;
 
     private CaveMap cave;
 
@@ -37,10 +37,10 @@ public class CaveRenderer {
     }
 
     public int getWidth() {
-        return width;
+        return (int) width;
     }
     public int getHeight() {
-        return height;
+        return (int) height;
     }
 
     public void reset() {
@@ -62,14 +62,16 @@ public class CaveRenderer {
      */
     private void drawCave() {
 
-        int cellWidth = Math.max(1, width / cave.getWidth());
-        int cellHeight = Math.max(1, height / cave.getHeight());
+        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
+        double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         offlineGraphics_.setColor(FLOOR_COLOR);
 
         for (int i = 0; i < cave.getWidth(); i++)  {
             for (int j = 0; j < cave.getHeight(); j++) {
                if (!cave.isWall(i, j)) {
-                   offlineGraphics_.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+                   int xpos = (int) (i * cellWidth);
+                   int ypos = (int) (j * cellHeight);
+                   offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
                }
             }
         }
