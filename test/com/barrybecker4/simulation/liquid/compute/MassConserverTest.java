@@ -2,25 +2,30 @@
 package com.barrybecker4.simulation.liquid.compute;
 
 import com.barrybecker4.simulation.liquid.model.*;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
  * @author Barry Becker
  */
-public class MassConserverTest extends TestCase {
+public class MassConserverTest {
 
     /** delta time */
     private static final double DT = 0.1;
+    private static final double EPS = 0.0000000001;
 
     private static final int DIM = 6;
+    private static final double TOL = 0.000000000001;
 
 
     /** instance under test. */
     private MassConserver conserver;
 
+    @Test
     public void testMassConservationForEmptyCell() {
 
         double b0 = 1.0;
@@ -31,10 +36,10 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.0, div);
+        assertEquals("Unexpected divergence", 0.0, div, TOL);
     }
 
-
+    @Test
     public void testMassConservationForFullCellInUniformFlow() {
 
         double b0 = 1.0;
@@ -48,12 +53,12 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.0, div);
-        assertEquals("Unexpected cell pressure", 0.9, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.0, div, EPS);
+        assertEquals("Unexpected cell pressure", 0.9, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(1.0, 1.0),  new Vector2d(1.0, 1.0));
     }
 
-
+    @Test
     public void testMassConservationForFullCellInNonUniformFlow() {
 
         double b0 = 1.0;
@@ -67,15 +72,14 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.032088732160504604, div);
+        assertEquals("Unexpected divergence", 0.032088732160504604, div, EPS);
         // @@ seems wrong
-        assertEquals("Unexpected cell pressure", -7.122183040126151, cell.getPressure());
+        assertEquals("Unexpected cell pressure", -7.122183040126151, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(0.49120674102731, 0.49120674102731),
                                       new Vector2d(0.49120674102731, 0.49120674102731));
     }
 
-
-
+    @Test
     public void testMassConservationForNonUniformFlowHighB() {
 
         double b0 = 2.0;
@@ -91,12 +95,12 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.05, div);
-        assertEquals("Unexpected cell pressure", -24.1, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.05, div, TOL);
+        assertEquals("Unexpected cell pressure", -24.1, cell.getPressure(), TOL);
         verifyResult(cell, neighbors, new Vector2d(0.75, 0.75),  new Vector2d(0.75, 1.25));
     }
 
-
+    @Test
     public void testMassConservationForNonUniformFlowSlowWest() {
 
         double b0 = 1.0;
@@ -112,12 +116,13 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.05, div);
-        assertEquals("Unexpected cell pressure", -11.6, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.05, div, EPS);
+        assertEquals("Unexpected cell pressure", -11.6, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(0.875, 0.875),  new Vector2d(0.625, 1.125));
     }
 
-     public void testMassConservationForNonUniformFlowSlowEast() {
+    @Test
+    public void testMassConservationForNonUniformFlowSlowEast() {
 
         double b0 = 1.0;
         conserver = new MassConserver(b0, DT);
@@ -130,11 +135,12 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.05, div);
-        assertEquals("Unexpected cell pressure", 13.4, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.05, div, EPS);
+        assertEquals("Unexpected cell pressure", 13.4, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(0.625, 1.125),  new Vector2d(0.875, 0.875));
     }
 
+    @Test
     public void testMassConservationForNonUniformFlowSlowSouth() {
 
         double b0 = 1.0;
@@ -150,12 +156,12 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.05, div);
-        assertEquals("Unexpected cell pressure", -11.6, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.05, div, EPS);
+        assertEquals("Unexpected cell pressure", -11.6, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(0.875, 0.875),  new Vector2d(1.125, 0.625));
     }
 
-
+    @Test
     public void testMassConservationForNonUniformFlowSlowNorth() {
 
         double b0 = 1.0;
@@ -169,8 +175,8 @@ public class MassConserverTest extends TestCase {
         CellNeighbors neighbors = grid.getNeighbors(2, 2);
         double div = conserver.updateMassConservation(cell, neighbors);
 
-        assertEquals("Unexpected divergence", 0.05, div);
-        assertEquals("Unexpected cell pressure", 13.4, cell.getPressure());
+        assertEquals("Unexpected divergence", 0.05, div, EPS);
+        assertEquals("Unexpected cell pressure", 13.4, cell.getPressure(), EPS);
         verifyResult(cell, neighbors, new Vector2d(0.625, 1.125),  new Vector2d(0.875, 0.875));
     }
 

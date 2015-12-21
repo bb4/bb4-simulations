@@ -3,10 +3,13 @@ package com.barrybecker4.simulation.liquid.compute;
 
 import com.barrybecker4.simulation.liquid.model.*;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
 
 import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * There are 13 surface conditions.
@@ -17,15 +20,17 @@ import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PR
  *
  * @author Barry Becker
  */
-public class SurfaceVelocityUpdaterTest extends TestCase {
+public class SurfaceVelocityUpdaterTest {
 
     private static final double EPS = 0.00001;
     private static final int DIM = 6;
+    private static final double TOL = 0.0000000001;
 
     /** instance under test. */
     private SurfaceVelocityUpdater svUpdater;
 
 
+    @Test
     public void testUpdateIsolatedInAbsenceOfFlow() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.0, 0.0), CellStatus.EMPTY);
@@ -36,10 +41,11 @@ public class SurfaceVelocityUpdaterTest extends TestCase {
         svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE);
         svUpdater.updateSurfaceVelocities(cell, neighbors);
 
-        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure());
+        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure(), TOL);
         verifyBorderVelocities(cell, neighbors, 0, 0, 0, 0);
     }
 
+    @Test
     public void testUpdateIsolatedInNorthEastFlow() {
 
         Grid grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.EMPTY);
@@ -50,11 +56,12 @@ public class SurfaceVelocityUpdaterTest extends TestCase {
         svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE);
         svUpdater.updateSurfaceVelocities(cell, neighbors);
 
-        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure());
+        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure(), TOL);
         verifyBorderVelocities(cell, neighbors, 0.285714285714, 0.28571428, 0.2054924, 0.205492455313);
     }
 
     /*
+    @Test
     public void testUpdateSurfaceWithOneNorthEmptyNbrInNorthEastFlow() {
 
         Grid grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL);
@@ -66,11 +73,11 @@ public class SurfaceVelocityUpdaterTest extends TestCase {
         svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE);
         svUpdater.updateSurfaceVelocities(cell, neighbors);
 
-        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure());
+        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure(), TOL);
         verifyBorderVelocities(cell, neighbors, 0.2857142857, 0.285714285714, 0.205492455313, 0.2054924553);
     }
 
-
+    @Test
     public void testUpdateSurfaceWithOneEastEmptyNbrInNorthEastFlow() {
 
         Grid grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL);
@@ -82,11 +89,11 @@ public class SurfaceVelocityUpdaterTest extends TestCase {
         svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE);
         svUpdater.updateSurfaceVelocities(cell, neighbors);
 
-        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure());
+        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure(), TOL);
         verifyBorderVelocities(cell, neighbors, 0.2857142857, 0.2857142857, 0.205492455, 0.205492455);
     }
 
-
+    @Test
     public void testUpdateSurfaceWithOneWestEmptyNbrInNorthEastFlow() {
 
         Grid grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL);
@@ -98,7 +105,7 @@ public class SurfaceVelocityUpdaterTest extends TestCase {
         svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE);
         svUpdater.updateSurfaceVelocities(cell, neighbors);
 
-        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure());
+        assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure(), TOL);
         verifyBorderVelocities(cell, neighbors, 0.2857142857, 0.2857142857, 0.2054924553, 0.2054924553);
     }  */
 

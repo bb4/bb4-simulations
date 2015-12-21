@@ -2,14 +2,17 @@
 package com.barrybecker4.simulation.liquid.compute;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *
  * @author Barry Becker
  */
-public class VelocityUpdaterTest extends TestCase {
+public class VelocityUpdaterTest {
 
     /** delta time */
     private static final double DT = 0.1;
@@ -23,6 +26,7 @@ public class VelocityUpdaterTest extends TestCase {
     private VelocityUpdater velocityUpdater;
 
 
+    @Test
     public void testTrue() {
         assertTrue(true);
     }
@@ -40,7 +44,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.0, 1.0), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNorthEastFlow() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -54,7 +58,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.1, 1.1), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNorthEastNonUniformFlow() {
 
         Grid grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -70,6 +74,7 @@ public class VelocityUpdaterTest extends TestCase {
                 new Vector2d(cell.getU(), cell.getV()));
     }
 
+    @Test
     public void testUpdateInViscousSlightNothEastFlowFlow() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -86,7 +91,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.1, 1.1), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNothEastFlowFlowUpperLeftTweak() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -103,7 +108,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.1, 1.0997500000000002), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNorthEastFlowFlowLoweRightTweak() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -119,7 +124,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.09975, 1.1), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNorthEastFlowFlowLeftPressureTweak() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
@@ -137,7 +142,7 @@ public class VelocityUpdaterTest extends TestCase {
         assertEquals("Unexpected UV", new Vector2d(0.10450000000000001, 1.1), new Vector2d(cell.getU(), cell.getV()));
     }
 
-
+    @Test
     public void testUpdateInSlightNorthEastFlowFlowLowerPressureTweak() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.1, 0.1), CellStatus.FULL);
