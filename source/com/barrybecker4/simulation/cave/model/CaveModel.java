@@ -7,24 +7,33 @@ import com.barrybecker4.simulation.common.Profiler;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_DENSITY;
+import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_BIRTH_THRESHOLD;
+import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_STARVATION_LIMIT;
 
 /**
  * @author Barry Becker
  */
 public class CaveModel {
 
-    //private static final int DEFAULT_NUM_ITERATIONS = 2;
+    public static final int DEFAULT_MAX_ITERATIONS = 2;
+    public static final double DEFAULT_SCALE = 5.0;
 
-    private static final int DEFAULT_CAVE_WIDTH = 50;
-    private static final int DEFAULT_CAVE_HEIGHT = 50;
+    //private static final int DEFAULT_CAVE_WIDTH = 50;
+    //private static final int DEFAULT_CAVE_HEIGHT = 50;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
 
+
+    private CaveMap cave;
     private CaveRenderer renderer;
 
     private double density = DEFAULT_DENSITY;
-    //private int numIterations = DEFAULT_NUM_ITERATIONS;
+    private int maxIterations = DEFAULT_MAX_ITERATIONS;
+    private int numIterations = 0;
+    private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
+    private int starvationLimit = DEFAULT_STARVATION_LIMIT;
+    private double scale = DEFAULT_SCALE;
 
 
     private boolean restartRequested = false;
@@ -44,19 +53,18 @@ public class CaveModel {
     public void reset() {
         density = DEFAULT_DENSITY;
         //numIterations = DEFAULT_NUM_ITERATIONS;
-        CaveMap cave = new CaveMap(DEFAULT_CAVE_WIDTH, DEFAULT_CAVE_HEIGHT, density);
+        int caveWidth = (int)(DEFAULT_WIDTH / scale);
+        int caveHeight = (int)(DEFAULT_HEIGHT / scale);
+        CaveMap cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
     }
 
-    /*
-    public void setNumIterations(int num) {
-        if (num != this.numIterations) {
-            numIterations = num;
+    public void setMaxIterations(int num) {
+        if (num != this.maxIterations) {
+            maxIterations = num;
             requestRestart(renderer.getWidth(), renderer.getHeight());
         }
-    }  */
-
-
+    }
 
     public void setDensity(double density) {
         if (this.density != density)  {
@@ -65,9 +73,33 @@ public class CaveModel {
         }
     }
 
+    public void setBirthThreshold(int birthThresh) {
+        if (this.birthThresh != birthThresh)  {
+            this.birthThresh = birthThresh;
+            requestRestart(renderer.getWidth(), renderer.getHeight());
+        }
+    }
+
+    public void setStarvationLimit(int starvationLimit) {
+        if (this.starvationLimit != starvationLimit)  {
+            this.starvationLimit = starvationLimit;
+            requestRestart(renderer.getWidth(), renderer.getHeight());
+        }
+    }
+
+    public void setScale(double scale) {
+        if (this.scale != scale)  {
+            this.scale = scale;
+            requestRestart(renderer.getWidth(), renderer.getHeight());
+        }
+    }
+
     private void requestRestart(int width, int height) {
         try {
-            CaveMap cave = new CaveMap(DEFAULT_CAVE_WIDTH, DEFAULT_CAVE_HEIGHT, density);
+            int caveWidth = (int)(DEFAULT_WIDTH / scale);
+            int caveHeight = (int)(DEFAULT_HEIGHT / scale);
+            cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);
+            numIterations = 0;
             renderer = new CaveRenderer(width, height, cave);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
@@ -91,7 +123,11 @@ public class CaveModel {
             Profiler.getInstance().startCalculationTime();
             renderer.render();
         }
-
+        else if (numIterations < maxIterations) {
+            cave.nextPhase();
+            numIterations++;
+            renderer.render();
+        }
 
         return false;
     }

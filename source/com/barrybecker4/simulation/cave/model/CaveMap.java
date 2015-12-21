@@ -14,9 +14,9 @@ public class CaveMap {
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
     /** cells die if less than this */
-    public static final int STARVATION_LIMIT = 3;
+    public static final int DEFAULT_STARVATION_LIMIT = 3;
     /** Cells are born if more than this many neighbors */
-    public static final int BIRTH_THRESHOLD = 2;
+    public static final int DEFAULT_BIRTH_THRESHOLD = 2;
 
     private static final int SEED = 0;
     private static final Random RAND = new Random();
@@ -24,6 +24,8 @@ public class CaveMap {
     private int width;
     private int height;
     private double density;
+    private int starvationLimit;
+    private int birthThreshold;
     private boolean[][] map;
 
     /** Default no argument constructor */
@@ -33,13 +35,15 @@ public class CaveMap {
 
     /** Constructor that allows you to specify the dimensions of the cave */
     public CaveMap(int width, int height) {
-        this(width, height, DEFAULT_DENSITY);
+        this(width, height, DEFAULT_DENSITY, DEFAULT_STARVATION_LIMIT, DEFAULT_BIRTH_THRESHOLD);
     }
 
-    public CaveMap(int width, int height, double density) {
+    public CaveMap(int width, int height, double density, int starvationLimit, int birthThreshold) {
         this.width = width;
         this.height = height;
         this.density = density;
+        this.starvationLimit = starvationLimit;
+        this.birthThreshold = birthThreshold;
         map = genMap();
     }
 
@@ -56,10 +60,10 @@ public class CaveMap {
             for (int y = 0; y < map[0].length; y++) {
                 int neibNum = neighborCount(x, y);
                 if (map[x][y]) {
-                    newMap[x][y] = neibNum < STARVATION_LIMIT;
+                    newMap[x][y] = neibNum < starvationLimit;
                 }
                 else {
-                    newMap[x][y] = neibNum > BIRTH_THRESHOLD;
+                    newMap[x][y] = neibNum > birthThreshold;
                 }
             }
         }

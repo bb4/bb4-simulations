@@ -22,18 +22,24 @@ class DynamicOptions extends JPanel
     //private CaveExplorer simulator_;
     private double density;
 
-    //private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
+
+    private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
     private static final String DENSITY_SLIDER = "Density";
+    private static final String BIRTH_THRESHOLD_SLIDER = "Birth Threshold";
+    private static final String STARVATION_LIMIT_SLIDER = "Starvation Limit";
+    private static final String SCALE_SLIDER = "Scale";
+    //private static final String HEIGHT_SLIDER = "Height";
 
     private SliderGroup sliderGroup_;
     private JTextArea formulaText_;
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
-        //new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    LSystemModel.DEFAULT_ITERATIONS),
+        new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
         new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveMap.DEFAULT_DENSITY, 100),
-        //new SliderProperties(SCALE_SLIDER,   0.01,    2.2,   LSystemModel.DEFAULT_SCALE,  1000.0),
-        //new SliderProperties(SCALE_FACTOR_SLIDER,   0.2,    2.0,   LSystemModel.DEFAULT_SCALE_FACTOR,  1000.0),
+        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   1,    7,   CaveMap.DEFAULT_BIRTH_THRESHOLD),
+        new SliderProperties(STARVATION_LIMIT_SLIDER,   1,    7,   CaveMap.DEFAULT_STARVATION_LIMIT),
+        new SliderProperties(SCALE_SLIDER,             0,    20,   CaveModel.DEFAULT_SCALE, 100),
     };
 
 
@@ -65,22 +71,27 @@ class DynamicOptions extends JPanel
 
     /**
      * One of the sliders was moved.
-     *
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        //if (sliderName.equals(NUM_ITERATIONS_SLIDER)) {
-        //    algorithm_.setNumIterations((int)value);
-        //}
-        if (sliderName.equals(DENSITY_SLIDER)) {
-            caveModel.setDensity(value);
-        } /*
-        else if (sliderName.equals(SCALE_SLIDER)) {
-            algorithm_.setScale(value);
+        switch (sliderName) {
+            case NUM_ITERATIONS_SLIDER:
+                caveModel.setMaxIterations((int) value);
+                break;
+            case DENSITY_SLIDER:
+                caveModel.setDensity(value);
+                break;
+            case BIRTH_THRESHOLD_SLIDER:
+                caveModel.setBirthThreshold((int) value);
+                break;
+            case STARVATION_LIMIT_SLIDER:
+                caveModel.setStarvationLimit((int) value);
+                break;
+            case SCALE_SLIDER:
+                caveModel.setScale(value);
+                break;
+            default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);
         }
-        else if (sliderName.equals(SCALE_FACTOR_SLIDER)) {
-            algorithm_.setScaleFactor(value);
-        }  */
     }
 
 
