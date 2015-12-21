@@ -10,16 +10,20 @@ import java.util.Random;
  */
 public class CaveMap {
 
-    private static final double DENSITY = .35;
-    private static final int DEFAULT_HEIGHT = 32;
-    private static final int DEFAULT_WIDTH = 32;
-    private static final int DELETE = 3;
-    private static final int CREATE = 2;
+    public static final double DEFAULT_DENSITY = .35;
+    public static final int DEFAULT_HEIGHT = 32;
+    public static final int DEFAULT_WIDTH = 32;
+    /** cells die if less than this */
+    public static final int STARVATION_LIMIT = 3;
+    /** Cells are born if more than this many neighbors */
+    public static final int BIRTH_THRESHOLD = 2;
+
     private static final int SEED = 0;
     private static final Random RAND = new Random();
 
     private int width;
     private int height;
+    private double density;
     private boolean[][] map;
 
     /** Default no argument constructor */
@@ -29,8 +33,13 @@ public class CaveMap {
 
     /** Constructor that allows you to specify the dimensions of the cave */
     public CaveMap(int width, int height) {
+        this(width, height, DEFAULT_DENSITY);
+    }
+
+    public CaveMap(int width, int height, double density) {
         this.width = width;
         this.height = height;
+        this.density = density;
         map = genMap();
     }
 
@@ -47,10 +56,10 @@ public class CaveMap {
             for (int y = 0; y < map[0].length; y++) {
                 int neibNum = neighborCount(x, y);
                 if (map[x][y]) {
-                    newMap[x][y] = neibNum < DELETE;
+                    newMap[x][y] = neibNum < STARVATION_LIMIT;
                 }
                 else {
-                    newMap[x][y] = neibNum > CREATE;
+                    newMap[x][y] = neibNum > BIRTH_THRESHOLD;
                 }
             }
         }
@@ -91,7 +100,7 @@ public class CaveMap {
         boolean[][] theMap = new boolean[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                theMap[x][y] = RAND.nextDouble() < DENSITY;
+                theMap[x][y] = RAND.nextDouble() < density;
             }
         }
         return theMap;

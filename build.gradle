@@ -23,7 +23,7 @@ task runDice(type: JavaExec) {
 
 task runGraphing(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["com.barrybecker4.simulation.graphing.GraphSimulator"]
+    args = ["com.barrybecker4.simulation.graphing.Simulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -40,7 +40,7 @@ task runSnake(type: JavaExec) {
     enableAssertions = true
 }
 
-task runStock(type: JavaExec) {                                                             -0
+task runStock(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.stock.StockSimulator"]
     classpath = sourceSets.main.runtimeClasspath
@@ -80,6 +80,12 @@ task runHabitatExplorer(type: JavaExec) {
 task runLSystemExplorer(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.lsystem.LSystemExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runCaveExplorer(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.cave.CaveExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 

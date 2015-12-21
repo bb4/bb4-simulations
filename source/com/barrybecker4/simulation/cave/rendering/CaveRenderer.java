@@ -1,20 +1,12 @@
-// Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.rendering;
 
-import com.barrybecker4.common.expression.TreeNode;
 import com.barrybecker4.simulation.cave.model.CaveMap;
-import com.barrybecker4.simulation.lsystem.model.expression.LExpressionParser;
-import com.barrybecker4.simulation.lsystem.rendering.DepthColorMap;
-import com.barrybecker4.simulation.lsystem.rendering.OrientedPosition;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
-import com.barrybecker4.ui.util.ColorMap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-import java.util.List;
 
-import static com.barrybecker4.simulation.lsystem.model.expression.LTokens.*;
 
 /**
  * Everything we need to know to compute the l-System tree.
@@ -77,7 +69,7 @@ public class CaveRenderer {
         for (int i = 0; i < cave.getWidth(); i++)  {
             for (int j = 0; j < cave.getHeight(); j++) {
                if (!cave.isWall(i, j)) {
-                   offlineGraphics_.drawRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+                   offlineGraphics_.fillRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                }
             }
         }
