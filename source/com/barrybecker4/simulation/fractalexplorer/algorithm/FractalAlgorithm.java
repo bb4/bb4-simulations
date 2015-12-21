@@ -199,6 +199,10 @@ public abstract class FractalAlgorithm {
         return getComplexPosition(loc.getX(), loc.getY());
     }
 
+    public ComplexNumberRange getRange() {
+        return this.range;
+    }
+
     public ComplexNumberRange getRange(Box box)  {
         ComplexNumber firstCorner = getComplexPosition(box.getTopLeftCorner());
         ComplexNumber secondCorner = getComplexPosition(box.getBottomRightCorner());
