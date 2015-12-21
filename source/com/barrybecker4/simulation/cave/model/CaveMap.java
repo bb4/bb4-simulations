@@ -57,6 +57,18 @@ public class CaveMap {
         map = newMap;
     }
 
+    public boolean isWall(int x, int y) {
+        return map[x][y];
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void printMap() {
         System.out.println(this.toString());
     }
