@@ -21,6 +21,12 @@ task runDice(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runGraphing(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.graphing.GraphSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runFluid(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fluid.ui.FluidSimulator"]
