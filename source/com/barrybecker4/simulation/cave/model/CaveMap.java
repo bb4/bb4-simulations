@@ -1,5 +1,8 @@
 package com.barrybecker4.simulation.cave.model;
 
+import com.barrybecker4.simulation.cave.model.kernal.BasicKernal;
+import com.barrybecker4.simulation.cave.model.kernal.Kernal;
+
 import java.util.Random;
 
 /**
@@ -15,7 +18,7 @@ public class CaveMap {
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
     /** cells die if less than this */
-    public static final int DEFAULT_STARVATION_LIMIT = 3;
+    public static final int DEFAULT_STARVATION_LIMIT = 4;
     /** Cells are born if more than this many neighbors */
     public static final int DEFAULT_BIRTH_THRESHOLD = 2;
 
@@ -29,6 +32,7 @@ public class CaveMap {
     private int birthThreshold;
     /** boolean array. A true value indicates solid rock */
     private boolean[][] map;
+    private Kernal kernal;
 
     /** Default no argument constructor */
     public CaveMap() {
@@ -47,6 +51,7 @@ public class CaveMap {
         this.starvationLimit = starvationLimit;
         this.birthThreshold = birthThreshold;
         map = genMap();
+        kernal = new BasicKernal(map);
     }
 
     /**
@@ -60,7 +65,7 @@ public class CaveMap {
         // Loop over each row and column of the map
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
-                int neibNum = neighborCount(x, y);
+                int neibNum = (int) kernal.countNeighbors(x, y);
                 if (map[x][y]) {
                     // if rock, it continues to be rock if not enough neighbors
                     newMap[x][y] = neibNum > starvationLimit;
@@ -114,26 +119,11 @@ public class CaveMap {
         return theMap;
     }
 
-    int neighborCount(int x, int y) {
-        int count = 0;
-        for (int i = -1; i < 2; i++) {
-            int neighborX = x + i;
-            for (int j = -1; j < 2; j++) {
-                int neighborY = y + j;
-                // If we're looking at the middle point
-                if (i == 0 && j == 0) {
-                    // Do nothing, we don't want to add ourselves in!
-                    continue;
-                }
-                // In case the index we're looking at it off the edge of the map, or a filled neighbor
-                if (neighborX < 0 || neighborY < 0 ||
-                    neighborX >= map.length || neighborY >= map[0].length ||
-                    map[neighborX][neighborY]) {
-                    count++;
-                }
-            }
-        }
-        return count;
+    public static void main(String[] args) {
+        CaveMap cave = new CaveMap(32, 32, 0.35, 3, 2);
+        cave.printMap();
+        cave.nextPhase();
+        cave.printMap();
     }
 
 }

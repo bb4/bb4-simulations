@@ -12,7 +12,7 @@ public class CaveMapTest {
 
 	@Test
 	public void test2by2Construction() {
-		CaveMap cave = new CaveMap(2, 2);
+		CaveMap cave = new CaveMap(2, 2, 0.35, 3, 2);
 		assertEquals("2 by 2 construction", "  \n0 \n", cave.toString());
 	}
 
@@ -40,22 +40,11 @@ public class CaveMapTest {
 		assertEquals("1 by 4 construction", " \n0\n \n \n", cave.toString());
 	}
 
-	/** assertEquals that we get correct neighbor counts for different positions within the 5x5 cave. */
-	@Test
-	public void testNeighborCount() {
-		CaveMap cave = new CaveMap(5, 5);
-
-		assertEquals("count for 0,0", "7", "" + cave.neighborCount(0, 0));
-		assertEquals("count for 1,0", "6", "" + cave.neighborCount(1, 0));
-		assertEquals("count for 1,1", "5", "" + cave.neighborCount(1, 1));
-		assertEquals("count for 4,3", "3", "" + cave.neighborCount(4, 3));
-	}
-
 	@Test
 	public void testNextPhase() {
-		CaveMap cave = new CaveMap(5, 5);
+		CaveMap cave = new CaveMap(5, 5, 0.35, 3, 2);
 		cave.nextPhase();
-		assertEquals("5 by 5 nextPhase", "0  00\n 0  0\n00 00\n0 0 0\n00000\n", cave.toString());
+		assertEquals("5 by 5 nextPhase", "00000\n000 0\n00 00\n0   0\n00000\n", cave.toString());
 	}
 
 }
