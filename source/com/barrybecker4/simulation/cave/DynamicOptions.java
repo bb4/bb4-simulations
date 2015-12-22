@@ -9,6 +9,8 @@ import com.barrybecker4.ui.sliders.SliderProperties;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * Dynamic controls for the RD simulation that will show on the right.
@@ -16,12 +18,11 @@ import java.awt.*;
  * @author Barry Becker
  */
 class DynamicOptions extends JPanel
-                     implements SliderGroupChangeListener {
+                     implements SliderGroupChangeListener, ItemListener {
 
     private CaveModel caveModel;
-    //private CaveExplorer simulator_;
-    private double density;
 
+    private Choice kernelChoice;
 
     private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
     private static final String DENSITY_SLIDER = "Density";
@@ -39,7 +40,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveMap.DEFAULT_DENSITY, 100),
         new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveMap.DEFAULT_BIRTH_THRESHOLD),
         new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveMap.DEFAULT_STARVATION_LIMIT),
-        new SliderProperties(SCALE_SLIDER,             1,    20,   CaveModel.DEFAULT_SCALE, 40),
+        new SliderProperties(SCALE_SLIDER,             1,    20,  CaveModel.DEFAULT_SCALE, 40),
     };
 
 
@@ -53,17 +54,38 @@ class DynamicOptions extends JPanel
         setPreferredSize(new Dimension(300, 300));
 
         caveModel = algorithm;
-        //simulator_ = simulator;
 
         sliderGroup_ = new SliderGroup(SLIDER_PROPS);
         sliderGroup_.addSliderChangeListener(this);
 
         add(sliderGroup_);
+        add(createKernalDropdown());
+
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
         add(fill);
     }
 
+    /**
+     * The dropdown menu at the top for selecting a kernel type.
+     * @return a dropdown/down component.
+     */
+    private JPanel createKernalDropdown() {
+
+        JPanel kernelChoicePanel = new JPanel();
+        JLabel label = new JLabel("Kernal type: ");
+
+        kernelChoice = new Choice();
+        for (Enum kernelType: CaveMap.KernelType.values()) {
+            kernelChoice.add(kernelType.name());
+        }
+        kernelChoice.select(CaveMap.DEFAULT_KERNEL_TYPE.ordinal());
+        kernelChoice.addItemListener(this);
+
+        kernelChoicePanel.add(label);
+        kernelChoicePanel.add(kernelChoice);
+        return kernelChoicePanel;
+    }
 
     public void reset() {
         sliderGroup_.reset();
@@ -95,4 +117,9 @@ class DynamicOptions extends JPanel
     }
 
 
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        CaveMap.KernelType type = CaveMap.KernelType.valueOf(kernelChoice.getSelectedItem());
+        caveModel.setKernelType(type);
+    }
 }

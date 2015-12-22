@@ -26,6 +26,9 @@ public class CaveMap {
     private static final int SEED = 0;
     private static final Random RAND = new Random();
 
+    public enum KernelType {BASIC, RADIAL}
+    public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.BASIC;
+
     private int width;
     private int height;
     private double density;
@@ -42,17 +45,21 @@ public class CaveMap {
 
     /** Constructor that allows you to specify the dimensions of the cave */
     public CaveMap(int width, int height) {
-        this(width, height, DEFAULT_DENSITY, DEFAULT_STARVATION_LIMIT, DEFAULT_BIRTH_THRESHOLD);
+        this(width, height, DEFAULT_DENSITY, DEFAULT_STARVATION_LIMIT, DEFAULT_BIRTH_THRESHOLD, KernelType.BASIC);
     }
 
-    public CaveMap(int width, int height, double density, int starvationLimit, int birthThreshold) {
+    public CaveMap(int width, int height,
+                   double density, int starvationLimit, int birthThreshold, KernelType kernelType) {
         this.width = width;
         this.height = height;
         this.density = density;
         this.starvationLimit = starvationLimit;
         this.birthThreshold = birthThreshold;
         map = genMap();
-        kernel = new RadialKernel(map);
+        switch (kernelType) {
+            case BASIC: kernel = new BasicKernel(map); break;
+            case RADIAL: kernel = new RadialKernel(map); break;
+        }
     }
 
     /**
@@ -68,8 +75,8 @@ public class CaveMap {
             for (int y = 0; y < map[0].length; y++) {
                 int neibNum = (int) kernel.countNeighbors(x, y);
                 if (map[x][y]) {
-                    // if rock, it continues to be rock if not enough neighbors
-                    newMap[x][y] = neibNum > starvationLimit;
+                    // if rock, it continues to be rock if enough neighbors (or too few)
+                    newMap[x][y] = neibNum > starvationLimit; // || neibNum < 2;
                 }
                 else {
                     // becomes rock if enough rock neighbors
@@ -121,7 +128,7 @@ public class CaveMap {
     }
 
     public static void main(String[] args) {
-        CaveMap cave = new CaveMap(32, 32, 0.35, 3, 2);
+        CaveMap cave = new CaveMap(32, 32, 0.35, 3, 2, KernelType.BASIC);
         cave.printMap();
         cave.nextPhase();
         cave.printMap();

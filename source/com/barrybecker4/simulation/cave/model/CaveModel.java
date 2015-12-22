@@ -30,6 +30,7 @@ public class CaveModel {
     private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
     private int starvationLimit = DEFAULT_STARVATION_LIMIT;
     private double scale = DEFAULT_SCALE;
+    private CaveMap.KernelType kernalType = CaveMap.DEFAULT_KERNEL_TYPE;
 
     private boolean restartRequested = false;
 
@@ -49,7 +50,7 @@ public class CaveModel {
         density = DEFAULT_DENSITY;
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
-        CaveMap cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);
+        CaveMap cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
     }
 
@@ -88,11 +89,16 @@ public class CaveModel {
         }
     }
 
+    public void setKernelType(CaveMap.KernelType type) {
+        this.kernalType = type;
+        requestRestart(renderer.getWidth(), renderer.getHeight());
+    }
+
     private void requestRestart(int width, int height) {
         try {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
-            cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh);
+            cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
             numIterations = 0;
             renderer = new CaveRenderer(width, height, cave);
             restartRequested = true;

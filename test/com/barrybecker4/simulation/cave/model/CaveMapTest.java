@@ -12,7 +12,7 @@ public class CaveMapTest {
 
 	@Test
 	public void test2by2Construction() {
-		CaveMap cave = new CaveMap(2, 2, 0.35, 3, 2);
+		CaveMap cave = new CaveMap(2, 2);
 		assertEquals("2 by 2 construction", "  \n0 \n", cave.toString());
 	}
 
@@ -42,7 +42,7 @@ public class CaveMapTest {
 
 	@Test
 	public void testNextPhase() {
-		CaveMap cave = new CaveMap(5, 5, 0.35, 3, 2);
+		CaveMap cave = new CaveMap(5, 5, 0.35, 3, 2, CaveMap.KernelType.BASIC);
 		cave.nextPhase();
 		assertEquals("5 by 5 nextPhase", "00000\n000 0\n00 00\n0   0\n00000\n", cave.toString());
 	}
