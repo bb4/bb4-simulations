@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class BasicKernalTest {
 
     /** instance under test */
-    private BasicKernal kernal;
+    private BasicKernel kernel;
 
     private static final double EPS = 0.0000000000001;
 
@@ -25,11 +25,11 @@ public class BasicKernalTest {
                 {false, true, false, false, false},
                 {false, false, false, false, false}
         };
-        kernal = new BasicKernal(map);
+        kernel = new BasicKernel(map);
 
-        assertEquals("count for 0,0", 7.0, kernal.countNeighbors(0, 0), EPS);
-        assertEquals("count for 1,0", 6.0, kernal.countNeighbors(1, 0), EPS);
-        assertEquals("count for 1,1", 5.0, kernal.countNeighbors(1, 1), EPS);
-        assertEquals("count for 4,3", 3.0, kernal.countNeighbors(4, 3), EPS);
+        assertEquals("count for 0,0", 7.0, kernel.countNeighbors(0, 0), EPS);
+        assertEquals("count for 1,0", 6.0, kernel.countNeighbors(1, 0), EPS);
+        assertEquals("count for 1,1", 5.0, kernel.countNeighbors(1, 1), EPS);
+        assertEquals("count for 4,3", 3.0, kernel.countNeighbors(4, 3), EPS);
     }
 }

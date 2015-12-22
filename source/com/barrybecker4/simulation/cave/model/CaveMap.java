@@ -1,7 +1,8 @@
 package com.barrybecker4.simulation.cave.model;
 
-import com.barrybecker4.simulation.cave.model.kernal.BasicKernal;
-import com.barrybecker4.simulation.cave.model.kernal.Kernal;
+import com.barrybecker4.simulation.cave.model.kernal.BasicKernel;
+import com.barrybecker4.simulation.cave.model.kernal.Kernel;
+import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
 
 import java.util.Random;
 
@@ -32,7 +33,7 @@ public class CaveMap {
     private int birthThreshold;
     /** boolean array. A true value indicates solid rock */
     private boolean[][] map;
-    private Kernal kernal;
+    private Kernel kernel;
 
     /** Default no argument constructor */
     public CaveMap() {
@@ -51,7 +52,7 @@ public class CaveMap {
         this.starvationLimit = starvationLimit;
         this.birthThreshold = birthThreshold;
         map = genMap();
-        kernal = new BasicKernal(map);
+        kernel = new RadialKernel(map);
     }
 
     /**
@@ -65,7 +66,7 @@ public class CaveMap {
         // Loop over each row and column of the map
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
-                int neibNum = (int) kernal.countNeighbors(x, y);
+                int neibNum = (int) kernel.countNeighbors(x, y);
                 if (map[x][y]) {
                     // if rock, it continues to be rock if not enough neighbors
                     newMap[x][y] = neibNum > starvationLimit;
