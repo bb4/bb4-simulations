@@ -9,6 +9,7 @@ import java.util.Random;
 /**
  * This Cave simulation program is based on work by Michael Cook
  * See http://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664
+ * See http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
  * @author Brian Becker
  * @author Barry Becker
  */
