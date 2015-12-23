@@ -54,6 +54,14 @@ public class CaveProcessor {
         }
     }
 
+    public int getWidth() {
+        return cave.getWidth();
+    }
+
+    public int getHeight() {
+        return cave.getHeight();
+    }
+
     /**
      * Compute the next step of the simulation
      * The new value is at each point based on simulation rules:
@@ -66,19 +74,23 @@ public class CaveProcessor {
         for (int x = 0; x < cave.getWidth(); x++) {
             for (int y = 0; y < cave.getHeight()/*map[0].length*/; y++) {
                 int neibNum = (int) kernel.countNeighbors(x, y);
+                byte newValue;
                 if (cave.isWall(x, y)) {
                     // if rock, it continues to be rock if enough neighbors (or too few)
-                    if (neibNum > starvationLimit)
-                        newCave.setValue(x, y, Cave.NEW_FLOOR); // || neibNum < 2;
+                    newValue =  (neibNum < starvationLimit) ? Cave.NEW_FLOOR : Cave.WALL;
                 }
                 else {
                     // becomes rock if enough rock neighbors
-                    if (neibNum > birthThreshold)
-                        newCave.setValue(x, y, Cave.NEW_WALL);
+                    newValue = (neibNum > birthThreshold) ? Cave.NEW_WALL : Cave.FLOOR;
                 }
+                newCave.setValue(x, y, newValue);
             }
         }
         cave = newCave;
+    }
+
+    public byte getValue (int x, int y) {
+        return cave.getValue(x, y);
     }
 
     public boolean isWall(int x, int y) {
@@ -89,12 +101,8 @@ public class CaveProcessor {
         cave.print();
     }
 
-    public int getWidth() {
-        return cave.getWidth();
-    }
-
-    public int getHeight() {
-        return cave.getHeight();
+    public String toString() {
+        return cave.toString();
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.rendering;
 
+import com.barrybecker4.simulation.cave.model.Cave;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 
@@ -16,8 +17,10 @@ import java.awt.image.BufferedImage;
  */
 public class CaveRenderer {
 
-    private static final Color WALL_COLOR = new Color(80, 150, 10);
-    private static final Color FLOOR_COLOR = new Color(110, 255, 215);
+    private static final Color WALL_COLOR = new Color(70, 120, 10);
+    private static final Color NEW_WALL_COLOR = new Color(120, 150, 30);
+    private static final Color FLOOR_COLOR = new Color(100, 245, 185);
+    private static final Color NEW_FLOOR_COLOR = new Color(150, 255, 245);
 
     private final double width;
     private final double height;
@@ -33,7 +36,7 @@ public class CaveRenderer {
         this.width = width;
         this.height = height;
         this.cave = cave;
-        offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), WALL_COLOR);
+        offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
     }
 
     public int getWidth() {
@@ -64,15 +67,21 @@ public class CaveRenderer {
 
         double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
-        offlineGraphics_.setColor(FLOOR_COLOR);
+
 
         for (int i = 0; i < cave.getWidth(); i++)  {
             for (int j = 0; j < cave.getHeight(); j++) {
-               if (!cave.isWall(i, j)) {
-                   int xpos = (int) (i * cellWidth);
-                   int ypos = (int) (j * cellHeight);
-                   offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
-               }
+                int xpos = (int) (i * cellWidth);
+                int ypos = (int) (j * cellHeight);
+                byte value = cave.getValue(i, j);
+                switch (value) {
+                    case Cave.WALL : offlineGraphics_.setColor(WALL_COLOR); break;
+                    case Cave.NEW_WALL : offlineGraphics_.setColor(NEW_WALL_COLOR); break;
+                    case Cave.FLOOR : offlineGraphics_.setColor(FLOOR_COLOR); break;
+                    case Cave.NEW_FLOOR : offlineGraphics_.setColor(NEW_FLOOR_COLOR); break;
+                }
+
+                offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
     }

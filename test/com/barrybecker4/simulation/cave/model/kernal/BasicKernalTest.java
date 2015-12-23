@@ -1,5 +1,6 @@
 package com.barrybecker4.simulation.cave.model.kernal;
 
+import com.barrybecker4.simulation.cave.model.Cave;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -18,14 +19,16 @@ public class BasicKernalTest {
     @Test
     public void testNeighborCount() {
 
-        boolean map[][] = new boolean[][] {
-                {false, true, false, false, false},
-                {true, false, false, false, false},
-                {true, true, true, true, false},
-                {false, true, false, false, false},
-                {false, false, false, false, false}
-        };
-        kernel = new BasicKernel(map);
+        Cave cave = new Cave(5, 5, 0);
+        cave.setValue(0, 1, Cave.WALL);
+        cave.setValue(1, 0, Cave.WALL);
+        cave.setValue(2, 0, Cave.WALL);
+        cave.setValue(2, 1, Cave.WALL);
+        cave.setValue(2, 2, Cave.WALL);
+        cave.setValue(2, 3, Cave.WALL);
+        cave.setValue(3, 1, Cave.WALL);
+
+        kernel = new BasicKernel(cave);
 
         assertEquals("count for 0,0", 7.0, kernel.countNeighbors(0, 0), EPS);
         assertEquals("count for 1,0", 6.0, kernel.countNeighbors(1, 0), EPS);

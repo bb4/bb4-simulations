@@ -119,6 +119,7 @@ public class CaveModel {
 
         if (restartRequested) {
             restartRequested = false;
+            numIterations = 0;
             renderer.reset();
             Profiler.getInstance().startCalculationTime();
             renderer.render();

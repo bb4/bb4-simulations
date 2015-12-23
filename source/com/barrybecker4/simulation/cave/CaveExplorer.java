@@ -59,10 +59,8 @@ public class CaveExplorer extends Simulator {
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
-
             caveModel.setSize(this.getWidth(), this.getHeight());
             caveModel.timeStep(timeStep_);
-            //algorithm_.timeStep(timeStep_);
         }
         return timeStep_;
     }

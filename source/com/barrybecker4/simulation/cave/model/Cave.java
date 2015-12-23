@@ -7,10 +7,10 @@ import java.util.Random;
  */
 public class Cave {
 
-    static final byte WALL = 1;
-    static final byte NEW_WALL = 2;
-    static final byte FLOOR = 0;
-    static final byte NEW_FLOOR = -1;
+    public static final byte WALL = 1;
+    public static final byte NEW_WALL = 2;
+    public static final byte FLOOR = 0;
+    public static final byte NEW_FLOOR = -1;
 
     private static final int SEED = 0;
     private static final Random RAND = new Random();
@@ -51,6 +51,10 @@ public class Cave {
         return newCave;
     }
 
+    public byte getValue(int x, int y) {
+        return map[x][y];
+    }
+
     private char getChar(int x, int y) {
         char c;
         byte v = map[x][y];
@@ -71,7 +75,7 @@ public class Cave {
         byte[][] theMap = new byte[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                theMap[x][y] = (byte) (RAND.nextDouble() < density ? 1 : 0);
+                theMap[x][y] = (RAND.nextDouble() < density ? WALL : FLOOR);
             }
         }
         return theMap;

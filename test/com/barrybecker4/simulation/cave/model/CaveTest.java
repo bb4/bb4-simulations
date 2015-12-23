@@ -1,6 +1,5 @@
 package com.barrybecker4.simulation.cave.model;
 
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,43 +7,37 @@ import static org.junit.Assert.assertEquals;
 /**
  * Unit tests for CaveMap
  */
-public class CaveMapTest {
+public class CaveTest {
 
+	private static final double DENSITY = 0.35;
 	@Test
 	public void test2by2Construction() {
-		CaveProcessor cave = new CaveProcessor(2, 2);
+		Cave cave = new Cave(2, 2, DENSITY);
 		assertEquals("2 by 2 construction", "  \n0 \n", cave.toString());
 	}
 
 	@Test
 	public void test3by3Construction() {
-		CaveProcessor cave = new CaveProcessor(3, 3);
+		Cave cave = new Cave(3, 3, DENSITY);
 		assertEquals("3 by 3 construction", "   \n0  \n 0 \n", cave.toString());
 	}
 
 	@Test
 	public void test5by5Construction() {
-		CaveProcessor cave = new CaveProcessor(5, 5);
+		Cave cave = new Cave(5, 5, DENSITY);
 		assertEquals("5 by 5 construction", " 00  \n0 00 \n  0  \n  0  \n     \n", cave.toString());
 	}
 
 	@Test
 	public void test4by1Construction() {
-		CaveProcessor cave = new CaveProcessor(4, 1);
+		Cave cave = new Cave(4, 1, DENSITY);
 		assertEquals("4 by 1 construction", " 0  \n", cave.toString());
 	}
 
 	@Test
 	public void test1by4Construction() {
-		CaveProcessor cave = new CaveProcessor(1, 4);
+		Cave cave = new Cave(1, 4, DENSITY);
 		assertEquals("1 by 4 construction", " \n0\n \n \n", cave.toString());
-	}
-
-	@Test
-	public void testNextPhase() {
-		CaveProcessor cave = new CaveProcessor(5, 5, 0.35, 3, 2, CaveProcessor.KernelType.BASIC);
-		cave.nextPhase();
-		assertEquals("5 by 5 nextPhase", "00000\n000 0\n00 00\n0   0\n00000\n", cave.toString());
 	}
 
 }
