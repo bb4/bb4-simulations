@@ -9,6 +9,8 @@ import com.barrybecker4.ui.sliders.SliderProperties;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -18,11 +20,13 @@ import java.awt.event.ItemListener;
  * @author Barry Becker
  */
 class DynamicOptions extends JPanel
-                     implements SliderGroupChangeListener, ItemListener {
+                     implements SliderGroupChangeListener, ItemListener, ActionListener {
 
     private CaveModel caveModel;
 
     private Choice kernelChoice;
+    private JButton nextButton;
+    private JButton resetButton;
 
     private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
     private static final String DENSITY_SLIDER = "Density";
@@ -36,7 +40,7 @@ class DynamicOptions extends JPanel
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
-        new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
+        //new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
         new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveProcessor.DEFAULT_DENSITY, 100),
         new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveProcessor.DEFAULT_BIRTH_THRESHOLD),
         new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveProcessor.DEFAULT_STARVATION_LIMIT),
@@ -60,6 +64,7 @@ class DynamicOptions extends JPanel
 
         add(sliderGroup_);
         add(createKernalDropdown());
+        add(createButtons());
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
@@ -87,6 +92,24 @@ class DynamicOptions extends JPanel
         return kernelChoicePanel;
     }
 
+    /**
+     * The dropdown menu at the top for selecting a kernel type.
+     * @return a dropdown/down component.
+     */
+    private JPanel createButtons() {
+
+        JPanel buttonsPanel = new JPanel();
+
+        nextButton = new JButton("Next");
+        resetButton = new JButton("Reset");
+        nextButton.addActionListener(this);
+        resetButton.addActionListener(this);
+
+        buttonsPanel.add(nextButton);
+        buttonsPanel.add(resetButton);
+        return buttonsPanel;
+    }
+
     public void reset() {
         sliderGroup_.reset();
     }
@@ -97,9 +120,9 @@ class DynamicOptions extends JPanel
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
         switch (sliderName) {
-            case NUM_ITERATIONS_SLIDER:
-                caveModel.setMaxIterations((int) value);
-                break;
+            //case NUM_ITERATIONS_SLIDER:
+            //    caveModel.setMaxIterations((int) value);
+            //    break;
             case DENSITY_SLIDER:
                 caveModel.setDensity(value);
                 break;
@@ -116,10 +139,20 @@ class DynamicOptions extends JPanel
         }
     }
 
-
     @Override
     public void itemStateChanged(ItemEvent e) {
         CaveProcessor.KernelType type = CaveProcessor.KernelType.valueOf(kernelChoice.getSelectedItem());
         caveModel.setKernelType(type);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(nextButton)) {
+            caveModel.requestNextStep();
+        }
+        else if (e.getSource().equals(resetButton)) {
+            caveModel.requestRestart();
+        }
+        else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
 }

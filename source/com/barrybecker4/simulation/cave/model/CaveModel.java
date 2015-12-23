@@ -25,7 +25,7 @@ public class CaveModel {
     private CaveRenderer renderer;
 
     private double density = DEFAULT_DENSITY;
-    private int maxIterations = DEFAULT_MAX_ITERATIONS;
+    //private int maxIterations = DEFAULT_MAX_ITERATIONS;
     private int numIterations = 0;
     private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
     private int starvationLimit = DEFAULT_STARVATION_LIMIT;
@@ -33,6 +33,7 @@ public class CaveModel {
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
 
     private boolean restartRequested = false;
+    private boolean nextStepRequested = false;
 
 
     public CaveModel() {
@@ -40,7 +41,6 @@ public class CaveModel {
     }
 
     public void setSize(int width, int height)  {
-
         if (width != renderer.getWidth() || height != renderer.getHeight())   {
             requestRestart(width, height);
         }
@@ -54,44 +54,44 @@ public class CaveModel {
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
     }
 
+    /*
     public void setMaxIterations(int num) {
         if (num != this.maxIterations) {
             maxIterations = num;
             requestRestart(renderer.getWidth(), renderer.getHeight());
         }
-    }
+    } */
 
     public void setDensity(double density) {
-        if (this.density != density)  {
-            this.density = density;
-            requestRestart(renderer.getWidth(), renderer.getHeight());
-        }
+        this.density = density;
     }
 
     public void setBirthThreshold(int birthThresh) {
-        if (this.birthThresh != birthThresh)  {
-            this.birthThresh = birthThresh;
-            requestRestart(renderer.getWidth(), renderer.getHeight());
-        }
+        cave.setBirthThreshold(birthThresh);
+        this.birthThresh = birthThresh;
     }
 
     public void setStarvationLimit(int starvationLimit) {
-        if (this.starvationLimit != starvationLimit)  {
-            this.starvationLimit = starvationLimit;
-            requestRestart(renderer.getWidth(), renderer.getHeight());
-        }
+        cave.setStarvationLimit(starvationLimit);
+        this.starvationLimit = starvationLimit;
     }
 
     public void setScale(double scale) {
-        if (this.scale != scale)  {
-            this.scale = scale;
-            requestRestart(renderer.getWidth(), renderer.getHeight());
-        }
+        this.scale = scale;
+    }
+
+    public void requestRestart() {
+        requestRestart(renderer.getWidth(), renderer.getHeight());
+    }
+
+    public void requestNextStep() {
+        nextStepRequested = true;
     }
 
     public void setKernelType(CaveProcessor.KernelType type) {
+        cave.setKernelType(type);
         this.kernalType = type;
-        requestRestart(renderer.getWidth(), renderer.getHeight());
+        //requestRestart(renderer.getWidth(), renderer.getHeight());
     }
 
     private void requestRestart(int width, int height) {
@@ -119,15 +119,16 @@ public class CaveModel {
 
         if (restartRequested) {
             restartRequested = false;
+            nextStepRequested = false;
             numIterations = 0;
-            renderer.reset();
             Profiler.getInstance().startCalculationTime();
             renderer.render();
         }
-        else if (numIterations < maxIterations) {
+        else if (nextStepRequested/*numIterations < maxIterations*/) {
             cave.nextPhase();
             numIterations++;
             renderer.render();
+            nextStepRequested = false;
         }
 
         return false;

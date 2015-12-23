@@ -48,10 +48,8 @@ public class CaveProcessor {
         this.starvationLimit = starvationLimit;
         this.birthThreshold = birthThreshold;
         cave = new Cave(width, height, density);
-        switch (kernelType) {
-            case BASIC: kernel = new BasicKernel(cave); break;
-            case RADIAL: kernel = new RadialKernel(cave); break;
-        }
+        setKernelType(kernelType);
+
     }
 
     public int getWidth() {
@@ -62,6 +60,20 @@ public class CaveProcessor {
         return cave.getHeight();
     }
 
+    public void setKernelType(KernelType type) {
+        switch (type) {
+            case BASIC: kernel = new BasicKernel(cave); break;
+            case RADIAL: kernel = new RadialKernel(cave); break;
+        }
+    }
+
+    public void setStarvationLimit(int limit) {
+        starvationLimit = limit;
+    }
+
+    public void setBirthThreshold(int thresh) {
+        birthThreshold = thresh;
+    }
     /**
      * Compute the next step of the simulation
      * The new value is at each point based on simulation rules:
@@ -91,10 +103,6 @@ public class CaveProcessor {
 
     public byte getValue (int x, int y) {
         return cave.getValue(x, y);
-    }
-
-    public boolean isWall(int x, int y) {
-        return cave.isWall(x, y);
     }
 
     public void printCave() {

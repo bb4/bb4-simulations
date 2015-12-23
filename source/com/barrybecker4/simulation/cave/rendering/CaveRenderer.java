@@ -17,10 +17,10 @@ import java.awt.image.BufferedImage;
  */
 public class CaveRenderer {
 
-    private static final Color WALL_COLOR = new Color(70, 120, 10);
-    private static final Color NEW_WALL_COLOR = new Color(120, 150, 30);
+    private static final Color WALL_COLOR = new Color(80, 130, 10);
+    private static final Color NEW_WALL_COLOR = new Color(100, 150, 30);
     private static final Color FLOOR_COLOR = new Color(100, 245, 185);
-    private static final Color NEW_FLOOR_COLOR = new Color(150, 255, 245);
+    private static final Color NEW_FLOOR_COLOR = new Color(120, 255, 225);
 
     private final double width;
     private final double height;
@@ -46,8 +46,6 @@ public class CaveRenderer {
         return (int) height;
     }
 
-    public void reset() {
-    }
 
     public BufferedImage getImage() {
         return offlineGraphics_.getOfflineImage();
