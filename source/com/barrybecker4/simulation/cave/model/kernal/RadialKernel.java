@@ -12,9 +12,7 @@ import com.barrybecker4.simulation.cave.model.Cave;
  *
  * @author Barry Becker
  */
-public class RadialKernel implements Kernel {
-
-    private Cave cave;
+public class RadialKernel extends AbstractKernel {
 
     private static final double RT2_INV = 0.70710678118;
     private static final double RT3_INV = 0.57735026919;
@@ -26,7 +24,7 @@ public class RadialKernel implements Kernel {
     };
 
     public RadialKernel(Cave cave) {
-         this.cave = cave;
+         super(cave);
     }
 
     public double countNeighbors(int x, int y) {
@@ -43,15 +41,11 @@ public class RadialKernel implements Kernel {
                     continue;
                 }
                 // In case the index we're looking at it off the edge of the cave, or a filled neighbor
-                if (neighborX < 0 || neighborY < 0 ||
-                    neighborX >= cave.getWidth() || neighborY >= cave.getWidth() ||
-                    cave.isWall(neighborX,neighborY)) {
+                if (isNbr(neighborX, neighborY)) {
                     count += distance;
                 }
             }
         }
         return count;
     }
-
-
 }
