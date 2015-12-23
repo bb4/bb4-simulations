@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.rendering;
 
-import com.barrybecker4.simulation.cave.model.CaveMap;
+import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 
 import java.awt.*;
@@ -22,13 +22,13 @@ public class CaveRenderer {
     private final double width;
     private final double height;
 
-    private CaveMap cave;
+    private CaveProcessor cave;
 
     /** offline rendering is fast  */
     private final OfflineGraphics offlineGraphics_;
 
     /** Constructor */
-    public CaveRenderer(int width, int height, CaveMap cave)
+    public CaveRenderer(int width, int height, CaveProcessor cave)
             throws IllegalArgumentException {
         this.width = width;
         this.height = height;

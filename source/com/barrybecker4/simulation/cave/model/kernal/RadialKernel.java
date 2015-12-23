@@ -1,5 +1,7 @@
 package com.barrybecker4.simulation.cave.model.kernal;
 
+import com.barrybecker4.simulation.cave.model.Cave;
+
 /**
  * Looks only at all neighbors a distance of 2 away and weight them by 1/distance
  *
@@ -12,7 +14,7 @@ package com.barrybecker4.simulation.cave.model.kernal;
  */
 public class RadialKernel implements Kernel {
 
-    private boolean map[][];
+    private Cave cave;
 
     private static final double RT2_INV = 0.70710678118;
     private static final double RT3_INV = 0.57735026919;
@@ -23,8 +25,8 @@ public class RadialKernel implements Kernel {
             {0.5, RT3_INV,   0.25}
     };
 
-    public RadialKernel(boolean[][] map) {
-         this.map = map;
+    public RadialKernel(Cave cave) {
+         this.cave = cave;
     }
 
     public double countNeighbors(int x, int y) {
@@ -40,10 +42,10 @@ public class RadialKernel implements Kernel {
                     // Do nothing, we don't want to add ourselves in!
                     continue;
                 }
-                // In case the index we're looking at it off the edge of the map, or a filled neighbor
+                // In case the index we're looking at it off the edge of the cave, or a filled neighbor
                 if (neighborX < 0 || neighborY < 0 ||
-                    neighborX >= map.length || neighborY >= map[0].length ||
-                    map[neighborX][neighborY]) {
+                    neighborX >= cave.getWidth() || neighborY >= cave.getWidth() ||
+                    cave.isWall(neighborX,neighborY)) {
                     count += distance;
                 }
             }

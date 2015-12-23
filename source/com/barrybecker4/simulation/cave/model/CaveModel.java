@@ -6,9 +6,9 @@ import com.barrybecker4.simulation.common.Profiler;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_DENSITY;
-import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_BIRTH_THRESHOLD;
-import static com.barrybecker4.simulation.cave.model.CaveMap.DEFAULT_STARVATION_LIMIT;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_DENSITY;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_BIRTH_THRESHOLD;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_STARVATION_LIMIT;
 
 /**
  * @author Barry Becker
@@ -21,7 +21,7 @@ public class CaveModel {
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
 
-    private CaveMap cave;
+    private CaveProcessor cave;
     private CaveRenderer renderer;
 
     private double density = DEFAULT_DENSITY;
@@ -30,7 +30,7 @@ public class CaveModel {
     private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
     private int starvationLimit = DEFAULT_STARVATION_LIMIT;
     private double scale = DEFAULT_SCALE;
-    private CaveMap.KernelType kernalType = CaveMap.DEFAULT_KERNEL_TYPE;
+    private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
 
     private boolean restartRequested = false;
 
@@ -50,7 +50,7 @@ public class CaveModel {
         density = DEFAULT_DENSITY;
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
-        CaveMap cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
+        CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
     }
 
@@ -89,7 +89,7 @@ public class CaveModel {
         }
     }
 
-    public void setKernelType(CaveMap.KernelType type) {
+    public void setKernelType(CaveProcessor.KernelType type) {
         this.kernalType = type;
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
@@ -98,7 +98,7 @@ public class CaveModel {
         try {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
-            cave = new CaveMap(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
+            cave = new CaveProcessor(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
             numIterations = 0;
             renderer = new CaveRenderer(width, height, cave);
             restartRequested = true;

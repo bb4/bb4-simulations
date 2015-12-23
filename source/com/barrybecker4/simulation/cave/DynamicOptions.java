@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave;
 
-import com.barrybecker4.simulation.cave.model.CaveMap;
+import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.cave.model.CaveModel;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
@@ -37,9 +37,9 @@ class DynamicOptions extends JPanel
     private static final SliderProperties[] SLIDER_PROPS = {
 
         new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
-        new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveMap.DEFAULT_DENSITY, 100),
-        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveMap.DEFAULT_BIRTH_THRESHOLD),
-        new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveMap.DEFAULT_STARVATION_LIMIT),
+        new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveProcessor.DEFAULT_DENSITY, 100),
+        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveProcessor.DEFAULT_BIRTH_THRESHOLD),
+        new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveProcessor.DEFAULT_STARVATION_LIMIT),
         new SliderProperties(SCALE_SLIDER,             1,    20,  CaveModel.DEFAULT_SCALE, 40),
     };
 
@@ -76,10 +76,10 @@ class DynamicOptions extends JPanel
         JLabel label = new JLabel("Kernal type: ");
 
         kernelChoice = new Choice();
-        for (Enum kernelType: CaveMap.KernelType.values()) {
+        for (Enum kernelType: CaveProcessor.KernelType.values()) {
             kernelChoice.add(kernelType.name());
         }
-        kernelChoice.select(CaveMap.DEFAULT_KERNEL_TYPE.ordinal());
+        kernelChoice.select(CaveProcessor.DEFAULT_KERNEL_TYPE.ordinal());
         kernelChoice.addItemListener(this);
 
         kernelChoicePanel.add(label);
@@ -119,7 +119,7 @@ class DynamicOptions extends JPanel
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        CaveMap.KernelType type = CaveMap.KernelType.valueOf(kernelChoice.getSelectedItem());
+        CaveProcessor.KernelType type = CaveProcessor.KernelType.valueOf(kernelChoice.getSelectedItem());
         caveModel.setKernelType(type);
     }
 }

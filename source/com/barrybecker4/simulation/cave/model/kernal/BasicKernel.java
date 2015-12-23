@@ -1,15 +1,17 @@
 package com.barrybecker4.simulation.cave.model.kernal;
 
+import com.barrybecker4.simulation.cave.model.Cave;
+
 /**
  * Looks only at immediate neighbors
  * @author Barry Becker
  */
 public class BasicKernel implements Kernel {
 
-    private boolean map[][];
+    private Cave cave;
 
-    public BasicKernel(boolean[][] map) {
-         this.map = map;
+    public BasicKernel(Cave cave) {
+         this.cave = cave;
     }
 
     public double countNeighbors(int x, int y) {
@@ -26,8 +28,8 @@ public class BasicKernel implements Kernel {
                 }
                 // In case the index we're looking at it off the edge of the map, or a filled neighbor
                 if (neighborX < 0 || neighborY < 0 ||
-                    neighborX >= map.length || neighborY >= map[0].length ||
-                    map[neighborX][neighborY]) {
+                    neighborX >= cave.getWidth() || neighborY >= cave.getHeight() ||
+                    cave.isWall(neighborX, neighborY)) {
                     count++;
                 }
             }
