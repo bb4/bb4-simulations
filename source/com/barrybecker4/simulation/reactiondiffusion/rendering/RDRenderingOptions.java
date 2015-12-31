@@ -21,10 +21,8 @@ public class RDRenderingOptions {
     /** Specular highlight degree. */
     private double specularConst_ = 0;
 
-
     /** Manages the worker threads. */
     private RunnableParallelizer parallelizer_;
-
 
 
     /**
@@ -64,7 +62,6 @@ public class RDRenderingOptions {
     public double getSpecular() {
         return specularConst_;
     }
-
 
     public boolean isShowingU() {
         return isShowingU_;

@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.cave.rendering;
 import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.Cave;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
+import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;
 
@@ -20,11 +21,6 @@ import java.awt.image.BufferedImage;
 public class CaveRenderer {
 
     private static final Color FLOOR_COLOR = new Color(130, 255, 175);
-    private static final Color CEIL_COLOR = new Color(70, 30, 10);
-
-    private static final Color WALL_COLOR_LOW = new Color(80, 130, 10);
-    private static final Color WALL_COLOR_MED = new Color(100, 160, 30);
-    private static final Color WALL_COLOR_HIGH = new Color(120, 205, 75);
 
     private final double width;
     private final double height;
@@ -33,6 +29,7 @@ public class CaveRenderer {
 
     /** offline rendering is fast  */
     private final OfflineGraphics offlineGraphics_;
+    private final BumpMapper bmapper;
 
     /** Constructor */
     public CaveRenderer(int width, int height, CaveProcessor cave)
@@ -41,6 +38,7 @@ public class CaveRenderer {
         this.height = height;
         this.cave = cave;
         offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
+        bmapper = new BumpMapper();
     }
 
     public int getWidth() {
@@ -72,7 +70,7 @@ public class CaveRenderer {
                 double value = cave.getValue(i, j);
                 Color color = cmap.getColorForValue(value);
                 if (useBumpmapping) {
-                   color = new Color(color.getBlue(), color.getRed(), color.getGreen());
+                    color = bmapper.adjustForLighting(color, cave, 10.0, 2.0, i, j);
                 }
                 offlineGraphics_.setColor(color);
                 offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);

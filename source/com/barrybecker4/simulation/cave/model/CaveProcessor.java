@@ -4,6 +4,7 @@ import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.kernal.BasicKernel;
 import com.barrybecker4.simulation.cave.model.kernal.Kernel;
 import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
+import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
 
 /**
  * This Cave simulation program is based on work by Michael Cook
@@ -12,7 +13,7 @@ import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
  * @author Brian Becker
  * @author Barry Becker
  */
-public class CaveProcessor {
+public class CaveProcessor implements HeightField {
 
     /** The density is the chance that a cell starts as part of the cave area (alive) */
     public static final double DEFAULT_FLOOR_THRESH = .2;
@@ -101,8 +102,7 @@ public class CaveProcessor {
             for (int y = 0; y < cave.getLength(); y++) {
                 double neibNum = kernel.countNeighbors(x, y);
                 double oldValue = cave.getValue(x, y);
-                double newValue = oldValue;
-                newValue = oldValue + (neibNum - lossFactor) * effectFactor;
+                double newValue = oldValue + (neibNum - lossFactor) * effectFactor;
                 newCave.setValue(x, y, newValue);
             }
         }

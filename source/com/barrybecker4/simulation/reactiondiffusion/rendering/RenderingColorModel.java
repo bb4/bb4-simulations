@@ -51,7 +51,6 @@ public class RenderingColorModel {
             c = bmapper.adjustForLighting(c, heightMap, htScale, options_.getSpecular(), x, y);
         }
 
-
         return c;
     }
 
@@ -70,6 +69,4 @@ public class RenderingColorModel {
                     + (options_.isShowingV() ? model_.getV(x, y) : 0.0);
         }
     }
-
-
 }
