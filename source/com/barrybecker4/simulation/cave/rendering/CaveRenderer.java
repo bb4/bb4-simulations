@@ -5,6 +5,7 @@ import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.Cave;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
+import com.barrybecker4.ui.util.ColorMap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -69,6 +70,7 @@ public class CaveRenderer {
         double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
+        ColorMap cmap = new CaveColorMap(range);
         double ext = range.getExtent();
 
         for (int i = 0; i < cave.getWidth(); i++)  {
@@ -76,12 +78,7 @@ public class CaveRenderer {
                 int xpos = (int) (i * cellWidth);
                 int ypos = (int) (j * cellHeight);
                 double value = cave.getValue(i, j);
-                if (value == range.getMin()) offlineGraphics_.setColor(FLOOR_COLOR);
-                else if (value == range.getMax()) offlineGraphics_.setColor(CEIL_COLOR);
-                else if (value < ext/3) offlineGraphics_.setColor(WALL_COLOR_LOW);
-                else if (value < ext/2) offlineGraphics_.setColor(WALL_COLOR_MED);
-                else offlineGraphics_.setColor(WALL_COLOR_HIGH);
-
+                offlineGraphics_.setColor(cmap.getColorForValue(value));
                 offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
