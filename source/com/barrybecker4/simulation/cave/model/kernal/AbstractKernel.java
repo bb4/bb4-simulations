@@ -14,9 +14,8 @@ public abstract class AbstractKernel implements Kernel {
          this.cave = cave;
     }
 
-    protected boolean isNbr(int x, int y) {
-        return (x < 0 || y < 0 || x >= cave.getWidth() || y >= cave.getHeight() ||
-                cave.isWall(x, y));
+    protected boolean isOnEdge(int x, int y) {
+        return (x < 0 || y < 0 || x >= cave.getWidth() || y >= cave.getLength());
     }
 
 }

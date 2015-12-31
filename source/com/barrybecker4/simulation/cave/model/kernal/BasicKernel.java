@@ -8,13 +8,15 @@ import com.barrybecker4.simulation.cave.model.Cave;
  */
 public class BasicKernel extends AbstractKernel {
 
+    private static final double TOTAL_WEIGHT = 8;
+
     public BasicKernel(Cave cave) {
         super(cave);
     }
 
     public double countNeighbors(int x, int y) {
 
-        int count = 0;
+        double count = 0;
         for (int i = -1; i < 2; i++) {
             int neighborX = x + i;
             for (int j = -1; j < 2; j++) {
@@ -25,11 +27,14 @@ public class BasicKernel extends AbstractKernel {
                     continue;
                 }
                 // In case the index we're looking at it off the edge of the map, or a filled neighbor
-                if (isNbr(neighborX, neighborY)) {
-                    count++;
+                if (isOnEdge(neighborX, neighborY)) {
+                    count += 1.0;
+                }
+                else {
+                    count += cave.getValue(neighborX, neighborY);
                 }
             }
         }
-        return count;
+        return count / 8;
     }
 }

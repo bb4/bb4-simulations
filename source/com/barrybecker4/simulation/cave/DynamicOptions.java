@@ -28,10 +28,10 @@ class DynamicOptions extends JPanel
     private JButton nextButton;
     private JButton resetButton;
 
-    private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
-    private static final String DENSITY_SLIDER = "Density";
-    private static final String BIRTH_THRESHOLD_SLIDER = "Birth Threshold";
-    private static final String STARVATION_LIMIT_SLIDER = "Starvation Limit";
+    private static final String FLOOR_SLIDER = "Floor";
+    private static final String CEILING_SLIDER = "Ceiling";
+    private static final String LOSS_FACTOR_SLIDER = "Loss Factor";
+    private static final String EFFECT_FACTOR_SLIDER = "Effect Factor";
     private static final String SCALE_SLIDER = "Scale";
     //private static final String HEIGHT_SLIDER = "Height";
 
@@ -40,13 +40,12 @@ class DynamicOptions extends JPanel
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
-        //new SliderProperties(NUM_ITERATIONS_SLIDER,   0,    10,    CaveModel.DEFAULT_MAX_ITERATIONS),
-        new SliderProperties(DENSITY_SLIDER,   0,    1.0,    CaveProcessor.DEFAULT_DENSITY, 100),
-        new SliderProperties(BIRTH_THRESHOLD_SLIDER,   0,    9,   CaveProcessor.DEFAULT_BIRTH_THRESHOLD),
-        new SliderProperties(STARVATION_LIMIT_SLIDER,  0,    9,   CaveProcessor.DEFAULT_STARVATION_LIMIT),
-        new SliderProperties(SCALE_SLIDER,             1,    20,  CaveModel.DEFAULT_SCALE, 40),
+        new SliderProperties(FLOOR_SLIDER,   0,    1.0,    CaveProcessor.DEFAULT_FLOOR_THRESH, 100),
+        new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
+        new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
+        new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
+        new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR, 40),
     };
-
 
     /**
      * Constructor
@@ -120,17 +119,17 @@ class DynamicOptions extends JPanel
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
         switch (sliderName) {
-            //case NUM_ITERATIONS_SLIDER:
-            //    caveModel.setMaxIterations((int) value);
-            //    break;
-            case DENSITY_SLIDER:
-                caveModel.setDensity(value);
+            case FLOOR_SLIDER:
+                caveModel.setFloorThresh(value);
                 break;
-            case BIRTH_THRESHOLD_SLIDER:
-                caveModel.setBirthThreshold((int) value);
+            case CEILING_SLIDER:
+                caveModel.setCeilThresh(value);
                 break;
-            case STARVATION_LIMIT_SLIDER:
-                caveModel.setStarvationLimit((int) value);
+            case LOSS_FACTOR_SLIDER:
+                caveModel.setLossFactor(value);
+                break;
+            case EFFECT_FACTOR_SLIDER:
+                caveModel.setEffectFactor(value);
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);

@@ -6,17 +6,17 @@ import com.barrybecker4.simulation.common.Profiler;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_DENSITY;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_BIRTH_THRESHOLD;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_STARVATION_LIMIT;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_CEIL_THRESH;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_FLOOR_THRESH;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_LOSS_FACTOR;
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_EFFECT_FACTOR;
 
 /**
  * @author Barry Becker
  */
 public class CaveModel {
 
-    public static final int DEFAULT_MAX_ITERATIONS = 2;
-    public static final double DEFAULT_SCALE = 5.0;
+    public static final double DEFAULT_SCALE_FACTOR = 5.0;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -24,14 +24,14 @@ public class CaveModel {
     private CaveProcessor cave;
     private CaveRenderer renderer;
 
-    private double density = DEFAULT_DENSITY;
-    //private int maxIterations = DEFAULT_MAX_ITERATIONS;
-    private int numIterations = 0;
-    private int birthThresh = DEFAULT_BIRTH_THRESHOLD;
-    private int starvationLimit = DEFAULT_STARVATION_LIMIT;
-    private double scale = DEFAULT_SCALE;
+    private double floorThresh = DEFAULT_FLOOR_THRESH;
+    private double ceilThresh = DEFAULT_CEIL_THRESH;
+    private double lossFactor = DEFAULT_LOSS_FACTOR;
+    private double effectFactor = DEFAULT_EFFECT_FACTOR;
+    private double scale = DEFAULT_SCALE_FACTOR;
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
 
+    private int numIterations = 0;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
 
@@ -47,33 +47,33 @@ public class CaveModel {
     }
 
     public void reset() {
-        density = DEFAULT_DENSITY;
+        floorThresh = DEFAULT_FLOOR_THRESH;
+        ceilThresh = DEFAULT_CEIL_THRESH;
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
-        CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
+        CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight,
+                floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
     }
 
-    /*
-    public void setMaxIterations(int num) {
-        if (num != this.maxIterations) {
-            maxIterations = num;
-            requestRestart(renderer.getWidth(), renderer.getHeight());
-        }
-    } */
-
-    public void setDensity(double density) {
-        this.density = density;
+    public void setFloorThresh(double floor) {
+        cave.setFloorThresh(floor);
+        this.floorThresh = floor;
     }
 
-    public void setBirthThreshold(int birthThresh) {
-        cave.setBirthThreshold(birthThresh);
-        this.birthThresh = birthThresh;
+    public void setCeilThresh(double ceil) {
+        cave.setCeilThresh(ceil);
+        this.ceilThresh = ceil;
     }
 
-    public void setStarvationLimit(int starvationLimit) {
-        cave.setStarvationLimit(starvationLimit);
-        this.starvationLimit = starvationLimit;
+    public void setLossFactor(double lossFactor) {
+        cave.setLossFactor(lossFactor);
+        this.lossFactor = lossFactor;
+    }
+
+    public void setEffectFactor(double effectFactor) {
+        cave.setEffectFactor(effectFactor);
+        this.effectFactor = effectFactor;
     }
 
     public void setScale(double scale) {
@@ -98,7 +98,8 @@ public class CaveModel {
         try {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
-            cave = new CaveProcessor(caveWidth, caveHeight, density, starvationLimit, birthThresh, kernalType);
+            cave = new CaveProcessor(caveWidth, caveHeight,
+                    floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
             numIterations = 0;
             renderer = new CaveRenderer(width, height, cave);
             restartRequested = true;
@@ -124,7 +125,7 @@ public class CaveModel {
             Profiler.getInstance().startCalculationTime();
             renderer.render();
         }
-        else if (nextStepRequested/*numIterations < maxIterations*/) {
+        else if (nextStepRequested) {
             cave.nextPhase();
             numIterations++;
             renderer.render();

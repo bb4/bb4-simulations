@@ -1,10 +1,9 @@
 package com.barrybecker4.simulation.cave.model;
 
+import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.kernal.BasicKernel;
 import com.barrybecker4.simulation.cave.model.kernal.Kernel;
 import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
-
-import java.util.Random;
 
 /**
  * This Cave simulation program is based on work by Michael Cook
@@ -16,19 +15,22 @@ import java.util.Random;
 public class CaveProcessor {
 
     /** The density is the chance that a cell starts as part of the cave area (alive) */
-    public static final double DEFAULT_DENSITY = .35;
+    public static final double DEFAULT_FLOOR_THRESH = .2;
+    public static final double DEFAULT_CEIL_THRESH = .8;
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
+
     /** cells die if less than this */
-    public static final int DEFAULT_STARVATION_LIMIT = 4;
+    public static final double DEFAULT_LOSS_FACTOR = 0.5;
+
     /** Cells are born if more than this many neighbors */
-    public static final int DEFAULT_BIRTH_THRESHOLD = 2;
+    public static final double DEFAULT_EFFECT_FACTOR = 0.2;
 
     public enum KernelType {BASIC, RADIAL}
     public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.BASIC;
 
-    private int starvationLimit;
-    private int birthThreshold;
+    private double lossFactor;
+    private double effectFactor;
     private Cave cave;
     private Kernel kernel;
 
@@ -40,14 +42,14 @@ public class CaveProcessor {
     /** Constructor that allows you to specify the dimensions of the cave */
     public CaveProcessor(int width, int height) {
         this(width, height,
-                DEFAULT_DENSITY, DEFAULT_STARVATION_LIMIT, DEFAULT_BIRTH_THRESHOLD, KernelType.BASIC);
+           DEFAULT_FLOOR_THRESH, DEFAULT_CEIL_THRESH, DEFAULT_LOSS_FACTOR, DEFAULT_EFFECT_FACTOR, KernelType.BASIC);
     }
 
     public CaveProcessor(int width, int height,
-              double density, int starvationLimit, int birthThreshold, KernelType kernelType) {
-        this.starvationLimit = starvationLimit;
-        this.birthThreshold = birthThreshold;
-        cave = new Cave(width, height, density);
+              double floorThresh, double ceilThresh, double lossFactor, double effectFactor, KernelType kernelType) {
+        this.lossFactor = lossFactor;
+        this.effectFactor = effectFactor;
+        cave = new Cave(width, height, floorThresh, ceilThresh);
         setKernelType(kernelType);
 
     }
@@ -57,7 +59,7 @@ public class CaveProcessor {
     }
 
     public int getHeight() {
-        return cave.getHeight();
+        return cave.getLength();
     }
 
     public void setKernelType(KernelType type) {
@@ -67,12 +69,20 @@ public class CaveProcessor {
         }
     }
 
-    public void setStarvationLimit(int limit) {
-        starvationLimit = limit;
+    public void setLossFactor(double loss) {
+        lossFactor = loss;
     }
 
-    public void setBirthThreshold(int thresh) {
-        birthThreshold = thresh;
+    public void setEffectFactor(double scale) {
+        effectFactor = scale;
+    }
+
+    public void setFloorThresh(double floor) {
+       cave.setFloorThresh(floor);
+    }
+
+    public void setCeilThresh(double ceil) {
+       cave.setCeilThresh(ceil);
     }
     /**
      * Compute the next step of the simulation
@@ -84,25 +94,23 @@ public class CaveProcessor {
         Cave newCave = cave.createCopy();
         // Loop over each row and column of the map
         for (int x = 0; x < cave.getWidth(); x++) {
-            for (int y = 0; y < cave.getHeight()/*map[0].length*/; y++) {
-                int neibNum = (int) kernel.countNeighbors(x, y);
-                byte newValue;
-                if (cave.isWall(x, y)) {
-                    // if rock, it continues to be rock if enough neighbors (or too few)
-                    newValue =  (neibNum < starvationLimit) ? Cave.NEW_FLOOR : Cave.WALL;
-                }
-                else {
-                    // becomes rock if enough rock neighbors
-                    newValue = (neibNum > birthThreshold) ? Cave.NEW_WALL : Cave.FLOOR;
-                }
+            for (int y = 0; y < cave.getLength(); y++) {
+                double neibNum = kernel.countNeighbors(x, y);
+                double oldValue = cave.getValue(x, y);
+                double newValue = oldValue;
+                newValue = oldValue + (neibNum - lossFactor) * effectFactor;
                 newCave.setValue(x, y, newValue);
             }
         }
         cave = newCave;
     }
 
-    public byte getValue (int x, int y) {
+    public double getValue (int x, int y) {
         return cave.getValue(x, y);
+    }
+
+    public Range getRange() {
+        return cave.getRange();
     }
 
     public void printCave() {
@@ -114,7 +122,7 @@ public class CaveProcessor {
     }
 
     public static void main(String[] args) {
-        CaveProcessor cave = new CaveProcessor(32, 32, 0.35, 3, 2, KernelType.BASIC);
+        CaveProcessor cave = new CaveProcessor(32, 32, 0.25, 0.8, 3, 2, KernelType.BASIC);
         cave.printCave();
         cave.nextPhase();
         cave.printCave();

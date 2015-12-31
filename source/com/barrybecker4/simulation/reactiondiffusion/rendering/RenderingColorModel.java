@@ -8,7 +8,7 @@ import javax.vecmath.Vector3d;
 import java.awt.*;
 
 /**
- * Determines pixel colors based on chemical concentratins and lighting models.
+ * Determines pixel colors based on chemical concentrations and lighting models.
  *
  * @author Barry Becker
  */
@@ -60,7 +60,9 @@ public class RenderingColorModel {
     }
 
     /**
+     * Bump mapping is used to adjust the surface model before applying phong shading.
      * @param c color of surface
+     * @param concentration the chemical concentration at this point.
      * @return new color based on old, but accounting for lighting effects using the Phong reflection model.
      */
     private Color adjustForLighting(Color c, double concentration, int x, int y) {

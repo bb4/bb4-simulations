@@ -16,6 +16,7 @@ public class RadialKernel extends AbstractKernel {
 
     private static final double RT2_INV = 0.70710678118;
     private static final double RT3_INV = 0.57735026919;
+    private static final double TOTAL_WEIGHT = 5 + 4 * RT2_INV + 8 * RT3_INV;
 
     private double[][] DISTANCE_LOOKUP = {
             {0,     1,       0.5},
@@ -41,11 +42,15 @@ public class RadialKernel extends AbstractKernel {
                     continue;
                 }
                 // In case the index we're looking at it off the edge of the cave, or a filled neighbor
-                if (isNbr(neighborX, neighborY)) {
+                //if (isNbr(neighborX, neighborY)) {
+                 if (isOnEdge(neighborX, neighborY)) {
                     count += distance;
+                }
+                else {
+                    count += distance * cave.getValue(neighborX, neighborY);
                 }
             }
         }
-        return count;
+        return count / TOTAL_WEIGHT;
     }
 }

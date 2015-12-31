@@ -1,5 +1,7 @@
 package com.barrybecker4.simulation.cave.model;
 
+import com.barrybecker4.common.math.Range;
+
 import java.util.Random;
 
 /**
@@ -7,78 +9,75 @@ import java.util.Random;
  */
 public class Cave {
 
-    public static final byte WALL = 1;
-    public static final byte NEW_WALL = 2;
-    public static final byte FLOOR = 0;
-    public static final byte NEW_FLOOR = -1;
-
     private static final int SEED = 0;
     private static final Random RAND = new Random();
 
-    //private int width;
-    //private int height;
+    /** a value representing the height. MAX_HEIGHT is wall, MIN_HEIGHT is floor  */
+    private double[][] heightMap;
+    private double floorThresh = 0.2;
+    private double ceilThresh = 0.9;
 
-    /** byte array. Positive values indicates solid rock */
-    private byte[][] map;
-
-    public Cave(int width, int height, double density) {
-        map = genMap(width, height, density);
+    public Cave(int width, int length, double floorThresh, double ceilThresh) {
+        this.floorThresh = floorThresh;
+        this.ceilThresh = ceilThresh;
+        heightMap = genMap(width, length);
     }
 
     public int getWidth() {
-        return map.length;
+        return heightMap.length;
     }
-    public int getHeight() {
-        return map[0].length;
-    }
-
-    public boolean isWall(int x, int y) {
-        byte val = map[x][y];
-        return val == WALL || val == NEW_WALL;
+    public int getLength() {
+        return heightMap[0].length;
     }
 
-    public void setValue(int x, int y, byte value) {
-        map[x][y] = value;
+    public Range getRange() {
+        return new Range(floorThresh, ceilThresh);
+    }
+    public void setValue(int x, int y, double value) {
+        heightMap[x][y] = Math.min(Math.max(value, floorThresh), ceilThresh);
     }
 
     public Cave createCopy() {
-        Cave newCave = new Cave(getWidth(), getHeight(), 0);
+        Cave newCave = new Cave(getWidth(), getLength(), this.floorThresh, this.ceilThresh);
         for (int x = 0; x < getWidth(); x++) {
-            for (int y = 0; y < getHeight(); y++) {
-                newCave.setValue(x, y, map[x][y]);
+            for (int y = 0; y < getLength(); y++) {
+                newCave.setValue(x, y, heightMap[x][y]);
             }
         }
         return newCave;
     }
 
-    public byte getValue(int x, int y) {
-        return map[x][y];
+    public double getValue(int x, int y) {
+        return heightMap[x][y];
+    }
+
+    public void setFloorThresh(double floor) {
+        this.floorThresh = floor;
+    }
+
+    public void setCeilThresh(double ceil) {
+        this.ceilThresh = ceil;
     }
 
     private char getChar(int x, int y) {
-        char c;
-        byte v = map[x][y];
-        switch (v) {
-            case FLOOR : c = ' '; break;
-            case WALL : c = '0'; break;
-            case NEW_WALL : c = 'W'; break;
-            case NEW_FLOOR : c = '.'; break;
-            default: throw new IllegalStateException("Unexpected value: " + v);
-        }
-        return c;
+        double v = heightMap[x][y];
+        if (v < floorThresh) return ' ';
+        else if (v < ceilThresh) return 'C';
+        else return 'W';
     }
 
-
-    /** generate the initial random 2D map data */
-    private byte[][] genMap(int width, int height, double density) {
+    /** generate the initial random 2D typeMap data */
+    private double[][] genMap(int width, int length) {
         RAND.setSeed(SEED);
-        byte[][] theMap = new byte[width][height];
+        double[][] map = new double[width][length];
+
         for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                theMap[x][y] = (RAND.nextDouble() < density ? WALL : FLOOR);
+            for (int y = 0; y < length; y++) {
+                double r = RAND.nextDouble();
+                map[x][y] = Math.min(Math.max(r, floorThresh), ceilThresh);
             }
         }
-        return theMap;
+        return map;
     }
 
     public void print() {
@@ -87,11 +86,9 @@ public class Cave {
 
     public String toString() {
         StringBuilder bldr = new StringBuilder();
-        for (int y = 0; y < getHeight(); y++) {
+        for (int y = 0; y < getLength(); y++) {
             for (int x = 0; x < getWidth(); x++) {
                 bldr.append(getChar(x, y));
-                //if (map[x][y] > 0) bldr.append("0");
-                //else bldr.append(" ");
             }
             bldr.append("\n");
         }
