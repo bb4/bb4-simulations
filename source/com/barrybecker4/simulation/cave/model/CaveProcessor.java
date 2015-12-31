@@ -18,6 +18,8 @@ public class CaveProcessor implements HeightField {
     /** The density is the chance that a cell starts as part of the cave area (alive) */
     public static final double DEFAULT_FLOOR_THRESH = .2;
     public static final double DEFAULT_CEIL_THRESH = .8;
+
+
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
 
@@ -89,6 +91,7 @@ public class CaveProcessor implements HeightField {
     public void setCeilThresh(double ceil) {
        cave.setCeilThresh(ceil);
     }
+
     /**
      * Compute the next step of the simulation
      * The new value is at each point based on simulation rules:

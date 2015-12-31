@@ -6,10 +6,8 @@ import com.barrybecker4.simulation.common.Profiler;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_CEIL_THRESH;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_FLOOR_THRESH;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_LOSS_FACTOR;
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_EFFECT_FACTOR;
+
+import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
 
 /**
  * @author Barry Becker
@@ -18,6 +16,7 @@ public class CaveModel {
 
     public static final double DEFAULT_SCALE_FACTOR = 5.0;
     public static final boolean DEFAULT_USE_BUMP_MAPPING = false;
+    public static final double DEFAULT_BUMP_HEIGHT = 10;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -34,6 +33,7 @@ public class CaveModel {
 
     private int numIterations = 0;
     private boolean useBumpmapping = DEFAULT_USE_BUMP_MAPPING;
+    private double bumpHeight = DEFAULT_BUMP_HEIGHT;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
 
@@ -76,6 +76,10 @@ public class CaveModel {
     public void setEffectFactor(double effectFactor) {
         cave.setEffectFactor(effectFactor);
         this.effectFactor = effectFactor;
+    }
+
+    public void setBumpHeight(double ht) {
+        this.bumpHeight = ht;
     }
 
     public void setUseBumpmapping(boolean useBumpmapping) {
@@ -129,12 +133,12 @@ public class CaveModel {
             nextStepRequested = false;
             numIterations = 0;
             Profiler.getInstance().startCalculationTime();
-            renderer.render(useBumpmapping);
+            renderer.render(useBumpmapping, bumpHeight);
         }
         else if (nextStepRequested) {
             cave.nextPhase();
             numIterations++;
-            renderer.render(useBumpmapping);
+            renderer.render(useBumpmapping, bumpHeight);
             nextStepRequested = false;
         }
 

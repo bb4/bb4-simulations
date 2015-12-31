@@ -32,6 +32,7 @@ class DynamicOptions extends JPanel
     private static final String CEILING_SLIDER = "Ceiling";
     private static final String LOSS_FACTOR_SLIDER = "Loss Factor";
     private static final String EFFECT_FACTOR_SLIDER = "Effect Factor";
+    private static final String HEIGHT_SLIDER = "Height (for bumps)";
     private static final String SCALE_SLIDER = "Scale";
     //private static final String HEIGHT_SLIDER = "Height";
 
@@ -45,6 +46,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
+        new SliderProperties(HEIGHT_SLIDER,  1.0,   100.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR, 40),
     };
 
@@ -149,6 +151,9 @@ class DynamicOptions extends JPanel
                 break;
             case EFFECT_FACTOR_SLIDER:
                 caveModel.setEffectFactor(value);
+                break;
+            case HEIGHT_SLIDER:
+                caveModel.setBumpHeight(value);
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);
