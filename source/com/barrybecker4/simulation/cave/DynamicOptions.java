@@ -36,6 +36,7 @@ class DynamicOptions extends JPanel
     //private static final String HEIGHT_SLIDER = "Height";
 
     private SliderGroup sliderGroup_;
+    private JCheckBox useBumpmapRendering_;
     private JTextArea formulaText_;
 
     private static final SliderProperties[] SLIDER_PROPS = {
@@ -63,6 +64,7 @@ class DynamicOptions extends JPanel
 
         add(sliderGroup_);
         add(createKernalDropdown());
+        add(createCheckBoxes());
         add(createButtons());
 
         JPanel fill = new JPanel();
@@ -89,6 +91,23 @@ class DynamicOptions extends JPanel
         kernelChoicePanel.add(label);
         kernelChoicePanel.add(kernelChoice);
         return kernelChoicePanel;
+    }
+
+    /**
+     * The dropdown menu at the top for selecting a kernel type.
+     * @return a dropdown/down component.
+     */
+    private JPanel createCheckBoxes() {
+        JPanel checkboxPanel = new JPanel();
+
+        JLabel label = new JLabel("Use Bump map Rendering: ");
+        useBumpmapRendering_ = new JCheckBox();
+        useBumpmapRendering_.setSelected(CaveModel.DEFAULT_USE_BUMP_MAPPING);
+        useBumpmapRendering_.addActionListener(this);
+
+        checkboxPanel.add(label);
+        checkboxPanel.add(useBumpmapRendering_);
+        return checkboxPanel;
     }
 
     /**
@@ -151,6 +170,9 @@ class DynamicOptions extends JPanel
         }
         else if (e.getSource().equals(resetButton)) {
             caveModel.requestRestart();
+        }
+        else if (e.getSource().equals(useBumpmapRendering_)) {
+            caveModel.setUseBumpmapping(useBumpmapRendering_.isSelected());
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }

@@ -17,6 +17,7 @@ import static com.barrybecker4.simulation.cave.model.CaveProcessor.DEFAULT_EFFEC
 public class CaveModel {
 
     public static final double DEFAULT_SCALE_FACTOR = 5.0;
+    public static final boolean DEFAULT_USE_BUMP_MAPPING = false;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -32,6 +33,7 @@ public class CaveModel {
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
 
     private int numIterations = 0;
+    private boolean useBumpmapping = DEFAULT_USE_BUMP_MAPPING;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
 
@@ -74,6 +76,10 @@ public class CaveModel {
     public void setEffectFactor(double effectFactor) {
         cave.setEffectFactor(effectFactor);
         this.effectFactor = effectFactor;
+    }
+
+    public void setUseBumpmapping(boolean useBumpmapping) {
+        this.useBumpmapping = useBumpmapping;
     }
 
     public void setScale(double scale) {
@@ -123,12 +129,12 @@ public class CaveModel {
             nextStepRequested = false;
             numIterations = 0;
             Profiler.getInstance().startCalculationTime();
-            renderer.render();
+            renderer.render(useBumpmapping);
         }
         else if (nextStepRequested) {
             cave.nextPhase();
             numIterations++;
-            renderer.render();
+            renderer.render(useBumpmapping);
             nextStepRequested = false;
         }
 

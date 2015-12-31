@@ -56,18 +56,10 @@ public class CaveRenderer {
     }
 
     /**
-     * draw the tree
-     */
-    public void render() {
-        drawCave();
-    }
-
-    /**
      * Draw the floor of the cave
      */
-    private void drawCave() {
-
-        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
+    public void render(boolean useBumpmapping) {
+       double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
         ColorMap cmap = new CaveColorMap(range);
@@ -78,10 +70,13 @@ public class CaveRenderer {
                 int xpos = (int) (i * cellWidth);
                 int ypos = (int) (j * cellHeight);
                 double value = cave.getValue(i, j);
-                offlineGraphics_.setColor(cmap.getColorForValue(value));
+                Color color = cmap.getColorForValue(value);
+                if (useBumpmapping) {
+                   color = new Color(color.getBlue(), color.getRed(), color.getGreen());
+                }
+                offlineGraphics_.setColor(color);
                 offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
     }
-
 }
