@@ -2,6 +2,8 @@ package com.barrybecker4.simulation.cave.model.kernal;
 
 import com.barrybecker4.simulation.cave.model.Cave;
 
+import java.util.Arrays;
+
 /**
  * Looks only at all neighbors a distance of 2 away and weight them by 1/distance
  *
@@ -14,35 +16,50 @@ import com.barrybecker4.simulation.cave.model.Cave;
  */
 public class RadialKernel extends AbstractKernel {
 
-    private static final double RT2_INV = 0.70710678118;
-    private static final double RT3_INV = 0.57735026919;
-    private static final double TOTAL_WEIGHT = 5 + 4 * RT2_INV + 8 * RT3_INV;
+    /** kernal size. Must be odd, like 3, 5, 7, 9, etc */
+    private int size = 5;
 
-    private double[][] DISTANCE_LOOKUP = {
-            {0,     1,       0.5},
-            {1,   RT2_INV, RT3_INV},
-            {0.5, RT3_INV,   0.25}
-    };
+    private double[][] distanceLookup;
+    private double totalWeight;
 
-    public RadialKernel(Cave cave) {
-         super(cave);
+
+    public RadialKernel(Cave cave, int size) {
+        super(cave);
+        assert size > 2&& size % 2 == 1;
+        this.size = size;
+        initDistanceLookup(size);
+    }
+
+    private void initDistanceLookup(int size) {
+        distanceLookup = new double[size][size];
+        double sum = 0;
+        int range = size / 2;
+        for (int i = 0; i <= range; i++)  {
+            for (int j = 0; j <= range; j++) {
+                double value = Math.sqrt(i*i + j*j);
+                distanceLookup[i][j] = value;
+                sum += (i==0 || j==0) ? 2 * value : 4 * value;
+            }
+        }
+
+        totalWeight = sum;
     }
 
     public double countNeighbors(int x, int y) {
 
         double count = 0;
-        for (int i = -2; i <= 2; i++) {
+        int range = size / 2;
+
+        for (int i = -range; i <= range; i++) {
             int neighborX = x + i;
-            for (int j = -2; j <= 2; j++) {
+            for (int j = -range; j <= range; j++) {
                 int neighborY = y + j;
-                double distance = DISTANCE_LOOKUP[Math.abs(i)][Math.abs(j)];
+                double distance = distanceLookup[Math.abs(i)][Math.abs(j)];
                 // If we're looking at the middle point
                 if (i == 0 && j == 0) {
                     // Do nothing, we don't want to add ourselves in!
                     continue;
                 }
-                // In case the index we're looking at it off the edge of the cave, or a filled neighbor
-                //if (isNbr(neighborX, neighborY)) {
                  if (isOnEdge(neighborX, neighborY)) {
                     count += distance;
                 }
@@ -51,6 +68,7 @@ public class RadialKernel extends AbstractKernel {
                 }
             }
         }
-        return count / TOTAL_WEIGHT;
+        return count / totalWeight;
     }
+
 }

@@ -5,6 +5,10 @@ import com.barrybecker4.common.math.Range;
 import java.util.Random;
 
 /**
+ * Ideas for future work:
+ *  - add bump map rendering and phong shading
+ *   - allow continuous iterating or multiple steps at once
+ *   - support mouse interaction to raise or lower the height field
  * @author Barry Becker
  */
 public class Cave {

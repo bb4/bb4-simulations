@@ -26,7 +26,7 @@ public class CaveProcessor {
     /** Cells are born if more than this many neighbors */
     public static final double DEFAULT_EFFECT_FACTOR = 0.2;
 
-    public enum KernelType {BASIC, RADIAL}
+    public enum KernelType {BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11}
     public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.BASIC;
 
     private double lossFactor;
@@ -65,7 +65,11 @@ public class CaveProcessor {
     public void setKernelType(KernelType type) {
         switch (type) {
             case BASIC: kernel = new BasicKernel(cave); break;
-            case RADIAL: kernel = new RadialKernel(cave); break;
+            case RADIAL3: kernel = new RadialKernel(cave, 3); break;
+            case RADIAL5: kernel = new RadialKernel(cave, 5); break;
+            case RADIAL7: kernel = new RadialKernel(cave, 7); break;
+            case RADIAL9: kernel = new RadialKernel(cave, 9); break;
+            case RADIAL11: kernel = new RadialKernel(cave, 11); break;
         }
     }
 
