@@ -1,7 +1,5 @@
 package com.barrybecker4.simulation.common.rendering.bumps;
 
-import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions;
-
 import javax.vecmath.Vector3d;
 import java.awt.*;
 
@@ -13,32 +11,44 @@ import java.awt.*;
  */
 public class BumpMapper {
 
+    /** The angle at which light will hit the height field surface. Must be normalized to length 1. */
+    public static final Vector3d DEFAULT_LIGHT_SOURCE_DIR = new Vector3d(1.0, 1.0, 1.0);
+    static {
+        DEFAULT_LIGHT_SOURCE_DIR.normalize();
+    }
+
     /** the bigger this is the smaller the specular highlight will be. */
-    private static final Color LIGHT_SOURCE_COLOR = Color.WHITE;
+    private static final Color DEFAULT_LIGHT_SOURCE_COLOR = Color.WHITE;
 
     /** the bigger this is the smaller the specular highlight will be. */
     private static final double SPECULAR_HIGHLIGHT_EXP = 4.0;
 
-    private static final Vector3d HALF_ANGLE;
+    //private static final Vector3d HALF_ANGLE;
 
-    public static final Vector3d LIGHT_SOURCE_DIR = new Vector3d(1.0, 1.0, 1.0);
+    private static final double DEFAULT_SPECULAR_PERCENT = 0.1;
 
-    static {
-        LIGHT_SOURCE_DIR.normalize();
-        HALF_ANGLE = new Vector3d(0, 0, 1);
-        HALF_ANGLE.add(LIGHT_SOURCE_DIR);
-        HALF_ANGLE.normalize();
-    }
 
     /**
      * Bump mapping is used to adjust the surface model before applying phong shading.
      * @param c color of surface
      * @param field a height field used to perturb the normal.
      * @param htScale amount to scale the height field values by
-     * @param specPercent amount of specular highlighting to add to phong model
      * @return new color based on old, but accounting for lighting effects using the Phong reflection model.
      */
-    public Color adjustForLighting(Color c, HeightField field, double htScale, double specPercent, int x, int y) {
+    public Color adjustForLighting(Color c, int x, int y,  HeightField field, double htScale) {
+        return adjustForLighting(c, x, y, field, htScale, DEFAULT_SPECULAR_PERCENT, DEFAULT_LIGHT_SOURCE_DIR);
+    }
+
+    /**
+     * Bump mapping is used to adjust the surface model before applying Phong shading.
+     * @param c color of surface
+     * @param field a height field used to perturb the normal.
+     * @param htScale amount to scale the height field values by
+     * @param specPercent amount of specular highlighting to add to Phong model
+     * @return new color based on old, but accounting for lighting effects using the Phong reflection model.
+     */
+    public Color adjustForLighting(Color c, int x, int y,
+                                   HeightField field, double htScale, double specPercent, Vector3d lightSourceDir) {
         double xdelta = 0;
         double ydelta = 0;
         double centerValue = field.getValue(x, y);
@@ -55,7 +65,7 @@ public class BumpMapper {
         surfaceNormal.cross(xVec, yVec);
         surfaceNormal.normalize();
 
-        return computeColor(c, surfaceNormal, specPercent);
+        return computeColor(c, surfaceNormal, specPercent, lightSourceDir);
     }
 
     /**
@@ -63,29 +73,38 @@ public class BumpMapper {
      * @param color base color
      * @param surfaceNormal surface normal for lighting calculations.
      * @param specPct amount of specular highlighting to add to phong model
+     * @param lightSourceDir normalized unit vector to light source (it must be normalized to length 1)
      * @return color adjusted for lighting.
      */
-    private Color computeColor(Color color, Vector3d surfaceNormal, double specPct) {
+    private Color computeColor(Color color, Vector3d surfaceNormal, double specPct, Vector3d lightSourceDir) {
 
-        double diffuse = Math.abs(surfaceNormal.dot(LIGHT_SOURCE_DIR));
-        double specular = getSpecularExponent(surfaceNormal, specPct);
+        double diffuse = Math.abs(surfaceNormal.dot(lightSourceDir));
+        double specular = getSpecularExponent(surfaceNormal, specPct, lightSourceDir);
 
         Color cc = color.brighter();
         return new Color(
-                (int)Math.min(255, cc.getRed() * diffuse + LIGHT_SOURCE_COLOR.getRed() * specular),
-                (int)Math.min(255, cc.getGreen() * diffuse + LIGHT_SOURCE_COLOR.getGreen() * specular),
-                (int)Math.min(255, cc.getBlue() * diffuse + LIGHT_SOURCE_COLOR.getBlue() * specular));
+            (int)Math.min(255, cc.getRed() * diffuse + DEFAULT_LIGHT_SOURCE_COLOR.getRed() * specular),
+            (int)Math.min(255, cc.getGreen() * diffuse + DEFAULT_LIGHT_SOURCE_COLOR.getGreen() * specular),
+            (int)Math.min(255, cc.getBlue() * diffuse + DEFAULT_LIGHT_SOURCE_COLOR.getBlue() * specular));
     }
 
     /**
-     * @param specPct amount of specular highlighting to add to phong model
+     * @param specPct amount of specular highlighting to add to Phong model
      * @return specular contribution to add in
      */
-    public double getSpecularExponent(Vector3d surfaceNormal, double specPct) {
+    private double getSpecularExponent(Vector3d surfaceNormal, double specPct, Vector3d lightSourceDir) {
         double specular = 0;
         if (specPct > 0)  {
-           specular = specPct * Math.pow(Math.abs(surfaceNormal.dot(HALF_ANGLE)), SPECULAR_HIGHLIGHT_EXP);
+            Vector3d halfAngle = computeHalfAngle(lightSourceDir);
+           specular = specPct * Math.pow(Math.abs(surfaceNormal.dot(halfAngle)), SPECULAR_HIGHLIGHT_EXP);
         }
         return specular;
+    }
+
+    private Vector3d computeHalfAngle(Vector3d lightSourceDir) {
+        Vector3d halfAngle = new Vector3d(0, 0, 1);
+        halfAngle.add(lightSourceDir);
+        halfAngle.normalize();
+        return halfAngle;
     }
 }

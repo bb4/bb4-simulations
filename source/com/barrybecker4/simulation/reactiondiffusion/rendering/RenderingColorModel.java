@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
 import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel;
 
-import javax.vecmath.Vector3d;
 import java.awt.*;
 
 /**
@@ -48,7 +47,8 @@ public class RenderingColorModel {
         Color c = cmap_.getColorForValue(concentration);
         if (options_.getHeightScale() != 0) {
             double htScale = options_.getHeightScale();
-            c = bmapper.adjustForLighting(c, heightMap, htScale, options_.getSpecular(), x, y);
+            c = bmapper.adjustForLighting(c, x, y, heightMap, htScale, options_.getSpecular(),
+                    BumpMapper.DEFAULT_LIGHT_SOURCE_DIR);
         }
 
         return c;

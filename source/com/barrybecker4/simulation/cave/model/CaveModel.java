@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
 
 /**
+ * Communicates changing dynamic options to CaveProcessor and controls the rendering of the cave.
  * @author Barry Becker
  */
 public class CaveModel {
@@ -17,6 +18,8 @@ public class CaveModel {
     public static final double DEFAULT_SCALE_FACTOR = 5.0;
     public static final double DEFAULT_BUMP_HEIGHT = 0.0;
     public static final double DEFAULT_SPECULAR_PCT = 0.1;
+    public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
+    public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -34,8 +37,10 @@ public class CaveModel {
     private int numIterations = 0;
     private double bumpHeight = DEFAULT_BUMP_HEIGHT;
     private double specularPct = DEFAULT_SPECULAR_PCT;
+    private double lightSourceDescensionAngle = DEFAULT_LIGHT_SOURCE_ELEVATION;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
+    private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
 
 
     public CaveModel() {
@@ -90,6 +95,15 @@ public class CaveModel {
         doRender();
     }
 
+    public void setDefaultUseContinuousIteration(boolean continuous) {
+        this.continuousIteration = continuous;
+        doRender();
+    }
+
+    public void setLightSourceDescensionAngle(double descensionAngle) {
+        this.lightSourceDescensionAngle = descensionAngle;
+        doRender();
+    }
 
     public void setScale(double scale) {
         this.scale = scale;
@@ -107,6 +121,10 @@ public class CaveModel {
     public void setKernelType(CaveProcessor.KernelType type) {
         cave.setKernelType(type);
         this.kernalType = type;
+    }
+
+    public int getNumIterations() {
+        return numIterations;
     }
 
     private void requestRestart(int width, int height) {
@@ -140,7 +158,7 @@ public class CaveModel {
             Profiler.getInstance().startCalculationTime();
             doRender();
         }
-        else if (nextStepRequested) {
+        else if (nextStepRequested || continuousIteration) {
             cave.nextPhase();
             numIterations++;
             doRender();
@@ -151,6 +169,6 @@ public class CaveModel {
     }
 
     private void doRender() {
-        renderer.render(bumpHeight, specularPct);
+        renderer.render(bumpHeight, specularPct, lightSourceDescensionAngle);
     }
 }

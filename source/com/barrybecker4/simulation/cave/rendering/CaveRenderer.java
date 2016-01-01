@@ -2,12 +2,12 @@
 package com.barrybecker4.simulation.cave.rendering;
 
 import com.barrybecker4.common.math.Range;
-import com.barrybecker4.simulation.cave.model.Cave;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;
 
+import javax.vecmath.Vector3d;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -56,7 +56,7 @@ public class CaveRenderer {
     /**
      * Draw the floor of the cave
      */
-    public void render(double bumpHeight, double specularPct) {
+    public void render(double bumpHeight, double specularPct, double lightDescensionAngle) {
        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
@@ -70,11 +70,22 @@ public class CaveRenderer {
                 double value = cave.getValue(i, j);
                 Color color = cmap.getColorForValue(value);
                 if (bumpHeight > 0) {
-                    color = bmapper.adjustForLighting(color, cave, bumpHeight, specularPct, i, j);
+                    Vector3d lightVector = computeSphericalCoordinateUnitVector(45, lightDescensionAngle);
+                    color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector);
                 }
                 offlineGraphics_.setColor(color);
                 offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
+    }
+
+    /**
+     * See http://mathworld.wolfram.com/SphericalCoordinates.html
+     * @param theta azymuthal angle in radians
+     * @param phi angle of descension (pi/2 - elevation) in radians
+     * @return unit vector defined by spherical coordinates
+     */
+    private Vector3d computeSphericalCoordinateUnitVector(double theta, double phi) {
+        return new Vector3d(Math.cos(theta) * Math.sin(phi), Math.sin(theta) * Math.sin(phi), Math.cos(phi));
     }
 }

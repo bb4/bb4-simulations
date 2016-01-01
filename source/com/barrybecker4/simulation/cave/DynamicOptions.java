@@ -9,10 +9,7 @@ import com.barrybecker4.ui.sliders.SliderProperties;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 /**
  * Dynamic controls for the RD simulation that will show on the right.
@@ -34,10 +31,12 @@ class DynamicOptions extends JPanel
     private static final String EFFECT_FACTOR_SLIDER = "Effect Factor";
     private static final String BUMP_HEIGHT_SLIDER = "Height (for bumps)";
     private static final String SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)";
+    private static final String LIGHT_SOURCE_ELEVATION_SLIDER = "Light source elevation angle (for bumps)";
     private static final String SCALE_SLIDER = "Scale";
+    private static final double PI_D2 = Math.PI / 2.0;
 
     private SliderGroup sliderGroup_;
-    //private JCheckBox useBumpmapRendering_;
+    private JCheckBox useContinuousIteration_;
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
@@ -47,6 +46,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
         new SliderProperties(BUMP_HEIGHT_SLIDER,  0.0,   10.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
         new SliderProperties(SPECULAR_PCT_SLIDER,  0.0,   1.0,  CaveModel.DEFAULT_SPECULAR_PCT, 100),
+        new SliderProperties(LIGHT_SOURCE_ELEVATION_SLIDER, 0.0, Math.PI/2.0,  CaveModel.DEFAULT_LIGHT_SOURCE_ELEVATION, 100),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR, 40),
     };
 
@@ -66,7 +66,7 @@ class DynamicOptions extends JPanel
 
         add(sliderGroup_);
         add(createKernalDropdown());
-        add(createCheckBoxes());
+        add(createIncrementPanel());
         add(createButtons());
 
         JPanel fill = new JPanel();
@@ -99,17 +99,24 @@ class DynamicOptions extends JPanel
      * The dropdown menu at the top for selecting a kernel type.
      * @return a dropdown/down component.
      */
-    private JPanel createCheckBoxes() {
-        JPanel checkboxPanel = new JPanel();
+    private JPanel createIncrementPanel() {
+        JPanel panel = new JPanel();
 
-        JLabel label = new JLabel("Use Bump map Rendering: ");
-        //useBumpmapRendering_ = new JCheckBox();
-        //useBumpmapRendering_.setSelected(CaveModel.DEFAULT_USE_BUMP_MAPPING);
-        //useBumpmapRendering_.addActionListener(this);
+        JLabel label = new JLabel("Continuous iteration: ");
+        useContinuousIteration_ = new JCheckBox();
+        useContinuousIteration_.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION);
+        useContinuousIteration_.addActionListener(this);
 
-        checkboxPanel.add(label);
-        //checkboxPanel.add(useBumpmapRendering_);
-        return checkboxPanel;
+        nextButton = new JButton("Next");
+        nextButton.addActionListener(this);
+        nextButton.setEnabled(!useContinuousIteration_.isSelected());
+
+        panel.add(label);
+        panel.add(useContinuousIteration_);
+        panel.add(Box.createHorizontalGlue());
+        panel.add(nextButton);
+
+        return panel;
     }
 
     /**
@@ -117,15 +124,9 @@ class DynamicOptions extends JPanel
      * @return a dropdown/down component.
      */
     private JPanel createButtons() {
-
         JPanel buttonsPanel = new JPanel();
-
-        nextButton = new JButton("Next");
         resetButton = new JButton("Reset");
-        nextButton.addActionListener(this);
         resetButton.addActionListener(this);
-
-        buttonsPanel.add(nextButton);
         buttonsPanel.add(resetButton);
         return buttonsPanel;
     }
@@ -156,9 +157,13 @@ class DynamicOptions extends JPanel
                 caveModel.setBumpHeight(value);
                 // specular highlight does not apply if no bumps
                 sliderGroup_.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
+                sliderGroup_.setEnabled(LIGHT_SOURCE_ELEVATION_SLIDER, value > 0);
                 break;
             case SPECULAR_PCT_SLIDER:
                 caveModel.setSpecularPercent(value);
+                break;
+            case LIGHT_SOURCE_ELEVATION_SLIDER:
+                caveModel.setLightSourceDescensionAngle(PI_D2 - value);
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);
@@ -181,9 +186,10 @@ class DynamicOptions extends JPanel
         else if (e.getSource().equals(resetButton)) {
             caveModel.requestRestart();
         }
-        //else if (e.getSource().equals(useBumpmapRendering_)) {
-        //    caveModel.setUseBumpmapping(useBumpmapRendering_.isSelected());
-        //}
+        else if (e.getSource().equals(useContinuousIteration_)) {
+            caveModel.setDefaultUseContinuousIteration(useContinuousIteration_.isSelected());
+            nextButton.setEnabled(!useContinuousIteration_.isSelected());
+        }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
 }
