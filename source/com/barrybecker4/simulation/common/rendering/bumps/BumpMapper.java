@@ -6,7 +6,8 @@ import javax.vecmath.Vector3d;
 import java.awt.*;
 
 /**
- * This can be used to apply bump map rendering to a height field
+ * This can be used to apply bump map rendering to a height field.
+ * The constants at the top could be parameters to the constructor.
  *
  * @author Barry Becker
  */
@@ -34,10 +35,10 @@ public class BumpMapper {
      * @param c color of surface
      * @param field a height field used to perturb the normal.
      * @param htScale amount to scale the height field values by
-     * @param specExp the specular exponent to use.
+     * @param specPercent amount of specular highlighting to add to phong model
      * @return new color based on old, but accounting for lighting effects using the Phong reflection model.
      */
-    public Color adjustForLighting(Color c, HeightField field, double htScale, double specExp, int x, int y) {
+    public Color adjustForLighting(Color c, HeightField field, double htScale, double specPercent, int x, int y) {
         double xdelta = 0;
         double ydelta = 0;
         double centerValue = field.getValue(x, y);
@@ -54,19 +55,20 @@ public class BumpMapper {
         surfaceNormal.cross(xVec, yVec);
         surfaceNormal.normalize();
 
-        return computeColor(c, surfaceNormal, specExp);
+        return computeColor(c, surfaceNormal, specPercent);
     }
 
     /**
      * Diffuse the surface normal with the light source direction, to determine the shading effect.
      * @param color base color
      * @param surfaceNormal surface normal for lighting calculations.
+     * @param specPct amount of specular highlighting to add to phong model
      * @return color adjusted for lighting.
      */
-    private Color computeColor(Color color, Vector3d surfaceNormal, double specExp) {
+    private Color computeColor(Color color, Vector3d surfaceNormal, double specPct) {
 
         double diffuse = Math.abs(surfaceNormal.dot(LIGHT_SOURCE_DIR));
-        double specular = getSpecularExponent(surfaceNormal, specExp);
+        double specular = getSpecularExponent(surfaceNormal, specPct);
 
         Color cc = color.brighter();
         return new Color(
@@ -75,10 +77,14 @@ public class BumpMapper {
                 (int)Math.min(255, cc.getBlue() * diffuse + LIGHT_SOURCE_COLOR.getBlue() * specular));
     }
 
-    public double getSpecularExponent(Vector3d surfaceNormal, double specExp) {
+    /**
+     * @param specPct amount of specular highlighting to add to phong model
+     * @return specular contribution to add in
+     */
+    public double getSpecularExponent(Vector3d surfaceNormal, double specPct) {
         double specular = 0;
-        if (specExp > 0)  {
-           specular = specExp * Math.pow(Math.abs(surfaceNormal.dot(HALF_ANGLE)), SPECULAR_HIGHLIGHT_EXP);
+        if (specPct > 0)  {
+           specular = specPct * Math.pow(Math.abs(surfaceNormal.dot(HALF_ANGLE)), SPECULAR_HIGHLIGHT_EXP);
         }
         return specular;
     }

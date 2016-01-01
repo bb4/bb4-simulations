@@ -17,6 +17,7 @@ public class CaveModel {
     public static final double DEFAULT_SCALE_FACTOR = 5.0;
     public static final boolean DEFAULT_USE_BUMP_MAPPING = false;
     public static final double DEFAULT_BUMP_HEIGHT = 10;
+    public static final double DEFAULT_SPECULAR_PCT = 0.1;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -34,6 +35,7 @@ public class CaveModel {
     private int numIterations = 0;
     private boolean useBumpmapping = DEFAULT_USE_BUMP_MAPPING;
     private double bumpHeight = DEFAULT_BUMP_HEIGHT;
+    private double specularPct = DEFAULT_SPECULAR_PCT;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
 
@@ -61,11 +63,13 @@ public class CaveModel {
     public void setFloorThresh(double floor) {
         cave.setFloorThresh(floor);
         this.floorThresh = floor;
+        doRender();
     }
 
     public void setCeilThresh(double ceil) {
         cave.setCeilThresh(ceil);
         this.ceilThresh = ceil;
+        doRender();
     }
 
     public void setLossFactor(double lossFactor) {
@@ -80,14 +84,22 @@ public class CaveModel {
 
     public void setBumpHeight(double ht) {
         this.bumpHeight = ht;
+        doRender();
+    }
+
+    public void setSpecularPercent(double pct) {
+        this.specularPct = pct;
+        doRender();
     }
 
     public void setUseBumpmapping(boolean useBumpmapping) {
         this.useBumpmapping = useBumpmapping;
+        doRender();
     }
 
     public void setScale(double scale) {
         this.scale = scale;
+        doRender();
     }
 
     public void requestRestart() {
@@ -101,7 +113,6 @@ public class CaveModel {
     public void setKernelType(CaveProcessor.KernelType type) {
         cave.setKernelType(type);
         this.kernalType = type;
-        //requestRestart(renderer.getWidth(), renderer.getHeight());
     }
 
     private void requestRestart(int width, int height) {
@@ -133,15 +144,19 @@ public class CaveModel {
             nextStepRequested = false;
             numIterations = 0;
             Profiler.getInstance().startCalculationTime();
-            renderer.render(useBumpmapping, bumpHeight);
+            doRender();
         }
         else if (nextStepRequested) {
             cave.nextPhase();
             numIterations++;
-            renderer.render(useBumpmapping, bumpHeight);
+            doRender();
             nextStepRequested = false;
         }
 
         return false;
+    }
+
+    private void doRender() {
+        renderer.render(useBumpmapping, bumpHeight, specularPct);
     }
 }
