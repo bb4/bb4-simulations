@@ -37,8 +37,7 @@ class DynamicOptions extends JPanel
     private static final String SCALE_SLIDER = "Scale";
 
     private SliderGroup sliderGroup_;
-    private JCheckBox useBumpmapRendering_;
-    private JTextArea formulaText_;
+    //private JCheckBox useBumpmapRendering_;
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
@@ -46,7 +45,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
-        new SliderProperties(BUMP_HEIGHT_SLIDER,  1.0,   100.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
+        new SliderProperties(BUMP_HEIGHT_SLIDER,  0.0,   10.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
         new SliderProperties(SPECULAR_PCT_SLIDER,  0.0,   1.0,  CaveModel.DEFAULT_SPECULAR_PCT, 100),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR, 40),
     };
@@ -104,12 +103,12 @@ class DynamicOptions extends JPanel
         JPanel checkboxPanel = new JPanel();
 
         JLabel label = new JLabel("Use Bump map Rendering: ");
-        useBumpmapRendering_ = new JCheckBox();
-        useBumpmapRendering_.setSelected(CaveModel.DEFAULT_USE_BUMP_MAPPING);
-        useBumpmapRendering_.addActionListener(this);
+        //useBumpmapRendering_ = new JCheckBox();
+        //useBumpmapRendering_.setSelected(CaveModel.DEFAULT_USE_BUMP_MAPPING);
+        //useBumpmapRendering_.addActionListener(this);
 
         checkboxPanel.add(label);
-        checkboxPanel.add(useBumpmapRendering_);
+        //checkboxPanel.add(useBumpmapRendering_);
         return checkboxPanel;
     }
 
@@ -155,6 +154,8 @@ class DynamicOptions extends JPanel
                 break;
             case BUMP_HEIGHT_SLIDER:
                 caveModel.setBumpHeight(value);
+                // specular highlight does not apply if no bumps
+                sliderGroup_.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
                 break;
             case SPECULAR_PCT_SLIDER:
                 caveModel.setSpecularPercent(value);
@@ -180,9 +181,9 @@ class DynamicOptions extends JPanel
         else if (e.getSource().equals(resetButton)) {
             caveModel.requestRestart();
         }
-        else if (e.getSource().equals(useBumpmapRendering_)) {
-            caveModel.setUseBumpmapping(useBumpmapRendering_.isSelected());
-        }
+        //else if (e.getSource().equals(useBumpmapRendering_)) {
+        //    caveModel.setUseBumpmapping(useBumpmapRendering_.isSelected());
+        //}
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
 }

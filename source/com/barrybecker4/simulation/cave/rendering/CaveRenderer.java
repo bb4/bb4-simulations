@@ -56,7 +56,7 @@ public class CaveRenderer {
     /**
      * Draw the floor of the cave
      */
-    public void render(boolean useBumpmapping, double bumpHeight, double specularPct) {
+    public void render(double bumpHeight, double specularPct) {
        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
@@ -69,7 +69,7 @@ public class CaveRenderer {
                 int ypos = (int) (j * cellHeight);
                 double value = cave.getValue(i, j);
                 Color color = cmap.getColorForValue(value);
-                if (useBumpmapping) {
+                if (bumpHeight > 0) {
                     color = bmapper.adjustForLighting(color, cave, bumpHeight, specularPct, i, j);
                 }
                 offlineGraphics_.setColor(color);
