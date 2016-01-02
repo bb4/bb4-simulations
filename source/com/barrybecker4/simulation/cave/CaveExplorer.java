@@ -86,7 +86,7 @@ public class CaveExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options = new com.barrybecker4.simulation.cave.DynamicOptions(caveModel, this);
+        options = new com.barrybecker4.simulation.cave.DynamicOptions(caveModel);
         setPaused(false);
         return options;
     }

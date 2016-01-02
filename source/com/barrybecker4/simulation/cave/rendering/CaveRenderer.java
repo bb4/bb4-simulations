@@ -30,13 +30,15 @@ public class CaveRenderer {
     /** offline rendering is fast  */
     private final OfflineGraphics offlineGraphics_;
     private final BumpMapper bmapper;
+    private ColorMap cmap;
 
     /** Constructor */
-    public CaveRenderer(int width, int height, CaveProcessor cave)
+    public CaveRenderer(int width, int height, CaveProcessor cave, ColorMap cmap)
             throws IllegalArgumentException {
         this.width = width;
         this.height = height;
         this.cave = cave;
+        this.cmap = cmap;
         offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
         bmapper = new BumpMapper();
     }
@@ -47,6 +49,7 @@ public class CaveRenderer {
     public int getHeight() {
         return (int) height;
     }
+
 
 
     public BufferedImage getImage() {
@@ -60,8 +63,7 @@ public class CaveRenderer {
        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
-        ColorMap cmap = new CaveColorMap(range);
-        double ext = range.getExtent();
+        //double ext = range.getExtent();
 
         for (int i = 0; i < cave.getWidth(); i++)  {
             for (int j = 0; j < cave.getHeight(); j++) {

@@ -1,8 +1,10 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.model;
 
+import com.barrybecker4.simulation.cave.rendering.CaveColorMap;
 import com.barrybecker4.simulation.cave.rendering.CaveRenderer;
 import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -41,6 +43,7 @@ public class CaveModel {
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
+    private ColorMap cmap = new CaveColorMap();
 
 
     public CaveModel() {
@@ -60,7 +63,7 @@ public class CaveModel {
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
         CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight,
                 floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
-        renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave);
+        renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
     }
 
     public void setFloorThresh(double floor) {
@@ -110,6 +113,9 @@ public class CaveModel {
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
 
+    public ColorMap getColormap() {
+        return cmap;
+    }
     public void requestRestart() {
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
@@ -134,7 +140,7 @@ public class CaveModel {
             cave = new CaveProcessor(caveWidth, caveHeight,
                     floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
             numIterations = 0;
-            renderer = new CaveRenderer(width, height, cave);
+            renderer = new CaveRenderer(width, height, cave, cmap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

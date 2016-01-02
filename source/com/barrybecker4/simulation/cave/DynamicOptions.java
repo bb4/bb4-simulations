@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.cave;
 
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
 import com.barrybecker4.ui.sliders.SliderProperties;
@@ -53,7 +54,7 @@ class DynamicOptions extends JPanel
     /**
      * Constructor
      */
-    DynamicOptions(CaveModel algorithm, CaveExplorer simulator) {
+    DynamicOptions(CaveModel algorithm) {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
@@ -64,10 +65,13 @@ class DynamicOptions extends JPanel
         sliderGroup_ = new SliderGroup(SLIDER_PROPS);
         sliderGroup_.addSliderChangeListener(this);
 
+        ContinuousColorLegend legend = new ContinuousColorLegend(null, algorithm.getColormap(), true);
+
         add(sliderGroup_);
         add(createKernalDropdown());
         add(createIncrementPanel());
         add(createButtons());
+        add(legend);
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));

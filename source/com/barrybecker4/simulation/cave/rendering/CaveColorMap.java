@@ -15,18 +15,22 @@ import java.util.Arrays;
  */
 public class CaveColorMap extends ColorMap {
 
-
-
-    private static final Color[] COLORS =  {
+    private static Color[] COLORS =  {
         Color.WHITE,
-        new Color(190, 240, 255),
-        new Color(160, 200, 250),
+        new Color(210, 170, 155),
+        new Color(250, 100, 155),
+        new Color(190, 140, 255),
+        new Color(120, 120, 255),
         new Color(100, 180, 230),
         new Color(90, 170, 200),
         new Color(70, 160, 100),
         new Color(40, 130, 0),
         Color.BLACK
     };
+
+    public CaveColorMap() {
+        super(getControlPoints(new Range(0, 1.0)), COLORS);
+    }
 
     public CaveColorMap(Range range) {
         super(getControlPoints(range), COLORS);
