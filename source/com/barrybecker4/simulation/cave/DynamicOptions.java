@@ -38,6 +38,7 @@ class DynamicOptions extends JPanel
 
     private SliderGroup sliderGroup_;
     private JCheckBox useContinuousIteration_;
+    private CaveExplorer simulator_;
 
     private static final SliderProperties[] SLIDER_PROPS = {
 
@@ -48,14 +49,15 @@ class DynamicOptions extends JPanel
         new SliderProperties(BUMP_HEIGHT_SLIDER,  0.0,   10.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
         new SliderProperties(SPECULAR_PCT_SLIDER,  0.0,   1.0,  CaveModel.DEFAULT_SPECULAR_PCT, 100),
         new SliderProperties(LIGHT_SOURCE_ELEVATION_SLIDER, 0.0, Math.PI/2.0,  CaveModel.DEFAULT_LIGHT_SOURCE_ELEVATION, 100),
-        new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR, 40),
+        new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
     };
 
     /**
      * Constructor
      */
-    DynamicOptions(CaveModel algorithm) {
+    DynamicOptions(CaveModel algorithm, CaveExplorer simulator) {
 
+        simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
@@ -171,6 +173,7 @@ class DynamicOptions extends JPanel
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);
+                simulator_.getInteractionHandler().setScale(value);
                 break;
             default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);
         }

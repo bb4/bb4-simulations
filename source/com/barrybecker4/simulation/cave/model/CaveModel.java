@@ -17,7 +17,7 @@ import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
  */
 public class CaveModel {
 
-    public static final double DEFAULT_SCALE_FACTOR = 5.0;
+    public static final int DEFAULT_SCALE_FACTOR = 5;
     public static final double DEFAULT_BUMP_HEIGHT = 0.0;
     public static final double DEFAULT_SPECULAR_PCT = 0.1;
     public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
@@ -64,6 +64,14 @@ public class CaveModel {
         CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight,
                 floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
+    }
+
+    public int getWidth() {
+        return cave.getWidth();
+    }
+
+    public int getHeight() {
+        return cave.getHeight();
     }
 
     public void setFloorThresh(double floor) {
@@ -113,9 +121,18 @@ public class CaveModel {
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
 
+    public double getScale() {
+        return this.scale;
+    }
+
+    public void incrementHeight(int x, int y, double amount) {
+        cave.incrementHeight(x, y, amount);
+    }
+
     public ColorMap getColormap() {
         return cmap;
     }
+
     public void requestRestart() {
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
@@ -174,7 +191,7 @@ public class CaveModel {
         return false;
     }
 
-    private void doRender() {
+    public void doRender() {
         renderer.render(bumpHeight, specularPct, lightSourceDescensionAngle);
     }
 }

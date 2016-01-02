@@ -94,6 +94,10 @@ public class CaveProcessor implements HeightField {
        cave.setCeilThresh(ceil);
     }
 
+    public void incrementHeight(int x, int y, double amount) {
+        cave.incrementHeight(x, y, amount);
+    }
+
     /**
      * Compute the next step of the simulation
      * The new value is at each point based on simulation rules:

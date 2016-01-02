@@ -55,6 +55,14 @@ public class Cave {
         return heightMap[x][y];
     }
 
+    /**
+     * @param amount the amout to change hte height by. Will never go above 1 or below 0.
+     */
+    public void incrementHeight(int x, int y, double amount) {
+        double oldVal = heightMap[x][y];
+        heightMap[x][y] = Math.max(floorThresh, Math.min(ceilThresh, oldVal + amount));
+    }
+
     public void setFloorThresh(double floor) {
         this.floorThresh = floor;
     }
