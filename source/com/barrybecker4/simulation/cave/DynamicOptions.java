@@ -32,6 +32,7 @@ class DynamicOptions extends JPanel
     private static final String FLOOR_SLIDER = "Floor";
     private static final String CEILING_SLIDER = "Ceiling";
     private static final String LOSS_FACTOR_SLIDER = "Loss Factor";
+    private static final String BRUSH_RADIUS_SLIDER = "Brush radius (for click/dragging)";
     private static final String EFFECT_FACTOR_SLIDER = "Effect Factor";
     private static final String BUMP_HEIGHT_SLIDER = "Height (for bumps)";
     private static final String SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)";
@@ -52,6 +53,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
+        new SliderProperties(BRUSH_RADIUS_SLIDER,  1,   12,  CaveModel.DEFAULT_BRUSH_RADIUS),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
     };
 
@@ -70,7 +72,7 @@ class DynamicOptions extends JPanel
         simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(PREFERRED_WIDTH, 600));
+        setPreferredSize(new Dimension(PREFERRED_WIDTH, 750));
 
         caveModel = algorithm;
 
@@ -88,7 +90,9 @@ class DynamicOptions extends JPanel
 
     private JPanel createGeneralControls(ColorMap cmap) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(300, 450));
+        final int southPanelHt = 160;
+        int ht = GENERAL_SLIDER_PROPS.length * 55 + southPanelHt;
+        panel.setPreferredSize(new Dimension(300, ht));
         panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
         generalSliderGroup_ = new SliderGroup(GENERAL_SLIDER_PROPS);
@@ -101,7 +105,7 @@ class DynamicOptions extends JPanel
         panel.add(generalSliderGroup_, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.setPreferredSize(new Dimension(PREFERRED_WIDTH, 160));
+        southPanel.setPreferredSize(new Dimension(PREFERRED_WIDTH, southPanelHt));
         JPanel cp = new JPanel();
 
         cp.add(createKernalDropdown());
@@ -207,6 +211,10 @@ class DynamicOptions extends JPanel
             case EFFECT_FACTOR_SLIDER:
                 caveModel.setEffectFactor(value);
                 break;
+            case BRUSH_RADIUS_SLIDER:
+                simulator_.getInteractionHandler().setBrushRadius((int) value);
+                break;
+
             case BUMP_HEIGHT_SLIDER:
                 caveModel.setBumpHeight(value);
                 // specular highlight does not apply if no bumps

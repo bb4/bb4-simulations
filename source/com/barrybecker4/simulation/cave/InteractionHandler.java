@@ -15,8 +15,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    public static final int DEFAULT_RADIUS = 2;
-    private static final double DEFAULT_IMPACT = 0.2;
+    private static final double DEFAULT_IMPACT = 0.1;
 
     CaveModel cave_;
 
@@ -24,6 +23,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     double scale_;
 
     private int currentX, currentY;
+    private int brushRadius = (int) CaveModel.DEFAULT_BRUSH_RADIUS;
     private int lastX, lastY;
     private boolean mouse1Down, mouse3Down;
 
@@ -39,6 +39,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         scale_ = scale;
     }
 
+    public void setBrushRadius(int rad) {
+        brushRadius = rad;
+    }
     /**
      * Lowers (or raises) cave walls when dragging.
      * Left mouse lowers; right mouse drag raises.
@@ -51,10 +54,10 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         int j = (int) (currentY / scale_);
 
         // apply the change to a convolution kernel area
-        int startX = Math.max(1, i - DEFAULT_RADIUS);
-        int stopX = Math.min(cave_.getWidth(), i + DEFAULT_RADIUS);
-        int startY = Math.max(1, j - DEFAULT_RADIUS);
-        int stopY = Math.min(cave_.getHeight(), j + DEFAULT_RADIUS);
+        int startX = Math.max(1, i - brushRadius);
+        int stopX = Math.min(cave_.getWidth(), i + brushRadius);
+        int startY = Math.max(1, j - brushRadius);
+        int stopY = Math.min(cave_.getHeight(), j + brushRadius);
 
         for (int ii = startX; ii < stopX; ii++) {
              for (int jj=startY; jj<stopY; jj++) {
@@ -78,7 +81,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         if (distance < 1.0) {
             distance = 1.0;
         }
-        return 1.0 / distance;
+        return 0.9 / distance;
     }
 
     /**
