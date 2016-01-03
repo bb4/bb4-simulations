@@ -69,7 +69,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         int startY = Math.max(1, j - brushRadius);
         int stopY = Math.min(cave_.getHeight(), j + brushRadius);
         // adjust by this so that there is not a discontinuity at the periphery
-        double minWt = 1.0 / brushRadius;
+        double minWt = 0.9 / brushRadius;
 
         for (int ii = startX; ii < stopX; ii++) {
              for (int jj=startY; jj<stopY; jj++) {

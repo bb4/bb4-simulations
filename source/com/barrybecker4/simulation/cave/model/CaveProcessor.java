@@ -29,7 +29,8 @@ public class CaveProcessor implements HeightField {
     /** Cells are born if more than this many neighbors */
     public static final double DEFAULT_EFFECT_FACTOR = 0.2;
 
-    public enum KernelType {BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11, RADIAL13, RADIAL15}
+    public enum KernelType {BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9,
+        RADIAL11, RADIAL13, RADIAL15, RADIAL17, RADIAL19}
     public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.RADIAL9;
 
     private double lossFactor;
@@ -73,8 +74,10 @@ public class CaveProcessor implements HeightField {
             case RADIAL7: kernel = new RadialKernel(cave, 7); break;
             case RADIAL9: kernel = new RadialKernel(cave, 9); break;
             case RADIAL11: kernel = new RadialKernel(cave, 11); break;
-            case RADIAL13: kernel = new RadialKernel(cave, 11); break;
-            case RADIAL15: kernel = new RadialKernel(cave, 11); break;
+            case RADIAL13: kernel = new RadialKernel(cave, 13); break;
+            case RADIAL15: kernel = new RadialKernel(cave, 15); break;
+            case RADIAL17: kernel = new RadialKernel(cave, 17); break;
+            case RADIAL19: kernel = new RadialKernel(cave, 19); break;
         }
     }
 

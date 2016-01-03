@@ -11,6 +11,7 @@ import com.barrybecker4.ui.sliders.SliderProperties;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -42,6 +43,7 @@ class DynamicOptions extends JPanel
     private static final String SCALE_SLIDER = "Scale";
     private static final double PI_D2 = Math.PI / 2.0;
     private static final int PREFERRED_WIDTH = 300;
+    private static final int SPACING = 14;
 
     private SliderGroup generalSliderGroup_;
     private SliderGroup bumpSliderGroup_;
@@ -80,18 +82,25 @@ class DynamicOptions extends JPanel
         simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(PREFERRED_WIDTH, 850));
+        //setPreferredSize(new Dimension(PREFERRED_WIDTH, 900));
 
         caveModel = algorithm;
 
-        JPanel generalPanel = createGeneralControls(algorithm.getColormap());
+        JPanel generalPanel = createGeneralControls();
         JPanel bumpPanel = createBumpControls();
         JPanel brushPanel = createBrushControls();
 
+        ContinuousColorLegend legend = new ContinuousColorLegend(null, algorithm.getColormap(), true);
+        add(createKernalDropdown());
+        add(createIncrementPanel());
+        add(createButtons());
+        add(legend);
+
+        add(Box.createVerticalStrut(SPACING));
         add(generalPanel);
-        add(Box.createVerticalStrut(12));
+        add(Box.createVerticalStrut(SPACING));
         add(bumpPanel);
-        add(Box.createVerticalStrut(12));
+        add(Box.createVerticalStrut(SPACING));
         add(brushPanel);
 
         JPanel fill = new JPanel();
@@ -99,59 +108,42 @@ class DynamicOptions extends JPanel
         add(fill);
     }
 
-    private JPanel createGeneralControls(ColorMap cmap) {
+    private JPanel createGeneralControls() {
         JPanel panel = new JPanel(new BorderLayout());
-        final int southPanelHt = 150;
-        int ht = GENERAL_SLIDER_PROPS.length * 50 + southPanelHt;
-        panel.setPreferredSize(new Dimension(300, ht));
-        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+        panel.setBorder(createTitledBorder("General parameters"));
 
         generalSliderGroup_ = new SliderGroup(GENERAL_SLIDER_PROPS);
         generalSliderGroup_.addSliderChangeListener(this);
 
-        ContinuousColorLegend legend = new ContinuousColorLegend(null, cmap, true);
-
-        JLabel title = new JLabel("General Cave Parameters");
-        panel.add(title, BorderLayout.NORTH);
         panel.add(generalSliderGroup_, BorderLayout.CENTER);
-
-        JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.setPreferredSize(new Dimension(PREFERRED_WIDTH, southPanelHt));
-        JPanel cp = new JPanel();
-
-        cp.add(createKernalDropdown());
-        cp.add(createIncrementPanel());
-        cp.add(createButtons());
-        southPanel.add(cp, BorderLayout.CENTER);
-        southPanel.add(legend, BorderLayout.SOUTH);
-
-        panel.add(southPanel, BorderLayout.SOUTH);
 
         return panel;
     }
 
     private JPanel createBumpControls() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+        panel.setBorder(createTitledBorder("Bump prameters"));
 
         bumpSliderGroup_ = new SliderGroup(BUMP_SLIDER_PROPS);
         bumpSliderGroup_.addSliderChangeListener(this);
 
-        JLabel title = new JLabel("Bump Parameters");
-        panel.add(title, BorderLayout.NORTH);
         panel.add(bumpSliderGroup_, BorderLayout.CENTER);
         return panel;
     }
 
+    private Border createTitledBorder(String title) {
+        return BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder(title),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    }
+
     private JPanel createBrushControls() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+        panel.setBorder(createTitledBorder("Brush Parameters (left: raise; right: lower)"));
 
         brushSliderGroup_ = new SliderGroup(BRUSH_SLIDER_PROPS);
         brushSliderGroup_.addSliderChangeListener(this);
 
-        JLabel title = new JLabel("Brush Parameters (left: raise; right: lower)");
-        panel.add(title, BorderLayout.NORTH);
         panel.add(brushSliderGroup_, BorderLayout.CENTER);
         return panel;
     }
