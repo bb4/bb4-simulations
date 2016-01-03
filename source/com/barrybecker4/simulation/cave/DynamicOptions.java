@@ -32,7 +32,8 @@ class DynamicOptions extends JPanel
     private static final String FLOOR_SLIDER = "Floor";
     private static final String CEILING_SLIDER = "Ceiling";
     private static final String LOSS_FACTOR_SLIDER = "Loss Factor";
-    private static final String BRUSH_RADIUS_SLIDER = "Brush radius (for click/dragging)";
+    private static final String BRUSH_RADIUS_SLIDER = "Brush radius";
+    private static final String BRUSH_STRENGTH_SLIDER = "Brush strength";
     private static final String EFFECT_FACTOR_SLIDER = "Effect Factor";
     private static final String BUMP_HEIGHT_SLIDER = "Height (for bumps)";
     private static final String SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)";
@@ -44,6 +45,8 @@ class DynamicOptions extends JPanel
 
     private SliderGroup generalSliderGroup_;
     private SliderGroup bumpSliderGroup_;
+    private SliderGroup brushSliderGroup_;
+
     private JCheckBox useContinuousIteration_;
     private CaveExplorer simulator_;
 
@@ -53,7 +56,6 @@ class DynamicOptions extends JPanel
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
-        new SliderProperties(BRUSH_RADIUS_SLIDER,  1,   12,  CaveModel.DEFAULT_BRUSH_RADIUS),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
     };
 
@@ -64,6 +66,12 @@ class DynamicOptions extends JPanel
         new SliderProperties(LIGHT_SOURCE_AZYMUTH_SLIDER, 0.0, Math.PI,  CaveModel.DEFAULT_LIGHT_SOURCE_AZYMUTH, 100),
     };
 
+    private static final SliderProperties[] BRUSH_SLIDER_PROPS = {
+
+        new SliderProperties(BRUSH_RADIUS_SLIDER,  1,   30,  CaveModel.DEFAULT_BRUSH_RADIUS),
+        new SliderProperties(BRUSH_STRENGTH_SLIDER, 0.1,   1,  CaveModel.DEFAULT_BRUSH_STRENGTH, 100),
+    };
+
     /**
      * Constructor
      */
@@ -72,16 +80,19 @@ class DynamicOptions extends JPanel
         simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(PREFERRED_WIDTH, 750));
+        setPreferredSize(new Dimension(PREFERRED_WIDTH, 850));
 
         caveModel = algorithm;
 
         JPanel generalPanel = createGeneralControls(algorithm.getColormap());
         JPanel bumpPanel = createBumpControls();
+        JPanel brushPanel = createBrushControls();
 
         add(generalPanel);
         add(Box.createVerticalStrut(12));
         add(bumpPanel);
+        add(Box.createVerticalStrut(12));
+        add(brushPanel);
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
@@ -90,8 +101,8 @@ class DynamicOptions extends JPanel
 
     private JPanel createGeneralControls(ColorMap cmap) {
         JPanel panel = new JPanel(new BorderLayout());
-        final int southPanelHt = 160;
-        int ht = GENERAL_SLIDER_PROPS.length * 55 + southPanelHt;
+        final int southPanelHt = 150;
+        int ht = GENERAL_SLIDER_PROPS.length * 50 + southPanelHt;
         panel.setPreferredSize(new Dimension(300, ht));
         panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
@@ -126,9 +137,22 @@ class DynamicOptions extends JPanel
         bumpSliderGroup_ = new SliderGroup(BUMP_SLIDER_PROPS);
         bumpSliderGroup_.addSliderChangeListener(this);
 
-        JLabel title = new JLabel("Bump related Parameters");
+        JLabel title = new JLabel("Bump Parameters");
         panel.add(title, BorderLayout.NORTH);
         panel.add(bumpSliderGroup_, BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JPanel createBrushControls() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+
+        brushSliderGroup_ = new SliderGroup(BRUSH_SLIDER_PROPS);
+        brushSliderGroup_.addSliderChangeListener(this);
+
+        JLabel title = new JLabel("Brush Parameters (left: raise; right: lower)");
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(brushSliderGroup_, BorderLayout.CENTER);
         return panel;
     }
 
@@ -211,9 +235,6 @@ class DynamicOptions extends JPanel
             case EFFECT_FACTOR_SLIDER:
                 caveModel.setEffectFactor(value);
                 break;
-            case BRUSH_RADIUS_SLIDER:
-                simulator_.getInteractionHandler().setBrushRadius((int) value);
-                break;
 
             case BUMP_HEIGHT_SLIDER:
                 caveModel.setBumpHeight(value);
@@ -233,6 +254,13 @@ class DynamicOptions extends JPanel
             case SCALE_SLIDER:
                 caveModel.setScale(value);
                 simulator_.getInteractionHandler().setScale(value);
+                break;
+
+            case BRUSH_RADIUS_SLIDER:
+                simulator_.getInteractionHandler().setBrushRadius((int) value);
+                break;
+            case BRUSH_STRENGTH_SLIDER:
+                simulator_.getInteractionHandler().setBrushStrength(value);
                 break;
             default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);
         }

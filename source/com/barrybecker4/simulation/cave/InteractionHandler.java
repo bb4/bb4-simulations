@@ -15,8 +15,6 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    private static final double DEFAULT_IMPACT = 0.1;
-
     CaveModel cave_;
 
     /** amount of the effect */
@@ -24,6 +22,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
 
     private int currentX, currentY;
     private int brushRadius = (int) CaveModel.DEFAULT_BRUSH_RADIUS;
+    private double brushStrength = CaveModel.DEFAULT_BRUSH_STRENGTH;
     private int lastX, lastY;
     private boolean mouse1Down, mouse3Down;
 
@@ -42,6 +41,11 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     public void setBrushRadius(int rad) {
         brushRadius = rad;
     }
+
+    public void setBrushStrength(double strength) {
+        brushStrength = strength;
+    }
+
     /**
      * Lowers (or raises) cave walls when dragging.
      * Left mouse lowers; right mouse drag raises.
@@ -50,6 +54,12 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
 
         currentX = e.getX();
         currentY = e.getY();
+        doBrush();
+        lastX = currentX;
+        lastY = currentY;
+    }
+
+    private void doBrush() {
         int i = (int) (currentX / scale_);
         int j = (int) (currentY / scale_);
 
@@ -58,30 +68,29 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         int stopX = Math.min(cave_.getWidth(), i + brushRadius);
         int startY = Math.max(1, j - brushRadius);
         int stopY = Math.min(cave_.getHeight(), j + brushRadius);
+        // adjust by this so that there is not a discontinuity at the periphery
+        double minWt = 1.0 / brushRadius;
 
         for (int ii = startX; ii < stopX; ii++) {
              for (int jj=startY; jj<stopY; jj++) {
-                 double weight = getWeight(i, j, ii, jj);
+                 double weight = getWeight(i, j, ii, jj, minWt);
                  applyChange(ii, jj, weight);
              }
         }
-
-        lastX = currentX;
-        lastY = currentY;
         cave_.doRender();
     }
 
     /**
      * @return the weight is 1 / distance.
      */
-    private double getWeight(int i, int j, int ii, int jj) {
+    private double getWeight(int i, int j, int ii, int jj, double minWt) {
         double deltaX = (double)i - ii;
         double deltaY = (double)j - jj;
         double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        if (distance < 1.0) {
+        if (distance < 0.5) {
             distance = 1.0;
         }
-        return 0.9 / distance;
+        return 1.0 / distance - minWt ;
     }
 
     /**
@@ -100,8 +109,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
             // drag with no mouse click
         }
 
-        cave_.incrementHeight(i, j, sign * DEFAULT_IMPACT * weight);
+        cave_.incrementHeight(i, j, sign * brushStrength * weight);
     }
+
 
     public void mouseMoved(MouseEvent e) {
         currentX = e.getX();
@@ -113,7 +123,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     /**
      * The following methods implement MouseListener
      */
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+        doBrush();
+    }
 
     /**
      *Remember the mouse button that is pressed.

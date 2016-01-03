@@ -23,8 +23,11 @@ public class CaveModel {
     public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
     public static final double DEFAULT_LIGHT_SOURCE_AZYMUTH = Math.PI / 4.0;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
-        /** Radius for area of effect when doing manual modification with clikc/drag brush */
-    public static final int DEFAULT_BRUSH_RADIUS = 2;
+    /** Radius for area of effect when doing manual modification with clikc/drag brush */
+    public static final int DEFAULT_BRUSH_RADIUS = 7;
+
+    /** The amount of impact that the brush has. */
+    public static final double DEFAULT_BRUSH_STRENGTH = 0.5;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -38,6 +41,7 @@ public class CaveModel {
     private double effectFactor = DEFAULT_EFFECT_FACTOR;
     private double scale = DEFAULT_SCALE_FACTOR;
     private int brushRadius = DEFAULT_BRUSH_RADIUS;
+    private double brushStrength = DEFAULT_BRUSH_STRENGTH;
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
 
     private int numIterations = 0;
@@ -102,12 +106,19 @@ public class CaveModel {
     }
 
     public void setBrushRadius(int rad) {
-        //cave.setBrushRadius(rad);
         this.brushRadius = rad;
     }
 
     public double getBrushRadius() {
         return this.brushRadius;
+    }
+
+    public void setBrushStrength(int strength) {
+        this.brushStrength = strength;
+    }
+
+    public double getBrushStrength() {
+        return this.brushStrength;
     }
 
     public void setBumpHeight(double ht) {
