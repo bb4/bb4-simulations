@@ -59,7 +59,7 @@ public class CaveRenderer {
     /**
      * Draw the floor of the cave
      */
-    public void render(double bumpHeight, double specularPct, double lightDescensionAngle) {
+    public void render(double bumpHeight, double specularPct, double lightAzymuthAngle, double lightDescensionAngle) {
        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
         Range range = cave.getRange();
@@ -72,7 +72,7 @@ public class CaveRenderer {
                 double value = cave.getValue(i, j);
                 Color color = cmap.getColorForValue(value);
                 if (bumpHeight > 0) {
-                    Vector3d lightVector = computeSphericalCoordinateUnitVector(45, lightDescensionAngle);
+                    Vector3d lightVector = computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle);
                     color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector);
                 }
                 offlineGraphics_.setColor(color);

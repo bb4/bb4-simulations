@@ -18,13 +18,13 @@ public class CaveColorMap extends ColorMap {
     private static Color[] COLORS =  {
         Color.WHITE,
         //new Color(210, 235, 0),
-        new Color(150, 220, 0),
+        new Color(150, 200, 10),
         //new Color(90, 210, 5),
         //new Color(0, 200, 230),
-        new Color(50, 100, 230),
+        new Color(40, 150, 225),
         //new Color(110, 60, 200),
         //new Color(200, 120, 90),
-        new Color(120, 80, 0),
+        new Color(20, 0, 210),
         Color.BLACK
     };
 

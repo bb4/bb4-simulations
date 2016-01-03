@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
@@ -8,8 +8,10 @@ import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
 import com.barrybecker4.ui.sliders.SliderProperties;
+import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -34,23 +36,30 @@ class DynamicOptions extends JPanel
     private static final String BUMP_HEIGHT_SLIDER = "Height (for bumps)";
     private static final String SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)";
     private static final String LIGHT_SOURCE_ELEVATION_SLIDER = "Light source elevation angle (for bumps)";
+    private static final String LIGHT_SOURCE_AZYMUTH_SLIDER = "Light azymuthal angle (for bumps)";
     private static final String SCALE_SLIDER = "Scale";
     private static final double PI_D2 = Math.PI / 2.0;
+    private static final int PREFERRED_WIDTH = 300;
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup generalSliderGroup_;
+    private SliderGroup bumpSliderGroup_;
     private JCheckBox useContinuousIteration_;
     private CaveExplorer simulator_;
 
-    private static final SliderProperties[] SLIDER_PROPS = {
+    private static final SliderProperties[] GENERAL_SLIDER_PROPS = {
 
         new SliderProperties(FLOOR_SLIDER,   0,    1.0,    CaveProcessor.DEFAULT_FLOOR_THRESH, 100),
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
+        new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
+    };
+
+    private static final SliderProperties[] BUMP_SLIDER_PROPS = {
         new SliderProperties(BUMP_HEIGHT_SLIDER,  0.0,   10.0,  CaveModel.DEFAULT_BUMP_HEIGHT, 100),
         new SliderProperties(SPECULAR_PCT_SLIDER,  0.0,   1.0,  CaveModel.DEFAULT_SPECULAR_PCT, 100),
         new SliderProperties(LIGHT_SOURCE_ELEVATION_SLIDER, 0.0, Math.PI/2.0,  CaveModel.DEFAULT_LIGHT_SOURCE_ELEVATION, 100),
-        new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
+        new SliderProperties(LIGHT_SOURCE_AZYMUTH_SLIDER, 0.0, Math.PI,  CaveModel.DEFAULT_LIGHT_SOURCE_AZYMUTH, 100),
     };
 
     /**
@@ -61,24 +70,62 @@ class DynamicOptions extends JPanel
         simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(300, 300));
+        setPreferredSize(new Dimension(PREFERRED_WIDTH, 600));
 
         caveModel = algorithm;
 
-        sliderGroup_ = new SliderGroup(SLIDER_PROPS);
-        sliderGroup_.addSliderChangeListener(this);
+        JPanel generalPanel = createGeneralControls(algorithm.getColormap());
+        JPanel bumpPanel = createBumpControls();
 
-        ContinuousColorLegend legend = new ContinuousColorLegend(null, algorithm.getColormap(), true);
-
-        add(sliderGroup_);
-        add(createKernalDropdown());
-        add(createIncrementPanel());
-        add(createButtons());
-        add(legend);
+        add(generalPanel);
+        add(Box.createVerticalStrut(12));
+        add(bumpPanel);
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
         add(fill);
+    }
+
+    private JPanel createGeneralControls(ColorMap cmap) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setPreferredSize(new Dimension(300, 450));
+        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+
+        generalSliderGroup_ = new SliderGroup(GENERAL_SLIDER_PROPS);
+        generalSliderGroup_.addSliderChangeListener(this);
+
+        ContinuousColorLegend legend = new ContinuousColorLegend(null, cmap, true);
+
+        JLabel title = new JLabel("General Cave Parameters");
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(generalSliderGroup_, BorderLayout.CENTER);
+
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.setPreferredSize(new Dimension(PREFERRED_WIDTH, 160));
+        JPanel cp = new JPanel();
+
+        cp.add(createKernalDropdown());
+        cp.add(createIncrementPanel());
+        cp.add(createButtons());
+        southPanel.add(cp, BorderLayout.CENTER);
+        southPanel.add(legend, BorderLayout.SOUTH);
+
+        panel.add(southPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private JPanel createBumpControls() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+
+        bumpSliderGroup_ = new SliderGroup(BUMP_SLIDER_PROPS);
+        bumpSliderGroup_.addSliderChangeListener(this);
+
+        JLabel title = new JLabel("Bump related Parameters");
+        panel.add(title, BorderLayout.NORTH);
+        panel.add(bumpSliderGroup_, BorderLayout.CENTER);
+        return panel;
     }
 
     /**
@@ -139,7 +186,7 @@ class DynamicOptions extends JPanel
     }
 
     public void reset() {
-        sliderGroup_.reset();
+        generalSliderGroup_.reset();
     }
 
     /**
@@ -163,14 +210,17 @@ class DynamicOptions extends JPanel
             case BUMP_HEIGHT_SLIDER:
                 caveModel.setBumpHeight(value);
                 // specular highlight does not apply if no bumps
-                sliderGroup_.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
-                sliderGroup_.setEnabled(LIGHT_SOURCE_ELEVATION_SLIDER, value > 0);
+                bumpSliderGroup_.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
+                bumpSliderGroup_.setEnabled(LIGHT_SOURCE_ELEVATION_SLIDER, value > 0);
                 break;
             case SPECULAR_PCT_SLIDER:
                 caveModel.setSpecularPercent(value);
                 break;
             case LIGHT_SOURCE_ELEVATION_SLIDER:
                 caveModel.setLightSourceDescensionAngle(PI_D2 - value);
+                break;
+            case LIGHT_SOURCE_AZYMUTH_SLIDER:
+                caveModel.setLightSourceAzymuthAngle(value);
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);
@@ -200,7 +250,7 @@ class DynamicOptions extends JPanel
             nextButton.setEnabled(!useCont);
             if (!useCont) {
                 // do one last step in case the rendering was interrupted.
-                ThreadUtil.sleep(500);
+                ThreadUtil.sleep(100);
                 caveModel.requestNextStep();
             }
         }

@@ -21,6 +21,7 @@ public class CaveModel {
     public static final double DEFAULT_BUMP_HEIGHT = 0.0;
     public static final double DEFAULT_SPECULAR_PCT = 0.1;
     public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
+    public static final double DEFAULT_LIGHT_SOURCE_AZYMUTH = Math.PI / 4.0;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
 
     private static final int DEFAULT_WIDTH = 400;
@@ -40,6 +41,7 @@ public class CaveModel {
     private double bumpHeight = DEFAULT_BUMP_HEIGHT;
     private double specularPct = DEFAULT_SPECULAR_PCT;
     private double lightSourceDescensionAngle = DEFAULT_LIGHT_SOURCE_ELEVATION;
+    private double lightSourceAzymuthAngle = DEFAULT_LIGHT_SOURCE_AZYMUTH;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
@@ -113,6 +115,11 @@ public class CaveModel {
 
     public void setLightSourceDescensionAngle(double descensionAngle) {
         this.lightSourceDescensionAngle = descensionAngle;
+        doRender();
+    }
+
+    public void setLightSourceAzymuthAngle(double azymuthAngle) {
+        this.lightSourceAzymuthAngle = azymuthAngle;
         doRender();
     }
 
@@ -192,6 +199,6 @@ public class CaveModel {
     }
 
     public void doRender() {
-        renderer.render(bumpHeight, specularPct, lightSourceDescensionAngle);
+        renderer.render(bumpHeight, specularPct, lightSourceAzymuthAngle, lightSourceDescensionAngle);
     }
 }
