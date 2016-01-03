@@ -30,7 +30,7 @@ public class CaveProcessor implements HeightField {
     public static final double DEFAULT_EFFECT_FACTOR = 0.2;
 
     public enum KernelType {BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11, RADIAL13, RADIAL15}
-    public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.BASIC;
+    public static final KernelType DEFAULT_KERNEL_TYPE = KernelType.RADIAL9;
 
     private double lossFactor;
     private double effectFactor;

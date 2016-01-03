@@ -17,14 +17,14 @@ public class CaveColorMap extends ColorMap {
 
     private static Color[] COLORS =  {
         Color.WHITE,
-        new Color(210, 170, 155),
-        new Color(250, 100, 155),
-        new Color(190, 140, 255),
-        new Color(120, 120, 255),
-        new Color(100, 180, 230),
-        new Color(90, 170, 200),
-        new Color(70, 160, 100),
-        new Color(40, 130, 0),
+        //new Color(210, 235, 0),
+        new Color(150, 220, 0),
+        //new Color(90, 210, 5),
+        //new Color(0, 200, 230),
+        new Color(50, 100, 230),
+        //new Color(110, 60, 200),
+        //new Color(200, 120, 90),
+        new Color(120, 80, 0),
         Color.BLACK
     };
 

@@ -17,7 +17,7 @@ import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
  */
 public class CaveModel {
 
-    public static final int DEFAULT_SCALE_FACTOR = 5;
+    public static final int DEFAULT_SCALE_FACTOR = 2;
     public static final double DEFAULT_BUMP_HEIGHT = 0.0;
     public static final double DEFAULT_SPECULAR_PCT = 0.1;
     public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;

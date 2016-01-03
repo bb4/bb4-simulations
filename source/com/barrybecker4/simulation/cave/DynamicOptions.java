@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave;
 
+import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.cave.model.CaveModel;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
@@ -194,8 +195,14 @@ class DynamicOptions extends JPanel
             caveModel.requestRestart();
         }
         else if (e.getSource().equals(useContinuousIteration_)) {
-            caveModel.setDefaultUseContinuousIteration(useContinuousIteration_.isSelected());
-            nextButton.setEnabled(!useContinuousIteration_.isSelected());
+            boolean useCont = useContinuousIteration_.isSelected();
+            caveModel.setDefaultUseContinuousIteration(useCont);
+            nextButton.setEnabled(!useCont);
+            if (!useCont) {
+                // do one last step in case the rendering was interrupted.
+                ThreadUtil.sleep(500);
+                caveModel.requestNextStep();
+            }
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
