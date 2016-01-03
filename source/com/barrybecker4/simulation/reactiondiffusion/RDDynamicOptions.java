@@ -47,7 +47,7 @@ class RDDynamicOptions extends JPanel
         new SliderProperties(K_SLIDER,      0,           0.3,      GrayScottModel.K0,     1000),
         new SliderProperties(F_SLIDER,      0,           0.3,      GrayScottModel.F0,     1000),
         new SliderProperties(H_SLIDER,      0.008,      0.05,      GrayScottController.H0,     10000),
-        new SliderProperties(BH_SLIDER,     0,          30.0,     0.0,               10),
+        new SliderProperties(BH_SLIDER,     0,          20.0,     0.0,               10),
         new SliderProperties(SH_SLIDER,     0,          1.0,      0.0,               100),
         new SliderProperties(NS_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),
         new SliderProperties(TIMESTEP_SLIDER,   0.1,     2.0,     RDSimulator.INITIAL_TIME_STEP,    100),

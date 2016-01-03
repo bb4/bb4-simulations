@@ -27,7 +27,7 @@ public class BasicKernel extends AbstractKernel {
                     continue;
                 }
                 // In case the index we're looking at it off the edge of the map, or a filled neighbor
-                if (isOnEdge(neighborX, neighborY)) {
+                if (isOffEdge(neighborX, neighborY)) {
                     count += 1.0;
                 }
                 else {

@@ -51,13 +51,15 @@ public class BumpMapper {
                                    HeightField field, double htScale, double specPercent, Vector3d lightSourceDir) {
         double xdelta = 0;
         double ydelta = 0;
-        double centerValue = field.getValue(x, y);
-        if (x < field.getWidth() - 1) {
-            xdelta = field.getValue(x + 1, y) - centerValue;
-        }
-        if (y < field.getHeight() - 1) {
-            ydelta = field.getValue(x, y + 1) - centerValue;
-        }
+        //double centerValue = field.getValue(x, y);
+
+        double posXOffsetValue = field.getValue(Math.min(field.getWidth() - 1, x + 1), y);
+        double negXOffsetValue = field.getValue(Math.max(0, x - 1), y);
+        xdelta = posXOffsetValue - negXOffsetValue;
+
+        double posYOffsetValue = field.getValue(x, Math.min(field.getHeight() - 1, y + 1));
+        double negYOffsetValue = field.getValue(x, Math.max(0, y - 1));
+        ydelta = posYOffsetValue - negYOffsetValue;
 
         Vector3d xVec = new Vector3d(1.0, 0.0, htScale * xdelta);
         Vector3d yVec = new Vector3d(0.0, 1.0, htScale * ydelta);

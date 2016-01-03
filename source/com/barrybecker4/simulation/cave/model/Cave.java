@@ -44,14 +44,15 @@ public class Cave {
     public Cave createCopy() {
         Cave newCave = new Cave(getWidth(), getLength(), this.floorThresh, this.ceilThresh);
         for (int x = 0; x < getWidth(); x++) {
-            for (int y = 0; y < getLength(); y++) {
-                newCave.setValue(x, y, heightMap[x][y]);
-            }
+            System.arraycopy(heightMap[x], 0, newCave.heightMap[x], 0, getLength());
         }
         return newCave;
     }
 
     public double getValue(int x, int y) {
+        //if (x < 0 || y < 0 || x >= getWidth() || y >= getLength()) {
+        //    return ceilThresh;
+        //}
         return heightMap[x][y];
     }
 

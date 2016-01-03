@@ -2,8 +2,6 @@ package com.barrybecker4.simulation.cave.model.kernal;
 
 import com.barrybecker4.simulation.cave.model.Cave;
 
-import java.util.Arrays;
-
 /**
  * Looks only at all neighbors a distance of 2 away and weight them by 1/distance
  *
@@ -60,7 +58,7 @@ public class RadialKernel extends AbstractKernel {
                     // Do nothing, we don't want to add ourselves in!
                     continue;
                 }
-                 if (isOnEdge(neighborX, neighborY)) {
+                 if (isOffEdge(neighborX, neighborY)) {
                     count += distance;
                 }
                 else {
