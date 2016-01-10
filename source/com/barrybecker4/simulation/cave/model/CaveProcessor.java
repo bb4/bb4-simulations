@@ -19,7 +19,6 @@ public class CaveProcessor implements HeightField {
     public static final double DEFAULT_FLOOR_THRESH = .2;
     public static final double DEFAULT_CEIL_THRESH = .8;
 
-
     public static final int DEFAULT_HEIGHT = 32;
     public static final int DEFAULT_WIDTH = 32;
 

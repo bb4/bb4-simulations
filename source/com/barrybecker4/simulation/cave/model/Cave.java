@@ -50,9 +50,6 @@ public class Cave {
     }
 
     public double getValue(int x, int y) {
-        //if (x < 0 || y < 0 || x >= getWidth() || y >= getLength()) {
-        //    return ceilThresh;
-        //}
         return heightMap[x][y];
     }
 

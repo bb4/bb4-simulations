@@ -40,6 +40,7 @@ class DynamicOptions extends JPanel
     private static final String SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)";
     private static final String LIGHT_SOURCE_ELEVATION_SLIDER = "Light source elevation angle (for bumps)";
     private static final String LIGHT_SOURCE_AZYMUTH_SLIDER = "Light azymuthal angle (for bumps)";
+    private static final String NUM_STEPS_PER_FRAME_SLIDER = "Mum steps per frame";
     private static final String SCALE_SLIDER = "Scale";
     private static final double PI_D2 = Math.PI / 2.0;
     private static final int PREFERRED_WIDTH = 300;
@@ -58,6 +59,7 @@ class DynamicOptions extends JPanel
         new SliderProperties(CEILING_SLIDER,   0,    1.0,   CaveProcessor.DEFAULT_CEIL_THRESH, 100),
         new SliderProperties(LOSS_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_LOSS_FACTOR, 100),
         new SliderProperties(EFFECT_FACTOR_SLIDER,  0,   1.0,  CaveProcessor.DEFAULT_EFFECT_FACTOR, 100),
+        new SliderProperties(NUM_STEPS_PER_FRAME_SLIDER,   1,   20,  CaveModel.DEFAULT_NUM_STEPS_PER_FRAME),
         new SliderProperties(SCALE_SLIDER,           1,   20,  CaveModel.DEFAULT_SCALE_FACTOR),
     };
 
@@ -242,6 +244,9 @@ class DynamicOptions extends JPanel
                 break;
             case LIGHT_SOURCE_AZYMUTH_SLIDER:
                 caveModel.setLightSourceAzymuthAngle(value);
+                break;
+            case NUM_STEPS_PER_FRAME_SLIDER:
+                caveModel.setNumStepsPerFrame((int)value);
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);

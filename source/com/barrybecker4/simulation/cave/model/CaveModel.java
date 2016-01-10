@@ -23,6 +23,8 @@ public class CaveModel {
     public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
     public static final double DEFAULT_LIGHT_SOURCE_AZYMUTH = Math.PI / 4.0;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
+    public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
+
     /** Radius for area of effect when doing manual modification with clikc/drag brush */
     public static final int DEFAULT_BRUSH_RADIUS = 7;
 
@@ -43,6 +45,7 @@ public class CaveModel {
     private int brushRadius = DEFAULT_BRUSH_RADIUS;
     private double brushStrength = DEFAULT_BRUSH_STRENGTH;
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
+    private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
 
     private int numIterations = 0;
     private double bumpHeight = DEFAULT_BUMP_HEIGHT;
@@ -155,6 +158,10 @@ public class CaveModel {
         return this.scale;
     }
 
+    public void setNumStepsPerFrame(int steps) {
+        this.numStepsPerFrame = steps;
+    }
+
     public void incrementHeight(int x, int y, double amount) {
         cave.incrementHeight(x, y, amount);
     }
@@ -212,6 +219,7 @@ public class CaveModel {
             doRender();
         }
         else if (nextStepRequested || continuousIteration) {
+            for (int i = 0; i < numStepsPerFrame; i++)
             cave.nextPhase();
             numIterations++;
             doRender();
