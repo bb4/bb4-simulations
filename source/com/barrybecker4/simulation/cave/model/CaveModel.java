@@ -42,10 +42,9 @@ public class CaveModel {
     private double lossFactor = DEFAULT_LOSS_FACTOR;
     private double effectFactor = DEFAULT_EFFECT_FACTOR;
     private double scale = DEFAULT_SCALE_FACTOR;
-    private int brushRadius = DEFAULT_BRUSH_RADIUS;
-    private double brushStrength = DEFAULT_BRUSH_STRENGTH;
     private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
     private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
+    private boolean useParallel = DEFAULT_USE_PARALLEL;
 
     private int numIterations = 0;
     private double bumpHeight = DEFAULT_BUMP_HEIGHT;
@@ -74,7 +73,7 @@ public class CaveModel {
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
         CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight,
-                floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
+                floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
         renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
     }
 
@@ -106,22 +105,6 @@ public class CaveModel {
     public void setEffectFactor(double effectFactor) {
         cave.setEffectFactor(effectFactor);
         this.effectFactor = effectFactor;
-    }
-
-    public void setBrushRadius(int rad) {
-        this.brushRadius = rad;
-    }
-
-    public double getBrushRadius() {
-        return this.brushRadius;
-    }
-
-    public void setBrushStrength(int strength) {
-        this.brushStrength = strength;
-    }
-
-    public double getBrushStrength() {
-        return this.brushStrength;
     }
 
     public void setBumpHeight(double ht) {
@@ -162,6 +145,11 @@ public class CaveModel {
         this.numStepsPerFrame = steps;
     }
 
+    public void setUseParallelComputation(boolean use) {
+        useParallel = use;
+        cave.setUseParallel(use);
+    }
+
     public void incrementHeight(int x, int y, double amount) {
         cave.incrementHeight(x, y, amount);
     }
@@ -192,7 +180,7 @@ public class CaveModel {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
             cave = new CaveProcessor(caveWidth, caveHeight,
-                    floorThresh, ceilThresh, lossFactor, effectFactor, kernalType);
+                    floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
             numIterations = 0;
             renderer = new CaveRenderer(width, height, cave, cmap);
             restartRequested = true;

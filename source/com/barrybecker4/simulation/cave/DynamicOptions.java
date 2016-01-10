@@ -51,6 +51,7 @@ class DynamicOptions extends JPanel
     private SliderGroup brushSliderGroup_;
 
     private JCheckBox useContinuousIteration_;
+    private JCheckBox useParallelComputation_;
     private CaveExplorer simulator_;
 
     private static final SliderProperties[] GENERAL_SLIDER_PROPS = {
@@ -84,7 +85,7 @@ class DynamicOptions extends JPanel
         simulator_ = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
-        //setPreferredSize(new Dimension(PREFERRED_WIDTH, 900));
+        setPreferredSize(new Dimension(PREFERRED_WIDTH, 900));
 
         caveModel = algorithm;
 
@@ -176,7 +177,7 @@ class DynamicOptions extends JPanel
      * @return a dropdown/down component.
      */
     private JPanel createIncrementPanel() {
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new BorderLayout());
 
         JLabel label = new JLabel("Continuous iteration: ");
         useContinuousIteration_ = new JCheckBox();
@@ -187,10 +188,28 @@ class DynamicOptions extends JPanel
         nextButton.addActionListener(this);
         nextButton.setEnabled(!useContinuousIteration_.isSelected());
 
+        panel.add(label, BorderLayout.WEST);
+        panel.add(useContinuousIteration_, BorderLayout.CENTER);
+        panel.add(nextButton, BorderLayout.EAST);
+        panel.add(createCheckboxPanel(), BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    /**
+     * @return checkbox options.
+     */
+    private JPanel createCheckboxPanel() {
+        JPanel panel = new JPanel();
+
+        JLabel label = new JLabel("Parallel computation: ");
+        useParallelComputation_ = new JCheckBox();
+        useParallelComputation_.setSelected(CaveProcessor.DEFAULT_USE_PARALLEL);
+        useParallelComputation_.addActionListener(this);
+
         panel.add(label);
-        panel.add(useContinuousIteration_);
+        panel.add(useParallelComputation_);
         panel.add(Box.createHorizontalGlue());
-        panel.add(nextButton);
 
         return panel;
     }
@@ -286,6 +305,9 @@ class DynamicOptions extends JPanel
                 ThreadUtil.sleep(100);
                 caveModel.requestNextStep();
             }
+        }
+        else if (e.getSource().equals((useParallelComputation_))) {
+            caveModel.setUseParallelComputation(useParallelComputation_.isSelected());
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
