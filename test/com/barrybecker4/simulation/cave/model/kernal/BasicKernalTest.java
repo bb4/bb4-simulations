@@ -33,9 +33,9 @@ public class BasicKernalTest {
 
         kernel = new BasicKernel(cave);
 
-        assertEquals("count for 0,0", 7.0, kernel.countNeighbors(0, 0), EPS);
-        assertEquals("count for 1,0", 6.0, kernel.countNeighbors(1, 0), EPS);
-        assertEquals("count for 1,1", 5.0, kernel.countNeighbors(1, 1), EPS);
-        assertEquals("count for 4,3", 3.0, kernel.countNeighbors(4, 3), EPS);
+        assertEquals("count for 0,0", 0.7606486480925898, kernel.countNeighbors(0, 0), EPS);    // 7.0
+        assertEquals("count for 1,0", 0.7520196215146719, kernel.countNeighbors(1, 0), EPS);    // 6.0
+        assertEquals("count for 1,1", 0.5960481515908456, kernel.countNeighbors(1, 1), EPS);    // 5.0
+        assertEquals("count for 4,3", 0.796974165870401, kernel.countNeighbors(4, 3), EPS);
     }
 }
