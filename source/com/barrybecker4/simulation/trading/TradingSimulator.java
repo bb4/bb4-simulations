@@ -90,8 +90,8 @@ public class TradingSimulator extends Simulator {
     }
 
     private void update() {
-        stockChartPanel.clear();
-        investmentPanel.clear();
+        stockChartPanel.clear(graphingOpts.numRecentSeries);
+        investmentPanel.clear(graphingOpts.numRecentSeries);
         profitPanel.setOptions(tradingOpts.theoreticalMaxGain, graphingOpts);
     }
 

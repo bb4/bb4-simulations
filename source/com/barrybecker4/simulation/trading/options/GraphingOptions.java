@@ -11,8 +11,14 @@ public class GraphingOptions {
 
     private static final int DEFAULT_X_RESOLUTION = 2;
     private static final boolean DEFAULT_USE_LOG_SCALE = false;
+    private static final int DEFAULT_NUM_RECENT_SERIES = 100;
 
-    public int xResolution = DEFAULT_X_RESOLUTION;
-    public boolean useLogScale = DEFAULT_USE_LOG_SCALE;
+    public int histogramXResolution = DEFAULT_X_RESOLUTION;
+    public boolean histogramUseLogScale = DEFAULT_USE_LOG_SCALE;
+
+    /** for stock and investment line charts, this shows some number of recent series */
+    public int numRecentSeries = DEFAULT_NUM_RECENT_SERIES;
+
+
 
 }

@@ -28,12 +28,12 @@ public class ProfitHistogramPanel extends JPanel {
 
 
     public void setOptions(double maxGain, GraphingOptions graphingOpts)  {
-        double xScale = Math.pow(10, Math.max(0, Math.log10(maxGain) - graphingOpts.xResolution));
-        double xLogScale = 3 * graphingOpts.xResolution * graphingOpts.xResolution;
+        double xScale = Math.pow(10, Math.max(0, Math.log10(maxGain) - graphingOpts.histogramXResolution));
+        double xLogScale = 3 * graphingOpts.histogramXResolution * graphingOpts.histogramXResolution;
         int maxX = (int) (maxGain / xScale);
 
         // go from domain to bin index
-        InvertibleFunction xFunction = graphingOpts.useLogScale ?
+        InvertibleFunction xFunction = graphingOpts.histogramUseLogScale ?
                 new LogFunction(xLogScale, 10.0, false) :
                 new LinearFunction(1/(1.5 * xScale), maxX / 4.0);
 

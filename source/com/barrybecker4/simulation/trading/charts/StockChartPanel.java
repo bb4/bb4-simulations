@@ -39,8 +39,8 @@ public class StockChartPanel extends JPanel {
         stockChart.setFunctions(stockSeries);
     }
 
-    public void clear() {
-        stockSeries.clear();
+    public void clear(int numRecentSeries) {
+        stockSeries.clear(numRecentSeries);
     }
 
     public void paint(Graphics g) {
