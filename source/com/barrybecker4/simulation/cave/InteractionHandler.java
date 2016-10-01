@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.ui;
+package com.barrybecker4.simulation.cave;
 
-import com.barrybecker4.simulation.fluid.model.Grid;
+import com.barrybecker4.simulation.cave.model.CaveModel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -9,91 +9,109 @@ import java.awt.event.MouseMotionListener;
 
 /**
  * Handle mouse interactions - converting them in to physical manifestations.
+ * Using this handler, you can lower the gave walls.
  *
  * @author Barry Becker
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    public static final double DEFAULT_FORCE = 3.0f;
-    public static final double DEFAULT_SOURCE_DENSITY = 1.0f;
+    CaveModel cave_;
 
-    private double force_ = DEFAULT_FORCE;
-    private double sourceDensity_ = DEFAULT_SOURCE_DENSITY;
-
-    Grid grid_;
-
+    /** amount of the effect */
     double scale_;
 
     private int currentX, currentY;
+    private int brushRadius = (int) CaveModel.DEFAULT_BRUSH_RADIUS;
+    private double brushStrength = CaveModel.DEFAULT_BRUSH_STRENGTH;
     private int lastX, lastY;
     private boolean mouse1Down, mouse3Down;
 
     /**
      * Constructor
      */
-    public InteractionHandler(Grid grid,  double scale) {
+    public InteractionHandler(CaveModel cave, double scale) {
+        cave_ = cave;
         scale_ = scale;
-        grid_ = grid;
     }
 
-    public void setForce(double force) {
-        force_ = force;
+    public void setScale(double scale) {
+        scale_ = scale;
     }
 
-    public void setSourceDensity(double sourceDensity) {
-        sourceDensity_ = sourceDensity;
+    public void setBrushRadius(int rad) {
+        brushRadius = rad;
     }
 
+    public void setBrushStrength(double strength) {
+        brushStrength = strength;
+    }
 
     /**
-     * Make waves or adds ink when dragging depending on the mouse key held down.
+     * Lowers (or raises) cave walls when dragging.
+     * Left mouse lowers; right mouse drag raises.
      */
     public void mouseDragged(MouseEvent e) {
 
         currentX = e.getX();
         currentY = e.getY();
-        int i = (int) (currentX / scale_);
-        int j = (int) (currentY / scale_);
-
-        // apply the change to a convolution kernel area
-        int startX = Math.max(1, i - 1);
-        int stopX = Math.min(grid_.getWidth(), i + 1);
-        int startY = Math.max(1, j - 1);
-        int stopY = Math.min(grid_.getHeight(), j + 1);
-
-
-        for (int ii=startX; ii<stopX; ii++) {
-             for (int jj=startY; jj<stopY; jj++) {
-                 double weight = (ii == i && jj == j)? 1.0f : 0.3f;
-                 applyChange(ii, jj, weight);
-             }
-        }
-
+        doBrush();
         lastX = currentX;
         lastY = currentY;
     }
 
+    private void doBrush() {
+        int i = (int) (currentX / scale_);
+        int j = (int) (currentY / scale_);
+
+        // apply the change to a convolution kernel area
+        int startX = Math.max(1, i - brushRadius);
+        int stopX = Math.min(cave_.getWidth(), i + brushRadius);
+        int startY = Math.max(1, j - brushRadius);
+        int stopY = Math.min(cave_.getHeight(), j + brushRadius);
+        // adjust by this so that there is not a discontinuity at the periphery
+        double minWt = 0.9 / brushRadius;
+
+        for (int ii = startX; ii < stopX; ii++) {
+             for (int jj=startY; jj<stopY; jj++) {
+                 double weight = getWeight(i, j, ii, jj, minWt);
+                 applyChange(ii, jj, weight);
+             }
+        }
+        cave_.doRender();
+    }
+
+    /**
+     * @return the weight is 1 / distance.
+     */
+    private double getWeight(int i, int j, int ii, int jj, double minWt) {
+        double deltaX = (double)i - ii;
+        double deltaY = (double)j - jj;
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance < 0.5) {
+            distance = 1.0;
+        }
+        return 1.0 / distance - minWt ;
+    }
 
     /**
      * Make waves or adds ink depending on which mouse key is being held down.
      */
     private void applyChange(int i, int j, double weight) {
 
+        double sign = 1;
         // if the left mouse is down, make waves
         if (mouse1Down) {
-            double fu = (weight * force_ * (currentX - lastX) / scale_);
-            double fv = (weight *force_ * (currentY - lastY) / scale_);
-            grid_.incrementU(i, j, fu);
-            grid_.incrementV(i, j, fv);
         }
         else if (mouse3Down) {
-            // if the right mouse is down, add ink (density)
-            grid_.incrementDensity(i, j, weight * sourceDensity_);
+            sign = -1;
         }
         else {
-            System.out.println("dragged with no button down");
+            // drag with no mouse click
         }
+
+        cave_.incrementHeight(i, j, sign * brushStrength * weight);
     }
+
 
     public void mouseMoved(MouseEvent e) {
         currentX = e.getX();
@@ -105,7 +123,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     /**
      * The following methods implement MouseListener
      */
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+        doBrush();
+    }
 
     /**
      *Remember the mouse button that is pressed.

@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import java.awt.image.BufferedImage;
 
 /**
- *
  * @author Barry Becker
  */
 public class LSystemModel {

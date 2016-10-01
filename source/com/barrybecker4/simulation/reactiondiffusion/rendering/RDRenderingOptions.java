@@ -21,22 +21,8 @@ public class RDRenderingOptions {
     /** Specular highlight degree. */
     private double specularConst_ = 0;
 
-
-    /** the bigger this is the smaller the specular highlight will be. */
-    public static final Vector3d LIGHT_SOURCE_DIR = new Vector3d(1.0, 1.0, 1.0);
-    private static final double SPECULAR_HIGHLIGHT_EXP = 4.0;
-    private static final Vector3d HALF_ANGLE;
-
     /** Manages the worker threads. */
     private RunnableParallelizer parallelizer_;
-
-
-    static {
-        LIGHT_SOURCE_DIR.normalize();
-        HALF_ANGLE = new Vector3d(0, 0, 1);
-        HALF_ANGLE.add(LIGHT_SOURCE_DIR);
-        HALF_ANGLE.normalize();
-    }
 
 
     /**
@@ -73,12 +59,8 @@ public class RDRenderingOptions {
         specularConst_ = s;
     }
 
-    public double getSpecularExponent(Vector3d surfaceNormal) {
-        double specular = 0;
-        if (specularConst_ > 0)  {
-           specular = specularConst_ * Math.pow(Math.abs(surfaceNormal.dot(HALF_ANGLE)), SPECULAR_HIGHLIGHT_EXP);
-        }
-        return specular;
+    public double getSpecular() {
+        return specularConst_;
     }
 
     public boolean isShowingU() {

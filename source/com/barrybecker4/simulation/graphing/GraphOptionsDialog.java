@@ -17,10 +17,10 @@ import java.awt.*;
 public class GraphOptionsDialog extends SimulatorOptionsDialog {
 
     /** type of interpolation to use.   */
-    private JComboBox functionCombo_;
+    private JComboBox<FunctionType> functionCombo_;
 
     /** type of interpolation to use.   */
-    private JComboBox interpolationTypeCombo_;
+    private JComboBox<InterpolationMethod> interpolationTypeCombo_;
 
 
     /**
@@ -42,11 +42,11 @@ public class GraphOptionsDialog extends SimulatorOptionsDialog {
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout( new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
-        ComboBoxModel model = new DefaultComboBoxModel(FunctionType.values());
-        functionCombo_ = new JComboBox(model);
+        ComboBoxModel<FunctionType> model = new DefaultComboBoxModel<>(FunctionType.values());
+        functionCombo_ = new JComboBox<>(model);
         innerPanel.add(functionCombo_);
 
-        interpolationTypeCombo_ = new JComboBox(InterpolationMethod.values());
+        interpolationTypeCombo_ = new JComboBox<>(InterpolationMethod.values());
         innerPanel.add(interpolationTypeCombo_);
         interpolationTypeCombo_.setSelectedIndex(1);
 

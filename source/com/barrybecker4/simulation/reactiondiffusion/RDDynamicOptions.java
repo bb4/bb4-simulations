@@ -47,7 +47,7 @@ class RDDynamicOptions extends JPanel
         new SliderProperties(K_SLIDER,      0,           0.3,      GrayScottModel.K0,     1000),
         new SliderProperties(F_SLIDER,      0,           0.3,      GrayScottModel.F0,     1000),
         new SliderProperties(H_SLIDER,      0.008,      0.05,      GrayScottController.H0,     10000),
-        new SliderProperties(BH_SLIDER,     0,          30.0,     0.0,               10),
+        new SliderProperties(BH_SLIDER,     0,          20.0,     0.0,               10),
         new SliderProperties(SH_SLIDER,     0,          1.0,      0.0,               100),
         new SliderProperties(NS_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),
         new SliderProperties(TIMESTEP_SLIDER,   0.1,     2.0,     RDSimulator.INITIAL_TIME_STEP,    100),
@@ -161,27 +161,29 @@ class RDDynamicOptions extends JPanel
      * One of the sliders was moved.
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
-        if (sliderName.equals(F_SLIDER)) {
-            gs_.getModel().setF(value);
-        }
-        else if (sliderName.equals(K_SLIDER)) {
-            gs_.getModel().setK(value);
-        }
-        else if (sliderName.equals(H_SLIDER)) {
-            gs_.setH(value);
-        }
-        else if (sliderName.equals(BH_SLIDER)) {
-            simulator_.getRenderingOptions().setHeightScale(value);
-            sliderGroup_.setEnabled(SH_SLIDER, value > 0);
-        }
-        else if (sliderName.equals(SH_SLIDER)) {
-            simulator_.getRenderingOptions().setSpecular(value);
-        }
-        else if (sliderName.equals(NS_SLIDER)) {
-            simulator_.setNumStepsPerFrame((int) value);
-        }
-        else if (sliderName.equals(TIMESTEP_SLIDER)) {
-            simulator_.setTimeStep(value);
+        switch (sliderName) {
+            case F_SLIDER:
+                gs_.getModel().setF(value);
+                break;
+            case K_SLIDER:
+                gs_.getModel().setK(value);
+                break;
+            case H_SLIDER:
+                gs_.setH(value);
+                break;
+            case BH_SLIDER:
+                simulator_.getRenderingOptions().setHeightScale(value);
+                sliderGroup_.setEnabled(SH_SLIDER, value > 0);
+                break;
+            case SH_SLIDER:
+                simulator_.getRenderingOptions().setSpecular(value);
+                break;
+            case NS_SLIDER:
+                simulator_.setNumStepsPerFrame((int) value);
+                break;
+            case TIMESTEP_SLIDER:
+                simulator_.setTimeStep(value);
+                break;
         }
     }
 

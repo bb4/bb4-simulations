@@ -3,14 +3,17 @@ package com.barrybecker4.simulation.liquid.compute;
 
 import com.barrybecker4.simulation.liquid.model.*;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
  * @author Barry Becker
  */
-public class VelocityInterpolatorTest extends TestCase {
+public class VelocityInterpolatorTest  {
 
     private static final int DIM = 6;
 
@@ -22,24 +25,28 @@ public class VelocityInterpolatorTest extends TestCase {
     private VelocityInterpolator interpolator;
 
     /*
+    @Test
     public void testUniformEastFlowInterpolation() {
 
         Vector2d velocity = new Vector2d(1.0, 0.0);
         verifyUniformField(velocity);
     }
 
+    @Test
     public void testUniformNorthFlowInterpolation() {
 
         Vector2d velocity = new Vector2d(0.0, 1.0);
         verifyUniformField(velocity);
     }
 
+    @Test
     public void testUniformSouthFlowInterpolation() {
 
         Vector2d velocity = new Vector2d(0.0, -1.0);
         verifyUniformField(velocity);
     }
 
+    @Test
     public void testUniformNorthEastFlowInterpolation() {
 
         Vector2d velocity = new Vector2d(1.0, 1.0);
@@ -63,7 +70,7 @@ public class VelocityInterpolatorTest extends TestCase {
         }
     }
 
-
+    @Test
     public void testInterpolateVelocities() {
         CellBlock cb = new CellBlock();
         Particle particle;
@@ -71,7 +78,7 @@ public class VelocityInterpolatorTest extends TestCase {
         cb.setAllCellParticles(5);
 
         Cell cell = cb.get(0,0);
-        particle = new Particle(1.1, 1.1, cell);
+        //particle = new Particle(1.1, 1.1, cell);
         //verifyParticleVelocity(particle, cb,  new Vector2d(0.0, 0.0));
 
         cb.get(-1, 1).initializeVelocity(1.0, 0.0);  // upper left
