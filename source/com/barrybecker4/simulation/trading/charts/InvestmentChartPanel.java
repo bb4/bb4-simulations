@@ -33,9 +33,9 @@ public class InvestmentChartPanel extends JPanel {
      */
     private static final int LABEL_WIDTH = 70;
 
-    private StockSeries series = new StockSeries(200);
+    private StockSeries series = new StockSeries(20);
 
-    MultipleFunctionRenderer investmentChart;
+    private MultipleFunctionRenderer investmentChart;
 
 
     public InvestmentChartPanel() {

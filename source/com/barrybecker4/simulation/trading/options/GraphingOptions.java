@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.trading.options;
 
 /**
- * Defaults for stock time series generation.
- * A single stock or a collection of stocks can be simulated.
+ * Defaults for graphing options.
+ * There are 3 graphs: stock market, investment, and profit histogram.
  *
  * @author Barry Becker
  */
