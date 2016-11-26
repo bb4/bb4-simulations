@@ -1,21 +1,21 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave.model;
+package com.barrybecker4.simulation.conway.model;
 
-import com.barrybecker4.simulation.cave.rendering.CaveColorMap;
-import com.barrybecker4.simulation.cave.rendering.CaveRenderer;
 import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.simulation.conway.rendering.ConwayColorMap;
+import com.barrybecker4.simulation.conway.rendering.ConwayRenderer;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
+import static com.barrybecker4.simulation.conway.model.ConwayProcessor.*;
 
 /**
  * Communicates changing dynamic options to ConwayProcessor and controls the rendering of the cave.
  * @author Barry Becker
  */
-public class CaveModel {
+public class ConwayModel {
 
     public static final int DEFAULT_SCALE_FACTOR = 2;
     public static final double DEFAULT_BUMP_HEIGHT = 0.0;
@@ -34,15 +34,15 @@ public class CaveModel {
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
 
-    private CaveProcessor cave;
-    private CaveRenderer renderer;
+    private ConwayProcessor cave;
+    private ConwayRenderer renderer;
 
     private double floorThresh = DEFAULT_FLOOR_THRESH;
     private double ceilThresh = DEFAULT_CEIL_THRESH;
     private double lossFactor = DEFAULT_LOSS_FACTOR;
     private double effectFactor = DEFAULT_EFFECT_FACTOR;
     private double scale = DEFAULT_SCALE_FACTOR;
-    private CaveProcessor.KernelType kernalType = CaveProcessor.DEFAULT_KERNEL_TYPE;
+    private KernelType kernalType = ConwayProcessor.DEFAULT_KERNEL_TYPE;
     private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
     private boolean useParallel = DEFAULT_USE_PARALLEL;
 
@@ -54,10 +54,10 @@ public class CaveModel {
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
-    private ColorMap cmap = new CaveColorMap();
+    private ColorMap cmap = new ConwayColorMap();
 
 
-    public CaveModel() {
+    public ConwayModel() {
         reset();
     }
 
@@ -72,9 +72,9 @@ public class CaveModel {
         ceilThresh = DEFAULT_CEIL_THRESH;
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
-        CaveProcessor cave = new CaveProcessor(caveWidth, caveHeight,
+        ConwayProcessor cave = new ConwayProcessor(caveWidth, caveHeight,
                 floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
-        renderer = new CaveRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
+        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
     }
 
     public int getWidth() {
@@ -166,7 +166,7 @@ public class CaveModel {
         nextStepRequested = true;
     }
 
-    public void setKernelType(CaveProcessor.KernelType type) {
+    public void setKernelType(KernelType type) {
         cave.setKernelType(type);
         this.kernalType = type;
     }
@@ -179,10 +179,10 @@ public class CaveModel {
         try {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
-            cave = new CaveProcessor(caveWidth, caveHeight,
+            cave = new ConwayProcessor(caveWidth, caveHeight,
                     floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
             numIterations = 0;
-            renderer = new CaveRenderer(width, height, cave, cmap);
+            renderer = new ConwayRenderer(width, height, cave, cmap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

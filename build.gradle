@@ -89,6 +89,12 @@ task runCaveExplorer(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runConwayExplorer(type: JavaExec) {
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["com.barrybecker4.simulation.conway.ConwayExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runLiquid(type: JavaExec) {
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.liquid.LiquidSimulator"]

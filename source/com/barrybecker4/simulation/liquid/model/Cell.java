@@ -11,7 +11,7 @@ import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PR
  *               |
  *          _____________
  *         |            |
- *    <--  |      p     |  --> uip_[cur_]   (positive u dir)
+ *    &lt;--  |      p     |  --&gt; uip_[cur_]   (positive u dir)
  *         |            |
  *          ------------
  *               |
