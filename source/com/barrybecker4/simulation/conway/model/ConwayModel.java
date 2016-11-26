@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import static com.barrybecker4.simulation.conway.model.ConwayProcessor.*;
 
 /**
- * Communicates changing dynamic options to ConwayProcessor and controls the rendering of the cave.
+ * Communicates changing dynamic options to ConwayProcessor and controls the rendering.
  * @author Barry Becker
  */
 public class ConwayModel {
@@ -24,13 +24,9 @@ public class ConwayModel {
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
 
-    private ConwayProcessor cave;
+    private ConwayProcessor processor;
     private ConwayRenderer renderer;
 
-    private double floorThresh = DEFAULT_FLOOR_THRESH;
-    private double ceilThresh = DEFAULT_CEIL_THRESH;
-    private double lossFactor = DEFAULT_LOSS_FACTOR;
-    private double effectFactor = DEFAULT_EFFECT_FACTOR;
     private double scale = DEFAULT_SCALE_FACTOR;
     private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
     private boolean useParallel = DEFAULT_USE_PARALLEL;
@@ -53,35 +49,21 @@ public class ConwayModel {
     }
 
     public void reset() {
-        floorThresh = DEFAULT_FLOOR_THRESH;
-        ceilThresh = DEFAULT_CEIL_THRESH;
-        int caveWidth = (int)(DEFAULT_WIDTH / scale);
-        int caveHeight = (int)(DEFAULT_HEIGHT / scale);
-        ConwayProcessor cave = new ConwayProcessor(caveWidth, caveHeight,
-                floorThresh, ceilThresh, lossFactor, effectFactor, useParallel);
+        ConwayProcessor cave = new ConwayProcessor(useParallel);
         renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
     }
 
     public int getWidth() {
-        return cave.getWidth();
+        return renderer.getWidth();
     }
-
     public int getHeight() {
-        return cave.getHeight();
+        return renderer.getHeight();
     }
-
-    public void setFloorThresh(double floor) {
-        cave.setFloorThresh(floor);
-        this.floorThresh = floor;
-        doRender();
-    }
-
 
     public void setDefaultUseContinuousIteration(boolean continuous) {
         this.continuousIteration = continuous;
         doRender();
     }
-
 
     public void setScale(double scale) {
         this.scale = scale;
@@ -98,11 +80,7 @@ public class ConwayModel {
 
     public void setUseParallelComputation(boolean use) {
         useParallel = use;
-        cave.setUseParallel(use);
-    }
-
-    public void incrementHeight(int x, int y, double amount) {
-        cave.incrementHeight(x, y, amount);
+        processor.setUseParallel(use);
     }
 
     public ColorMap getColormap() {
@@ -118,18 +96,19 @@ public class ConwayModel {
     }
 
 
+    public void setAlive(int i, int j) {
+        processor.setAlive(i, j);
+    }
+
     public int getNumIterations() {
         return numIterations;
     }
 
     private void requestRestart(int width, int height) {
         try {
-            int caveWidth = (int)(width / scale);
-            int caveHeight = (int)(height / scale);
-            cave = new ConwayProcessor(caveWidth, caveHeight,
-                    floorThresh, ceilThresh, lossFactor, effectFactor, useParallel);
+            processor = new ConwayProcessor(useParallel);
             numIterations = 0;
-            renderer = new ConwayRenderer(width, height, cave, cmap);
+            renderer = new ConwayRenderer(width, height, processor, cmap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -155,7 +134,7 @@ public class ConwayModel {
         }
         else if (nextStepRequested || continuousIteration) {
             for (int i = 0; i < numStepsPerFrame; i++)
-            cave.nextPhase();
+            processor.nextPhase();
             numIterations++;
             doRender();
             nextStepRequested = false;

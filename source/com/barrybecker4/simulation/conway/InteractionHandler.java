@@ -15,7 +15,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    ConwayModel cave_;
+    ConwayModel model;
 
     /** amount of the effect */
     double scale_;
@@ -28,7 +28,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
      * Constructor
      */
     public InteractionHandler(ConwayModel cave, double scale) {
-        cave_ = cave;
+        model = cave;
         scale_ = scale;
     }
 
@@ -53,9 +53,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
 
         // apply the change to a convolution kernel area
         int startX = Math.max(1, i - brushRadius);
-        int stopX = Math.min(cave_.getWidth(), i + brushRadius);
+        int stopX = Math.min(model.getWidth(), i + brushRadius);
         int startY = Math.max(1, j - brushRadius);
-        int stopY = Math.min(cave_.getHeight(), j + brushRadius);
+        int stopY = Math.min(model.getHeight(), j + brushRadius);
         // adjust by this so that there is not a discontinuity at the periphery
         double minWt = 0.9 / brushRadius;
 
@@ -65,7 +65,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
                  applyChange(ii, jj, weight);
              }
         }
-        cave_.doRender();
+        model.doRender();
     }
 
     /**
@@ -94,7 +94,8 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
             sign = -1;
         }
 
-        cave_.incrementHeight(i, j, sign * weight);
+        model.setAlive(i, j);
+        //model.incrementHeight(i, j, sign * weight);
     }
 
 

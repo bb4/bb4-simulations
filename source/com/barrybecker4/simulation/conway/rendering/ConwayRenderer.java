@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.rendering;
 
+import com.barrybecker4.common.geometry.Location;
 import com.barrybecker4.simulation.conway.model.ConwayProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;
@@ -48,22 +49,14 @@ public class ConwayRenderer {
         return offlineGraphics_.getOfflineImage();
     }
 
-    /**
-     * Draw the floor of the processor
-     */
+    /** render the live cels on the grid */
     public void render() {
-       double cellWidth = Math.max(1, (int)(width / processor.getWidth()));
-        double cellHeight = Math.max(1, (int)(height / processor.getHeight()));
 
-        for (int i = 0; i < processor.getWidth(); i++)  {
-            for (int j = 0; j < processor.getHeight(); j++) {
-                int xpos = (int) (i * cellWidth);
-                int ypos = (int) (j * cellHeight);
-                double value = processor.getValue(i, j);
-                Color color = cmap.getColorForValue(value);
-                offlineGraphics_.setColor(color);
-                offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
-            }
+        for (Location c : processor.getPoints())  {
+            int value = processor.getValue(c);
+            Color color = cmap.getColorForValue(value);
+            offlineGraphics_.setColor(color);
+            offlineGraphics_.fillRect(c.getX(), c.getY(), 1, 1);
         }
     }
 }

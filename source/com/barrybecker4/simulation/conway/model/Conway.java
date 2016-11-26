@@ -1,91 +1,87 @@
 package com.barrybecker4.simulation.conway.model;
 
-import com.barrybecker4.common.math.Range;
 
-import java.util.Random;
+import com.barrybecker4.common.geometry.IntLocation;
+import com.barrybecker4.common.geometry.Location;
+
+import java.util.*;
 
 /**
+ * The data for points in the conway life simulation
  * @author Barry Becker
  */
 public class Conway {
 
-    private static final int SEED = 0;
-    private static final Random RAND = new Random();
+    /** Since its on an infinite grid. Only store the grid locations where there his life. */
+    private Map<Location, Integer> points;
 
-    /** a value representing the height. MAX_HEIGHT is wall, MIN_HEIGHT is floor  */
-    private double[][] heightMap;
-    private double floorThresh = 0.2;
-    private double ceilThresh = 0.9;
+    private static final List<Location> NBR_OFFSETS = Arrays.asList(new Location[] {
+            new IntLocation(-1, -1), new IntLocation(-1, 0), new IntLocation(-1, -1),
+            new IntLocation(0, -1), new IntLocation(0, 1),
+            new IntLocation(1, -1), new IntLocation(1, 0), new IntLocation(1, 1)
+    });
 
-    public Conway(int width, int length, double floorThresh, double ceilThresh) {
-        this.floorThresh = floorThresh;
-        this.ceilThresh = ceilThresh;
-        heightMap = genMap(width, length);
+    public Conway() {
+        points = new HashMap<>();
     }
 
-    public int getWidth() {
-        return heightMap.length;
-    }
-    public int getLength() {
-        return heightMap[0].length;
+    public void initialize() {
+        genMap(100, 100);
     }
 
-    public Range getRange() {
-        return new Range(floorThresh, ceilThresh);
-    }
-    public void setValue(int x, int y, double value) {
-        heightMap[x][y] = Math.min(Math.max(value, floorThresh), ceilThresh);
+    public int getNumPoints() {
+        return points.keySet().size();
     }
 
-    public Conway createCopy() {
-        Conway newCave = new Conway(getWidth(), getLength(), this.floorThresh, this.ceilThresh);
-        for (int x = 0; x < getWidth(); x++) {
-            System.arraycopy(heightMap[x], 0, newCave.heightMap[x], 0, getLength());
+    public Set<Location> getCandidates() {
+        Set<Location> candidates = new HashSet<>();
+        for (Location c : points.keySet()) {
+            candidates.add(c);
+            for (Location offset : NBR_OFFSETS) {
+                candidates.add(c.incrementOnCopy(offset));
+            }
         }
-        return newCave;
+        return candidates;
     }
 
-    public double getValue(int x, int y) {
-        return heightMap[x][y];
+    public Set<Location> getPoints() {
+        return points.keySet();
     }
 
-    /**
-     * @param amount the amount to change the height by. Will never go above 1 or below 0.
-     */
-    public void incrementHeight(int x, int y, double amount) {
-        double oldVal = heightMap[x][y];
-        heightMap[x][y] = Math.max(floorThresh, Math.min(ceilThresh, oldVal + amount));
+    public boolean isAlive(Location coord) {
+        return points.containsKey(coord);
     }
 
-    private char getChar(int x, int y) {
-        double v = heightMap[x][y];
-        if (v < floorThresh) return ' ';
-        else if (v < ceilThresh) return 'C';
-        else return 'W';
+    public int getNumNeighbors(Location c) {
+        int numNbrs = 0;
+        for (Location offset : NBR_OFFSETS) {
+            if (isAlive(c.incrementOnCopy(offset))) {
+                numNbrs++;
+            }
+        }
+        return numNbrs;
     }
 
-    /** generate the initial random 2D typeMap data */
-    private double[][] genMap(int width, int length) {
-        RAND.setSeed(SEED);
-        double[][] map = new double[width][length];
+    public void setValue(Location coord, int value) {
+        points.put(coord, value);
+    }
+
+    public Integer getValue(Location coord) {
+        return points.containsKey(coord) ? points.get(coord) : null;
+    }
+
+    /** generate the initial random 2D data */
+    private void genMap(int width, int length) {
+        Random RAND = new Random(1);
+        points.clear();
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < length; y++) {
                 double r = RAND.nextDouble();
-                map[x][y] = Math.min(Math.max(r, floorThresh), ceilThresh);
+                if (r > 0.7) {
+                    setValue(new IntLocation(x, y), 1);
+                }
             }
         }
-        return map;
-    }
-
-    public String toString() {
-        StringBuilder bldr = new StringBuilder();
-        for (int y = 0; y < getLength(); y++) {
-            for (int x = 0; x < getWidth(); x++) {
-                bldr.append(getChar(x, y));
-            }
-            bldr.append("\n");
-        }
-        return bldr.toString();
     }
 }
