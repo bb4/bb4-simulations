@@ -21,9 +21,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     double scale_;
 
     private int currentX, currentY;
-    private int brushRadius = (int) ConwayModel.DEFAULT_BRUSH_RADIUS;
-    private double brushStrength = ConwayModel.DEFAULT_BRUSH_STRENGTH;
-    private int lastX, lastY;
+    private int brushRadius = 1;
     private boolean mouse1Down, mouse3Down;
 
     /**
@@ -38,14 +36,6 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         scale_ = scale;
     }
 
-    public void setBrushRadius(int rad) {
-        brushRadius = rad;
-    }
-
-    public void setBrushStrength(double strength) {
-        brushStrength = strength;
-    }
-
     /**
      * Lowers (or raises) cave walls when dragging.
      * Left mouse lowers; right mouse drag raises.
@@ -55,8 +45,6 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         currentX = e.getX();
         currentY = e.getY();
         doBrush();
-        lastX = currentX;
-        lastY = currentY;
     }
 
     private void doBrush() {
@@ -105,19 +93,14 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         else if (mouse3Down) {
             sign = -1;
         }
-        else {
-            // drag with no mouse click
-        }
 
-        cave_.incrementHeight(i, j, sign * brushStrength * weight);
+        cave_.incrementHeight(i, j, sign * weight);
     }
 
 
     public void mouseMoved(MouseEvent e) {
         currentX = e.getX();
         currentY = e.getY();
-        lastX = currentX;
-        lastY = currentY;
     }
 
     /**

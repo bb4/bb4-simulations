@@ -23,8 +23,6 @@ public class BumpMapper {
     /** the bigger this is the smaller the specular highlight will be. */
     private static final double SPECULAR_HIGHLIGHT_EXP = 4.0;
 
-    //private static final Vector3d HALF_ANGLE;
-
     private static final double DEFAULT_SPECULAR_PERCENT = 0.1;
 
 

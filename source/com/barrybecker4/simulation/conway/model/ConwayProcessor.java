@@ -71,20 +71,8 @@ public class ConwayProcessor implements HeightField {
         return cave.getLength();
     }
 
-    public void setLossFactor(double loss) {
-        lossFactor = loss;
-    }
-
-    public void setEffectFactor(double scale) {
-        effectFactor = scale;
-    }
-
     public void setFloorThresh(double floor) {
        cave.setFloorThresh(floor);
-    }
-
-    public void setCeilThresh(double ceil) {
-       cave.setCeilThresh(ceil);
     }
 
     public void incrementHeight(int x, int y, double amount) {

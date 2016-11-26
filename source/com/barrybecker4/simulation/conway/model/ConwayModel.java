@@ -18,18 +18,8 @@ import static com.barrybecker4.simulation.conway.model.ConwayProcessor.*;
 public class ConwayModel {
 
     public static final int DEFAULT_SCALE_FACTOR = 2;
-    public static final double DEFAULT_BUMP_HEIGHT = 0.0;
-    public static final double DEFAULT_SPECULAR_PCT = 0.1;
-    public static final double DEFAULT_LIGHT_SOURCE_ELEVATION = Math.PI / 4.0;
-    public static final double DEFAULT_LIGHT_SOURCE_AZYMUTH = Math.PI / 4.0;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
     public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
-
-    /** Radius for area of effect when doing manual modification with clikc/drag brush */
-    public static final int DEFAULT_BRUSH_RADIUS = 7;
-
-    /** The amount of impact that the brush has. */
-    public static final double DEFAULT_BRUSH_STRENGTH = 0.5;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;
@@ -46,10 +36,6 @@ public class ConwayModel {
     private boolean useParallel = DEFAULT_USE_PARALLEL;
 
     private int numIterations = 0;
-    private double bumpHeight = DEFAULT_BUMP_HEIGHT;
-    private double specularPct = DEFAULT_SPECULAR_PCT;
-    private double lightSourceDescensionAngle = DEFAULT_LIGHT_SOURCE_ELEVATION;
-    private double lightSourceAzymuthAngle = DEFAULT_LIGHT_SOURCE_AZYMUTH;
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
@@ -90,46 +76,12 @@ public class ConwayModel {
         doRender();
     }
 
-    public void setCeilThresh(double ceil) {
-        cave.setCeilThresh(ceil);
-        this.ceilThresh = ceil;
-        doRender();
-    }
-
-    public void setLossFactor(double lossFactor) {
-        cave.setLossFactor(lossFactor);
-        this.lossFactor = lossFactor;
-    }
-
-    public void setEffectFactor(double effectFactor) {
-        cave.setEffectFactor(effectFactor);
-        this.effectFactor = effectFactor;
-    }
-
-    public void setBumpHeight(double ht) {
-        this.bumpHeight = ht;
-        doRender();
-    }
-
-    public void setSpecularPercent(double pct) {
-        this.specularPct = pct;
-        doRender();
-    }
 
     public void setDefaultUseContinuousIteration(boolean continuous) {
         this.continuousIteration = continuous;
         doRender();
     }
 
-    public void setLightSourceDescensionAngle(double descensionAngle) {
-        this.lightSourceDescensionAngle = descensionAngle;
-        doRender();
-    }
-
-    public void setLightSourceAzymuthAngle(double azymuthAngle) {
-        this.lightSourceAzymuthAngle = azymuthAngle;
-        doRender();
-    }
 
     public void setScale(double scale) {
         this.scale = scale;
@@ -213,6 +165,6 @@ public class ConwayModel {
     }
 
     public void doRender() {
-        renderer.render(bumpHeight, specularPct, lightSourceAzymuthAngle, lightSourceDescensionAngle);
+        renderer.render();
     }
 }

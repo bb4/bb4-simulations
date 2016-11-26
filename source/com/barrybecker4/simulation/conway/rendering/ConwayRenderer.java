@@ -1,12 +1,10 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.rendering;
 
-import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.simulation.conway.model.ConwayProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;
 
-import javax.vecmath.Vector3d;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -23,23 +21,20 @@ public class ConwayRenderer {
 
     private final double width;
     private final double height;
-
-    private ConwayProcessor cave;
+    private ConwayProcessor processor;
 
     /** offline rendering is fast  */
     private final OfflineGraphics offlineGraphics_;
-    private final BumpMapper bmapper;
     private ColorMap cmap;
 
     /** Constructor */
-    public ConwayRenderer(int width, int height, ConwayProcessor cave, ColorMap cmap)
+    public ConwayRenderer(int width, int height, ConwayProcessor processor, ColorMap cmap)
             throws IllegalArgumentException {
         this.width = width;
         this.height = height;
-        this.cave = cave;
+        this.processor = processor;
         this.cmap = cmap;
         offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
-        bmapper = new BumpMapper();
     }
 
     public int getWidth() {
@@ -49,45 +44,26 @@ public class ConwayRenderer {
         return (int) height;
     }
 
-
-
     public BufferedImage getImage() {
         return offlineGraphics_.getOfflineImage();
     }
 
     /**
-     * Draw the floor of the cave
+     * Draw the floor of the processor
      */
-    public void render(double bumpHeight, double specularPct, double lightAzymuthAngle, double lightDescensionAngle) {
-       double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
-        double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
-        //Range range = cave.getRange();
-        //double ext = range.getExtent();
-        Vector3d lightVector = bumpHeight > 0 ?
-                computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle) : null;
+    public void render() {
+       double cellWidth = Math.max(1, (int)(width / processor.getWidth()));
+        double cellHeight = Math.max(1, (int)(height / processor.getHeight()));
 
-        for (int i = 0; i < cave.getWidth(); i++)  {
-            for (int j = 0; j < cave.getHeight(); j++) {
+        for (int i = 0; i < processor.getWidth(); i++)  {
+            for (int j = 0; j < processor.getHeight(); j++) {
                 int xpos = (int) (i * cellWidth);
                 int ypos = (int) (j * cellHeight);
-                double value = cave.getValue(i, j);
+                double value = processor.getValue(i, j);
                 Color color = cmap.getColorForValue(value);
-                if (bumpHeight > 0) {
-                    color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector);
-                }
                 offlineGraphics_.setColor(color);
                 offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
-    }
-
-    /**
-     * See http://mathworld.wolfram.com/SphericalCoordinates.html
-     * @param theta azymuthal angle in radians
-     * @param phi angle of descension (pi/2 - elevation) in radians
-     * @return unit vector defined by spherical coordinates
-     */
-    private Vector3d computeSphericalCoordinateUnitVector(double theta, double phi) {
-        return new Vector3d(Math.cos(theta) * Math.sin(phi), Math.sin(theta) * Math.sin(phi), Math.cos(phi));
     }
 }

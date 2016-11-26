@@ -78,10 +78,6 @@ public class Conway {
         return map;
     }
 
-    public void print() {
-        System.out.println(this.toString());
-    }
-
     public String toString() {
         StringBuilder bldr = new StringBuilder();
         for (int y = 0; y < getLength(); y++) {
