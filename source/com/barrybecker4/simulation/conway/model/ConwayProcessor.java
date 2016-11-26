@@ -3,9 +3,6 @@ package com.barrybecker4.simulation.conway.model;
 import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.Cave;
-import com.barrybecker4.simulation.cave.model.kernal.BasicKernel;
-import com.barrybecker4.simulation.cave.model.kernal.Kernel;
-import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
 
 import java.util.ArrayList;
@@ -44,7 +41,6 @@ public class ConwayProcessor implements HeightField {
     private double lossFactor;
     private double effectFactor;
     private Cave cave;
-    private Kernel kernel;
     /** Manages the worker threads. */
     private RunnableParallelizer parallelizer;
 
@@ -56,16 +52,14 @@ public class ConwayProcessor implements HeightField {
     /** Constructor that allows you to specify the dimensions of the cave */
     public ConwayProcessor(int width, int height) {
         this(width, height,
-           DEFAULT_FLOOR_THRESH, DEFAULT_CEIL_THRESH, DEFAULT_LOSS_FACTOR, DEFAULT_EFFECT_FACTOR,
-                KernelType.BASIC, DEFAULT_USE_PARALLEL);
+           DEFAULT_FLOOR_THRESH, DEFAULT_CEIL_THRESH, DEFAULT_LOSS_FACTOR, DEFAULT_EFFECT_FACTOR, DEFAULT_USE_PARALLEL);
     }
 
     public ConwayProcessor(int width, int height,
-                           double floorThresh, double ceilThresh, double lossFactor, double effectFactor, KernelType kernelType, boolean useParallel) {
+                           double floorThresh, double ceilThresh, double lossFactor, double effectFactor, boolean useParallel) {
         this.lossFactor = lossFactor;
         this.effectFactor = effectFactor;
         cave = new Cave(width, height, floorThresh, ceilThresh);
-        setKernelType(kernelType);
         setUseParallel(useParallel);
     }
 
@@ -75,21 +69,6 @@ public class ConwayProcessor implements HeightField {
 
     public int getHeight() {
         return cave.getLength();
-    }
-
-    public void setKernelType(KernelType type) {
-        switch (type) {
-            case BASIC: kernel = new BasicKernel(cave); break;
-            case RADIAL3: kernel = new RadialKernel(cave, 3); break;
-            case RADIAL5: kernel = new RadialKernel(cave, 5); break;
-            case RADIAL7: kernel = new RadialKernel(cave, 7); break;
-            case RADIAL9: kernel = new RadialKernel(cave, 9); break;
-            case RADIAL11: kernel = new RadialKernel(cave, 11); break;
-            case RADIAL13: kernel = new RadialKernel(cave, 13); break;
-            case RADIAL15: kernel = new RadialKernel(cave, 15); break;
-            case RADIAL17: kernel = new RadialKernel(cave, 17); break;
-            case RADIAL19: kernel = new RadialKernel(cave, 19); break;
-        }
     }
 
     public void setLossFactor(double loss) {
@@ -152,7 +131,7 @@ public class ConwayProcessor implements HeightField {
         // Loop over each row and column of the map
         for (int x = minX; x < maxX; x++) {
             for (int y = 0; y < cave.getLength(); y++) {
-                double neibNum = kernel.countNeighbors(x, y);
+                double neibNum = 1; //kernel.countNeighbors(x, y);
                 double oldValue = cave.getValue(x, y);
                 double newValue = oldValue + (neibNum - lossFactor) * effectFactor;
                 newCave.setValue(x, y, newValue);
@@ -198,7 +177,7 @@ public class ConwayProcessor implements HeightField {
     }
 
     public static void main(String[] args) {
-        ConwayProcessor cave = new ConwayProcessor(32, 32, 0.25, 0.8, 3, 2, KernelType.BASIC, DEFAULT_USE_PARALLEL);
+        ConwayProcessor cave = new ConwayProcessor(32, 32, 0.25, 0.8, 3, 2, DEFAULT_USE_PARALLEL);
         cave.printCave();
         cave.nextPhase();
         cave.printCave();

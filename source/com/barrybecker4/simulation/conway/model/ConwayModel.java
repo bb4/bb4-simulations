@@ -42,7 +42,6 @@ public class ConwayModel {
     private double lossFactor = DEFAULT_LOSS_FACTOR;
     private double effectFactor = DEFAULT_EFFECT_FACTOR;
     private double scale = DEFAULT_SCALE_FACTOR;
-    private KernelType kernalType = ConwayProcessor.DEFAULT_KERNEL_TYPE;
     private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
     private boolean useParallel = DEFAULT_USE_PARALLEL;
 
@@ -73,7 +72,7 @@ public class ConwayModel {
         int caveWidth = (int)(DEFAULT_WIDTH / scale);
         int caveHeight = (int)(DEFAULT_HEIGHT / scale);
         ConwayProcessor cave = new ConwayProcessor(caveWidth, caveHeight,
-                floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
+                floorThresh, ceilThresh, lossFactor, effectFactor, useParallel);
         renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
     }
 
@@ -166,10 +165,6 @@ public class ConwayModel {
         nextStepRequested = true;
     }
 
-    public void setKernelType(KernelType type) {
-        cave.setKernelType(type);
-        this.kernalType = type;
-    }
 
     public int getNumIterations() {
         return numIterations;
@@ -180,7 +175,7 @@ public class ConwayModel {
             int caveWidth = (int)(width / scale);
             int caveHeight = (int)(height / scale);
             cave = new ConwayProcessor(caveWidth, caveHeight,
-                    floorThresh, ceilThresh, lossFactor, effectFactor, kernalType, useParallel);
+                    floorThresh, ceilThresh, lossFactor, effectFactor, useParallel);
             numIterations = 0;
             renderer = new ConwayRenderer(width, height, cave, cmap);
             restartRequested = true;

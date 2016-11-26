@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway;
 
-import com.barrybecker4.simulation.conway.ConwayExplorer;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 
@@ -23,13 +22,13 @@ public class OptionsDialog extends SimulatorOptionsDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        ConwayExplorer sim = (ConwayExplorer) getSimulator();
+        //ConwayExplorer sim = (ConwayExplorer) getSimulator();
         return panel;
     }
 
     @Override
     public void actionPerformed( ActionEvent e ) {
         super.actionPerformed(e);
-        ConwayExplorer sim = (ConwayExplorer) getSimulator();
+        //ConwayExplorer sim = (ConwayExplorer) getSimulator();
     }
 }

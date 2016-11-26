@@ -54,7 +54,7 @@ public class Cave {
     }
 
     /**
-     * @param amount the amout to change hte height by. Will never go above 1 or below 0.
+     * @param amount the amount to change the height by. Will never go above 1 or below 0.
      */
     public void incrementHeight(int x, int y, double amount) {
         double oldVal = heightMap[x][y];

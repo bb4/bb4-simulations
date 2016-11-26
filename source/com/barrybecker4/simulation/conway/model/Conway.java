@@ -5,10 +5,6 @@ import com.barrybecker4.common.math.Range;
 import java.util.Random;
 
 /**
- * Ideas for future work:
- *  - add bump map rendering and phong shading
- *   - allow continuous iterating or multiple steps at once
- *   - support mouse interaction to raise or lower the height field
  * @author Barry Becker
  */
 public class Conway {
@@ -54,19 +50,11 @@ public class Conway {
     }
 
     /**
-     * @param amount the amout to change hte height by. Will never go above 1 or below 0.
+     * @param amount the amount to change the height by. Will never go above 1 or below 0.
      */
     public void incrementHeight(int x, int y, double amount) {
         double oldVal = heightMap[x][y];
         heightMap[x][y] = Math.max(floorThresh, Math.min(ceilThresh, oldVal + amount));
-    }
-
-    public void setFloorThresh(double floor) {
-        this.floorThresh = floor;
-    }
-
-    public void setCeilThresh(double ceil) {
-        this.ceilThresh = ceil;
     }
 
     private char getChar(int x, int y) {

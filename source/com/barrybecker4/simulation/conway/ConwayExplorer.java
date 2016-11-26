@@ -1,9 +1,6 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway;
 
-import com.barrybecker4.simulation.conway.DynamicOptions;
-import com.barrybecker4.simulation.conway.InteractionHandler;
-import com.barrybecker4.simulation.conway.OptionsDialog;
 import com.barrybecker4.simulation.conway.model.ConwayModel;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
@@ -20,16 +17,13 @@ import java.awt.*;
  */
 public class ConwayExplorer extends Simulator {
 
-    private ConwayModel caveModel;
+    private ConwayModel conwayModel;
     private DynamicOptions options;
     private InteractionHandler handler_;
 
-    protected static final double INITIAL_TIME_STEP = 10.0;
-    protected static final int DEFAULT_STEPS_PER_FRAME = 10;
-
 
     public ConwayExplorer() {
-        super("Cave Explorer");
+        super("Conway's Game of Life Explorer");
         commonInit();
     }
 
@@ -38,19 +32,18 @@ public class ConwayExplorer extends Simulator {
     }
 
     private void commonInit() {
-        caveModel = new ConwayModel();
+        conwayModel = new ConwayModel();
 
         initCommonUI();
 
-        handler_ = new InteractionHandler(caveModel, caveModel.getScale());
+        handler_ = new InteractionHandler(conwayModel, conwayModel.getScale());
         this.addMouseListener(handler_);
         this.addMouseMotionListener(handler_);
     }
 
     @Override
     protected void reset() {
-        //caveModel.reset();
-        setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
+        setNumStepsPerFrame(1);
         // remove handlers to void memory leak
         this.removeMouseListener(handler_);
         this.removeMouseMotionListener(handler_);
@@ -68,14 +61,14 @@ public class ConwayExplorer extends Simulator {
 
     @Override
     protected double getInitialTimeStep() {
-        return INITIAL_TIME_STEP;
+        return 1;
     }
 
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
-            caveModel.setSize(this.getWidth(), this.getHeight());
-            caveModel.timeStep(timeStep_);
+            conwayModel.setSize(this.getWidth(), this.getHeight());
+            conwayModel.timeStep(timeStep_);
         }
         return timeStep_;
     }
@@ -87,7 +80,7 @@ public class ConwayExplorer extends Simulator {
 
         Profiler.getInstance().startRenderingTime();
 
-        g.drawImage(caveModel.getImage(), 0, 0, null);
+        g.drawImage(conwayModel.getImage(), 0, 0, null);
         Profiler.getInstance().stopRenderingTime();
     }
 
@@ -101,7 +94,7 @@ public class ConwayExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options = new DynamicOptions(caveModel, this);
+        options = new DynamicOptions(conwayModel, this);
         setPaused(false);
         return options;
     }

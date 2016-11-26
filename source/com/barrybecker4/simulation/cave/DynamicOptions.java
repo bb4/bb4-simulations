@@ -125,7 +125,7 @@ class DynamicOptions extends JPanel
 
     private JPanel createBumpControls() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(createTitledBorder("Bump prameters"));
+        panel.setBorder(createTitledBorder("Bump parameters"));
 
         bumpSliderGroup_ = new SliderGroup(BUMP_SLIDER_PROPS);
         bumpSliderGroup_.addSliderChangeListener(this);

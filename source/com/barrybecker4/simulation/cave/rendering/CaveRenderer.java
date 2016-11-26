@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.rendering;
 
-import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
@@ -13,8 +12,7 @@ import java.awt.image.BufferedImage;
 
 
 /**
- * Everything we need to know to compute the l-System tree.
- * Should make the tree automatically center.
+ * Draws the 2D cave model by applying the processor to it.
  *
  * @author Barry Becker
  */
