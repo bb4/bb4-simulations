@@ -1,10 +1,10 @@
 package com.barrybecker4.simulation.conway.model;
 
-
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The data for points in the conway life simulation
@@ -22,7 +22,7 @@ class Conway {
     });
 
     Conway() {
-        points = new HashMap<>();
+        points = new ConcurrentHashMap<>();
     }
 
     public void initialize() {
@@ -68,7 +68,7 @@ class Conway {
     }
 
     public Integer getValue(Location coord) {
-        return points.containsKey(coord) ? points.get(coord) : null;
+        return points.get(coord);
     }
 
     private void addGlider() {

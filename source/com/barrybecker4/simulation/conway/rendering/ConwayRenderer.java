@@ -53,12 +53,13 @@ public class ConwayRenderer {
 
     /** render the live cells on the grid */
     public void render() {
-
         for (Location c : processor.getPoints())  {
-            int value = processor.getValue(c);
-            Color color = cmap.getColorForValue(value);
-            offlineGraphics_.setColor(color);
-            offlineGraphics_.fillRect(c.getX() * scale, c.getY() * scale, scale, scale);
+            Integer value = processor.getValue(c);
+            if (value != null) {
+                Color color = cmap.getColorForValue(value);
+                offlineGraphics_.setColor(color);
+                offlineGraphics_.fillRect(c.getX() * scale, c.getY() * scale, scale, scale);
+            }
         }
     }
 }

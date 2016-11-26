@@ -118,7 +118,7 @@ public class ConwayProcessor {
     }*/
 
 
-    public int getValue (Location c) {
+    public Integer getValue (Location c) {
         return conway.getValue(c);
     }
 

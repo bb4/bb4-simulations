@@ -15,7 +15,7 @@ import java.awt.*;
 public class ConwayColorMap extends ColorMap {
 
     private static Color[] COLORS =  {
-        Color.WHITE,
+        new Color(120, 15, 100),
         new Color(250, 215, 0),
         new Color(140, 230, 0),
         new Color(40, 150, 225),

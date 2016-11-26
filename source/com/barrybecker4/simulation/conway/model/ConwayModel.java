@@ -49,8 +49,8 @@ public class ConwayModel {
     }
 
     public void reset() {
-        ConwayProcessor cave = new ConwayProcessor(useParallel);
-        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, scale, cave, cmap);
+        processor = new ConwayProcessor(useParallel);
+        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, scale, processor, cmap);
     }
 
     public int getWidth() {
@@ -106,7 +106,7 @@ public class ConwayModel {
 
     private void requestRestart(int width, int height) {
         try {
-            processor = new ConwayProcessor(useParallel);
+            //processor = new ConwayProcessor(useParallel);
             numIterations = 0;
             renderer = new ConwayRenderer(width, height, scale, processor, cmap);
             restartRequested = true;
