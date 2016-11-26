@@ -170,7 +170,7 @@ class DynamicOptions extends JPanel
                 conwayModel.setNumStepsPerFrame((int)value);
                 break;
             case SCALE_SLIDER:
-                conwayModel.setScale(value);
+                conwayModel.setScale((int)value);
                 simulator_.getInteractionHandler().setScale(value);
                 break;
             default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);

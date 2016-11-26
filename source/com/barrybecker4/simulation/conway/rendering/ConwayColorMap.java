@@ -25,11 +25,7 @@ public class ConwayColorMap extends ColorMap {
     };
 
     public ConwayColorMap() {
-        super(getControlPoints(new Range(0, 1.0)), COLORS);
-    }
-
-    public ConwayColorMap(Range range) {
-        super(getControlPoints(range), COLORS);
+        super(getControlPoints(new Range(0, 100.0)), COLORS);
     }
 
     private static double[] getControlPoints(Range range) {

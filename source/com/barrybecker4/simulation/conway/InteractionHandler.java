@@ -93,9 +93,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         else if (mouse3Down) {
             sign = -1;
         }
-
-        model.setAlive(i, j);
-        //model.incrementHeight(i, j, sign * weight);
+        model.setAlive(j, i);
     }
 
 

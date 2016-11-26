@@ -27,7 +27,7 @@ public class ConwayModel {
     private ConwayProcessor processor;
     private ConwayRenderer renderer;
 
-    private double scale = DEFAULT_SCALE_FACTOR;
+    private int scale = DEFAULT_SCALE_FACTOR;
     private int numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME;
     private boolean useParallel = DEFAULT_USE_PARALLEL;
 
@@ -50,7 +50,7 @@ public class ConwayModel {
 
     public void reset() {
         ConwayProcessor cave = new ConwayProcessor(useParallel);
-        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, cave, cmap);
+        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, scale, cave, cmap);
     }
 
     public int getWidth() {
@@ -65,7 +65,7 @@ public class ConwayModel {
         doRender();
     }
 
-    public void setScale(double scale) {
+    public void setScale(int scale) {
         this.scale = scale;
         requestRestart(renderer.getWidth(), renderer.getHeight());
     }
@@ -108,7 +108,7 @@ public class ConwayModel {
         try {
             processor = new ConwayProcessor(useParallel);
             numIterations = 0;
-            renderer = new ConwayRenderer(width, height, processor, cmap);
+            renderer = new ConwayRenderer(width, height, scale, processor, cmap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

@@ -24,13 +24,13 @@ public class ConwayProcessor {
         this(DEFAULT_USE_PARALLEL);
     }
 
-    public ConwayProcessor(boolean useParallel) {
+    ConwayProcessor(boolean useParallel) {
         conway = new Conway();
         conway.initialize();
         setUseParallel(useParallel);
     }
 
-    public void setUseParallel(boolean parallelized) {
+    void setUseParallel(boolean parallelized) {
         parallelizer =
              parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
@@ -39,15 +39,15 @@ public class ConwayProcessor {
         return conway.getPoints();
     }
 
-    public void setAlive(int i, int j) {
-        conway.setValue(new IntLocation(i, j), 1);
+    void setAlive(int row, int col) {
+        conway.setValue(new IntLocation(row, col), 1);
     }
 
     /**
      * Compute the next step of the simulation.
      */
-    public void nextPhase() {
-        Conway newConway = new Conway(); //conway.createCopy();
+    void nextPhase() {
+        Conway newConway = new Conway();
 
         // for each live point in the old conway, determine if there is a new point.
         // first create a big set of all the points that must be examined (this includes empty nbrs of live points)
@@ -57,11 +57,13 @@ public class ConwayProcessor {
         for (Location c : candidates) {
             int numNbrs = conway.getNumNeighbors(c);
             boolean isAlive = conway.isAlive(c);
-            //System.out.println("isAlive = " + isAlive + " numNbr = " + numNbrs);
-            if (!isAlive && numNbrs == 3) {
+            if (isAlive) {
+                if ((numNbrs == 2 || numNbrs == 3)) {
+                    newConway.setValue(c, conway.getValue(c) + 1);
+                }
+            }
+            else if (numNbrs == 3) {
                 newConway.setValue(c, 1);
-            } else if (isAlive && (numNbrs == 2 || numNbrs == 3)) {
-                newConway.setValue(c, conway.getValue(c) + 1);
             }
         }
 

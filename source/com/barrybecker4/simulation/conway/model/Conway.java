@@ -10,30 +10,31 @@ import java.util.*;
  * The data for points in the conway life simulation
  * @author Barry Becker
  */
-public class Conway {
+class Conway {
 
     /** Since its on an infinite grid. Only store the grid locations where there his life. */
     private Map<Location, Integer> points;
 
     private static final List<Location> NBR_OFFSETS = Arrays.asList(new Location[] {
-            new IntLocation(-1, -1), new IntLocation(-1, 0), new IntLocation(-1, -1),
+            new IntLocation(-1, -1), new IntLocation(-1, 0), new IntLocation(-1, 1),
             new IntLocation(0, -1), new IntLocation(0, 1),
             new IntLocation(1, -1), new IntLocation(1, 0), new IntLocation(1, 1)
     });
 
-    public Conway() {
+    Conway() {
         points = new HashMap<>();
     }
 
     public void initialize() {
-        genMap(100, 100);
+        //genMap(100, 100);
+        addGlider();
     }
 
     public int getNumPoints() {
         return points.keySet().size();
     }
 
-    public Set<Location> getCandidates() {
+    Set<Location> getCandidates() {
         Set<Location> candidates = new HashSet<>();
         for (Location c : points.keySet()) {
             candidates.add(c);
@@ -44,15 +45,15 @@ public class Conway {
         return candidates;
     }
 
-    public Set<Location> getPoints() {
+    Set<Location> getPoints() {
         return points.keySet();
     }
 
-    public boolean isAlive(Location coord) {
+    boolean isAlive(Location coord) {
         return points.containsKey(coord);
     }
 
-    public int getNumNeighbors(Location c) {
+    int getNumNeighbors(Location c) {
         int numNbrs = 0;
         for (Location offset : NBR_OFFSETS) {
             if (isAlive(c.incrementOnCopy(offset))) {
@@ -62,12 +63,20 @@ public class Conway {
         return numNbrs;
     }
 
-    public void setValue(Location coord, int value) {
+    void setValue(Location coord, int value) {
         points.put(coord, value);
     }
 
     public Integer getValue(Location coord) {
         return points.containsKey(coord) ? points.get(coord) : null;
+    }
+
+    private void addGlider() {
+        setValue(new IntLocation(10, 10), 1);
+        setValue(new IntLocation(11, 11), 1);
+        setValue(new IntLocation(11, 12), 1);
+        setValue(new IntLocation(10, 12), 1);
+        setValue(new IntLocation(9, 12), 1);
     }
 
     /** generate the initial random 2D data */
@@ -79,7 +88,7 @@ public class Conway {
             for (int y = 0; y < length; y++) {
                 double r = RAND.nextDouble();
                 if (r > 0.7) {
-                    setValue(new IntLocation(x, y), 1);
+                    setValue(new IntLocation(y, x), 1);
                 }
             }
         }

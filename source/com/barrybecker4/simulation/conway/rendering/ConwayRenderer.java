@@ -22,6 +22,7 @@ public class ConwayRenderer {
 
     private final double width;
     private final double height;
+    private final int scale;
     private ConwayProcessor processor;
 
     /** offline rendering is fast  */
@@ -29,10 +30,11 @@ public class ConwayRenderer {
     private ColorMap cmap;
 
     /** Constructor */
-    public ConwayRenderer(int width, int height, ConwayProcessor processor, ColorMap cmap)
+    public ConwayRenderer(int width, int height, int scale, ConwayProcessor processor, ColorMap cmap)
             throws IllegalArgumentException {
         this.width = width;
         this.height = height;
+        this.scale = scale;
         this.processor = processor;
         this.cmap = cmap;
         offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
@@ -49,14 +51,14 @@ public class ConwayRenderer {
         return offlineGraphics_.getOfflineImage();
     }
 
-    /** render the live cels on the grid */
+    /** render the live cells on the grid */
     public void render() {
 
         for (Location c : processor.getPoints())  {
             int value = processor.getValue(c);
             Color color = cmap.getColorForValue(value);
             offlineGraphics_.setColor(color);
-            offlineGraphics_.fillRect(c.getX(), c.getY(), 1, 1);
+            offlineGraphics_.fillRect(c.getX() * scale, c.getY() * scale, scale, scale);
         }
     }
 }
