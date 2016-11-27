@@ -19,6 +19,8 @@ public class ConwayModel {
 
     public static final int DEFAULT_SCALE_FACTOR = 2;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
+    public static final boolean DEFAULT_SHOW_SHADOWS = true;
+    public static final boolean DEFAULT_WRAP_GRID = false;
     public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
 
     private static final int DEFAULT_WIDTH = 400;
@@ -35,6 +37,8 @@ public class ConwayModel {
     private boolean restartRequested = false;
     private boolean nextStepRequested = false;
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
+    private boolean showShadows = DEFAULT_SHOW_SHADOWS;
+    private boolean wrapGrid = DEFAULT_WRAP_GRID;
     private ColorMap cmap = new ConwayColorMap();
 
 
@@ -50,7 +54,8 @@ public class ConwayModel {
 
     public void reset() {
         processor = new ConwayProcessor(useParallel);
-        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, scale, processor, cmap);
+        processor.setWrap(wrapGrid, DEFAULT_WIDTH / scale, DEFAULT_HEIGHT / scale);
+        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, showShadows, scale, processor, cmap);
     }
 
     public int getWidth() {
@@ -74,6 +79,14 @@ public class ConwayModel {
         return this.scale;
     }
 
+    public void setWrapGrid(boolean wrap) {
+        this.wrapGrid = wrap;
+    }
+
+    public boolean getWrapGrid() {
+        return wrapGrid;
+    }
+
     public void setNumStepsPerFrame(int steps) {
         this.numStepsPerFrame = steps;
     }
@@ -95,7 +108,6 @@ public class ConwayModel {
         nextStepRequested = true;
     }
 
-
     public void setAlive(int i, int j) {
         processor.setAlive(i, j);
     }
@@ -108,7 +120,8 @@ public class ConwayModel {
         try {
             //processor = new ConwayProcessor(useParallel);
             numIterations = 0;
-            renderer = new ConwayRenderer(width, height, scale, processor, cmap);
+            processor.setWrap(wrapGrid, width / scale, height / scale);
+            renderer = new ConwayRenderer(width, height, showShadows, scale, processor, cmap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

@@ -18,10 +18,11 @@ import java.awt.image.BufferedImage;
  */
 public class ConwayRenderer {
 
-    private static final Color FLOOR_COLOR = new Color(130, 255, 175);
+    private static final Color FLOOR_COLOR = new Color(130, 155, 175);
 
     private final double width;
     private final double height;
+    private final boolean showShadows;
     private final int scale;
     private ConwayProcessor processor;
 
@@ -30,10 +31,12 @@ public class ConwayRenderer {
     private ColorMap cmap;
 
     /** Constructor */
-    public ConwayRenderer(int width, int height, int scale, ConwayProcessor processor, ColorMap cmap)
+    public ConwayRenderer(int width, int height, boolean showShadows, int scale,
+                          ConwayProcessor processor, ColorMap cmap)
             throws IllegalArgumentException {
         this.width = width;
         this.height = height;
+        this.showShadows = showShadows;
         this.scale = scale;
         this.processor = processor;
         this.cmap = cmap;
@@ -58,7 +61,9 @@ public class ConwayRenderer {
             if (value != null) {
                 Color color = cmap.getColorForValue(value);
                 offlineGraphics_.setColor(color);
-                offlineGraphics_.fillRect(c.getX() * scale, c.getY() * scale, scale, scale);
+                int xpos = c.getX() * scale;
+                int ypos = c.getY() * scale;
+                offlineGraphics_.fillRect(xpos, ypos, scale, scale);
             }
         }
     }

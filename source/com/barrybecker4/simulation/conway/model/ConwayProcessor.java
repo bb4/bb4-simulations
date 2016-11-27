@@ -1,6 +1,5 @@
 package com.barrybecker4.simulation.conway.model;
 
-import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;
 
@@ -13,11 +12,13 @@ public class ConwayProcessor {
 
     /** cells die if less than this */
     public static final boolean DEFAULT_USE_PARALLEL = true;
+    private boolean wrapGrid = false;
+    private int width = -1;
+    private int height = -1;
 
     private Conway conway;
     /** Manages the worker threads. */
-    private RunnableParallelizer parallelizer;
-
+    //private RunnableParallelizer parallelizer;
 
     /** Constructor that allows you to specify the dimensions of the conway */
     public ConwayProcessor() {
@@ -30,9 +31,15 @@ public class ConwayProcessor {
         setUseParallel(useParallel);
     }
 
+    void setWrap(boolean wrapGrid, int width, int height) {
+        this.wrapGrid = wrapGrid;
+        this.width = width;
+        this.height = height;
+    }
+
     void setUseParallel(boolean parallelized) {
-        parallelizer =
-             parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
+        //parallelizer =
+        //     parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
 
     public Set<Location> getPoints() {
@@ -48,6 +55,7 @@ public class ConwayProcessor {
      */
     void nextPhase() {
         Conway newConway = new Conway();
+        newConway.setWrapping(wrapGrid, width, height);
 
         // for each live point in the old conway, determine if there is a new point.
         // first create a big set of all the points that must be examined (this includes empty nbrs of live points)
@@ -70,9 +78,7 @@ public class ConwayProcessor {
         /*
         int numThreads = parallelizer.getNumThreads();
         List<Runnable> workers = new ArrayList<>(numThreads + 1);
-
         int range = conway.getNumPoints() / numThreads;
-
         for (int i = 0; i < numThreads; i++) {
             int offset = i * range;
             workers.add(new Worker(offset, offset + range, newConway));
@@ -81,15 +87,21 @@ public class ConwayProcessor {
         // blocks until all Callables are done running.
         parallelizer.invokeAllRunnables(workers);
         */
-        //System.out.println("new numpoints = " + newConway.getNumPoints() + " old numpoints = " + conway.getNumPoints());
         conway = newConway;
+    }
+
+    public Integer getValue (Location c) {
+        return conway.getValue(c);
+    }
+
+    public String toString() {
+        return conway.toString();
     }
 
     /**
      * Compute the next step of the simulation
      *
     public void nextPhase(int minPoint, int maxPoint, Conway newCave) {
-        // Loop over each point of the map
         for (int x = minPoint; x < maxPoint; x++) {
             double oldValue = conway.getValue(x, y);
             double newValue = oldValue + neibNum;
@@ -118,17 +130,8 @@ public class ConwayProcessor {
     }*/
 
 
-    public Integer getValue (Location c) {
-        return conway.getValue(c);
-    }
-
-    public String toString() {
-        return conway.toString();
-    }
-
     public static void main(String[] args) {
         ConwayProcessor cave = new ConwayProcessor(DEFAULT_USE_PARALLEL);
         cave.nextPhase();
     }
-
 }

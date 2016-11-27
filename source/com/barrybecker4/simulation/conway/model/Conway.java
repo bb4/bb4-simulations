@@ -15,6 +15,10 @@ class Conway {
     /** Since its on an infinite grid. Only store the grid locations where there his life. */
     private Map<Location, Integer> points;
 
+    private boolean wrap = false;
+    private int width = -1;
+    private int height = -1;
+
     private static final List<Location> NBR_OFFSETS = Arrays.asList(new Location[] {
             new IntLocation(-1, -1), new IntLocation(-1, 0), new IntLocation(-1, 1),
             new IntLocation(0, -1), new IntLocation(0, 1),
@@ -25,24 +29,29 @@ class Conway {
         points = new ConcurrentHashMap<>();
     }
 
+    void setWrapping(boolean wrap, int width, int height) {
+        this.wrap = wrap;
+        this.width = width;
+        this.height = height;
+    }
     public void initialize() {
         //genMap(100, 100);
         addGlider();
     }
 
-    public int getNumPoints() {
-        return points.keySet().size();
-    }
-
     Set<Location> getCandidates() {
         Set<Location> candidates = new HashSet<>();
         for (Location c : points.keySet()) {
-            candidates.add(c);
+            candidates.add(keepInBounds(c));
             for (Location offset : NBR_OFFSETS) {
-                candidates.add(c.incrementOnCopy(offset));
+                candidates.add(keepInBounds(c.incrementOnCopy(offset)));
             }
         }
         return candidates;
+    }
+
+    private Location keepInBounds(Location c) {
+        return wrap ? new IntLocation((c.getRow() + height) % height, (c.getCol() + width) % width) : c;
     }
 
     Set<Location> getPoints() {
@@ -56,7 +65,7 @@ class Conway {
     int getNumNeighbors(Location c) {
         int numNbrs = 0;
         for (Location offset : NBR_OFFSETS) {
-            if (isAlive(c.incrementOnCopy(offset))) {
+            if (isAlive(keepInBounds(c.incrementOnCopy(offset)))) {
                 numNbrs++;
             }
         }

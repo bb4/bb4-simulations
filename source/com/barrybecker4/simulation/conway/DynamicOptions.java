@@ -34,10 +34,14 @@ class DynamicOptions extends JPanel
     private static final int PREFERRED_WIDTH = 300;
     private static final int SPACING = 14;
 
-    private SliderGroup generalSliderGroup_;
+    private SliderGroup generalSliderGroup;
 
-    private JCheckBox useContinuousIteration_;
-    private JCheckBox useParallelComputation_;
+    private JCheckBox useContinuousIteration;
+    private JCheckBox useParallelComputation;
+
+    private JCheckBox showShadowsCheckbox;
+    private JCheckBox wrapCheckbox;
+
     private ConwayExplorer simulator_;
 
     private static final SliderProperties[] GENERAL_SLIDER_PROPS = {
@@ -80,10 +84,10 @@ class DynamicOptions extends JPanel
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(createTitledBorder("General parameters"));
 
-        generalSliderGroup_ = new SliderGroup(GENERAL_SLIDER_PROPS);
-        generalSliderGroup_.addSliderChangeListener(this);
+        generalSliderGroup = new SliderGroup(GENERAL_SLIDER_PROPS);
+        generalSliderGroup.addSliderChangeListener(this);
 
-        panel.add(generalSliderGroup_, BorderLayout.CENTER);
+        panel.add(generalSliderGroup, BorderLayout.CENTER);
 
         return panel;
     }
@@ -101,7 +105,6 @@ class DynamicOptions extends JPanel
         return panel;
     }
 
-
     /**
      * The dropdown menu at the top for selecting a kernel type.
      * @return a dropdown/down component.
@@ -109,17 +112,13 @@ class DynamicOptions extends JPanel
     private JPanel createIncrementPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        JLabel label = new JLabel("Continuous iteration: ");
-        useContinuousIteration_ = new JCheckBox();
-        useContinuousIteration_.setSelected(ConwayModel.DEFAULT_USE_CONTINUOUS_ITERATION);
-        useContinuousIteration_.addActionListener(this);
+        useContinuousIteration = createCheckbox("Continuous iteration", ConwayModel.DEFAULT_USE_CONTINUOUS_ITERATION);
 
         nextButton = new JButton("Next");
         nextButton.addActionListener(this);
-        nextButton.setEnabled(!useContinuousIteration_.isSelected());
+        nextButton.setEnabled(!useContinuousIteration.isSelected());
 
-        panel.add(label, BorderLayout.WEST);
-        panel.add(useContinuousIteration_, BorderLayout.CENTER);
+        panel.add(useContinuousIteration, BorderLayout.CENTER);
         panel.add(nextButton, BorderLayout.EAST);
         panel.add(createCheckboxPanel(), BorderLayout.SOUTH);
 
@@ -131,17 +130,23 @@ class DynamicOptions extends JPanel
      */
     private JPanel createCheckboxPanel() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel label = new JLabel("Parallel computation: ");
-        useParallelComputation_ = new JCheckBox();
-        useParallelComputation_.setSelected(ConwayProcessor.DEFAULT_USE_PARALLEL);
-        useParallelComputation_.addActionListener(this);
+        useParallelComputation = createCheckbox("Parallel computation", ConwayProcessor.DEFAULT_USE_PARALLEL);
+        showShadowsCheckbox = createCheckbox("Show shadows", ConwayModel.DEFAULT_SHOW_SHADOWS);
+        wrapCheckbox = createCheckbox("Wrap grid", ConwayModel.DEFAULT_WRAP_GRID);
 
-        panel.add(label);
-        panel.add(useParallelComputation_);
-        panel.add(Box.createHorizontalGlue());
-
+        panel.add(useParallelComputation);
+        panel.add(showShadowsCheckbox);
+        panel.add(wrapCheckbox);
         return panel;
+    }
+
+    private JCheckBox createCheckbox(String labelText, boolean defaultValue) {
+        JCheckBox cb = new JCheckBox(labelText);
+        cb.setSelected(defaultValue);
+        cb.addActionListener(this);
+        return cb;
     }
 
     /**
@@ -157,7 +162,7 @@ class DynamicOptions extends JPanel
     }
 
     public void reset() {
-        generalSliderGroup_.reset();
+        generalSliderGroup.reset();
     }
 
     /**
@@ -185,8 +190,8 @@ class DynamicOptions extends JPanel
         else if (e.getSource().equals(resetButton)) {
             conwayModel.requestRestart();
         }
-        else if (e.getSource().equals(useContinuousIteration_)) {
-            boolean useCont = useContinuousIteration_.isSelected();
+        else if (e.getSource().equals(useContinuousIteration)) {
+            boolean useCont = useContinuousIteration.isSelected();
             conwayModel.setDefaultUseContinuousIteration(useCont);
             nextButton.setEnabled(!useCont);
             if (!useCont) {
@@ -195,8 +200,12 @@ class DynamicOptions extends JPanel
                 conwayModel.requestNextStep();
             }
         }
-        else if (e.getSource().equals((useParallelComputation_))) {
-            conwayModel.setUseParallelComputation(useParallelComputation_.isSelected());
+        else if (e.getSource().equals((useParallelComputation))) {
+            conwayModel.setUseParallelComputation(useParallelComputation.isSelected());
+        }
+        else if (e.getSource().equals(wrapCheckbox)) {
+            conwayModel.setWrapGrid(wrapCheckbox.isSelected());
+            conwayModel.requestRestart();
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }
