@@ -26,7 +26,6 @@ class DynamicOptions extends JPanel
     private ConwayModel conwayModel;
 
     private JButton nextButton;
-    private JButton resetButton;
 
     private static final String NUM_STEPS_PER_FRAME_SLIDER = "Mum steps per frame";
     private static final String SCALE_SLIDER = "Scale";
@@ -155,9 +154,9 @@ class DynamicOptions extends JPanel
      */
     private JPanel createButtons() {
         JPanel buttonsPanel = new JPanel();
-        resetButton = new JButton("Reset");
-        resetButton.addActionListener(this);
-        buttonsPanel.add(resetButton);
+        //resetButton = new JButton("Reset");
+        //resetButton.addActionListener(this);
+        //buttonsPanel.add(resetButton);
         return buttonsPanel;
     }
 
@@ -188,9 +187,6 @@ class DynamicOptions extends JPanel
 
         if (source.equals(nextButton)) {
             conwayModel.requestNextStep();
-        }
-        else if (source.equals(resetButton)) {
-            conwayModel.requestRestart();
         }
         else if (source.equals(useContinuousIteration)) {
             boolean useCont = useContinuousIteration.isSelected();

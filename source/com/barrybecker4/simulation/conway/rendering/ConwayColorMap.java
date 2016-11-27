@@ -3,8 +3,10 @@ package com.barrybecker4.simulation.conway.rendering;
 
 import com.barrybecker4.common.math.Range;
 import com.barrybecker4.ui.util.ColorMap;
+import sun.security.provider.SHA;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Default colormap for cave visualization
@@ -14,9 +16,11 @@ import java.awt.*;
  */
 public class ConwayColorMap extends ColorMap {
 
+    private static final Color SHADOW_COLOR = new Color(120, 130, 180);
     private static Color[] COLORS =  {
-        new Color(120, 15, 100),
-        new Color(250, 215, 0),
+        SHADOW_COLOR,
+        new Color(250, 180, 0),
+        new Color(240, 230, 0),
         new Color(140, 230, 0),
         new Color(40, 150, 225),
         new Color(20, 0, 210),
@@ -25,18 +29,21 @@ public class ConwayColorMap extends ColorMap {
     };
 
     public ConwayColorMap() {
-        super(getControlPoints(new Range(0, 100.0)), COLORS);
+        super(getControlPoints(new Range(0, 1000.0)), COLORS);
     }
 
     private static double[] getControlPoints(Range range) {
+
         double floor = range.getMin();
         double ceil = range.getMax() + 0.000001 * range.getExtent();
         double[] values = new double[COLORS.length];
-        double step = range.getExtent() / (COLORS.length - 1);
-        int ct = 0;
-        for (Double v = floor; v <= ceil; v += step) {
+        values[0] = floor;
+        double step = (range.getExtent() - 1) / (COLORS.length - 2);
+        int ct = 1;
+        for (Double v = floor + 1; v <= ceil; v += step) {
             values[ct++] = v;
         }
+        System.out.println("cpts = " + Arrays.toString(values));
         return values;
     }
 }

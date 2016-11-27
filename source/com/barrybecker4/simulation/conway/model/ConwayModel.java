@@ -19,8 +19,8 @@ public class ConwayModel {
 
     public static final int DEFAULT_SCALE_FACTOR = 2;
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
-    public static final boolean DEFAULT_SHOW_SHADOWS = true;
-    public static final boolean DEFAULT_WRAP_GRID = false;
+    public static final boolean DEFAULT_SHOW_SHADOWS = false;
+    public static final boolean DEFAULT_WRAP_GRID = true;
     public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
 
     private static final int DEFAULT_WIDTH = 400;
@@ -86,7 +86,6 @@ public class ConwayModel {
     public void setShowShadows(boolean showShadows) {
         this.showShadows = showShadows;
     }
-
 
     public void setNumStepsPerFrame(int steps) {
         this.numStepsPerFrame = steps;
