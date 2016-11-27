@@ -16,6 +16,9 @@ import java.util.Arrays;
  */
 public class ConwayColorMap extends ColorMap {
 
+    /** The color will not change beyond this timestep */
+    private static final int MAX_TIME_STEP = 2000;
+
     private static final Color SHADOW_COLOR = new Color(120, 130, 180);
     private static Color[] COLORS =  {
         SHADOW_COLOR,
@@ -29,7 +32,7 @@ public class ConwayColorMap extends ColorMap {
     };
 
     public ConwayColorMap() {
-        super(getControlPoints(new Range(0, 1000.0)), COLORS);
+        super(getControlPoints(new Range(0, MAX_TIME_STEP)), COLORS);
     }
 
     private static double[] getControlPoints(Range range) {
