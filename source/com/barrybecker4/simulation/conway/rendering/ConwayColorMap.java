@@ -26,9 +26,10 @@ public class ConwayColorMap extends ColorMap {
         new Color(240, 230, 0),
         new Color(140, 230, 0),
         new Color(40, 150, 225),
-        new Color(20, 0, 210),
-        new Color(210, 101, 208),
-        //Color.BLACK
+        new Color(20, 0, 240),
+        new Color(250, 10, 240),
+        new Color(200, 0, 0),
+        Color.BLACK
     };
 
     public ConwayColorMap() {
@@ -46,7 +47,6 @@ public class ConwayColorMap extends ColorMap {
         for (Double v = floor + 1; v <= ceil; v += step) {
             values[ct++] = v;
         }
-        System.out.println("cpts = " + Arrays.toString(values));
         return values;
     }
 }
