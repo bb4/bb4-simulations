@@ -184,13 +184,15 @@ class DynamicOptions extends JPanel
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(nextButton)) {
+        Component source = (Component) e.getSource();
+
+        if (source.equals(nextButton)) {
             conwayModel.requestNextStep();
         }
-        else if (e.getSource().equals(resetButton)) {
+        else if (source.equals(resetButton)) {
             conwayModel.requestRestart();
         }
-        else if (e.getSource().equals(useContinuousIteration)) {
+        else if (source.equals(useContinuousIteration)) {
             boolean useCont = useContinuousIteration.isSelected();
             conwayModel.setDefaultUseContinuousIteration(useCont);
             nextButton.setEnabled(!useCont);
@@ -200,11 +202,15 @@ class DynamicOptions extends JPanel
                 conwayModel.requestNextStep();
             }
         }
-        else if (e.getSource().equals((useParallelComputation))) {
+        else if (source.equals((useParallelComputation))) {
             conwayModel.setUseParallelComputation(useParallelComputation.isSelected());
         }
-        else if (e.getSource().equals(wrapCheckbox)) {
+        else if (source.equals(wrapCheckbox)) {
             conwayModel.setWrapGrid(wrapCheckbox.isSelected());
+            conwayModel.requestRestart();
+        }
+        else if (source.equals(showShadowsCheckbox)) {
+            conwayModel.setShowShadows(showShadowsCheckbox.isSelected());
             conwayModel.requestRestart();
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());

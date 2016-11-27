@@ -83,9 +83,10 @@ public class ConwayModel {
         this.wrapGrid = wrap;
     }
 
-    public boolean getWrapGrid() {
-        return wrapGrid;
+    public void setShowShadows(boolean showShadows) {
+        this.showShadows = showShadows;
     }
+
 
     public void setNumStepsPerFrame(int steps) {
         this.numStepsPerFrame = steps;

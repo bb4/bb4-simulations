@@ -22,6 +22,7 @@ public class ConwayRenderer {
 
     private final double width;
     private final double height;
+    /** shadows show where the life has been */
     private final boolean showShadows;
     private final int scale;
     private ConwayProcessor processor;
@@ -56,6 +57,11 @@ public class ConwayRenderer {
 
     /** render the live cells on the grid */
     public void render() {
+        // if not showing where life has been, clear all first
+        if (!showShadows) {
+            offlineGraphics_.clear();
+        }
+
         for (Location c : processor.getPoints())  {
             Integer value = processor.getValue(c);
             if (value != null) {
