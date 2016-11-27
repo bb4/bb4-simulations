@@ -2,6 +2,8 @@ package com.barrybecker4.simulation.conway.model;
 
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;
+import com.barrybecker4.simulation.conway.model.rules.Rule;
+import com.barrybecker4.simulation.conway.model.rules.RuleB3S23;
 
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public class ConwayProcessor {
     private boolean wrapGrid = false;
     private int width = -1;
     private int height = -1;
+    private Rule rule = new RuleB3S23();
 
     private Conway conway;
     /** Manages the worker threads. */
@@ -57,23 +60,7 @@ public class ConwayProcessor {
         Conway newConway = new Conway();
         newConway.setWrapping(wrapGrid, width, height);
 
-        // for each live point in the old conway, determine if there is a new point.
-        // first create a big set of all the points that must be examined (this includes empty nbrs of live points)
-        Set<Location> candidates = conway.getCandidates();
-
-        // Loop through all the candidates, apply the life-rule, and update the new grid appropriately.
-        for (Location c : candidates) {
-            int numNbrs = conway.getNumNeighbors(c);
-            boolean isAlive = conway.isAlive(c);
-            if (isAlive) {
-                if ((numNbrs == 2 || numNbrs == 3)) {
-                    newConway.setValue(c, conway.getValue(c) + 1);
-                }
-            }
-            else if (numNbrs == 3) {
-                newConway.setValue(c, 1);
-            }
-        }
+        conway = rule.applyRule(conway, newConway);
 
         /*
         int numThreads = parallelizer.getNumThreads();
@@ -87,7 +74,6 @@ public class ConwayProcessor {
         // blocks until all Callables are done running.
         parallelizer.invokeAllRunnables(workers);
         */
-        conway = newConway;
     }
 
     public Integer getValue (Location c) {

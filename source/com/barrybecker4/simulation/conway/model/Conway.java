@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * The data for points in the conway life simulation
  * @author Barry Becker
  */
-class Conway {
+public class Conway {
 
     /** Since its on an infinite grid. Only store the grid locations where there his life. */
     private Map<Location, Integer> points;
@@ -39,7 +39,7 @@ class Conway {
         addGlider();
     }
 
-    Set<Location> getCandidates() {
+    public Set<Location> getCandidates() {
         Set<Location> candidates = new HashSet<>();
         for (Location c : points.keySet()) {
             candidates.add(keepInBounds(c));
@@ -58,11 +58,11 @@ class Conway {
         return points.keySet();
     }
 
-    boolean isAlive(Location coord) {
+    public boolean isAlive(Location coord) {
         return points.containsKey(coord);
     }
 
-    int getNumNeighbors(Location c) {
+    public int getNumNeighbors(Location c) {
         int numNbrs = 0;
         for (Location offset : NBR_OFFSETS) {
             if (isAlive(keepInBounds(c.incrementOnCopy(offset)))) {
@@ -72,7 +72,7 @@ class Conway {
         return numNbrs;
     }
 
-    void setValue(Location coord, int value) {
+    public void setValue(Location coord, int value) {
         points.put(coord, value);
     }
 
