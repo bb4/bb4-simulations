@@ -3,6 +3,8 @@ package com.barrybecker4.simulation.conway.model;
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;
 import com.barrybecker4.simulation.conway.model.rules.Rule;
+import com.barrybecker4.simulation.conway.model.rules.RuleB34S456Amoeba;
+import com.barrybecker4.simulation.conway.model.rules.RuleB36S23Highlife;
 import com.barrybecker4.simulation.conway.model.rules.RuleB3S23;
 
 import java.util.Set;
@@ -17,7 +19,7 @@ public class ConwayProcessor {
     private boolean wrapGrid = false;
     private int width = -1;
     private int height = -1;
-    private Rule rule = new RuleB3S23();
+    private Rule rule = new RuleB3S23(); // new RuleB34S456Amoeba();
 
     private Conway conway;
     /** Manages the worker threads. */

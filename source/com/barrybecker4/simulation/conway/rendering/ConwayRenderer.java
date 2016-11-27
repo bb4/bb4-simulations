@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
  */
 public class ConwayRenderer {
 
-    private static final Color FLOOR_COLOR = new Color(230, 240, 250);
+    private static final Color FLOOR_COLOR = new Color(240, 244, 254);
 
     private final double width;
     private final double height;
