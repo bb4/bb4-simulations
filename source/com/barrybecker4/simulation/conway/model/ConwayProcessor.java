@@ -98,7 +98,7 @@ public class ConwayProcessor {
         return conway.toString();
     }
 
-    /**
+    /*
      * Compute the next step of the simulation
      *
     public void nextPhase(int minPoint, int maxPoint, Conway newCave) {
@@ -123,7 +123,6 @@ public class ConwayProcessor {
             newCave_ = newCave;
         }
 
-        @Override
         public void run() {
             nextPhase(minX_, maxX_, newCave_);
         }

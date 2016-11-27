@@ -3,10 +3,8 @@ package com.barrybecker4.simulation.conway.rendering;
 
 import com.barrybecker4.common.math.Range;
 import com.barrybecker4.ui.util.ColorMap;
-import sun.security.provider.SHA;
 
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * Default colormap for cave visualization
@@ -33,7 +31,7 @@ public class ConwayColorMap extends ColorMap {
     };
 
     public ConwayColorMap() {
-        super(getControlPoints(new Range(0, MAX_TIME_STEP)), COLORS);
+        super(getControlPoints(new Range(1, MAX_TIME_STEP)), COLORS);
     }
 
     private static double[] getControlPoints(Range range) {
