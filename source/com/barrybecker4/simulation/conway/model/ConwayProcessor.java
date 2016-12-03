@@ -2,10 +2,7 @@ package com.barrybecker4.simulation.conway.model;
 
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;
-import com.barrybecker4.simulation.conway.model.rules.Rule;
-import com.barrybecker4.simulation.conway.model.rules.RuleB34S456Amoeba;
-import com.barrybecker4.simulation.conway.model.rules.RuleB36S23Highlife;
-import com.barrybecker4.simulation.conway.model.rules.RuleB3S23;
+import com.barrybecker4.simulation.conway.model.rules.*;
 
 import java.util.Set;
 
@@ -20,6 +17,9 @@ public class ConwayProcessor {
     private int width = -1;
     private int height = -1;
     private Rule rule = new RuleB3S23(); // new RuleB34S456Amoeba();
+
+    public enum RuleType {TraditionalB3S23, AmoebaB34S456, HighlifeB36S23, SwarmB356S23}
+    public static final RuleType DEFAULT_RULE_TYPE = RuleType.TraditionalB3S23;
 
     private Conway conway;
     /** Manages the worker threads. */
@@ -40,6 +40,15 @@ public class ConwayProcessor {
         this.wrapGrid = wrapGrid;
         this.width = width;
         this.height = height;
+    }
+
+    void setRuleType(RuleType type) {
+        switch (type) {
+            case TraditionalB3S23: rule = new RuleB3S23(); break;
+            case AmoebaB34S456: rule = new RuleB34S456Amoeba(); break;
+            case HighlifeB36S23: rule = new RuleB36S23Highlife(); break;
+            case SwarmB356S23: rule = new RuleB356S23Swarm(); break;
+        }
     }
 
     void setUseParallel(boolean parallelized) {

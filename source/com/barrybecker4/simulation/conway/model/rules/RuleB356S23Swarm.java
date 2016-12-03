@@ -12,8 +12,7 @@ public class RuleB356S23Swarm implements Rule {
 
     @Override
     public Conway applyRule(Conway conway, Conway newConway) {
-        // for each live point in the old conway, determine if there is a new point.
-        // first create a big set of all the points that must be examined (this includes empty nbrs of live points)
+
         Set<Location> candidates = conway.getCandidates();
 
         // Loop through all the candidates, apply the life-rule, and update the new grid appropriately.

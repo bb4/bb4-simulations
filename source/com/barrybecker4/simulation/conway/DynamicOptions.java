@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.conway;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
+import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.conway.model.ConwayModel;
 import com.barrybecker4.simulation.conway.model.ConwayProcessor;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
@@ -14,6 +15,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * Dynamic controls for the RD simulation that will show on the right.
@@ -21,11 +24,12 @@ import java.awt.event.ActionListener;
  * @author Barry Becker
  */
 class DynamicOptions extends JPanel
-                     implements SliderGroupChangeListener, ActionListener {
+                     implements SliderGroupChangeListener, ActionListener, ItemListener {
 
     private ConwayModel conwayModel;
 
     private JButton nextButton;
+    private Choice ruleChoice;
 
     private static final String NUM_STEPS_PER_FRAME_SLIDER = "Mum steps per frame";
     private static final String SCALE_SLIDER = "Scale";
@@ -67,6 +71,7 @@ class DynamicOptions extends JPanel
         ContinuousColorLegend legend = new ContinuousColorLegend(null, algorithm.getColormap(), true);
         add(createIncrementPanel());
         add(createButtons());
+        add(createRuleDropdown());
         add(legend);
 
         add(Box.createVerticalStrut(SPACING));
@@ -90,7 +95,6 @@ class DynamicOptions extends JPanel
 
         return panel;
     }
-
 
     private Border createTitledBorder(String title) {
         return BorderFactory.createCompoundBorder(
@@ -149,6 +153,27 @@ class DynamicOptions extends JPanel
     }
 
     /**
+     * The dropdown menu for selecting a rule type.
+     * @return a dropdown/down component.
+     */
+    private JPanel createRuleDropdown() {
+
+        JPanel ruleChoicePanel = new JPanel();
+        JLabel label = new JLabel("Rule to apply: ");
+
+        ruleChoice = new Choice();
+        for (Enum ruleType: ConwayProcessor.RuleType.values()) {
+            ruleChoice.add(ruleType.name());
+        }
+        ruleChoice.select(ConwayProcessor.DEFAULT_RULE_TYPE.ordinal());
+        ruleChoice.addItemListener(this);
+
+        ruleChoicePanel.add(label);
+        ruleChoicePanel.add(ruleChoice);
+        return ruleChoicePanel;
+    }
+
+    /**
      * The dropdown menu at the top for selecting a kernel type.
      * @return a dropdown/down component.
      */
@@ -179,6 +204,12 @@ class DynamicOptions extends JPanel
                 break;
             default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);
         }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        ConwayProcessor.RuleType type = ConwayProcessor.RuleType.valueOf(ruleChoice.getSelectedItem());
+        conwayModel.setRuleType(type);
     }
 
     @Override

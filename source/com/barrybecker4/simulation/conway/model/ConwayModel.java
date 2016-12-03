@@ -39,7 +39,7 @@ public class ConwayModel {
     private boolean continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION;
     private boolean showShadows = DEFAULT_SHOW_SHADOWS;
     private boolean wrapGrid = DEFAULT_WRAP_GRID;
-    private ColorMap cmap = new ConwayColorMap();
+    private ColorMap colorMap = new ConwayColorMap();
 
 
     public ConwayModel() {
@@ -55,7 +55,7 @@ public class ConwayModel {
     public void reset() {
         processor = new ConwayProcessor(useParallel);
         processor.setWrap(wrapGrid, DEFAULT_WIDTH / scale, DEFAULT_HEIGHT / scale);
-        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, showShadows, scale, processor, cmap);
+        renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, showShadows, scale, processor, colorMap);
     }
 
     public int getWidth() {
@@ -83,6 +83,11 @@ public class ConwayModel {
         this.wrapGrid = wrap;
     }
 
+    public void setRuleType(ConwayProcessor.RuleType type) {
+        processor.setRuleType(type);
+        //this.ruleType = type;
+    }
+
     public void setShowShadows(boolean showShadows) {
         this.showShadows = showShadows;
     }
@@ -97,7 +102,7 @@ public class ConwayModel {
     }
 
     public ColorMap getColormap() {
-        return cmap;
+        return colorMap;
     }
 
     public void requestRestart() {
@@ -121,7 +126,7 @@ public class ConwayModel {
             //processor = new ConwayProcessor(useParallel);
             numIterations = 0;
             processor.setWrap(wrapGrid, width / scale, height / scale);
-            renderer = new ConwayRenderer(width, height, showShadows, scale, processor, cmap);
+            renderer = new ConwayRenderer(width, height, showShadows, scale, processor, colorMap);
             restartRequested = true;
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
