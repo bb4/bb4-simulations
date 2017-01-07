@@ -16,24 +16,28 @@ dependencies {
 }
 
 task runDice(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.dice.DiceSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runGraphing(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.graphing.Simulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runFluid(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fluid.ui.FluidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runSnake(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.snake.SnakeSimulator"]
     classpath = sourceSets.main.runtimeClasspath
@@ -41,12 +45,14 @@ task runSnake(type: JavaExec) {
 }
 
 task runStock(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.stock.StockSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runTrading(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.trading.TradingSimulator"]
     classpath = sourceSets.main.runtimeClasspath
@@ -54,60 +60,70 @@ task runTrading(type: JavaExec) {
 }
 
 task runReactionDiffusion(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.reactiondiffusion.RDSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runFractalExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.fractalexplorer.FractalExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runHenonPhaseExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.henonphase.HenonPhaseExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runHabitatExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.habitat.HabitatSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runLSystemExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.lsystem.LSystemExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runCaveExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.cave.CaveExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runConwayExplorer(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.conway.ConwayExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runLiquid(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.liquid.LiquidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runTrebuchet(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.trebuchet.TrebuchetSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task runVerhulst(type: JavaExec) {
+    group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["com.barrybecker4.simulation.verhulst.VerhulstSimulator"]
     classpath = sourceSets.main.runtimeClasspath
