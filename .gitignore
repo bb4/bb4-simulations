@@ -6,4 +6,5 @@ classes/
 build/
 bin/
 *.iml
-*.class
+bb4-simulations.ipr
+bb4-simulations.iws
