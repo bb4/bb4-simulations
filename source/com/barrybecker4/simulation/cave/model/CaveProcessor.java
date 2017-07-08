@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * This Cave simulation program is based on work by Michael Cook
- * See http://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664
+ * See https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664
  * See http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
  *
  * Using concurrency in 4 core (8 thread) processor increases speed from 3.7 fps to about 6.6 fps.

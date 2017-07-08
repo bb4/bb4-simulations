@@ -10,8 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Interactively explores LSystem generated trees based on a user supplied expression.
- * See http://en.wikipedia.org/wiki/L-system
+ * Interactively explores Conway's game of life.
+ * See https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
  *
  * @author Barry Becker.
  */

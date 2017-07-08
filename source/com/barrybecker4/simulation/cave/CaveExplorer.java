@@ -11,8 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Interactively explores LSystem generated trees based on a user supplied expression.
- * See http://en.wikipedia.org/wiki/L-system
+ * Interactively explores generating cave systems.
  *
  * @author Barry Becker.
  */
