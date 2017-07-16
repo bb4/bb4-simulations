@@ -130,6 +130,7 @@ public class FractalExplorer extends Simulator {
             g.drawImage(modelImage_.getImage(), 0, 0, null);
         }
         zoomHandler_.render(g, model_.getAspectRatio());
+        options_.setCoordinates(algorithm_.getRange());
         Profiler.getInstance().stopRenderingTime();
     }
 

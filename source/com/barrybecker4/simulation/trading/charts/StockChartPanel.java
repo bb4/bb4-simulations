@@ -23,9 +23,9 @@ public class StockChartPanel extends JPanel {
      */
     private static final int LABEL_WIDTH = 70;
 
-    private StockSeries stockSeries = new StockSeries(100);
+    private StockSeries stockSeries = new StockSeries(10);
 
-    MultipleFunctionRenderer stockChart;
+    private MultipleFunctionRenderer stockChart;
 
     public StockChartPanel() {
         List<Function> functions = Collections.emptyList();
@@ -39,8 +39,8 @@ public class StockChartPanel extends JPanel {
         stockChart.setFunctions(stockSeries);
     }
 
-    public void clear() {
-        stockSeries.clear();
+    public void clear(int numRecentSeries) {
+        stockSeries.clear(numRecentSeries);
     }
 
     public void paint(Graphics g) {

@@ -3,15 +3,18 @@ package com.barrybecker4.simulation.liquid.config;
 
 import com.barrybecker4.common.geometry.ByteLocation;
 import com.barrybecker4.common.geometry.Location;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
+
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
  * @author Barry Becker
  */
-public class TestSource extends TestCase {
+public class TestSource {
 
     /** class under test. */
     private Source src;
@@ -21,8 +24,8 @@ public class TestSource extends TestCase {
 
     private static final Vector2d VELOCITY1 = new Vector2d(1,1);
 
-    public void testOnTimeNoRepeat()
-    {
+    @Test
+    public void testOnTimeNoRepeat() {
         src = new Source(LOCATION_START, VELOCITY1);
         verifyStatus(src, 0.0, true);
         verifyStatus(src, 0.1, true);
@@ -34,8 +37,8 @@ public class TestSource extends TestCase {
         verifyStatus(src, 20.0, true);
     }
 
-    public void testOnTimeDuration()
-    {
+    @Test
+    public void testOnTimeDuration() {
         src = new Source(LOCATION_START, LOCATION_STOP, VELOCITY1, 2.0, 1.0, -1);
         verifyStatus(src, 0.0, false);
         verifyStatus(src, 1.9, false);
@@ -46,12 +49,11 @@ public class TestSource extends TestCase {
         verifyStatus(src, 20.0, false);
     }
 
-    public void testOnTimeRepeat()
-    {
+    @Test
+    public void testOnTimeRepeat() {
         src = new Source(LOCATION_START, LOCATION_STOP, VELOCITY1, 2.0, 1.0, 3.0);
 
         // starts at 2.0, continues to 3.0, off until 5.0, on again until 6.0, off until 8.0,...
-
         verifyStatus(src, 0.0, false);
         verifyStatus(src, 1.9, false);
         verifyStatus(src, 2.0, true);
@@ -67,6 +69,7 @@ public class TestSource extends TestCase {
         verifyStatus(src, 11.2, true);
     }
 
+
     private void verifyStatus(Source src, double t, boolean expectedValue) {
         boolean isOn = src.isOn(t);
         String err = (isOn == expectedValue)? "" : " : ERROR";
@@ -78,19 +81,5 @@ public class TestSource extends TestCase {
             assertFalse("We expected it to be off at " + t, isOn);
         }
     }
-
-    /**
-     * common initialization for all go test cases.
-     *
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }*/
-
-
 
 }

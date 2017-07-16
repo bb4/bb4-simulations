@@ -27,4 +27,9 @@ public class StockSeries extends LinkedList<Function> {
         }
         return success;
     }
+
+    public void clear(int newNumeriesToKeep) {
+        maxNum = newNumeriesToKeep;
+        super.clear();
+    }
 }

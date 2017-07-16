@@ -157,26 +157,28 @@ public class FluidDynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        if (sliderName.equals(VISC_SLIDER)) {
-            simulator_.getEnvironment().setViscosity(value);
-        }
-        else if (sliderName.equals(DR_SLIDER)) {
-             simulator_.getEnvironment().setDiffusionRate(value);
-        }
-        else if (sliderName.equals(FORCE_SLIDER)) {
-            simulator_.getInteractionHandler().setForce(value);
-        }
-        else if (sliderName.equals(SD_SLIDER)) {
-            simulator_.getInteractionHandler().setSourceDensity(value);
-        }
-        else if (sliderName.equals(NUM_ITERATIONS_SLIDER)) {
-            simulator_.getEnvironment().setNumSolverIterations((int)value);
-        }
-        else if (sliderName.equals(NS_SLIDER)) {
-            simulator_.setNumStepsPerFrame((int) value);
-        }
-        else if (sliderName.equals(TIME_STEP_SLIDER)) {
-            simulator_.setTimeStep(value);
+        switch (sliderName) {
+            case VISC_SLIDER:
+                simulator_.getEnvironment().setViscosity(value);
+                break;
+            case DR_SLIDER:
+                simulator_.getEnvironment().setDiffusionRate(value);
+                break;
+            case FORCE_SLIDER:
+                simulator_.getInteractionHandler().setForce(value);
+                break;
+            case SD_SLIDER:
+                simulator_.getInteractionHandler().setSourceDensity(value);
+                break;
+            case NUM_ITERATIONS_SLIDER:
+                simulator_.getEnvironment().setNumSolverIterations((int) value);
+                break;
+            case NS_SLIDER:
+                simulator_.setNumStepsPerFrame((int) value);
+                break;
+            case TIME_STEP_SLIDER:
+                simulator_.setTimeStep(value);
+                break;
         }
     }
 

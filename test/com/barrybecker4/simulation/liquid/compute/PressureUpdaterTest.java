@@ -3,25 +3,29 @@ package com.barrybecker4.simulation.liquid.compute;
 
 import com.barrybecker4.simulation.liquid.model.*;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import javax.vecmath.Vector2d;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
  * @author Barry Becker
  */
-public class PressureUpdaterTest extends TestCase {
+public class PressureUpdaterTest {
 
     /** delta time */
     private static final double DT = 0.1;
-
     private static final int DIM = 6;
+    private static final double TOL = 0.0000000001;
 
 
     /** instance under test. */
     private PressureUpdater pressureUpdater;
 
 
+    @Test
     public void testPressureUpdateUniform() {
 
         double b0 = 1.0;
@@ -30,7 +34,7 @@ public class PressureUpdaterTest extends TestCase {
 
         double maxDiv = pressureUpdater.updatePressure(DT);
 
-        assertEquals("Unexpected divergence", 0.0, maxDiv);
+        assertEquals("Unexpected divergence", 0.0, maxDiv, TOL);
         assertEquals("Unexpected number of iterations till convergence",
                 2, pressureUpdater.getNumIterations());
 
@@ -42,6 +46,7 @@ public class PressureUpdaterTest extends TestCase {
 
 
     /** Currently failing */
+    @Test
     public void testPressureUpdateNonUniform() {
 
         double b0 = 1.0;
@@ -62,6 +67,7 @@ public class PressureUpdaterTest extends TestCase {
         */
     }
 
+    @Test
     public void testPressureUpdateRandom() {
 
         double b0 = 1.0;
@@ -79,7 +85,7 @@ public class PressureUpdaterTest extends TestCase {
 
         double maxDiv = pressureUpdater.updatePressure(DT);
 
-        assertEquals("Unexpected divergence", 2.7755575615628914E-17, maxDiv);
+        assertEquals("Unexpected divergence", 2.7755575615628914E-17, maxDiv, TOL);
         assertEquals("Unexpected number of iterations till convergence",
                 2, pressureUpdater.getNumIterations());
 
@@ -92,7 +98,7 @@ public class PressureUpdaterTest extends TestCase {
     }
 
     private void verifyCell(Cell cell, double pressure, Vector2d expUV) {
-        assertEquals("Unexpected pressure", pressure, cell.getPressure());
+        assertEquals("Unexpected pressure", pressure, cell.getPressure(), TOL);
         assertEquals("Unexpected velocity", expUV, new Vector2d(cell.getU(), cell.getV()));
     }
 
@@ -103,7 +109,7 @@ public class PressureUpdaterTest extends TestCase {
                 Cell cell = grid.getCell(i, j);
 
                 assertEquals("Unexpected pressure at " + cell,
-                        expPressure, cell.getPressure());
+                        expPressure, cell.getPressure(), TOL);
             }
         }
     }

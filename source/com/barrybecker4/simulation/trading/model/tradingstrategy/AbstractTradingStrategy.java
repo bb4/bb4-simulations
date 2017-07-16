@@ -31,6 +31,7 @@ public abstract class AbstractTradingStrategy implements ITradingStrategy {
 
     /**
      * do nothing
+     * @param stockPrice stock price
      */
     @Override
     public abstract MarketPosition updateInvestment(double stockPrice);

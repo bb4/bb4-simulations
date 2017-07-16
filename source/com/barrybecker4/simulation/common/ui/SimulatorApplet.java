@@ -123,7 +123,7 @@ public class SimulatorApplet extends ApplicationApplet {
         } else if (args.length > 1) {
             simulatorClassName = args[1];
         }
-        System.out.println("ARGS = "+ Arrays.toString(args));
+        System.out.println("ARGS = " + Arrays.toString(args));
 
         SimulatorApplet applet = new SimulatorApplet(args, simulatorClassName);
         GUIUtil.showApplet( applet );

@@ -19,6 +19,7 @@ import com.barrybecker4.ui.util.Log;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 /**
@@ -39,7 +40,6 @@ public class TradingSimulator extends Simulator {
     private InvestmentChartPanel investmentPanel;
     private ProfitHistogramPanel profitPanel;
 
-
     private StockGenerationOptions generationOpts = new StockGenerationOptions();
     private TradingOptions tradingOpts = new TradingOptions();
     private GraphingOptions graphingOpts = new GraphingOptions();
@@ -47,7 +47,7 @@ public class TradingSimulator extends Simulator {
 
     public TradingSimulator() {
         super("Stock Market Simulation");
-        AppContext.initialize("ENGLISH", Arrays.asList("com.barrybecker4.ui.message"), new Log());
+        AppContext.initialize("ENGLISH", Collections.singletonList("com.barrybecker4.ui.message"), new Log());
         initUI();
     }
 
@@ -90,8 +90,8 @@ public class TradingSimulator extends Simulator {
     }
 
     private void update() {
-        stockChartPanel.clear();
-        investmentPanel.clear();
+        stockChartPanel.clear(graphingOpts.numRecentSeries);
+        investmentPanel.clear(graphingOpts.numRecentSeries);
         profitPanel.setOptions(tradingOpts.theoreticalMaxGain, graphingOpts);
     }
 
@@ -121,7 +121,7 @@ public class TradingSimulator extends Simulator {
     }
 
 
-    protected double getXPositionToIncrement() {
+    private double getXPositionToIncrement() {
         return createSample();
     }
 

@@ -10,7 +10,7 @@ import javax.vecmath.Vector2d;
  *  A segment of a snakes body. It is composed of edges and particles
  *  The structure of the segment looks like this:
  *  <pre>
- *    p3<-------e2<-------p2    left edge
+ *    p3&lt;-------e2&lt;-------p2    left edge
  *    ^  \              / ^
  *    |    e7        e6   |
  *    |      \      /     |     all edges in the middle point to p4
@@ -19,7 +19,7 @@ import javax.vecmath.Vector2d;
  *    |     /       \     |
  *    |   e4          e5  |
  *    | /               \ |
- *    p0------->e0------->p1     right edge
+ *    p0-------&gt;e0-------&gt;p1     right edge
  *  </pre>
  *
  *  @author Barry Becker

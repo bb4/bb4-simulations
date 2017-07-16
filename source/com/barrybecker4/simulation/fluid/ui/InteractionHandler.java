@@ -111,8 +111,8 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
      *Remember the mouse button that is pressed.
      */
     public void mousePressed(MouseEvent e) {
-        mouse1Down = ((e.getModifiers() & e.BUTTON1_MASK) == e.BUTTON1_MASK);
-        mouse3Down = ((e.getModifiers() & e.BUTTON3_MASK) == e.BUTTON3_MASK);
+        mouse1Down = ((e.getModifiers() & MouseEvent.BUTTON1_MASK) == MouseEvent.BUTTON1_MASK);
+        mouse3Down = ((e.getModifiers() & MouseEvent.BUTTON3_MASK) == MouseEvent.BUTTON3_MASK);
     }
 
     public void mouseReleased(MouseEvent e) {}

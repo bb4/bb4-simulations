@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class InvestmentChartPanel extends JPanel {
 
-    private static final Color INVESTMENT_COLOR = new Color(200, 10,30, 50);
-    private static final Color RESERVE_COLOR = new Color(0, 100, 190, 50);
+    private static final Color INVESTMENT_COLOR = new Color(200, 10,30, 80);
+    private static final Color RESERVE_COLOR = new Color(0, 100, 190, 80);
     private static final Color TEXT_COLOR = new Color(10, 10, 80);
 
     private static final int LEGEND_X = 140;
@@ -33,9 +33,9 @@ public class InvestmentChartPanel extends JPanel {
      */
     private static final int LABEL_WIDTH = 70;
 
-    private StockSeries series = new StockSeries(200);
+    private StockSeries series = new StockSeries(20);
 
-    MultipleFunctionRenderer investmentChart;
+    private MultipleFunctionRenderer investmentChart;
 
 
     public InvestmentChartPanel() {
@@ -60,8 +60,8 @@ public class InvestmentChartPanel extends JPanel {
         investmentChart.setFunctions(series, lineColors);
     }
 
-    public void clear() {
-        series.clear();
+    public void clear(int numRecentSeries) {
+        series.clear(numRecentSeries);
     }
 
     public void paint(Graphics g) {
