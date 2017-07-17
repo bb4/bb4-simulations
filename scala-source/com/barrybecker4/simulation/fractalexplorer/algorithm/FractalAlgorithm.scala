@@ -20,6 +20,18 @@ import com.barrybecker4.simulation.common.Profiler
   * original                    after rendering optimization.
   * - not-parallel  16.0  seconds         6.1
   * - parallel       5.1 seconds          2.1
+  *
+  * * Initial benchmark
+  *                                         calcTime     renderTime
+  * Scala with java style parallelization:     7.8         2.4 - 6.8
+  * Scala with java style                     18.6         2.0 - 7.09
+  *
+  * Scala with scala style parallelization      4.0        0.02 - 2.4
+  * Scala with scala style                     8.8         0.02 - 2.4
+  *
+  * scala parallel overview                   0.2 - 0.4        2.0
+  * Java parallel overview                    0.5 - 0.9        2.0
+  *
   * @author Barry Becker
   */
 object FractalAlgorithm {
@@ -30,27 +42,27 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
   /** range of bounding box in complex plane. */
   private var range: ComplexNumberRange = initialRange
-  private var parallelize = true
-  private var maxIterations_ : Int = FractalAlgorithm.DEFAULT_MAX_ITERATIONS
-  private var rowCalculator_ : RowCalculator = null
+  private var parallelized = true
+  private var maxIterations : Int = FractalAlgorithm.DEFAULT_MAX_ITERATIONS
+  private var rowCalculator : RowCalculator = _
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
-  private val history_ : History = new History
+  private val history : History = new History
 
   setParallelized(true)
-  rowCalculator_ = new RowCalculator(this)
+  rowCalculator = new RowCalculator(this)
 
   def setRange(range: ComplexNumberRange) {
-    history_.addRangeToHistory(range)
+    history.addRangeToHistory(range)
     processRange(range)
   }
 
   /** Back up one step in the history */
   def goBack() {
-    if (history_.hasHistory) {
-      var newRange: ComplexNumberRange = history_.popLastRange
+    if (history.hasHistory) {
+      var newRange: ComplexNumberRange = history.popLastRange
       if (range == newRange) {
-        newRange = history_.popLastRange
+        newRange = history.popLastRange
       }
       processRange(newRange)
     }
@@ -61,26 +73,28 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     restartRequested = true
   }
 
-  def isParallelized: Boolean = parallelize //parallelizer_.getNumThreads > 1
+  def isParallelized: Boolean = parallelized
 
   def setParallelized(parallelized: Boolean) {
-    if (parallelized != parallelize) {
-      parallelize = parallelized
+    if (this.parallelized != parallelized) {
+      this.parallelized = parallelized
       model.setCurrentRow(0)
     }
   }
 
-  def getMaxIterations: Int = maxIterations_
+  def getMaxIterations: Int = maxIterations
 
   def setMaxIterations(value: Int) {
-    if (value != maxIterations_) {
-      maxIterations_ = value
+    if (value != maxIterations) {
+      maxIterations = value
       model.setCurrentRow(0)
     }
   }
 
-  def getUseRunLengthOptimization: Boolean = rowCalculator_.getUseRunLengthOptimization
-  def setUseRunLengthOptimization(value: Boolean) = rowCalculator_.setUseRunLengthOptimization(value)
+  def getUseRunLengthOptimization: Boolean = rowCalculator.getUseRunLengthOptimization
+  def setUseRunLengthOptimization(value: Boolean) {
+    rowCalculator.setUseRunLengthOptimization(value)
+  }
   def getModel: FractalModel = model
 
   /** @param timeStep number of rows to compute on this timestep.
@@ -113,7 +127,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
         i += 1
     }
 
-    if (parallelize)
+    if (parallelized)
       workers.par.foreach(x => x.run())
     else
       workers.foreach(x => x.run())
@@ -144,7 +158,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     new ComplexNumberRange(firstCorner, secondCorner)
   }
 
-  def getRange = range
+  def getRange: ComplexNumberRange = range
 
   private def startProfileTimeIfNeeded(currentRow: Int) {
     if (currentRow == 0) {
@@ -176,7 +190,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
       var y: Int = fromRow
       while (y < toRow) {
-          rowCalculator_.calculateRow(width, y)
+          rowCalculator.calculateRow(width, y)
           y += 1
       }
     }

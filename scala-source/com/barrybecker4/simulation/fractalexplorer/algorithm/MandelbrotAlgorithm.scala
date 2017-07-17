@@ -14,7 +14,8 @@ object MandelbrotAlgorithm {
     new ComplexNumberRange(new ComplexNumber(-2.1, -1.5), new ComplexNumber(1.1, 1.5))
 }
 
-class MandelbrotAlgorithm(model: FractalModel) extends FractalAlgorithm(model, MandelbrotAlgorithm.INITIAL_RANGE) {
+class MandelbrotAlgorithm(model: FractalModel)
+  extends FractalAlgorithm(model, MandelbrotAlgorithm.INITIAL_RANGE) {
 
   model.setCurrentRow(0)
 
