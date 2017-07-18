@@ -60,7 +60,8 @@ public class CaveProcessor implements HeightField {
     }
 
     public CaveProcessor(int width, int height,
-              double floorThresh, double ceilThresh, double lossFactor, double effectFactor, KernelType kernelType, boolean useParallel) {
+              double floorThresh, double ceilThresh, double lossFactor, double effectFactor,
+                         KernelType kernelType, boolean useParallel) {
         this.lossFactor = lossFactor;
         this.effectFactor = effectFactor;
         cave = new Cave(width, height, floorThresh, ceilThresh);

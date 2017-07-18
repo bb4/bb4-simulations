@@ -15,10 +15,10 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    CaveModel cave_;
+    private CaveModel cave;
 
     /** amount of the effect */
-    double scale_;
+    private double scale;
 
     private int currentX, currentY;
     private int brushRadius = (int) CaveModel.DEFAULT_BRUSH_RADIUS;
@@ -30,12 +30,12 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
      * Constructor
      */
     public InteractionHandler(CaveModel cave, double scale) {
-        cave_ = cave;
-        scale_ = scale;
+        this.cave = cave;
+        this.scale = scale;
     }
 
     public void setScale(double scale) {
-        scale_ = scale;
+        this.scale = scale;
     }
 
     public void setBrushRadius(int rad) {
@@ -60,24 +60,24 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     }
 
     private void doBrush() {
-        int i = (int) (currentX / scale_);
-        int j = (int) (currentY / scale_);
+        int i = (int) (currentX / scale);
+        int j = (int) (currentY / scale);
 
         // apply the change to a convolution kernel area
         int startX = Math.max(1, i - brushRadius);
-        int stopX = Math.min(cave_.getWidth(), i + brushRadius);
+        int stopX = Math.min(cave.getWidth(), i + brushRadius);
         int startY = Math.max(1, j - brushRadius);
-        int stopY = Math.min(cave_.getHeight(), j + brushRadius);
+        int stopY = Math.min(cave.getHeight(), j + brushRadius);
         // adjust by this so that there is not a discontinuity at the periphery
         double minWt = 0.9 / brushRadius;
 
         for (int ii = startX; ii < stopX; ii++) {
-             for (int jj=startY; jj<stopY; jj++) {
+             for (int jj = startY; jj < stopY; jj++) {
                  double weight = getWeight(i, j, ii, jj, minWt);
                  applyChange(ii, jj, weight);
              }
         }
-        cave_.doRender();
+        cave.doRender();
     }
 
     /**
@@ -109,7 +109,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
             // drag with no mouse click
         }
 
-        cave_.incrementHeight(i, j, sign * brushStrength * weight);
+        cave.incrementHeight(i, j, sign * brushStrength * weight);
     }
 
 

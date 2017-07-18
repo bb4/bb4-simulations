@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Renders a specified liquid environment.
+ *  Renders a specified fluid environment.
  *
  *  @author Barry Becker
  */
@@ -20,7 +20,6 @@ public final class EnvironmentRenderer {
     // rendering attributes
     private static final Color GRID_COLOR = new Color( 30, 30, 30, 10 );
     private static final Color VECTOR_COLOR = new Color( 200, 60, 30, 50 );
-
 
     private static final double  VECTOR_SCALE = 40.0;
     private static final int OFFSET = 10;
@@ -104,13 +103,11 @@ public final class EnvironmentRenderer {
         int rightEdgePos = (int) (scale * grid.getWidth());
         int bottomEdgePos = (int) (scale * grid.getHeight());
 
-        for (int j = 0; j < grid.getHeight(); j++ )   //  -----
-        {
+        for (int j = 0; j < grid.getHeight(); j++ ) {  //  -----
             int ypos = (int) (j * scale);
             g.drawLine( OFFSET, ypos + OFFSET, rightEdgePos + OFFSET, ypos + OFFSET );
         }
-        for (int i = 0; i < grid.getWidth(); i++ )    //  ||||
-        {
+        for (int i = 0; i < grid.getWidth(); i++ ) {   //  ||||
             int xpos = (int) (i * scale);
             g.drawLine( xpos + OFFSET, OFFSET, xpos + OFFSET, bottomEdgePos + OFFSET );
         }

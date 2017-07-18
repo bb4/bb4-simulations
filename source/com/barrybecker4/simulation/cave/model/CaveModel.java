@@ -26,10 +26,10 @@ public class CaveModel {
     public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
 
     /** Radius for area of effect when doing manual modification with clikc/drag brush */
-    public static final int DEFAULT_BRUSH_RADIUS = 7;
+    public static final int DEFAULT_BRUSH_RADIUS = 8;
 
     /** The amount of impact that the brush has. */
-    public static final double DEFAULT_BRUSH_STRENGTH = 0.5;
+    public static final double DEFAULT_BRUSH_STRENGTH = 0.6;
 
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 400;

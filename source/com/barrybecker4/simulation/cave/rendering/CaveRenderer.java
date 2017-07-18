@@ -26,7 +26,8 @@ public class CaveRenderer {
     private CaveProcessor cave;
 
     /** offline rendering is fast  */
-    private final OfflineGraphics offlineGraphics_;
+    private OfflineGraphics offlineGraphics;
+
     private final BumpMapper bmapper;
     private ColorMap cmap;
 
@@ -37,7 +38,7 @@ public class CaveRenderer {
         this.height = height;
         this.cave = cave;
         this.cmap = cmap;
-        offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
+        offlineGraphics = new OfflineGraphics(new Dimension(width, height), FLOOR_COLOR);
         bmapper = new BumpMapper();
     }
 
@@ -48,20 +49,19 @@ public class CaveRenderer {
         return (int) height;
     }
 
-
-
     public BufferedImage getImage() {
-        return offlineGraphics_.getOfflineImage();
+        return offlineGraphics.getOfflineImage();
     }
 
     /**
-     * Draw the floor of the cave
+     * Draw the floor of the cave.
+     * Synchronized so we do not end up calling it multiple times from the same thread until processing is done.
      */
-    public void render(double bumpHeight, double specularPct, double lightAzymuthAngle, double lightDescensionAngle) {
+    public synchronized void render(double bumpHeight, double specularPct, double lightAzymuthAngle,
+                                    double lightDescensionAngle) {
        double cellWidth = Math.max(1, (int)(width / cave.getWidth()));
         double cellHeight = Math.max(1, (int)(height / cave.getHeight()));
-        //Range range = cave.getRange();
-        //double ext = range.getExtent();
+
         Vector3d lightVector = bumpHeight > 0 ?
                 computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle) : null;
 
@@ -74,8 +74,8 @@ public class CaveRenderer {
                 if (bumpHeight > 0) {
                     color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector);
                 }
-                offlineGraphics_.setColor(color);
-                offlineGraphics_.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
+                offlineGraphics.setColor(color);
+                offlineGraphics.fillRect(xpos, ypos, (int)cellWidth, (int)cellHeight);
             }
         }
     }
