@@ -77,7 +77,7 @@ public class LiquidSimulator extends Simulator implements MouseListener {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new LiquidOptionsDialog( frame_, this );
+         return new LiquidOptionsDialog(frame, this );
     }
 
     @Override

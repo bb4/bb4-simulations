@@ -18,8 +18,8 @@ public abstract class DistributionSimulator extends Simulator {
     private static final double TIME_STEP = 1.0;
     private static final int DEFAULT_STEPS_PER_FRAME = 100;
 
-    protected HistogramRenderer histogram_;
-    protected int[] data_;
+    protected HistogramRenderer histogram;
+    protected int[] data;
 
     /** Constructor */
     public DistributionSimulator(String title) {
@@ -51,7 +51,7 @@ public abstract class DistributionSimulator extends Simulator {
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
-            histogram_.increment(getXPositionToIncrement());
+            histogram.increment(getXPositionToIncrement());
         }
         return timeStep_;
     }
@@ -65,8 +65,8 @@ public abstract class DistributionSimulator extends Simulator {
 
     @Override
     public void paint( Graphics g ) {
-        histogram_.setSize(getWidth(), getHeight());
-        histogram_.paint(g);
+        histogram.setSize(getWidth(), getHeight());
+        histogram.paint(g);
     }
 
     protected static void runSimulation(DistributionSimulator simulator) {

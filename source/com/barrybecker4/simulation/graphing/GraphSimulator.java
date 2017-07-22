@@ -56,7 +56,7 @@ public class GraphSimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new GraphOptionsDialog( frame_, this );
+         return new GraphOptionsDialog(frame, this );
     }
 
     @Override

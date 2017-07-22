@@ -98,7 +98,7 @@ public class HabitatSimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new HabitatOptionsDialog(frame_, this);
+         return new HabitatOptionsDialog(frame, this);
     }
 
     public static void main( String[] args ) {

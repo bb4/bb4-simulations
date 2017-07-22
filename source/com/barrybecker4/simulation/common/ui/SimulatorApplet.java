@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 public class SimulatorApplet extends ApplicationApplet {
 
-    private Simulator simulator_;
+    private Simulator simulator;
 
     private static final boolean RUN_OPTIMIZATION = false;
     private static final String DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer";
@@ -34,7 +34,7 @@ public class SimulatorApplet extends ApplicationApplet {
     public SimulatorApplet(String[] args, String simulatorClassName) {
 
         super(args);
-        simulator_ = createSimulationFromClassName(simulatorClassName);
+        simulator = createSimulationFromClassName(simulatorClassName);
     }
 
     /**
@@ -42,12 +42,12 @@ public class SimulatorApplet extends ApplicationApplet {
      * @param sim the simulator to show.
      */
     public SimulatorApplet(Simulator sim) {
-        simulator_ = sim;
+        simulator = sim;
     }
 
     @Override
     public String getName() {
-        return simulator_.getName();
+        return simulator.getName();
     }
 
     /**
@@ -58,22 +58,22 @@ public class SimulatorApplet extends ApplicationApplet {
     @Override
     public JPanel createMainPanel() {
 
-        if (simulator_ == null) {
+        if (simulator == null) {
 
             String className = getParameter("panel_class"); //NON-NLS
             className = className == null ? DEFAULT_SIMULATOR : className;
-            simulator_ = createSimulationFromClassName(className);
+            simulator = createSimulationFromClassName(className);
         }
 
-        JPanel animPanel = new AnimationPanel( simulator_ );
-        animPanel.add( simulator_.createTopControls(), BorderLayout.NORTH );
+        JPanel animPanel = new AnimationPanel(simulator);
+        animPanel.add( simulator.createTopControls(), BorderLayout.NORTH );
 
-        JPanel dynamicControls = simulator_.createDynamicControls();
+        JPanel dynamicControls = simulator.createDynamicControls();
         if (dynamicControls != null) {
             animPanel.add( dynamicControls, BorderLayout.EAST );
         }
 
-        simulator_.setVisible(true);
+        simulator.setVisible(true);
 
         return animPanel;
     }
@@ -105,7 +105,7 @@ public class SimulatorApplet extends ApplicationApplet {
     public void start() {
         super.start();
         if (RUN_OPTIMIZATION)  {
-            simulator_.doOptimization();
+            simulator.doOptimization();
         }
         this.repaint();
     }

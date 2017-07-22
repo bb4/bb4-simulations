@@ -52,16 +52,16 @@ public class StockSimulator extends DistributionSimulator {
                 opts_.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
 
         int maxX = (int)xFunction.getValue(max);
-        data_ = new int[maxX + 1];
+        data = new int[maxX + 1];
 
-        histogram_ = new HistogramRenderer(data_, xFunction);
-        histogram_.setXFormatter(new CurrencyFormatter());
-        histogram_.setMaxLabelWidth(LABEL_WIDTH);
+        histogram = new HistogramRenderer(data, xFunction);
+        histogram.setXFormatter(new CurrencyFormatter());
+        histogram.setMaxLabelWidth(LABEL_WIDTH);
     }
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new StockOptionsDialog( frame_, this );
+        return new StockOptionsDialog(frame, this );
     }
 
     @Override

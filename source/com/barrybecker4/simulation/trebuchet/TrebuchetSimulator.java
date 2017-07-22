@@ -116,7 +116,7 @@ public class TrebuchetSimulator extends NewtonianSimulator
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new TrebuchetOptionsDialog( frame_, this );
+         return new TrebuchetOptionsDialog(frame, this );
     }
 
 

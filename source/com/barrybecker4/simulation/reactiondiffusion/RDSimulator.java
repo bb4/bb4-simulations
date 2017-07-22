@@ -75,7 +75,7 @@ public class RDSimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new RDOptionsDialog( frame_, this );
+        return new RDOptionsDialog(frame, this );
     }
 
 

@@ -99,7 +99,7 @@ public class FractalExplorer extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new FractalOptionsDialog( frame_, this );
+        return new FractalOptionsDialog(frame, this );
     }
 
     @Override

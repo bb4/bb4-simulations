@@ -73,7 +73,7 @@ public class FluidSimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new FluidOptionsDialog( frame_, this );
+         return new FluidOptionsDialog(frame, this );
     }
 
     @Override

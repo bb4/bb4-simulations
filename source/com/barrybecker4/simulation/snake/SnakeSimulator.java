@@ -219,7 +219,7 @@ public class SnakeSimulator extends NewtonianSimulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new SnakeOptionsDialog( frame_, this );
+         return new SnakeOptionsDialog(frame, this );
     }
 
     @Override
