@@ -16,7 +16,7 @@ public class BasicKernalTest {
     private static final double EPS = 0.0000000000001;
 
     private static final double FLOOR = 0.1;
-	private static final double CEILING = 0.9;
+    private static final double CEILING = 0.9;
 
     /** assertEquals that we get correct neighbor counts for different positions within the 5x5 cave. */
     @Test
