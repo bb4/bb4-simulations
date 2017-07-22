@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class HabitatPanel extends JPanel {
 
-    HabitatRenderer renderer;
+    private HabitatRenderer renderer;
 
     HabitatPanel(Populations populations) {
         renderer = new HabitatRenderer(populations);

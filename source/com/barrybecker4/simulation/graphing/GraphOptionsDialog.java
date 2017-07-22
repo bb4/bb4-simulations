@@ -17,14 +17,13 @@ import java.awt.*;
 public class GraphOptionsDialog extends SimulatorOptionsDialog {
 
     /** type of interpolation to use.   */
-    private JComboBox<FunctionType> functionCombo_;
+    private JComboBox<FunctionType> functionCombo;
 
     /** type of interpolation to use.   */
-    private JComboBox<InterpolationMethod> interpolationTypeCombo_;
-
+    private JComboBox<InterpolationMethod> interpolationTypeCombo;
 
     /**
-     * constructor
+     * Constructor
      */
     public GraphOptionsDialog( Component parent, Simulator simulator ) {
         super( parent, simulator );
@@ -43,12 +42,12 @@ public class GraphOptionsDialog extends SimulatorOptionsDialog {
         innerPanel.setLayout( new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
         ComboBoxModel<FunctionType> model = new DefaultComboBoxModel<>(FunctionType.values());
-        functionCombo_ = new JComboBox<>(model);
-        innerPanel.add(functionCombo_);
+        functionCombo = new JComboBox<>(model);
+        innerPanel.add(functionCombo);
 
-        interpolationTypeCombo_ = new JComboBox<>(InterpolationMethod.values());
-        innerPanel.add(interpolationTypeCombo_);
-        interpolationTypeCombo_.setSelectedIndex(1);
+        interpolationTypeCombo = new JComboBox<>(InterpolationMethod.values());
+        innerPanel.add(interpolationTypeCombo);
+        interpolationTypeCombo.setSelectedIndex(1);
 
         JPanel fill = new JPanel();
         paramPanel.add(innerPanel, BorderLayout.NORTH);
@@ -63,10 +62,10 @@ public class GraphOptionsDialog extends SimulatorOptionsDialog {
 
         GraphSimulator simulator = (GraphSimulator) getSimulator();
 
-        Function func = ((FunctionType)functionCombo_.getSelectedItem()).function;
+        Function func = ((FunctionType) functionCombo.getSelectedItem()).function;
         if (func instanceof ArrayFunction)  {
             ((ArrayFunction)func).setInterpolationMethod(
-                    (InterpolationMethod)interpolationTypeCombo_.getSelectedItem());
+                    (InterpolationMethod) interpolationTypeCombo.getSelectedItem());
         }
 
         simulator.setFunction(func);

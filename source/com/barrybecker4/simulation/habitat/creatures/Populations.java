@@ -31,7 +31,7 @@ public abstract class Populations extends ArrayList<Population> {
     /**
      * Constructor
      */
-    public Populations() {
+    Populations() {
         functionMap = new HashMap<>();
         initialize();
     }

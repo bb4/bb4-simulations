@@ -32,7 +32,7 @@ public class HenonModel  {
     private ColorMap cmap_;
 
 
-    public HenonModel(int width, int height, TravelerParams params,
+    HenonModel(int width, int height, TravelerParams params,
                       boolean uniformSeeds, boolean connectPoints, int numTravelors, ColorMap cmap) {
 
         this.width = width;

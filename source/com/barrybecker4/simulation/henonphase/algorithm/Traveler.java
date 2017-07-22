@@ -21,7 +21,7 @@ public class Traveler {
     private double lastY;
 
 
-    public Traveler(double origX, double origY, Color color, TravelerParams params) {
+    Traveler(double origX, double origY, Color color, TravelerParams params) {
         this.color = color;
         this.params = params;
         x = origX;

@@ -12,8 +12,7 @@ import java.util.List;
 public class Cell {
 
     /** The creatures in this cell. */
-    List<Creature> creatures;
-
+    private List<Creature> creatures;
 
     int xIndex;
     int yIndex;

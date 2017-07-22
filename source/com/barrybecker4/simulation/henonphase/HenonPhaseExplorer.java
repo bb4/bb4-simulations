@@ -19,10 +19,10 @@ import java.awt.*;
  */
 public class HenonPhaseExplorer extends Simulator {
 
-    private HenonAlgorithm algorithm_;
-    private DynamicOptions options_;
+    private HenonAlgorithm algorithm;
+    private DynamicOptions options;
 
-    private boolean useFixedSize_ = false;
+    private boolean useFixedSize = false;
 
     protected static final double INITIAL_TIME_STEP = 10.0;
     protected static final int DEFAULT_STEPS_PER_FRAME = 10;
@@ -37,15 +37,15 @@ public class HenonPhaseExplorer extends Simulator {
      * @param fixed if true then the render area does not resize automatically.
      */
     public void setUseFixedSize(boolean fixed) {
-        useFixedSize_ = fixed;
+        useFixedSize = fixed;
     }
 
     public boolean getUseFixedSize() {
-        return useFixedSize_;
+        return useFixedSize;
     }
 
     private void commonInit() {
-        algorithm_ = new HenonAlgorithm();
+        algorithm = new HenonAlgorithm();
         initCommonUI();
         reset();
     }
@@ -53,11 +53,11 @@ public class HenonPhaseExplorer extends Simulator {
     @Override
     protected void reset() {
 
-        algorithm_.reset();
+        algorithm.reset();
         setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
 
-        if (options_ != null) {
-            options_.reset();
+        if (options != null) {
+            options.reset();
         }
     }
 
@@ -75,10 +75,10 @@ public class HenonPhaseExplorer extends Simulator {
     public double timeStep() {
         if ( !isPaused() ) {
 
-            if (!useFixedSize_) {
-                algorithm_.setSize(this.getWidth(), this.getHeight());
+            if (!useFixedSize) {
+                algorithm.setSize(this.getWidth(), this.getHeight());
             }
-            algorithm_.timeStep(timeStep_);
+            algorithm.timeStep(timeStep_);
         }
         return timeStep_;
     }
@@ -89,7 +89,7 @@ public class HenonPhaseExplorer extends Simulator {
         super.paint(g);
 
         Profiler.getInstance().startRenderingTime();
-        g.drawImage(algorithm_.getImage(), 0, 0, null);
+        g.drawImage(algorithm.getImage(), 0, 0, null);
         Profiler.getInstance().stopRenderingTime();
     }
 
@@ -103,11 +103,11 @@ public class HenonPhaseExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(algorithm_, this);
-        return options_;
+        options = new DynamicOptions(algorithm, this);
+        return options;
     }
 
     public ColorMap getColorMap() {
-        return algorithm_.getColorMap();
+        return algorithm.getColorMap();
     }
 }

@@ -26,7 +26,8 @@ public class Source extends Region {
      * @param stop opposite corner of the rectangle were  the flow to start.
      * @param velocity speed at which the liquid will flow.
      */
-    public Source(Location start, Location stop, Vector2d velocity) {
+    private Source(Location start, Location stop, Vector2d velocity) {
+
         this(start, stop, velocity, 0, -1, -1);
     }
 

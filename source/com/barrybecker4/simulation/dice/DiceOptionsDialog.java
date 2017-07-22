@@ -24,7 +24,7 @@ public class DiceOptionsDialog extends SimulatorOptionsDialog {
     /**
      * constructor
      */
-    public DiceOptionsDialog( Component parent, Simulator simulator ) {
+    DiceOptionsDialog( Component parent, Simulator simulator ) {
         super( parent, simulator );
     }
 

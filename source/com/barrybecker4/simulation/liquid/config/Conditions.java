@@ -25,20 +25,17 @@ public class Conditions {
     private static final String START = "start";
     private static final String STOP = "stop";
 
-    private int gridWidth_;
-    private int gridHeight_;
+    private int gridWidth;
+    private int gridHeight;
 
-    private double cellSize_;
-    private double gravity_;
+    private double cellSize;
+    private double gravity;
 
     /** keep the walls globally because we need to draw them each frame. */
-    private List<Wall> walls_;
-
-    private List<Source> sources_;
-
-    private List<Region> sinks_;
-
-    private List<Region> initialLiquidRegions_;
+    private List<Wall> walls;
+    private List<Source> sources;
+    private List<Region> sinks;
+    private List<Region> initialLiquidRegions;
 
     /**
      * Constructor
@@ -60,11 +57,11 @@ public class Conditions {
         Node envRoot = document.getDocumentElement();    // environment element
         NodeList children = envRoot.getChildNodes();
 
-        gridWidth_ = Integer.parseInt(DomUtil.getAttribute(envRoot, "gridWidth"));
-        gridHeight_ = Integer.parseInt(DomUtil.getAttribute(envRoot, "gridHeight"));
+        gridWidth = Integer.parseInt(DomUtil.getAttribute(envRoot, "gridWidth"));
+        gridHeight = Integer.parseInt(DomUtil.getAttribute(envRoot, "gridHeight"));
 
-        cellSize_ = Double.parseDouble(DomUtil.getAttribute(envRoot, "cellSize"));
-        gravity_ = Double.parseDouble(DomUtil.getAttribute(envRoot, "gravity"));
+        cellSize = Double.parseDouble(DomUtil.getAttribute(envRoot, "cellSize"));
+        gravity = Double.parseDouble(DomUtil.getAttribute(envRoot, "gravity"));
 
         int num = children.getLength();
 
@@ -92,11 +89,10 @@ public class Conditions {
      *      ...
      *  </walls>
      * </pre>
-     * @param wallsNode
      */
     private void parseWalls(Node wallsNode) {
 
-        walls_ = new ArrayList<Wall>();
+        walls = new ArrayList<Wall>();
 
         NodeList children = wallsNode.getChildNodes();
         int num = children.getLength();
@@ -104,7 +100,7 @@ public class Conditions {
 
             Node n = children.item(i);
             Wall w = new Wall(parseLocation(n, START), parseLocation(n, STOP));
-            walls_.add(w);
+            walls.add(w);
         }
     }
 
@@ -116,13 +112,12 @@ public class Conditions {
      *     <region start="1,25" stop="20, 31" />
      * </liquid>
      * </pre>
-     * @param wallsNode
      */
     private void parseLiquidRegions(Node wallsNode) {
 
-        sources_ = new ArrayList<Source>();
-        sinks_ = new ArrayList<Region>();
-        initialLiquidRegions_ = new ArrayList<Region>();
+        sources = new ArrayList<Source>();
+        sinks = new ArrayList<Region>();
+        initialLiquidRegions = new ArrayList<Region>();
 
         NodeList children = wallsNode.getChildNodes();
         int num = children.getLength();
@@ -135,15 +130,15 @@ public class Conditions {
 
             if ("source".equals(name)) {
                 Source source = parseSource(n);
-                sources_.add(source);
+                sources.add(source);
             }
             else if ("sink".equals(name)) {
                 Region sink = parseRegion(n);
-                sinks_.add(sink);
+                sinks.add(sink);
             }
             else if ("region".equals(name)) {
                 Region region = parseRegion(n);
-                initialLiquidRegions_.add(region);
+                initialLiquidRegions.add(region);
             }
         }
     }
@@ -180,8 +175,8 @@ public class Conditions {
          int yPos = Integer.parseInt(locationString.substring(commaPos + 1));
 
          // verify that it is within the bounds of the grid
-         assert (xPos <=  this.gridWidth_ && xPos > 0) : "invalid xpos = "+ xPos;
-         assert (yPos <=  this.gridHeight_ && yPos > 0) : "invalid ypos = "+ yPos;
+         assert (xPos <=  this.gridWidth && xPos > 0) : "invalid xpos = "+ xPos;
+         assert (yPos <=  this.gridHeight && yPos > 0) : "invalid ypos = "+ yPos;
 
          return new IntLocation(yPos, xPos);
     }
@@ -196,47 +191,47 @@ public class Conditions {
     }
 
     public List<Wall> getWalls() {
-        return walls_;
+        return walls;
     }
 
     public List<Source> getSources() {
-        return sources_;
+        return sources;
     }
 
     public List<Region> getSinks() {
-        return sinks_;
+        return sinks;
     }
 
     public List<Region> getInitialLiquidRegions() {
-        return initialLiquidRegions_;
+        return initialLiquidRegions;
     }
 
     /**
-     * @return the gridWidth_
+     * @return the gridWidth
      */
     public int getGridWidth() {
-        return gridWidth_;
+        return gridWidth;
     }
 
     /**
-     * @return the gridHeight_
+     * @return the gridHeight
      */
     public int getGridHeight() {
-        return gridHeight_;
+        return gridHeight;
     }
 
     /**
      * @return the cellSize
      */
     public double getCellSize() {
-        return cellSize_;
+        return cellSize;
     }
 
     /**
-     * @return the gravity_
+     * @return the gravity
      */
     public double getGravity() {
-        return gravity_;
+        return gravity;
     }
 
 }

@@ -22,16 +22,14 @@ public class OptionsDialog extends SimulatorOptionsDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        HenonPhaseExplorer sim = (HenonPhaseExplorer) getSimulator();
-
+        //HenonPhaseExplorer sim = (HenonPhaseExplorer) getSimulator();
         return panel;
     }
-
 
     @Override
     public void actionPerformed( ActionEvent e ) {
         super.actionPerformed(e);
         Object source = e.getSource();
-        HenonPhaseExplorer sim = (HenonPhaseExplorer) getSimulator();
+        //HenonPhaseExplorer sim = (HenonPhaseExplorer) getSimulator();
     }
 }

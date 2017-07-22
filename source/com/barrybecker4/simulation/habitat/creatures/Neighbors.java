@@ -29,7 +29,7 @@ public class Neighbors {
      * Constructor
      */
     public Neighbors(Creature creature, HabitatGrid grid) {
-        flockFriends = new ArrayList<Creature>();
+        flockFriends = new ArrayList<>();
         this.creature = creature;
         this.grid = grid;
         findNeighbors();

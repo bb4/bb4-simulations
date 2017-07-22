@@ -23,12 +23,12 @@ import java.awt.*;
 public class HabitatSimulator extends Simulator {
 
     private Populations populations;
-    private DynamicOptions options_;
+    private DynamicOptions options;
     private JSplitPane splitPane;
 
 
     /** Constructor */
-    public HabitatSimulator() {
+    private HabitatSimulator() {
 
         super("Habitat Simulation");
         setBackground(Color.WHITE);
@@ -59,7 +59,7 @@ public class HabitatSimulator extends Simulator {
         ThreadUtil.sleep(500);
         MathUtil.RANDOM.setSeed(1);
         populations.reset();
-        options_.reset();
+        options.reset();
         this.setPaused(false);
     }
 
@@ -71,7 +71,7 @@ public class HabitatSimulator extends Simulator {
     @Override
     public double timeStep() {
 
-        options_.update();
+        options.update();
         populations.nextDay();
         return timeStep_;
     }
@@ -92,8 +92,8 @@ public class HabitatSimulator extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(this);
-        return options_;
+        options = new DynamicOptions(this);
+        return options;
     }
 
     @Override

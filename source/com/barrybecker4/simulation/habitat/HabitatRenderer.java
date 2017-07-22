@@ -15,22 +15,21 @@ import java.awt.*;
 public class HabitatRenderer  {
 
     private static final double SIZE_SCALE = 0.001;
-    Populations populations;
+    private Populations populations;
 
-    int width_;
-    int height_;
-
+    private int width;
+    private int height;
 
     /**
      * Constructor.
      */
-    public HabitatRenderer(Populations populations) {
+    HabitatRenderer(Populations populations) {
         this.populations = populations;
     }
 
     public void setSize(int width, int height) {
-        width_ = width;
-        height_ = height;
+        this.width = width;
+        this.height = height;
     }
 
     /** draw the cartesian functions */
@@ -48,14 +47,14 @@ public class HabitatRenderer  {
     }
 
     private void drawCreature(Creature creature, Graphics2D g2) {
-        int w = (int) (creature.getSize() * width_ * SIZE_SCALE + 1.0);
-        int h = (int) (creature.getSize() * height_ * SIZE_SCALE + 1.0);
-        int centerX = (int)(creature.getLocation().x * width_);
-        int centerY = (int)(creature.getLocation().y * height_);
+        int w = (int) (creature.getSize() * width * SIZE_SCALE + 1.0);
+        int h = (int) (creature.getSize() * height * SIZE_SCALE + 1.0);
+        int centerX = (int)(creature.getLocation().x * width);
+        int centerY = (int)(creature.getLocation().y * height);
         g2.fillOval(centerX - w/2, centerY - h/2, w, h);
 
-        int vectorEndpointX = (int)(centerX + creature.getVelocity().x * width_);
-        int vectorEndpointY = (int)(centerY + creature.getVelocity().y * height_);
+        int vectorEndpointX = (int)(centerX + creature.getVelocity().x * width);
+        int vectorEndpointY = (int)(centerY + creature.getVelocity().y * height);
         g2.drawLine(centerX, centerY, vectorEndpointX, vectorEndpointY);
 
         if (creature.isPursuing()) {

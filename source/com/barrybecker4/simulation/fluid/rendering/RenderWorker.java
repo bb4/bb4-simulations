@@ -19,7 +19,6 @@ public class RenderWorker implements Runnable {
     }
 
     public void run() {
-
         modelImage_.updateImage(minY_, maxY_);
     }
 }

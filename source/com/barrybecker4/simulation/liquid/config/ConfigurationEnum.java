@@ -8,7 +8,6 @@ package com.barrybecker4.simulation.liquid.config;
  */
 public enum ConfigurationEnum {
 
-
     SPIGOT_RIGHT("Spigot to the Right", "A spigot aimed to the right", getFileBase() + "spigotRight.xml"),
     SPIGOT_LEFT("Spigot to the Left", "A spigot aimed to the left", getFileBase() + "spigotLeft.xml"),
     BASIC("Basic", "A stream of water into a pool",  getFileBase() + "config1.xml"),
@@ -19,7 +18,6 @@ public enum ConfigurationEnum {
     PULSE_LARGE("Pulsing spigot", "Water pulsing out of the spigot", getFileBase() + "pulse_large.xml"),
     PULSE_SMALL("Pulsing spigot (3x3)", "Water pulsing out of the spigot (3x3)", getFileBase() + "pulse_small.xml"),
     PULSE_SMALLEST("Pulsing spigot (2x2)", "Water pulsing out of the spigot (2x2)", getFileBase() + "pulse_smallest.xml");
-
 
     private String name;
     private String description;

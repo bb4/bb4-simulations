@@ -19,8 +19,7 @@ public class TravelerParams {
     /**
      * Default Constructor.
      */
-    public TravelerParams() {
-    }
+    public TravelerParams() {}
 
     /**
      * Constructor.
@@ -79,7 +78,4 @@ public class TravelerParams {
     public double getOffset() {
         return offset;
     }
-
-
-
 }

@@ -6,12 +6,12 @@ package com.barrybecker4.simulation.dice;
  *
  * @author Barry Becker
  */
-public class DiceOptions {
+class DiceOptions {
 
     static final int DEFAULT_NUMBER_OF_DICE = 2;
     static final int DEFAULT_NUMBER_OF_SIDES = 6;
 
-    public int numDice = DEFAULT_NUMBER_OF_DICE;
-    public int numSides = DEFAULT_NUMBER_OF_SIDES;
+    int numDice = DEFAULT_NUMBER_OF_DICE;
+    int numSides = DEFAULT_NUMBER_OF_SIDES;
 
 }

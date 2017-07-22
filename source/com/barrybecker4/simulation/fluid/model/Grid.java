@@ -9,19 +9,19 @@ import com.barrybecker4.simulation.common.RectangularModel;
  */
 public class Grid implements RectangularModel {
 
-    private int dimX_;
-    private int dimY_;
+    private int dimX;
+    private int dimY;
 
-    CellGrid grid0;
-    CellGrid grid1;
+    private CellGrid grid0;
+    private CellGrid grid1;
 
     /**
      * Creates a new instance of Grid
      */
     public Grid(int dimX, int dimY) {
 
-        dimX_ = dimX;
-        dimY_ = dimY;
+        this.dimX = dimX;
+        this.dimY = dimY;
 
         grid0 = new CellGrid(dimX, dimY);
         grid1 = new CellGrid(dimX, dimY);
@@ -30,18 +30,18 @@ public class Grid implements RectangularModel {
     }
 
     public int getWidth() {
-        return dimX_;
+        return dimX;
     }
 
     public int getHeight() {
-        return dimY_;
+        return dimY;
     }
 
-    public CellGrid getGrid0() {
+    CellGrid getGrid0() {
         return grid0;
     }
 
-    public CellGrid getGrid1() {
+    CellGrid getGrid1() {
         return grid1;
     }
 
@@ -99,18 +99,18 @@ public class Grid implements RectangularModel {
      */
     public void setBoundary(Boundary b, double[][] x)  {
 
-        for (int i=1 ; i<=dimX_ ; i++ ) {
+        for (int i = 1; i<= dimX; i++ ) {
             x[i][0] = b==Boundary.HORIZONTAL ? -x[i][1] : x[i][1];
-            x[i][dimY_+1] = b==Boundary.HORIZONTAL ? -x[i][dimY_] : x[i][dimY_];
+            x[i][dimY +1] = b==Boundary.HORIZONTAL ? -x[i][dimY] : x[i][dimY];
         }
-        for (int i=1 ; i<=dimY_ ; i++ ) {
+        for (int i = 1; i<= dimY; i++ ) {
             x[0][i] = b==Boundary.VERTICAL ? -x[1][i] : x[1][i];
-            x[dimX_+1][i] = b==Boundary.VERTICAL ? -x[dimX_][i] : x[dimX_][i];
+            x[dimX +1][i] = b==Boundary.VERTICAL ? -x[dimX][i] : x[dimX][i];
         }
 
         x[0][ 0] = 0.5f * (x[1][0] + x[0][1]);
-        x[0][dimY_+1] = 0.5f * (x[1][dimY_+1] + x[0][dimY_]);
-        x[dimX_+1][0] = 0.5f * (x[dimX_][0] + x[dimX_+1][1]);
-        x[dimX_+1][dimY_+1] = 0.5f*(x[dimX_][dimY_+1] + x[dimX_+1][dimY_]);
+        x[0][dimY +1] = 0.5f * (x[1][dimY +1] + x[0][dimY]);
+        x[dimX +1][0] = 0.5f * (x[dimX][0] + x[dimX +1][1]);
+        x[dimX +1][dimY +1] = 0.5f*(x[dimX][dimY +1] + x[dimX +1][dimY]);
     }
 }

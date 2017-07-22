@@ -27,7 +27,7 @@ public class ConwayExplorer extends Simulator {
         commonInit();
     }
 
-    public InteractionHandler getInteractionHandler() {
+    InteractionHandler getInteractionHandler() {
         return handler_;
     }
 

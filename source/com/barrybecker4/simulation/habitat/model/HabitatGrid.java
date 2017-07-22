@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class HabitatGrid {
 
-    int xDim;
-    int yDim;
+    private int xDim;
+    private int yDim;
 
-    Cell[][] cells;
+    private Cell[][] cells;
 
 
     public HabitatGrid(int xDim, int yDim)  {
@@ -27,7 +27,6 @@ public class HabitatGrid {
             }
         }
     }
-
 
     public Cell getCellForPosition(Point2d position) {
 

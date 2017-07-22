@@ -8,8 +8,8 @@ package com.barrybecker4.simulation.fluid.model;
  */
 public class CellGrid {
 
-    private int dimX_;
-    private int dimY_;
+    private int dimX;
+    private int dimY;
 
     public double u[][];
     public double v[][];
@@ -20,12 +20,12 @@ public class CellGrid {
      */
     public CellGrid(int dimX, int dimY) {
 
-        dimX_ = dimX;
-        dimY_ = dimY;
+        this.dimX = dimX;
+        this.dimY = dimY;
 
-        u =  new double[dimX_ + 2][dimY_ + 2];
-        v =  new double[dimX_ + 2][dimY_ + 2];
-        density = new double[dimX_ + 2][dimY_ + 2];
+        u =  new double[this.dimX + 2][this.dimY + 2];
+        v =  new double[this.dimX + 2][this.dimY + 2];
+        density = new double[this.dimX + 2][this.dimY + 2];
 
         addInitialInkDensity();
     }
@@ -49,8 +49,8 @@ public class CellGrid {
     }
 
     public void addInitialInkDensity() {
-        for ( int i=2; i<dimX_/2; i++) {
-            for ( int j=2; j<dimY_/2; j++) {
+        for (int i = 2; i< dimX /2; i++) {
+            for (int j = 2; j< dimY /2; j++) {
 
                 u[i][j] = (0.01 + (Math.cos(0.4*i)+Math.sin(0.3*j))/10.0);
                 v[i][j] = (.1 - (Math.sin(.2*i) + Math.sin(0.1 * j)/10.0));

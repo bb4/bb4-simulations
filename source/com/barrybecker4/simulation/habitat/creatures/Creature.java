@@ -30,8 +30,6 @@ public class Creature  {
     /** if becomes too large, then starve */
     private int hunger;
     private boolean alive;
-    /** set to true if pursued or pursuing. Use maxSpeed when running. */
-    //private boolean isRunning;
     /** chasing prey */
     private boolean pursuing;
     /** not mature (capable of having children) until eaten at least once (and can eat). */
@@ -40,7 +38,7 @@ public class Creature  {
     /**
      * Constructor
      */
-    public Creature(CreatureType type, Point2d location) {
+    Creature(CreatureType type, Point2d location) {
         this.type = type;
         this.location = location;
 
