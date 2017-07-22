@@ -19,9 +19,9 @@ public class ModelImage {
 
     private RectangularModel model;
     private ColorMap cmap;
-    BufferedImage image;
-    int scale = 1;
-    boolean useLinearInterpolation = false;
+    private BufferedImage image;
+    private int scale = 1;
+    private boolean useLinearInterpolation = false;
 
     /**
      * constructor
@@ -75,16 +75,15 @@ public class ModelImage {
             }
         }
 
-        //System.out.println("updateImage width= "  +width+ " height="+ model.getHeight() +" rectHt="+ rectHeight + " pixelDim="+ pixels.magnitude
-        //        + " currentRow="+ model.getCurrentRow() +" lastRow = " + lastRow + "  imgDims= "+ image.getWidth() +", " + image.getHeight());
-        image.setRGB(0, scale * lastRow, scale * width, scale * rectHeight, pixels, 0, scale * width);
+        image.setRGB(0, scale * lastRow, scale * width, scale * rectHeight, pixels, 0,
+                scale * width);
     }
 
 
     /**
      * Determine the colors for a rectangular strip of pixels.
      */
-    public void setColorRect(int xStart, int yStart, int lastRow, int[] pixels) {
+    private void setColorRect(int xStart, int yStart, int lastRow, int[] pixels) {
 
         int width = scale * model.getWidth();
         int xScaledStart = scale * xStart;

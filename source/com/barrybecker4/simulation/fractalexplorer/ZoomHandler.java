@@ -17,7 +17,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class ZoomHandler implements MouseListener, MouseMotionListener {
 
-    FractalAlgorithm algorithm_;
+    private FractalAlgorithm algorithm;
 
     /** if control or shift key held down while dragging, maintain aspect ratio */
     private boolean keepAspectRatio = false;
@@ -29,7 +29,7 @@ public class ZoomHandler implements MouseListener, MouseMotionListener {
      * Constructor
      */
     public ZoomHandler(FractalAlgorithm algorithm) {
-        algorithm_ = algorithm;
+        this.algorithm = algorithm;
         zoomBox = new ZoomBox();
     }
 
@@ -53,8 +53,8 @@ public class ZoomHandler implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent e) {
 
         if (zoomBox.isValidBox())   {
-            ComplexNumberRange range = algorithm_.getRange(zoomBox.getBox());
-            algorithm_.setRange(range);
+            ComplexNumberRange range = algorithm.getRange(zoomBox.getBox());
+            algorithm.setRange(range);
         }
         zoomBox.clearBox();
     }

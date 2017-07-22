@@ -1,32 +1,29 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.conway;
 
-import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.simulation.conway.model.ConwayModel;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Interactively explores generating cave systems.
+ * Interactively explores Conway's game of life.
+ * See https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
  *
  * @author Barry Becker.
  */
-public class CaveExplorer extends Simulator {
+public class ConwayExplorer extends Simulator {
 
-    private CaveModel caveModel;
+    private ConwayModel conwayModel;
     private DynamicOptions options;
     private InteractionHandler handler_;
 
-    protected static final double INITIAL_TIME_STEP = 10.0;
-    protected static final int DEFAULT_STEPS_PER_FRAME = 10;
 
-
-    public CaveExplorer() {
-        super("Cave Explorer");
+    public ConwayExplorer() {
+        super("Conway's Game of Life Explorer");
         commonInit();
     }
 
@@ -35,19 +32,18 @@ public class CaveExplorer extends Simulator {
     }
 
     private void commonInit() {
-        caveModel = new CaveModel();
+        conwayModel = new ConwayModel();
 
         initCommonUI();
 
-        handler_ = new InteractionHandler(caveModel, caveModel.getScale());
+        handler_ = new InteractionHandler(conwayModel, conwayModel.getScale());
         this.addMouseListener(handler_);
         this.addMouseMotionListener(handler_);
     }
 
     @Override
     protected void reset() {
-        //caveModel.reset();
-        setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
+        setNumStepsPerFrame(1);
         // remove handlers to void memory leak
         this.removeMouseListener(handler_);
         this.removeMouseMotionListener(handler_);
@@ -65,14 +61,14 @@ public class CaveExplorer extends Simulator {
 
     @Override
     protected double getInitialTimeStep() {
-        return INITIAL_TIME_STEP;
+        return 1;
     }
 
     @Override
     public double timeStep() {
         if ( !isPaused() ) {
-            caveModel.setSize(this.getWidth(), this.getHeight());
-            caveModel.timeStep(timeStep_);
+            conwayModel.setSize(this.getWidth(), this.getHeight());
+            conwayModel.timeStep(timeStep_);
         }
         return timeStep_;
     }
@@ -84,7 +80,7 @@ public class CaveExplorer extends Simulator {
 
         Profiler.getInstance().startRenderingTime();
 
-        g.drawImage(caveModel.getImage(), 0, 0, null);
+        g.drawImage(conwayModel.getImage(), 0, 0, null);
         Profiler.getInstance().stopRenderingTime();
     }
 
@@ -98,7 +94,7 @@ public class CaveExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options = new com.barrybecker4.simulation.cave.DynamicOptions(caveModel, this);
+        options = new DynamicOptions(conwayModel, this);
         setPaused(false);
         return options;
     }

@@ -46,13 +46,13 @@ class DynamicOptions extends JPanel
     private static final int PREFERRED_WIDTH = 300;
     private static final int SPACING = 14;
 
-    private SliderGroup generalSliderGroup_;
-    private SliderGroup bumpSliderGroup_;
-    private SliderGroup brushSliderGroup_;
+    private SliderGroup generalSliderGroup;
+    private SliderGroup bumpSliderGroup;
+    private SliderGroup brushSliderGroup;
 
-    private JCheckBox useContinuousIteration_;
-    private JCheckBox useParallelComputation_;
-    private CaveExplorer simulator_;
+    private JCheckBox useContinuousIteration;
+    private JCheckBox useParallelComputation;
+    private CaveExplorer simulator;
 
     private static final SliderProperties[] GENERAL_SLIDER_PROPS = {
 
@@ -73,8 +73,8 @@ class DynamicOptions extends JPanel
 
     private static final SliderProperties[] BRUSH_SLIDER_PROPS = {
 
-        new SliderProperties(BRUSH_RADIUS_SLIDER,  1,   30,  CaveModel.DEFAULT_BRUSH_RADIUS),
-        new SliderProperties(BRUSH_STRENGTH_SLIDER, 0.1,   1,  CaveModel.DEFAULT_BRUSH_STRENGTH, 100),
+        new SliderProperties(BRUSH_RADIUS_SLIDER,  1,   50,  CaveModel.DEFAULT_BRUSH_RADIUS),
+        new SliderProperties(BRUSH_STRENGTH_SLIDER, 0.1,   2.0,  CaveModel.DEFAULT_BRUSH_STRENGTH, 100),
     };
 
     /**
@@ -82,7 +82,7 @@ class DynamicOptions extends JPanel
      */
     DynamicOptions(CaveModel algorithm, CaveExplorer simulator) {
 
-        simulator_ = simulator;
+        this.simulator = simulator;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(PREFERRED_WIDTH, 900));
@@ -115,22 +115,22 @@ class DynamicOptions extends JPanel
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(createTitledBorder("General parameters"));
 
-        generalSliderGroup_ = new SliderGroup(GENERAL_SLIDER_PROPS);
-        generalSliderGroup_.addSliderChangeListener(this);
+        generalSliderGroup = new SliderGroup(GENERAL_SLIDER_PROPS);
+        generalSliderGroup.addSliderChangeListener(this);
 
-        panel.add(generalSliderGroup_, BorderLayout.CENTER);
+        panel.add(generalSliderGroup, BorderLayout.CENTER);
 
         return panel;
     }
 
     private JPanel createBumpControls() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(createTitledBorder("Bump prameters"));
+        panel.setBorder(createTitledBorder("Bump parameters"));
 
-        bumpSliderGroup_ = new SliderGroup(BUMP_SLIDER_PROPS);
-        bumpSliderGroup_.addSliderChangeListener(this);
+        bumpSliderGroup = new SliderGroup(BUMP_SLIDER_PROPS);
+        bumpSliderGroup.addSliderChangeListener(this);
 
-        panel.add(bumpSliderGroup_, BorderLayout.CENTER);
+        panel.add(bumpSliderGroup, BorderLayout.CENTER);
         return panel;
     }
 
@@ -144,10 +144,10 @@ class DynamicOptions extends JPanel
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(createTitledBorder("Brush Parameters (left: raise; right: lower)"));
 
-        brushSliderGroup_ = new SliderGroup(BRUSH_SLIDER_PROPS);
-        brushSliderGroup_.addSliderChangeListener(this);
+        brushSliderGroup = new SliderGroup(BRUSH_SLIDER_PROPS);
+        brushSliderGroup.addSliderChangeListener(this);
 
-        panel.add(brushSliderGroup_, BorderLayout.CENTER);
+        panel.add(brushSliderGroup, BorderLayout.CENTER);
         return panel;
     }
 
@@ -180,16 +180,16 @@ class DynamicOptions extends JPanel
         JPanel panel = new JPanel(new BorderLayout());
 
         JLabel label = new JLabel("Continuous iteration: ");
-        useContinuousIteration_ = new JCheckBox();
-        useContinuousIteration_.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION);
-        useContinuousIteration_.addActionListener(this);
+        useContinuousIteration = new JCheckBox();
+        useContinuousIteration.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION);
+        useContinuousIteration.addActionListener(this);
 
         nextButton = new JButton("Next");
         nextButton.addActionListener(this);
-        nextButton.setEnabled(!useContinuousIteration_.isSelected());
+        nextButton.setEnabled(!useContinuousIteration.isSelected());
 
         panel.add(label, BorderLayout.WEST);
-        panel.add(useContinuousIteration_, BorderLayout.CENTER);
+        panel.add(useContinuousIteration, BorderLayout.CENTER);
         panel.add(nextButton, BorderLayout.EAST);
         panel.add(createCheckboxPanel(), BorderLayout.SOUTH);
 
@@ -203,12 +203,12 @@ class DynamicOptions extends JPanel
         JPanel panel = new JPanel();
 
         JLabel label = new JLabel("Parallel computation: ");
-        useParallelComputation_ = new JCheckBox();
-        useParallelComputation_.setSelected(CaveProcessor.DEFAULT_USE_PARALLEL);
-        useParallelComputation_.addActionListener(this);
+        useParallelComputation = new JCheckBox();
+        useParallelComputation.setSelected(CaveProcessor.DEFAULT_USE_PARALLEL);
+        useParallelComputation.addActionListener(this);
 
         panel.add(label);
-        panel.add(useParallelComputation_);
+        panel.add(useParallelComputation);
         panel.add(Box.createHorizontalGlue());
 
         return panel;
@@ -227,7 +227,7 @@ class DynamicOptions extends JPanel
     }
 
     public void reset() {
-        generalSliderGroup_.reset();
+        generalSliderGroup.reset();
     }
 
     /**
@@ -252,8 +252,8 @@ class DynamicOptions extends JPanel
             case BUMP_HEIGHT_SLIDER:
                 caveModel.setBumpHeight(value);
                 // specular highlight does not apply if no bumps
-                bumpSliderGroup_.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
-                bumpSliderGroup_.setEnabled(LIGHT_SOURCE_ELEVATION_SLIDER, value > 0);
+                bumpSliderGroup.setEnabled(SPECULAR_PCT_SLIDER, value > 0);
+                bumpSliderGroup.setEnabled(LIGHT_SOURCE_ELEVATION_SLIDER, value > 0);
                 break;
             case SPECULAR_PCT_SLIDER:
                 caveModel.setSpecularPercent(value);
@@ -269,14 +269,14 @@ class DynamicOptions extends JPanel
                 break;
             case SCALE_SLIDER:
                 caveModel.setScale(value);
-                simulator_.getInteractionHandler().setScale(value);
+                simulator.getInteractionHandler().setScale(value);
                 break;
 
             case BRUSH_RADIUS_SLIDER:
-                simulator_.getInteractionHandler().setBrushRadius((int) value);
+                simulator.getInteractionHandler().setBrushRadius((int) value);
                 break;
             case BRUSH_STRENGTH_SLIDER:
-                simulator_.getInteractionHandler().setBrushStrength(value);
+                simulator.getInteractionHandler().setBrushStrength(value);
                 break;
             default: throw new IllegalArgumentException("Unexpected slider: " + sliderName);
         }
@@ -296,8 +296,8 @@ class DynamicOptions extends JPanel
         else if (e.getSource().equals(resetButton)) {
             caveModel.requestRestart();
         }
-        else if (e.getSource().equals(useContinuousIteration_)) {
-            boolean useCont = useContinuousIteration_.isSelected();
+        else if (e.getSource().equals(useContinuousIteration)) {
+            boolean useCont = useContinuousIteration.isSelected();
             caveModel.setDefaultUseContinuousIteration(useCont);
             nextButton.setEnabled(!useCont);
             if (!useCont) {
@@ -306,8 +306,8 @@ class DynamicOptions extends JPanel
                 caveModel.requestNextStep();
             }
         }
-        else if (e.getSource().equals((useParallelComputation_))) {
-            caveModel.setUseParallelComputation(useParallelComputation_.isSelected());
+        else if (e.getSource().equals((useParallelComputation))) {
+            caveModel.setUseParallelComputation(useParallelComputation.isSelected());
         }
         else throw new IllegalStateException("Unexpected button " + e.getSource());
     }

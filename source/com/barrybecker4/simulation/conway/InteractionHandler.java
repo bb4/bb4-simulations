@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.conway;
 
-import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.simulation.conway.model.ConwayModel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,35 +15,25 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    private CaveModel cave;
+    ConwayModel model;
 
     /** amount of the effect */
-    private double scale;
+    double scale_;
 
     private int currentX, currentY;
-    private int brushRadius = (int) CaveModel.DEFAULT_BRUSH_RADIUS;
-    private double brushStrength = CaveModel.DEFAULT_BRUSH_STRENGTH;
-    private int lastX, lastY;
+    private int brushRadius = 1;
     private boolean mouse1Down, mouse3Down;
 
     /**
      * Constructor
      */
-    public InteractionHandler(CaveModel cave, double scale) {
-        this.cave = cave;
-        this.scale = scale;
+    public InteractionHandler(ConwayModel cave, double scale) {
+        model = cave;
+        scale_ = scale;
     }
 
     public void setScale(double scale) {
-        this.scale = scale;
-    }
-
-    public void setBrushRadius(int rad) {
-        brushRadius = rad;
-    }
-
-    public void setBrushStrength(double strength) {
-        brushStrength = strength;
+        scale_ = scale;
     }
 
     /**
@@ -55,29 +45,27 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         currentX = e.getX();
         currentY = e.getY();
         doBrush();
-        lastX = currentX;
-        lastY = currentY;
     }
 
     private void doBrush() {
-        int i = (int) (currentX / scale);
-        int j = (int) (currentY / scale);
+        int i = (int) (currentX / scale_);
+        int j = (int) (currentY / scale_);
 
         // apply the change to a convolution kernel area
         int startX = Math.max(1, i - brushRadius);
-        int stopX = Math.min(cave.getWidth(), i + brushRadius);
+        int stopX = Math.min(model.getWidth(), i + brushRadius);
         int startY = Math.max(1, j - brushRadius);
-        int stopY = Math.min(cave.getHeight(), j + brushRadius);
+        int stopY = Math.min(model.getHeight(), j + brushRadius);
         // adjust by this so that there is not a discontinuity at the periphery
         double minWt = 0.9 / brushRadius;
 
         for (int ii = startX; ii < stopX; ii++) {
-             for (int jj = startY; jj < stopY; jj++) {
+             for (int jj=startY; jj<stopY; jj++) {
                  double weight = getWeight(i, j, ii, jj, minWt);
                  applyChange(ii, jj, weight);
              }
         }
-        cave.doRender();
+        model.doRender();
     }
 
     /**
@@ -105,19 +93,13 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         else if (mouse3Down) {
             sign = -1;
         }
-        else {
-            // drag with no mouse click
-        }
-
-        cave.incrementHeight(i, j, sign * brushStrength * weight);
+        model.setAlive(j, i);
     }
 
 
     public void mouseMoved(MouseEvent e) {
         currentX = e.getX();
         currentY = e.getY();
-        lastX = currentX;
-        lastY = currentY;
     }
 
     /**

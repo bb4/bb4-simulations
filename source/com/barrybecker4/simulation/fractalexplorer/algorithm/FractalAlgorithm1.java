@@ -44,7 +44,7 @@ import java.util.List;
  *
  * @author Barry Becker
  */
-public abstract class FractalAlgorithm {
+public abstract class FractalAlgorithm1 {
 
     public static final int DEFAULT_MAX_ITERATIONS = 500;
 
@@ -66,11 +66,11 @@ public abstract class FractalAlgorithm {
     private History history_ = new History();
 
 
-    public FractalAlgorithm(FractalModel model, ComplexNumberRange range) {
+    public FractalAlgorithm1(FractalModel model, ComplexNumberRange range) {
         this.model = model;
         setRange(range);
         setParallelized(true);
-        rowCalculator_ = new RowCalculator(this);
+        //rowCalculator_ = new RowCalculator(this);
     }
 
     public void setRange(ComplexNumberRange range)  {

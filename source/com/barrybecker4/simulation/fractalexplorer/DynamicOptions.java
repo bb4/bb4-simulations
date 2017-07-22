@@ -8,8 +8,16 @@ import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
 import com.barrybecker4.ui.sliders.SliderProperties;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -40,7 +48,7 @@ class DynamicOptions extends JPanel
     private static final int MAX_NUM_STEPS = (int)(10.0 * INITIAL_TIME_STEP);
 
     private static final SliderProperties[] SLIDER_PROPS = {
-        new SliderProperties(ITER_SLIDER,      100,           10000,      FractalAlgorithm.DEFAULT_MAX_ITERATIONS(),   1),
+        new SliderProperties(ITER_SLIDER,      100,   10000, FractalAlgorithm.DEFAULT_MAX_ITERATIONS(),   1),
         new SliderProperties(TIMESTEP_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   INITIAL_TIME_STEP, 1),
     };
 
