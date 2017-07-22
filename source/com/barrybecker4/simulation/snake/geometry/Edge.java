@@ -13,10 +13,10 @@ import java.awt.geom.Rectangle2D;
 public class Edge {
 
     // the 2 endpoints defining the edge endpoints
-    private Particle firstParticle_;
-    private Particle secondParticle_;
+    private Particle firstParticle;
+    private Particle secondParticle;
 
-    private Line2D.Double segment_ = null;
+    private Line2D.Double segment = null;
 
     /** constants related the the spring for this edge segment  */
     private static final double K = 0.8; // default  .6
@@ -25,7 +25,7 @@ public class Edge {
     private static final double D = 1.2; // default
 
     /** the spring constant K (large K = stiffer) */
-    private double k_;
+    private double k;
 
     /** damping constant  */
     private double damping;
@@ -54,11 +54,11 @@ public class Edge {
     }
 
     public Particle getFirstParticle() {
-        return firstParticle_;
+        return firstParticle;
     }
 
     public Particle getSecondParticle() {
-        return secondParticle_;
+        return secondParticle;
     }
 
     public double getRestingLength() {
@@ -71,13 +71,13 @@ public class Edge {
 
 
     private void commonInit( Particle p1, Particle p2, double k, double d ) {
-        segment_ = new Line2D.Double( p1.x, p1.y, p2.x, p2.y );
-        firstParticle_ = p1;
-        secondParticle_ = p2;
+        segment = new Line2D.Double( p1.x, p1.y, p2.x, p2.y );
+        firstParticle = p1;
+        secondParticle = p2;
 
-        k_ = k;
+        this.k = k;
         damping = d;
-        restingLength = firstParticle_.distance( secondParticle_ );
+        restingLength = firstParticle.distance(secondParticle);
         effectiveLength = restingLength;
         length = restingLength; // current magnitude
     }
@@ -87,7 +87,7 @@ public class Edge {
      *  the rest magnitude restingLength is effectively changed by the contraction factor.
      *  @param contraction the amount that the spring model for the edge is contracting
      */
-    public void setContraction( double contraction )  {
+    void setContraction( double contraction )  {
         if (contraction <= 0) {
             throw new IllegalArgumentException( "Error contraction <=0 = "+contraction );
             //contraction = EPS;
@@ -96,38 +96,38 @@ public class Edge {
     }
 
     /**
-     * The force that the spring edge exerts is k_ times the vector (L-l)p2-p1
+     * The force that the spring edge exerts is k times the vector (L-l)p2-p1
      * where L is the resting magnitude of the edge and l is the current magnitude
      * The official formula in proceedings of Siggraph 1988 p169 is
      *   k(L-l) - D* dl/dt
      * @return the computed force exerted on the particle.
      */
     public Vector2d getForce() {
-        force.set(secondParticle_);
-        force.sub(firstParticle_);
+        force.set(secondParticle);
+        force.sub(firstParticle);
         direction.set(force);
         direction.normalize();
 
         // adjust the force by the damping term
-        dampingVec.set(secondParticle_.velocity);
-        dampingVec.sub(firstParticle_.velocity);
+        dampingVec.set(secondParticle.velocity);
+        dampingVec.sub(firstParticle.velocity);
         double halfEffectiveL = effectiveLength / 2.0;
         double damp = damping * dampingVec.dot(direction);
 
         length = force.length();
         // never let the force get too great or too small
         if ( length > 2.0 * effectiveLength)
-            force.scale( (-k_ * (effectiveLength - length) * (effectiveLength - length) / effectiveLength - damp) );
+            force.scale( (-k * (effectiveLength - length) * (effectiveLength - length) / effectiveLength - damp) );
         else if ( length < halfEffectiveL ) {
             // prevent the springs from getting too compressed
             double lengthDiff =  restingLength - length;
-            force.scale(k_ * (lengthDiff + 100000.0 * (halfEffectiveL - length)) / halfEffectiveL - damp);
+            force.scale(k * (lengthDiff + 100000.0 * (halfEffectiveL - length)) / halfEffectiveL - damp);
         }
         else {
 
             //if (d>1.0)
-            //   System.out.println("f="+k_*(effectiveLength-length)+" - d="+d);
-            force.scale( (k_ * (effectiveLength - length) - damp) );
+            //   System.out.println("f="+k*(effectiveLength-length)+" - d="+d);
+            force.scale( (k * (effectiveLength - length) - damp) );
         }
 
         return force;
@@ -137,14 +137,14 @@ public class Edge {
      * A unit vector in the direction p2-p1
      */
     public Vector2d getDirection() {
-        direction.set(secondParticle_);
-        direction.sub(firstParticle_);
+        direction.set(secondParticle);
+        direction.sub(firstParticle);
         direction.normalize();
         return direction;
     }
 
     public boolean intersects( Rectangle2D.Double rect ) {
-        return segment_.intersects( rect );
+        return segment.intersects( rect );
     }
 
     /**

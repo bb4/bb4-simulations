@@ -8,12 +8,12 @@ import com.barrybecker4.simulation.snake.geometry.SegmentUpdater;
  *
  *  @author Barry Becker
  */
-public class SnakeUpdater {
+class SnakeUpdater {
 
     private Snake snake;
 
     /** the time since the start of the simulation */
-    private double time_ = 0.0;
+    private double time = 0.0;
 
     private LocomotionParameters locomotionParams = new LocomotionParameters();
     private SegmentUpdater segmentUpdater;
@@ -21,7 +21,7 @@ public class SnakeUpdater {
     /**
      * Constructor
      */
-    public SnakeUpdater() {
+    SnakeUpdater() {
         segmentUpdater = new SegmentUpdater();
     }
 
@@ -42,7 +42,7 @@ public class SnakeUpdater {
         boolean unstable = updateParticleVelocities( timeStep );
         updateParticlePositions( timeStep );
 
-        time_ += timeStep;
+        time += timeStep;
         if ( unstable ) {
             return timeStep / 2;
         }
@@ -66,7 +66,7 @@ public class SnakeUpdater {
         // apply the sinusoidal muscular contraction function to the
         // left and right sides of the snake
         for ( int i = 2; i <snake.getNumSegments(); i++ )
-            snake.getSegment(i).contractMuscles(locomotionParams, time_);
+            snake.getSegment(i).contractMuscles(locomotionParams, time);
 
         // update forces based on surrounding contracted springs
         for ( int i = 0; i < snake.getNumSegments(); i++ )
