@@ -2,14 +2,13 @@
 package com.barrybecker4.simulation.lsystem.rendering;
 
 import com.barrybecker4.common.geometry.IntLocation;
-import com.barrybecker4.common.geometry.Location;
 
 /**
  * The current position and orientation used while rendering.
  *
  * @author Barry Becker
  */
-public class OrientedPosition {
+class OrientedPosition {
     double x;
     double y;
     double angle;

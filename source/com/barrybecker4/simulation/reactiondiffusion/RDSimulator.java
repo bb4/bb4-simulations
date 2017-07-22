@@ -16,9 +16,9 @@ import java.awt.*;
  */
 public class RDSimulator extends Simulator {
 
-    private GrayScottController grayScott_;
-    private RDViewer viewer_;
-    private RDDynamicOptions rdOptions_;
+    private GrayScottController grayScott;
+    private RDViewer viewer;
+    private RDDynamicOptions rdOptions;
 
     protected static final double INITIAL_TIME_STEP = 1.0;
     protected static final int DEFAULT_STEPS_PER_FRAME = 10;
@@ -33,19 +33,19 @@ public class RDSimulator extends Simulator {
      * @param fixed if true then the render area does not resize automatically.
      */
     public void setUseFixedSize(boolean fixed) {
-        viewer_.setUseFixedSize(fixed);
+        viewer.setUseFixedSize(fixed);
     }
 
     public boolean getUseFixedSize() {
-        return viewer_.getUseFixedSize();
+        return viewer.getUseFixedSize();
     }
 
     public void setUseOffscreenRendering(boolean use) {
-        viewer_.setUseOffscreenRendering(use);
+        viewer.setUseOffscreenRendering(use);
     }
 
     public boolean getUseOffScreenRendering() {
-        return viewer_.getUseOffScreenRendering();
+        return viewer.getUseOffScreenRendering();
     }
 
 
@@ -60,17 +60,17 @@ public class RDSimulator extends Simulator {
 
     private void commonInit() {
         initCommonUI();
-        grayScott_ = new GrayScottController(1, 1);
+        grayScott = new GrayScottController(1, 1);
 
         setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
 
-        viewer_ = new RDViewer(grayScott_, this);
+        viewer = new RDViewer(grayScott, this);
     }
 
     @Override
     protected void reset() {
-        grayScott_.reset();
-        rdOptions_.reset();
+        grayScott.reset();
+        rdOptions.reset();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class RDSimulator extends Simulator {
     {
         if ( !isPaused() ) {
             RDProfiler.getInstance().startCalculationTime();
-            grayScott_.timeStep( timeStep_ );
+            grayScott.timeStep( timeStep_ );
             RDProfiler.getInstance().stopCalculationTime();
         }
         return timeStep_;
@@ -101,7 +101,7 @@ public class RDSimulator extends Simulator {
         super.paint(g);
 
         RDProfiler.getInstance().startRenderingTime();
-        viewer_.paint(g);
+        viewer.paint(g);
         RDProfiler.getInstance().stopRenderingTime();
     }
 
@@ -115,15 +115,15 @@ public class RDSimulator extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        rdOptions_ = new RDDynamicOptions(grayScott_, this);
-        return rdOptions_;
+        rdOptions = new RDDynamicOptions(grayScott, this);
+        return rdOptions;
     }
 
     public ColorMap getColorMap() {
-        return viewer_.getColorMap();
+        return viewer.getColorMap();
     }
 
     public RDRenderingOptions getRenderingOptions() {
-        return viewer_.getRenderingOptions();
+        return viewer.getRenderingOptions();
     }
 }

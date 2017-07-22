@@ -22,14 +22,14 @@ import java.awt.event.ActionListener;
 class RDDynamicOptions extends JPanel
                        implements ActionListener, SliderGroupChangeListener {
 
-    private GrayScottController gs_;
-    private RDSimulator simulator_;
+    private GrayScottController gs;
+    private RDSimulator simulator;
 
-    private JCheckBox showU_;
-    private JCheckBox showV_;
-    private JCheckBox useComputeConcurrency_;
-    private JCheckBox useRenderingConcurrency_;
-    private JCheckBox useFixedSize_;
+    private JCheckBox showU;
+    private JCheckBox showV;
+    private JCheckBox useComputeConcurrency;
+    private JCheckBox useRenderingConcurrency;
+    private JCheckBox useFixedSize;
 
     private static final String K_SLIDER = "K";
     private static final String F_SLIDER = "F";
@@ -39,7 +39,7 @@ class RDDynamicOptions extends JPanel
     private static final String NS_SLIDER = "Num Steps per Frame";
     private static final String TIMESTEP_SLIDER = "Time Step Size";
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup sliderGroup;
     private static final double MIN_NUM_STEPS = RDSimulator.DEFAULT_STEPS_PER_FRAME/10.0;
     private static final double MAX_NUM_STEPS = 10.0 * RDSimulator.DEFAULT_STEPS_PER_FRAME;
 
@@ -53,7 +53,6 @@ class RDDynamicOptions extends JPanel
         new SliderProperties(TIMESTEP_SLIDER,   0.1,     2.0,     RDSimulator.INITIAL_TIME_STEP,    100),
     };
 
-
     /**
      * Constructor
      */
@@ -63,18 +62,18 @@ class RDDynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        gs_ = gs;
-        simulator_ = simulator;
+        this.gs = gs;
+        this.simulator = simulator;
 
-        sliderGroup_ = new SliderGroup(SLIDER_PROPS);
-        sliderGroup_.addSliderChangeListener(this);
+        sliderGroup = new SliderGroup(SLIDER_PROPS);
+        sliderGroup.addSliderChangeListener(this);
 
         JPanel checkBoxes = createCheckBoxes();
         ContinuousColorLegend legend_ =
-                new ContinuousColorLegend(null, simulator_.getColorMap(), true);
+                new ContinuousColorLegend(null, this.simulator.getColorMap(), true);
 
 
-        add(sliderGroup_);
+        add(sliderGroup);
         add(Box.createVerticalStrut(10));
         add(checkBoxes);
         add(Box.createVerticalStrut(10));
@@ -87,34 +86,34 @@ class RDDynamicOptions extends JPanel
 
     private JPanel createCheckBoxes() {
 
-        RDRenderingOptions renderingOptions = simulator_.getRenderingOptions();
-        showU_ = new JCheckBox("U Value", renderingOptions.isShowingU());
-        showU_.addActionListener(this);
+        RDRenderingOptions renderingOptions = simulator.getRenderingOptions();
+        showU = new JCheckBox("U Value", renderingOptions.isShowingU());
+        showU.addActionListener(this);
 
-        showV_ = new JCheckBox("V Value", renderingOptions.isShowingV());
-        showV_.addActionListener(this);
+        showV = new JCheckBox("V Value", renderingOptions.isShowingV());
+        showV.addActionListener(this);
 
-        useComputeConcurrency_ =
+        useComputeConcurrency =
                 createCheckBox("Parallel caclulation",
                                "Take advantage of multiple processors for RD calculation if checked.",
-                               gs_.isParallelized());
+                               gs.isParallelized());
 
-        useRenderingConcurrency_ =
+        useRenderingConcurrency =
                 createCheckBox("Parallel rendering",
                               "Take advantage of multiple processors for rendering if checked.",
                               renderingOptions.isParallelized());
 
-        useFixedSize_ =
+        useFixedSize =
                 createCheckBox("Fixed Size",
                                "Use just a small fixed size area for rendering rather than the whole resizable area.",
-                               simulator_.getUseFixedSize());
+                               simulator.getUseFixedSize());
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 2));
-        checkBoxes.add(showU_);
-        checkBoxes.add(showV_);
-        checkBoxes.add(useComputeConcurrency_);
-        checkBoxes.add(useRenderingConcurrency_);
-        checkBoxes.add(useFixedSize_);
+        checkBoxes.add(showU);
+        checkBoxes.add(showV);
+        checkBoxes.add(useComputeConcurrency);
+        checkBoxes.add(useRenderingConcurrency);
+        checkBoxes.add(useFixedSize);
 
         checkBoxes.setBorder(BorderFactory.createEtchedBorder());
         return checkBoxes;
@@ -128,32 +127,32 @@ class RDDynamicOptions extends JPanel
     }
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
     }
 
     /**
      * One of the buttons was pressed.
      */
     public void actionPerformed(ActionEvent e) {
-        RDRenderingOptions renderingOptions = simulator_.getRenderingOptions();
+        RDRenderingOptions renderingOptions = simulator.getRenderingOptions();
 
-        if (e.getSource() == showU_) {
+        if (e.getSource() == showU) {
             renderingOptions.setShowingU(!renderingOptions.isShowingU());
         }
-        else if (e.getSource() == showV_) {
+        else if (e.getSource() == showV) {
             renderingOptions.setShowingV(!renderingOptions.isShowingV());
             repaint();
         }
-        else if (e.getSource() == useComputeConcurrency_) {
-            boolean isParallelized = !gs_.isParallelized();
-            gs_.setParallelized(isParallelized);
+        else if (e.getSource() == useComputeConcurrency) {
+            boolean isParallelized = !gs.isParallelized();
+            gs.setParallelized(isParallelized);
         }
-        else if (e.getSource() == useRenderingConcurrency_) {
+        else if (e.getSource() == useRenderingConcurrency) {
             boolean isParallelized = !renderingOptions.isParallelized();
             renderingOptions.setParallelized(isParallelized);
         }
-        else if (e.getSource() == useFixedSize_) {
-            simulator_.setUseFixedSize(useFixedSize_.isSelected());
+        else if (e.getSource() == useFixedSize) {
+            simulator.setUseFixedSize(useFixedSize.isSelected());
         }
     }
 
@@ -163,26 +162,26 @@ class RDDynamicOptions extends JPanel
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
         switch (sliderName) {
             case F_SLIDER:
-                gs_.getModel().setF(value);
+                gs.getModel().setF(value);
                 break;
             case K_SLIDER:
-                gs_.getModel().setK(value);
+                gs.getModel().setK(value);
                 break;
             case H_SLIDER:
-                gs_.setH(value);
+                gs.setH(value);
                 break;
             case BH_SLIDER:
-                simulator_.getRenderingOptions().setHeightScale(value);
-                sliderGroup_.setEnabled(SH_SLIDER, value > 0);
+                simulator.getRenderingOptions().setHeightScale(value);
+                sliderGroup.setEnabled(SH_SLIDER, value > 0);
                 break;
             case SH_SLIDER:
-                simulator_.getRenderingOptions().setSpecular(value);
+                simulator.getRenderingOptions().setSpecular(value);
                 break;
             case NS_SLIDER:
-                simulator_.setNumStepsPerFrame((int) value);
+                simulator.setNumStepsPerFrame((int) value);
                 break;
             case TIMESTEP_SLIDER:
-                simulator_.setTimeStep(value);
+                simulator.setTimeStep(value);
                 break;
         }
     }

@@ -3,8 +3,6 @@ package com.barrybecker4.simulation.reactiondiffusion.rendering;
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer;
 
-import javax.vecmath.Vector3d;
-
 /**
  * Date: Aug 15, 2010
  *
@@ -12,17 +10,17 @@ import javax.vecmath.Vector3d;
  */
 public class RDRenderingOptions {
 
-    private boolean isShowingU_ = false;
-    private boolean isShowingV_ = true;
+    private boolean isShowingU = false;
+    private boolean isShowingV = true;
 
     /** used for scaling the bump height. if 0, then no bumpiness. */
-    private double heightScale_ = 0;
+    private double heightScale = 0;
 
     /** Specular highlight degree. */
-    private double specularConst_ = 0;
+    private double specularConst = 0;
 
     /** Manages the worker threads. */
-    private RunnableParallelizer parallelizer_;
+    private RunnableParallelizer parallelizer;
 
 
     /**
@@ -34,49 +32,49 @@ public class RDRenderingOptions {
 
     public void setParallelized(boolean useParallelization) {
 
-        parallelizer_ =
+        parallelizer =
              useParallelization ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }
 
-    public RunnableParallelizer getParallelizer() {
-        return parallelizer_;
+    RunnableParallelizer getParallelizer() {
+        return parallelizer;
     }
 
     public boolean isParallelized() {
-        return parallelizer_.getNumThreads() > 1;
+        return parallelizer.getNumThreads() > 1;
     }
 
     public void setHeightScale(double h) {
-        heightScale_ = h;
+        heightScale = h;
     }
 
     protected double getHeightScale() {
-        return heightScale_;
+        return heightScale;
     }
 
 
     public void setSpecular(double s) {
-        specularConst_ = s;
+        specularConst = s;
     }
 
     public double getSpecular() {
-        return specularConst_;
+        return specularConst;
     }
 
     public boolean isShowingU() {
-        return isShowingU_;
+        return isShowingU;
     }
 
     public void setShowingU(boolean showingU) {
-        isShowingU_ = showingU;
+        isShowingU = showingU;
     }
 
 
     public boolean isShowingV() {
-        return isShowingV_;
+        return isShowingV;
     }
 
     public void setShowingV(boolean showingV) {
-        isShowingV_ = showingV;
+        isShowingV = showingV;
     }
 }

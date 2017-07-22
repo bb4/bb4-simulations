@@ -11,9 +11,9 @@ import com.barrybecker4.common.expression.TreeNode;
  *
  * @author Barry Becker
  */
-public class LTreeSerializer {
+class LTreeSerializer {
 
-    public String serialize(TreeNode node) {
+    String serialize(TreeNode node) {
         String serialized = "";
         if (node != null) {
             serialized = traverse(node);

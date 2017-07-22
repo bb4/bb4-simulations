@@ -18,35 +18,35 @@ public class RDViewer {
 
     private static final int FIXED_SIZE_DIM = 250;
 
-    private GrayScottController grayScott_;
-    private RDRenderer onScreenRenderer_;
-    private RDRenderer offScreenRenderer_;
+    private GrayScottController grayScott;
+    private RDRenderer onScreenRenderer;
+    private RDRenderer offScreenRenderer;
 
     private boolean useFixedSize_ = false;
     private boolean useOfflineRendering = false;
 
-    private Container parent_;
+    private Container parent;
     private int oldWidth;
     private int oldHeight;
 
-    RDRenderingOptions renderOptions_;
-    ColorMap cmap_;
+    private RDRenderingOptions renderOptions;
+    private ColorMap cmap;
 
 
     /**
      * Constructor
      */
-    public RDViewer(GrayScottController grayScott, Container parent) {
-        grayScott_ = grayScott;
-        parent_ = parent;
-        oldWidth = parent_.getWidth();
-        oldHeight = parent_.getHeight();
-        cmap_ = new RDColorMap();
-        renderOptions_ = new RDRenderingOptions();
+    RDViewer(GrayScottController grayScott, Container parent) {
+        this.grayScott = grayScott;
+        this.parent = parent;
+        oldWidth = this.parent.getWidth();
+        oldHeight = this.parent.getHeight();
+        cmap = new RDColorMap();
+        renderOptions = new RDRenderingOptions();
     }
 
-    public RDRenderingOptions getRenderingOptions() {
-        return renderOptions_;
+    RDRenderingOptions getRenderingOptions() {
+        return renderOptions;
     }
 
     /**
@@ -69,7 +69,7 @@ public class RDViewer {
     }
 
     public ColorMap getColorMap() {
-        return cmap_;
+        return cmap;
     }
 
     public void paint( Graphics g )  {
@@ -87,34 +87,34 @@ public class RDViewer {
         int h = FIXED_SIZE_DIM;
 
         if (!useFixedSize_) {
-            w = parent_.getWidth();
-            h = parent_.getHeight();
+            w = parent.getWidth();
+            h = parent.getHeight();
         }
         initRenderers(w, h);
     }
 
     private void initRenderers(int w, int h) {
         if (w != oldWidth || h != oldHeight) {
-            grayScott_.setSize(w, h);
-            onScreenRenderer_ = null;
-            offScreenRenderer_ = null;
+            grayScott.setSize(w, h);
+            onScreenRenderer = null;
+            offScreenRenderer = null;
             oldWidth = w;
             oldHeight = h;
         }
     }
 
     private RDRenderer getOffScreenRenderer() {
-        if (offScreenRenderer_ == null) {
-           offScreenRenderer_ = new RDOffscreenRenderer(grayScott_.getModel(), cmap_, renderOptions_, parent_);
+        if (offScreenRenderer == null) {
+           offScreenRenderer = new RDOffscreenRenderer(grayScott.getModel(), cmap, renderOptions, parent);
         }
-        return offScreenRenderer_;
+        return offScreenRenderer;
     }
 
     private RDRenderer getOnScreenRenderer() {
-        if (onScreenRenderer_ == null) {
-           onScreenRenderer_ = new RDOnscreenRenderer(grayScott_.getModel(), cmap_, renderOptions_);
+        if (onScreenRenderer == null) {
+           onScreenRenderer = new RDOnscreenRenderer(grayScott.getModel(), cmap, renderOptions);
         }
-        return onScreenRenderer_;
+        return onScreenRenderer;
     }
 
     private RDRenderer getRenderer() {

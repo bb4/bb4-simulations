@@ -17,7 +17,7 @@ public class LSystemModel {
     public static final double DEFAULT_ANGLE = 90.0;
     public static final double DEFAULT_SCALE = 0.9;
     public static final double DEFAULT_SCALE_FACTOR = 0.7;
-    public static final int DEFAULT_SIZE = 256;
+    private static final int DEFAULT_SIZE = 256;
 
     private LSystemRenderer renderer;
 

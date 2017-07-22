@@ -25,7 +25,7 @@ public class ParameterSimulator extends DistributionSimulator {
 
     private boolean showRedistribution_ = true;
 
-    public ParameterSimulator() {
+    private ParameterSimulator() {
         super("Parameter Histogram");
         initHistogram();
     }
@@ -35,11 +35,11 @@ public class ParameterSimulator extends DistributionSimulator {
         initHistogram();
     }
 
-    public void setShowRedistribution(boolean show) {
+    void setShowRedistribution(boolean show) {
         showRedistribution_ = show;
     }
 
-    public boolean isShowRedistribution() {
+    boolean isShowRedistribution() {
         return showRedistribution_;
     }
 

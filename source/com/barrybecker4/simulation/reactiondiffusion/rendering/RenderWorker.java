@@ -15,7 +15,7 @@ public class RenderWorker implements Runnable {
     private Graphics2D g2_;
     private RDRenderer renderer_;
 
-    public RenderWorker(int minX, int maxX, RDRenderer renderer, Graphics2D g2) {
+    RenderWorker(int minX, int maxX, RDRenderer renderer, Graphics2D g2) {
         minX_ = minX;
         maxX_ = maxX;
         renderer_ = renderer;

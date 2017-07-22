@@ -4,8 +4,6 @@ package com.barrybecker4.simulation.reactiondiffusion;
 import com.barrybecker4.common.format.FormatUtil;
 import com.barrybecker4.simulation.common.Profiler;
 
-import java.text.Normalizer;
-
 
 /**
  * Singleton for RD profiling.
@@ -14,7 +12,7 @@ import java.text.Normalizer;
  */
 public class RDProfiler extends Profiler {
 
-    protected static final String CONCURRENT_CALCULATION = "concurrent_calculation";
+    private static final String CONCURRENT_CALCULATION = "concurrent_calculation";
 
     private static RDProfiler instance;
     private int numFrames;
@@ -33,7 +31,7 @@ public class RDProfiler extends Profiler {
     /**
      * Private constructor. Use getInstance instead.
      */
-    protected RDProfiler() {
+    private RDProfiler() {
         super();
         add(CONCURRENT_CALCULATION, CALCULATION);
         //add(COMMIT_CHANGES, CALCULATION);
