@@ -8,11 +8,9 @@ import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
 import com.barrybecker4.ui.sliders.SliderProperties;
-import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
 
