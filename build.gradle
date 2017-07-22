@@ -2,7 +2,7 @@
 
 description = 'A collection of java simulations.'
 group = 'com.barrybecker4'
-version = '1.4-SNAPSHOT'
+version = '1.4'
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
@@ -11,8 +11,8 @@ dependencies {
     def javaHome = System.properties.'java.home'
     compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
-    compile 'com.barrybecker4:bb4-sound:1.4-SNAPSHOT'
-    compile 'com.barrybecker4:bb4-optimization:1.4-SNAPSHOT'
+    compile 'com.barrybecker4:bb4-sound:1.4'
+    compile 'com.barrybecker4:bb4-optimization:1.4'
 }
 
 task runDice(type: JavaExec, description: "Run dice simulator") {
