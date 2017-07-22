@@ -12,7 +12,7 @@ object FractalModel {
 }
 
 class FractalModel extends RectangularModel {
-  private[algorithm] var values: Array[Array[Double]] = null
+  private[algorithm] var values: Array[Array[Double]] = _
   private var lastRow: Int = 0
   private var currentRow: Int = 0
 
