@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fractalexplorer.algorithm;
+package com.barrybecker4.simulation.fractalexplorer1.algorithm;
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.common.geometry.Box;
@@ -70,7 +70,7 @@ public abstract class FractalAlgorithm1 {
         this.model = model;
         setRange(range);
         setParallelized(true);
-        //rowCalculator_ = new RowCalculator(this);
+        rowCalculator_ = new RowCalculator(this);
     }
 
     public void setRange(ComplexNumberRange range)  {

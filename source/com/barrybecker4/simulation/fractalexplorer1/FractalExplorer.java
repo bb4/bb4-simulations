@@ -1,15 +1,15 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fractalexplorer;
+package com.barrybecker4.simulation.fractalexplorer1;
 
 import com.barrybecker4.common.math.ComplexNumber;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.rendering.ModelImage;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.AlgorithmEnum;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalModel;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.JuliaAlgorithm;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.AlgorithmEnum;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalAlgorithm1;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalModel;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.JuliaAlgorithm;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.JPanel;
@@ -23,9 +23,9 @@ public class FractalExplorer extends Simulator {
 
     static final AlgorithmEnum DEFAULT_ALGORITHM_ENUM = AlgorithmEnum.MANDELBROT;
 
-    private FractalAlgorithm algorithm_;
+    private FractalAlgorithm1 algorithm_;
     private AlgorithmEnum algorithmEnum_;
-    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED();
+    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED;
     private FractalModel model_;
     private ModelImage modelImage_;
     private DynamicOptions options_;
@@ -68,7 +68,7 @@ public class FractalExplorer extends Simulator {
     }
 
     /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
-    public FractalAlgorithm getAlgorithm() {
+    public FractalAlgorithm1 getAlgorithm() {
         return algorithm_;
     }
 

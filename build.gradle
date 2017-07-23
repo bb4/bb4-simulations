@@ -74,10 +74,17 @@ task runReactionDiffusion(type: JavaExec, description: "Run reaction diffusion s
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runFractalExplorer(type: JavaExec, description: "Run fractal explorer simulator") {
+task runFractalExplorer(type: JavaExec, description: "Run (scala) fractal explorer simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runFractalExplorer1(type: JavaExec, description: "Run (java) fractal explorer simulator") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer1.FractalExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -141,7 +148,7 @@ ext.appMap = new LinkedHashMap()
 appMap.put('simulation', [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']])
 appMap.put('dice',       [include:['com/barrybecker4/simulation/dice/**']])
 appMap.put('fluid',      [include:['com/barrybecker4/simulation/fluid/**']])
-appMap.put('fractalexplorer', [include:['com/barrybecker4/simulation/fractalexplorer/**']])
+appMap.put('fractalexplorer1', [include:['com/barrybecker4/simulation/fractalexplorer1/**']])
 appMap.put('habitat',    [include:['com/barrybecker4/simulation/habitat/**']])
 appMap.put('henonexplorer', [include:['com/barrybecker4/simulation/henonphase/**']])
 appMap.put('cave', [include:['com/barrybecker4/simulation/cave/**']])

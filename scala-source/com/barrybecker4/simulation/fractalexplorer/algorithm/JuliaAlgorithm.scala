@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.fractalexplorer.algorithm
 
 import com.barrybecker4.common.math.ComplexNumber
 import com.barrybecker4.common.math.ComplexNumberRange
+import JuliaAlgorithm._
 
 /**
   * Populates the FractalModel using the iterative Julia set algorithm.

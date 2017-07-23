@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fractalexplorer;
+package com.barrybecker4.simulation.fractalexplorer1;
 
 import com.barrybecker4.common.math.ComplexNumberRange;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalAlgorithm1;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
@@ -48,7 +48,7 @@ class DynamicOptions extends JPanel
     private static final int MAX_NUM_STEPS = (int)(10.0 * INITIAL_TIME_STEP);
 
     private static final SliderProperties[] SLIDER_PROPS = {
-        new SliderProperties(ITER_SLIDER,      100,   10000, FractalAlgorithm.DEFAULT_MAX_ITERATIONS(),   1),
+        new SliderProperties(ITER_SLIDER,      100,   10000, FractalAlgorithm1.DEFAULT_MAX_ITERATIONS,   1),
         new SliderProperties(TIMESTEP_SLIDER,  MIN_NUM_STEPS,   MAX_NUM_STEPS,   INITIAL_TIME_STEP, 1),
     };
 
@@ -94,7 +94,7 @@ class DynamicOptions extends JPanel
 
     private JPanel createCheckBoxes() {
 
-        FractalAlgorithm algorithm = simulator_.getAlgorithm();
+        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
         useConcurrency_ = new JCheckBox("Parallel", algorithm.isParallelized());
         useConcurrency_.setToolTipText(
                 "Take advantage of multiple processors for calculation and rendering if present.");
@@ -136,7 +136,7 @@ class DynamicOptions extends JPanel
      */
     public void actionPerformed(ActionEvent e) {
         //RDRenderingOptions renderingOptions = simulator_.getRenderingOptions();
-        FractalAlgorithm algorithm = simulator_.getAlgorithm();
+        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
 
         if (e.getSource() == useConcurrency_) {
             boolean isParallelized = !algorithm.isParallelized();
@@ -158,7 +158,7 @@ class DynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        FractalAlgorithm algorithm = simulator_.getAlgorithm();
+        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
 
         if (sliderName.equals(ITER_SLIDER)) {
             algorithm.setMaxIterations((int)value);

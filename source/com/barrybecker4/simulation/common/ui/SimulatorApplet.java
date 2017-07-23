@@ -21,7 +21,7 @@ public class SimulatorApplet extends ApplicationApplet {
     private Simulator simulator;
 
     private static final boolean RUN_OPTIMIZATION = false;
-    private static final String DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer";
+    private static final String DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer1.FractalExplorer";
 
     public SimulatorApplet() {
         super(new String[] {});

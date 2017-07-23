@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fractalexplorer;
+package com.barrybecker4.simulation.fractalexplorer1;
 
 import com.barrybecker4.common.math.ComplexNumberRange;
-import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm;
+import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalAlgorithm1;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class ZoomHandler implements MouseListener, MouseMotionListener {
 
-    private FractalAlgorithm algorithm;
+    private FractalAlgorithm1 algorithm;
 
     /** if control or shift key held down while dragging, maintain aspect ratio */
     private boolean keepAspectRatio = false;
@@ -28,7 +28,7 @@ public class ZoomHandler implements MouseListener, MouseMotionListener {
     /**
      * Constructor
      */
-    public ZoomHandler(FractalAlgorithm algorithm) {
+    public ZoomHandler(FractalAlgorithm1 algorithm) {
         this.algorithm = algorithm;
         zoomBox = new ZoomBox();
     }

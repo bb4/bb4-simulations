@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.fractalexplorer.algorithm;
+package com.barrybecker4.simulation.fractalexplorer1.algorithm;
 
 import com.barrybecker4.common.app.AppContext;
 
@@ -28,13 +28,13 @@ public enum AlgorithmEnum {
     /**
      * Create an instance of the algorithm given the controller and a refreshable.
      */
-    public FractalAlgorithm createInstance(FractalModel model) {
+    public FractalAlgorithm1 createInstance(FractalModel model) {
 
         switch (this) {
             case MANDELBROT :
                 return new MandelbrotAlgorithm(model);
             case JULIA :
-                return new JuliaAlgorithm(model);
+                return new com.barrybecker4.simulation.fractalexplorer1.algorithm.JuliaAlgorithm(model);
         }
         return null;
     }
