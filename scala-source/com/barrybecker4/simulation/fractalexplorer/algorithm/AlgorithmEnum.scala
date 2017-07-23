@@ -23,6 +23,8 @@ sealed trait AlgorithmEnum  {
       case JULIA => new JuliaAlgorithm(model)
     }
   }
+
+  def ordinal(): Int = AlgorithmEnum.VALUES.indexOf(this)
 }
 
 object AlgorithmEnum {

@@ -6,6 +6,7 @@ import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.math.ComplexNumber
 import com.barrybecker4.common.math.ComplexNumberRange
 import com.barrybecker4.simulation.common.Profiler
+import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
 
 /**
   * Abstract implementation common to all fractal algorithms.
@@ -35,7 +36,7 @@ import com.barrybecker4.simulation.common.Profiler
   * @author Barry Becker
   */
 object FractalAlgorithm {
-  val DEFAULT_MAX_ITERATIONS: Int = 500
+  val DEFAULT_MAX_ITERATIONS = 500
 }
 
 abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumberRange) {
@@ -43,8 +44,8 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   /** range of bounding box in complex plane. */
   private var range: ComplexNumberRange = initialRange
   private var parallelized = true
-  private var maxIterations : Int = FractalAlgorithm.DEFAULT_MAX_ITERATIONS
-  private var rowCalculator : RowCalculator = _
+  private var maxIterations: Int = DEFAULT_MAX_ITERATIONS
+  private var rowCalculator: RowCalculator = _
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
   private val history : History = new History

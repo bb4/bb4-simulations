@@ -32,7 +32,7 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
     private GradientButton startButton_ = new GradientButton();
 
     // constructor
-    public SimulatorOptionsDialog( Component parent, Simulator simulator ) {
+    public SimulatorOptionsDialog(Component parent, Simulator simulator) {
         super( parent );
         this.simulator = simulator;
         showContent();

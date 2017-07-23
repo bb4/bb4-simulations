@@ -27,7 +27,7 @@ public abstract class Simulator extends AnimationComponent
                                 implements Optimizee {
 
     private SimulatorOptionsDialog optionsDialog = null;
-    protected static JFrame frame = null;
+    protected JFrame frame = null;
 
     /** timestep for every step of the animation */
     protected double timeStep_;
