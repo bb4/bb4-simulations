@@ -23,14 +23,14 @@ public class FractalExplorer extends Simulator {
 
     static final AlgorithmEnum DEFAULT_ALGORITHM_ENUM = AlgorithmEnum.MANDELBROT;
 
-    private FractalAlgorithm1 algorithm_;
-    private AlgorithmEnum algorithmEnum_;
-    private ComplexNumber juliaSeed_ = JuliaAlgorithm.DEFAULT_JULIA_SEED;
-    private FractalModel model_;
-    private ModelImage modelImage_;
-    private DynamicOptions options_;
-    private ZoomHandler zoomHandler_;
-    private FractalColorMap colorMap_;
+    private FractalAlgorithm1 algorithm;
+    private AlgorithmEnum algorithmEnum;
+    private ComplexNumber juliaSeed = JuliaAlgorithm.DEFAULT_JULIA_SEED;
+    private FractalModel model;
+    private ModelImage modelImage;
+    private DynamicOptions options;
+    private ZoomHandler zoomHandler;
+    private FractalColorMap colorMap;
 
     private boolean useFixedSize_ = false;
 
@@ -53,48 +53,48 @@ public class FractalExplorer extends Simulator {
 
     private void commonInit() {
         initCommonUI();
-        algorithmEnum_ = DEFAULT_ALGORITHM_ENUM;
-        colorMap_ = new FractalColorMap();
+        algorithmEnum = DEFAULT_ALGORITHM_ENUM;
+        colorMap = new FractalColorMap();
         reset();
     }
 
     public void setAlgorithm(AlgorithmEnum alg) {
-        algorithmEnum_ = alg;
+        algorithmEnum = alg;
         reset();
     }
 
     public void setJuliaSeed(ComplexNumber seed) {
-       juliaSeed_ = seed;
+       juliaSeed = seed;
     }
 
     /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
     public FractalAlgorithm1 getAlgorithm() {
-        return algorithm_;
+        return algorithm;
     }
 
     @Override
     protected void reset() {
 
-        model_ = new FractalModel();
-        algorithm_ = algorithmEnum_.createInstance(model_);
+        model = new FractalModel();
+        algorithm = algorithmEnum.createInstance(model);
 
         // this is a hack. The Options dialog should only know about this seed
-        if (algorithm_ instanceof JuliaAlgorithm) {
-            ((JuliaAlgorithm) algorithm_).setJuliaSeed(juliaSeed_);
+        if (algorithm instanceof JuliaAlgorithm) {
+            ((JuliaAlgorithm) algorithm).setJuliaSeed(juliaSeed);
         }
-        modelImage_ = new ModelImage(model_, colorMap_);
+        modelImage = new ModelImage(model, colorMap);
 
         setNumStepsPerFrame(DynamicOptions.DEFAULT_STEPS_PER_FRAME);
 
-        if (zoomHandler_ != null) {
-            this.removeMouseListener(zoomHandler_);
-            this.removeMouseMotionListener(zoomHandler_);
+        if (zoomHandler != null) {
+            this.removeMouseListener(zoomHandler);
+            this.removeMouseMotionListener(zoomHandler);
         }
-        zoomHandler_ = new ZoomHandler(algorithm_);
-        this.addMouseListener(zoomHandler_);
-        this.addMouseMotionListener(zoomHandler_);
+        zoomHandler = new ZoomHandler(algorithm);
+        this.addMouseListener(zoomHandler);
+        this.addMouseMotionListener(zoomHandler);
 
-        if (options_ != null) options_.reset();
+        if (options != null) options.reset();
     }
 
     @Override
@@ -111,12 +111,12 @@ public class FractalExplorer extends Simulator {
     public double timeStep() {
         if ( !isPaused() ) {
             if (!useFixedSize_) {
-                model_.setSize(getWidth(), getHeight());
+                model.setSize(getWidth(), getHeight());
             }
 
-            algorithm_.timeStep( timeStep_ );
-            modelImage_.updateImage(model_.getLastRow(), model_.getCurrentRow());
-            options_.setCoordinates(algorithm_.getRange());
+            algorithm.timeStep( timeStep_ );
+            modelImage.updateImage(model.getLastRow(), model.getCurrentRow());
+            options.setCoordinates(algorithm.getRange());
         }
         return timeStep_;
     }
@@ -127,10 +127,10 @@ public class FractalExplorer extends Simulator {
 
         Profiler.getInstance().startRenderingTime();
         if (g != null) {
-            g.drawImage(modelImage_.getImage(), 0, 0, null);
+            g.drawImage(modelImage.getImage(), 0, 0, null);
         }
-        zoomHandler_.render(g, model_.getAspectRatio());
-        options_.setCoordinates(algorithm_.getRange());
+        zoomHandler.render(g, model.getAspectRatio());
+        options.setCoordinates(algorithm.getRange());
         Profiler.getInstance().stopRenderingTime();
     }
 
@@ -144,11 +144,11 @@ public class FractalExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(this);
-        return options_;
+        options = new DynamicOptions(this);
+        return options;
     }
 
     public ColorMap getColorMap() {
-        return modelImage_.getColorMap();
+        return modelImage.getColorMap();
     }
 }

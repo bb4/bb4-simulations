@@ -38,5 +38,4 @@ public enum AlgorithmEnum {
         }
         return null;
     }
-
 }

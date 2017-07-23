@@ -32,18 +32,18 @@ class DynamicOptions extends JPanel
     static final double INITIAL_TIME_STEP = 10.0;
     static final int DEFAULT_STEPS_PER_FRAME = 1;
 
-    private FractalExplorer simulator_;
-    private JCheckBox useConcurrency_;
-    private JCheckBox useFixedSize_;
-    private JCheckBox useRunLengthOptimization_;
-    private JButton backButton_;
+    private FractalExplorer simulator;
+    private JCheckBox useConcurrency;
+    private JCheckBox useFixedSize;
+    private JCheckBox useRunLengthOptimization;
+    private JButton backButton;
     private JLabel coordinate1;
     private JLabel coordinate2;
 
     private static final String ITER_SLIDER = "Max Iterations";;
     private static final String TIMESTEP_SLIDER = "Num Rows per Frame";
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup sliderGroup;
     private static final int MIN_NUM_STEPS = (int)(INITIAL_TIME_STEP/10.0);
     private static final int MAX_NUM_STEPS = (int)(10.0 * INITIAL_TIME_STEP);
 
@@ -60,27 +60,27 @@ class DynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        simulator_ = simulator;
+        this.simulator = simulator;
 
-        sliderGroup_ = new SliderGroup(SLIDER_PROPS);
-        sliderGroup_.addSliderChangeListener(this);
+        sliderGroup = new SliderGroup(SLIDER_PROPS);
+        sliderGroup.addSliderChangeListener(this);
 
         ContinuousColorLegend legend_ =
-                new ContinuousColorLegend(null, simulator_.getColorMap(), true);
+                new ContinuousColorLegend(null, this.simulator.getColorMap(), true);
 
         JPanel checkBoxes = createCheckBoxes();
         JPanel coordinates = createCoordinatesView();
 
-        add(sliderGroup_);
+        add(sliderGroup);
         add(Box.createVerticalStrut(10));
         add(checkBoxes);
         add(Box.createVerticalStrut(10));
         add(legend_);
         add(coordinates);
 
-        backButton_ = new JButton("Go Back");
-        backButton_.addActionListener(this);
-        add(backButton_);
+        backButton = new JButton("Go Back");
+        backButton.addActionListener(this);
+        add(backButton);
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(10, 1000));
@@ -94,23 +94,23 @@ class DynamicOptions extends JPanel
 
     private JPanel createCheckBoxes() {
 
-        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
-        useConcurrency_ = new JCheckBox("Parallel", algorithm.isParallelized());
-        useConcurrency_.setToolTipText(
+        FractalAlgorithm1 algorithm = simulator.getAlgorithm();
+        useConcurrency = new JCheckBox("Parallel", algorithm.isParallelized());
+        useConcurrency.setToolTipText(
                 "Take advantage of multiple processors for calculation and rendering if present.");
-        useConcurrency_.addActionListener(this);
+        useConcurrency.addActionListener(this);
 
-        useFixedSize_ = new JCheckBox("Fixed Size", simulator_.getUseFixedSize());
-        useFixedSize_.addActionListener(this);
+        useFixedSize = new JCheckBox("Fixed Size", simulator.getUseFixedSize());
+        useFixedSize.addActionListener(this);
 
-        useRunLengthOptimization_ = new JCheckBox("Run Length Optimization", algorithm.getUseRunLengthOptimization());
-        useRunLengthOptimization_.addActionListener(this);
+        useRunLengthOptimization = new JCheckBox("Run Length Optimization", algorithm.getUseRunLengthOptimization());
+        useRunLengthOptimization.addActionListener(this);
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 1));
 
-        checkBoxes.add(useConcurrency_);
-        checkBoxes.add(useFixedSize_);
-        checkBoxes.add(useRunLengthOptimization_);
+        checkBoxes.add(useConcurrency);
+        checkBoxes.add(useFixedSize);
+        checkBoxes.add(useRunLengthOptimization);
 
         checkBoxes.setBorder(BorderFactory.createEtchedBorder());
         return checkBoxes;
@@ -128,27 +128,27 @@ class DynamicOptions extends JPanel
     }
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
     }
 
     /**
      * One of the buttons was pressed.
      */
     public void actionPerformed(ActionEvent e) {
-        //RDRenderingOptions renderingOptions = simulator_.getRenderingOptions();
-        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
+        //RDRenderingOptions renderingOptions = simulator.getRenderingOptions();
+        FractalAlgorithm1 algorithm = simulator.getAlgorithm();
 
-        if (e.getSource() == useConcurrency_) {
+        if (e.getSource() == useConcurrency) {
             boolean isParallelized = !algorithm.isParallelized();
             algorithm.setParallelized(isParallelized);
         }
-        else if (e.getSource() == useFixedSize_) {
-            simulator_.setUseFixedSize(useFixedSize_.isSelected());
+        else if (e.getSource() == useFixedSize) {
+            simulator.setUseFixedSize(useFixedSize.isSelected());
         }
-        else if (e.getSource() == useRunLengthOptimization_) {
-            algorithm.setUseRunLengthOptimization(useRunLengthOptimization_.isSelected());
+        else if (e.getSource() == useRunLengthOptimization) {
+            algorithm.setUseRunLengthOptimization(useRunLengthOptimization.isSelected());
         }
-        else if (e.getSource() == backButton_) {
+        else if (e.getSource() == backButton) {
             algorithm.goBack();
         }
     }
@@ -158,13 +158,13 @@ class DynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        FractalAlgorithm1 algorithm = simulator_.getAlgorithm();
+        FractalAlgorithm1 algorithm = simulator.getAlgorithm();
 
         if (sliderName.equals(ITER_SLIDER)) {
             algorithm.setMaxIterations((int)value);
         }
         else if (sliderName.equals(TIMESTEP_SLIDER)) {
-            simulator_.setTimeStep(value);
+            simulator.setTimeStep(value);
         }
     }
 

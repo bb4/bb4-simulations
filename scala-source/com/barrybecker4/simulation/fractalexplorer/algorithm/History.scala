@@ -11,7 +11,7 @@ class History {
   /** range of bounding box in complex plane. */
   private var stack: List[ComplexNumberRange] = List()
 
-  def addRangeToHistory(range: ComplexNumberRange) = stack = range :: stack
+  def addRangeToHistory(range: ComplexNumberRange) { stack = range :: stack }
   def hasHistory: Boolean = stack.nonEmpty
 
   /** @return the last range viewed in the history */

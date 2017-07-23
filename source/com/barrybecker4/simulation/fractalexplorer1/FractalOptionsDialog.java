@@ -21,7 +21,7 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
 
     private static AlgorithmEnum[] ALGORITHM_VALUES = AlgorithmEnum.values();
 
-    private Choice algorithmChoice_;
+    private Choice algorithmChoice;
 
     private ComplexNumberInput juliaSeedField;
 
@@ -41,11 +41,11 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         JLabel label = new JLabel("Select a fractal algorithm to use:");
-        algorithmChoice_ = createAlgorithmDropdown();
+        algorithmChoice = createAlgorithmDropdown();
 
         JPanel panel = new JPanel();
         panel.add(label);
-        panel.add(algorithmChoice_);
+        panel.add(algorithmChoice);
         JPanel cnPanel = new JPanel();
 
         juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED);
@@ -62,12 +62,12 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
      * @return a dropdown/down component.
      */
     private Choice createAlgorithmDropdown() {
-        algorithmChoice_ = new Choice();
+        algorithmChoice = new Choice();
         for (AlgorithmEnum algorithm: ALGORITHM_VALUES) {
-            algorithmChoice_.add(algorithm.getLabel());
+            algorithmChoice.add(algorithm.getLabel());
         }
-        algorithmChoice_.select(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal());
-        return algorithmChoice_;
+        algorithmChoice.select(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal());
+        return algorithmChoice;
     }
 
 
@@ -82,7 +82,7 @@ public class FractalOptionsDialog extends SimulatorOptionsDialog {
         // set the common rendering and global options
         FractalExplorer sim = getSimulator();
 
-        int selected = algorithmChoice_.getSelectedIndex();
+        int selected = algorithmChoice.getSelectedIndex();
         sim.setAlgorithm(ALGORITHM_VALUES[selected]);
         System.out.println("from field seed = "+ juliaSeedField.getValue());
         sim.setJuliaSeed(juliaSeedField.getValue());

@@ -19,30 +19,24 @@ object RowCalculator {
 class RowCalculator(algorithmToUse: FractalAlgorithm) {
   private val algorithm: FractalAlgorithm = algorithmToUse
   private val model: FractalModel = algorithm.getModel
-  private var useRunLengthOpt_ =  false
+  private var useRunLengthOpt =  false
 
-  def getUseRunLengthOptimization: Boolean = {
-    useRunLengthOpt_
-  }
+  def getUseRunLengthOptimization: Boolean = useRunLengthOpt
 
   def setUseRunLengthOptimization(value: Boolean) {
-    if (useRunLengthOpt_ != value) {
-      useRunLengthOpt_ = value
+    if (useRunLengthOpt != value) {
+      useRunLengthOpt = value
       model.setCurrentRow(0)
     }
   }
 
   /** Computes values for a row. */
   def calculateRow(width: Int, y: Int) {
-    if (useRunLengthOpt_)
-      calculateRowOptimized(width, y)
-    else
-      calculateRowSimple(width, y)
+    if (useRunLengthOpt) calculateRowOptimized(width, y)
+    else calculateRowSimple(width, y)
   }
 
-  /**
-    * Computes values for a row.
-    */
+  /** Computes values for a row. */
   private def calculateRowSimple(width: Int, y: Int) {
     var x: Int = 0
     while (x < width) {
@@ -71,9 +65,7 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
     var x: Int = 0
     while (x < width) {
       var currentValue: Double = computeFractalValueForPosition(x, y)
-      if (lastValue == currentValue) {
-        runLength += increment
-      }
+      if (lastValue == currentValue) runLength += increment
       else {
         lastValue = currentValue
         if (runLength > RowCalculator.M) {
