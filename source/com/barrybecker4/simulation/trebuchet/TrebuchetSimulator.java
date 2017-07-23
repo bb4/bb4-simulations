@@ -25,9 +25,9 @@ import java.awt.*;
 public class TrebuchetSimulator extends NewtonianSimulator
                                 implements ChangeListener {
 
-    private Trebuchet trebuchet_ = null;
+    private Trebuchet trebuchet = null;
 
-    JSlider zoomSlider_;
+    JSlider zoomSlider;
 
     private static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
 
@@ -51,7 +51,7 @@ public class TrebuchetSimulator extends NewtonianSimulator
     }
 
     private void commonInit( Trebuchet trebuchet ) {
-        trebuchet_ = trebuchet;
+        this.trebuchet = trebuchet;
         setNumStepsPerFrame(DEFAULT_NUM_STEPS_PER_FRAME);
         this.setBackground(BACKGROUND_COLOR);
         initCommonUI();
@@ -76,14 +76,14 @@ public class TrebuchetSimulator extends NewtonianSimulator
         JPanel zoomPanel = new JPanel();
         zoomPanel.setLayout(new FlowLayout());
         JLabel zoomLabel = new JLabel( " Zoom" );
-        zoomSlider_ = new JSlider( JSlider.HORIZONTAL, 15, 255, 200 );
-        zoomSlider_.addChangeListener( this );
+        zoomSlider = new JSlider( JSlider.HORIZONTAL, 15, 255, 200 );
+        zoomSlider.addChangeListener( this );
         zoomPanel.add(zoomLabel);
-        zoomPanel .add(zoomSlider_);
+        zoomPanel .add(zoomSlider);
         this.add(zoomPanel);
 
         controls.add(zoomLabel);
-        controls.add(zoomSlider_);
+        controls.add(zoomSlider);
         return controls;
     }
 
@@ -123,7 +123,7 @@ public class TrebuchetSimulator extends NewtonianSimulator
     @Override
     public double timeStep()  {
         if ( !isPaused() ) {
-            timeStep_ = trebuchet_.stepForward( timeStep_ );
+            timeStep_ = trebuchet.stepForward( timeStep_ );
         }
         return timeStep_;
     }
@@ -143,18 +143,18 @@ public class TrebuchetSimulator extends NewtonianSimulator
 
 
         // draw the trebuchet in its current position
-        trebuchet_.render( g2 );
+        trebuchet.render( g2 );
     }
 
 
 
     @Override
     public void setScale( double scale ) {
-        trebuchet_.setScale(scale);
+        trebuchet.setScale(scale);
     }
     @Override
     public double getScale() {
-        return trebuchet_.getScale();
+        return trebuchet.getScale();
     }
 
     @Override
@@ -206,26 +206,23 @@ public class TrebuchetSimulator extends NewtonianSimulator
         return 0.01;
     }
 
-
-    // api for setting trebuchet params  /////////////////////////////////
+    /** api for setting trebuchet params  */
     public Trebuchet getTrebuchet() {
-        return trebuchet_;
+        return trebuchet;
     }
 
     public void stateChanged(ChangeEvent event) {
         Object src = event.getSource();
-        if (src == zoomSlider_) {
-            double v = (double) zoomSlider_.getValue() / 200.0;
-            trebuchet_.setScale(v);
+        if (src == zoomSlider) {
+            double v = (double) zoomSlider.getValue() / 200.0;
+            trebuchet.setScale(v);
             this.repaint();
         }
     }
 
-
-    /////////////// the next methods implement the Optimizee interface  /////////////////////////
-
     /**
-     * evaluates the trebuchet's fitness.
+     * Evaluates the trebuchet's fitness.
+     * This method is an implement the Optimizee interface.
      * The measure is purely based on its velocity.
      * If the trebuchet becomes unstable, then 0.0 is returned.
      */
@@ -252,6 +249,4 @@ public class TrebuchetSimulator extends NewtonianSimulator
             return 1.0/oldVelocity;
         }
     }
-
-
 }

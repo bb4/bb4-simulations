@@ -42,7 +42,7 @@ public class InvestmentChartPanel extends JPanel {
         List<Function> functions = Collections.emptyList();
         investmentChart = new MultipleFunctionRenderer(functions);
         investmentChart.setXFormatter(new CurrencyFormatter());
-        investmentChart.setMaxLabelWidth(LABEL_WIDTH);
+        //investmentChart.setMaxLabelWidth(LABEL_WIDTH);
     }
 
     public void addSeries(Function investmentFunction, Function reserveFunction) {

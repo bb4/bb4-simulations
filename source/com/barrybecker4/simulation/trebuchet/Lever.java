@@ -9,12 +9,12 @@ import java.awt.*;
  */
 public class Lever extends RenderablePart {
 
-    // the angle of the leverl wrt horizontal (0 being horizontal)
-    private double counterWeightLeverLength_;
-    private double slingLeverLength_ ;
+    // the angle of the level wrt horizontal (0 being horizontal)
+    private double counterWeightLeverLength;
+    private double slingLeverLength;
 
     // amount of mass in kg per meter magnitude of the lever
-    public static final double LEVER_MASS_PER_METER = 2.0;
+    private static final double LEVER_MASS_PER_METER = 2.0;
 
     private static final BasicStroke LEVER_STROKE = new BasicStroke(10.0f);
     private static final Color LEVER_COLOR = new Color(80, 60, 180);
@@ -22,25 +22,25 @@ public class Lever extends RenderablePart {
 
     public Lever(double counterWightLeverLength, double slingLeverLength) {
 
-        counterWeightLeverLength_ = counterWightLeverLength;
-        slingLeverLength_ = slingLeverLength;
+        counterWeightLeverLength = counterWightLeverLength;
+        this.slingLeverLength = slingLeverLength;
     }
 
 
     public double getSlingLeverLength() {
-        return slingLeverLength_;
+        return slingLeverLength;
     }
 
     public void setSlingLeverLength(double slingLeverLength) {
-        this.slingLeverLength_ = slingLeverLength;
+        this.slingLeverLength = slingLeverLength;
     }
 
     public double getCounterWeightLeverLength() {
-        return counterWeightLeverLength_;
+        return counterWeightLeverLength;
     }
 
     public void setCounterWeightLeverLength(double counterWeightLeverLength) {
-        this.counterWeightLeverLength_ = counterWeightLeverLength;
+        this.counterWeightLeverLength = counterWeightLeverLength;
     }
 
     /**
@@ -52,12 +52,12 @@ public class Lever extends RenderablePart {
     }
 
     public double getTotalLength() {
-        return counterWeightLeverLength_ + slingLeverLength_;
+        return counterWeightLeverLength + slingLeverLength;
     }
 
     // @@ make constant to improve perf?
     public Vector2d getFulcrumPosition() {
-        return new Vector2d(STRUT_BASE_X, (int) (-SCALE_FACTOR * height_));
+        return new Vector2d(STRUT_BASE_X, (int) (-SCALE_FACTOR * height));
     }
 
     /**
@@ -66,8 +66,8 @@ public class Lever extends RenderablePart {
      * @return the moment of inertia for the lever
      */
     public double getInertia() {
-        double sllSquared = slingLeverLength_ * slingLeverLength_;
-        double cwlSquared = counterWeightLeverLength_ * counterWeightLeverLength_;
+        double sllSquared = slingLeverLength * slingLeverLength;
+        double cwlSquared = counterWeightLeverLength * counterWeightLeverLength;
         return getMass() / 3.0 * (sllSquared + cwlSquared);
     }
 
@@ -80,13 +80,13 @@ public class Lever extends RenderablePart {
 
         Vector2d fulcrumPos = getFulcrumPosition();
 
-        double cos = SCALE_FACTOR * Math.cos(angle_);
-        double sin = SCALE_FACTOR * Math.sin(angle_);
+        double cos = SCALE_FACTOR * Math.cos(angle);
+        double sin = SCALE_FACTOR * Math.sin(angle);
 
-        g2.drawLine((int) (scale * (fulcrumPos.x + sin * counterWeightLeverLength_)),
-                    (int) (scale * (fulcrumPos.y - cos * counterWeightLeverLength_) + BASE_Y),
-                    (int) (scale * (fulcrumPos.x - sin * slingLeverLength_)),
-                    (int) (scale * (fulcrumPos.y + cos * slingLeverLength_)) + BASE_Y);
+        g2.drawLine((int) (scale * (fulcrumPos.x + sin * counterWeightLeverLength)),
+                    (int) (scale * (fulcrumPos.y - cos * counterWeightLeverLength) + BASE_Y),
+                    (int) (scale * (fulcrumPos.x - sin * slingLeverLength)),
+                    (int) (scale * (fulcrumPos.y + cos * slingLeverLength)) + BASE_Y);
     }
 
 }

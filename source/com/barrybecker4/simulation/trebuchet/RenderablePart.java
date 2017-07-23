@@ -23,48 +23,48 @@ public abstract class RenderablePart {
     protected static final Color VELOCITY_VECTOR_COLOR = new Color(70, 10, 255, 200);
     protected static final Color FORCE_VECTOR_COLOR = new Color(200, 0, 80, 200);
 
-    protected static double height_ = HEIGHT;
-    protected static double angle_;
+    protected static double height = HEIGHT;
+    protected static double angle;
     protected static double angularVelocity_ = 0;
 
-    protected static boolean showVelocityVectors_ = true;
-    protected static boolean showForceVectors_ = true;
+    protected static boolean showVelocityVectors = true;
+    protected static boolean showForceVectors = true;
 
     /** Constructor */
     public RenderablePart() {}
 
 
     public static double getHieght() {
-        return height_;
+        return height;
     }
 
     public static void setHeight(double height) {
-        height_ = height;
+        RenderablePart.height = height;
     }
 
 
     public static boolean getShowVelocityVectors() {
-        return showVelocityVectors_;
+        return showVelocityVectors;
     }
 
     public static void setShowVelocityVectors(boolean showVelocityVectors) {
-        showVelocityVectors_ = showVelocityVectors;
+        RenderablePart.showVelocityVectors = showVelocityVectors;
     }
 
     public static boolean getShowForceVectors() {
-        return showForceVectors_;
+        return showForceVectors;
     }
 
     public static void setShowForceVectors(boolean showForceVectors) {
-        showForceVectors_ = showForceVectors;
+        RenderablePart.showForceVectors = showForceVectors;
     }
 
     public static double getAngle() {
-        return angle_;
+        return angle;
     }
 
     public static void setAngle(double angle) {
-        angle_ = angle;
+        RenderablePart.angle = angle;
     }
 
     public static double getAngularVelocity() {

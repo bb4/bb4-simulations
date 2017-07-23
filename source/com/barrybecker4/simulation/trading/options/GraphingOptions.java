@@ -19,6 +19,4 @@ public class GraphingOptions {
     /** for stock and investment line charts, this shows some number of recent series */
     public int numRecentSeries = DEFAULT_NUM_RECENT_SERIES;
 
-
-
 }

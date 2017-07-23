@@ -14,38 +14,38 @@ import java.awt.*;
 public class StockOptionsDialog extends SimulatorOptionsDialog {
 
     /** number of dice to use.  */
-    private NumberInput numStocksField_;
+    private NumberInput numStocksField;
 
     /** Number of time periods (for example months or years)  */
-    private NumberInput numTimePeriodsField_;
+    private NumberInput numTimePeriodsField;
 
     /** Amount to increase after each time period if heads   */
-    private NumberInput percentIncreaseField_;
+    private NumberInput percentIncreaseField;
 
     /** Amount to decrease after each time period if tails  */
-    private NumberInput percentDecreaseField_;
+    private NumberInput percentDecreaseField;
 
     /** Starting value of each stock in dollars  */
-    private NumberInput startingValueField_;
+    private NumberInput startingValueField;
 
     /** Granularity fo the histogram bins on the x axis.  */
-    private NumberInput xResolutionField_;
+    private NumberInput xResolutionField;
 
     /** if true the x axis will have a log scale */
-    private JCheckBox useLogScale_;
+    private JCheckBox useLogScale;
 
     /** if true changes are between 0 and percent change. */
-    private JCheckBox useRandomChange_;
+    private JCheckBox useRandomChange;
 
-    private StockSampleOptions options_;
+    private StockSampleOptions options;
 
     /**
      * constructor
      */
-    public StockOptionsDialog(Component parent, Simulator simulator )
+    StockOptionsDialog(Component parent, Simulator simulator )
     {
         super( parent, simulator );
-        options_ = new StockSampleOptions();
+        options = new StockSampleOptions();
     }
 
     @Override
@@ -66,12 +66,12 @@ public class StockOptionsDialog extends SimulatorOptionsDialog {
 
         JPanel booleanOptions = createBooleanOptions();
 
-        innerPanel.add( numStocksField_);
-        innerPanel.add( numTimePeriodsField_);
-        innerPanel.add( percentIncreaseField_);
-        innerPanel.add( percentDecreaseField_);
-        innerPanel.add( startingValueField_);
-        innerPanel.add( xResolutionField_);
+        innerPanel.add(numStocksField);
+        innerPanel.add(numTimePeriodsField);
+        innerPanel.add(percentIncreaseField);
+        innerPanel.add(percentDecreaseField);
+        innerPanel.add(startingValueField);
+        innerPanel.add(xResolutionField);
         paramPanel.add(innerPanel, BorderLayout.NORTH);
         paramPanel.add(booleanOptions, BorderLayout.CENTER);
 
@@ -79,29 +79,29 @@ public class StockOptionsDialog extends SimulatorOptionsDialog {
     }
 
     private void initializeFields() {
-        numStocksField_ =
+        numStocksField =
                 new NumberInput("Number of stocks in each sample (1 - 1000): ", StockSampleOptions.DEFAULT_NUM_STOCKS,
                         "The number of stocks in each trial. The average value of which will be one data point.",
                         1, 1000, true);
-        numTimePeriodsField_ =
+        numTimePeriodsField =
                 new NumberInput("Number of time periods (1 - 1000): ", StockSampleOptions.DEFAULT_NUM_TIME_PERIODS,
                         "Number of time periods (for example months or years).",
                         1, 1000, true);
-        percentIncreaseField_ =
+        percentIncreaseField =
                 new NumberInput("Amount to increase each time period if heads (0 - 100): ",
                         100* StockSampleOptions.DEFAULT_PERCENT_INCREASE,
                         "Amount to increase after each time period if coin toss is heads.",
                         0, 100, true);
-        percentDecreaseField_ =
+        percentDecreaseField =
                 new NumberInput("Amount to decrease each time period if tails (0 - 100): ",
                         100* StockSampleOptions.DEFAULT_PERCENT_DECREASE,
                         "Amount to decrease after each time period if coin toss is tails.",
                         0, 100, true);
-        startingValueField_ =
+        startingValueField =
                 new NumberInput("Starting stock value : ", StockSampleOptions.DEFAULT_STARTING_VALUE,
                         "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
                         1, 1000000, false);
-        xResolutionField_ =
+        xResolutionField =
                 new NumberInput("Resolution (1 - 5): ", StockSampleOptions.DEFAULT_X_RESOLUTION,
                         "1 is low resolution 5 is high (meaning more bins on the x axis).",
                         1, 5, true);
@@ -111,39 +111,38 @@ public class StockOptionsDialog extends SimulatorOptionsDialog {
         JPanel booleanOptionsPanel = new JPanel();
         booleanOptionsPanel.setLayout(new BoxLayout(booleanOptionsPanel, BoxLayout.Y_AXIS));
 
-        useLogScale_ = new JCheckBox("Use log scale on x axis",
+        useLogScale = new JCheckBox("Use log scale on x axis",
                 StockSampleOptions.DEFAULT_USE_LOG_SCALE);
-        useLogScale_.setToolTipText("If checked, " +
+        useLogScale.setToolTipText("If checked, " +
                 "the x axis will be shown on a log scale so that the histogram will be easier to interpret.");
 
-        useRandomChange_ = new JCheckBox("Use random change",
+        useRandomChange = new JCheckBox("Use random change",
                 StockSampleOptions.DEFAULT_USE_RANDOM_CHANGE);
-        useRandomChange_.setToolTipText("If checked, " +
+        useRandomChange.setToolTipText("If checked, " +
                 "then the amount of change at each time step will be a " +
                 "random amount between 0 and the percent increase or decrease.");
 
-        booleanOptionsPanel.add(useLogScale_);
-        booleanOptionsPanel.add(useRandomChange_);
+        booleanOptionsPanel.add(useLogScale);
+        booleanOptionsPanel.add(useRandomChange);
 
         return booleanOptionsPanel;
     }
 
     @Override
-    protected void ok()
-    {
+    protected void ok() {
         super.ok();
 
-        options_.numStocks = numStocksField_.getIntValue();
-        options_.percentDecrease = (double) percentDecreaseField_.getIntValue() / 100.0;
-        options_.percentIncrease = (double) percentIncreaseField_.getIntValue() / 100.0;
-        options_.numTimePeriods = numTimePeriodsField_.getIntValue();
-        options_.startingValue = startingValueField_.getValue();
-        options_.xResolution = xResolutionField_.getIntValue();
-        options_.useLogScale = useLogScale_.isSelected();
-        options_.useRandomChange = useRandomChange_.isSelected();
+        options.numStocks = numStocksField.getIntValue();
+        options.percentDecrease = (double) percentDecreaseField.getIntValue() / 100.0;
+        options.percentIncrease = (double) percentIncreaseField.getIntValue() / 100.0;
+        options.numTimePeriods = numTimePeriodsField.getIntValue();
+        options.startingValue = startingValueField.getValue();
+        options.xResolution = xResolutionField.getIntValue();
+        options.useLogScale = useLogScale.isSelected();
+        options.useRandomChange = useRandomChange.isSelected();
 
         StockSimulator simulator = (StockSimulator) getSimulator();
-        simulator.setSampleOptions(options_);
+        simulator.setSampleOptions(options);
     }
 
 }
