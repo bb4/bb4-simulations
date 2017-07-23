@@ -13,13 +13,13 @@ import java.awt.event.ActionEvent;
  */
 public class RDOptionsDialog extends SimulatorOptionsDialog {
 
-    private JCheckBox offscreenRenderingCheckbox_;
+    private JCheckBox offscreenRenderingCheckbox;
 
-    private JCheckBox showProfilingCheckbox_;
-    private JCheckBox useParallelRenderingCheckbox_;
+    private JCheckBox showProfilingCheckbox;
+    private JCheckBox useParallelRenderingCheckbox;
 
 
-    public RDOptionsDialog(Component parent, Simulator simulator ) {
+    RDOptionsDialog(Component parent, Simulator simulator ) {
         super(parent, simulator);
     }
 
@@ -30,22 +30,22 @@ public class RDOptionsDialog extends SimulatorOptionsDialog {
 
         RDSimulator sim = (RDSimulator) getSimulator();
 
-        showProfilingCheckbox_ = createCheckBox("Show Profiling Information",
+        showProfilingCheckbox = createCheckBox("Show Profiling Information",
                         "If checked, profiling statistics will be displayed in the console when paused.",
                         RDProfiler.getInstance().isEnabled());
 
-        offscreenRenderingCheckbox_ = createCheckBox("Use offscreen rendering",
+        offscreenRenderingCheckbox = createCheckBox("Use offscreen rendering",
                         "If checked, rendering graphics to an offscreen buffer before copying to the screen.",
                         sim.getUseOffScreenRendering());
 
-        useParallelRenderingCheckbox_ = createCheckBox("Use parallel rendering",
+        useParallelRenderingCheckbox = createCheckBox("Use parallel rendering",
                         "Rendering will take advantage of as many cores/threads that are avaialble.",
                         sim.getRenderingOptions().isParallelized());
 
 
-        panel.add(showProfilingCheckbox_);
-        panel.add(offscreenRenderingCheckbox_);
-        panel.add(useParallelRenderingCheckbox_);
+        panel.add(showProfilingCheckbox);
+        panel.add(offscreenRenderingCheckbox);
+        panel.add(useParallelRenderingCheckbox);
 
         return panel;
     }
@@ -57,14 +57,14 @@ public class RDOptionsDialog extends SimulatorOptionsDialog {
         Object source = e.getSource();
         RDSimulator sim = (RDSimulator) getSimulator();
 
-        if ( source == showProfilingCheckbox_ ) {
-            RDProfiler.getInstance().setEnabled(showProfilingCheckbox_.isSelected());
+        if ( source == showProfilingCheckbox) {
+            RDProfiler.getInstance().setEnabled(showProfilingCheckbox.isSelected());
         }
-        else if ( source == offscreenRenderingCheckbox_ ) {
-            sim.setUseOffscreenRendering(offscreenRenderingCheckbox_.isSelected());
+        else if ( source == offscreenRenderingCheckbox) {
+            sim.setUseOffscreenRendering(offscreenRenderingCheckbox.isSelected());
         }
-        else if ( source == useParallelRenderingCheckbox_ ) {
-            sim.getRenderingOptions().setParallelized(useParallelRenderingCheckbox_.isSelected());
+        else if ( source == useParallelRenderingCheckbox) {
+            sim.getRenderingOptions().setParallelized(useParallelRenderingCheckbox.isSelected());
         }
     }
 }

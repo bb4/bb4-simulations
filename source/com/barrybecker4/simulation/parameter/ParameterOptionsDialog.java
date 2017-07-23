@@ -13,8 +13,8 @@ import java.awt.*;
 public class ParameterOptionsDialog extends SimulatorOptionsDialog {
 
     /** type of distribution function to test.   */
-    private JComboBox parameterChoiceField_;
-    private JCheckBox showRedistribution_;
+    private JComboBox parameterChoiceField;
+    private JCheckBox showRedistribution;
 
     /**
      * constructor
@@ -22,7 +22,7 @@ public class ParameterOptionsDialog extends SimulatorOptionsDialog {
     public ParameterOptionsDialog(Component parent, Simulator simulator ) {
         super( parent, simulator );
         ParameterSimulator psim = (ParameterSimulator) getSimulator();
-        showRedistribution_.setSelected(psim.isShowRedistribution());
+        showRedistribution.setSelected(psim.isShowRedistribution());
     }
 
     @Override
@@ -37,14 +37,14 @@ public class ParameterOptionsDialog extends SimulatorOptionsDialog {
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout( new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
-        parameterChoiceField_ = new JComboBox();
-        parameterChoiceField_.setModel(
+        parameterChoiceField = new JComboBox();
+        parameterChoiceField.setModel(
                 new DefaultComboBoxModel(ParameterDistributionType.values()));
 
 
-        showRedistribution_ = new JCheckBox("Show Redistribution");
-        innerPanel.add( parameterChoiceField_ );
-        innerPanel.add(showRedistribution_);
+        showRedistribution = new JCheckBox("Show Redistribution");
+        innerPanel.add(parameterChoiceField);
+        innerPanel.add(showRedistribution);
         JPanel fill = new JPanel();
         paramPanel.add(innerPanel, BorderLayout.NORTH);
         paramPanel.add(fill, BorderLayout.CENTER);
@@ -59,8 +59,8 @@ public class ParameterOptionsDialog extends SimulatorOptionsDialog {
         ParameterSimulator simulator = (ParameterSimulator) getSimulator();
         // set the common rendering and global physics options
         simulator.setParameter(
-                ParameterDistributionType.values()[parameterChoiceField_.getSelectedIndex()].getParameter());
-        simulator.setShowRedistribution(showRedistribution_.isSelected());
+                ParameterDistributionType.values()[parameterChoiceField.getSelectedIndex()].getParameter());
+        simulator.setShowRedistribution(showRedistribution.isSelected());
     }
 
 }

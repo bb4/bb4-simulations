@@ -27,7 +27,7 @@ public class ConwayExplorer extends Simulator {
         commonInit();
     }
 
-    public InteractionHandler getInteractionHandler() {
+    InteractionHandler getInteractionHandler() {
         return handler_;
     }
 
@@ -56,7 +56,7 @@ public class ConwayExplorer extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new OptionsDialog( frame_, this );
+        return new OptionsDialog(frame, this );
     }
 
     @Override

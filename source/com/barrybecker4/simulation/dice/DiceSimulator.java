@@ -40,14 +40,14 @@ public class DiceSimulator extends DistributionSimulator {
 
     @Override
     protected void initHistogram() {
-        data_ = new int[options.numDice * (options.numSides - 1) + 1];
-        histogram_ = new HistogramRenderer(data_, new LinearFunction(1.0, - options.numDice));
-        histogram_.setXFormatter(new IntegerFormatter());
+        data = new int[options.numDice * (options.numSides - 1) + 1];
+        histogram = new HistogramRenderer(data, new LinearFunction(1.0, - options.numDice));
+        histogram.setXFormatter(new IntegerFormatter());
     }
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new DiceOptionsDialog( frame_, this );
+         return new DiceOptionsDialog(frame, this );
     }
 
     @Override

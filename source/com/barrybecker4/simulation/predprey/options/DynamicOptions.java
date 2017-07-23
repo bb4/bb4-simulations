@@ -19,7 +19,7 @@ import java.util.List;
 public class DynamicOptions extends JPanel
                             implements SliderGroupChangeListener {
 
-    private List<CreatureSliderGroup> sliderGroups_;
+    private List<CreatureSliderGroup> sliderGroups;
 
     /**
      * Constructor
@@ -30,11 +30,11 @@ public class DynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        sliderGroups_ = new ArrayList<CreatureSliderGroup>();
+        sliderGroups = new ArrayList<CreatureSliderGroup>();
         for (Population creaturePop : simulator.getCreatures()) {
             CreatureSliderGroup group = new CreatureSliderGroup(creaturePop);
             group.addSliderChangeListener(this);
-            sliderGroups_.add(group);
+            sliderGroups.add(group);
             add(group);
         }
 
@@ -44,13 +44,13 @@ public class DynamicOptions extends JPanel
     }
 
     public void update() {
-        for (CreatureSliderGroup group : sliderGroups_)  {
+        for (CreatureSliderGroup group : sliderGroups)  {
             group.update();
         }
     }
 
     public void reset() {
-        for (SliderGroup group : sliderGroups_)  {
+        for (SliderGroup group : sliderGroups)  {
             group.reset();
         }
     }
@@ -60,7 +60,7 @@ public class DynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        for (CreatureSliderGroup group : sliderGroups_)  {
+        for (CreatureSliderGroup group : sliderGroups)  {
             group.checkSliderChanged(sliderName, value);
         }
     }

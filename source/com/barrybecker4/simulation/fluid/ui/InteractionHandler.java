@@ -14,15 +14,14 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    public static final double DEFAULT_FORCE = 3.0f;
-    public static final double DEFAULT_SOURCE_DENSITY = 1.0f;
+    static final double DEFAULT_FORCE = 3.0f;
+    static final double DEFAULT_SOURCE_DENSITY = 1.0f;
 
     private double force_ = DEFAULT_FORCE;
     private double sourceDensity_ = DEFAULT_SOURCE_DENSITY;
 
-    Grid grid_;
-
-    double scale_;
+    private Grid grid;
+    private double scale;
 
     private int currentX, currentY;
     private int lastX, lastY;
@@ -31,9 +30,9 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     /**
      * Constructor
      */
-    public InteractionHandler(Grid grid,  double scale) {
-        scale_ = scale;
-        grid_ = grid;
+    InteractionHandler(Grid grid,  double scale) {
+        this.scale = scale;
+        this.grid = grid;
     }
 
     public void setForce(double force) {
@@ -52,14 +51,14 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
 
         currentX = e.getX();
         currentY = e.getY();
-        int i = (int) (currentX / scale_);
-        int j = (int) (currentY / scale_);
+        int i = (int) (currentX / scale);
+        int j = (int) (currentY / scale);
 
         // apply the change to a convolution kernel area
         int startX = Math.max(1, i - 1);
-        int stopX = Math.min(grid_.getWidth(), i + 1);
+        int stopX = Math.min(grid.getWidth(), i + 1);
         int startY = Math.max(1, j - 1);
-        int stopY = Math.min(grid_.getHeight(), j + 1);
+        int stopY = Math.min(grid.getHeight(), j + 1);
 
 
         for (int ii=startX; ii<stopX; ii++) {
@@ -81,14 +80,14 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
 
         // if the left mouse is down, make waves
         if (mouse1Down) {
-            double fu = (weight * force_ * (currentX - lastX) / scale_);
-            double fv = (weight *force_ * (currentY - lastY) / scale_);
-            grid_.incrementU(i, j, fu);
-            grid_.incrementV(i, j, fv);
+            double fu = (weight * force_ * (currentX - lastX) / scale);
+            double fv = (weight *force_ * (currentY - lastY) / scale);
+            grid.incrementU(i, j, fu);
+            grid.incrementV(i, j, fv);
         }
         else if (mouse3Down) {
             // if the right mouse is down, add ink (density)
-            grid_.incrementDensity(i, j, weight * sourceDensity_);
+            grid.incrementDensity(i, j, weight * sourceDensity_);
         }
         else {
             System.out.println("dragged with no button down");

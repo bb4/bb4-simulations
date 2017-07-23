@@ -28,9 +28,9 @@ public class HenonAlgorithm {
 
     // should extract these into ModelParams class
     private int numTravelors;
-    private int maxIterations_;
+    private int maxIterations;
     private int numStepsPerFrame;
-    private TravelerParams travelorParams;
+    private TravelerParams travelerParams;
     private boolean useUniformSeeds;
     private boolean connectPoints;
     private int alpha;
@@ -55,19 +55,19 @@ public class HenonAlgorithm {
 
     public void reset() {
         numTravelors = DEFAULT_NUM_TRAVELERS;
-        maxIterations_ = DEFAULT_MAX_ITERATIONS;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         numStepsPerFrame = DEFAULT_FRAME_ITERATIONS;
-        travelorParams = new TravelerParams();
+        travelerParams = new TravelerParams();
         useUniformSeeds = DEFAULT_UNIFORM_SEEDS;
         connectPoints = DEFAULT_CONNECT_POINTS;
         alpha = DEFAULT_ALPHA;
         cmap = new HenonColorMap(alpha);
-        model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelorParams, useUniformSeeds, connectPoints, numTravelors, cmap);
+        model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelors, cmap);
     }
 
     public void setTravelerParams(TravelerParams newParams) {
-        if (!newParams.equals(travelorParams))   {
-            travelorParams = newParams;
+        if (!newParams.equals(travelerParams))   {
+            travelerParams = newParams;
             requestRestart(model.getWidth(), model.getHeight());
         }
     }
@@ -106,8 +106,8 @@ public class HenonAlgorithm {
     }
 
     public void setMaxIterations(int value) {
-        if (value != maxIterations_)  {
-            maxIterations_ = value;
+        if (value != maxIterations)  {
+            maxIterations = value;
             requestRestart(model.getWidth(), model.getHeight());
         }
     }
@@ -125,7 +125,7 @@ public class HenonAlgorithm {
     }
 
     private void requestRestart(int width, int height) {
-        model = new HenonModel(width, height, travelorParams, useUniformSeeds, connectPoints, numTravelors, cmap);
+        model = new HenonModel(width, height, travelerParams, useUniformSeeds, connectPoints, numTravelors, cmap);
         restartRequested = true;
     }
 
@@ -146,7 +146,7 @@ public class HenonAlgorithm {
             model.reset();
             Profiler.getInstance().startCalculationTime();
         }
-        if (iterations_ > maxIterations_) {
+        if (iterations_ > maxIterations) {
             showProfileInfo();
             return true;  // we are done.
         }

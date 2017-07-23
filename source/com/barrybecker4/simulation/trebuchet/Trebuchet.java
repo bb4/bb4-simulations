@@ -42,26 +42,26 @@ public class Trebuchet {
     protected static final double MAX_LEVER_ANGLE = PI - 0.1;
 
     // the parts
-    private Base base_;
-    private Lever lever_;
-    private CounterWeight counterWeight_;
-    private Sling sling_;
-    private Projectile projectile_;
+    private Base base;
+    private Lever lever;
+    private CounterWeight counterWeight;
+    private Sling sling;
+    private Projectile projectile;
 
     private Vector2d forceFromHook_ = new Vector2d(0, 0);
 
     protected static final int NUM_PARTS = 5;
-    private RenderablePart[] part_;
+    private RenderablePart[] part;
 
     // the time since the start of the simulation
-    private static ILog logger_ = null;
+    private static ILog logger = null;
 
     // tweakable rendering parameters
-    private boolean showVelocityVectors_ = false;
-    private boolean showForceVectors_ = false;
+    private boolean showVelocityVectors = false;
+    private boolean showForceVectors = false;
 
     // scales the geometry of the trebuchet
-    private double scale_ = SCALE;
+    private double scale = SCALE;
 
 
     /**
@@ -79,23 +79,23 @@ public class Trebuchet {
     }
 
     private void commonInit() {
-        logger_ = new Log();
+        logger = new Log();
 
-        part_ = new RenderablePart[NUM_PARTS];
+        part = new RenderablePart[NUM_PARTS];
 
         double angle = PI/2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH);
         RenderablePart.setAngle(angle);
-        base_ = new Base();
-        part_[0] = base_;
-        lever_ = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH);
-        part_[1] = lever_;
+        base = new Base();
+        part[0] = base;
+        lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH);
+        part[1] = lever;
         //System.out.println("cw mass="+DEFAULT_COUNTER_WEIGHT_MASS);
-        counterWeight_ = new CounterWeight(lever_, DEFAULT_COUNTER_WEIGHT_MASS);
-        part_[2] = counterWeight_;
-        projectile_ = new Projectile(DEFAULT_PROJECTILE_MASS);
-        sling_ = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever_, projectile_);
-        part_[3] = sling_;
-        part_[4] = projectile_;
+        counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS);
+        part[2] = counterWeight;
+        projectile = new Projectile(DEFAULT_PROJECTILE_MASS);
+        sling = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile);
+        part[3] = sling;
+        part[4] = projectile;
     }
 
     /**
@@ -108,7 +108,7 @@ public class Trebuchet {
 
         double angle = RenderablePart.getAngle();
         double angularVelocity = RenderablePart.getAngularVelocity();
-        double slingAngle = sling_.getAngleWithLever();
+        double slingAngle = sling.getAngleWithLever();
         double torque = calculateTorque(angle, slingAngle);
         double inertia = calculateInertia();
 
@@ -130,37 +130,37 @@ public class Trebuchet {
 
         // calculate the forces acting on the projectile.
         // the magnitude of the tangential force at the hook
-        if (!projectile_.isReleased()) {
-            double tangentialForceAtHook = torque / lever_.getSlingLeverLength();
+        if (!projectile.isReleased()) {
+            double tangentialForceAtHook = torque / lever.getSlingLeverLength();
             //System.out.println("tangentialForceAtHook="+tangentialForceAtHook);
-            double slingAngleWithHorz = sling_.getAngleWithHorz();
+            double slingAngleWithHorz = sling.getAngleWithHorz();
 
             forceFromHook_.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz));  //sin(PI - angle), -cos(PI + angle));
             forceFromHook_.scale( tangentialForceAtHook * sin(slingAngle));
             Vector2d gravityForce = new Vector2d(GRAVITY_VEC);
-            gravityForce.scale(projectile_.getMass());
+            gravityForce.scale(projectile.getMass());
             forceFromHook_.add(gravityForce);
             // also add a restoring force which is proportional to the distnace from the attachpoint on the sling
             // if we have not yet been released.
 
-            Vector2d restoreForce = sling_.getProjectileAttachPoint();
-            restoreForce.sub(projectile_.getPosition());
+            Vector2d restoreForce = sling.getProjectileAttachPoint();
+            restoreForce.sub(projectile.getPosition());
             restoreForce.scale(100.0);
             forceFromHook_.add(restoreForce);
-            projectile_.setForce(forceFromHook_, timeStep);
+            projectile.setForce(forceFromHook_, timeStep);
         }  else {
             Vector2d gravityForce = new Vector2d(GRAVITY_VEC);
-            gravityForce.scale(projectile_.getMass());
-            projectile_.setForce(gravityForce, timeStep);
+            gravityForce.scale(projectile.getMass());
+            projectile.setForce(gravityForce, timeStep);
         }
 
 
         // at the time when it is released, the only force acting on it will be gravity.
-        if (!projectile_.isReleased() && slingAngle >= (PI + sling_.getReleaseAngle())) {
+        if (!projectile.isReleased() && slingAngle >= (PI + sling.getReleaseAngle())) {
             System.out.println("##########################################################################");
-            System.out.println("released!  slingAngle = "+slingAngle +" sling release angle = "+sling_.getReleaseAngle());
+            System.out.println("released!  slingAngle = "+slingAngle +" sling release angle = "+ sling.getReleaseAngle());
             System.out.println("##########################################################################");
-            projectile_.setReleased(true);
+            projectile.setReleased(true);
         }
 
         return timeStep;
@@ -169,16 +169,16 @@ public class Trebuchet {
     private double calculateTorque(double angle, double slingAngle) {
         double primaryTorque = 0;
         if ( angle < MAX_LEVER_ANGLE) {
-            primaryTorque = lever_.getCounterWeightLeverLength() * sin(angle) * GRAVITY * counterWeight_.getMass();
+            primaryTorque = lever.getCounterWeightLeverLength() * sin(angle) * GRAVITY * counterWeight.getMass();
         }
         double dragTorque = 0;
-        if (projectile_.isOnRamp()) {
+        if (projectile.isOnRamp()) {
             // case when the projectile is still on the ramp
-            dragTorque = -lever_.getSlingLeverLength() * projectile_.getMass() * GRAVITY * RAMP_FRICTION * sin(slingAngle);
+            dragTorque = -lever.getSlingLeverLength() * projectile.getMass() * GRAVITY * RAMP_FRICTION * sin(slingAngle);
         } else {
             // case when the projectile is no longer on the ramp
-            double r = projectile_.getDistanceFrom(lever_.getFulcrumPosition());
-            dragTorque = r * projectile_.getMass() * GRAVITY * cos(PI - angle - slingAngle) * sin(angle) ;
+            double r = projectile.getDistanceFrom(lever.getFulcrumPosition());
+            dragTorque = r * projectile.getMass() * GRAVITY * cos(PI - angle - slingAngle) * sin(angle) ;
         }
         //System.out.println("torque= primaryTorque("+primaryTorque+")" +
         //                   " + dragTorque("+dragTorque+")= "+(primaryTorque+dragTorque));
@@ -191,7 +191,7 @@ public class Trebuchet {
      * @return the calculated interia
      */
     private double calculateInertia() {
-        return lever_.getInertia() + projectile_.getInertia(lever_.getFulcrumPosition());
+        return lever.getInertia() + projectile.getInertia(lever.getFulcrumPosition());
     }
 
 
@@ -199,78 +199,78 @@ public class Trebuchet {
     // api for tweaking Trebuchet params ////////////////////////////////////////
 
     public void setScale( double scale ) {
-        scale_ = scale;
+        this.scale = scale;
     }
 
     public double getScale() {
-        return scale_;
+        return scale;
     }
 
     public void setShowVelocityVectors( boolean show ) {
-        showVelocityVectors_ = show;
+        showVelocityVectors = show;
     }
 
     public boolean getShowVelocityVectors() {
-        return showVelocityVectors_;
+        return showVelocityVectors;
     }
 
     public void setShowForceVectors( boolean show ){
-        showForceVectors_ = show;
+        showForceVectors = show;
     }
 
     public boolean getShowForceVectors() {
-        return showForceVectors_;
+        return showForceVectors;
     }
 
 
 
     public double getCounterWeightLeverLength() {
-        return lever_.getCounterWeightLeverLength();
+        return lever.getCounterWeightLeverLength();
     }
 
     public void setCounterWeightLeverLength(double counterWeightLeverLength) {
-        lever_.setCounterWeightLeverLength(counterWeightLeverLength);
+        lever.setCounterWeightLeverLength(counterWeightLeverLength);
     }
 
     public double getSlingLeverLength() {
-        return lever_.getSlingLeverLength();
+        return lever.getSlingLeverLength();
     }
 
     public void setSlingLeverLength(double slingLeverLength) {
-        lever_.setSlingLeverLength(slingLeverLength);
+        lever.setSlingLeverLength(slingLeverLength);
     }
 
     public double getCounterWeightMass() {
-        return counterWeight_.getMass();
+        return counterWeight.getMass();
     }
 
     public void setCounterWeightMass(double counterWeightMass) {
-        this.counterWeight_.setMass(counterWeightMass);
+        this.counterWeight.setMass(counterWeightMass);
     }
 
     public double getSlingLength() {
-        return sling_.getLength();
+        return sling.getLength();
     }
 
     public void setSlingLength(double slingLength) {
-        this.sling_.setLength(slingLength);
+        this.sling.setLength(slingLength);
     }
 
     public double getProjectileMass() {
-        return projectile_.getMass();
+        return projectile.getMass();
     }
 
     public void setProjectileMass(double projectileMass) {
-        this.projectile_.setMass(projectileMass);
+        this.projectile.setMass(projectileMass);
     }
 
 
     public double getSlingReleaseAngle() {
-        return sling_.getReleaseAngle();
+        return sling.getReleaseAngle();
     }
 
     public void setSlingReleaseAngle(double slingReleaseAngle) {
-        this.sling_.setReleaseAngle(slingReleaseAngle);
+        this.sling.setReleaseAngle(slingReleaseAngle);
     }
 
 
@@ -284,8 +284,8 @@ public class Trebuchet {
 
         // render each part
         for ( i = 0; i < NUM_PARTS; i++ ) {
-            if (part_[i] != null)
-                part_[i].render( g, getScale() );
+            if (part[i] != null)
+                part[i].render( g, getScale() );
         }
     }
 

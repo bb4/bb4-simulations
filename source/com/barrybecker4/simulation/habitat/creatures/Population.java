@@ -19,7 +19,6 @@ public class Population {
     private static final double SPAWN_RADIUS = 0.05;
 
     private CreatureType type;
-
     private int initialSize;
     private List<Creature> creatures;
 
@@ -35,14 +34,14 @@ public class Population {
      * @param initialSize
      * @return new population
      */
-    public static Population createPopulation(CreatureType type, int initialSize)  {
+    static Population createPopulation(CreatureType type, int initialSize)  {
 
         Population pop = new Population(type);
         pop.createInitialSet(initialSize);
         return pop;
     }
 
-    public void createInitialSet(int num) {
+    private void createInitialSet(int num) {
         this.initialSize = num;
         create();
     }
@@ -70,25 +69,22 @@ public class Population {
      * Increment to the next day.
      * Move the creatures around and see if they are close to something to eat.
      * Have children of gestation period is complete and they have spawned.
-     * @param grid
+     * @param grid the habitat grid
      */
     public void nextDay(HabitatGrid grid) {
 
         List<Point2d> spawnLocations = new ArrayList<Point2d>();
-        Iterator<Creature> creatureIt = creatures.iterator();
 
         // Figure out if anything edible nearby.
         // Eat prey if there are things that we eat nearby.
 
-        while (creatureIt.hasNext())   {
-            Creature creature = creatureIt.next();
-
+        for (Creature creature : creatures) {
             boolean spawn = creature.nextDay(grid);
 
             if (spawn) {
                 Point2d loc = creature.getLocation();
                 spawnLocations.add(new Point2d(absMod(loc.x + SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()),
-                                               absMod(loc.y + SPAWN_RADIUS * MathUtil.RANDOM.nextDouble())));
+                        absMod(loc.y + SPAWN_RADIUS * MathUtil.RANDOM.nextDouble())));
             }
         }
 
@@ -101,10 +97,9 @@ public class Population {
 
 
     /**
-     * remove dead after next day is done.
-     * @param grid
+     * Remove dead after next day is done.
      */
-    public void removeDead(HabitatGrid grid) {
+    void removeDead(HabitatGrid grid) {
         Iterator<Creature> creatureIt = creatures.iterator();
         while (creatureIt.hasNext())   {
              Creature creature = creatureIt.next();

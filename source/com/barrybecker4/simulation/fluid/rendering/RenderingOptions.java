@@ -12,7 +12,7 @@ import com.barrybecker4.common.concurrency.*;
 public class RenderingOptions {
 
     /** scales the size of everything   */
-    public static final double DEFAULT_SCALE = 4;
+    private static final double DEFAULT_SCALE = 4;
     private double scale = DEFAULT_SCALE;
 
     private boolean showVelocities = false;
@@ -42,10 +42,9 @@ public class RenderingOptions {
         return parallelizer.getNumThreads() > 1;
     }
 
-    public RunnableParallelizer getParallelizer() {
+    RunnableParallelizer getParallelizer() {
         return parallelizer;
     }
-
 
     public void setScale(double scale) {
         this.scale = scale;

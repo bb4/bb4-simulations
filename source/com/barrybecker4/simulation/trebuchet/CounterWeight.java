@@ -40,9 +40,9 @@ public class CounterWeight extends RenderablePart {
         g2.setColor(COLOR);
 
         double cwLeverLength = lever_.getCounterWeightLeverLength();
-        double cos = SCALE_FACTOR * cwLeverLength* Math.cos(angle_);
-        double sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle_);
-        Vector2d attachPt = new Vector2d(STRUT_BASE_X + sin, (int) ( -SCALE_FACTOR * height_) - cos);
+        double cos = SCALE_FACTOR * cwLeverLength* Math.cos(angle);
+        double sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle);
+        Vector2d attachPt = new Vector2d(STRUT_BASE_X + sin, (int) ( -SCALE_FACTOR * height) - cos);
 
 
         g2.drawLine((int) (scale * attachPt.x),

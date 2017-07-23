@@ -25,7 +25,7 @@ public class CaveModel {
     public static final boolean DEFAULT_USE_CONTINUOUS_ITERATION = false;
     public static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
 
-    /** Radius for area of effect when doing manual modification with clikc/drag brush */
+    /** Radius for area of effect when doing manual modification with click/drag brush */
     public static final int DEFAULT_BRUSH_RADIUS = 8;
 
     /** The amount of impact that the brush has. */

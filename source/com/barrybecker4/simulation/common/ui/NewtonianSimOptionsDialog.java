@@ -12,13 +12,13 @@ import java.awt.*;
 public abstract class NewtonianSimOptionsDialog extends SimulatorOptionsDialog {
 
     // rendering option controls
-    private JCheckBox drawMeshCheckbox_;
-    private JCheckBox showVelocitiesCheckbox_;
-    private JCheckBox showForcesCheckbox_;
+    private JCheckBox drawMeshCheckbox;
+    private JCheckBox showVelocitiesCheckbox;
+    private JCheckBox showForcesCheckbox;
 
     // physics param options controls
-    private NumberInput staticFrictionField_;
-    private NumberInput dynamicFrictionField_;
+    private NumberInput staticFrictionField;
+    private NumberInput dynamicFrictionField;
 
 
     /**
@@ -44,24 +44,24 @@ public abstract class NewtonianSimOptionsDialog extends SimulatorOptionsDialog {
     }
 
     protected JCheckBox createMeshCheckBox(NewtonianSimulator sim) {
-        drawMeshCheckbox_ =
+        drawMeshCheckbox =
                 createCheckBox("Show Wireframe", "draw showing the underlying wireframe mesh", sim.getDrawMesh() );
-        return drawMeshCheckbox_;
+        return drawMeshCheckbox;
     }
 
     protected JCheckBox createVelocitiesCheckBox(NewtonianSimulator sim) {
-        showVelocitiesCheckbox_ =
+        showVelocitiesCheckbox =
                 createCheckBox("Show Velocity Vectors",
                     "show lines representing velocity vectors on each partical mass",
                     sim.getShowVelocityVectors() );
-        return showVelocitiesCheckbox_;
+        return showVelocitiesCheckbox;
     }
 
     protected JCheckBox createForcesCheckBox(NewtonianSimulator sim) {
-        showForcesCheckbox_ =
+        showForcesCheckbox =
                 createCheckBox("Show Force Vectors",
                         "show lines representing force vectors on each partical mass",  sim.getShowForceVectors());
-        return showForcesCheckbox_;
+        return showForcesCheckbox;
     }
 
     @Override
@@ -76,15 +76,15 @@ public abstract class NewtonianSimOptionsDialog extends SimulatorOptionsDialog {
                 BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Friction" ) );
 
         NewtonianSimulator sim = (NewtonianSimulator) getSimulator();
-        staticFrictionField_ =
+        staticFrictionField =
                 new NumberInput( "static Friction (.0 small - 0.4 large):  ", sim.getStaticFriction(),
                                  "This controls amount of static surface friction.", 0.0, 0.4, false);
-        dynamicFrictionField_ =
+        dynamicFrictionField =
                 new NumberInput( "dynamic friction (.0 small - .4 large):  ", sim.getDynamicFriction(),
                                   "This controls amount of dynamic surface friction.", 0.0, 0.4, false);
 
-        frictionPanel.add( staticFrictionField_ );
-        frictionPanel.add( dynamicFrictionField_ );
+        frictionPanel.add(staticFrictionField);
+        frictionPanel.add(dynamicFrictionField);
 
         globalParamPanel.add(frictionPanel, BorderLayout.NORTH);
 
@@ -99,13 +99,13 @@ public abstract class NewtonianSimOptionsDialog extends SimulatorOptionsDialog {
 
         NewtonianSimulator simulator = (NewtonianSimulator) getSimulator();
         // set the common rendering and global physics options
-        simulator.setDrawMesh( drawMeshCheckbox_.isSelected() );
-        simulator.setShowVelocityVectors( showVelocitiesCheckbox_.isSelected() );
-        if (showForcesCheckbox_!=null)
-            simulator.setShowForceVectors( showForcesCheckbox_.isSelected() );
+        simulator.setDrawMesh( drawMeshCheckbox.isSelected() );
+        simulator.setShowVelocityVectors( showVelocitiesCheckbox.isSelected() );
+        if (showForcesCheckbox !=null)
+            simulator.setShowForceVectors( showForcesCheckbox.isSelected() );
 
-        double staticFriction = staticFrictionField_.getValue();
-        double dynamicFriction =  dynamicFrictionField_.getValue();
+        double staticFriction = staticFrictionField.getValue();
+        double dynamicFriction =  dynamicFrictionField.getValue();
         assert(staticFriction >= dynamicFriction);
         simulator.setStaticFriction( staticFriction);
         simulator.setDynamicFriction( dynamicFriction );

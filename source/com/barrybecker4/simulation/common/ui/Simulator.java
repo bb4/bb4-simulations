@@ -26,14 +26,14 @@ import java.awt.event.ActionListener;
 public abstract class Simulator extends AnimationComponent
                                 implements Optimizee {
 
-    protected SimulatorOptionsDialog optionsDialog_ = null;
-    protected static JFrame frame_ = null;
+    private SimulatorOptionsDialog optionsDialog = null;
+    protected static JFrame frame = null;
 
     /** timestep for every step of the animation */
     protected double timeStep_;
 
     /** whether or not to use anti-aliasing when rendering */
-    private boolean useAntialiasing_ = true;
+    private boolean useAntialiasing = true;
 
     /**
      * Constructor
@@ -59,10 +59,10 @@ public abstract class Simulator extends AnimationComponent
     }
 
     public void setAntialiasing( boolean use ) {
-        useAntialiasing_ = use;
+        useAntialiasing = use;
     }
     public boolean getAntialiasing() {
-        return useAntialiasing_;
+        return useAntialiasing;
     }
 
     public void setScale( double scale ) {}
@@ -75,19 +75,19 @@ public abstract class Simulator extends AnimationComponent
 
         GradientButton button = new GradientButton( "Options" );
 
-        optionsDialog_ = createOptionsDialog();
+        optionsDialog = createOptionsDialog();
 
         button.addActionListener( new ActionListener() {
 
             @Override
             public void actionPerformed( ActionEvent e ) {
 
-                optionsDialog_.setLocationRelativeTo( (Component) e.getSource() );
+                optionsDialog.setLocationRelativeTo( (Component) e.getSource() );
                 // pause the snake while the options are open
-                final Simulator simulator = optionsDialog_.getSimulator();
+                final Simulator simulator = optionsDialog.getSimulator();
                 final boolean oldPauseVal = simulator.isPaused();
                 simulator.setPaused( true );
-                optionsDialog_.showDialog();
+                optionsDialog.showDialog();
                 simulator.setPaused( oldPauseVal );
             }
         } );

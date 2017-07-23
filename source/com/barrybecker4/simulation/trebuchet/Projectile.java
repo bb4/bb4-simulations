@@ -12,15 +12,15 @@ import java.awt.*;
 public class Projectile extends RenderablePart {
 
 
-    private double mass_ = 1.0;
-    private double radius_;
-    private Vector2d position_ = new Vector2d();
-    private boolean isOnRamp_ = true;
-    private boolean isReleased_ = false;
+    private double mass = 1.0;
+    private double radius;
+    private Vector2d position = new Vector2d();
+    private boolean isOnRamp = true;
+    private boolean isReleased = false;
 
-    private Vector2d acceleration_ = new Vector2d(0, 0);
-    private Vector2d velocity_ = new Vector2d(0, 0);
-    private Vector2d force_ = new Vector2d(0, 0);
+    private Vector2d acceleration = new Vector2d(0, 0);
+    private Vector2d velocity = new Vector2d(0, 0);
+    private Vector2d force = new Vector2d(0, 0);
 
     private static final BasicStroke LEVER_STROKE = new BasicStroke(10.0f);
     private static final Color BORDER_COLOR = new Color(140, 50, 110);
@@ -28,67 +28,66 @@ public class Projectile extends RenderablePart {
 
 
     public Projectile(double projectileMass) {
-        mass_ = projectileMass;
-        radius_ = 0.05 * Math.cbrt(mass_);
+        mass = projectileMass;
+        radius = 0.05 * Math.cbrt(mass);
     }
 
-
     public void setX(double x) {
-        position_.x = x;
+        position.x = x;
     }
 
     public double getX() {
-        return position_.x;
+        return position.x;
     }
 
     public Vector2d getPosition() {
-        return position_;
+        return position;
     }
 
     public void setY(double y) {
-        position_.y = y;
+        position.y = y;
     }
 
     public double getY() {
-        return position_.y;
+        return position.y;
     }
 
     public void setPosition(Vector2d position) {
-        position_  = position;
+        this.position = position;
     }
 
 
     public void setMass(double mass) {
-        mass_ = mass;
+        this.mass = mass;
     }
 
     public double getMass() {
-        return mass_;
+        return mass;
     }
 
     public double getRadius() {
-        return radius_;
+        return radius;
     }
 
 
     public boolean isOnRamp() {
-        return isOnRamp_;
+        return isOnRamp;
     }
 
     private void setOnRamp(boolean onRamp) {
-        isOnRamp_ = onRamp;
+        isOnRamp = onRamp;
     }
 
     public boolean isReleased() {
-        return isReleased_;
+        return isReleased;
     }
 
     public void setReleased(boolean released) {
-        isReleased_ = released;
+        isReleased = released;
     }
 
     public double getDistanceFrom(Vector2d referencePoint) {
-        return LinearUtil.distance(referencePoint, position_);
+        return LinearUtil.distance(referencePoint, position);
     }
     public double getInertia(Vector2d referencePoint) {
         double dist = getDistanceFrom(referencePoint);
@@ -100,34 +99,33 @@ public class Projectile extends RenderablePart {
         if (isOnRamp() && force.y > 0.0) {
             force.y = 0;
         }
-        force_.set(force);
+        this.force.set(force);
 
-        acceleration_.set(force);
-        acceleration_.scale( 1.0 / getMass());
-        Vector2d deltaVelocity = new Vector2d(acceleration_);
+        acceleration.set(force);
+        acceleration.scale( 1.0 / getMass());
+        Vector2d deltaVelocity = new Vector2d(acceleration);
         deltaVelocity.scale(timeStep);
-        velocity_.add(deltaVelocity);
+        velocity.add(deltaVelocity);
 
-        position_.set(position_.x + SCALE_FACTOR * timeStep * velocity_.x,
-                      position_.y + SCALE_FACTOR * timeStep * velocity_.y);
-        if (isOnRamp() && position_.y < (-4)) {
+        position.set(position.x + SCALE_FACTOR * timeStep * velocity.x,
+                      position.y + SCALE_FACTOR * timeStep * velocity.y);
+        if (isOnRamp() && position.y < (-4)) {
             setOnRamp(false);
             System.out.println("*********** no longer on ramp!");
         }
     }
 
     public Vector2d getVelocity() {
-        return velocity_;
+        return velocity;
     }
-
 
     public void render(Graphics2D g2, double scale) {
 
-        int radius = (int) (SCALE_FACTOR * radius_);
+        int radius = (int) (SCALE_FACTOR * this.radius);
         g2.setColor(BORDER_COLOR);
         int diameter = (int) (scale * 2.0 * radius);
-        int ovalX = (int) (scale * (position_.x - radius));
-        int ovalY = (int) (scale * (position_.y - radius) + BASE_Y);
+        int ovalX = (int) (scale * (position.x - radius));
+        int ovalY = (int) (scale * (position.y - radius) + BASE_Y);
         g2.drawOval(ovalX, ovalY, diameter, diameter);
         g2.setColor(FILL_COLOR);
         g2.fillOval(ovalX, ovalY, diameter, diameter);
@@ -139,14 +137,14 @@ public class Projectile extends RenderablePart {
         if (getShowVelocityVectors()) {
             g2.setStroke(VELOCITY_VECTOR_STROKE);
             g2.setColor(VELOCITY_VECTOR_COLOR);
-            g2.drawLine((int) (scale * position_.x), (int) (BASE_Y + scale * position_.y),
-                        (int) (scale * (position_.x + velocity_.x)), (int) (BASE_Y + scale *(position_.y + velocity_.y)));
+            g2.drawLine((int) (scale * position.x), (int) (BASE_Y + scale * position.y),
+                        (int) (scale * (position.x + velocity.x)), (int) (BASE_Y + scale *(position.y + velocity.y)));
         }
         if (getShowForceVectors())  {
             g2.setStroke(FORCE_VECTOR_STROKE);
             g2.setColor(FORCE_VECTOR_COLOR);
-            g2.drawLine((int) (scale * position_.x), (int) (BASE_Y + scale * position_.y),
-                        (int) (scale * (position_.x + force_.x)), (int) (BASE_Y + scale *(position_.y + force_.y)));
+            g2.drawLine((int) (scale * position.x), (int) (BASE_Y + scale * position.y),
+                        (int) (scale * (position.x + force.x)), (int) (BASE_Y + scale *(position.y + force.y)));
         }
     }
 

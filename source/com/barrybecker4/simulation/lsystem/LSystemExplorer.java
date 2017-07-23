@@ -17,10 +17,10 @@ import java.awt.Graphics;
  */
 public class LSystemExplorer extends Simulator {
 
-    private LSystemModel algorithm_;
-    private DynamicOptions options_;
+    private LSystemModel algorithm;
+    private DynamicOptions options;
 
-    private boolean useFixedSize_ = false;
+    private boolean useFixedSize = false;
 
     protected static final double INITIAL_TIME_STEP = 10.0;
     protected static final int DEFAULT_STEPS_PER_FRAME = 10;
@@ -34,16 +34,16 @@ public class LSystemExplorer extends Simulator {
     /**
      * @param fixed if true then the render area does not resize automatically.
      */
-    public void setUseFixedSize(boolean fixed) {
-        useFixedSize_ = fixed;
+    void setUseFixedSize(boolean fixed) {
+        useFixedSize = fixed;
     }
 
-    public boolean getUseFixedSize() {
-        return useFixedSize_;
+    boolean getUseFixedSize() {
+        return useFixedSize;
     }
 
     private void commonInit() {
-        algorithm_ = new LSystemModel();
+        algorithm = new LSystemModel();
         initCommonUI();
         reset();
     }
@@ -51,17 +51,17 @@ public class LSystemExplorer extends Simulator {
     @Override
     protected void reset() {
 
-        algorithm_.reset();
+        algorithm.reset();
         setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME);
 
-        if (options_ != null) {
-            options_.reset();
+        if (options != null) {
+            options.reset();
         }
     }
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new OptionsDialog( frame_, this );
+        return new OptionsDialog(frame, this );
     }
 
     @Override
@@ -73,10 +73,10 @@ public class LSystemExplorer extends Simulator {
     public double timeStep() {
         if ( !isPaused() ) {
 
-            if (!useFixedSize_) {
-                algorithm_.setSize(this.getWidth(), this.getHeight());
+            if (!useFixedSize) {
+                algorithm.setSize(this.getWidth(), this.getHeight());
             }
-            algorithm_.timeStep(timeStep_);
+            algorithm.timeStep(timeStep_);
         }
         return timeStep_;
     }
@@ -87,7 +87,7 @@ public class LSystemExplorer extends Simulator {
         super.paint(g);
 
         Profiler.getInstance().startRenderingTime();
-        g.drawImage(algorithm_.getImage(), 0, 0, null);
+        g.drawImage(algorithm.getImage(), 0, 0, null);
         Profiler.getInstance().stopRenderingTime();
     }
 
@@ -101,8 +101,8 @@ public class LSystemExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(algorithm_, this);
+        options = new DynamicOptions(algorithm, this);
         setPaused(false);
-        return options_;
+        return options;
     }
 }

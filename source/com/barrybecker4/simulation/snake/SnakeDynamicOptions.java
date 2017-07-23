@@ -16,7 +16,7 @@ import java.awt.*;
 class SnakeDynamicOptions extends JPanel
                           implements SliderGroupChangeListener {
 
-    private SnakeSimulator snakeSim_;
+    private SnakeSimulator snakeSim;
 
     private static final String DIRECTION_SLIDER = "Direction";
     private static final String WAVE_SPEED_SLIDER = "Wave Speed";
@@ -28,7 +28,7 @@ class SnakeDynamicOptions extends JPanel
     private static final String SCALE_SLIDER = "Scale";
     private static final String TIMESTEP_SLIDER = "Time Step Size";
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup sliderGroup;
 
 
     /**
@@ -40,12 +40,12 @@ class SnakeDynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        snakeSim_ = snake;
+        snakeSim = snake;
 
-        sliderGroup_ = new SliderGroup(createSliderProperties());
-        sliderGroup_.addSliderChangeListener(this);
+        sliderGroup = new SliderGroup(createSliderProperties());
+        sliderGroup.addSliderChangeListener(this);
 
-        add(sliderGroup_);
+        add(sliderGroup);
 
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(10, 1000));
@@ -64,14 +64,14 @@ class SnakeDynamicOptions extends JPanel
                 new SliderProperties(MASS_SCALE_SLIDER, 0.1, 6.0, params.getMassScale(), 100),
                 new SliderProperties(SPRING_CONST_SLIDER, 0.1, 4.0, params.getSpringK(), 100),
                 new SliderProperties(SPRING_DAMPING_SLIDER, 0.1, 4.0, params.getSpringDamping(), 100),
-                new SliderProperties(SCALE_SLIDER, 0.2, 2.0, snakeSim_.getScale(), 100),
+                new SliderProperties(SCALE_SLIDER, 0.2, 2.0, snakeSim.getScale(), 100),
                 new SliderProperties(TIMESTEP_SLIDER, 0.001, 0.5, SnakeSimulator.INITIAL_TIME_STEP, 1000)};
          return sliderProps;
     }
 
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
     }
 
     /**
@@ -79,7 +79,7 @@ class SnakeDynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        LocomotionParameters params = snakeSim_.getLocomotionParams();
+        LocomotionParameters params = snakeSim.getLocomotionParams();
 
         if (sliderName.equals(DIRECTION_SLIDER)) {
             params.setDirection(value);
@@ -103,10 +103,10 @@ class SnakeDynamicOptions extends JPanel
             params.setSpringDamping(value);
         }
         else if (sliderName.equals(SCALE_SLIDER)) {
-            snakeSim_.setScale(value);
+            snakeSim.setScale(value);
         }
         else if (sliderName.equals(TIMESTEP_SLIDER)) {
-            snakeSim_.setTimeStep(value);
+            snakeSim.setTimeStep(value);
         }
     }
 }

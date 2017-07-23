@@ -24,10 +24,10 @@ public class FluidDynamicOptions extends JPanel
     private FluidSimulator simulator_;
 
     private JCheckBox useConcurrentCalculation_;
-    private JCheckBox useConcurrentRendering_;
-    private JCheckBox useLinearInterpolation_;
-    private JCheckBox showVelocities_;
-    private JCheckBox showGrid_;
+    private JCheckBox useConcurrentRendering;
+    private JCheckBox useLinearInterpolation;
+    private JCheckBox showVelocities;
+    private JCheckBox showGrid;
 
     private static final String DR_SLIDER = "Diffusion Rate";
     private static final String VISC_SLIDER = "Viscosity";
@@ -37,7 +37,7 @@ public class FluidDynamicOptions extends JPanel
     private static final String NS_SLIDER = "Num Steps per Frame";
     private static final String TIME_STEP_SLIDER = "Time Step";
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup sliderGroup;
 
     private static final double MIN_STEPS = Math.ceil(FluidSimulator.DEFAULT_STEPS_PER_FRAME/10.0);
     private static final double MAX_STEPS = 20.0 * FluidSimulator.DEFAULT_STEPS_PER_FRAME;
@@ -53,7 +53,7 @@ public class FluidDynamicOptions extends JPanel
     };
 
 
-    public FluidDynamicOptions(FluidSimulator simulator) {
+    FluidDynamicOptions(FluidSimulator simulator) {
 
         setBorder(BorderFactory.createEtchedBorder());
 
@@ -63,15 +63,15 @@ public class FluidDynamicOptions extends JPanel
 
         simulator_ = simulator;
 
-        sliderGroup_ = new SliderGroup(SLIDER_PROPS);
-        sliderGroup_.addSliderChangeListener(this);
-        sliderGroup_.setPreferredSize(new Dimension(300, 260));
+        sliderGroup = new SliderGroup(SLIDER_PROPS);
+        sliderGroup.addSliderChangeListener(this);
+        sliderGroup.setPreferredSize(new Dimension(300, 260));
 
         JPanel checkBoxes = createCheckBoxes();
 
         ContinuousColorLegend legend_ = new ContinuousColorLegend(null, simulator_.getRenderer().getColorMap(), true);
 
-        controlsPanel.add(sliderGroup_);
+        controlsPanel.add(sliderGroup);
 
         controlsPanel.add(Box.createVerticalStrut(10));
         controlsPanel.add(checkBoxes);
@@ -87,25 +87,25 @@ public class FluidDynamicOptions extends JPanel
         //useConcurrentCalculation_ = createCheckBox("Parallel calculation",
         //        "Will take advantage of multiple processors for calculation if present.", false);
 
-        useConcurrentRendering_ = createCheckBox("Parallel rendering",
+        useConcurrentRendering = createCheckBox("Parallel rendering",
                 "Will take advantage of multiple processors for rendering if present.", renderOpts.isParallelized());
 
-        useLinearInterpolation_ = createCheckBox("Use linear interpolation",
+        useLinearInterpolation = createCheckBox("Use linear interpolation",
                 "If checked, use linear interpolation when rendering, to give a smoother look.",
                 renderOpts.getUseLinearInterpolation());
 
-        showVelocities_ = createCheckBox("Show velocities", "if checked, show velocity vectors",
+        showVelocities = createCheckBox("Show velocities", "if checked, show velocity vectors",
                                           renderOpts.getShowVelocities());
-        showGrid_ = createCheckBox("Show grid",
+        showGrid = createCheckBox("Show grid",
                 "Draw the background grid that shows the cells.", renderOpts.getShowGrid());
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 2));
 
         //checkBoxes.add(useConcurrentCalculation_);
-        checkBoxes.add(useConcurrentRendering_);
-        checkBoxes.add(useLinearInterpolation_);
-        checkBoxes.add(showVelocities_);
-        checkBoxes.add(showGrid_);
+        checkBoxes.add(useConcurrentRendering);
+        checkBoxes.add(useLinearInterpolation);
+        checkBoxes.add(showVelocities);
+        checkBoxes.add(showGrid);
 
         checkBoxes.setBorder(BorderFactory.createEtchedBorder());
         return checkBoxes;
@@ -120,12 +120,12 @@ public class FluidDynamicOptions extends JPanel
     }
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
         // make sure we honor current check selections
         RenderingOptions renderOpts =  simulator_.getRenderer().getOptions();
-        renderOpts.setShowGrid(showGrid_.isSelected());
-        renderOpts.setShowVelocities(showVelocities_.isSelected());
-        renderOpts.setUseLinearInterpolation(useLinearInterpolation_.isSelected());
+        renderOpts.setShowGrid(showGrid.isSelected());
+        renderOpts.setShowVelocities(showVelocities.isSelected());
+        renderOpts.setUseLinearInterpolation(useLinearInterpolation.isSelected());
     }
 
     /**
@@ -138,22 +138,22 @@ public class FluidDynamicOptions extends JPanel
         if (e.getSource() == useConcurrentCalculation_) {
             // gs_.setParallelized(!gs_.isParallelized());
         }
-        else if (e.getSource() == useConcurrentRendering_) {
+        else if (e.getSource() == useConcurrentRendering) {
             renderOpts.setParallelized(!renderOpts.isParallelized());
         }
-        else if (e.getSource() == useLinearInterpolation_) {
+        else if (e.getSource() == useLinearInterpolation) {
             renderOpts.setUseLinearInterpolation(!renderOpts.getUseLinearInterpolation());
         }
-        else if (e.getSource() == showVelocities_) {
+        else if (e.getSource() == showVelocities) {
             renderOpts.setShowVelocities(!renderOpts.getShowVelocities());
         }
-        else if (e.getSource() == showGrid_) {
+        else if (e.getSource() == showGrid) {
             renderOpts.setShowGrid(!renderOpts.getShowGrid());
         }
     }
 
     /**
-     * one of the sliders was moved.
+     * One of the sliders was moved.
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 

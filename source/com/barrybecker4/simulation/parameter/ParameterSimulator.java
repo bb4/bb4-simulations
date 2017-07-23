@@ -25,7 +25,7 @@ public class ParameterSimulator extends DistributionSimulator {
 
     private boolean showRedistribution_ = true;
 
-    public ParameterSimulator() {
+    private ParameterSimulator() {
         super("Parameter Histogram");
         initHistogram();
     }
@@ -35,11 +35,11 @@ public class ParameterSimulator extends DistributionSimulator {
         initHistogram();
     }
 
-    public void setShowRedistribution(boolean show) {
+    void setShowRedistribution(boolean show) {
         showRedistribution_ = show;
     }
 
-    public boolean isShowRedistribution() {
+    boolean isShowRedistribution() {
         return showRedistribution_;
     }
 
@@ -47,24 +47,24 @@ public class ParameterSimulator extends DistributionSimulator {
     protected void initHistogram() {
 
         if (parameter_.isIntegerOnly()) {
-            data_ = new int[(int)parameter_.getRange() + 1];
-            histogram_ = new HistogramRenderer(data_);
+            data = new int[(int)parameter_.getRange() + 1];
+            histogram = new HistogramRenderer(data);
         }
         else {
-            data_ = new int[NUM_DOUBLE_BINS];
+            data = new int[NUM_DOUBLE_BINS];
 
             double scale = NUM_DOUBLE_BINS / parameter_.getRange();
             double offset = -parameter_.getMinValue();
             //System.out.println("new Lin scale = " +scale + " off="+ offset);
             InvertibleFunction xFunc = new LinearFunction(scale, offset);
 
-            histogram_ = new HistogramRenderer(data_, xFunc);
+            histogram = new HistogramRenderer(data, xFunc);
         }
     }
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new ParameterOptionsDialog( frame_, this );
+         return new ParameterOptionsDialog(frame, this );
     }
 
     @Override

@@ -38,25 +38,25 @@ public class Segment {
     private static final double EPS = 0.00001;
     private static final double MASS_SCALE = 1.0;
 
-    protected double halfLength_ = 0;
-    protected double length_ = 0;
-    private int segmentIndex_ = 0;
+    protected double halfLength = 0;
+    protected double length = 0;
+    private int segmentIndex = 0;
 
     // keep pointers to the segments in front and in back
-    protected Segment segmentInFront_ = null;
-    protected Segment segmentInBack_ = null;
+    protected Segment segmentInFront = null;
+    protected Segment segmentInBack = null;
 
-    protected Edge[] edges_ = null;
-    protected Particle[] particles_ = null;
+    protected Edge[] edges = null;
+    protected Particle[] particles = null;
 
-    protected double particleMass_ = 0;
+    protected double particleMass = 0;
 
     /** The unit directional spinal vector */
-    protected Vector2d direction_ = new Vector2d( 0, 0 );
+    protected Vector2d direction = new Vector2d( 0, 0 );
 
     /** temporary vector to aid in calculations (saves creating a lot of new vector objects)  */
-    private Vector2d vel_ = new Vector2d( 0, 0 );
-    private Vector2d change_ = new Vector2d( 0, 0 );
+    private Vector2d velocityVec = new Vector2d( 0, 0 );
+    private Vector2d changeVec = new Vector2d( 0, 0 );
 
     protected Segment() {}
 
@@ -70,127 +70,127 @@ public class Segment {
                    Segment segmentInFront, int segmentIndex, Snake snake ) {
 
         Particle center = segmentInFront.getCenterParticle();
-        length_ = length;
-        halfLength_ = length_ / 2.0;
-        commonInit(width1, width2, (center.x - segmentInFront.getHalfLength() - halfLength_),
+        this.length = length;
+        halfLength = this.length / 2.0;
+        commonInit(width1, width2, (center.x - segmentInFront.getHalfLength() - halfLength),
                    center.y, segmentIndex, snake);
 
-        segmentInFront_ = segmentInFront;
-        segmentInFront.segmentInBack_ = this;
+        this.segmentInFront = segmentInFront;
+        segmentInFront.segmentInBack = this;
 
         // reused particles
-        particles_[1] = segmentInFront.getBackRightParticle();
-        particles_[2] = segmentInFront.getBackLeftParticle();
+        particles[1] = segmentInFront.getBackRightParticle();
+        particles[2] = segmentInFront.getBackLeftParticle();
 
         initCommonEdges();
-        edges_[1] = segmentInFront.getBackEdge();  // front
+        edges[1] = segmentInFront.getBackEdge();  // front
     }
 
     public Edge[] getEdges() {
-        return edges_;
+        return edges;
     }
 
     public Particle[] getParticles() {
-        return particles_;
+        return particles;
     }
 
     /**
      * Initialize the segment.
      */
     protected void commonInit(double width1, double width2, double xpos, double ypos, int segmentIndex, Snake snake) {
-        segmentIndex_ = segmentIndex;
+        this.segmentIndex = segmentIndex;
 
-        particles_ = new Particle[5];
-        edges_ = new Edge[8];
+        particles = new Particle[5];
+        edges = new Edge[8];
 
-        double segmentMass_ = (width1 + width2) * halfLength_;
-        particleMass_ = MASS_SCALE * segmentMass_ / 3;
+        double segmentMass_ = (width1 + width2) * halfLength;
+        particleMass = MASS_SCALE * segmentMass_ / 3;
         double scale = 1.0; //snake.getRenderingParams().getScale();
 
-        particles_[0] = new Particle( xpos - halfLength_, ypos + scale * width2 / 2.0, particleMass_ );
-        particles_[3] = new Particle( xpos - halfLength_, ypos - scale * width2 / 2.0, particleMass_ );
-        particles_[CENTER_INDEX] = new Particle( xpos, ypos, particleMass_ );
+        particles[0] = new Particle( xpos - halfLength, ypos + scale * width2 / 2.0, particleMass);
+        particles[3] = new Particle( xpos - halfLength, ypos - scale * width2 / 2.0, particleMass);
+        particles[CENTER_INDEX] = new Particle( xpos, ypos, particleMass);
     }
 
     protected void initCommonEdges()  {
-        edges_[0] = new Edge( particles_[0], particles_[1] ); // bottom (left of snake)
-        edges_[2] = new Edge( particles_[2], particles_[3] ); // top (right of snake)
-        edges_[3] = new Edge( particles_[0], particles_[3] ); // back
+        edges[0] = new Edge( particles[0], particles[1] ); // bottom (left of snake)
+        edges[2] = new Edge( particles[2], particles[3] ); // top (right of snake)
+        edges[3] = new Edge( particles[0], particles[3] ); // back
 
         // inner diagonal edges
-        edges_[4] = new Edge( particles_[0], particles_[CENTER_INDEX] );
-        edges_[5] = new Edge( particles_[1], particles_[CENTER_INDEX] );
-        edges_[6] = new Edge( particles_[2], particles_[CENTER_INDEX] );
-        edges_[7] = new Edge( particles_[3], particles_[CENTER_INDEX] );
+        edges[4] = new Edge( particles[0], particles[CENTER_INDEX] );
+        edges[5] = new Edge( particles[1], particles[CENTER_INDEX] );
+        edges[6] = new Edge( particles[2], particles[CENTER_INDEX] );
+        edges[7] = new Edge( particles[3], particles[CENTER_INDEX] );
     }
 
     public boolean isHead() {
-        return (segmentInFront_ == null);
+        return (segmentInFront == null);
     }
 
     public boolean isTail() {
-        return (segmentInBack_ == null);
+        return (segmentInBack == null);
     }
 
     private Edge getBackEdge() {
-        return edges_[3];
+        return edges[3];
     }
 
     private Particle getBackRightParticle() {
-        return particles_[0];
+        return particles[0];
     }
 
     private Particle getBackLeftParticle() {
-        return particles_[3];
+        return particles[3];
     }
 
     private Edge getRightEdge() {
-        return edges_[0];
+        return edges[0];
     }
 
     private Edge getLeftEdge() {
-        return edges_[2];
+        return edges[2];
     }
 
     public Particle getCenterParticle() {
-        return particles_[CENTER_INDEX];
+        return particles[CENTER_INDEX];
     }
 
     private double getHalfLength() {
-        return halfLength_;
+        return halfLength;
     }
 
     protected Vector2d getRightForce() {
-        return edges_[0].getForce();
+        return edges[0].getForce();
     }
 
     protected Vector2d getLeftForce() {
-        return edges_[2].getForce();
+        return edges[2].getForce();
     }
 
     protected Vector2d getRightBackDiagForce()  {
-        return edges_[4].getForce();
+        return edges[4].getForce();
     }
 
     protected Vector2d getLeftBackDiagForce() {
-        return edges_[7].getForce();
+        return edges[7].getForce();
     }
 
     public Vector2d getSpinalDirection()  {
         if ( isTail() ) {
-            direction_.set( segmentInFront_.getCenterParticle().x - particles_[CENTER_INDEX].x,
-                    segmentInFront_.getCenterParticle().y - particles_[CENTER_INDEX].y );
+            direction.set( segmentInFront.getCenterParticle().x - particles[CENTER_INDEX].x,
+                    segmentInFront.getCenterParticle().y - particles[CENTER_INDEX].y );
         }
         else if ( isHead() ) {
-            direction_.set( particles_[CENTER_INDEX].x - segmentInBack_.getCenterParticle().x,
-                    particles_[CENTER_INDEX].y - segmentInBack_.getCenterParticle().y );
+            direction.set( particles[CENTER_INDEX].x - segmentInBack.getCenterParticle().x,
+                    particles[CENTER_INDEX].y - segmentInBack.getCenterParticle().y );
         }
         else {
-            direction_.set( segmentInFront_.getCenterParticle().x - segmentInBack_.getCenterParticle().x,
-                    segmentInFront_.getCenterParticle().y - segmentInBack_.getCenterParticle().y );
+            direction.set( segmentInFront.getCenterParticle().x - segmentInBack.getCenterParticle().x,
+                    segmentInFront.getCenterParticle().y - segmentInBack.getCenterParticle().y );
         }
-        direction_.normalize();
-        return direction_;
+        direction.normalize();
+        return direction;
     }
 
     /**
@@ -204,7 +204,7 @@ public class Segment {
         double period = params.getWavePeriod();
 
         //Vector2d muscleForce = v;
-        double theta = (double) segmentIndex_ / period - waveSpeed * time;
+        double theta = (double) segmentIndex / period - waveSpeed * time;
         double offset = 0;
 
         double dir = params.getDirection();
@@ -217,16 +217,16 @@ public class Segment {
             //contractionRight = 0.0;
         }
 
-        edges_[0].setContraction( contractionLeft );
-        edges_[2].setContraction( contractionRight );
+        edges[0].setContraction( contractionLeft );
+        edges[2].setContraction( contractionRight );
     }
 
     public void translate( Vector2d vec ) {
         for ( int i = 0; i < NUM_PARTICLES; i++ ) {
             if ( (i != 3 && i != 0) || isTail() ) {
-                vel_.set( particles_[i].x, particles_[i].y );
-                vel_.add( vec );
-                particles_[i].set( vel_.x, vel_.y );
+                velocityVec.set( particles[i].x, particles[i].y );
+                velocityVec.add( vec );
+                particles[i].set( velocityVec.x, velocityVec.y );
             }
         }
     }
@@ -236,8 +236,8 @@ public class Segment {
      */
     public boolean isStable() {
 
-        double dot1 = edges_[0].dot( segmentInFront_.getRightEdge() );
-        double dot2 = edges_[2].dot( segmentInFront_.getLeftEdge() );
+        double dot1 = edges[0].dot( segmentInFront.getRightEdge() );
+        double dot2 = edges[2].dot( segmentInFront.getLeftEdge() );
         if ( dot1 < MIN_EDGE_ANGLE || dot2 < MIN_EDGE_ANGLE )   {
             System.out.println( "dot1="+dot1+" dot2="+dot2 );
             return false;
@@ -248,7 +248,7 @@ public class Segment {
     public String toString()  {
         StringBuilder str = new StringBuilder( "Segment particles:\n" );
         for ( int i = 0; i < 5; i++ )
-            str.append(" p").append(i).append('=').append(particles_[i]).append(" \n");
+            str.append(" p").append(i).append('=').append(particles[i]).append(" \n");
         return str.toString();
     }
 }

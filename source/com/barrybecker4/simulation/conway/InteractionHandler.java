@@ -15,10 +15,10 @@ import java.awt.event.MouseMotionListener;
  */
 public class InteractionHandler implements MouseListener, MouseMotionListener {
 
-    ConwayModel model;
+    private ConwayModel model;
 
     /** amount of the effect */
-    double scale_;
+    private double scale;
 
     private int currentX, currentY;
     private int brushRadius = 1;
@@ -29,11 +29,11 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
      */
     public InteractionHandler(ConwayModel cave, double scale) {
         model = cave;
-        scale_ = scale;
+        this.scale = scale;
     }
 
     public void setScale(double scale) {
-        scale_ = scale;
+        this.scale = scale;
     }
 
     /**
@@ -48,8 +48,8 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
     }
 
     private void doBrush() {
-        int i = (int) (currentX / scale_);
-        int j = (int) (currentY / scale_);
+        int i = (int) (currentX / scale);
+        int j = (int) (currentY / scale);
 
         // apply the change to a convolution kernel area
         int startX = Math.max(1, i - brushRadius);

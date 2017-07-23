@@ -11,15 +11,15 @@ import com.barrybecker4.common.geometry.Location;
 public class Region {
 
     /** starting location for the rectangular region */
-    Location start;
+    private Location start;
 
     /** optional stopping location for the rectangular region */
-    Location stop;
+    private Location stop;
 
     /**
      * Constructor
      */
-    public Region(Location start, Location stop) {
+    Region(Location start, Location stop) {
         this.start = start;
         this.stop = stop;
     }

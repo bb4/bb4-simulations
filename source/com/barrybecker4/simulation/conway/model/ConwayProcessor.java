@@ -95,36 +95,6 @@ public class ConwayProcessor {
         return conway.toString();
     }
 
-    /*
-     * Compute the next step of the simulation
-     *
-    public void nextPhase(int minPoint, int maxPoint, Conway newCave) {
-        for (int x = minPoint; x < maxPoint; x++) {
-            double oldValue = conway.getValue(x, y);
-            double newValue = oldValue + neibNum;
-            newCave.setValue(x, y, newValue);
-        }
-        conway = newCave;
-    }*/
-
-    /**
-     * Runs one of the chunks.
-     *
-    private class Worker implements Runnable {
-        private int minX_, maxX_;
-        private Conway newCave_;
-
-        public Worker(int minPoint, int maxPoint, Conway newCave) {
-            minX_ = minPoint;
-            maxX_ = maxPoint;
-            newCave_ = newCave;
-        }
-
-        public void run() {
-            nextPhase(minX_, maxX_, newCave_);
-        }
-    }*/
-
 
     public static void main(String[] args) {
         ConwayProcessor cave = new ConwayProcessor(DEFAULT_USE_PARALLEL);

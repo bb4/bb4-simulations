@@ -17,17 +17,16 @@ import java.awt.*;
  */
 public class GraphSimulator extends Simulator {
 
-    SingleFunctionRenderer graph_;
-    Function function_;
+    private SingleFunctionRenderer graph;
+    private Function function;
 
-
-    public GraphSimulator() {
+    private GraphSimulator() {
         super("Graph");
         initGraph();
     }
 
     public void setFunction(Function function) {
-        function_ = function;
+        this.function = function;
         initGraph();
     }
 
@@ -46,23 +45,23 @@ public class GraphSimulator extends Simulator {
         return timeStep_;
     }
 
-    protected void initGraph() {
-        if (function_ == null) {
+    private void initGraph() {
+        if (function == null) {
 
-            function_ = FunctionType.DIAGONAL.function;
+            function = FunctionType.DIAGONAL.function;
         }
-        graph_ = new SingleFunctionRenderer(function_);
+        graph = new SingleFunctionRenderer(function);
     }
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new GraphOptionsDialog( frame_, this );
+         return new GraphOptionsDialog(frame, this );
     }
 
     @Override
     public void paint( Graphics g ) {
-        graph_.setSize(getWidth(), getHeight());
-        graph_.paint(g);
+        graph.setSize(getWidth(), getHeight());
+        graph.paint(g);
     }
 
     public static void main( String[] args ) {

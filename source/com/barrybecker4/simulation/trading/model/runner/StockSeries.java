@@ -15,7 +15,6 @@ public class StockSeries extends LinkedList<Function> {
 
     private int maxNum;
 
-
     public StockSeries(int maxSeriesToKeep) {
         maxNum = maxSeriesToKeep;
     }

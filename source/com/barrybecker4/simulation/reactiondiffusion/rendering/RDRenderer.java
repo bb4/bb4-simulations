@@ -15,21 +15,21 @@ import java.util.List;
  */
 public abstract class RDRenderer {
 
-    protected GrayScottModel model_;
-    protected RDRenderingOptions options_;
-    private RenderingColorModel renderingModel_;
+    protected GrayScottModel model;
+    protected RDRenderingOptions options;
+    private RenderingColorModel renderingModel;
 
     /**
      * Constructor
      */
     RDRenderer(GrayScottModel model, ColorMap cmap, RDRenderingOptions options) {
-        model_ = model;
-        options_ = options;
-        renderingModel_ = new RenderingColorModel(model, cmap, options);
+        this.model = model;
+        this.options = options;
+        renderingModel = new RenderingColorModel(model, cmap, options);
     }
 
     public ColorMap getColorMap() {
-        return renderingModel_.getColorMap();
+        return renderingModel.getColorMap();
     }
 
     /**
@@ -37,9 +37,9 @@ public abstract class RDRenderer {
      */
     public void render(Graphics2D g2) {
 
-        int width = model_.getWidth();
+        int width = model.getWidth();
 
-        int numProcs = options_.getParallelizer().getNumThreads();
+        int numProcs = options.getParallelizer().getNumThreads();
         List<Runnable> workers = new ArrayList<Runnable>(numProcs);
         int range = (width / numProcs);
         for (int i = 0; i < (numProcs - 1); i++) {
@@ -52,7 +52,7 @@ public abstract class RDRenderer {
         workers.add(new RenderWorker(currentX, width, this, g2));
 
         // blocks until all Callables are done running.
-        options_.getParallelizer().invokeAllRunnables(workers);
+        options.getParallelizer().invokeAllRunnables(workers);
 
         postRender(g2);
     }
@@ -62,11 +62,11 @@ public abstract class RDRenderer {
      * @return array of colors that will be used to define an image for quick rendering.
      */
     public ColorRect getColorRect(int minX, int maxX) {
-        int ymax = model_.getHeight();
+        int ymax = model.getHeight();
         ColorRect colorRect = new ColorRect(maxX-minX, ymax);
         for (int x = minX; x < maxX; x++) {
             for (int y = 0; y < ymax; y++) {
-                colorRect.setColor(x-minX, y, renderingModel_.getColorForPosition(x, y));
+                colorRect.setColor(x-minX, y, renderingModel.getColorForPosition(x, y));
             }
         }
         return colorRect;

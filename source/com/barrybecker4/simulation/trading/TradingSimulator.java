@@ -18,7 +18,6 @@ import com.barrybecker4.ui.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -97,7 +96,7 @@ public class TradingSimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-        return new OptionsDialog( frame_, this );
+        return new OptionsDialog(frame, this );
     }
 
     @Override

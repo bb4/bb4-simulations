@@ -12,7 +12,6 @@ import com.barrybecker4.simulation.trading.model.generationstrategy.RandomUpsAnd
  */
 public class StockGenerationOptions {
 
-
     public static final IGenerationStrategy DEFAULT_GENERATION_STRATEGY = new RandomUpsAndDownsStrategy();
 
     private static final int DEFAULT_NUM_STOCKS = 1;

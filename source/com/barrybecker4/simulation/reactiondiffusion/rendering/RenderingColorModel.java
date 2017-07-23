@@ -15,8 +15,8 @@ import java.awt.*;
  */
 public class RenderingColorModel {
 
-    protected GrayScottModel model_;
-    protected RDRenderingOptions options_;
+    protected GrayScottModel model;
+    protected RDRenderingOptions options;
     private ColorMap cmap_;
     private BumpMapper bmapper;
     private HeightField heightMap;
@@ -26,9 +26,9 @@ public class RenderingColorModel {
      * Constructor
      */
     RenderingColorModel(GrayScottModel model, ColorMap cmap, RDRenderingOptions options) {
-        model_ = model;
+        this.model = model;
         cmap_ = cmap;
-        options_ = options;
+        this.options = options;
         bmapper = new BumpMapper();
         heightMap = new HeightMap();
     }
@@ -41,13 +41,13 @@ public class RenderingColorModel {
      * Get the color for a specific position based on chemical concentrations.
      * @return the color to use.
      */
-    public Color getColorForPosition(int x, int y) {
+    Color getColorForPosition(int x, int y) {
 
         double concentration = heightMap.getValue(x, y);
         Color c = cmap_.getColorForValue(concentration);
-        if (options_.getHeightScale() != 0) {
-            double htScale = options_.getHeightScale();
-            c = bmapper.adjustForLighting(c, x, y, heightMap, htScale, options_.getSpecular(),
+        if (options.getHeightScale() != 0) {
+            double htScale = options.getHeightScale();
+            c = bmapper.adjustForLighting(c, x, y, heightMap, htScale, options.getSpecular(),
                     BumpMapper.DEFAULT_LIGHT_SOURCE_DIR);
         }
 
@@ -57,16 +57,16 @@ public class RenderingColorModel {
     private class HeightMap implements HeightField {
 
         public int getWidth() {
-            return model_.getWidth();
+            return model.getWidth();
         }
 
         public int getHeight() {
-            return model_.getHeight();
+            return model.getHeight();
         }
 
         public double getValue(int x, int y) {
-            return (options_.isShowingU() ? model_.getU(x, y) : 0.0)
-                    + (options_.isShowingV() ? model_.getV(x, y) : 0.0);
+            return (options.isShowingU() ? model.getU(x, y) : 0.0)
+                    + (options.isShowingV() ? model.getV(x, y) : 0.0);
         }
     }
 }

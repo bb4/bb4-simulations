@@ -13,59 +13,58 @@ import static java.lang.Math.atan;
 public class Sling extends RenderablePart {
 
 
-    private double length_;
-    private Lever lever_;
-    private Projectile projectile_;
-    private double releaseAngle_;
+    private double length;
+    private Lever lever;
+    private Projectile projectile;
+    private double releaseAngle;
 
     private static final BasicStroke STROKE = new BasicStroke(2.0f);
     private static final Color COLOR = new Color(0, 30, 0);
     private static final Color ARC_COLOR = new Color(60, 90, 70, 150);
 
     public Sling(double slingLength,  double releaseAngle, Lever lever, Projectile p) {
-        length_ = slingLength;
-        lever_ = lever;
-        releaseAngle_ = releaseAngle;
-        projectile_ = p;
+        length = slingLength;
+        this.lever = lever;
+        this.releaseAngle = releaseAngle;
+        projectile = p;
 
         Vector2d attachPt = getHookPosition();
-        p.setX(attachPt.x + SCALE_FACTOR * length_);
+        p.setX(attachPt.x + SCALE_FACTOR * length);
         p.setY(attachPt.y - SCALE_FACTOR * p.getRadius());
     }
 
     public double getLength() {
-        return length_;
+        return length;
     }
 
     public void setLength(double length) {
-        this.length_ = length;
+        this.length = length;
     }
 
     public double getReleaseAngle() {
-        return releaseAngle_;
+        return releaseAngle;
     }
 
     public void setReleaseAngle(double releaseAngle) {
-        this.releaseAngle_ = releaseAngle;
+        this.releaseAngle = releaseAngle;
     }
 
     public Vector2d getHookPosition() {
-        double leverLength = lever_.getSlingLeverLength();
-        double cos = SCALE_FACTOR * leverLength * Math.cos(angle_);
-        double sin = SCALE_FACTOR * leverLength * Math.sin(angle_);
-        Vector2d attachPt = new Vector2d(STRUT_BASE_X - sin, (int) (-SCALE_FACTOR * height_) + cos);
+        double leverLength = lever.getSlingLeverLength();
+        double cos = SCALE_FACTOR * leverLength * Math.cos(angle);
+        double sin = SCALE_FACTOR * leverLength * Math.sin(angle);
+        Vector2d attachPt = new Vector2d(STRUT_BASE_X - sin, (int) (-SCALE_FACTOR * height) + cos);
         return attachPt;
     }
 
     public Vector2d getProjectileAttachPoint() {
         Vector2d attachPt = getHookPosition();
-        Vector2d dir = new Vector2d(projectile_.getX()-attachPt.x, projectile_.getY()-attachPt.y);
+        Vector2d dir = new Vector2d(projectile.getX()-attachPt.x, projectile.getY()-attachPt.y);
         dir.normalize();
-        dir.scale(SCALE_FACTOR * length_);
+        dir.scale(SCALE_FACTOR * length);
         attachPt.add(dir);
         return attachPt;
     }
-
 
     /**
      * the sling angle is the bottom angle bwetween the lever and the sling.
@@ -81,8 +80,8 @@ public class Sling extends RenderablePart {
 
     public double getAngleWithHorz() {
         Vector2d hookPos = getHookPosition();
-        double deltaY = projectile_.getY() - hookPos.y;
-        double deltaX = projectile_.getX() - hookPos.x;
+        double deltaY = projectile.getY() - hookPos.y;
+        double deltaX = projectile.getX() - hookPos.x;
 
         double angle = atan(deltaY / deltaX);
 
@@ -92,7 +91,6 @@ public class Sling extends RenderablePart {
         }
         return -angle;
     }
-
 
     public void render(Graphics2D g2, double scale) {
 
@@ -111,7 +109,7 @@ public class Sling extends RenderablePart {
         int startAngle = (int) (getAngleWithHorz() * 180.0 / PI);
         int angle = (int) (getAngleWithLever() * 180.0 / PI);
         int endAngle = startAngle + angle;
-        int diameter = (int) (SCALE_FACTOR * 2 * length_);
+        int diameter = (int) (SCALE_FACTOR * 2 * length);
 
         double rad = diameter >> 1;
         g2.setColor(ARC_COLOR);

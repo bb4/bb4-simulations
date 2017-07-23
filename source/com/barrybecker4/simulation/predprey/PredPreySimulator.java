@@ -28,19 +28,19 @@ import java.util.List;
  */
 public class PredPreySimulator extends Simulator {
 
-    MultipleFunctionRenderer graph_;
-    long iteration;
+    private MultipleFunctionRenderer graph;
+    private long iteration;
 
-    Rabbits rabbits;
-    Foxes foxes;
+    private Rabbits rabbits;
+    private Foxes foxes;
 
-    CountFunction rabbitFunction;
-    CountFunction foxFunction;
+    private CountFunction rabbitFunction;
+    private CountFunction foxFunction;
 
-    DynamicOptions options_;
+    private DynamicOptions options_;
 
     /** Constructor */
-    public PredPreySimulator() {
+    private PredPreySimulator() {
         super("Predator Prey Simulation");
 
         foxes = new Foxes();
@@ -87,7 +87,7 @@ public class PredPreySimulator extends Simulator {
         return timeStep_;
     }
 
-    protected void initGraph() {
+    private  void initGraph() {
         iteration = 0;
 
         rabbits.reset();
@@ -106,7 +106,7 @@ public class PredPreySimulator extends Simulator {
         lineColors.add(Foxes.COLOR);
         //lineColors.add(Lions.COLOR);
 
-        graph_ = new MultipleFunctionRenderer(functions, lineColors);
+        graph = new MultipleFunctionRenderer(functions, lineColors);
     }
 
 
@@ -119,13 +119,13 @@ public class PredPreySimulator extends Simulator {
 
     @Override
     protected SimulatorOptionsDialog createOptionsDialog() {
-         return new GraphOptionsDialog( frame_, this );
+         return new GraphOptionsDialog(frame, this );
     }
 
     @Override
     public void paint( Graphics g ) {
-        graph_.setSize(getWidth(), getHeight());
-        graph_.paint(g);
+        graph.setSize(getWidth(), getHeight());
+        graph.paint(g);
     }
 
     public static void main( String[] args ) {

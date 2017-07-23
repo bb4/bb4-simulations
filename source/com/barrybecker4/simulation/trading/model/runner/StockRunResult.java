@@ -13,7 +13,6 @@ import com.barrybecker4.common.math.function.HeightFunction;
  */
 public class StockRunResult {
 
-
     private HeightFunction stockSeries;
     private HeightFunction investmentSeries;
     private HeightFunction reserveSeries;
@@ -21,13 +20,13 @@ public class StockRunResult {
 
 
     /** Constructor */
-    StockRunResult(HeightFunction stockSeries, HeightFunction investmentSeries, HeightFunction reserveSeries, double finalGain) {
+    StockRunResult(HeightFunction stockSeries, HeightFunction investmentSeries,
+                   HeightFunction reserveSeries, double finalGain) {
         this.stockSeries = stockSeries;
         this.investmentSeries = investmentSeries;
         this.reserveSeries = reserveSeries;
         this.finalGain = finalGain;
     }
-
 
     public HeightFunction getStockSeries() {
         return stockSeries;

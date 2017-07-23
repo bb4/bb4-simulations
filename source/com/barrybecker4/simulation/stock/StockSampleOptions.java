@@ -7,7 +7,7 @@ package com.barrybecker4.simulation.stock;
  *
  * @author Barry Becker
  */
-public class StockSampleOptions {
+class StockSampleOptions {
 
     static final int DEFAULT_NUM_STOCKS = 1;
     static final int DEFAULT_NUM_TIME_PERIODS = 100;
@@ -18,22 +18,21 @@ public class StockSampleOptions {
     static final boolean DEFAULT_USE_LOG_SCALE = true;
     static final boolean DEFAULT_USE_RANDOM_CHANGE = false;
 
-    public int numStocks = DEFAULT_NUM_STOCKS;
-    public int numTimePeriods = DEFAULT_NUM_TIME_PERIODS;
-    public double percentIncrease = DEFAULT_PERCENT_INCREASE;
-    public double percentDecrease = DEFAULT_PERCENT_DECREASE;
-    public double startingValue = DEFAULT_STARTING_VALUE;
-    public int xResolution = DEFAULT_X_RESOLUTION;
-    public boolean useLogScale = DEFAULT_USE_LOG_SCALE;
-    public boolean useRandomChange = DEFAULT_USE_RANDOM_CHANGE;
+    int numStocks = DEFAULT_NUM_STOCKS;
+    int numTimePeriods = DEFAULT_NUM_TIME_PERIODS;
+    double percentIncrease = DEFAULT_PERCENT_INCREASE;
+    double percentDecrease = DEFAULT_PERCENT_DECREASE;
+    double startingValue = DEFAULT_STARTING_VALUE;
+    int xResolution = DEFAULT_X_RESOLUTION;
+    boolean useLogScale = DEFAULT_USE_LOG_SCALE;
+    boolean useRandomChange = DEFAULT_USE_RANDOM_CHANGE;
 
     /**
      * This theoretical maximum is something that could occur but rarely
      * ever would by chance. One use of it is used to set an upper limit on the axis.
      * @return upper limit on sample value.
      */
-    public double getTheoreticalMaximum() {
+    double getTheoreticalMaximum() {
         return startingValue * Math.pow(1.0 + percentIncrease, numTimePeriods);
     }
-
 }

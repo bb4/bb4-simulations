@@ -15,16 +15,16 @@ import java.awt.event.ActionEvent;
 public abstract class SimulatorOptionsDialog extends OptionsDialog {
 
     /** the options get set directly on the snake simulator object that is passed in */
-    private Simulator simulator_;
+    private Simulator simulator;
 
     // rendering option controls
-    private JCheckBox antialiasingCheckbox_;
-    private JCheckBox recordAnimationCheckbox_;
+    private JCheckBox antialiasingCheckbox;
+    private JCheckBox recordAnimationCheckbox;
 
     // animation param options controls
-    private NumberInput timeStepField_;
-    private NumberInput numStepsPerFrameField_;
-    private NumberInput scaleField_;
+    private NumberInput timeStepField;
+    private NumberInput numStepsPerFrameField;
+    private NumberInput scaleField;
 
     private static final int MAX_NUM_STEPS_PER_FRAME = 10000;
 
@@ -34,13 +34,13 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
     // constructor
     public SimulatorOptionsDialog( Component parent, Simulator simulator ) {
         super( parent );
-        simulator_ = simulator;
+        this.simulator = simulator;
         showContent();
     }
 
 
     public Simulator getSimulator() {
-        return simulator_;
+        return simulator;
     }
 
     @Override
@@ -115,37 +115,37 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
         textInputsPanel.setBorder(
                 BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Animation Options" ) );
 
-        antialiasingCheckbox_ = new JCheckBox("Use Antialiasing", simulator_.getAntialiasing());
-        antialiasingCheckbox_.setToolTipText( "this toggle the use of antialising when rendering lines." );
-        antialiasingCheckbox_.addActionListener( this );
-        togglesPanel.add( antialiasingCheckbox_ );
+        antialiasingCheckbox = new JCheckBox("Use Antialiasing", simulator.getAntialiasing());
+        antialiasingCheckbox.setToolTipText( "this toggle the use of antialising when rendering lines." );
+        antialiasingCheckbox.addActionListener( this );
+        togglesPanel.add(antialiasingCheckbox);
 
         addAdditionalToggles(togglesPanel) ;
 
-        recordAnimationCheckbox_ = new JCheckBox( "Record Animation Frames", simulator_.getRecordAnimation());
-        recordAnimationCheckbox_.setToolTipText( "Record each animation frame to a unique file" );
-        recordAnimationCheckbox_.addActionListener( this );
-        togglesPanel.add( recordAnimationCheckbox_ );
+        recordAnimationCheckbox = new JCheckBox( "Record Animation Frames", simulator.getRecordAnimation());
+        recordAnimationCheckbox.setToolTipText( "Record each animation frame to a unique file" );
+        recordAnimationCheckbox.addActionListener( this );
+        togglesPanel.add(recordAnimationCheckbox);
 
-        timeStepField_ =
-                new NumberInput("Time Step (.001 slow - .9 fast but unstable):  ",  simulator_.getTimeStep(),
+        timeStepField =
+                new NumberInput("Time Step (.001 slow - .9 fast but unstable):  ",  simulator.getTimeStep(),
                                 "This controls the size of the numerical integration steps",
                                 0.001, 10.0, false);
-        numStepsPerFrameField_ =
+        numStepsPerFrameField =
                 new NumberInput("Num Steps Per Frame (1 slow but smooth - "+MAX_NUM_STEPS_PER_FRAME+" (fast but choppy):  ",
-                                simulator_.getNumStepsPerFrame(),
+                                simulator.getNumStepsPerFrame(),
                                "This controls the number of the numerical intergration steps per animation frame",
                                1, MAX_NUM_STEPS_PER_FRAME, true);
 
-        textInputsPanel.add( timeStepField_ );
-        textInputsPanel.add( numStepsPerFrameField_ );
+        textInputsPanel.add(timeStepField);
+        textInputsPanel.add(numStepsPerFrameField);
 
-        scaleField_ =
-                new NumberInput( "Geometry Scale (1.0 = standard size):  ", simulator_.getScale(),
+        scaleField =
+                new NumberInput( "Geometry Scale (1.0 = standard size):  ", simulator.getScale(),
                                  "This controls the size of the objects in the simulation",
                                  0.01, 1000, false);
-        scaleField_.setEnabled( false );
-        textInputsPanel.add( scaleField_ );
+        scaleField.setEnabled( false );
+        textInputsPanel.add(scaleField);
 
         paramPanel.add( togglesPanel, BorderLayout.CENTER );
         paramPanel.add( textInputsPanel, BorderLayout.SOUTH );
@@ -174,15 +174,15 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
     protected void ok() {
 
         // set the common rendering and global options
-        simulator_.setAntialiasing( antialiasingCheckbox_.isSelected() );
-        simulator_.setRecordAnimation( recordAnimationCheckbox_.isSelected() );
+        simulator.setAntialiasing( antialiasingCheckbox.isSelected() );
+        simulator.setRecordAnimation( recordAnimationCheckbox.isSelected() );
 
-        simulator_.setTimeStep( timeStepField_.getValue() );
-        simulator_.setNumStepsPerFrame( numStepsPerFrameField_.getIntValue() );
-        simulator_.setScale( scaleField_.getValue() );
+        simulator.setTimeStep( timeStepField.getValue() );
+        simulator.setNumStepsPerFrame( numStepsPerFrameField.getIntValue() );
+        simulator.setScale( scaleField.getValue() );
 
         this.setVisible( false );
-        simulator_.repaint();
+        simulator.repaint();
     }
 
     @Override

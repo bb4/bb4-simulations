@@ -22,12 +22,12 @@ public final class GrayScottModel {
     double[][] tmpU;
     double[][] tmpV;
 
-    private double k_;
-    private double f_;
-    private double initialK_;
-    private double initialF_;
+    private double k;
+    private double f;
+    private double initialK;
+    private double initialF;
 
-    private int width_, height_;
+    private int width, height;
 
 
     /**
@@ -36,10 +36,10 @@ public final class GrayScottModel {
      * @param height height of computational space.
      */
     GrayScottModel(int width, int height) {
-        this.width_ = width;
-        this.height_ = height;
-        this.initialF_ = F0;
-        this.initialK_ = K0;
+        this.width = width;
+        this.height = height;
+        this.initialF = F0;
+        this.initialK = K0;
         resetState();
     }
 
@@ -53,38 +53,38 @@ public final class GrayScottModel {
 
 
     public int getWidth() {
-        return width_;
+        return width;
     }
 
     public int getHeight() {
-        return height_;
+        return height;
     }
 
     public void setSize(Dimension requestedNewSize) {
-        width_ = requestedNewSize.width;
-        height_ = requestedNewSize.height;
+        width = requestedNewSize.width;
+        height = requestedNewSize.height;
     }
 
     public void setF(double f) {
-        f_ = f;
+        this.f = f;
     }
 
     double getF() {
-        return f_;
+        return f;
     }
 
     public void setK(double k) {
-        k_ = k;
+        this.k = k;
     }
 
     double getK() {
-        return k_;
+        return k;
     }
 
     /**
      * Exchange the u, v fields with the tmp versions.
      */
-    public void commitChanges() {
+    void commitChanges() {
         double[][] temp = tmpU;
         tmpU = u;
         u = temp;
@@ -94,7 +94,7 @@ public final class GrayScottModel {
         v = temp;
     }
 
-    public double getNeighborSum(double tmp[][], int x, int y) {
+    double getNeighborSum(double tmp[][], int x, int y) {
 
        return tmp[x + 1][y]
                 + tmp[x - 1][y]
@@ -102,37 +102,37 @@ public final class GrayScottModel {
                 + tmp[x][y - 1];
     }
 
-    public double getEdgeNeighborSum(double tmp[][], int x, int y) {
+    double getEdgeNeighborSum(double tmp[][], int x, int y) {
 
-        return tmp[getPeriodicXValue(x + 1, width_)][y]
-                  + tmp[getPeriodicXValue(x - 1, width_)][y]
-                  + tmp[x][getPeriodicXValue(y + 1, height_)]
-                  + tmp[x][getPeriodicXValue(y - 1, height_)];
+        return tmp[getPeriodicXValue(x + 1, width)][y]
+                  + tmp[getPeriodicXValue(x - 1, width)][y]
+                  + tmp[x][getPeriodicXValue(y + 1, height)]
+                  + tmp[x][getPeriodicXValue(y - 1, height)];
     }
 
     /**
      * Create some initial pattern of chemical that represents the initial condition.
      */
-    public void resetState()  {
+    void resetState()  {
 
-        f_ = initialF_;
-        k_ = initialK_;
+        f = initialF;
+        k = initialK;
 
-        u = new double[width_][height_];
-        v = new double[width_][height_];
-        tmpU = new double[width_][height_];
-        tmpV = new double[width_][height_];
+        u = new double[width][height];
+        v = new double[width][height];
+        tmpU = new double[width][height];
+        tmpV = new double[width][height];
 
-        stampInitialSquare(0, 0, width_, height_, 1, 0);
+        stampInitialSquare(0, 0, width, height, 1, 0);
 
         // random square 1
-        int w3 = width_ / 3;
-        int h3 = height_ / 3;
+        int w3 = width / 3;
+        int h3 = height / 3;
         stampInitialSquare(w3, h3, w3, h3, INITIAL_U, INITIAL_V);
 
         // random square 2
-        int w7 = width_ / 7;
-        int h5 = height_ / 5;
+        int w7 = width / 7;
+        int h5 = height / 5;
         stampInitialSquare(5*w7, 3*h5, w7, h5, INITIAL_U, INITIAL_V);
     }
 

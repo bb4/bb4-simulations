@@ -1,17 +1,29 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.trading.options.ui;
 
-import com.barrybecker4.simulation.trading.model.generationstrategy.*;
+import com.barrybecker4.simulation.trading.model.generationstrategy.FlatStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.GaussianStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.IGenerationStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.RandomUpsAndDownsStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.RandomWithAdditiveMomentumStrategy;
+import com.barrybecker4.simulation.trading.model.generationstrategy.SineStrategy;
 import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins;
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions;
 import com.barrybecker4.ui.components.NumberInput;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,10 +37,8 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     /** Number of time periods (for example months or years)  */
     private NumberInput numTimePeriodsField;
 
-
     /** Starting value of each stock in dollars  */
     private NumberInput startingValueField;
-
 
     private StockGenerationOptions generationOptions;
 

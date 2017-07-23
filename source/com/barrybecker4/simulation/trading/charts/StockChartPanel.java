@@ -31,7 +31,7 @@ public class StockChartPanel extends JPanel {
         List<Function> functions = Collections.emptyList();
         stockChart = new MultipleFunctionRenderer(functions);
         stockChart.setXFormatter(new CurrencyFormatter());
-        stockChart.setMaxLabelWidth(LABEL_WIDTH);
+        //stockChart.setMaxLabelWidth(LABEL_WIDTH);
     }
 
     public void addSeries(Function function) {

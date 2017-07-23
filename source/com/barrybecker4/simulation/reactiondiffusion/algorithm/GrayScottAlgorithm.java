@@ -12,7 +12,7 @@ final class GrayScottAlgorithm {
     private static final double DU = 2.0e-5;
     private static final double DV = 1.0e-5;
 
-    private GrayScottModel model_;
+    private GrayScottModel model;
 
     private double duDivh2;
     private double dvDivh2;
@@ -22,29 +22,29 @@ final class GrayScottAlgorithm {
      * Constructor
      */
     GrayScottAlgorithm(GrayScottModel model) {
-        model_ = model;
+        this.model = model;
     }
 
 
     public void computeNextTimeStep(int minX, int maxX, double dt) {
 
         double uv2;
-        double[][] u = model_.tmpU;
-        double[][] v = model_.tmpV;
-        int height = model_.getHeight();
+        double[][] u = model.tmpU;
+        double[][] v = model.tmpV;
+        int height = model.getHeight();
         for (int x = minX; x <= maxX; x++) {
             for (int y = 1; y < height - 1; y++) {
                 uv2 = u[x][y] * v[x][y] * v[x][y];
-                model_.u[x][y] = calcNewCenter(u, x, y, duDivh2, true, uv2, dt);
-                model_.v[x][y] = calcNewCenter(v, x, y, dvDivh2, false, uv2, dt);
+                model.u[x][y] = calcNewCenter(u, x, y, duDivh2, true, uv2, dt);
+                model.v[x][y] = calcNewCenter(v, x, y, dvDivh2, false, uv2, dt);
             }
         }
     }
 
     public void computeNewEdgeValues(double dt) {
 
-        int width = model_.getWidth();
-        int height = model_.getHeight();
+        int width = model.getWidth();
+        int height = model.getHeight();
 
         // top and bottom edges
         for (int x = 0; x < width; x++) {
@@ -72,9 +72,9 @@ final class GrayScottAlgorithm {
      */
     private void calcEdge(int x, int y, double dt) {
 
-        double uv2 = model_.tmpU[x][y] * model_.tmpV[x][y] * model_.tmpV[x][y];
-        model_.u[x][y] = calcNewEdge(model_.tmpU, x, y, duDivh2, true, uv2, dt);
-        model_.v[x][y] = calcNewEdge(model_.tmpV, x, y, dvDivh2, false, uv2, dt);
+        double uv2 = model.tmpU[x][y] * model.tmpV[x][y] * model.tmpV[x][y];
+        model.u[x][y] = calcNewEdge(model.tmpU, x, y, duDivh2, true, uv2, dt);
+        model.v[x][y] = calcNewEdge(model.tmpV, x, y, dvDivh2, false, uv2, dt);
     }
 
 
@@ -84,7 +84,7 @@ final class GrayScottAlgorithm {
     private double calcNewCenter(double[][] tmp, int x, int y,
                                  double dDivh2, boolean useF, double uv2, double dt) {
 
-        double sum = model_.getNeighborSum(tmp, x, y) - 4 * tmp[x][y];
+        double sum = model.getNeighborSum(tmp, x, y) - 4 * tmp[x][y];
 
         return calcNewAux(tmp[x][y], sum, dDivh2, useF, uv2, dt);
     }
@@ -95,7 +95,7 @@ final class GrayScottAlgorithm {
     private double calcNewEdge(double[][] tmp, int x, int y,
                                double dDivh2, boolean useF, double uv2, double dt) {
 
-        double sum = model_.getEdgeNeighborSum(tmp, x, y) - 4 * tmp[x][y];
+        double sum = model.getEdgeNeighborSum(tmp, x, y) - 4 * tmp[x][y];
 
         return calcNewAux(tmp[x][y], sum, dDivh2, useF, uv2, dt);
     }
@@ -104,8 +104,8 @@ final class GrayScottAlgorithm {
     private double calcNewAux(double txy, double sum,
                               double dDivh2, boolean useF, double uv2, double dt) {
 
-        double c = useF ? -uv2 + model_.getF() * (1.0 - txy)
-                        :  uv2 - model_.getK() * txy;
+        double c = useF ? -uv2 + model.getF() * (1.0 - txy)
+                        :  uv2 - model.getK() * txy;
 
         return txy + dt * (dDivh2 * sum  + c);
     }

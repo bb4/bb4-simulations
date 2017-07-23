@@ -40,7 +40,7 @@ public class HenonColorMap extends ColorMap {
         Color.BLACK
     };
 
-    public HenonColorMap(int alpha) {
+    HenonColorMap(int alpha) {
         super(VALUES, COLORS);
         this.setGlobalAlpha(alpha);
     }

@@ -65,9 +65,9 @@ public final class GrayScottController {
     /** Manages the worker threads. */
     private RunnableParallelizer parallelizer;
 
-    private GrayScottModel model_;
+    private GrayScottModel model;
 
-    private GrayScottAlgorithm algorithm_;
+    private GrayScottAlgorithm algorithm;
 
     /** null if no new size has been requested. */
     private Dimension requestedNewSize;
@@ -79,13 +79,13 @@ public final class GrayScottController {
      * @param height height of computational space.
      */
     public GrayScottController(int width, int height) {
-        model_ = new GrayScottModel(width, height);
-        algorithm_ = new GrayScottAlgorithm(model_);
+        model = new GrayScottModel(width, height);
+        algorithm = new GrayScottAlgorithm(model);
         setParallelized(true);
     }
 
     public GrayScottModel getModel() {
-        return model_;
+        return model;
     }
 
     /**
@@ -99,12 +99,12 @@ public final class GrayScottController {
 
 
     public void reset() {
-        algorithm_.setH(H0);
-        model_.resetState();
+        algorithm.setH(H0);
+        model.resetState();
     }
 
     public void setH(double h) {
-        algorithm_.setH(h);
+        algorithm.setH(h);
     }
 
     /**
@@ -132,7 +132,7 @@ public final class GrayScottController {
 
         int numThreads = parallelizer.getNumThreads();
         List<Runnable> workers = new ArrayList<>(numThreads + 1);
-        int range = model_.getWidth() / numThreads;
+        int range = model.getWidth() / numThreads;
         RDProfiler prof = RDProfiler.getInstance();
 
         prof.startConcurrentCalculationTime();
@@ -142,13 +142,13 @@ public final class GrayScottController {
         }
 
         int minXEdge = range * (numThreads - 1) + 1;
-        int maxXEdge = model_.getWidth() - 2;
+        int maxXEdge = model.getWidth() - 2;
         workers.add(new Worker(minXEdge, maxXEdge, dt));
 
         // also add the border calculations in a separate thread.
         Runnable edgeWorker = new Runnable() {
             public void run() {
-                algorithm_.computeNewEdgeValues(dt);
+                algorithm.computeNewEdgeValues(dt);
             }
         };
         workers.add(edgeWorker);
@@ -157,10 +157,10 @@ public final class GrayScottController {
         parallelizer.invokeAllRunnables(workers);
         prof.stopConcurrentCalculationTime();
 
-        model_.commitChanges();
+        model.commitChanges();
 
         if (requestedNewSize != null) {
-             model_.setSize(requestedNewSize);
+             model.setSize(requestedNewSize);
              requestedNewSize = null;
              reset();
         }
@@ -181,7 +181,7 @@ public final class GrayScottController {
 
         @Override
         public void run() {
-            algorithm_.computeNextTimeStep(minX_, maxX_, dt_);
+            algorithm.computeNextTimeStep(minX_, maxX_, dt_);
         }
     }
 }
