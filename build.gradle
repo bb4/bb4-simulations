@@ -11,8 +11,8 @@ mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
 
 
 // This is needed for when java depends on scala. Remove when fully ported to scala.
-sourceSets.main.scala.srcDir "source"
-sourceSets.main.java.srcDirs = []
+//sourceSets.main.scala.srcDir "source"
+//sourceSets.main.java.srcDirs = []
 
 
 dependencies {
