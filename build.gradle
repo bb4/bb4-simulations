@@ -74,6 +74,13 @@ task runReactionDiffusion(type: JavaExec, description: "Run reaction diffusion s
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runReactionDiffusion1(type: JavaExec, description: "Run (java) reaction diffusion simulator") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.reactiondiffusion1.RDSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runFractalExplorer(type: JavaExec, description: "Run (scala) fractal explorer simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

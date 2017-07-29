@@ -1,10 +1,10 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.reactiondiffusion.rendering;
+package com.barrybecker4.simulation.reactiondiffusion1.rendering;
 
 import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
 import com.barrybecker4.ui.util.ColorMap;
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel;
+import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottModel;
 
 import java.awt.*;
 

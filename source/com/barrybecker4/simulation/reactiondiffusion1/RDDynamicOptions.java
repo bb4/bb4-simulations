@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.reactiondiffusion;
+package com.barrybecker4.simulation.reactiondiffusion1;
 
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController;
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel;
-import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions;
+import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottController;
+import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottModel;
+import com.barrybecker4.simulation.reactiondiffusion1.rendering.RDRenderingOptions;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;

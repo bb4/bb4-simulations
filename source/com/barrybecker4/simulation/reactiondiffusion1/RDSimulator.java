@@ -1,11 +1,11 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.reactiondiffusion;
+package com.barrybecker4.simulation.reactiondiffusion1;
 
 import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController;
-import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions;
+import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottController;
+import com.barrybecker4.simulation.reactiondiffusion1.rendering.RDRenderingOptions;
 
 import javax.swing.*;
 import java.awt.*;
