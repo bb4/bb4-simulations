@@ -12,7 +12,7 @@ object FractalModel {
 }
 
 class FractalModel extends RectangularModel {
-  private[algorithm] var values: Array[Array[Double]] = _
+  private var values: Array[Array[Double]] = _
   private var lastRow: Int = 0
   private var currentRow: Int = 0
 
@@ -36,10 +36,8 @@ class FractalModel extends RectangularModel {
   }
 
   def getValue(x: Int, y: Int): Double = {
-    if (x < 0 || x >= getWidth || y < 0 || y >= getHeight)
-      0
-    else
-      values(x)(y)
+    if (x < 0 || x >= getWidth || y < 0 || y >= getHeight) 0
+    else values(x)(y)
   }
 
   def getWidth: Int = values.length

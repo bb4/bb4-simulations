@@ -23,7 +23,7 @@ import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
   * - parallel       5.1 seconds          2.1
   *
   * * Initial benchmark
-  *                                         calcTime     renderTime
+  * calcTime     renderTime
   * Scala with java style parallelization:     7.8         2.4 - 6.8
   * Scala with java style                     18.6         2.0 - 7.09
   *
@@ -48,7 +48,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   private var rowCalculator: RowCalculator = _
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
-  private val history : History = new History
+  private val history: History = new History
 
   setParallelized(true)
   rowCalculator = new RowCalculator(this)
@@ -93,9 +93,11 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   }
 
   def getUseRunLengthOptimization: Boolean = rowCalculator.getUseRunLengthOptimization
+
   def setUseRunLengthOptimization(value: Boolean) {
     rowCalculator.setUseRunLengthOptimization(value)
   }
+
   def getModel: FractalModel = model
 
   /** @param timeStep number of rows to compute on this timestep.
@@ -122,10 +124,10 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
     var i: Int = 0
     while (i < numProcs) {
-        val nextRow: Int = Math.min(height, currentRow + chunk)
-        workers = new Worker(currentRow, nextRow) :: workers
-        currentRow = nextRow
-        i += 1
+      val nextRow: Int = Math.min(height, currentRow + chunk)
+      workers = new Worker(currentRow, nextRow) :: workers
+      currentRow = nextRow
+      i += 1
     }
 
     if (parallelized)
@@ -138,11 +140,12 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   }
 
   /** @return a number between 0 and 1.
-    *   Typically corresponds to the number times we had to iterate before the point escaped (or not).
+    *         Typically corresponds to the number times we had to iterate before the point escaped (or not).
     */
   def getFractalValue(seed: ComplexNumber): Double
 
   /** Converts from screen coordinates to data coordinates.
+    *
     * @param x real valued coordinate
     * @param y pure imaginary coordinate
     * @return corresponding position in complex number plane represented by the model.
@@ -180,20 +183,14 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
   /** Runs one of the chunks. */
   private class Worker(fromRow: Int, toRow: Int) extends Runnable {
-    private val fromRow_ : Int = fromRow
-    private val toRow_ : Int = toRow
-
-    def run() = computeChunk(fromRow_, toRow_)
 
     /** Do a chunk of work (i.e. compute the specified rows) */
     private def computeChunk(fromRow: Int, toRow: Int) {
       val width: Int = model.getWidth
-
-      var y: Int = fromRow
-      while (y < toRow) {
-          rowCalculator.calculateRow(width, y)
-          y += 1
-      }
+      for (y <- fromRow until toRow) rowCalculator.calculateRow(width, y)
     }
+
+    def run() = computeChunk(fromRow, toRow)
   }
+
 }

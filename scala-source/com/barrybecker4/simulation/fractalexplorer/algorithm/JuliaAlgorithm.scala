@@ -16,7 +16,8 @@ object JuliaAlgorithm {
     new ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7))
 }
 
-class JuliaAlgorithm(model: FractalModel) extends FractalAlgorithm(model, JuliaAlgorithm.INITIAL_RANGE) {
+class JuliaAlgorithm(model: FractalModel)
+  extends FractalAlgorithm(model, JuliaAlgorithm.INITIAL_RANGE) {
 
   private var seed: ComplexNumber = JuliaAlgorithm.DEFAULT_JULIA_SEED
 

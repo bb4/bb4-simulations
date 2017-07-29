@@ -29,5 +29,4 @@ object FractalColorMap {
     Color.BLACK)
 }
 
-class FractalColorMap() extends ColorMap(FractalColorMap.VALUES, FractalColorMap.COLORS) {
-}
+class FractalColorMap() extends ColorMap(FractalColorMap.VALUES, FractalColorMap.COLORS)

@@ -18,41 +18,41 @@ object ZoomBox {
 }
 
 class ZoomBox { // corner positions while dragging.
-  private var firstCorner: IntLocation = _
-  private var secondCorner: IntLocation = _
-  private var box: Box = _
+  private var firstCorner: Option[IntLocation] = None
+  private var secondCorner: Option[IntLocation] = None
+  private var box: Option[Box] = None
 
   def setFirstCorner(x: Int, y: Int): Unit = {
-    firstCorner = new IntLocation(y, x)
+    firstCorner = Some(new IntLocation(y, x))
   }
 
   def setSecondCorner(x: Int, y: Int): Unit = {
-    secondCorner = new IntLocation(y, x)
+    secondCorner = Some(new IntLocation(y, x))
   }
 
-  def getBox: Box = box //new Box(firstCorner, secondCorner);
+  def getBox: Box = box.get //new Box(firstCorner, secondCorner);
 
   def clearBox(): Unit = {
-    firstCorner = null
-    secondCorner = null
-  }
+    firstCorner = None
+    secondCorner = None
+}
 
-  def isValidBox: Boolean = box != null && firstCorner != null && !(firstCorner == secondCorner)
+  def isValidBox: Boolean = box.isDefined && firstCorner.isDefined && !(firstCorner == secondCorner)
 
   /**
     * Draw the bounding box if dragging.
     */
   def render(g: Graphics, aspectRatio: Double, keepAspectRatio: Boolean): Unit = {
     val g2 = g.asInstanceOf[Graphics2D]
-    if (firstCorner == null || secondCorner == null) return
-    box = findBox(aspectRatio, keepAspectRatio)
+    if (firstCorner.isEmpty || secondCorner.isEmpty) return
+    box = Some(findBox(aspectRatio, keepAspectRatio))
     g2.setColor(ZoomBox.BOUNDING_BOX_COLOR)
-    val topLeft = box.getTopLeftCorner
-    g2.drawRect(topLeft.getX, topLeft.getY, box.getWidth, box.getHeight)
+    val topLeft = box.get.getTopLeftCorner
+    g2.drawRect(topLeft.getX, topLeft.getY, box.get.getWidth, box.get.getHeight)
   }
 
-  private def findBox(aspectRatio: Double, keepAspectRatio: Boolean) = {
-    var box = new Box(firstCorner, secondCorner)
+  private def findBox(aspectRatio: Double, keepAspectRatio: Boolean): Box = {
+    var box = new Box(firstCorner.get, secondCorner.get)
     val topLeft = box.getTopLeftCorner
     var width = box.getWidth
     var height = box.getHeight
