@@ -29,8 +29,8 @@ object GrayScottModel {
   * @param height height of computational space.
   */
 final class GrayScottModel(var width: Int, var height: Int)  {
-  this.initialF = GrayScottModel.F0
-  this.initialK = GrayScottModel.K0
+  private var initialK = GrayScottModel.F0
+  private var initialF = GrayScottModel.K0
   resetState()
   /** concentrations of the 2 chemicals, u and v. */
   private[algorithm] var u = Array.ofDim[Double](width, height)
@@ -39,8 +39,6 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   private[algorithm] var tmpV = Array.ofDim[Double](width, height)
   private var k = .0
   private var f = .0
-  private var initialK = .0
-  private var initialF = .0
 
   def getU(x: Int, y: Int): Double = u(x)(y)
   def getV(x: Int, y: Int): Double = v(x)(y)
