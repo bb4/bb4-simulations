@@ -33,10 +33,10 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   this.initialK = GrayScottModel.K0
   resetState()
   /** concentrations of the 2 chemicals, u and v. */
-  private var u = Array.ofDim[Double](width, height)
-  private var v = Array.ofDim[Double](width, height)
-  private var tmpU = Array.ofDim[Double](width, height)
-  private var tmpV = Array.ofDim[Double](width, height)
+  private[algorithm] var u = Array.ofDim[Double](width, height)
+  private[algorithm] var v = Array.ofDim[Double](width, height)
+  private[algorithm] var tmpU = Array.ofDim[Double](width, height)
+  private[algorithm] var tmpV = Array.ofDim[Double](width, height)
   private var k = .0
   private var f = .0
   private var initialK = .0
@@ -69,10 +69,10 @@ final class GrayScottModel(var width: Int, var height: Int)  {
     v = temp
   }
 
-  private def getNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int) =
+  private[algorithm] def getNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int) =
     tmp(x + 1)(y) + tmp(x - 1)(y) + tmp(x)(y + 1) + tmp(x)(y - 1)
 
-  private def getEdgeNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int) =
+  private[algorithm] def getEdgeNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int) =
     tmp(GrayScottModel.getPeriodicXValue(x + 1, width))(y) +
       tmp(GrayScottModel.getPeriodicXValue(x - 1, width))(y) +
       tmp(x)(GrayScottModel.getPeriodicXValue(y + 1, height)) +
