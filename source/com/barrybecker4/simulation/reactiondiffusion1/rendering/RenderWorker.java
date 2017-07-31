@@ -11,21 +11,21 @@ import java.awt.*;
  */
 public class RenderWorker implements Runnable {
 
-    private int minX_, maxX_;
-    private Graphics2D g2_;
-    private RDRenderer renderer_;
+    private int minX, maxX;
+    private Graphics2D g2;
+    private RDRenderer renderer;
 
     RenderWorker(int minX, int maxX, RDRenderer renderer, Graphics2D g2) {
-        minX_ = minX;
-        maxX_ = maxX;
-        renderer_ = renderer;
-        g2_ = g2;
+        this.minX = minX;
+        this.maxX = maxX;
+        this.renderer = renderer;
+        this.g2 = g2;
     }
 
     public void run() {
-        if (maxX_ - minX_ > 0) {
-            ColorRect colorRect = renderer_.getColorRect(minX_, maxX_);
-            renderer_.renderStrip(minX_, colorRect, g2_);
+        if (maxX - minX > 0) {
+            ColorRect colorRect = renderer.getColorRect(minX, maxX);
+            renderer.renderStrip(minX, colorRect, g2);
         }
     }
 }
