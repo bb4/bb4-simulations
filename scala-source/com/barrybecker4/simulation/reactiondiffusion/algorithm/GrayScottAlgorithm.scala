@@ -44,7 +44,7 @@ final class GrayScottAlgorithm private[algorithm](var model: GrayScottModel)  {
     }
   }
 
-  def setH(h: Double): Unit = {
+  def setH(h: Double) {
     val h2 = h * h
     duDivh2 = GrayScottAlgorithm.DU / h2
     dvDivh2 = GrayScottAlgorithm.DV / h2

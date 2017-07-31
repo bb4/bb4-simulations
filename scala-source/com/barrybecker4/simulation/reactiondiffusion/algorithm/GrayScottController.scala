@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer
-import com.barrybecker4.simulation.reactiondiffusion1.RDProfiler
+import com.barrybecker4.simulation.reactiondiffusion.RDProfiler
 import java.awt._
 import java.util
 
@@ -100,7 +100,7 @@ final class GrayScottController(val width: Int, val height: Int) {
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
     */
-  def setParallelized(parallelized: Boolean): Unit = {
+  def setParallelized(parallelized: Boolean) {
     parallelizer = if (parallelized) new RunnableParallelizer
     else new RunnableParallelizer(1)
   }
@@ -113,7 +113,7 @@ final class GrayScottController(val width: Int, val height: Int) {
     *
     * @param dt time step in seconds.
     */
-  def timeStep(dt: Double): Unit = {
+  def timeStep(dt: Double) {
     val numThreads = parallelizer.getNumThreads
     val workers = Array.ofDim[Runnable](numThreads + 1)
     val range = model.getWidth / numThreads
@@ -128,7 +128,7 @@ final class GrayScottController(val width: Int, val height: Int) {
     workers(numThreads - 1) = new Worker(minXEdge, maxXEdge, dt)
     // also add the border calculations in a separate thread.
     val edgeWorker = new Runnable() {
-      override def run(): Unit = {
+      override def run() {
         algorithm.computeNewEdgeValues(dt)
       }
     }

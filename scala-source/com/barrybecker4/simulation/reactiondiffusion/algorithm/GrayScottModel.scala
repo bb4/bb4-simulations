@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import java.awt._
@@ -31,7 +31,8 @@ object GrayScottModel {
 final class GrayScottModel(var width: Int, var height: Int)  {
   private var initialK = GrayScottModel.F0
   private var initialF = GrayScottModel.K0
-  resetState()
+  println("w=" + width + " ht="+ height)
+
   /** concentrations of the 2 chemicals, u and v. */
   private[algorithm] var u = Array.ofDim[Double](width, height)
   private[algorithm] var v = Array.ofDim[Double](width, height)
@@ -39,6 +40,7 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   private[algorithm] var tmpV = Array.ofDim[Double](width, height)
   private var k = .0
   private var f = .0
+  resetState()
 
   def getU(x: Int, y: Int): Double = u(x)(y)
   def getV(x: Int, y: Int): Double = v(x)(y)
@@ -46,15 +48,15 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   def getWidth: Int = width
   def getHeight: Int = height
 
-  def setSize(requestedNewSize: Dimension): Unit = {
+  def setSize(requestedNewSize: Dimension) {
     width = requestedNewSize.width
     height = requestedNewSize.height
   }
 
-  def setF(f: Double): Unit = { this.f = f }
+  def setF(f: Double) { this.f = f }
   private[algorithm] def getF = f
 
-  def setK(k: Double): Unit = {this.k = k}
+  def setK(k: Double) {this.k = k}
   private[algorithm] def getK = k
 
   /** Exchange the u, v fields with the tmp versions.  */

@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.rendering.ColorRect
-import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottModel
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import java.awt.Graphics2D
 
 
@@ -22,7 +22,7 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
   /**
     * Draw the model representing the current state of the GrayScottController rd implementation.
     */
-  def render(g2: Graphics2D): Unit = {
+  def render(g2: Graphics2D) {
     val width = model.getWidth
     val numProcs = Runtime.getRuntime.availableProcessors
     val range = width / numProcs

@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.rendering.ColorRect
-import com.barrybecker4.simulation.reactiondiffusion1.algorithm.GrayScottModel
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import java.awt._
 
 
@@ -16,7 +16,7 @@ class RDOnscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRende
   extends RDRenderer(model, cmap, options) {
 
   /** Renders a rectangular strip of pixels. */
-  override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D): Unit = {
+  override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D) {
     val img = rect.getAsImage
     if (g2 != null) g2.drawImage(img, minX, 0, null)
   }
