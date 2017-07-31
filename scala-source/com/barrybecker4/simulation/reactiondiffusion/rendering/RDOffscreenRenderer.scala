@@ -20,7 +20,6 @@ class RDOffscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRend
   /** offline rendering is fast  (I wish it was anyway)  */
   private var offlineGraphics = new OfflineGraphics(observer.getSize, Color.BLACK)
 
-
   /** Renders a rectangular strip of pixels. */
   override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D): Unit = {
     val img = rect.getAsImage
