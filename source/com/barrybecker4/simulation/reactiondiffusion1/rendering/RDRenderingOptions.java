@@ -27,11 +27,10 @@ public class RDRenderingOptions {
      * Constructor
      */
     public RDRenderingOptions() {
-        setParallelized(false);
+        setParallelized(true);
     }
 
     public void setParallelized(boolean useParallelization) {
-
         parallelizer =
              useParallelization ? new RunnableParallelizer() : new RunnableParallelizer(1);
     }

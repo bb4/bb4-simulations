@@ -14,7 +14,7 @@ class RDRenderingOptions() {
   private var heightScale: Double = 0
   /** Specular highlight degree. */
   private var specularConst: Double = 0
-  private var runParallelized = false
+  private var runParallelized = true
 
   def setParallelized(useParallelization: Boolean) { runParallelized = useParallelization}
   def isParallelized: Boolean = runParallelized
