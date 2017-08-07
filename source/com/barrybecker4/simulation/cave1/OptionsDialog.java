@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.cave1;
 
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;

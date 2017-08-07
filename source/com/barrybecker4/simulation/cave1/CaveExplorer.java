@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.cave1;
 
-import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.simulation.cave1.model.CaveModel;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
@@ -98,7 +98,7 @@ public class CaveExplorer extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options = new com.barrybecker4.simulation.cave.DynamicOptions(caveModel, this);
+        options = new com.barrybecker4.simulation.cave1.DynamicOptions(caveModel, this);
         setPaused(false);
         return options;
     }

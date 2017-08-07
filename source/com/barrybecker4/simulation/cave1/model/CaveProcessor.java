@@ -1,10 +1,10 @@
-package com.barrybecker4.simulation.cave.model;
+package com.barrybecker4.simulation.cave1.model;
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer;
 import com.barrybecker4.common.math.Range;
-import com.barrybecker4.simulation.cave.model.kernal.BasicKernel;
-import com.barrybecker4.simulation.cave.model.kernal.Kernel;
-import com.barrybecker4.simulation.cave.model.kernal.RadialKernel;
+import com.barrybecker4.simulation.cave1.model.kernal.BasicKernel;
+import com.barrybecker4.simulation.cave1.model.kernal.Kernel;
+import com.barrybecker4.simulation.cave1.model.kernal.RadialKernel;
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
 
 import java.util.ArrayList;

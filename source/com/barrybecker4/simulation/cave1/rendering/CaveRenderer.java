@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave.rendering;
+package com.barrybecker4.simulation.cave1.rendering;
 
-import com.barrybecker4.simulation.cave.model.CaveProcessor;
+import com.barrybecker4.simulation.cave1.model.CaveProcessor;
 import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;

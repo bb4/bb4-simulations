@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.conway;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
-import com.barrybecker4.simulation.cave.model.CaveProcessor;
 import com.barrybecker4.simulation.conway.model.ConwayModel;
 import com.barrybecker4.simulation.conway.model.ConwayProcessor;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;

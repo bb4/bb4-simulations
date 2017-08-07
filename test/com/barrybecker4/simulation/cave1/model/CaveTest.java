@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.cave.model;
+package com.barrybecker4.simulation.cave1.model;
 
 import org.junit.Test;
 

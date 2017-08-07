@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.cave1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
-import com.barrybecker4.simulation.cave.model.CaveProcessor;
-import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.simulation.cave1.model.CaveProcessor;
+import com.barrybecker4.simulation.cave1.model.CaveModel;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;

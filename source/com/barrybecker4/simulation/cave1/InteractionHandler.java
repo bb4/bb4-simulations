@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.cave;
+package com.barrybecker4.simulation.cave1;
 
-import com.barrybecker4.simulation.cave.model.CaveModel;
+import com.barrybecker4.simulation.cave1.model.CaveModel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

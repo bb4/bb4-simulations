@@ -1,15 +1,15 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.cave.model;
+package com.barrybecker4.simulation.cave1.model;
 
-import com.barrybecker4.simulation.cave.rendering.CaveColorMap;
-import com.barrybecker4.simulation.cave.rendering.CaveRenderer;
+import com.barrybecker4.simulation.cave1.rendering.CaveColorMap;
+import com.barrybecker4.simulation.cave1.rendering.CaveRenderer;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-import static com.barrybecker4.simulation.cave.model.CaveProcessor.*;
+import static com.barrybecker4.simulation.cave1.model.CaveProcessor.*;
 
 /**
  * Communicates changing dynamic options to ConwayProcessor and controls the rendering of the cave.

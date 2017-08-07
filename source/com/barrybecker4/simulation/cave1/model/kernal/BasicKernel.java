@@ -1,6 +1,6 @@
-package com.barrybecker4.simulation.cave.model.kernal;
+package com.barrybecker4.simulation.cave1.model.kernal;
 
-import com.barrybecker4.simulation.cave.model.Cave;
+import com.barrybecker4.simulation.cave1.model.Cave;
 
 /**
  * Looks only at immediate neighbors
