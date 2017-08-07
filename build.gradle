@@ -30,6 +30,13 @@ task runDice(type: JavaExec, description: "Run dice simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runDice1(type: JavaExec, description: "Run dice simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.dice1.DiceSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runGraphing(type: JavaExec, description: "Run Graphing simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

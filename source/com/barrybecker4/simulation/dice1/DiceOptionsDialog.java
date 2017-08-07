@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.dice;
+package com.barrybecker4.simulation.dice1;
 
 
 import com.barrybecker4.simulation.common.ui.Simulator;
@@ -15,14 +15,14 @@ import java.awt.*;
 public class DiceOptionsDialog extends SimulatorOptionsDialog {
 
     /** number of dice to use.   */
-    private NumberInput numDiceField_;
+    private NumberInput numDiceField;
 
     /** number of sides on dice.  */
-    private NumberInput numSidesField_;
+    private NumberInput numSidesField;
 
 
     /**
-     * constructor
+     * Constructor
      */
     DiceOptionsDialog( Component parent, Simulator simulator ) {
         super( parent, simulator );
@@ -35,22 +35,21 @@ public class DiceOptionsDialog extends SimulatorOptionsDialog {
     }
 
     @Override
-    protected JPanel createCustomParamPanel()
-    {
+    protected JPanel createCustomParamPanel() {
         JPanel paramPanel = new JPanel();
         paramPanel.setLayout(new BorderLayout());
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout( new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
-        numDiceField_ =
+        numDiceField =
                 new NumberInput("Number of Dice (1 - 200): ", DiceOptions.DEFAULT_NUMBER_OF_DICE,
                                 "This sets the number of dice to throw on each step of the simulation.", 1, 200, true);
-        numSidesField_ =
+        numSidesField =
                 new NumberInput( "Number of Sides on Dice (2 - 100): ", DiceOptions.DEFAULT_NUMBER_OF_SIDES,
                                   "This sets the number of sides on each dice that is thrown.", 1, 100, true);
 
-        innerPanel.add( numDiceField_ );
-        innerPanel.add( numSidesField_);
+        innerPanel.add(numDiceField);
+        innerPanel.add(numSidesField);
         JPanel fill = new JPanel();
         paramPanel.add(innerPanel, BorderLayout.NORTH);
         paramPanel.add(fill, BorderLayout.CENTER);
@@ -65,8 +64,8 @@ public class DiceOptionsDialog extends SimulatorOptionsDialog {
 
         DiceSimulator simulator = (DiceSimulator) getSimulator();
 
-        simulator.setNumDice(numDiceField_.getIntValue());
-        simulator.setNumSides(numSidesField_.getIntValue());
+        simulator.setNumDice(numDiceField.getIntValue());
+        simulator.setNumSides(numSidesField.getIntValue());
     }
 
 }
