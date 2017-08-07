@@ -60,7 +60,7 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   private[algorithm] def getK = k
 
   /** Exchange the u, v fields with the tmp versions.  */
-  private[algorithm] def commitChanges() = {
+  private[algorithm] def commitChanges()  {
     var temp = tmpU
     tmpU = u
     u = temp

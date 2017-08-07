@@ -33,23 +33,14 @@ final class GrayScottAlgorithm {
         double[][] u = model.tmpU;
         double[][] v = model.tmpV;
         int height = model.getHeight();
-        double sumU = 0;
-        double sumV = 0;
-        //System.out.println("minX="+minX +" maxX="+maxX +" ht="+height);
         for (int x = minX; x <= maxX; x++) {
             for (int y = 1; y < height - 1; y++) {
                 double uv2 = u[x][y] * v[x][y] * v[x][y];
                 if (uv2 > 10.0) System.out.println("error uv2 = " + uv2 + " u = " + u[x][y] + " v=" + v[x][y]);
                 model.u[x][y] = calcNewCenter(u, x, y, duDivh2, true, uv2, dt);
                 model.v[x][y] = calcNewCenter(v, x, y, dvDivh2, false, uv2, dt);
-                //model.u[x][y] = u[x][y];
-                //model.v[x][y] = v[x][y];
-                sumU += model.u[x][y];
-                sumV += model.v[x][y];
             }
         }
-        System.out.println("sum u = " + sumU + " v = " + sumV);
-        ThreadUtil.sleep(100);
     }
 
     public void computeNewEdgeValues(double dt) {
