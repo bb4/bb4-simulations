@@ -18,16 +18,14 @@ object RDViewer {
 }
 
 class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, var parent: Container) {
-  oldWidth = this.parent.getWidth
-  oldHeight = this.parent.getHeight
+  private var oldWidth: Int = this.parent.getWidth
+  private var oldHeight: Int = this.parent.getHeight
   private var cmap = new RDColorMap
   private var renderOptions = new RDRenderingOptions
-  private var onScreenRenderer: RDOnscreenRenderer = _
-  private var offScreenRenderer: RDOffscreenRenderer = _
+  private var onScreenRenderer: Option[RDOnscreenRenderer] = _
+  private var offScreenRenderer: Option[RDOffscreenRenderer] = _
   private var useFixedSize: Boolean = false
   private var useOfflineRendering = false
-  private var oldWidth = 0
-  private var oldHeight = 0
 
   private[reactiondiffusion] def getRenderingOptions = renderOptions
 
@@ -45,12 +43,10 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   def paint(g: Graphics) {
     checkDimensions()
     val g2 = g.asInstanceOf[Graphics2D]
-    getRenderer.render(g2)
+    getRenderer.get.render(g2)
   }
 
-  /**
-    * Sets to new size if needed.
-    */
+  /** Sets to new size if needed. */
   private def checkDimensions() = {
     var w = RDViewer.FIXED_SIZE_DIM
     var h = RDViewer.FIXED_SIZE_DIM
@@ -64,22 +60,22 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   private def initRenderers(w: Int, h: Int) = {
     if (w != oldWidth || h != oldHeight) {
       grayScott.setSize(w, h)
-      onScreenRenderer = null
-      offScreenRenderer = null
+      onScreenRenderer = None
+      offScreenRenderer = None
       oldWidth = w
       oldHeight = h
     }
   }
 
   private def getOffScreenRenderer = {
-    if (offScreenRenderer == null)
-      offScreenRenderer = new RDOffscreenRenderer(grayScott.getModel, cmap, renderOptions, parent)
+    if (offScreenRenderer.isEmpty)
+      offScreenRenderer = Some(new RDOffscreenRenderer(grayScott.getModel, cmap, renderOptions, parent))
     offScreenRenderer
   }
 
   private def getOnScreenRenderer = {
-    if (onScreenRenderer == null)
-      onScreenRenderer = new RDOnscreenRenderer(grayScott.getModel, cmap, renderOptions)
+    if (onScreenRenderer.isEmpty)
+      onScreenRenderer = Some(new RDOnscreenRenderer(grayScott.getModel, cmap, renderOptions))
     onScreenRenderer
   }
 

@@ -2,6 +2,8 @@
 package com.barrybecker4.simulation.reactiondiffusion1.algorithm;
 
 
+import com.barrybecker4.common.concurrency.ThreadUtil;
+
 /**
  * This is the core of the Gray-Scott reaction diffusion simulation implementation.
  * Based on an work by Joakim Linde and modified by Barry Becker.
@@ -28,17 +30,26 @@ final class GrayScottAlgorithm {
 
     public void computeNextTimeStep(int minX, int maxX, double dt) {
 
-        double uv2;
         double[][] u = model.tmpU;
         double[][] v = model.tmpV;
         int height = model.getHeight();
+        double sumU = 0;
+        double sumV = 0;
+        //System.out.println("minX="+minX +" maxX="+maxX +" ht="+height);
         for (int x = minX; x <= maxX; x++) {
             for (int y = 1; y < height - 1; y++) {
-                uv2 = u[x][y] * v[x][y] * v[x][y];
+                double uv2 = u[x][y] * v[x][y] * v[x][y];
+                if (uv2 > 10.0) System.out.println("error uv2 = " + uv2 + " u = " + u[x][y] + " v=" + v[x][y]);
                 model.u[x][y] = calcNewCenter(u, x, y, duDivh2, true, uv2, dt);
                 model.v[x][y] = calcNewCenter(v, x, y, dvDivh2, false, uv2, dt);
+                //model.u[x][y] = u[x][y];
+                //model.v[x][y] = v[x][y];
+                sumU += model.u[x][y];
+                sumV += model.v[x][y];
             }
         }
+        System.out.println("sum u = " + sumU + " v = " + sumV);
+        ThreadUtil.sleep(100);
     }
 
     public void computeNewEdgeValues(double dt) {
@@ -66,7 +77,6 @@ final class GrayScottAlgorithm {
         dvDivh2 = DV / h2;
     }
 
-
     /**
      * Calculate new values on an edge.
      */
@@ -85,7 +95,6 @@ final class GrayScottAlgorithm {
                                  double dDivh2, boolean useF, double uv2, double dt) {
 
         double sum = model.getNeighborSum(tmp, x, y) - 4 * tmp[x][y];
-
         return calcNewAux(tmp[x][y], sum, dDivh2, useF, uv2, dt);
     }
 
@@ -96,7 +105,6 @@ final class GrayScottAlgorithm {
                                double dDivh2, boolean useF, double uv2, double dt) {
 
         double sum = model.getEdgeNeighborSum(tmp, x, y) - 4 * tmp[x][y];
-
         return calcNewAux(tmp[x][y], sum, dDivh2, useF, uv2, dt);
     }
 
@@ -104,7 +112,7 @@ final class GrayScottAlgorithm {
     private double calcNewAux(double txy, double sum,
                               double dDivh2, boolean useF, double uv2, double dt) {
 
-        double c = useF ? -uv2 + model.getF() * (1.0 - txy)
+        double c = useF ? model.getF() * (1.0 - txy) - uv2
                         :  uv2 - model.getK() * txy;
 
         return txy + dt * (dDivh2 * sum  + c);

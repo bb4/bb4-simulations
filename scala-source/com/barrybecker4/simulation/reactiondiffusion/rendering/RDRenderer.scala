@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.ui.util.ColorMap
@@ -19,9 +19,7 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
 
   def getColorMap: ColorMap = renderingModel.getColorMap
 
-  /**
-    * Draw the model representing the current state of the GrayScottController rd implementation.
-    */
+  /** Draw the model representing the current state of the GrayScottController rd implementation. */
   def render(g2: Graphics2D) {
     val width = model.getWidth
     val numProcs = Runtime.getRuntime.availableProcessors
@@ -38,7 +36,9 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
       }
     }
 
-    workers.par.foreach(x => x.run())
+    if (options.isParallelized)
+      workers.par.foreach(x => x.run())
+    else workers.foreach(x => x.run())
     postRender(g2)
   }
 
@@ -52,7 +52,7 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
     val colorRect = new ColorRect(maxX - minX, ymax)
     var x = minX
 
-    for (x <- 0 until maxX)
+    for (x <- minX until maxX)
       for (y <- 0 until ymax)
         colorRect.setColor(x - minX, y, renderingModel.getColorForPosition(x, y))
     colorRect

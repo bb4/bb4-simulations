@@ -35,16 +35,14 @@ public class RDSimulator extends Simulator {
     public void setUseFixedSize(boolean fixed) {
         viewer.setUseFixedSize(fixed);
     }
-
     public boolean getUseFixedSize() {
         return viewer.getUseFixedSize();
     }
 
-    public void setUseOffscreenRendering(boolean use) {
+    void setUseOffscreenRendering(boolean use) {
         viewer.setUseOffscreenRendering(use);
     }
-
-    public boolean getUseOffScreenRendering() {
+    boolean getUseOffScreenRendering() {
         return viewer.getUseOffScreenRendering();
     }
 
@@ -85,8 +83,7 @@ public class RDSimulator extends Simulator {
     }
 
     @Override
-    public double timeStep()
-    {
+    public double timeStep() {
         if ( !isPaused() ) {
             RDProfiler.getInstance().startCalculationTime();
             grayScott.timeStep( timeStep_ );
@@ -96,8 +93,7 @@ public class RDSimulator extends Simulator {
     }
 
     @Override
-    public void paint( Graphics g )
-    {
+    public void paint( Graphics g ) {
         super.paint(g);
 
         RDProfiler.getInstance().startRenderingTime();

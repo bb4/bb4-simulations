@@ -3,8 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler
-import java.awt._
-import java.util
+import java.awt.Dimension
 
 
 /**
@@ -63,19 +62,17 @@ object GrayScottController {
 /**
   * Constructor
   *
-  * @param width  width of computational space.
-  * @param height height of computational space.
+  * @param initialWidth  width of computational space.
+  * @param initialHeight height of computational space.
   */
-final class GrayScottController(val width: Int, val height: Int) {
-  val model: GrayScottModel = new GrayScottModel(width, height)
+final class GrayScottController(initialWidth: Int, initialHeight: Int) {
+  val model: GrayScottModel = new GrayScottModel(initialWidth, initialHeight)
   val algorithm = new GrayScottAlgorithm(model)
   setParallelized(true)
-  /** Manages the worker threads. */
-  private var parallelizer: RunnableParallelizer = _
 
   /** null if no new size has been requested. */
-  private var requestedNewSize: Dimension = _
-
+  private var requestedNewSize: Option[Dimension] = None
+  private var paralellized = true
   def getModel: GrayScottModel = model
 
   /**
@@ -84,7 +81,7 @@ final class GrayScottController(val width: Int, val height: Int) {
     * before reinitializing with the new size.
     */
   def setSize(width: Int, height: Int) {
-    requestedNewSize = new Dimension(width, height)
+    requestedNewSize = Some(new Dimension(width, height))
   }
 
   def reset() {
@@ -100,12 +97,8 @@ final class GrayScottController(val width: Int, val height: Int) {
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
     */
-  def setParallelized(parallelized: Boolean) {
-    parallelizer = if (parallelized) new RunnableParallelizer
-    else new RunnableParallelizer(1)
-  }
-
-  def isParallelized: Boolean = parallelizer.getNumThreads > 1
+  def setParallelized(parallelized: Boolean) { this.paralellized = parallelized }
+  def isParallelized: Boolean = this.paralellized
 
   /**
     * Advance one time step increment.
@@ -114,7 +107,7 @@ final class GrayScottController(val width: Int, val height: Int) {
     * @param dt time step in seconds.
     */
   def timeStep(dt: Double) {
-    val numThreads = parallelizer.getNumThreads
+    val numThreads = Runtime.getRuntime.availableProcessors()
     val workers = Array.ofDim[Runnable](numThreads + 1)
     val range = model.getWidth / numThreads
     val prof = RDProfiler.getInstance
@@ -133,21 +126,22 @@ final class GrayScottController(val width: Int, val height: Int) {
       }
     }
     workers(numThreads) = edgeWorker
-    // blocks until all Callables are done running.
-    //parallelizer.invokeAllRunnables(workers)
-    workers.par.foreach(w => w.run())
+
+    if (paralellized)
+      workers.par.foreach(w => w.run())
+    else workers.foreach(w => w.run())
 
     prof.stopConcurrentCalculationTime()
     model.commitChanges()
-    if (requestedNewSize != null) {
-      model.setSize(requestedNewSize)
-      requestedNewSize = null
+    if (requestedNewSize.isDefined) {
+      model.setSize(requestedNewSize.get)
+      requestedNewSize = None
       reset()
     }
   }
 
   /**  Runs one of the chunks. */
-  private class Worker(var minX: Int, var maxX: Int, var dt: Double) extends Runnable {
+  private class Worker(minX: Int, maxX: Int,  dt: Double) extends Runnable {
     override def run() {
       algorithm.computeNextTimeStep(minX, maxX, dt)
     }

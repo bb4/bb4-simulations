@@ -46,16 +46,13 @@ public final class GrayScottModel {
     public double getU(int x, int y) {
         return u[x][y];
     }
-
     public double getV(int x, int y) {
         return v[x][y];
     }
 
-
     public int getWidth() {
         return width;
     }
-
     public int getHeight() {
         return height;
     }
@@ -68,7 +65,6 @@ public final class GrayScottModel {
     public void setF(double f) {
         this.f = f;
     }
-
     double getF() {
         return f;
     }
@@ -76,7 +72,6 @@ public final class GrayScottModel {
     public void setK(double k) {
         this.k = k;
     }
-
     double getK() {
         return k;
     }

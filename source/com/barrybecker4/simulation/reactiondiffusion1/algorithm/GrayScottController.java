@@ -75,11 +75,11 @@ public final class GrayScottController {
 
     /**
      * Constructor
-     * @param width width of computational space.
-     * @param height height of computational space.
+     * @param initialWidth width of computational space.
+     * @param initialHeight height of computational space.
      */
-    public GrayScottController(int width, int height) {
-        model = new GrayScottModel(width, height);
+    public GrayScottController(int initialWidth, int initialHeight) {
+        model = new GrayScottModel(initialWidth, initialHeight);
         algorithm = new GrayScottAlgorithm(model);
         setParallelized(true);
     }

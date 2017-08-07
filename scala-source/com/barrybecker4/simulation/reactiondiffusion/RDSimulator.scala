@@ -19,10 +19,11 @@ object RDSimulator {
 }
 
 class RDSimulator() extends Simulator("Reaction Diffusion") {
-  commonInit()
+
   private var grayScott: GrayScottController = _
   private var viewer: RDViewer = _
   private var rdOptions: RDDynamicOptions = _
+  commonInit()
 
   /**
     * @param fixed if true then the render area does not resize automatically.
