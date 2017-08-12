@@ -51,14 +51,13 @@ object CaveProcessor {
 
 class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
                     val ceilThresh: Double, var lossFactor: Double, var effectFactor: Double,
-                    val kernelType: KernelType, val useParallel: Boolean) extends HeightField {
+                    val kernelType: KernelType, var useParallel: Boolean = true) extends HeightField {
 
   private var cave = new Cave(width, height, floorThresh, ceilThresh)
+  cave.randomInitialization()
   private var kernel: Kernel = _
-  /** Manages the worker threads. */
-  private var parallelizer: RunnableParallelizer = _
+
   setKernelType(kernelType)
-  setUseParallel(useParallel)
 
   /** Constructor that allows you to specify the dimensions of the cave */
   def this(width: Int, height: Int) {
@@ -101,8 +100,7 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
 
   override def toString: String = cave.toString
   def setUseParallel(parallelized: Boolean) {
-    parallelizer = if (parallelized) new RunnableParallelizer
-    else new RunnableParallelizer(1)
+    useParallel = parallelized
   }
 
   /**
@@ -113,18 +111,25 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
     */
   def nextPhase() {
     val newCave = cave.createCopy
-    val numThreads = parallelizer.getNumThreads
-    val workers = new util.ArrayList[Runnable](numThreads + 1)
+    val numThreads = Runtime.getRuntime.availableProcessors()
+    val workers = Array.ofDim[Runnable](numThreads)
     val range = cave.getWidth / numThreads
     for (i <- 0 until numThreads) {
       val offset = i * range
-      workers.add(new Worker(offset, offset + range, newCave))
+      workers(i) = new Worker(offset, offset + range, newCave)
     }
-    // blocks until all Callables are done running.
-    parallelizer.invokeAllRunnables(workers)
+
+    assert(workers != null)
+    if (useParallel)
+      workers.par.foreach(w => {
+        assert(w != null)
+        w.run()
+      })
+    else
+      workers.foreach(w => w.run())
+
     cave = newCave
   }
-
 
 
   /** Runs one of the chunks. */

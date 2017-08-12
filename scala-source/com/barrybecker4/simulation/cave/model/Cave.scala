@@ -4,11 +4,9 @@ package com.barrybecker4.simulation.cave.model
 import com.barrybecker4.common.math.Range
 import java.util.Random
 
-
 /**
   * Ideas for future work:
   *   - support mouse interaction to raise or lower the height field
-  *
   * @author Barry Becker
   */
 object Cave {
@@ -20,7 +18,7 @@ class Cave(val width: Int, val length: Int,
            var floorThresh: Double = 0.2, var ceilThresh: Double = 0.9) {
 
   /** a value representing the height. MAX_HEIGHT is wall, MIN_HEIGHT is floor  */
-  private val heightMap = genMap(width, length)
+  private val heightMap = Array.ofDim[Double](width, length) //genMap(width, length)
 
   def getWidth: Int = heightMap.length
   def getLength: Int = heightMap(0).length
@@ -29,6 +27,17 @@ class Cave(val width: Int, val length: Int,
 
   def setValue(x: Int, y: Int, value: Double) {
     heightMap(x)(y) = Math.min(Math.max(value, floorThresh), ceilThresh)
+  }
+
+  /** @return the initial random 2D typeMap data */
+  def randomInitialization(): Unit = {
+    Cave.RAND.setSeed(Cave.SEED)
+    for (x <- 0 until width) {
+      for(y <- 0 until length) {
+        val r = Cave.RAND.nextDouble
+        heightMap(x)(y) = Math.min(Math.max(r, floorThresh), ceilThresh)
+      }
+    }
   }
 
   def createCopy: Cave = {
@@ -55,20 +64,6 @@ class Cave(val width: Int, val length: Int,
     if (v < floorThresh) ' '
     else if (v < ceilThresh) 'C'
     else 'W'
-  }
-
-  /** @return the initial random 2D typeMap data */
-  private def genMap(width: Int, length: Int) = {
-    Cave.RAND.setSeed(Cave.SEED)
-    println("w=" + width + " len=" + length)
-    val map = Array.ofDim[Double](width, length)
-    for (x <- 0 until width) {
-      for(y <- 0 until length) {
-        val r = Cave.RAND.nextDouble
-        map(x)(y) = Math.min(Math.max(r, floorThresh), ceilThresh)
-      }
-    }
-    map
   }
 
   def print() {System.out.println(this.toString)}

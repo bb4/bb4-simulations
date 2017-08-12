@@ -31,7 +31,8 @@ class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcesso
     * Draw the floor of the cave.
     * Synchronized so we do not end up calling it multiple times from the same thread until processing is done.
     */
-  def render(bumpHeight: Double, specularPct: Double, lightAzymuthAngle: Double, lightDescensionAngle: Double): Unit = {
+  def render(bumpHeight: Double, specularPct: Double, lightAzymuthAngle: Double,
+             lightDescensionAngle: Double): Unit = synchronized {
     val cellWidth = Math.max(1, (width / cave.getWidth).toInt)
     val cellHeight = Math.max(1, (height / cave.getHeight).toInt)
     val lightVector = if (bumpHeight > 0) computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle)
