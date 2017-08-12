@@ -142,26 +142,6 @@ public class CaveProcessor implements HeightField {
     }
 
     /**
-     * Compute the next step of the simulation
-     * The new value is at each point based on simulation rules:
-     * - if a cell is alive but has too few neighbors, kill it.
-     * - otherwise, if the cell is dead now, check if it has the right number of neighbors to be 'born'
-     */
-    public void nextPhase(int minX, int maxX, Cave newCave) {
-
-        // Loop over each row and column of the map
-        for (int x = minX; x < maxX; x++) {
-            for (int y = 0; y < cave.getLength(); y++) {
-                double neibNum = kernel.countNeighbors(x, y);
-                double oldValue = cave.getValue(x, y);
-                double newValue = oldValue + (neibNum - lossFactor) * effectFactor;
-                newCave.setValue(x, y, newValue);
-            }
-        }
-        cave = newCave;
-    }
-
-    /**
      * Runs one of the chunks.
      */
     private class Worker implements Runnable {
@@ -177,6 +157,25 @@ public class CaveProcessor implements HeightField {
         @Override
         public void run() {
             nextPhase(minX_, maxX_, newCave_);
+        }
+
+        /**
+         * Compute the next step of the simulation
+         * The new value is at each point based on simulation rules:
+         * - if a cell is alive but has too few neighbors, kill it.
+         * - otherwise, if the cell is dead now, check if it has the right number of neighbors to be 'born'
+         */
+        private void nextPhase(int minX, int maxX, Cave newCave) {
+
+            // Loop over each row and column of the map
+            for (int x = minX; x < maxX; x++) {
+                for (int y = 0; y < cave.getLength(); y++) {
+                    double neibNum = kernel.countNeighbors(x, y);
+                    double oldValue = cave.getValue(x, y);
+                    double newValue = oldValue + (neibNum - lossFactor) * effectFactor;
+                    newCave.setValue(x, y, newValue);
+                }
+            }
         }
     }
 

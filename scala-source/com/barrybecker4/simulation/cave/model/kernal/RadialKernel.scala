@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.model.kernal
 
 import com.barrybecker4.simulation.cave.model.Cave
@@ -19,8 +19,8 @@ class RadialKernel(cave: Cave, val size: Int = 5) extends AbstractKernel(cave) {
 
   assert(size > 2 && size % 2 == 1)
   private var distanceLookup = Array.ofDim[Double](size, size)
-  initDistanceLookup()
   private var totalWeight = .0
+  initDistanceLookup()
 
   private def initDistanceLookup() = {
     var sum: Double = 0

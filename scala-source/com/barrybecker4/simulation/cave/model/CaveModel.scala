@@ -14,7 +14,7 @@ import com.barrybecker4.simulation.cave.model.CaveProcessor._
   * @author Barry Becker
   */
 object CaveModel {
-  val DEFAULT_SCALE_FACTOR: Double = 2
+  val DEFAULT_SCALE_FACTOR: Double = 2.0
   val DEFAULT_BUMP_HEIGHT = 0.0
   val DEFAULT_SPECULAR_PCT = 0.1
   val DEFAULT_LIGHT_SOURCE_ELEVATION: Double = Math.PI / 4.0
@@ -30,7 +30,7 @@ object CaveModel {
 }
 
 class CaveModel() {
-  reset()
+
   private var cave: CaveProcessor = _
   private var renderer: CaveRenderer = _
   private var floorThresh = DEFAULT_FLOOR_THRESH
@@ -50,6 +50,7 @@ class CaveModel() {
   private var nextStepRequested = false
   private var continuousIteration = CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION
   private val cmap = new CaveColorMap
+  reset()
 
   def setSize(width: Int, height: Int) {
     if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
@@ -60,13 +61,12 @@ class CaveModel() {
     ceilThresh = DEFAULT_CEIL_THRESH
     val caveWidth = (CaveModel.DEFAULT_WIDTH / scale).toInt
     val caveHeight = (CaveModel.DEFAULT_HEIGHT / scale).toInt
-    val cave = new CaveProcessor(caveWidth, caveHeight, floorThresh, ceilThresh,
+    cave = new CaveProcessor(caveWidth, caveHeight, floorThresh, ceilThresh,
       lossFactor, effectFactor, kernelType, useParallel)
     renderer = new CaveRenderer(CaveModel.DEFAULT_WIDTH, CaveModel.DEFAULT_HEIGHT, cave, cmap)
   }
 
   def getWidth: Int = cave.getWidth
-
   def getHeight: Int = cave.getHeight
 
   def setFloorThresh(floor: Double) {
@@ -145,7 +145,8 @@ class CaveModel() {
     try {
       val caveWidth = (width / scale).toInt
       val caveHeight = (height / scale).toInt
-      cave = new CaveProcessor(caveWidth, caveHeight, floorThresh, ceilThresh, lossFactor, effectFactor, kernelType, useParallel)
+      cave = new CaveProcessor(caveWidth, caveHeight,
+        floorThresh, ceilThresh, lossFactor, effectFactor, kernelType, useParallel)
       numIterations = 0
       renderer = new CaveRenderer(width, height, cave, cmap)
       restartRequested = true

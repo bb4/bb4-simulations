@@ -129,6 +129,13 @@ task runCaveExplorer(type: JavaExec, description: "Run cave simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runCaveExplorer1(type: JavaExec, description: "Run cave simulator (legacy java version)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.cave1.CaveExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runConwayExplorer(type: JavaExec, description: "Run Conway's game of life simulator", group: "Run") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

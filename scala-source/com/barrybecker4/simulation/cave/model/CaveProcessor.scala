@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.model
 
 import com.barrybecker4.common.concurrency.RunnableParallelizer
@@ -52,13 +52,13 @@ object CaveProcessor {
 class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
                     val ceilThresh: Double, var lossFactor: Double, var effectFactor: Double,
                     val kernelType: KernelType, val useParallel: Boolean) extends HeightField {
-  private var cave = new Cave(width, height, floorThresh, ceilThresh)
-  setKernelType(kernelType)
-  setUseParallel(useParallel)
 
+  private var cave = new Cave(width, height, floorThresh, ceilThresh)
   private var kernel: Kernel = _
   /** Manages the worker threads. */
   private var parallelizer: RunnableParallelizer = _
+  setKernelType(kernelType)
+  setUseParallel(useParallel)
 
   /** Constructor that allows you to specify the dimensions of the cave */
   def this(width: Int, height: Int) {
@@ -95,6 +95,11 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
   def setCeilThresh(ceil: Double){ cave.setCeilThresh(ceil) }
   def incrementHeight(x: Int, y: Int, amount: Double) { cave.incrementHeight(x, y, amount) }
 
+  override def getValue(x: Int, y: Int): Double = cave.getValue(x, y)
+  def getRange: Range = cave.getRange
+  def printCave() {cave.print() }
+
+  override def toString: String = cave.toString
   def setUseParallel(parallelized: Boolean) {
     parallelizer = if (parallelized) new RunnableParallelizer
     else new RunnableParallelizer(1)
@@ -120,27 +125,22 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
     cave = newCave
   }
 
-  def nextPhase(minX: Int, maxX: Int, newCave: Cave) { // Loop over each row and column of the map
-    for (x <- minX until maxX) {
-      for (y <- 0 until cave.length) {
-        val neibNum = kernel.countNeighbors(x, y)
-        val oldValue = cave.getValue(x, y)
-        val newValue = oldValue + (neibNum - lossFactor) * effectFactor
-        newCave.setValue(x, y, newValue)
-      }
-    }
-    cave = newCave
-  }
+
 
   /** Runs one of the chunks. */
-  private class Worker(var minX: Int, var maxX: Int, var newCave: Cave) extends Runnable {
-    override def run() {nextPhase(minX, maxX, newCave) }
+  private class Worker(minX: Int, maxX: Int, newCave: Cave) extends Runnable {
+
+    override def run() {nextPhase() }
+
+    private def nextPhase() { // Loop over each row and column of the map
+      for (x <- minX until maxX) {
+        for (y <- 0 until cave.length) {
+          val neibNum = kernel.countNeighbors(x, y)
+          val oldValue = cave.getValue(x, y)
+          val newValue = oldValue + (neibNum - lossFactor) * effectFactor
+          newCave.setValue(x, y, newValue)
+        }
+      }
+    }
   }
-
-  override def getValue(x: Int, y: Int): Double = cave.getValue(x, y)
-
-  def getRange: Range = cave.getRange
-  def printCave() {cave.print() }
-
-  override def toString: String = cave.toString
 }
