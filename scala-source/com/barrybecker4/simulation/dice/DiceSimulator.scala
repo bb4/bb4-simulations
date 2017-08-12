@@ -28,9 +28,9 @@ object DiceSimulator {
 
 class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
 
+  private val options = new DiceOptions
   AppContext.initialize("ENGLISH", util.Arrays.asList("com.barrybecker4.ui.message"), new Log)
   initHistogram()
-  private val options = new DiceOptions
 
   def setNumDice(numDice: Int) {
     options.numDice = numDice

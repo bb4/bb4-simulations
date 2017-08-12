@@ -1,3 +1,4 @@
+// Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.model
 
 import com.barrybecker4.common.math.Range
@@ -6,8 +7,6 @@ import java.util.Random
 
 /**
   * Ideas for future work:
-  *  - add bump map rendering and phong shading
-  *   - allow continuous iterating or multiple steps at once
   *   - support mouse interaction to raise or lower the height field
   *
   * @author Barry Becker
@@ -60,7 +59,7 @@ class Cave(val width: Int, val length: Int,
     else 'W'
   }
 
-  /** generate the initial random 2D typeMap data */
+  /** @return the initial random 2D typeMap data */
   private def genMap(width: Int, length: Int) = {
     Cave.RAND.setSeed(Cave.SEED)
     val map = Array.ofDim[Double](width, length)

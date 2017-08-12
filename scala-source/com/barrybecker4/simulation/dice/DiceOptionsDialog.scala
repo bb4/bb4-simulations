@@ -15,13 +15,8 @@ import DiceOptions._
 class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  /** number of dice to use.   */
-  private var numDiceField = new NumberInput("Number of Dice (1 - 200): ", DEFAULT_NUMBER_OF_DICE,
-    "This sets the number of dice to throw on each step of the simulation.", 1, 200, true)
-
-  /** number of sides on dice.  */
-  private var numSidesField = new NumberInput("Number of Sides on Dice (2 - 100): ", DEFAULT_NUMBER_OF_SIDES,
-    "This sets the number of sides on each dice that is thrown.", 1, 100, true)
+  private var numDiceField: NumberInput = _
+  private var numSidesField: NumberInput = _
 
   override def getTitle = "Dice Simulation Configuration"
 
@@ -30,6 +25,12 @@ class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
     paramPanel.setLayout(new BorderLayout)
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
+
+    numDiceField = new NumberInput("Number of Dice (1 - 200): ", DEFAULT_NUMBER_OF_DICE,
+      "This sets the number of dice to throw on each step of the simulation.", 1, 200, true)
+    numSidesField = new NumberInput("Number of Sides on Dice (2 - 100): ", DEFAULT_NUMBER_OF_SIDES,
+      "This sets the number of sides on each dice that is thrown.", 1, 100, true)
+
     innerPanel.add(numDiceField)
     innerPanel.add(numSidesField)
     val fill = new JPanel

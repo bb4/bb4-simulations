@@ -9,7 +9,6 @@ apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
 
-
 // This is needed for when java depends on scala. Remove when fully ported to scala.
 //sourceSets.main.scala.srcDir "source"
 //sourceSets.main.java.srcDirs = []
