@@ -71,8 +71,8 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         // adjust by this so that there is not a discontinuity at the periphery
         double minWt = 0.9 / brushRadius;
 
-        for (int ii = startX; ii < stopX; ii++) {
-             for (int jj = startY; jj < stopY; jj++) {
+        for (int ii = startX; ii <= stopX; ii++) {
+             for (int jj = startY; jj <= stopY; jj++) {
                  double weight = getWeight(i, j, ii, jj, minWt);
                  applyChange(ii, jj, weight);
              }

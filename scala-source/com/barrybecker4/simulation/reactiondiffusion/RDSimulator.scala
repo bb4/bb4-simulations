@@ -23,6 +23,7 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   private var grayScott: GrayScottController = _
   private var viewer: RDViewer = _
   private var rdOptions: RDDynamicOptions = _
+  private var handler: InteractionHandler = _
   commonInit()
 
   /**
@@ -53,6 +54,9 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     grayScott = new GrayScottController(1, 1)
     setNumStepsPerFrame(RDSimulator.DEFAULT_STEPS_PER_FRAME)
     viewer = new RDViewer(grayScott, this)
+    val handler = new InteractionHandler(grayScott.model, 1)
+    this.addMouseListener(handler)
+    this.addMouseMotionListener(handler)
   }
 
   override protected def reset() {

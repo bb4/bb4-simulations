@@ -34,16 +34,13 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   private var initialF = F0
 
   /** concentrations of the 2 chemicals, u and v. */
-  private[algorithm] var u: Array[Array[Double]] = _
-  private[algorithm] var v: Array[Array[Double]] = _
+  var u: Array[Array[Double]] = _
+  var v: Array[Array[Double]] = _
   private[algorithm] var tmpU: Array[Array[Double]] = _
   private[algorithm] var tmpV: Array[Array[Double]] = _
   private var k: Double = _
   private var f: Double = _
   resetState()
-
-  def getU(x: Int, y: Int): Double = u(x)(y)
-  def getV(x: Int, y: Int): Double = v(x)(y)
 
   def getWidth: Int = width
   def getHeight: Int = height

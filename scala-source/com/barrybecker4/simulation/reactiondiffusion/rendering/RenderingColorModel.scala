@@ -37,8 +37,8 @@ class RenderingColorModel private[rendering](var model: GrayScottModel, var cmap
     override def getHeight: Int = model.getHeight
 
     override def getValue(x: Int, y: Int): Double =
-      (if (options.isShowingU) model.getU(x, y) else 0.0) +
-        (if (options.isShowingV) model.getV(x, y) else 0.0)
+      (if (options.isShowingU) model.u(x)(y) else 0.0) +
+        (if (options.isShowingV) model.v(x)(y) else 0.0)
   }
 
 }
