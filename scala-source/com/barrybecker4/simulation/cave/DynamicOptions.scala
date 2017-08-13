@@ -86,7 +86,6 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   private var resetButton: JButton = _
   private var generalSliderGroup: SliderGroup = _
   private var bumpSliderGroup: SliderGroup = _
-  private var brushSliderGroup: SliderGroup = _
   private var useContinuousIteration: JCheckBox = _
   private var useParallelComputation: JCheckBox = _
 
@@ -117,7 +116,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   private def createBrushControls = {
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Brush Parameters (left: raise; right: lower)"))
-    brushSliderGroup = new SliderGroup(DynamicOptions.BRUSH_SLIDER_PROPS)
+    val brushSliderGroup: SliderGroup= new SliderGroup(DynamicOptions.BRUSH_SLIDER_PROPS)
     brushSliderGroup.addSliderChangeListener(this)
     panel.add(brushSliderGroup, BorderLayout.CENTER)
     panel

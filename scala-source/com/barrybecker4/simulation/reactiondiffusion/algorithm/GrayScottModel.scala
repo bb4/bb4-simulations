@@ -16,6 +16,11 @@ object GrayScottModel {
   private val INITIAL_U: Double = 0.5
   private val INITIAL_V: Double = 0.25
 
+  /** Radius for area of effect when doing manual modification with click/drag brush */
+  val DEFAULT_BRUSH_RADIUS = 2
+  /** The amount of impact that the brush has. */
+  val DEFAULT_BRUSH_STRENGTH = 0.5
+
   /**  Periodic boundary conditions.
     * @return new x value taking into account wrapping boundaries.
     */

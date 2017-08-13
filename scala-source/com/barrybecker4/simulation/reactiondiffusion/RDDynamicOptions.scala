@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion
 
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
-import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions
+import RDDynamicOptions._
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
@@ -12,6 +12,7 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+
 
 
 /**
@@ -28,8 +29,12 @@ object RDDynamicOptions {
   private val SH_SLIDER = "Specular Highlight"
   private val NS_SLIDER = "Num Steps per Frame"
   private val TIMESTEP_SLIDER = "Time Step Size"
+  private val BRUSH_RADIUS_SLIDER = "Brush Radius"
+  private val BRUSH_STRENGTH_SLIDER = "Brush Strength"
   private val MIN_NUM_STEPS = RDSimulator.DEFAULT_STEPS_PER_FRAME / 10.0
   private val MAX_NUM_STEPS = 10.0 * RDSimulator.DEFAULT_STEPS_PER_FRAME
+  private val SPACER_HT = 10
+
   private val SLIDER_PROPS = Array(
     new SliderProperties(K_SLIDER, 0, 0.3, GrayScottModel.K0, 1000),
     new SliderProperties(F_SLIDER, 0, 0.3, GrayScottModel.F0, 1000),
@@ -39,24 +44,35 @@ object RDDynamicOptions {
     new SliderProperties(NS_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),
     new SliderProperties(TIMESTEP_SLIDER, 0.1, 2.0, RDSimulator.INITIAL_TIME_STEP, 100)
   )
+
+  private val BRUSH_SLIDER_PROPS = Array(
+    new SliderProperties(BRUSH_RADIUS_SLIDER, 1, 20, GrayScottModel.DEFAULT_BRUSH_RADIUS),
+    new SliderProperties(BRUSH_STRENGTH_SLIDER, 0.1, 1.0, GrayScottModel.DEFAULT_BRUSH_STRENGTH, 100)
+  )
 }
 
 class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, var simulator: RDSimulator)
   extends JPanel with ActionListener with SliderGroupChangeListener {
+
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
+
   private var sliderGroup  = new SliderGroup(RDDynamicOptions.SLIDER_PROPS)
   sliderGroup.addSliderChangeListener(this)
+
   val checkBoxes: JPanel = createCheckBoxes
   val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
   add(sliderGroup)
-  add(Box.createVerticalStrut(10))
+
+  add(Box.createVerticalStrut(SPACER_HT))
+  add(createBrushControls)
+  add(Box.createVerticalStrut(SPACER_HT))
   add(checkBoxes)
-  add(Box.createVerticalStrut(10))
+  add(Box.createVerticalStrut(SPACER_HT))
   add(legend)
   val fill = new JPanel
-  fill.setPreferredSize(new Dimension(10, 1000))
+  fill.setPreferredSize(new Dimension(SPACER_HT, 1000))
   add(fill)
   private var showU: JCheckBox = _
   private var showV: JCheckBox = _
@@ -70,9 +86,15 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     showU.addActionListener(this)
     showV = new JCheckBox("V Value", renderingOptions.isShowingV)
     showV.addActionListener(this)
-    useComputeConcurrency = createCheckBox("Parallel calculation", "Take advantage of multiple processors for RD calculation if checked.", gs.isParallelized)
-    useRenderingConcurrency = createCheckBox("Parallel rendering", "Take advantage of multiple processors for rendering if checked.", renderingOptions.isParallelized)
-    useFixedSize = createCheckBox("Fixed Size", "Use just a small fixed size area for rendering rather than the whole resizable area.", simulator.getUseFixedSize)
+    useComputeConcurrency = createCheckBox("Parallel calculation",
+      "Take advantage of multiple processors for RD calculation if checked.",
+      gs.isParallelized)
+    useRenderingConcurrency = createCheckBox("Parallel rendering",
+      "Take advantage of multiple processors for rendering if checked.",
+      renderingOptions.isParallelized)
+    useFixedSize = createCheckBox("Fixed Size",
+      "Use just a small fixed size area for rendering rather than the whole resizable area.",
+      simulator.getUseFixedSize)
     val checkBoxes = new JPanel(new GridLayout(0, 2))
     checkBoxes.add(showU)
     checkBoxes.add(showV)
@@ -83,6 +105,21 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     checkBoxes
   }
 
+  private def createBrushControls = {
+    val panel = new JPanel(new BorderLayout)
+    panel.setBorder(createTitledBorder("Brush Parameters (left: add U; right: add V)"))
+    val brushSliderGroup = new SliderGroup(BRUSH_SLIDER_PROPS)
+    brushSliderGroup.addSliderChangeListener(this)
+    panel.add(brushSliderGroup, BorderLayout.CENTER)
+    panel
+  }
+
+  private def createTitledBorder(title: String) =
+    BorderFactory.createCompoundBorder(
+      BorderFactory.createTitledBorder(title),
+      BorderFactory.createEmptyBorder(5, 5, 5, 5)
+    )
+
   private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
     val cb = new JCheckBox(label, initiallyChecked)
     cb.setToolTipText(tooltip)
@@ -90,7 +127,9 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     cb
   }
 
-  def reset() { sliderGroup.reset() }
+  def reset() {
+    sliderGroup.reset()
+  }
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent) {
@@ -114,15 +153,17 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double) {
     sliderName match {
-      case RDDynamicOptions.F_SLIDER => gs.getModel.setF(value)
-      case RDDynamicOptions.K_SLIDER => gs.getModel.setK(value)
-      case RDDynamicOptions.H_SLIDER => gs.setH(value)
-      case RDDynamicOptions.BH_SLIDER =>
+      case F_SLIDER => gs.getModel.setF(value)
+      case K_SLIDER => gs.getModel.setK(value)
+      case H_SLIDER => gs.setH(value)
+      case BH_SLIDER =>
         simulator.getRenderingOptions.setHeightScale(value)
-        sliderGroup.setEnabled(RDDynamicOptions.SH_SLIDER, value > 0)
-      case RDDynamicOptions.SH_SLIDER => simulator.getRenderingOptions.setSpecular(value)
-      case RDDynamicOptions.NS_SLIDER => simulator.setNumStepsPerFrame(value.toInt)
-      case RDDynamicOptions.TIMESTEP_SLIDER => simulator.setTimeStep(value)
+        sliderGroup.setEnabled(SH_SLIDER, value > 0)
+      case SH_SLIDER => simulator.getRenderingOptions.setSpecular(value)
+      case NS_SLIDER => simulator.setNumStepsPerFrame(value.toInt)
+      case TIMESTEP_SLIDER => simulator.setTimeStep(value)
+      case BRUSH_RADIUS_SLIDER => simulator.getInteractionHandler.setBrushRadius(value.toInt)
+      case BRUSH_STRENGTH_SLIDER => simulator.getInteractionHandler.setBrushStrength(value)
     }
   }
 }

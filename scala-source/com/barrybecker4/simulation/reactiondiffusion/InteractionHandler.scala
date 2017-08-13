@@ -1,7 +1,8 @@
-// Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.reactiondiffusion
 
 import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
+
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import InteractionHandler.SQRT2
 
@@ -19,8 +20,8 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
 
   private var currentX = 0
   private var currentY = 0
-  private var brushRadius = 1 // CaveModel.DEFAULT_BRUSH_RADIUS
-  private var brushStrength = 1.0 // CaveModel.DEFAULT_BRUSH_STRENGTH
+  private var brushRadius = GrayScottModel.DEFAULT_BRUSH_RADIUS
+  private var brushStrength = GrayScottModel.DEFAULT_BRUSH_STRENGTH
   private var lastX = 0
   private var lastY = 0
   private var mouse1Down = false
@@ -44,18 +45,16 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
     val startX = Math.max(1, i - brushRadius)
-    val stopX = Math.min(model.getWidth, i + brushRadius)
+    val stopX = Math.min(model.getWidth - 1, i + brushRadius)
     val startY = Math.max(1, j - brushRadius)
-    val stopY = Math.min(model.getHeight, j + brushRadius)
+    val stopY = Math.min(model.getHeight - 1, j + brushRadius)
     // adjust by this so that there is not a discontinuity at the periphery
     val minWt = 0.9 / (SQRT2 * brushRadius )
-    for (ii <- startX to stopX) {
+    for (ii <- startX to stopX)
       for (jj <- startY to stopY) {
         val weight = getWeight(i, j, ii, jj, minWt)
         applyChange(ii, jj, weight)
       }
-    }
-    println()
   }
 
   /** @return the weight is 1 / distance. */
@@ -70,13 +69,10 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   /** Make waves or adds ink depending on which mouse key is being held down. */
   private def applyChange(i: Int, j: Int, weight: Double) = {
     val amountToAdd = brushStrength * weight
-    println("m1 = " + mouse1Down + " m3 = " + mouse3Down + " amountToAdd " + amountToAdd + " at " + i + " " + j + " curY=" + model.u(i)(j) + " curV=" + model.v(i)(j))
+    //println("m1 = " + mouse1Down + " m3 = " + mouse3Down + " amountToAdd " + amountToAdd + " at " + i + " " + j + " curY=" + model.u(i)(j) + " curV=" + model.v(i)(j))
     // if the left mouse is down, make waves
-    if (mouse1Down)
-      model.u(i)(j) += amountToAdd //incrementHeight(i, j, sign * brushStrength * weight)
-    else if (mouse3Down)
-      model.v(i)(j) += amountToAdd
-    else {} // drag with no mouse click
+    if (mouse1Down) model.u(i)(j) += amountToAdd
+    else if (mouse3Down) model.v(i)(j) += amountToAdd
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {

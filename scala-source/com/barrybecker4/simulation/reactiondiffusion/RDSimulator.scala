@@ -54,10 +54,12 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     grayScott = new GrayScottController(1, 1)
     setNumStepsPerFrame(RDSimulator.DEFAULT_STEPS_PER_FRAME)
     viewer = new RDViewer(grayScott, this)
-    val handler = new InteractionHandler(grayScott.model, 1)
+    handler = new InteractionHandler(grayScott.model, 1)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }
+
+  def getInteractionHandler: InteractionHandler = handler
 
   override protected def reset() {
     grayScott.reset()
@@ -65,7 +67,6 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   }
 
   override protected def createOptionsDialog = new RDOptionsDialog(frame, this)
-
   override protected def getInitialTimeStep = RDSimulator.INITIAL_TIME_STEP
 
   override def timeStep: Double = {
@@ -84,9 +85,7 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     RDProfiler.getInstance.stopRenderingTime()
   }
 
-  override def setScale(scale: Double) {
-  }
-
+  override def setScale(scale: Double) {}
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
@@ -95,6 +94,5 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   }
 
   def getColorMap: ColorMap = viewer.getColorMap
-
   def getRenderingOptions: RDRenderingOptions = viewer.getRenderingOptions
 }
