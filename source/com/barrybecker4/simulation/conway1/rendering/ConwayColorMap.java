@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2016. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.conway.rendering;
+package com.barrybecker4.simulation.conway1.rendering;
 
 import com.barrybecker4.common.math.Range;
 import com.barrybecker4.ui.util.ColorMap;

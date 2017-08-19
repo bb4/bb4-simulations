@@ -1,15 +1,15 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.conway.model;
+package com.barrybecker4.simulation.conway1.model;
 
 import com.barrybecker4.simulation.common.Profiler;
-import com.barrybecker4.simulation.conway.rendering.ConwayColorMap;
-import com.barrybecker4.simulation.conway.rendering.ConwayRenderer;
+import com.barrybecker4.simulation.conway1.rendering.ConwayColorMap;
+import com.barrybecker4.simulation.conway1.rendering.ConwayRenderer;
 import com.barrybecker4.ui.util.ColorMap;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-import static com.barrybecker4.simulation.conway.model.ConwayProcessor.*;
+import static com.barrybecker4.simulation.conway1.model.ConwayProcessor.*;
 
 /**
  * Communicates changing dynamic options to ConwayProcessor and controls the rendering.

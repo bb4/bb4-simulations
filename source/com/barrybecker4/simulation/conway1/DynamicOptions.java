@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.conway;
+package com.barrybecker4.simulation.conway1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
-import com.barrybecker4.simulation.conway.model.ConwayModel;
-import com.barrybecker4.simulation.conway.model.ConwayProcessor;
+import com.barrybecker4.simulation.conway1.model.ConwayModel;
+import com.barrybecker4.simulation.conway1.model.ConwayProcessor;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;

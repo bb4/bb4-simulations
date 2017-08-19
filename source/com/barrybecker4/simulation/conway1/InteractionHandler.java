@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.conway;
+package com.barrybecker4.simulation.conway1;
 
-import com.barrybecker4.simulation.conway.model.ConwayModel;
+import com.barrybecker4.simulation.conway1.model.ConwayModel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

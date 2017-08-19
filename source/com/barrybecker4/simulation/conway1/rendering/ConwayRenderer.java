@@ -1,9 +1,8 @@
 // Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.conway.rendering;
+package com.barrybecker4.simulation.conway1.rendering;
 
-import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.geometry.Location;
-import com.barrybecker4.simulation.conway.model.ConwayProcessor;
+import com.barrybecker4.simulation.conway1.model.ConwayProcessor;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 import com.barrybecker4.ui.util.ColorMap;
 

@@ -1,7 +1,7 @@
-package com.barrybecker4.simulation.conway.model.rules;
+package com.barrybecker4.simulation.conway1.model.rules;
 
 import com.barrybecker4.common.geometry.Location;
-import com.barrybecker4.simulation.conway.model.Conway;
+import com.barrybecker4.simulation.conway1.model.Conway;
 
 import java.util.Set;
 

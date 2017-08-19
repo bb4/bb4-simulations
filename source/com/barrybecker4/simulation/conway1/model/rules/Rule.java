@@ -1,6 +1,6 @@
-package com.barrybecker4.simulation.conway.model.rules;
+package com.barrybecker4.simulation.conway1.model.rules;
 
-import com.barrybecker4.simulation.conway.model.Conway;
+import com.barrybecker4.simulation.conway1.model.Conway;
 
 /**
  * All conway game of life rules systems must implement this.

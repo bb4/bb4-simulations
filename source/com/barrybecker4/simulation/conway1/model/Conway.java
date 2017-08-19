@@ -1,4 +1,4 @@
-package com.barrybecker4.simulation.conway.model;
+package com.barrybecker4.simulation.conway1.model;
 
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.geometry.Location;

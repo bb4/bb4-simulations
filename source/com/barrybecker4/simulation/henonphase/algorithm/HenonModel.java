@@ -27,7 +27,7 @@ public class HenonModel  {
     private final List<Traveler> travelers;
 
     /** offline rendering is fast  */
-    private final OfflineGraphics offlineGraphics_;
+    private final OfflineGraphics offlineGraphics;
 
     private ColorMap cmap_;
 
@@ -44,7 +44,7 @@ public class HenonModel  {
         this.cmap_ = cmap;
 
         travelers = new ArrayList<Traveler>(this.numTravelors);
-        offlineGraphics_ = new OfflineGraphics(new Dimension(width, height), Color.BLACK);
+        offlineGraphics = new OfflineGraphics(new Dimension(width, height), Color.BLACK);
     }
 
     public int getWidth() {
@@ -77,7 +77,7 @@ public class HenonModel  {
     }
 
     public BufferedImage getImage() {
-        return offlineGraphics_.getOfflineImage();
+        return offlineGraphics.getOfflineImage();
     }
 
     /**
@@ -87,7 +87,7 @@ public class HenonModel  {
 
         for (final Traveler traveler : travelers) {
 
-            offlineGraphics_.setColor(traveler.getColor());
+            offlineGraphics.setColor(traveler.getColor());
 
             for (int i=0; i< numSteps; i++)   {
                 int xpos = (int)(width * (traveler.getX()/2.0 + 0.5));
@@ -97,10 +97,10 @@ public class HenonModel  {
                     int xposLast = (int)(width * (traveler.getLastX()/2.0 + 0.5));
                     int yposLast = (int)(height * (traveler.getLastY()/2.0 + 0.5));
 
-                    offlineGraphics_.drawLine(xposLast, yposLast, xpos, ypos);
+                    offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos);
                 }
                 else {
-                    offlineGraphics_.drawPoint(xpos, ypos);
+                    offlineGraphics.drawPoint(xpos, ypos);
                 }
 
                 traveler.increment();

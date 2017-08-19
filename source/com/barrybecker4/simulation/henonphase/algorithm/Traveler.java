@@ -33,16 +33,14 @@ public class Traveler {
     public double getX() {return x;}
     public double getY() {return y;}
 
-    public double getLastX() {return lastX;}
-    public double getLastY() {return lastY;}
+    double getLastX() {return lastX;}
+    double getLastY() {return lastY;}
 
     public Color getColor() {
         return color;
     }
 
-    /**
-     * increment forward one iteration
-     */
+    /** increment forward one iteration */
     public void increment() {
 
         lastX = x;
@@ -56,5 +54,4 @@ public class Traveler {
         y = x * sin + term * cos;
         x = temp;
     }
-
 }
