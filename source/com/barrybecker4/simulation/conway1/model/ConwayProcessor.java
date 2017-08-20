@@ -22,8 +22,6 @@ public class ConwayProcessor {
     public static final RuleType DEFAULT_RULE_TYPE = RuleType.TraditionalB3S23;
 
     private Conway conway;
-    /** Manages the worker threads. */
-    //private RunnableParallelizer parallelizer;
 
     /** Constructor that allows you to specify the dimensions of the conway */
     public ConwayProcessor() {

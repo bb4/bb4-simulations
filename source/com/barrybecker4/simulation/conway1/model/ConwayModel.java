@@ -151,8 +151,9 @@ public class ConwayModel {
             doRender();
         }
         else if (nextStepRequested || continuousIteration) {
-            for (int i = 0; i < numStepsPerFrame; i++)
-            processor.nextPhase();
+            for (int i = 0; i < numStepsPerFrame; i++) {
+                processor.nextPhase();
+            }
             numIterations++;
             doRender();
             nextStepRequested = false;
