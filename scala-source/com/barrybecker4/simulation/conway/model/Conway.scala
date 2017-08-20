@@ -51,6 +51,7 @@ class Conway private[model]() {
     candidates
   }
 
+  /** @return the point constrained to the view bouns if wrap is true */
   private def keepInBounds(c: Location): Location =
     if (wrap) new IntLocation((c.getRow + height) % height, (c.getCol + width) % width) else c
 
@@ -69,7 +70,9 @@ class Conway private[model]() {
   def setValue(coord: Location, value: Int) {
     points += coord -> value
   }
-  def getValue(coord: Location): Integer = points(coord)
+  def getValue(coord: Location): Integer = {
+    if (points.contains(coord)) points(coord) else 0
+  }
 
   private def addGlider() = {
     setValue(new IntLocation(10, 10), 1)
@@ -90,4 +93,6 @@ class Conway private[model]() {
       }
     }
   }
+
+  override def toString: String = { "points = " + points.toString }
 }

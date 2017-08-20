@@ -23,8 +23,8 @@ object ConwayProcessor {
   val DEFAULT_RULE_TYPE = RuleType.TraditionalB3S23
 
   def main(args: Array[String]): Unit = {
-    val cave = new ConwayProcessor(DEFAULT_USE_PARALLEL)
-    cave.nextPhase()
+    val proc = new ConwayProcessor(DEFAULT_USE_PARALLEL)
+    proc.nextPhase()
   }
 }
 

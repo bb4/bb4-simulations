@@ -112,7 +112,7 @@ class ConwayModel() {
     }
     else if (nextStepRequested || continuousIteration) {
       for (i <- 0 until numStepsPerFrame) {
-         processor.nextPhase()
+        processor.nextPhase()
       }
       numIterations += 1
       doRender()

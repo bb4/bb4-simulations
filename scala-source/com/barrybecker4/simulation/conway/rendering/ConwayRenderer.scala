@@ -29,7 +29,8 @@ class ConwayRenderer(val width: Double, val height: Double,
   def getImage: BufferedImage = offlineGraphics.getOfflineImage
 
   /** render the live cells on the grid */
-  def render(): Unit = { // if not showing where life has been, clear all first
+  def render(): Unit = synchronized {
+    // if not showing where life has been, clear all first
     if (!showShadows) offlineGraphics.clear()
     for (c <- processor.getPoints) {
       val value = processor.getValue(c)
