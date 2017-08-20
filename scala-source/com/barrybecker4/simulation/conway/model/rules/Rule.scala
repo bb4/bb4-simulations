@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.conway.model.Conway
 
 /**
   * All conway game of life rules systems must implement this.
+  * @author Barry Becker
   */
 trait Rule {
   /**
