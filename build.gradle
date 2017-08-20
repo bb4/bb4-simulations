@@ -143,6 +143,13 @@ task runConwayExplorer(type: JavaExec, description: "Run Conway's game of life s
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runConwayExplorer1(type: JavaExec, description: "Run Conway's game of life simulator (legacy java version)", group: "Run") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.conway1.ConwayExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runLiquid(type: JavaExec, description: "Run liquid simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

@@ -8,6 +8,7 @@ import com.barrybecker4.ui.util.ColorMap
 import javax.swing._
 import java.awt.image.BufferedImage
 import com.barrybecker4.simulation.conway.model.ConwayProcessor._
+import ConwayModel._
 
 
 /**
@@ -26,19 +27,19 @@ object ConwayModel {
 }
 
 class ConwayModel() {
-  reset()
   private var processor: ConwayProcessor = _
   private var renderer: ConwayRenderer = _
-  private var scale = ConwayModel.DEFAULT_SCALE_FACTOR
-  private var numStepsPerFrame = ConwayModel.DEFAULT_NUM_STEPS_PER_FRAME
+  private var scale = DEFAULT_SCALE_FACTOR
+  private var numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME
   private var useParallel = DEFAULT_USE_PARALLEL
   private var numIterations = 0
   private var restartRequested = false
   private var nextStepRequested = false
-  private var continuousIteration = ConwayModel.DEFAULT_USE_CONTINUOUS_ITERATION
-  private var showShadows = ConwayModel.DEFAULT_SHOW_SHADOWS
-  private var wrapGrid = ConwayModel.DEFAULT_WRAP_GRID
+  private var continuousIteration = DEFAULT_USE_CONTINUOUS_ITERATION
+  private var showShadows = DEFAULT_SHOW_SHADOWS
+  private var wrapGrid = DEFAULT_WRAP_GRID
   private val colorMap = new ConwayColorMap
+  reset()
 
   def setSize(width: Int, height: Int): Unit = {
     if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
@@ -46,8 +47,8 @@ class ConwayModel() {
 
   def reset() {
     processor = new ConwayProcessor(useParallel)
-    processor.setWrap(wrapGrid, ConwayModel.DEFAULT_WIDTH / scale, ConwayModel.DEFAULT_HEIGHT / scale)
-    renderer = new ConwayRenderer(ConwayModel.DEFAULT_WIDTH, ConwayModel.DEFAULT_HEIGHT, showShadows, scale, processor, colorMap)
+    processor.setWrap(wrapGrid, DEFAULT_WIDTH / scale, DEFAULT_HEIGHT / scale)
+    renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, showShadows, scale, processor, colorMap)
   }
 
   def getWidth: Int = renderer.getWidth
@@ -65,17 +66,12 @@ class ConwayModel() {
 
   def getScale: Double = this.scale
   def setWrapGrid(wrap: Boolean) { this.wrapGrid = wrap }
+  def setShowShadows(showShadows: Boolean) { this.showShadows = showShadows }
+  def setNumStepsPerFrame(steps: Int) { this.numStepsPerFrame = steps }
+  def getColormap: ColorMap = colorMap
 
   def setRuleType(ruleType: RuleType.RuleType) {
     processor.setRuleType(ruleType)
-  }
-
-  def setShowShadows(showShadows: Boolean) {
-    this.showShadows = showShadows
-  }
-
-  def setNumStepsPerFrame(steps: Int) {
-    this.numStepsPerFrame = steps
   }
 
   def setUseParallelComputation(use: Boolean) {
@@ -83,16 +79,12 @@ class ConwayModel() {
     processor.setUseParallel(use)
   }
 
-  def getColormap: ColorMap = colorMap
-
-  def requestRestart() {
-    requestRestart(renderer.getWidth, renderer.getHeight)
-  }
-
-  def requestNextStep() { nextStepRequested = true}
+  def requestRestart() { requestRestart(renderer.getWidth, renderer.getHeight) }
+  def requestNextStep() { nextStepRequested = true }
   def setAlive(i: Int, j: Int) { processor.setAlive(i, j)}
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
+  def doRender() { renderer.render() }
 
   private def requestRestart(width: Int, height: Int) = {
     try { //processor = new ConwayProcessor(useParallel);
@@ -128,6 +120,4 @@ class ConwayModel() {
     }
     false
   }
-
-  def doRender() { renderer.render() }
 }

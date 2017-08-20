@@ -30,12 +30,12 @@ object ConwayProcessor {
 
 class ConwayProcessor private[model](val useParallel: Boolean) {
   private var conway = new Conway
-  conway.initialize()
   setUseParallel(useParallel)
   private var wrapGrid = false
   private var width = -1
   private var height = -1
   private var rule: Rule = new RuleB3S23 // new RuleB34S456Amoeba();
+  conway.initialize()
 
   /** Constructor that allows you to specify the dimensions of the conway */
   def this() {
@@ -68,9 +68,7 @@ class ConwayProcessor private[model](val useParallel: Boolean) {
     conway.setValue(new IntLocation(row, col), 1)
   }
 
-  /**
-    * Compute the next step of the simulation.
-    */
+  /** Compute the next step of the simulation. */
   private[model] def nextPhase() = {
     val newConway = new Conway
     newConway.setWrapping(wrapGrid, width, height)

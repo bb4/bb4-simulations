@@ -30,7 +30,7 @@ class DynamicOptions extends JPanel
     private JButton nextButton;
     private Choice ruleChoice;
 
-    private static final String NUM_STEPS_PER_FRAME_SLIDER = "Mum steps per frame";
+    private static final String NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame";
     private static final String SCALE_SLIDER = "Scale";
     private static final double PI_D2 = Math.PI / 2.0;
     private static final int PREFERRED_WIDTH = 300;

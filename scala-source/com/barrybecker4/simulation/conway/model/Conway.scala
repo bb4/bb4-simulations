@@ -3,15 +3,12 @@ package com.barrybecker4.simulation.conway.model
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.geometry.Location
-import java.util.concurrent.ConcurrentHashMap
-
 import scala.collection.immutable.Set
 import scala.util.Random
 
 
 /**
-  * The data for points in the conway life simulation
-  *
+  * The data for points in the conway life simulation.
   * @author Barry Becker
   */
 object Conway {
@@ -27,10 +24,10 @@ object Conway {
   )
 }
 
+/** Since its on an infinite grid. Only store the grid locations where there his life. */
 class Conway private[model]() {
-  private var points = Map[Location, Integer]()
 
-  /** Since its on an infinite grid. Only store the grid locations where there his life. */
+  private var points = Map[Location, Integer]()
   private var wrap = false
   private var width = -1
   private var height = -1
@@ -41,9 +38,7 @@ class Conway private[model]() {
     this.height = height
   }
 
-  def initialize(): Unit = { //genMap(100, 100);
-    addGlider()
-  }
+  def initialize() { addGlider() }
 
   def getCandidates: Set[Location] = {
     var candidates = Set[Location]()
@@ -71,10 +66,9 @@ class Conway private[model]() {
     numNbrs
   }
 
-  def setValue(coord: Location, value: Int): Unit = {
-    points += coord ->value
+  def setValue(coord: Location, value: Int) {
+    points += coord -> value
   }
-
   def getValue(coord: Location): Integer = points(coord)
 
   private def addGlider() = {
@@ -85,7 +79,7 @@ class Conway private[model]() {
     setValue(new IntLocation(9, 12), 1)
   }
 
-  /** generate the initial random 2D data */
+  /** generate some initial random 2D data */
   private def genMap(width: Int, length: Int) = {
     val RAND = new Random(1)
     points = Map[Location, Integer]()
