@@ -6,6 +6,7 @@ import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.conway.model.rules._
 import ConwayProcessor.RuleType.RuleType
 import ConwayProcessor.RuleType.{SwarmB356S23, TraditionalB3S23, AmoebaB34S456, HighlifeB36S23}
+import ConwayProcessor._
 
 
 /**
@@ -13,7 +14,7 @@ import ConwayProcessor.RuleType.{SwarmB356S23, TraditionalB3S23, AmoebaB34S456, 
   */
 object ConwayProcessor {
 
-  val DEFAULT_USE_PARALLEL = true
+  val DEFAULT_USE_PARALLEL = false
 
   object RuleType extends Enumeration {
     type RuleType = Value
@@ -28,9 +29,8 @@ object ConwayProcessor {
   }
 }
 
-class ConwayProcessor private[model](val useParallel: Boolean) {
+class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARALLEL) {
   private var conway = new Conway
-  setUseParallel(useParallel)
   private var wrapGrid = false
   private var width = -1
   private var height = -1
@@ -57,11 +57,6 @@ class ConwayProcessor private[model](val useParallel: Boolean) {
     }
   }
 
-  private[model] def setUseParallel(parallelized: Boolean) = {
-    //parallelizer =
-    //     parallelized ? new RunnableParallelizer() : new RunnableParallelizer(1);
-  }
-
   def getPoints: Set[Location] = conway.getPoints
 
   private[model] def setAlive(row: Int, col: Int) = {
@@ -72,7 +67,7 @@ class ConwayProcessor private[model](val useParallel: Boolean) {
   private[model] def nextPhase() = {
     val newConway = new Conway
     newConway.setWrapping(wrapGrid, width, height)
-    conway = rule.applyRule(conway, newConway)
+    conway = rule.applyRule(conway, newConway, useParallel)
   }
 
   def getValue(c: Location): Integer = conway.getValue(c)

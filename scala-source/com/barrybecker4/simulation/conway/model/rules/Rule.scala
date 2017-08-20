@@ -12,17 +12,19 @@ import com.barrybecker4.simulation.conway.model.Conway
 trait Rule {
 
   /**
-    * For each live point in the old conway, determine if there is a new point.
+    * For each live point in the old conway, determine if there is a new point in newConway.
     * first create a big set of all the points that must be examined (this includes empty nbrs of live points)
     *
     * @return the new conway set with points either added or removed according to some set of rules.
     */
-  def applyRule(conway: Conway, newConway: Conway): Conway = {
+  def applyRule(conway: Conway, newConway: Conway, parallel: Boolean): Conway = synchronized {
     val candidates = conway.getCandidates
+
     // Loop through all the candidates, apply the life-rule, and update the new grid appropriately.
-    for (c <- candidates) {
-      applyRuleToCandidate(c, conway, newConway)
-    }
+    if (parallel)
+      candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway)) // not working for some reason. Why?
+    else candidates.foreach(c => applyRuleToCandidate(c, conway, newConway))
+
     newConway
   }
 

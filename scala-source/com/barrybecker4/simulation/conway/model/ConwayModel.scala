@@ -76,7 +76,7 @@ class ConwayModel() {
 
   def setUseParallelComputation(use: Boolean) {
     useParallel = use
-    processor.setUseParallel(use)
+    processor.useParallel = use
   }
 
   def requestRestart() { requestRestart(renderer.getWidth, renderer.getHeight) }
@@ -87,7 +87,7 @@ class ConwayModel() {
   def doRender() { renderer.render() }
 
   private def requestRestart(width: Int, height: Int) = {
-    try { //processor = new ConwayProcessor(useParallel);
+    try {
       numIterations = 0
       processor.setWrap(wrapGrid, width / scale, height / scale)
       renderer = new ConwayRenderer(width, height, showShadows, scale, processor, colorMap)
