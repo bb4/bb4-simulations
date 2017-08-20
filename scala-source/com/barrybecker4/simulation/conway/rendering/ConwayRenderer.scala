@@ -31,6 +31,7 @@ class ConwayRenderer(val width: Double, val height: Double,
   /** render the live cells on the grid */
   def render(): Unit = synchronized {
     // if not showing where life has been, clear all first
+    // Consider double buffering to avoid flicker during interaction
     if (!showShadows) offlineGraphics.clear()
     for (c <- processor.getPoints) {
       val value = processor.getValue(c)
