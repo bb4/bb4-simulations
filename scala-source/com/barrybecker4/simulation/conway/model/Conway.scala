@@ -67,7 +67,8 @@ class Conway private[model]() {
     numNbrs
   }
 
-  def setValue(coord: Location, value: Int) {
+  /** Needs to be synchronized when doing parallel computation to avoid missed writes */
+  def setValue(coord: Location, value: Int): Unit = synchronized {
     points += coord -> value
   }
   def getValue(coord: Location): Integer = {
