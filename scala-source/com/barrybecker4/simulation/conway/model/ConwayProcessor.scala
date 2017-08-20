@@ -73,18 +73,6 @@ class ConwayProcessor private[model](val useParallel: Boolean) {
     val newConway = new Conway
     newConway.setWrapping(wrapGrid, width, height)
     conway = rule.applyRule(conway, newConway)
-    /*
-            int numThreads = parallelizer.getNumThreads();
-            List<Runnable> workers = new ArrayList<>(numThreads + 1);
-            int range = conway.getNumPoints() / numThreads;
-            for (int i = 0; i < numThreads; i++) {
-                int offset = i * range;
-                workers.add(new Worker(offset, offset + range, newConway));
-            }
-
-            // blocks until all Callables are done running.
-            parallelizer.invokeAllRunnables(workers);
-            */
   }
 
   def getValue(c: Location): Integer = conway.getValue(c)

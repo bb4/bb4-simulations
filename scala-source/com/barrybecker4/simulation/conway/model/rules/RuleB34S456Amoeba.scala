@@ -8,7 +8,7 @@ import com.barrybecker4.simulation.conway.model.Conway
 /**
   * Grows like an amoeba
   */
-class RuleB34S456Amoeba extends AbstractRule {
+class RuleB34S456Amoeba extends Rule {
   override private[rules] def applyRuleToCandidate(c: Location, conway: Conway, newConway: Conway) = {
     val numNbrs = conway.getNumNeighbors(c)
     val isAlive = conway.isAlive(c)

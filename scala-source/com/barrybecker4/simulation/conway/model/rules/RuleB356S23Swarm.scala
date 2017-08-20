@@ -7,7 +7,7 @@ import com.barrybecker4.simulation.conway.model.Conway
 /**
   * Swarms rule
   */
-class RuleB356S23Swarm extends AbstractRule {
+class RuleB356S23Swarm extends Rule {
   override private[rules] def applyRuleToCandidate(c: Location, conway: Conway, newConway: Conway) = {
     val numNbrs = conway.getNumNeighbors(c)
     val isAlive = conway.isAlive(c)
