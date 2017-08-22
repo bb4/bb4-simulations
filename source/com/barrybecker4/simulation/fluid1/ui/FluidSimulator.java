@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.ui;
+package com.barrybecker4.simulation.fluid1.ui;
 
 import com.barrybecker4.common.util.FileUtil;
 import com.barrybecker4.optimization.Optimizer;
@@ -10,9 +10,9 @@ import com.barrybecker4.optimization.strategy.OptimizationStrategyType;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.fluid.model.FluidEnvironment;
-import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer;
-import com.barrybecker4.simulation.fluid.rendering.RenderingOptions;
+import com.barrybecker4.simulation.fluid1.model.FluidEnvironment;
+import com.barrybecker4.simulation.fluid1.rendering.EnvironmentRenderer;
+import com.barrybecker4.simulation.fluid1.rendering.RenderingOptions;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;

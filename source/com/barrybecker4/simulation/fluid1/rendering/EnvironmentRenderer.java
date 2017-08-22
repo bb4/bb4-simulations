@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.rendering;
+package com.barrybecker4.simulation.fluid1.rendering;
 
 import com.barrybecker4.simulation.common.rendering.ModelImage;
-import com.barrybecker4.simulation.fluid.model.Grid;
+import com.barrybecker4.simulation.fluid1.model.Grid;
 import com.barrybecker4.ui.util.ColorMap;
 
 import java.awt.Color;

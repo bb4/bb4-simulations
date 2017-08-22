@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.ui;
+package com.barrybecker4.simulation.fluid1.ui;
 
-import com.barrybecker4.simulation.fluid.model.Grid;
+import com.barrybecker4.simulation.fluid1.model.Grid;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

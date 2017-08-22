@@ -1,7 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.model;
+package com.barrybecker4.simulation.fluid1.model;
 
 import com.barrybecker4.simulation.common.RectangularModel;
+import com.barrybecker4.simulation.fluid.model.CellGrid;
 
 /**
  * Data behind the Fluid.
@@ -12,8 +13,8 @@ public class Grid implements RectangularModel {
     private int dimX;
     private int dimY;
 
-    private CellGrid grid0;
-    private CellGrid grid1;
+    private com.barrybecker4.simulation.fluid.model.CellGrid grid0;
+    private com.barrybecker4.simulation.fluid.model.CellGrid grid1;
 
     /**
      * Creates a new instance of Grid
@@ -23,8 +24,8 @@ public class Grid implements RectangularModel {
         this.dimX = dimX;
         this.dimY = dimY;
 
-        grid0 = new CellGrid(dimX, dimY);
-        grid1 = new CellGrid(dimX, dimY);
+        grid0 = new com.barrybecker4.simulation.fluid.model.CellGrid(dimX, dimY);
+        grid1 = new com.barrybecker4.simulation.fluid.model.CellGrid(dimX, dimY);
 
         grid1.addInitialInkDensity();
     }
@@ -37,7 +38,7 @@ public class Grid implements RectangularModel {
         return dimY;
     }
 
-    CellGrid getGrid0() {
+    com.barrybecker4.simulation.fluid.model.CellGrid getGrid0() {
         return grid0;
     }
 

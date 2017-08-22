@@ -50,6 +50,13 @@ task runFluid(type: JavaExec, description: "Run fluid dynamics simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runFluid1(type: JavaExec, description: "Run fluid dynamics simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.fluid1.ui.FluidSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runSnake(type: JavaExec, description: "Run snake movement simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

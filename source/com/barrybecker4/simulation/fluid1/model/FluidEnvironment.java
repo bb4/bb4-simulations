@@ -1,7 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fluid.model;
+package com.barrybecker4.simulation.fluid1.model;
 
 import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.simulation.fluid.model.CellGrid;
 
 /**
  *  This is the global space containing all the cells, walls, and fluid
@@ -88,7 +89,7 @@ public class FluidEnvironment {
 
         //addSource( u, dt );
         //addSource( v, dt );
-        CellGrid g0 = grid.getGrid0();
+        com.barrybecker4.simulation.fluid.model.CellGrid g0 = grid.getGrid0();
         CellGrid g1 = grid.getGrid1();
 
         grid.swap(CellProperty.U);
