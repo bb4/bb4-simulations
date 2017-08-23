@@ -145,9 +145,7 @@ public class FluidEnvironment {
         linearSolve(bound, grid.getGrid1().getProperty(prop), grid.getGrid0().getProperty(prop), a, 1 + 4 * a);
     }
 
-    /**
-     * Advect the fluid in the field.
-     */
+    /** Advect the fluid in the field. */
     private void advect( Boundary bound, CellProperty prop, double[][] u, double[][] v, double dt )  {
 
         int width = grid.getWidth();

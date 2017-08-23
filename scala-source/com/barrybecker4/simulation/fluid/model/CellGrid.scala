@@ -10,8 +10,9 @@ import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
   * @author Barry Becker
   */
 class CellGrid(var dimX: Int, var dimY: Int) {
-  var u: Array[Array[Double]] = Array.ofDim[Double](dimX + 2, dimY + 2)
-  var v: Array[Array[Double]] = Array.ofDim[Double](dimX + 2, dimY + 2)
+  type TwoDArray = Array[Array[Double]]
+  var u: TwoDArray = Array.ofDim[Double](dimX + 2, dimY + 2)
+  var v: TwoDArray = Array.ofDim[Double](dimX + 2, dimY + 2)
   private[model] var density = Array.ofDim[Double](dimX + 2, dimY + 2)
 
   addInitialInkDensity()

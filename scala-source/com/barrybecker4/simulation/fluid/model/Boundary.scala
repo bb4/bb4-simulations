@@ -1,6 +1,4 @@
-/*
- * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.model
 
 /**
@@ -8,8 +6,7 @@ package com.barrybecker4.simulation.fluid.model
   */
 object Boundary extends Enumeration {
   type Boundary = Value
-  val
 
   /** negates on neither the vertical or horizontal boundary */
-  NEITHER, HORIZONTAL, VERTICAL = Value
+  val NEITHER, HORIZONTAL, VERTICAL = Value
 }
