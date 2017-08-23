@@ -39,7 +39,7 @@ public class InteractionHandler implements MouseListener, MouseMotionListener {
         force_ = force;
     }
 
-    public void setSourceDensity(double sourceDensity) {
+    void setSourceDensity(double sourceDensity) {
         sourceDensity_ = sourceDensity;
     }
 

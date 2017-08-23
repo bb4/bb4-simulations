@@ -1,21 +1,20 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.model
 
-import com.barrybecker4.simulation.fluid1.model
-import com.barrybecker4.simulation.fluid1.model.CellProperty
+import com.barrybecker4.simulation.fluid.model
+import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
 
-//import CellProperty._
 
 /**
   * Data behind the Fluid.
   * @author Barry Becker
   */
 class CellGrid(var dimX: Int, var dimY: Int) {
-  var u = Array.ofDim[Double](dimX + 2, dimY + 2)
-  var v = Array.ofDim[Double](dimX + 2, dimY + 2)
+  var u: Array[Array[Double]] = Array.ofDim[Double](dimX + 2, dimY + 2)
+  var v: Array[Array[Double]] = Array.ofDim[Double](dimX + 2, dimY + 2)
   private[model] var density = Array.ofDim[Double](dimX + 2, dimY + 2)
-  addInitialInkDensity()
 
+  addInitialInkDensity()
 
   def getProperty(prop: CellProperty): Array[Array[Double]] = {
     prop match {
@@ -42,5 +41,4 @@ class CellGrid(var dimX: Int, var dimY: Int) {
       }
     }
   }
-
 }
