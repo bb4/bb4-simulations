@@ -50,7 +50,7 @@ class Grid(var dimX: Int, var dimY: Int) extends RectangularModel {
       x(i)(dimY + 1) = if (boundary eq Boundary.HORIZONTAL) -x(i)(dimY)
       else x(i)(dimY)
     }
-    for (i <- dimY) {
+    for (i <- 1 to dimY) {
       x(0)(i) = if (boundary eq Boundary.VERTICAL) -x(1)(i)
       else x(1)(i)
       x(dimX + 1)(i) = if (boundary eq Boundary.VERTICAL) -x(dimX)(i)
