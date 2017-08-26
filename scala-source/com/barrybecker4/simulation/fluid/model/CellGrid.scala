@@ -10,14 +10,14 @@ import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
   * @author Barry Becker
   */
 class CellGrid(var dimX: Int, var dimY: Int) {
-  type TwoDArray = Array[Array[Double]]
+
   var u: TwoDArray = Array.ofDim[Double](dimX + 2, dimY + 2)
   var v: TwoDArray = Array.ofDim[Double](dimX + 2, dimY + 2)
   private[model] var density = Array.ofDim[Double](dimX + 2, dimY + 2)
 
   addInitialInkDensity()
 
-  def getProperty(prop: CellProperty): Array[Array[Double]] = {
+  def getProperty(prop: CellProperty): TwoDArray = {
     prop match {
       case model.CellProperty.U => u
       case model.CellProperty.V => v
@@ -25,7 +25,7 @@ class CellGrid(var dimX: Int, var dimY: Int) {
     }
   }
 
-  def setProperty(prop: CellProperty, values: Array[Array[Double]]): Unit = {
+  def setProperty(prop: CellProperty, values: TwoDArray): Unit = {
     prop match {
       case model.CellProperty.U => u = values
       case model.CellProperty.V => v = values

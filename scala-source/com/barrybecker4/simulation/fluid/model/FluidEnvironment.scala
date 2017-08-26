@@ -21,7 +21,6 @@ object FluidEnvironment {
 
 class FluidEnvironment(val dimX: Int, val dimY: Int) {
 
-  type TwoDArray = Array[Array[Double]]
   private var grid = new Grid(dimX, dimY)
 
   /** the cells that the liquid will flow through. Contains two CellGrids for 2 steps - current and last. */

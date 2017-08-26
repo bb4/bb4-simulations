@@ -43,7 +43,7 @@ class Grid(var dimX: Int, var dimY: Int) extends RectangularModel {
   def incrementDensity(i: Int, j: Int, value: Double) { grid0.density(i)(j) += value }
 
   /** Set a boundary to contain the liquid. */
-  def setBoundary(boundary: Boundary, x: Array[Array[Double]]): Unit = {
+  def setBoundary(boundary: Boundary, x: TwoDArray): Unit = {
     for (i <- 1 to dimX) {
       x(i)(0) = if (boundary eq Boundary.HORIZONTAL) -x(i)(1)
       else x(i)(1)
