@@ -11,86 +11,86 @@ package com.barrybecker4.simulation.liquid1.model;
  */
 public class CellVelocity {
 
-    /** uip_ = u(i+0.5, j, k) */
-    private final double[] uip_ = new double[2];
+    /** uip = u(i+0.5, j, k) */
+    private final double[] uip = new double[2];
 
-    /** vjp_ = v(i, j+0.5, k) */
-    private final double[] vjp_ = new double[2];
+    /** vjp = v(i, j+0.5, k) */
+    private final double[] vjp = new double[2];
 
     /** use this to switch between current and last copies of fields. (hack) */
-    private int current_;
+    private int current;
 
     /**
      * Constructor
      */
     CellVelocity()  {
-        uip_[0] = uip_[1] = 0;
-        vjp_[0] = vjp_[1] = 0;
+        uip[0] = uip[1] = 0;
+        vjp[0] = vjp[1] = 0;
     }
 
     /**
      *  global swap of fields (use with care). (hack)
      */
     public void step()  {
-        current_ = 1 - current_;
+        current = 1 - current;
     }
 
     void passThrough() {
-        uip_[1 - current_] = uip_[current_]; // + dt * forceX;
-        vjp_[1 - current_] = vjp_[current_]; // + dt * forceY;
+        uip[1 - current] = uip[current]; // + dt * forceX;
+        vjp[1 - current] = vjp[current]; // + dt * forceY;
     }
 
     void initializeU(double u) {
-        uip_[0] = u;
-        uip_[1] = u;
+        uip[0] = u;
+        uip[1] = u;
     }
     void initializeV(double v) {
-        vjp_[0] = v;
-        vjp_[1] = v;
+        vjp[0] = v;
+        vjp[1] = v;
     }
 
     public double getU() {
-        return uip_[current_];
+        return uip[current];
     }
     public double getV() {
-        return vjp_[current_];
+        return vjp[current];
     }
 
-    public void setCurrentU(double u) {
-        uip_[current_] = u;
+    void setCurrentU(double u) {
+        uip[current] = u;
     }
 
-    public void setCurrentV(double v) {
-        vjp_[current_] = v;
+    void setCurrentV(double v) {
+        vjp[current] = v;
     }
 
-    public void setNewU(double newu) {
-        uip_[1 - current_] = newu;
+    void setNewU(double newu) {
+        uip[1 - current] = newu;
     }
 
-    public void setNewV(double newv) {
-        vjp_[1 - current_] = newv;
+    void setNewV(double newv) {
+        vjp[1 - current] = newv;
     }
 
-    public void incrementU(double inc) {
-        uip_[current_] += inc;
+    void incrementU(double inc) {
+        uip[current] += inc;
     }
 
-    public void incrementV(double inc) {
-        vjp_[current_] += inc;
+    void incrementV(double inc) {
+        vjp[current] += inc;
     }
 
     public void initialize(double u, double v) {
-        uip_[0] = u;
-        uip_[1] = u;
-        vjp_[0] = v;
-        vjp_[1] = v;
+        uip[0] = u;
+        uip[1] = u;
+        vjp[0] = v;
+        vjp[1] = v;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("velocity=(");
-        sb.append(uip_[current_]).append(", ").append(vjp_[current_]).append(")");
+        sb.append(uip[current]).append(", ").append(vjp[current]).append(")");
         return sb.toString();
     }
 }

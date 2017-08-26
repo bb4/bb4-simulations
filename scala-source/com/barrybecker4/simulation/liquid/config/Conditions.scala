@@ -7,17 +7,13 @@ import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.common.xml.DomUtil
 import org.w3c.dom.Document
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import javax.vecmath.Vector2d
 import java.net.URL
-
-import com.barrybecker4.simulation.liquid1.config.{ConfigurationEnum, Region, Source, Wall}
 
 
 /**
   * Configuration constraints and initial conditions to use while running the simulation.
   * Loaded from a config file.
-  *
   * @author Barry Becker
   */
 object Conditions {
@@ -30,7 +26,7 @@ object Conditions {
   */
 class Conditions(val configFile: String) { // use a default if null passed in.
   private var walls: Seq[Wall] = _
-  val file: String = if (configFile == null) ConfigurationEnum.BASIC.getFileName else configFile
+  val file: String = if (configFile == null) BASIC.fileName else configFile
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
   DomUtil.printTree(document, 0)

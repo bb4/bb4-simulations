@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.liquid.config.ConfigurationEnum.FILE_BASE
   * Different configurations to choose from.
   * @author Bary Becker
   */
-
 object ConfigurationEnum {
   val FILE_BASE = "com/barrybecker4/simulation/liquid1/data/"
   val DEFAULT_VALUE = PULSE_LARGE

@@ -1,0 +1,50 @@
+<!--
+# DTD for defining a liquid environment
+# if you change this doc, you must also update it on http://barrybecker4.com/schema
+#
+# @author Barry Becker  1/2009
+-->
+
+<!ELEMENT environment     (walls?, liquid?) >
+<!ELEMENT walls    (wall)* >
+<!ELEMENT wall    EMPTY>
+<!ELEMENT liquid    (source | sink | region)* >
+<!ELEMENT source    EMPTY>
+<!ELEMENT sink        EMPTY>
+<!ELEMENT region    EMPTY>
+
+
+<!-- The grid dimensions define the space within external walls.
+       So actual dimensions are [1,1] to [gridWidth, gridHeight] -->
+<!-- gravity is in m/seconds ^2 -->
+<!ATTLIST environment
+    date        CDATA      #IMPLIED
+    author      NMTOKENS   #IMPLIED  
+    gridWidth       CDATA    #REQUIRED
+    gridHeight      CDATA    #REQUIRED
+    cellSize    CDATA    #REQUIRED 
+    gravity     CDATA    #REQUIRED
+>
+
+<!ATTLIST wall
+    start           CDATA    #REQUIRED
+    stop           CDATA    #IMPLIED
+>
+
+<!ATTLIST source
+    start             CDATA    #REQUIRED
+    stop             CDATA    #IMPLIED
+    velocity         CDATA    #REQUIRED
+    startTime       CDATA   #IMPLIED
+    duration          CDATA   #IMPLIED
+    repeatInterval  CDATA   #IMPLIED
+>
+<!ATTLIST sink
+    start           CDATA    #REQUIRED
+    stop           CDATA    #IMPLIED
+>
+<!ATTLIST region
+    start           CDATA    #REQUIRED
+    stop           CDATA    #IMPLIED
+>
+
