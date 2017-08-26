@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.fluid.rendering
 
 import com.barrybecker4.simulation.common.rendering.ModelImage
-import com.barrybecker4.simulation.fluid1.model.Grid
+import com.barrybecker4.simulation.fluid.model.Grid
 import java.awt.Color
 import java.awt.Graphics2D
 

@@ -21,9 +21,8 @@ import java.awt.event.ActionListener;
 public class FluidDynamicOptions extends JPanel
                               implements ActionListener, SliderGroupChangeListener {
 
-    private FluidSimulator simulator_;
+    private FluidSimulator simulator;
 
-    private JCheckBox useConcurrentCalculation_;
     private JCheckBox useConcurrentRendering;
     private JCheckBox useLinearInterpolation;
     private JCheckBox showVelocities;
@@ -61,7 +60,7 @@ public class FluidDynamicOptions extends JPanel
         controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
         this.add(controlsPanel, BorderLayout.CENTER);
 
-        simulator_ = simulator;
+        this.simulator = simulator;
 
         sliderGroup = new SliderGroup(SLIDER_PROPS);
         sliderGroup.addSliderChangeListener(this);
@@ -69,23 +68,20 @@ public class FluidDynamicOptions extends JPanel
 
         JPanel checkBoxes = createCheckBoxes();
 
-        ContinuousColorLegend legend_ = new ContinuousColorLegend(null, simulator_.getRenderer().getColorMap(), true);
+        ContinuousColorLegend legend = new ContinuousColorLegend(null, this.simulator.getRenderer().getColorMap(), true);
 
         controlsPanel.add(sliderGroup);
 
         controlsPanel.add(Box.createVerticalStrut(10));
         controlsPanel.add(checkBoxes);
         controlsPanel.add(Box.createVerticalStrut(10));
-        controlsPanel.add(legend_);
+        controlsPanel.add(legend);
     }
 
     private JPanel createCheckBoxes() {
 
-        RenderingOptions renderOpts =  simulator_.getRenderer().getOptions();
+        RenderingOptions renderOpts =  simulator.getRenderer().getOptions();
 
-        // not yet supported.
-        //useConcurrentCalculation_ = createCheckBox("Parallel calculation",
-        //        "Will take advantage of multiple processors for calculation if present.", false);
 
         useConcurrentRendering = createCheckBox("Parallel rendering",
                 "Will take advantage of multiple processors for rendering if present.", renderOpts.isParallelized());
@@ -101,7 +97,6 @@ public class FluidDynamicOptions extends JPanel
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 2));
 
-        //checkBoxes.add(useConcurrentCalculation_);
         checkBoxes.add(useConcurrentRendering);
         checkBoxes.add(useLinearInterpolation);
         checkBoxes.add(showVelocities);
@@ -122,7 +117,7 @@ public class FluidDynamicOptions extends JPanel
     public void reset() {
         sliderGroup.reset();
         // make sure we honor current check selections
-        RenderingOptions renderOpts =  simulator_.getRenderer().getOptions();
+        RenderingOptions renderOpts =  simulator.getRenderer().getOptions();
         renderOpts.setShowGrid(showGrid.isSelected());
         renderOpts.setShowVelocities(showVelocities.isSelected());
         renderOpts.setUseLinearInterpolation(useLinearInterpolation.isSelected());
@@ -132,13 +127,10 @@ public class FluidDynamicOptions extends JPanel
      * One of the buttons was pressed
      */
     public void actionPerformed(ActionEvent e) {
-        EnvironmentRenderer renderer = simulator_.getRenderer();
+        EnvironmentRenderer renderer = simulator.getRenderer();
         RenderingOptions renderOpts =  renderer.getOptions();
 
-        if (e.getSource() == useConcurrentCalculation_) {
-            // gs_.setParallelized(!gs_.isParallelized());
-        }
-        else if (e.getSource() == useConcurrentRendering) {
+        if (e.getSource() == useConcurrentRendering) {
             renderOpts.setParallelized(!renderOpts.isParallelized());
         }
         else if (e.getSource() == useLinearInterpolation) {
@@ -159,27 +151,26 @@ public class FluidDynamicOptions extends JPanel
 
         switch (sliderName) {
             case VISC_SLIDER:
-                simulator_.getEnvironment().setViscosity(value);
+                simulator.getEnvironment().setViscosity(value);
                 break;
             case DR_SLIDER:
-                simulator_.getEnvironment().setDiffusionRate(value);
+                simulator.getEnvironment().setDiffusionRate(value);
                 break;
             case FORCE_SLIDER:
-                simulator_.getInteractionHandler().setForce(value);
+                simulator.getInteractionHandler().setForce(value);
                 break;
             case SD_SLIDER:
-                simulator_.getInteractionHandler().setSourceDensity(value);
+                simulator.getInteractionHandler().setSourceDensity(value);
                 break;
             case NUM_ITERATIONS_SLIDER:
-                simulator_.getEnvironment().setNumSolverIterations((int) value);
+                simulator.getEnvironment().setNumSolverIterations((int) value);
                 break;
             case NS_SLIDER:
-                simulator_.setNumStepsPerFrame((int) value);
+                simulator.setNumStepsPerFrame((int) value);
                 break;
             case TIME_STEP_SLIDER:
-                simulator_.setTimeStep(value);
+                simulator.setTimeStep(value);
                 break;
         }
     }
-
 }

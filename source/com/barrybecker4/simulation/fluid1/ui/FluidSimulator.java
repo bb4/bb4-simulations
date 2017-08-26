@@ -35,16 +35,13 @@ public class FluidSimulator extends Simulator {
     private FluidEnvironment environment;
     private EnvironmentRenderer envRenderer;
     private InteractionHandler handler;
-    private FluidDynamicOptions fluidOptions;
 
     public static final int DEFAULT_STEPS_PER_FRAME = 1;
 
     /** if true it will save all the animation steps to file */
-    public static final boolean RECORD_ANIMATION = false;
     public static final double INITIAL_TIME_STEP = 0.03;  // initial time step
 
     private static final Color BG_COLOR = Color.white;
-    private static final int NUM_OPT_PARAMS = 3;
     private RenderingOptions renderOptions;
 
 
@@ -52,7 +49,7 @@ public class FluidSimulator extends Simulator {
         this(new FluidEnvironment(250, 200));
     }
 
-    FluidSimulator( FluidEnvironment environment ) {
+    private FluidSimulator( FluidEnvironment environment ) {
         super("Fuild");
         this.environment = environment;
         renderOptions = new RenderingOptions();
@@ -78,8 +75,7 @@ public class FluidSimulator extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        fluidOptions = new FluidDynamicOptions(this);
-        return fluidOptions;
+        return new FluidDynamicOptions(this);
     }
 
     public EnvironmentRenderer getRenderer() {
@@ -179,5 +175,4 @@ public class FluidSimulator extends Simulator {
     protected String getFileNameBase() {
         return FileUtil.getHomeDir() + "temp/animations/simulation/" + "fluid/fluidFrame";
     }
-
 }
