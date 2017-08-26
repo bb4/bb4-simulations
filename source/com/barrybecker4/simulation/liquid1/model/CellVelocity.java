@@ -23,7 +23,7 @@ public class CellVelocity {
     /**
      * Constructor
      */
-    public CellVelocity()  {
+    CellVelocity()  {
         uip_[0] = uip_[1] = 0;
         vjp_[0] = vjp_[1] = 0;
     }
@@ -35,16 +35,16 @@ public class CellVelocity {
         current_ = 1 - current_;
     }
 
-    public void passThrough() {
+    void passThrough() {
         uip_[1 - current_] = uip_[current_]; // + dt * forceX;
         vjp_[1 - current_] = vjp_[current_]; // + dt * forceY;
     }
 
-    public void initializeU(double u) {
+    void initializeU(double u) {
         uip_[0] = u;
         uip_[1] = u;
     }
-    public void initializeV(double v) {
+    void initializeV(double v) {
         vjp_[0] = v;
         vjp_[1] = v;
     }

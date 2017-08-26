@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE environment SYSTEM "G:\projects\java_projects\trunk\source\com\barrybecker4\simulation\liquid\config\liquid.dtd"-->
+<!DOCTYPE environment SYSTEM "http://barrybecker4.com/schema/liquid.dtd">
+
+<environment date="3/9/2011" author="Barry Becker"
+             gridWidth="5" gridHeight="5" cellSize="1.0" gravity="-9.80">
+
+    <liquid>
+        <region start="2,2" stop="4,4" />
+    </liquid>
+
+</environment>

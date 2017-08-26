@@ -164,6 +164,13 @@ task runLiquid(type: JavaExec, description: "Run liquid simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runLiquid1(type: JavaExec, description: "Run liquid simulator (legacy java version)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.liquid1.LiquidSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runTrebuchet(type: JavaExec, description: "Run treduchet simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'

@@ -60,10 +60,10 @@ public class Cell {
         return pressure;
     }
 
-    public void initializeU(double u) {
+    void initializeU(double u) {
         velocity.initializeU(u);
     }
-    public void initializeV(double v) {
+    void initializeV(double v) {
          velocity.initializeV(v);
     }
 

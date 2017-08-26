@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--DOCTYPE environment SYSTEM "G:\projects\java_projects\trunk\source\com\barrybecker4\simulation\liquid\config\liquid.dtd"-->
+<!DOCTYPE environment SYSTEM "http://barrybecker4.com/schema/liquid.dtd">
+
+<environment date="1/9/2009" author="Barry Becker"
+                        gridWidth="26" gridHeight="21" cellSize="10.0" gravity="-9.80">
+
+    <walls>
+        <wall start="15,10" stop="15,15" />
+    </walls>
+
+    <liquid>
+        <source start="5,6" velocity="20.0,0.0" />
+        <region start="1,18" stop="25,21" />
+    </liquid>
+
+</environment>

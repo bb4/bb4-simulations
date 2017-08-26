@@ -16,12 +16,12 @@ import javax.vecmath.Point2d;
 public class Particle extends Point2d {
 
     /** the cell that the particle belongs to */
-    private Cell cell_;
+    private Cell cell;
 
     /**
      * Age of the particle. May be used to color flow by age.
      */
-    private double age_;
+    private double age;
 
     /**
      * Construct the particle
@@ -29,27 +29,27 @@ public class Particle extends Point2d {
      */
     public Particle( double x, double y, Cell cell ) {
         super( x, y );
-        cell_ = cell;
-        age_ = 0.0;
+        this.cell = cell;
+        age = 0.0;
     }
 
     public void setCell( Cell cell ) {
-        cell_ = cell;
+        this.cell = cell;
     }
 
     public Cell getCell() {
-        return cell_;
+        return cell;
     }
 
     /**
      * increment the age of the particle
      */
     public void incAge( double timeStep ) {
-        age_ += timeStep;
+        age += timeStep;
     }
 
     public double getAge()  {
-        return age_;
+        return age;
     }
 
 }

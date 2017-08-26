@@ -31,7 +31,7 @@ public class LiquidEnvironment {
     private Grid grid;
 
     /** Does all the computational processing on the grid */
-    GridUpdater gridUpdater;
+    private GridUpdater gridUpdater;
 
     /** constraints and conditions from the configuration file. */
     private Conditions conditions;

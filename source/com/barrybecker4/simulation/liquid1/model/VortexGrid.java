@@ -9,12 +9,12 @@ import javax.vecmath.Vector2d;
  *
  *  @author Barry Becker
  */
-public class VortexGrid extends Grid {
+class VortexGrid extends Grid {
 
     /**
      * Constructor.
      */
-    public VortexGrid(int xDim, int yDim) {
+    VortexGrid(int xDim, int yDim) {
 
         this(xDim, yDim, CellStatus.EMPTY);
     }
@@ -22,7 +22,7 @@ public class VortexGrid extends Grid {
     /**
      * Constructor.
      */
-    public VortexGrid(int xDim, int yDim, CellStatus status) {
+    VortexGrid(int xDim, int yDim, CellStatus status) {
 
         super(xDim, yDim);
         double centerX = xDim/2;

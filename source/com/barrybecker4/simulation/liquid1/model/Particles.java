@@ -20,7 +20,7 @@ public class Particles extends HashSet<Particle> {
      * @param numParticles  number of particles to add.
      * @param grid  some grid to add to.
      */
-    public void addRandomParticles( double x, double y, int numParticles, Grid grid)  {
+    void addRandomParticles( double x, double y, int numParticles, Grid grid)  {
 
         for ( int i = 0; i < numParticles; i++ ) {
             addParticle(x + RANDOM.nextDouble(), y + RANDOM.nextDouble(), grid);

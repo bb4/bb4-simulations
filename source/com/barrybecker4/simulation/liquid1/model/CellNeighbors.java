@@ -50,7 +50,7 @@ public class CellNeighbors {
     /**
      * @return true if all the neighbors have at least one particle
      */
-    public boolean allHaveParticles() {
+    boolean allHaveParticles() {
        return getRight().getNumParticles() > 0
             && getLeft().getNumParticles() > 0
             && getBottom().getNumParticles() > 0
@@ -60,7 +60,7 @@ public class CellNeighbors {
     /**
      * @return false if none of the neighbors have any particles.
      */
-    public boolean noneHaveParticles() {
+    boolean noneHaveParticles() {
          return getRight().getNumParticles() == 0
             && getLeft().getNumParticles() == 0
             && getBottom().getNumParticles() == 0
