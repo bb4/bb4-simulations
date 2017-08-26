@@ -24,7 +24,7 @@ object GrayScottModel {
   /**  Periodic boundary conditions.
     * @return new x value taking into account wrapping boundaries.
     */
-  private[algorithm] def getPeriodicXValue(x: Int, max: Int): Int = {
+  def getPeriodicXValue(x: Int, max: Int): Int = {
     val xp = x % max
     if (xp < 0) xp + max else xp
   }
