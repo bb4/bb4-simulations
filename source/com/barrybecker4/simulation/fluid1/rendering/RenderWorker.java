@@ -9,16 +9,16 @@ import com.barrybecker4.simulation.common.rendering.ModelImage;
  */
 public class RenderWorker implements Runnable {
 
-    private ModelImage modelImage_;
-    private int minY_, maxY_;
+    private ModelImage modelImage;
+    private int minY, maxY;
 
-    public RenderWorker(ModelImage modelImage, int minY, int maxY) {
-        modelImage_ = modelImage;
-        minY_ = minY;
-        maxY_ = maxY;
+    RenderWorker(ModelImage modelImage, int minY, int maxY) {
+        this.modelImage = modelImage;
+        this.minY = minY;
+        this.maxY = maxY;
     }
 
     public void run() {
-        modelImage_.updateImage(minY_, maxY_);
+        modelImage.updateImage(minY, maxY);
     }
 }
