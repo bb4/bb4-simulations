@@ -8,11 +8,18 @@ import com.barrybecker4.simulation.liquid.config.ConfigurationEnum.FILE_BASE
   * @author Bary Becker
   */
 object ConfigurationEnum {
-  val FILE_BASE = "com/barrybecker4/simulation/liquid1/data/"
+  val FILE_BASE = "com/barrybecker4/simulation/liquid/data/"
   val DEFAULT_VALUE = PULSE_LARGE
+  val values = Array(SPIGOT_RIGHT, SPIGOT_LEFT, BASIC, FALLING_BLOB, FALLING_BLOB_SMALL, WATER_WALL_LEFT,
+    WATER_WALL_RIGHT, PULSE_LARGE, PULSE_SMALL, PULSE_SMALLEST)
+
+  def toEnum(theName: String): ConfigurationEnum = ConfigurationEnum.values.find(_.name == theName).get
 }
 
-sealed abstract class ConfigurationEnum(val name: String, val description: String, val fileName: String)
+sealed abstract class ConfigurationEnum(val name: String, val description: String, val fileName: String) {
+  override def toString: String = name
+}
+
 case object SPIGOT_RIGHT extends ConfigurationEnum(
   "Spigot to the Right", "A spigot aimed to the right", FILE_BASE + "spigotRight.xml")
 case object SPIGOT_LEFT extends ConfigurationEnum(

@@ -17,12 +17,12 @@ class PressureColorMap extends ColorMap {
     private static final int CM_TRANS = 20;
 
     /** control point values */
-    private static final double pressureVals_[] = {
+    private static final double pressureVals[] = {
                     -200000.0, -2000.0, -50.0, -10.0,
                     0.0,
                     10.0, 50.0, 2000.0, 200000.0};
 
-    private static final Color pressureColors_[] = {
+    private static final Color pressureColors[] = {
         new Color( 0, 0, 250, 255 ),
         new Color( 0, 10, 255, CM_TRANS + 90 ),
         new Color( 0, 100, 255, CM_TRANS + 30 ),
@@ -39,7 +39,7 @@ class PressureColorMap extends ColorMap {
      */
     PressureColorMap()
     {
-        super( pressureVals_, pressureColors_ );
+        super(pressureVals, pressureColors);
     }
 
 }

@@ -8,42 +8,42 @@ package com.barrybecker4.simulation.liquid1.rendering;
  */
 public final class RenderingOptions {
 
-    private boolean showVelocities_ = true;
-    private boolean showPressures_ = true;
-    private boolean showCellStatus_ = true;
-    private boolean showGrid_ = true;
+    private boolean showVelocities = true;
+    private boolean showPressures = true;
+    private boolean showCellStatus = true;
+    private boolean showGrid = true;
 
     public RenderingOptions() { }
 
     public void setShowVelocities(boolean show) {
-        showVelocities_ = show;
+        showVelocities = show;
     }
 
     public boolean getShowVelocities() {
-        return showVelocities_;
+        return showVelocities;
     }
 
     public void setShowPressures(boolean show) {
-        showPressures_ = show;
+        showPressures = show;
     }
 
     public boolean getShowPressures() {
-        return showPressures_;
+        return showPressures;
     }
 
     public void setShowCellStatus(boolean show) {
-        showCellStatus_ = show;
+        showCellStatus = show;
     }
 
     public boolean getShowCellStatus() {
-        return showCellStatus_;
+        return showCellStatus;
     }
 
     public void setShowGrid(boolean show) {
-        showGrid_ = show;
+        showGrid = show;
     }
 
     public boolean getShowGrid() {
-        return showGrid_;
+        return showGrid;
     }
 }
