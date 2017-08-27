@@ -79,12 +79,11 @@ public class VelocityInterpolator {
      *       direction depending on the position of the particle.  [6]
      * @return the interpolated velocity vector.
      */
-    protected Vector2d interpolateVelocity( Point2d particle, Cell cell,
+    Vector2d interpolateVelocity( Point2d particle, Cell cell,
                                          Cell cX, Cell cY,
                                          Cell cXm1, Cell cXm1y, // u
                                          Cell cYm1, Cell cYm1x // v
-                                         )
-    {
+                                         ) {
         assert ( !(cell.isObstacle() || cell.isEmpty())) :
              "Error: interpVelocity cell status=" + cell.getStatus()
                + " num particles = " + cell.getNumParticles();

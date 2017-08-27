@@ -66,7 +66,7 @@ public class GridUpdater {
         VelocityUpdater velocityUpdater = new VelocityUpdater();
 
         for ( j = 1; j < grid.getYDimension() - 1; j++ ) {
-            for ( i = 1; i < grid.getYDimension() - 1; i++ ) {
+            for ( i = 1; i < grid.getXDimension() - 1; i++ ) {
                 velocityUpdater.updateTildeVelocities(grid.getCell(i, j), grid.getNeighbors(i,j),
                                                grid.getCell(i - 1, j + 1), grid.getCell(i + 1, j - 1),
                                                timeStep, force, viscosity );

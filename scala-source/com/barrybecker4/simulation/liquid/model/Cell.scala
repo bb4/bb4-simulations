@@ -9,17 +9,17 @@ import com.barrybecker4.simulation.liquid.model.CellStatus.CellStatus
   * A region of space containing particles, walls, or liquid.
   * Adapted from work by Nick Foster.
   *
-  * &#94;  vjp_[cur_]     (positive v direction)
-  * |
-  * _____________
-  * |            |
+  *         &#94;  vjp_[cur_]     (positive v direction)
+  *           |
+  *     _____________
+  *     |            |
   * &lt;--  |      p     |  --&gt; uip_[cur_]   (positive u dir)
-  * |            |
-  * ------------
-  * |
-  * v
+  *     |            |
+  *     ------------
+  *           |
+  *           v
   *
-  * |--- dx ---|
+  *     |--- dx ---|
   *
   * @author Barry Becker
   */

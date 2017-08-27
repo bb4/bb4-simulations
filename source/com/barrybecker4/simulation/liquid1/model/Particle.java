@@ -51,5 +51,4 @@ public class Particle extends Point2d {
     public double getAge()  {
         return age;
     }
-
 }

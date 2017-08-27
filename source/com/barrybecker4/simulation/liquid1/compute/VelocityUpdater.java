@@ -95,7 +95,7 @@ public class VelocityUpdater {
     /**
      * Update new V component of velocity.
      */
-    public void calcVTilde(Cell cell, CellNeighbors neighbors, double upperLeftU, double ipjp2,
+    private void calcVTilde(Cell cell, CellNeighbors neighbors, double upperLeftU, double ipjp2,
                            double dt, double forceY,  double viscosity) {
 
         // u(i-0.5, j+0.5) = 0.5*(u(i-0.5, j) + u(i-0.5, j+1))

@@ -10,7 +10,7 @@ import com.barrybecker4.common.geometry.Location
   * @param stop optional stopping location for the rectangular region
   * @author Barry Becker
   */
-class Region private[config](var start: Location, var stop: Location) {
+class Region(var start: Location, var stop: Location) {
   def getStart: Location = start
   def getStop: Location = { if (stop == null)  start else stop }
 }
