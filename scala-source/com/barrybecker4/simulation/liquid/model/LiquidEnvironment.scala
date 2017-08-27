@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.liquid.model
 import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.simulation.liquid.config.Conditions
-import com.barrybecker4.simulation.liquid.config.Region
 import com.barrybecker4.simulation.liquid.config.Source
 
 

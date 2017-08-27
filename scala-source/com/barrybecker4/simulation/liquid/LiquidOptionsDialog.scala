@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent
 class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSimulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  /** type of distribution function to test.   */
   private var configurationChoiceField: JComboBox[String] = _
   private var showPressureCheckbox: JCheckBox = _
   private var showCellStatusCheckbox: JCheckBox = _

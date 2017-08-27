@@ -30,7 +30,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
   DomUtil.printTree(document, 0)
-  parseFromDocument(document)
+
   private var gridWidth = 0
   private var gridHeight = 0
   private var cellSize = .0
@@ -39,6 +39,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   private var sources: List[Source] = _
   private var sinks: List[Region] = _
   private var initialLiquidRegions: List[Region]= _
+  parseFromDocument(document)
 
   private def parseFromDocument(document: Document) = {
     val envRoot = document.getDocumentElement

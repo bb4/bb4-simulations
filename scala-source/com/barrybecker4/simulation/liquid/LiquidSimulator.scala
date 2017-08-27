@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid
 
-
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
@@ -34,11 +33,11 @@ class LiquidSimulator()
   extends Simulator("Liquid") with MouseListener {
 
   private var environment = new LiquidEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
-  commonInit()
   private var envRenderer: EnvironmentRenderer = _
   /** These options can be changed while the simulation is running. */
   private var dynamicOptions: LiquidDynamicOptions = _
   private var advectionOnly = false
+  commonInit()
 
   private[liquid] def loadEnvironment(configFile: String) = {
     environment = new LiquidEnvironment(configFile)
@@ -110,7 +109,8 @@ class LiquidSimulator()
     envRenderer.render(g2, getWidth, getHeight)
   }
 
-  override def mouseClicked(e: MouseEvent): Unit = { //System.out.println("mclick timeStep="+ timeStep_ );
+  override def mouseClicked(e: MouseEvent) {
+    //System.out.println("mclick timeStep="+ timeStep_ );
     environment.stepForward(timeStep_)
     this.repaint()
   }

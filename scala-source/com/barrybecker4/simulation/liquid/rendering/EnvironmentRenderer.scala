@@ -44,7 +44,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** Figure out the biggest scale based in on which dimension is bumped up to first */
-  private def determinScaling(width: Int, height: Int) = {
+  private def determineScaling(width: Int, height: Int) = {
     val grid = env.getGrid
     val proposedXScale = width / grid.getXDimension
     val proposedYScale = height / grid.getYDimension
@@ -57,7 +57,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   /** Render the Environment on the screen. */
   def render(g: Graphics2D, width: Int, height: Int): Unit = {
     val time = System.currentTimeMillis
-    determinScaling(width, height)
+    determineScaling(width, height)
     // make sure all the cell statuses are in a consistent state
     env.getGrid.updateCellStatus()
     drawGrid(g)

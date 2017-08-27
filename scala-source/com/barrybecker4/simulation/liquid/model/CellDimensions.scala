@@ -8,22 +8,18 @@ import com.barrybecker4.simulation.liquid.model.CellDimensions.CELL_SIZE
   * @author Barry Becker
   */
 object CellDimensions {
-  val CELL_SIZE = 10.0
+  val CELL_SIZE: Double = 10.0
   val INVERSE_CELL_SIZE: Double = 1.0 / CellDimensions.CELL_SIZE
 }
 
 class CellDimensions() {
 
-  dx = CELL_SIZE
-  dy = CELL_SIZE
-  dxSq = dx * dx
-  dySq = dy * dy
-
   // size of a cell
-  final var dx = .0
-  final var dy = .0
+  final var dx = CELL_SIZE
+  final var dy = CELL_SIZE
 
   // squares of edge lengths
-  final var dxSq = .0
-  final var dySq = .0
+  final var dxSq: Double = dx * dx
+  final var dySq: Double = dy * dy
+
 }

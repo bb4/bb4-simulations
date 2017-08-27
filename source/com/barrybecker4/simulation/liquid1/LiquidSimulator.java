@@ -47,7 +47,6 @@ public class LiquidSimulator extends Simulator implements MouseListener {
      */
     public LiquidSimulator() {
         super("Liquid");
-
         environment = new LiquidEnvironment( ConfigurationEnum.getDefaultValue().getFileName());
         commonInit();
     }
