@@ -11,7 +11,7 @@ import java.awt.*;
  *
  * @author Barry Becker
  */
-public class PressureColorMap extends ColorMap {
+class PressureColorMap extends ColorMap {
 
     /** base transparency value.*/
     private static final int CM_TRANS = 20;
@@ -37,7 +37,7 @@ public class PressureColorMap extends ColorMap {
     /**
      * our own custom colormap for visualizing values in Go.
      */
-    public PressureColorMap()
+    PressureColorMap()
     {
         super( pressureVals_, pressureColors_ );
     }

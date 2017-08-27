@@ -27,11 +27,11 @@ import java.awt.event.MouseListener;
  */
 public class LiquidSimulator extends Simulator implements MouseListener {
 
-    private LiquidEnvironment environment_;
-    private EnvironmentRenderer envRenderer_;
+    private LiquidEnvironment environment;
+    private EnvironmentRenderer envRenderer;
 
     /** These options can be changed while the simulation is running. */
-    private LiquidDynamicOptions dynamicOptions_;
+    private LiquidDynamicOptions dynamicOptions;
 
     /** The initial time step. It may adapt. */
     private static final double INITIAL_TIME_STEP = 0.005;
@@ -48,13 +48,13 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     public LiquidSimulator() {
         super("Liquid");
 
-        environment_ = new LiquidEnvironment( ConfigurationEnum.getDefaultValue().getFileName());
+        environment = new LiquidEnvironment( ConfigurationEnum.getDefaultValue().getFileName());
         commonInit();
     }
 
-    public void loadEnvironment(String configFile) {
-        environment_ = new LiquidEnvironment(configFile);
-        environment_.setAdvectionOnly(advectionOnly);
+    void loadEnvironment(String configFile) {
+        environment = new LiquidEnvironment(configFile);
+        environment.setAdvectionOnly(advectionOnly);
         commonInit();
     }
 
@@ -62,17 +62,17 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     protected void reset() {
         boolean oldPaused = this.isPaused();
         setPaused(true);
-        environment_.reset();
+        environment.reset();
         commonInit();
         setPaused(oldPaused);
     }
 
     private void commonInit() {
         initCommonUI();
-        envRenderer_ = new EnvironmentRenderer(environment_);
+        envRenderer = new EnvironmentRenderer(environment);
 
-        int s = (int) envRenderer_.getScale();
-        setPreferredSize(new Dimension( environment_.getWidth() * s, environment_.getHeight() * s));
+        int s = (int) envRenderer.getScale();
+        setPreferredSize(new Dimension( environment.getWidth() * s, environment.getHeight() * s));
     }
 
     @Override
@@ -92,26 +92,26 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     public double timeStep() {
 
         if ( !isPaused() ) {
-            timeStep_ = environment_.stepForward( timeStep_);
+            timeStep_ = environment.stepForward( timeStep_);
         }
         return timeStep_;
     }
 
     public LiquidEnvironment getEnvironment() {
-        return environment_;
+        return environment;
     }
 
     @Override
     public void setScale( double scale ) {
-        envRenderer_.setScale(scale);
+        envRenderer.setScale(scale);
     }
     @Override
     public double getScale() {
-        return envRenderer_.getScale();
+        return envRenderer.getScale();
     }
 
     public RenderingOptions getRenderingOptions() {
-        return envRenderer_.getRenderingOptions();
+        return envRenderer.getRenderingOptions();
     }
 
     public boolean getSingleStepMode() {
@@ -133,13 +133,13 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     }
     public void setAdvectionOnly(boolean advectOnly) {
         advectionOnly = advectOnly;
-        environment_.setAdvectionOnly(advectOnly);
+        environment.setAdvectionOnly(advectOnly);
     }
 
     @Override
     public JPanel createDynamicControls() {
-        dynamicOptions_ = new LiquidDynamicOptions(this);
-        return dynamicOptions_;
+        dynamicOptions = new LiquidDynamicOptions(this);
+        return dynamicOptions;
     }
 
     @Override
@@ -166,7 +166,7 @@ public class LiquidSimulator extends Simulator implements MouseListener {
     public void paint( Graphics g ) {
         if (g==null) return;
         Graphics2D g2 = (Graphics2D) g;
-        envRenderer_.render(g2, getWidth(),  getHeight());
+        envRenderer.render(g2, getWidth(),  getHeight());
     }
 
     @Override
@@ -176,7 +176,7 @@ public class LiquidSimulator extends Simulator implements MouseListener {
 
     public void mouseClicked(MouseEvent e) {
         //System.out.println("mclick timeStep="+ timeStep_ );
-        environment_.stepForward( timeStep_);
+        environment.stepForward( timeStep_);
         this.repaint();
     }
 

@@ -13,8 +13,7 @@ public final class RenderingOptions {
     private boolean showCellStatus_ = true;
     private boolean showGrid_ = true;
 
-    public RenderingOptions() {
-    }
+    public RenderingOptions() { }
 
     public void setShowVelocities(boolean show) {
         showVelocities_ = show;

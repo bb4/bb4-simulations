@@ -19,13 +19,13 @@ import java.awt.event.ActionListener;
 class LiquidDynamicOptions extends JPanel
                           implements SliderGroupChangeListener, ActionListener {
 
-    private LiquidSimulator liquidSim_;
+    private LiquidSimulator liquidSim;
 
     private static final String VISCOSITY_SLIDER = "Viscosity";
     private static final String B0_SLIDER = "Relaxation Coefficient";
     private static final String TIMESTEP_SLIDER = "Time Step Size";
 
-    private SliderGroup sliderGroup_;
+    private SliderGroup sliderGroup;
 
     private JCheckBox advectionOnlyCheckBox;
 
@@ -38,17 +38,17 @@ class LiquidDynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        liquidSim_ = liquid;
+        liquidSim = liquid;
 
-        sliderGroup_ = new SliderGroup(createSliderProperties());
-        sliderGroup_.addSliderChangeListener(this);
+        sliderGroup = new SliderGroup(createSliderProperties());
+        sliderGroup.addSliderChangeListener(this);
 
-        add(sliderGroup_);
+        add(sliderGroup);
 
         advectionOnlyCheckBox =
                 createCheckBox("Do advection only",
                     "If checked we will not apply the Navier Stokes solver",
-                    liquidSim_.getAdvectionOnly() );
+                    liquidSim.getAdvectionOnly() );
         add(advectionOnlyCheckBox);
 
         JPanel fill = new JPanel();
@@ -78,7 +78,7 @@ class LiquidDynamicOptions extends JPanel
 
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
     }
 
     /**
@@ -87,19 +87,19 @@ class LiquidDynamicOptions extends JPanel
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
         if (sliderName.equals(VISCOSITY_SLIDER)) {
-            liquidSim_.getEnvironment().setViscosity(value);
+            liquidSim.getEnvironment().setViscosity(value);
         }
         else if (sliderName.equals(B0_SLIDER)) {
-            liquidSim_.getEnvironment().setB0(value);
+            liquidSim.getEnvironment().setB0(value);
         }
         else if (sliderName.equals(TIMESTEP_SLIDER)) {
-            liquidSim_.setTimeStep(value);
+            liquidSim.setTimeStep(value);
         }
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == advectionOnlyCheckBox) {
-            liquidSim_.setAdvectionOnly(advectionOnlyCheckBox.isSelected());
+            liquidSim.setAdvectionOnly(advectionOnlyCheckBox.isSelected());
         }
     }
 }

@@ -17,13 +17,13 @@ import java.awt.event.ActionEvent;
 class LiquidOptionsDialog extends SimulatorOptionsDialog {
 
     /** type of distribution function to test.   */
-    private JComboBox configurationChoiceField_;
-    private JCheckBox showPressureCheckbox_;
-    private JCheckBox showCellStatusCheckbox_;
+    private JComboBox configurationChoiceField;
+    private JCheckBox showPressureCheckbox;
+    private JCheckBox showCellStatusCheckbox;
 
-    private JCheckBox showGridCheckbox_;
-    private JCheckBox showVelocitiesCheckbox_;
-    private JCheckBox useSingleStepModeCheckbox_;
+    private JCheckBox showGridCheckbox;
+    private JCheckBox showVelocitiesCheckbox;
+    private JCheckBox useSingleStepModeCheckbox;
 
 
     /** constructor  */
@@ -37,34 +37,34 @@ class LiquidOptionsDialog extends SimulatorOptionsDialog {
 
         LiquidSimulator sim = (LiquidSimulator) getSimulator();
 
-        showGridCheckbox_ =
+        showGridCheckbox =
                createCheckBox("Show Wireframe", "draw showing the underlying wireframe mesh",
                         sim.getRenderingOptions().getShowGrid() );
 
-        showVelocitiesCheckbox_ =
+        showVelocitiesCheckbox =
                 createCheckBox("Show Velocity Vectors",
                     "show lines representing velocity vectors on each partical mass",
                     sim.getRenderingOptions().getShowVelocities() );
 
-        showPressureCheckbox_ =
+        showPressureCheckbox =
                 createCheckBox("Show Force Vectors",
                         "show lines representing force vectors on each partical mass",
                         sim.getRenderingOptions().getShowPressures());
 
-        showCellStatusCheckbox_ =
+        showCellStatusCheckbox =
                 createCheckBox( "Show Cell Status",  "show status for each of the cells" ,
                                 sim.getRenderingOptions().getShowCellStatus());
 
-        useSingleStepModeCheckbox_ =
+        useSingleStepModeCheckbox =
                 createCheckBox( "Use Single Stepping",
                                 "For debugging is may be useful to press a key to advance each timestep" ,
                                 sim.getSingleStepMode());
 
-        togglesPanel.add(showGridCheckbox_);
-        togglesPanel.add(showVelocitiesCheckbox_);
-        togglesPanel.add(showPressureCheckbox_);
-        togglesPanel.add(showCellStatusCheckbox_);
-        togglesPanel.add(useSingleStepModeCheckbox_);
+        togglesPanel.add(showGridCheckbox);
+        togglesPanel.add(showVelocitiesCheckbox);
+        togglesPanel.add(showPressureCheckbox);
+        togglesPanel.add(showCellStatusCheckbox);
+        togglesPanel.add(useSingleStepModeCheckbox);
     }
 
 
@@ -79,9 +79,9 @@ class LiquidOptionsDialog extends SimulatorOptionsDialog {
         liquidParamPanel.setBorder(
                 BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Liquid Parameters" ) );
 
-        configurationChoiceField_ = createConfigChoice();
+        configurationChoiceField = createConfigChoice();
 
-        liquidParamPanel.add( configurationChoiceField_ );
+        liquidParamPanel.add(configurationChoiceField);
         customParamPanel.add(liquidParamPanel, BorderLayout.NORTH);
 
         return customParamPanel;
@@ -105,11 +105,11 @@ class LiquidOptionsDialog extends SimulatorOptionsDialog {
 
         Object source = e.getSource();
 
-        if ( source == configurationChoiceField_ ) {
+        if ( source == configurationChoiceField) {
 
             ConfigurationEnum selectedValue =
-                   ((ConfigurationEnum)configurationChoiceField_.getSelectedItem());
-            configurationChoiceField_.setToolTipText(selectedValue.getDescription());
+                   ((ConfigurationEnum) configurationChoiceField.getSelectedItem());
+            configurationChoiceField.setToolTipText(selectedValue.getDescription());
         }
     }
 
@@ -119,15 +119,15 @@ class LiquidOptionsDialog extends SimulatorOptionsDialog {
         // set the liquid environment
         LiquidSimulator simulator = (LiquidSimulator) getSimulator();
 
-        ConfigurationEnum selected = (ConfigurationEnum) configurationChoiceField_.getSelectedItem();
+        ConfigurationEnum selected = (ConfigurationEnum) configurationChoiceField.getSelectedItem();
 
         simulator.loadEnvironment(selected.getFileName());
 
-        simulator.getRenderingOptions().setShowGrid(showGridCheckbox_.isSelected());
-        simulator.getRenderingOptions().setShowVelocities(showVelocitiesCheckbox_.isSelected());
-        simulator.getRenderingOptions().setShowPressures(showPressureCheckbox_.isSelected());
-        simulator.getRenderingOptions().setShowCellStatus(showCellStatusCheckbox_.isSelected());
-        simulator.setSingleStepMode(useSingleStepModeCheckbox_.isSelected());
+        simulator.getRenderingOptions().setShowGrid(showGridCheckbox.isSelected());
+        simulator.getRenderingOptions().setShowVelocities(showVelocitiesCheckbox.isSelected());
+        simulator.getRenderingOptions().setShowPressures(showPressureCheckbox.isSelected());
+        simulator.getRenderingOptions().setShowCellStatus(showCellStatusCheckbox.isSelected());
+        simulator.setSingleStepMode(useSingleStepModeCheckbox.isSelected());
         super.ok();
     }
 }
