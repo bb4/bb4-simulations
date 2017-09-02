@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.graphing;
+package com.barrybecker4.simulation.graphing1;
 
 import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.simulation.common.ui.Simulator;

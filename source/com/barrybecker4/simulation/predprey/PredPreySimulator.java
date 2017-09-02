@@ -6,7 +6,7 @@ import com.barrybecker4.common.math.function.Function;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.graphing.GraphOptionsDialog;
+import com.barrybecker4.simulation.graphing1.GraphOptionsDialog;
 import com.barrybecker4.simulation.predprey.creatures.Foxes;
 import com.barrybecker4.simulation.predprey.creatures.Population;
 import com.barrybecker4.simulation.predprey.creatures.Rabbits;

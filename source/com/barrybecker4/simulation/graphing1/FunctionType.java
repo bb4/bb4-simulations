@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.graphing;
+package com.barrybecker4.simulation.graphing1;
 
 import com.barrybecker4.common.math.function.ArrayFunction;
 import com.barrybecker4.common.math.function.ErrorFunction;
@@ -22,7 +22,6 @@ public enum FunctionType {
     SMOOTH("Smooth Function", getSmoothFunc()),
     TYPICAL_SMOOTH("Typical Smooth", getTypicalSmoothFunc()),
     V("V Function", getVFunc());
-
 
     private String name;
     public Function function;
@@ -86,8 +85,6 @@ public enum FunctionType {
     private static Function getErrorFunc() {
         return new ErrorFunction();
     }
-
-
 
     public String toString() {
         return name;
