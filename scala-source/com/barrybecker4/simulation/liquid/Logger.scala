@@ -8,7 +8,6 @@ import com.barrybecker4.ui.util.Log
 
 /**
   * Singleton instance of logger.
-  *
   * @author Barry Becker
   */
 object Logger {

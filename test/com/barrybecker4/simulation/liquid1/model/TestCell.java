@@ -23,26 +23,26 @@ public class TestCell extends TestCase {
         Cell cell = cb.get(0,0);
 
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isEmpty());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isEmpty());
         cell.incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isIsolated());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isIsolated());
         cell.incParticles();
         cell.incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isIsolated());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isIsolated());
         cb.get(1, 0).incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
         cb.get(-1, 0).incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
         cb.get(0, 1).incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isSurface());
         cb.get(0, -1).incParticles();
         cb.updateCellStatuses();
-        Assert.assertTrue( "unexpected status"+ cell.getStatus(), cell.isFull());
+        assertTrue( "unexpected status"+ cell.getStatus(), cell.isFull());
     }
 
     public void testTildeVelocities() {
@@ -104,7 +104,7 @@ public class TestCell extends TestCase {
         cb.updateCellStatuses();
         double divergence = conserver.updateMassConservation(cell, cb.getCenterNeighbors());
 
-        Assert.assertEquals("unexpected div="+divergence, 0.0, divergence);
+        assertEquals("unexpected div="+divergence, 0.0, divergence);
 
         cell.initializeVelocity(1.0, 0);
         cb.setAllCellParticles(5);
@@ -114,7 +114,7 @@ public class TestCell extends TestCase {
         cb.updateCellStatuses();
         divergence = conserver.updateMassConservation(cell, cb.getCenterNeighbors());
 
-        Assert.assertEquals("unexpected div="+divergence,
+        assertEquals("unexpected div="+divergence,
                                          0.0, divergence); // 0.1499999999999999
     }
 
@@ -152,11 +152,11 @@ public class TestCell extends TestCase {
         SurfaceVelocityUpdater updater = new SurfaceVelocityUpdater(pressure);
         updater.updateSurfaceVelocities(cell, cb.getCenterNeighbors());
 
-        Assert.assertEquals("Unexpected pressure.", expectedPressure, cell.getPressure());
-        Assert.assertEquals("Unexpected right x velocity.", expRightXVel, cell.getU());
-        Assert.assertEquals("Unexpected left x velocity.", expLeftXVel, cb.get(-1, 0).getU());
-        Assert.assertEquals("Unexpected top velocity.", expTopYVel,  cell.getV());
-        Assert.assertEquals("Unexpected bottom x velocity.", expBottomYVel, cb.get(0, 1).getV());
+        assertEquals("Unexpected pressure.", expectedPressure, cell.getPressure());
+        assertEquals("Unexpected right x velocity.", expRightXVel, cell.getU());
+        assertEquals("Unexpected left x velocity.", expLeftXVel, cb.get(-1, 0).getU());
+        assertEquals("Unexpected top velocity.", expTopYVel,  cell.getV());
+        assertEquals("Unexpected bottom x velocity.", expBottomYVel, cb.get(0, 1).getV());
     }
 
 }

@@ -19,14 +19,14 @@ package com.barrybecker4.simulation.liquid1.model;
 public class CellBlock {
 
     private static final int DIM = 5;
-    private final Cell[][] block_;
+    private final Cell[][] block;
 
     public CellBlock() {
-        block_ = new Cell[DIM][DIM];
+        block = new Cell[DIM][DIM];
 
         for (int i = 0; i<DIM; i++)  {
            for (int j = 0; j<DIM; j++) {
-               block_[i][j] = new Cell();
+               block[i][j] = new Cell();
            }
         }
         updateCellStatuses();
@@ -38,7 +38,7 @@ public class CellBlock {
      * @return cell relative to center of the block
      */
     public Cell get(int offsetX, int offsetY) {
-        return block_[offsetX + 2][offsetY + 2];
+        return block[offsetX + 2][offsetY + 2];
     }
 
     /**
@@ -46,19 +46,19 @@ public class CellBlock {
      * (excluding the outer obstacle cells).
      */
     public Cell getAbsolute(int x, int y) {
-        return block_[x+1][y+1];
+        return block[x+1][y+1];
     }
 
     public void setPressures(double p) {
         for (int i = 0; i<DIM; i++)
            for (int j = 0; j<DIM; j++)
-               block_[i][j].setPressure(p);
+               block[i][j].setPressure(p);
     }
 
     public void setVelocities(double u, double v) {
         for (int i = 0; i<DIM; i++)
            for (int j = 0; j<DIM; j++)
-               block_[i][j].initializeVelocity(u, v);
+               block[i][j].initializeVelocity(u, v);
     }
 
     /**
@@ -124,7 +124,7 @@ public class CellBlock {
     public void updateCellStatuses() {
         for (int i = 1; i<DIM-2; i++)
            for (int j = 1; j<DIM-2; j++)
-               block_[i][j].updateStatus(findNeighbors(i, j));
+               block[i][j].updateStatus(findNeighbors(i, j));
     }
 
     public CellNeighbors getCenterNeighbors() {
@@ -132,7 +132,7 @@ public class CellBlock {
     }
 
     public CellNeighbors findNeighbors(int i, int j) {
-        return new CellNeighbors(block_[i+1][j], block_[i-1][j], block_[i][j+1], block_[i][j-1]);
+        return new CellNeighbors(block[i+1][j], block[i-1][j], block[i][j+1], block[i][j-1]);
     }
 }
 
