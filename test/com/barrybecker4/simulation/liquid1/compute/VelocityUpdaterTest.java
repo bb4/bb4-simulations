@@ -1,10 +1,18 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.liquid1.compute;
 
+import com.barrybecker4.simulation.liquid1.model.Cell;
+import com.barrybecker4.simulation.liquid1.model.CellNeighbors;
+import com.barrybecker4.simulation.liquid1.model.CellStatus;
+import com.barrybecker4.simulation.liquid1.model.Grid;
+import com.barrybecker4.simulation.liquid1.model.NonUniformGrid;
+import com.barrybecker4.simulation.liquid1.model.UniformGrid;
 import org.junit.Test;
 
 import javax.vecmath.Vector2d;
 
+import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -29,7 +37,7 @@ public class VelocityUpdaterTest {
     public void testTrue() {
         assertTrue(true);
     }
-    /*
+
     public void testUpdateInAbsenceOfFlow() {
 
         Grid grid = new UniformGrid(DIM, DIM, new Vector2d(0.0, 0.0), CellStatus.FULL);
@@ -157,6 +165,6 @@ public class VelocityUpdaterTest {
 
         cell.swap();
         assertEquals("Unexpected UV", new Vector2d(0.1, 1.1045), new Vector2d(cell.getU(), cell.getV()));
-    }  */
+    }
 }
 

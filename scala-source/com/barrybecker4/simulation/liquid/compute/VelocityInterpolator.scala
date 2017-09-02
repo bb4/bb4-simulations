@@ -73,7 +73,7 @@ class VelocityInterpolator(var grid: Grid) {
     *                 direction depending on the position of the particle.  [6]
     * @return the interpolated velocity vector.
     */
-  protected def interpolateVelocity(particle: Point2d, cell: Cell, cX: Cell, cY: Cell,
+  def interpolateVelocity(particle: Point2d, cell: Cell, cX: Cell, cY: Cell,
                                     cXm1: Cell, cXm1y: Cell, cYm1: Cell, cYm1x: Cell): Vector2d = {
     assert(!(cell.isObstacle || cell.isEmpty),
       "Error: interpVelocity cell status=" + cell.getStatus + " num particles = " + cell.getNumParticles)

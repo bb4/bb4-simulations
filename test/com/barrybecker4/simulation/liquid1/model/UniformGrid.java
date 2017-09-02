@@ -10,7 +10,6 @@ import javax.vecmath.Vector2d;
  */
 public class UniformGrid extends Grid {
 
-
     /**
      * Constructor.
      */
