@@ -39,9 +39,17 @@ task runDice1(type: JavaExec, description: "Run dice simulator (legacy java)") {
 task runGraphing(type: JavaExec, description: "Run Graphing simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.graphing.Simulator"]
+    args = ["-panel_class", "com.barrybecker4.simulation.graphing.GraphSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
+
+task runGraphing1(type: JavaExec, description: "Run Graphing simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.graphing1.GraphSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 
 task runFluid(type: JavaExec, description: "Run fluid dynamics simulator") {
     group = 'application'

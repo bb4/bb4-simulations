@@ -12,7 +12,7 @@ import com.barrybecker4.common.math.function.Function
   */
 object FunctionType extends Enumeration {
 
-  protected case class Val(name: String, function: Function) extends super.Val
+  case class Val(name: String, function: Function) extends super.Val
 
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
@@ -30,4 +30,6 @@ object FunctionType extends Enumeration {
   val TYPICAL_SMOOTH = Val("Typical Smooth",
     new ArrayFunction(Array(0.0, .1, 0.3, 0.6, 0.7, 0.75, 0.7, 0.5, 0.4, 0.36, 0.39, 0.45, 0.56, 0.7, 1.0), NULL_FUNC))
   val V = Val("V Function", new ArrayFunction(Array(1.0, 0.0, 1.0), NULL_FUNC))
+
+  val VALUES: Array[Val] = Array(DIAGONAL, HORZ_LINE, VERT_LINE, SQUARE, TEETH, JAGGED, ERROR, SMOOTH, TYPICAL_SMOOTH)
 }
