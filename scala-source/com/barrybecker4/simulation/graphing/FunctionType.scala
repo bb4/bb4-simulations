@@ -13,7 +13,6 @@ import com.barrybecker4.common.math.function.Function
 object FunctionType extends Enumeration {
 
   case class Val(name: String, function: Function) extends super.Val
-
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
   private val NULL_FUNC = null

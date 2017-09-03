@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.model;
+package com.barrybecker4.simulation.habitat1.model;
 
 import javax.vecmath.Point2d;
 import java.util.ArrayList;

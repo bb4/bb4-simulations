@@ -1,15 +1,15 @@
 /** Copyright by Barry G. Becker, 2000-2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat;
+package com.barrybecker4.simulation.habitat1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.habitat.creatures.Populations;
-import com.barrybecker4.simulation.habitat.creatures.SerengetiPopulations;
-import com.barrybecker4.simulation.habitat.options.DynamicOptions;
-import com.barrybecker4.simulation.habitat.options.HabitatOptionsDialog;
+import com.barrybecker4.simulation.habitat1.creatures.Populations;
+import com.barrybecker4.simulation.habitat1.creatures.SerengetiPopulations;
+import com.barrybecker4.simulation.habitat1.options.DynamicOptions;
+import com.barrybecker4.simulation.habitat1.options.HabitatOptionsDialog;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class HabitatSimulator extends Simulator {
 
 
     /** Constructor */
-    private HabitatSimulator() {
+    public HabitatSimulator() {
 
         super("Habitat Simulation");
         setBackground(Color.WHITE);

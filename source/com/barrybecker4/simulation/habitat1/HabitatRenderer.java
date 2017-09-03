@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat;
+package com.barrybecker4.simulation.habitat1;
 
-import com.barrybecker4.simulation.habitat.creatures.Creature;
-import com.barrybecker4.simulation.habitat.creatures.Population;
-import com.barrybecker4.simulation.habitat.creatures.Populations;
+import com.barrybecker4.simulation.habitat1.creatures.Creature;
+import com.barrybecker4.simulation.habitat1.creatures.Population;
+import com.barrybecker4.simulation.habitat1.creatures.Populations;
 
 import java.awt.*;
 

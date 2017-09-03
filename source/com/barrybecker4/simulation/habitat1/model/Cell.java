@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.model;
+package com.barrybecker4.simulation.habitat1.model;
 
-import com.barrybecker4.simulation.habitat.creatures.Creature;
+import com.barrybecker4.simulation.habitat1.creatures.Creature;
 
 import java.util.ArrayList;
 import java.util.List;

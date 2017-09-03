@@ -1,6 +1,6 @@
-package com.barrybecker4.simulation.habitat;
+package com.barrybecker4.simulation.habitat1;
 
-import com.barrybecker4.simulation.habitat.creatures.Populations;
+import com.barrybecker4.simulation.habitat1.creatures.Populations;
 
 import javax.swing.*;
 import java.awt.*;

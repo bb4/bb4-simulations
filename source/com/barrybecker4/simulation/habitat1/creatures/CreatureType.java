@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.creatures;
+package com.barrybecker4.simulation.habitat1.creatures;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -40,28 +40,28 @@ public enum CreatureType {
 
     private int nutritionalValue;
 
-    private static final Map<CreatureType, List<CreatureType>> predatorMap_ = new HashMap<CreatureType, List<CreatureType>>();
-    private static final Map<CreatureType, List<CreatureType>> preyMap_ = new HashMap<CreatureType, List<CreatureType>>();
+    private static final Map<CreatureType, List<CreatureType>> predatorMap = new HashMap<CreatureType, List<CreatureType>>();
+    private static final Map<CreatureType, List<CreatureType>> preyMap = new HashMap<CreatureType, List<CreatureType>>();
 
 
     static {
         // eaten by relationship
-        predatorMap_.put(GRASS, Arrays.asList(WILDEBEEST, RAT));
-        predatorMap_.put(WILDEBEEST, Arrays.asList(LION));
-        predatorMap_.put(RAT, Arrays.asList(CAT, LION));
-        predatorMap_.put(CAT, Arrays.asList(LION));
-        predatorMap_.put(LION, Collections.<CreatureType>emptyList());
+        predatorMap.put(GRASS, Arrays.asList(WILDEBEEST, RAT));
+        predatorMap.put(WILDEBEEST, Arrays.asList(LION));
+        predatorMap.put(RAT, Arrays.asList(CAT, LION));
+        predatorMap.put(CAT, Arrays.asList(LION));
+        predatorMap.put(LION, Collections.<CreatureType>emptyList());
 
         for (CreatureType creature : values()) {
             List<CreatureType> preys = new ArrayList<CreatureType>();
 
             for (CreatureType potentialprey : values()) {
-                List<CreatureType> preds = predatorMap_.get(potentialprey);
+                List<CreatureType> preds = predatorMap.get(potentialprey);
                 if (preds.contains(creature)) {
                     preys.add(potentialprey);
                 }
             }
-            preyMap_.put(creature, preys);
+            preyMap.put(creature, preys);
         }
     }
 
@@ -92,7 +92,6 @@ public enum CreatureType {
     public void setSize(double s) {
         size = s;
     }
-
 
     public double getNormalSpeed() {
         return normalSpeed;
@@ -135,11 +134,11 @@ public enum CreatureType {
     }
 
     public List<CreatureType> getPredators() {
-        return predatorMap_.get(this);
+        return predatorMap.get(this);
     }
 
     public List<CreatureType> getPreys() {
-        return preyMap_.get(this);
+        return preyMap.get(this);
     }
 
     public String toString() {
@@ -148,7 +147,6 @@ public enum CreatureType {
 
     /** for testing */
     public static void main(String[] args) {
-        System.out.println("preyMap = " + preyMap_);
+        System.out.println("preyMap = " + preyMap);
     }
-
 }

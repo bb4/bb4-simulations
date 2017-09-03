@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.options;
+package com.barrybecker4.simulation.habitat1.options;
 
-import com.barrybecker4.simulation.habitat.HabitatSimulator;
-import com.barrybecker4.simulation.habitat.creatures.Population;
+import com.barrybecker4.simulation.habitat1.HabitatSimulator;
+import com.barrybecker4.simulation.habitat1.creatures.Population;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
 

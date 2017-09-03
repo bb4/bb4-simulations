@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.creatures;
+package com.barrybecker4.simulation.habitat1.creatures;
 
-import com.barrybecker4.simulation.habitat.model.Cell;
-import com.barrybecker4.simulation.habitat.model.HabitatGrid;
+import com.barrybecker4.simulation.habitat1.model.Cell;
+import com.barrybecker4.simulation.habitat1.model.HabitatGrid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,32 +13,29 @@ import java.util.List;
  *
  * @author Barry Becker
  */
-public class Neighbors {
+class Neighbors {
 
     /** only pursue prey that is this close to us */
     private static final double SMELL_NEIGHBOR_DISTANCE = 0.1;
 
-    public Creature nearestPrey;
-    public Creature nearestFriend;
+    Creature nearestPrey;
+    Creature nearestFriend;
     List<Creature> flockFriends;
 
-    Creature creature;
-    HabitatGrid grid;
+    private Creature creature;
+    private HabitatGrid grid;
 
     /**
      * Constructor
      */
-    public Neighbors(Creature creature, HabitatGrid grid) {
+    Neighbors(Creature creature, HabitatGrid grid) {
         flockFriends = new ArrayList<>();
         this.creature = creature;
         this.grid = grid;
         findNeighbors();
     }
 
-    /**
-     *
-     * @return neighbors.
-     */
+
     private void findNeighbors() {
 
         CreatureType type = creature.getType();

@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.habitat.creatures;
+package com.barrybecker4.simulation.habitat1.creatures;
 
 import com.barrybecker4.common.math.MathUtil;
-import com.barrybecker4.simulation.habitat.model.Cell;
-import com.barrybecker4.simulation.habitat.model.HabitatGrid;
+import com.barrybecker4.simulation.habitat1.model.Cell;
+import com.barrybecker4.simulation.habitat1.model.HabitatGrid;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
