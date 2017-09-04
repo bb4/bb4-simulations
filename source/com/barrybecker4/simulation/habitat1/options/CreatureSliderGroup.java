@@ -13,7 +13,7 @@ import com.barrybecker4.ui.sliders.SliderProperties;
  */
 public class CreatureSliderGroup extends SliderGroup {
 
-    private Population creaturePop_;
+    private Population creaturePop;
 
     private static final String SIZE_LABEL = " size";
     private static final String GESTATION_LABEL = " gestation period";
@@ -26,13 +26,13 @@ public class CreatureSliderGroup extends SliderGroup {
     private static final double MAX_FACTOR = 6;
 
     public CreatureSliderGroup(Population creaturePop) {
-        creaturePop_ = creaturePop;
+        this.creaturePop = creaturePop;
         commonInit(createSliderProperties());
     }
 
     private SliderProperties[] createSliderProperties()  {
 
-        CreatureType type = creaturePop_.getType();
+        CreatureType type = creaturePop.getType();
         double normSpeed = type.getNormalSpeed();
         SliderProperties[] props = normSpeed==0? new SliderProperties[4] : new SliderProperties[6];
 
@@ -68,7 +68,7 @@ public class CreatureSliderGroup extends SliderGroup {
      */
     public void checkSliderChanged(String sliderName, double value) {
 
-        CreatureType type = creaturePop_.getType();
+        CreatureType type = creaturePop.getType();
 
         for (SliderProperties props : this.getSliderProperties()) {
             if (sliderName.equals(props.getName()))  {

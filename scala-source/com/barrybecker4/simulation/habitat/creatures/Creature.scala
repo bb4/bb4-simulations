@@ -18,7 +18,7 @@ object Creature {
   private val THRESHOLD_TO_PREY = 0.001
 }
 
-class Creature private[creatures](var cType: CreatureType.Val, var location: Point2d) {
+class Creature private[creatures](var cType: CreatureType, var location: Point2d) {
 
   private var numDaysPregnant = 0
 
@@ -37,7 +37,7 @@ class Creature private[creatures](var cType: CreatureType.Val, var location: Poi
   def isAlive: Boolean = alive
   def isPursuing: Boolean = pursuing
   def getName: String = cType.name
-  def getType: CreatureType.Val = cType
+  def getType: CreatureType = cType
   def getLocation: Point2d = location
   def getDirection: Double = direction
   def getSize: Double = cType.size
@@ -93,7 +93,7 @@ class Creature private[creatures](var cType: CreatureType.Val, var location: Poi
   /**
     * Flock with nbrs
     * Move toward the center of mass of neighbors and turn in same direction as nearest friend.
-    * @param friends
+    * @param friends nearby friends
     */
   private def flock(friends: List[Creature], nearestFriend: Creature) {
     if (nearestFriend == null) return

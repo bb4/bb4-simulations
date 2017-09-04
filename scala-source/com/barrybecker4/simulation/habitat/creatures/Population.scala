@@ -11,14 +11,14 @@ object Population {
   private val SPAWN_RADIUS = 0.05
 
   /** Factory method to create an initial population of randomly distributed members. */
-  private[creatures] def createPopulation(creatureType: CreatureType.Val, initialSize: Int) = {
+  private[creatures] def createPopulation(creatureType: CreatureType, initialSize: Int) = {
     val pop = new Population(creatureType)
     pop.createInitialSet(initialSize)
     pop
   }
 }
 
-class Population(var creatureType: CreatureType.Val) {
+class Population(var creatureType: CreatureType) {
   var creatures: Set[Creature] = Set[Creature]()
   private var initialSize = 0
 
