@@ -7,11 +7,13 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.habitat.creatures.Populations
 import com.barrybecker4.simulation.habitat.creatures.SerengetiPopulations
-import com.barrybecker4.simulation.habitat.options.DynamicOptions
-import com.barrybecker4.simulation.habitat.options.HabitatOptionsDialog
+import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
+import com.barrybecker4.simulation.habitat.ui.options.HabitatOptionsDialog
 import com.barrybecker4.ui.util.GUIUtil
 import javax.swing._
 import java.awt._
+
+import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, PopulationGraphPanel}
 
 
 

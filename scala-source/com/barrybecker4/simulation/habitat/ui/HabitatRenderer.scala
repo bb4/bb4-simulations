@@ -1,9 +1,11 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.habitat
+/*
+ * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.habitat.ui
 
-import com.barrybecker4.simulation.habitat.creatures.Creature
-import com.barrybecker4.simulation.habitat.creatures.Populations
 import java.awt._
+
+import com.barrybecker4.simulation.habitat.creatures.{Creature, Populations}
 
 
 /**
