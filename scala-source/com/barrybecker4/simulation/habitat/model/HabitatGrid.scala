@@ -5,7 +5,7 @@ import javax.vecmath.Point2d
 
 
 /**
-  * @author Barry Becker
+  * Grid that contains all the creatures/
   */
 class HabitatGrid(var xDim: Int, var yDim: Int) {
 

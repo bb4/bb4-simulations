@@ -1,7 +1,4 @@
-/*
- * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
-
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures
 
 import com.barrybecker4.common.math.MathUtil
@@ -55,8 +52,6 @@ class Creature private[creatures](var cType: CreatureType.Val, var location: Poi
     if (newValue < 0) 1 - newValue
     else newValue
   }
-
-  override def toString: String = getName + " hunger=" + hunger + " pregnant=" + numDaysPregnant + " alive=" + alive
 
   /** @return true if new child spawned*/
   def nextDay(grid: HabitatGrid): Boolean = {
@@ -132,4 +127,6 @@ class Creature private[creatures](var cType: CreatureType.Val, var location: Poi
     speed = cType.normalSpeed
     mature = true
   }
+
+  override def toString: String = getName + " hunger=" + hunger + " pregnant=" + numDaysPregnant + " alive=" + alive
 }
