@@ -4,9 +4,7 @@ package com.barrybecker4.simulation.habitat.model
 import javax.vecmath.Point2d
 
 
-/**
-  * Grid that contains all the creatures/
-  */
+/** Grid that contains all the creatures/ */
 class HabitatGrid(var xDim: Int, var yDim: Int) {
 
   private var cells = Array.ofDim[Cell](xDim + 1, yDim + 1)

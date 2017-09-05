@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.habitat.creatures.Creature
 
 
 /**
-  * @author Barry Becker
+  * Cell in the grid containing creatuers
   */
 class Cell(var xIndex: Int, var yIndex: Int) {
 
