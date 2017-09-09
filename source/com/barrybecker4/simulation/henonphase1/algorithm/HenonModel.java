@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.henonphase.algorithm;
+package com.barrybecker4.simulation.henonphase1.algorithm;
 
 import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
@@ -29,7 +29,7 @@ public class HenonModel  {
     /** offline rendering is fast  */
     private final OfflineGraphics offlineGraphics;
 
-    private ColorMap cmap_;
+    private ColorMap cmap;
 
 
     HenonModel(int width, int height, TravelerParams params,
@@ -41,7 +41,7 @@ public class HenonModel  {
         this.numTravelors = numTravelors;
         this.useUniformSeeds = uniformSeeds;
         this.connectPoints = connectPoints;
-        this.cmap_ = cmap;
+        this.cmap = cmap;
 
         travelers = new ArrayList<Traveler>(this.numTravelors);
         offlineGraphics = new OfflineGraphics(new Dimension(width, height), Color.BLACK);
@@ -64,12 +64,12 @@ public class HenonModel  {
         for (int i=0; i < numTravelors; i++) {
 
             if (useUniformSeeds) {
-                Color color = cmap_.getColorForValue(xpos);
+                Color color = cmap.getColorForValue(xpos);
                 travelers.add(new Traveler(xpos, 0, color, params));
             }
             else {
                 double randXPos = Math.random();
-                Color color = cmap_.getColorForValue(randXPos);
+                Color color = cmap.getColorForValue(randXPos);
                 travelers.add(new Traveler(randXPos, 0, color, params));
             }
             xpos += inc;

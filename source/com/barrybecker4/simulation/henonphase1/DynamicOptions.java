@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.henonphase;
+package com.barrybecker4.simulation.henonphase1;
 
 import com.barrybecker4.common.format.FormatUtil;
-import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm;
-import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams;
+import com.barrybecker4.simulation.henonphase1.algorithm.HenonAlgorithm;
+import com.barrybecker4.simulation.henonphase1.algorithm.TravelerParams;
 import com.barrybecker4.ui.legend.ContinuousColorLegend;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
@@ -24,7 +24,6 @@ class DynamicOptions extends JPanel
 
     private HenonAlgorithm algorithm;
     private HenonPhaseExplorer simulator;
-    private JCheckBox useConcurrency_;
     private JCheckBox useFixedSize;
     private JCheckBox useUniformSeeds;
     private JCheckBox connectPoints;
@@ -67,7 +66,7 @@ class DynamicOptions extends JPanel
         sliderGroup = new SliderGroup(SLIDER_PROPS);
         sliderGroup.addSliderChangeListener(this);
 
-        ContinuousColorLegend legend_ =
+        ContinuousColorLegend legend =
                 new ContinuousColorLegend(null, this.algorithm.getColorMap(), true);
 
         JPanel checkBoxes = createCheckBoxes();
@@ -75,7 +74,7 @@ class DynamicOptions extends JPanel
         add(Box.createVerticalStrut(10));
         add(checkBoxes);
         add(Box.createVerticalStrut(10));
-        add(legend_);
+        add(legend);
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
         add(fill);
@@ -85,10 +84,10 @@ class DynamicOptions extends JPanel
     private JPanel createCheckBoxes() {
 
         /*
-        useConcurrency_ = new JCheckBox("Parallel", algorithm.isParallelized());
-        useConcurrency_.setToolTipText(
+        useConcurrency = new JCheckBox("Parallel", algorithm.isParallelized());
+        useConcurrency.setToolTipText(
                 "Take advantage of multiple processors for calculation and rendering if present.");
-        useConcurrency_.addActionListener(this);    */
+        useConcurrency.addActionListener(this);    */
 
         useFixedSize = new JCheckBox("Fixed Size", simulator.getUseFixedSize());
         useFixedSize.addActionListener(this);
@@ -101,7 +100,7 @@ class DynamicOptions extends JPanel
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 1));
 
-        //checkBoxes.add(useConcurrency_);
+        //checkBoxes.add(useConcurrency);
         checkBoxes.add(useFixedSize);
         checkBoxes.add(useUniformSeeds);
         checkBoxes.add(connectPoints);
@@ -158,7 +157,7 @@ class DynamicOptions extends JPanel
     public void actionPerformed(ActionEvent e) {
 
         /*
-        if (e.getSource() == useConcurrency_) {
+        if (e.getSource() == useConcurrency) {
             boolean isParallelized = !algorithm.isParallelized();
             algorithm.setParallelized(isParallelized);
         } */
@@ -206,5 +205,4 @@ class DynamicOptions extends JPanel
             algorithm.setMaxIterations((int)value);
         }
     }
-
 }

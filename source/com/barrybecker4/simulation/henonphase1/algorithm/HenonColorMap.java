@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.henonphase.algorithm;
+package com.barrybecker4.simulation.henonphase1.algorithm;
 
 import com.barrybecker4.ui.util.ColorMap;
 

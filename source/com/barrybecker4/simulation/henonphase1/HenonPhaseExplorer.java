@@ -1,11 +1,11 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.henonphase;
+package com.barrybecker4.simulation.henonphase1;
 
 import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm;
+import com.barrybecker4.simulation.henonphase1.algorithm.HenonAlgorithm;
 
 import javax.swing.*;
 import java.awt.*;

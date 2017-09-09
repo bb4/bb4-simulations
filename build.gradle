@@ -123,6 +123,13 @@ task runHenonPhaseExplorer(type: JavaExec, description: "Run henon phase simulat
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runHenonPhaseExplorer1(type: JavaExec, description: "Run henon phase simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.henonphase1.HenonPhaseExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runHabitatExplorer(type: JavaExec, description: "Run animal habitat simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
