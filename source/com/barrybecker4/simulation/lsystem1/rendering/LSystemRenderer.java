@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.lsystem.rendering;
+package com.barrybecker4.simulation.lsystem1.rendering;
 
 import com.barrybecker4.ui.util.ColorMap;
 import com.barrybecker4.common.expression.TreeNode;
-import com.barrybecker4.simulation.lsystem.model.expression.LExpressionParser;
+import com.barrybecker4.simulation.lsystem1.model.expression.LExpressionParser;
 import com.barrybecker4.ui.renderers.OfflineGraphics;
 
 import java.awt.Color;
@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.barrybecker4.simulation.lsystem.model.expression.LTokens.*;
+import static com.barrybecker4.simulation.lsystem1.model.expression.LTokens.*;
 
 /**
  * Everything we need to know to compute the l-System tree.

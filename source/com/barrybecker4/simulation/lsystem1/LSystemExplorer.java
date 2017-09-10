@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.lsystem;
+package com.barrybecker4.simulation.lsystem1;
 
 import com.barrybecker4.simulation.common.Profiler;
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.lsystem.model.LSystemModel;
+import com.barrybecker4.simulation.lsystem1.model.LSystemModel;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -12,6 +12,9 @@ import java.awt.Graphics;
 /**
  * Interactively explores LSystem generated trees based on a user supplied expression.
  * See http://en.wikipedia.org/wiki/L-system
+ * Todo:
+ *  - add ability to pan with mouse
+ *  - add dropdown for preset expressions (like F-F+F+FF-F-F+F)
  *
  * @author Barry Becker.
  */

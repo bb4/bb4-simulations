@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.lsystem.model.expression;
+package com.barrybecker4.simulation.lsystem1.model.expression;
 
 import com.barrybecker4.common.expression.ExpressionParser;
 import com.barrybecker4.common.expression.Tokens;
@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Parses the text form of an L-system expression into a tree representation.
+ * See https://en.wikipedia.org/wiki/L-system
  * @author Barry Becker
  */
 public class LExpressionParser extends ExpressionParser {
@@ -22,7 +23,7 @@ public class LExpressionParser extends ExpressionParser {
     /**
      * Recursive method to find all the tree nodes for the terms a the current level.
      * For example, given this expression
-     * FF(F(-F)(++F)
+     * FF(F(-F)(++F))
      * the items in []'s represent the array of nodes returned.
      * [FF][F(-F)][++F]
      * The parts that were in ()'s become their own subtrees via recursive calls.

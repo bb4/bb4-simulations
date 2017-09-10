@@ -1,13 +1,16 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.lsystem.model;
+package com.barrybecker4.simulation.lsystem1.model;
 
 import com.barrybecker4.simulation.common.Profiler;
-import com.barrybecker4.simulation.lsystem.rendering.LSystemRenderer;
+import com.barrybecker4.simulation.lsystem1.rendering.LSystemRenderer;
 
 import javax.swing.JOptionPane;
 import java.awt.image.BufferedImage;
 
 /**
+ * See https://en.wikipedia.org/wiki/L-system
+ * For explanation of the grammar and different types of L-systems.
+ * The language should be expanded to include support for more terms.
  * @author Barry Becker
  */
 public class LSystemModel {

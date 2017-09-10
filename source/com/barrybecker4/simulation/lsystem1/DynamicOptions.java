@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.lsystem;
+package com.barrybecker4.simulation.lsystem1;
 
-import com.barrybecker4.simulation.lsystem.model.LSystemModel;
+import com.barrybecker4.simulation.lsystem1.model.LSystemModel;
 import com.barrybecker4.ui.components.TextInput;
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;

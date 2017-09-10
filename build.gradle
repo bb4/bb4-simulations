@@ -151,6 +151,13 @@ task runLSystemExplorer(type: JavaExec, description: "Run l-system tree simulato
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runLSystemExplorer1(type: JavaExec, description: "Run l-system tree simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.lsystem1.LSystemExplorer"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 task runCaveExplorer(type: JavaExec, description: "Run cave simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
