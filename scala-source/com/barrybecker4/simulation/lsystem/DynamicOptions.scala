@@ -90,7 +90,7 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
   }
 
   private def updateFormulaText() {
-    val text = new StringBuilder
+    val text = new StringBuilder(algorithm.getExpression)
     formulaText.setText(text.toString)
   }
 
@@ -117,6 +117,9 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
   override def keyPressed(key: KeyEvent) {}
   override def keyReleased(key: KeyEvent) {
     val keyChar = key.getKeyChar
-    if (keyChar == '\n') algorithm.setExpression(expression.getValue)
+    if (keyChar == '\n') {
+      algorithm.setExpression(expression.getValue)
+      updateFormulaText()
+    }
   }
 }

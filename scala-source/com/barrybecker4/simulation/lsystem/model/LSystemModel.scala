@@ -81,6 +81,8 @@ class LSystemModel() {
     }
   }
 
+  def getExpression: String = {renderer.getSerializedExpression }
+
   private def requestRestart(width: Int, height: Int) {
     try {
       renderer = new LSystemRenderer(width, height, expression, numIterations, angle, scale, scaleFactor)

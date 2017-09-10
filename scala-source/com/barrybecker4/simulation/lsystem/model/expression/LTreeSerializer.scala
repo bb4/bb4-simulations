@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
   */
 class LTreeSerializer {
 
-  private[expression] def serialize(node: TreeNode) = {
+  def serialize(node: TreeNode) = {
     var serialized = ""
     if (node != null) serialized = traverse(node)
     if (serialized.length > 0) serialized

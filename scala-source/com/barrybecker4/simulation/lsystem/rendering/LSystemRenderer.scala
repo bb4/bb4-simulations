@@ -2,13 +2,15 @@
 package com.barrybecker4.simulation.lsystem.rendering
 
 import com.barrybecker4.common.expression.TreeNode
-import com.barrybecker4.simulation.lsystem.model.expression.LExpressionParser
+import com.barrybecker4.simulation.lsystem.model.expression.{LExpressionParser, LTreeSerializer}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.image.BufferedImage
+
 import com.barrybecker4.simulation.lsystem.model.expression.LToken._
 import java.util
+
 import scala.collection.JavaConverters._
 
 
@@ -28,6 +30,7 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
   private var root: TreeNode = _
   private var angleIncrement = angleInc * Math.PI / 180
   val parser = new LExpressionParser
+  val serializer = new LTreeSerializer
   try
     root = parser.parse(expression)
   catch {
@@ -40,6 +43,7 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
   def getHeight: Int = height
   def reset() {}
   def getImage: BufferedImage = offlineGraphics.getOfflineImage
+  def getSerializedExpression: String = serializer.serialize(root)
 
   /** draw the tree */
   def render(): Unit = {
@@ -67,7 +71,7 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
   }
 
   /** note: current position is changed by the processing of the symbol */
-  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: Char, depth: Int): Unit = {
+  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: Char, depth: Int) {
     if (c == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
     else drawF(currentPos, length, depth)
     else if (c == MINUS.symbol) currentPos.angle -= angleIncrement
@@ -75,7 +79,7 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
     else throw new IllegalStateException("Unexpected char: " + c)
   }
 
-  private def drawF(pos: OrientedPosition, length: Double, num: Int): Unit = {
+  private def drawF(pos: OrientedPosition, length: Double, num: Int) {
     val startX = pos.x.toInt
     val startY = -pos.y.toInt
     pos.x += scale * length * Math.cos(pos.angle)
