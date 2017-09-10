@@ -30,18 +30,18 @@ import java.awt.event.KeyListener;
 class DynamicOptions extends JPanel
                      implements ActionListener, KeyListener, SliderGroupChangeListener {
 
-    private LSystemModel algorithm_;
-    private LSystemExplorer simulator_;
-    private JCheckBox useFixedSize_;
-    private TextInput expression_;
+    private LSystemModel algorithm;
+    private LSystemExplorer simulator;
+    private JCheckBox useFixedSize;
+    private TextInput expression;
 
     private static final String NUM_ITERATIONS_SLIDER = "Num Iterations";
     private static final String ANGLE_SLIDER = "Angle";
     private static final String SCALE_SLIDER = "Sale";
     private static final String SCALE_FACTOR_SLIDER = "Sale Factor";
 
-    private SliderGroup sliderGroup_;
-    private JTextArea formulaText_;
+    private SliderGroup sliderGroup;
+    private JTextArea formulaText;
 
 
     private static final SliderProperties[] SLIDER_PROPS = {
@@ -62,16 +62,16 @@ class DynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        algorithm_ = algorithm;
-        simulator_ = simulator;
+        this.algorithm = algorithm;
+        this.simulator = simulator;
 
-        sliderGroup_ = new SliderGroup(SLIDER_PROPS);
-        sliderGroup_.addSliderChangeListener(this);
+        sliderGroup = new SliderGroup(SLIDER_PROPS);
+        sliderGroup.addSliderChangeListener(this);
 
         JPanel checkBoxes = createCheckBoxes();
         add(createExpressionInput());
         add(Box.createVerticalStrut(10));
-        add(sliderGroup_);
+        add(sliderGroup);
         add(checkBoxes);
         JPanel fill = new JPanel();
         fill.setPreferredSize(new Dimension(1, 1000));
@@ -81,19 +81,19 @@ class DynamicOptions extends JPanel
 
     private JPanel createExpressionInput() {
         JPanel p = new JPanel(new FlowLayout());
-        expression_ = new TextInput("Expression", LSystemModel.DEFAULT_EXPRESSION, 18);
-        expression_.addKeyListener(this);
-        p.add(expression_);
+        expression = new TextInput("Expression", LSystemModel.DEFAULT_EXPRESSION, 18);
+        expression.addKeyListener(this);
+        p.add(expression);
         return p;
     }
 
     private JPanel createCheckBoxes() {
 
-        useFixedSize_ = new JCheckBox("Fixed Size", simulator_.getUseFixedSize());
-        useFixedSize_.addActionListener(this);
+        useFixedSize = new JCheckBox("Fixed Size", simulator.getUseFixedSize());
+        useFixedSize.addActionListener(this);
 
         JPanel checkBoxes = new JPanel(new GridLayout(0, 1));
-        checkBoxes.add(useFixedSize_);
+        checkBoxes.add(useFixedSize);
 
         checkBoxes.setBorder(BorderFactory.createEtchedBorder());
         return checkBoxes;
@@ -104,23 +104,23 @@ class DynamicOptions extends JPanel
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BorderLayout());
 
-        formulaText_ = new JTextArea();
-        formulaText_.setEditable(false);
-        formulaText_.setBackground(getBackground());
+        formulaText = new JTextArea();
+        formulaText.setEditable(false);
+        formulaText.setBackground(getBackground());
         updateFormulaText();
 
-        textPanel.add(formulaText_, BorderLayout.CENTER);
+        textPanel.add(formulaText, BorderLayout.CENTER);
         return textPanel;
     }
 
     private void updateFormulaText() {
 
         StringBuilder text = new StringBuilder();
-        formulaText_.setText(text.toString());
+        formulaText.setText(text.toString());
     }
 
     public void reset() {
-        sliderGroup_.reset();
+        sliderGroup.reset();
     }
 
     /**
@@ -128,8 +128,8 @@ class DynamicOptions extends JPanel
      */
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == useFixedSize_) {
-            simulator_.setUseFixedSize(useFixedSize_.isSelected());
+        if (e.getSource() == useFixedSize) {
+            simulator.setUseFixedSize(useFixedSize.isSelected());
         }
     }
 
@@ -140,16 +140,16 @@ class DynamicOptions extends JPanel
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
         if (sliderName.equals(NUM_ITERATIONS_SLIDER)) {
-            algorithm_.setNumIterations((int)value);
+            algorithm.setNumIterations((int)value);
         }
         else if (sliderName.equals(ANGLE_SLIDER)) {
-            algorithm_.setAngle(value);
+            algorithm.setAngle(value);
         }
         else if (sliderName.equals(SCALE_SLIDER)) {
-            algorithm_.setScale(value);
+            algorithm.setScale(value);
         }
         else if (sliderName.equals(SCALE_FACTOR_SLIDER)) {
-            algorithm_.setScaleFactor(value);
+            algorithm.setScaleFactor(value);
         }
     }
 
@@ -163,7 +163,7 @@ class DynamicOptions extends JPanel
     public void keyReleased(KeyEvent key) {
         char keyChar = key.getKeyChar();
         if ( keyChar == '\n' ) {
-            algorithm_.setExpression(expression_.getValue());
+            algorithm.setExpression(expression.getValue());
         }
     }
 

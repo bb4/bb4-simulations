@@ -2,13 +2,14 @@
 package com.barrybecker4.simulation.lsystem.rendering
 
 import com.barrybecker4.common.expression.TreeNode
-import com.barrybecker4.simulation.lsystem1.model.expression.LExpressionParser
+import com.barrybecker4.simulation.lsystem.model.expression.LExpressionParser
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.image.BufferedImage
 import com.barrybecker4.simulation.lsystem.model.expression.LToken._
 import java.util
+import scala.collection.JavaConverters._
 
 
 /**
@@ -54,8 +55,7 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
     */
   private def drawTree(pos: OrientedPosition, length: Double, tree: TreeNode, numIterations: Int, depth: Int){
     val list = new util.LinkedList[TreeNode](tree.children)
-    import scala.collection.JavaConversions._
-    for (child <- list) {
+    for (child <- list.asScala) {
       if (child.hasParens) drawTree(new OrientedPosition(pos), scaleFactor * length, child, numIterations, depth + 1)
       else {
         val baseExp = child.getData
