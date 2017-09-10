@@ -1,5 +1,6 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem1.model.expression;
+
 import com.barrybecker4.common.expression.Operator;
 import com.barrybecker4.common.expression.OperatorsDefinition;
 import com.barrybecker4.common.expression.TreeNode;

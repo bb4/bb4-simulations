@@ -8,7 +8,8 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
 /**
   * Everything we need to know about a creature.
   * There are many different sorts of creatures.
-  * Add more creatures like sheep, fox, chickens, ants, vulture,
+  * Add more creatures like sheep, fox, chickens, ants, vulture, etc.
+  * This is probably the best pattern to follow for enums with properties and methods.
   * @author Barry Becker
   */
 object CreatureType  {
@@ -32,9 +33,9 @@ object CreatureType  {
   var preyMap: Map[CreatureType, Set[CreatureType]] = Map[CreatureType, Set[CreatureType]]()
   for (creature <- VALUES) {
     var preys = Set[CreatureType]()
-    for (potentialprey <- VALUES) {
-      val preds: Set[CreatureType] = predatorMap(potentialprey)
-      if (preds.contains(creature)) preys += potentialprey
+    for (potentialPrey <- VALUES) {
+      val preds: Set[CreatureType] = predatorMap(potentialPrey)
+      if (preds.contains(creature)) preys += potentialPrey
     }
     preyMap += (creature -> preys)
   }
