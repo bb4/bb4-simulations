@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage
 import com.barrybecker4.simulation.lsystem.model.expression.LToken._
 import java.util
 
+import com.barrybecker4.common.geometry.{IntLocation, Location}
+import com.barrybecker4.simulation.lsystem.Panable
+
 import scala.collection.JavaConverters._
 
 
@@ -25,10 +28,11 @@ object LSystemRenderer {
 }
 
 class LSystemRenderer(val width: Int, val height: Int, val expression: String, var numIterations: Int,
-                      val angleInc: Double, var scale: Double, var scaleFactor: Double) {
+                      val angleInc: Double, var scale: Double, var scaleFactor: Double) extends Panable {
   private val cmap = new DepthColorMap
   private var root: TreeNode = _
   private var angleIncrement = angleInc * Math.PI / 180
+  private var offset: Location = new IntLocation(0, 0)
   val parser = new LExpressionParser
   val serializer = new LTreeSerializer
   try
@@ -46,11 +50,18 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
   def getSerializedExpression: String = serializer.serialize(root)
 
   /** draw the tree */
-  def render(): Unit = {
+  def render() {
+    offlineGraphics.clear()
     offlineGraphics.setColor(Color.RED)
-    val initialPosition = new OrientedPosition(width / 2.0, height / 8.0 - height, Math.PI / 2.0)
+    val initialPosition =
+      new OrientedPosition(width / 2.0 + offset.getX, height / 8.0 - height + offset.getY, Math.PI / 2.0)
     val length = LSystemRenderer.LENGTH * width / 10.0
     drawTree(initialPosition, length, root, numIterations, 0)
+  }
+
+  def incrementOffset(incrementAmount: Location) {
+    offset = offset.incrementOnCopy(incrementAmount)
+    render()
   }
 
   /**

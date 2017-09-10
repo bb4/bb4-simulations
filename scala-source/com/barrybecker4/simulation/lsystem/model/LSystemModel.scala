@@ -5,7 +5,10 @@ import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.lsystem.rendering.LSystemRenderer
 import javax.swing.JOptionPane
 import java.awt.image.BufferedImage
+
 import LSystemModel._
+import com.barrybecker4.common.geometry.Location
+import com.barrybecker4.simulation.lsystem.{InteractionHandler, Panable}
 
 
 /**
@@ -23,7 +26,7 @@ object LSystemModel {
   private val DEFAULT_SIZE = 256
 }
 
-class LSystemModel() {
+class LSystemModel() extends Panable {
   reset()
   private var renderer: LSystemRenderer = _
   private var numIterations = 0
@@ -35,6 +38,11 @@ class LSystemModel() {
 
   def setSize(width: Int, height: Int): Unit = {
     if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
+  }
+
+  def incrementOffset(incrementAmount: Location) {
+    renderer.incrementOffset(incrementAmount)
+
   }
 
   def reset(): Unit = {

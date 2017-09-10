@@ -25,6 +25,7 @@ object LSystemExplorer {
 class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
 
   private var algorithm: LSystemModel = _
+  var handler: InteractionHandler = _
   private var options: DynamicOptions = _
   private var useFixedSize = false
   commonInit()
@@ -38,6 +39,9 @@ class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
 
   private def commonInit(): Unit = {
     algorithm = new LSystemModel
+    handler = new InteractionHandler(algorithm)
+    this.addMouseListener(handler)
+    this.addMouseMotionListener(handler)
     initCommonUI()
     reset()
   }

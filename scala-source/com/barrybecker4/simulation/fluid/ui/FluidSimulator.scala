@@ -43,7 +43,7 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
 
   def this() { this(new FluidEnvironment(250, 200)) }
 
-  private def commonInit() = {
+  private def commonInit() {
     initCommonUI()
     envRenderer = new EnvironmentRenderer(environment.getGrid, renderOptions)
     val scale = envRenderer.getOptions.getScale.toInt
@@ -60,8 +60,8 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
   def getRenderer: EnvironmentRenderer = envRenderer
   def getEnvironment: FluidEnvironment = environment
   def getInteractionHandler: InteractionHandler = handler
-  override def getBackground = FluidSimulator.BG_COLOR
-  override protected def getInitialTimeStep = FluidSimulator.INITIAL_TIME_STEP
+  override def getBackground: Color = FluidSimulator.BG_COLOR
+  override protected def getInitialTimeStep: Double = FluidSimulator.INITIAL_TIME_STEP
   override def setScale(scale: Double) { envRenderer.getOptions.setScale(scale) }
   override def getScale: Double = envRenderer.getOptions.getScale
   def setShowVelocityVectors(show: Boolean) { envRenderer.getOptions.setShowVelocities(show)}

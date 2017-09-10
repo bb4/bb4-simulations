@@ -28,7 +28,7 @@ class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends 
   private var mouse3Down = false
 
   def setForce(force: Double): Unit = { this.force = force }
-  private[ui] def setSourceDensity(sourceDensity: Double) = { this.sourceDensity = sourceDensity }
+  private[ui] def setSourceDensity(sourceDensity: Double) { this.sourceDensity = sourceDensity }
 
   /** Make waves or adds ink when dragging depending on the mouse key held down. */
   override def mouseDragged(e: MouseEvent) {
@@ -53,7 +53,8 @@ class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends 
   }
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
-  private def applyChange(i: Int, j: Int, weight: Double) = { // if the left mouse is down, make waves
+  private def applyChange(i: Int, j: Int, weight: Double) {
+    // if the left mouse is down, make waves
     if (mouse1Down) {
       val fu = weight * force * (currentX - lastX) / scale
       val fv = weight * force * (currentY - lastY) / scale
