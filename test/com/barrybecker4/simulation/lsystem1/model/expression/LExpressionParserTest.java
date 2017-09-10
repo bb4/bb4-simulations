@@ -60,5 +60,4 @@ public class LExpressionParserTest extends TestCase {
         assertEquals("Unexpected parsed expression tree.",
                 expSerializedStr, serialized);
     }
-
 }
