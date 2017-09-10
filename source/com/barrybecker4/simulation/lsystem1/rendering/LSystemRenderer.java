@@ -87,11 +87,11 @@ public class LSystemRenderer {
         drawTree(initialPosition, length, root, numIterations, 0);
     }
 
-	/**
-	 * Draw the tree recursively.
-	 * @param pos the position and angle in radians that the turtle graphics used when rotating '+' or '-'
-	 */
-	private void drawTree(OrientedPosition pos, double length, TreeNode tree, int numIterations, int depth) {
+    /**
+     * Draw the tree recursively.
+     * @param pos the position and angle in radians that the turtle graphics used when rotating '+' or '-'
+     */
+    private void drawTree(OrientedPosition pos, double length, TreeNode tree, int numIterations, int depth) {
 
         List<TreeNode> list = new LinkedList<TreeNode>(tree.children);
 

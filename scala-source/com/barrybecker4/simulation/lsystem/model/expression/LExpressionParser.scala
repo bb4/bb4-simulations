@@ -30,9 +30,7 @@ class LExpressionParser() extends ExpressionParser(new LOperatorsDefinition) {
     val nodes = new util.ArrayList[TreeNode]
     var token = ""
     var ch = exp.charAt(pos)
-    while ( {
-      pos < exp.length && !(token == "" + Tokens.RIGHT_PAREN.getSymbol)
-    }) {
+    while (pos < exp.length && !(token == "" + Tokens.RIGHT_PAREN.getSymbol)) {
       if (ch == ' ') {
         // spaces are ignored
       }
