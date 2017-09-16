@@ -1,20 +1,21 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model
 
-import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.lsystem.rendering.LSystemRenderer
 import javax.swing.JOptionPane
 import java.awt.image.BufferedImage
 
 import LSystemModel._
 import com.barrybecker4.common.geometry.Location
-import com.barrybecker4.simulation.lsystem.{InteractionHandler, Panable}
+import com.barrybecker4.simulation.lsystem.Panable
 
 
 /**
   * See https://en.wikipedia.org/wiki/L-system
   * For explanation of the grammar and different types of L-systems.
   * The language should be expanded to include support for more terms.
+  *
+  * move all the private vars into renderer.
   * @author Barry Becker
   */
 object LSystemModel {
@@ -27,22 +28,22 @@ object LSystemModel {
 }
 
 class LSystemModel() extends Panable {
-  reset()
+
   private var renderer: LSystemRenderer = _
   private var numIterations = 0
   private var angle = .0
   private var scale = .0
   private var scaleFactor = .0
   private var expression: String = _
-  private var restartRequested = false
+  private var renderRequested = false
+  reset()
 
   def setSize(width: Int, height: Int): Unit = {
-    if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
+    if (width != renderer.getWidth || height != renderer.getHeight) requestRender(width, height)
   }
 
   def incrementOffset(incrementAmount: Location) {
     renderer.incrementOffset(incrementAmount)
-
   }
 
   def reset(): Unit = {
@@ -57,44 +58,44 @@ class LSystemModel() extends Panable {
   def setNumIterations(num: Int) {
     if (num != this.numIterations) {
       numIterations = num
-      requestRestart(renderer.getWidth, renderer.getHeight)
+      requestRender(renderer.getWidth, renderer.getHeight)
     }
   }
 
   def setAngle(ang: Double) {
     if (ang != angle) {
       angle = ang
-      requestRestart(renderer.getWidth, renderer.getHeight)
+      requestRender(renderer.getWidth, renderer.getHeight)
     }
   }
 
   def setScale(value: Double) {
     if (value != scale) {
       scale = value
-      requestRestart(renderer.getWidth, renderer.getHeight)
+      requestRender(renderer.getWidth, renderer.getHeight)
     }
   }
 
   def setScaleFactor(value: Double) {
     if (value != scaleFactor) {
       scaleFactor = value
-      requestRestart(renderer.getWidth, renderer.getHeight)
+      requestRender(renderer.getWidth, renderer.getHeight)
     }
   }
 
   def setExpression(exp: String) {
     if (!(exp == expression)) {
       expression = exp
-      requestRestart(renderer.getWidth, renderer.getHeight)
+      requestRender(renderer.getWidth, renderer.getHeight)
     }
   }
 
   def getExpression: String = {renderer.getSerializedExpression }
 
-  private def requestRestart(width: Int, height: Int) {
+  private def requestRender(width: Int, height: Int) {
     try {
       renderer = new LSystemRenderer(width, height, expression, numIterations, angle, scale, scaleFactor)
-      restartRequested = true
+      renderRequested = true
     } catch {
       case e: IllegalArgumentException =>
         JOptionPane.showMessageDialog(null, e.getMessage)
@@ -108,10 +109,9 @@ class LSystemModel() extends Panable {
     * @return true when done computing whole renderer.
     */
   def timeStep(timeStep: Double): Boolean = {
-    if (restartRequested) {
-      restartRequested = false
-      renderer.reset()
-      Profiler.getInstance.startCalculationTime()
+    if (renderRequested) {
+      renderRequested = false
+      //Profiler.getInstance.startCalculationTime()
       renderer.render()
     }
     false

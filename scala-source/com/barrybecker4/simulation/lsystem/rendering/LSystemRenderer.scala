@@ -18,7 +18,7 @@ import scala.collection.JavaConverters._
 
 
 /**
-  * Everything we need to know to compute the l-System tree.
+  * Everything we need to know to compute and draw the Lyndonmayer-System tree.
   * Should make the tree automatically center.
   * @author Barry Becker
   */
@@ -35,17 +35,15 @@ class LSystemRenderer(val width: Int, val height: Int, val expression: String, v
   private var offset: Location = new IntLocation(0, 0)
   val parser = new LExpressionParser
   val serializer = new LTreeSerializer
-  try
-    root = parser.parse(expression)
+  try root = parser.parse(expression)
   catch {
     case e: Exception =>
       throw new IllegalArgumentException(e.getMessage, e)
   }
-  final private var offlineGraphics= new OfflineGraphics(new Dimension(width, height), LSystemRenderer.BG_COLOR)
+  final private var offlineGraphics = new OfflineGraphics(new Dimension(width, height), LSystemRenderer.BG_COLOR)
 
   def getWidth: Int = width
   def getHeight: Int = height
-  def reset() {}
   def getImage: BufferedImage = offlineGraphics.getOfflineImage
   def getSerializedExpression: String = serializer.serialize(root)
 
