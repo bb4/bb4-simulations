@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.lsystem.model
 
 import com.barrybecker4.simulation.lsystem.rendering.LSystemRenderer
-import javax.swing.JOptionPane
 import java.awt.image.BufferedImage
 
 import LSystemModel._
@@ -28,92 +27,33 @@ object LSystemModel {
 }
 
 class LSystemModel() extends Panable {
-
   private var renderer: LSystemRenderer = _
-  private var numIterations = 0
-  private var angle = .0
-  private var scale = .0
-  private var scaleFactor = .0
-  private var expression: String = _
-  private var renderRequested = false
   reset()
 
-  def setSize(width: Int, height: Int): Unit = {
-    if (width != renderer.getWidth || height != renderer.getHeight) requestRender(width, height)
+  def reset() {
+    renderer = new LSystemRenderer(DEFAULT_SIZE, DEFAULT_SIZE,
+      DEFAULT_EXPRESSION, DEFAULT_ITERATIONS, DEFAULT_ANGLE, DEFAULT_SCALE, DEFAULT_SCALE_FACTOR)
+    renderer.render()
   }
 
-  def incrementOffset(incrementAmount: Location) {
-    renderer.incrementOffset(incrementAmount)
+  def setSize(width: Int, height: Int) {
+    if (width != renderer.getWidth || height != renderer.getHeight) renderer.setDimensions(width, height)
   }
 
-  def reset(): Unit = {
-    numIterations = DEFAULT_ITERATIONS
-    angle = DEFAULT_ANGLE
-    scale = DEFAULT_SCALE
-    scaleFactor = DEFAULT_SCALE_FACTOR
-    expression = DEFAULT_EXPRESSION
-    renderer = new LSystemRenderer(DEFAULT_SIZE, DEFAULT_SIZE, expression, numIterations, angle, scale, scaleFactor)
-  }
-
-  def setNumIterations(num: Int) {
-    if (num != this.numIterations) {
-      numIterations = num
-      requestRender(renderer.getWidth, renderer.getHeight)
-    }
-  }
-
-  def setAngle(ang: Double) {
-    if (ang != angle) {
-      angle = ang
-      requestRender(renderer.getWidth, renderer.getHeight)
-    }
-  }
-
-  def setScale(value: Double) {
-    if (value != scale) {
-      scale = value
-      requestRender(renderer.getWidth, renderer.getHeight)
-    }
-  }
-
-  def setScaleFactor(value: Double) {
-    if (value != scaleFactor) {
-      scaleFactor = value
-      requestRender(renderer.getWidth, renderer.getHeight)
-    }
-  }
-
-  def setExpression(exp: String) {
-    if (!(exp == expression)) {
-      expression = exp
-      requestRender(renderer.getWidth, renderer.getHeight)
-    }
-  }
-
+  def incrementOffset(incrementAmount: Location) { renderer.incrementOffset(incrementAmount) }
+  def setNumIterations(num: Int) { renderer.setNumIterations(num) }
+  def setAngle(ang: Double) { renderer.setAngleInc(ang) }
+  def setScale(value: Double) { renderer.setScale(value)}
+  def setScaleFactor(value: Double) { renderer.setScaleFactor(value) }
+  def setExpression(exp: String) { renderer.setExpression(exp) }
   def getExpression: String = {renderer.getSerializedExpression }
-
-  private def requestRender(width: Int, height: Int) {
-    try {
-      renderer = new LSystemRenderer(width, height, expression, numIterations, angle, scale, scaleFactor)
-      renderRequested = true
-    } catch {
-      case e: IllegalArgumentException =>
-        JOptionPane.showMessageDialog(null, e.getMessage)
-    }
-  }
-
   def getImage: BufferedImage = renderer.getImage
 
   /**
     * @param timeStep number of rows to compute on this timestep.
     * @return true when done computing whole renderer.
     */
-  def timeStep(timeStep: Double): Boolean = {
-    if (renderRequested) {
-      renderRequested = false
-      //Profiler.getInstance.startCalculationTime()
-      renderer.render()
-    }
-    false
+  def timeStep(timeStep: Double) {
+    renderer.render()
   }
 }

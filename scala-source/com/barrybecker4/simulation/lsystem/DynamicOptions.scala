@@ -36,7 +36,7 @@ object DynamicOptions {
   private val SLIDER_PROPS = Array(
     new SliderProperties(NUM_ITERATIONS_SLIDER, 0, 10, LSystemModel.DEFAULT_ITERATIONS),
     new SliderProperties(ANGLE_SLIDER, 0, 180, LSystemModel.DEFAULT_ANGLE, 100),
-    new SliderProperties(SCALE_SLIDER, 0.01, 2.2, LSystemModel.DEFAULT_SCALE, 1000.0),
+    new SliderProperties(SCALE_SLIDER, 0.001, 1.0, LSystemModel.DEFAULT_SCALE, 1000.0),
     new SliderProperties(SCALE_FACTOR_SLIDER, 0.2, 2.0, LSystemModel.DEFAULT_SCALE_FACTOR, 1000.0)
   )
 }
