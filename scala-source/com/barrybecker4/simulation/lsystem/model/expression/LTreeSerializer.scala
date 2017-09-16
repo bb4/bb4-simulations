@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
   */
 class LTreeSerializer {
 
-  def serialize(node: TreeNode) = {
+  def serialize(node: TreeNode): String = {
     var serialized = ""
     if (node != null) serialized = traverse(node)
     if (serialized.length > 0) serialized
@@ -23,15 +23,11 @@ class LTreeSerializer {
   private def traverse(node: TreeNode): String = {
     var text: String = ""
     if (node.children.size > 0) {
-      text += (if (node.hasParens) Tokens.LEFT_PAREN.getSymbol
-      else "")
-
-      for (n <- node.children.asScala) {
+      text += (if (node.hasParens) Tokens.LEFT_PAREN.getSymbol else "")
+      for (n <- node.children.asScala)
         text += traverse(n)
-      }
-      text += (if (node.hasParens) Tokens.RIGHT_PAREN.getSymbol.toString else "")
+      text + (if (node.hasParens) Tokens.RIGHT_PAREN.getSymbol.toString else "")
     }
-    else text += node.getData
-    text
+    else text + node.getData
   }
 }

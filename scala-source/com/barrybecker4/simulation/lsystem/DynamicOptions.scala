@@ -31,8 +31,8 @@ import java.awt.event.KeyListener
 object DynamicOptions {
   private val NUM_ITERATIONS_SLIDER = "Num Iterations"
   private val ANGLE_SLIDER = "Angle"
-  private val SCALE_SLIDER = "Sale"
-  private val SCALE_FACTOR_SLIDER = "Sale Factor"
+  private val SCALE_SLIDER = "Scale"
+  private val SCALE_FACTOR_SLIDER = "Scale Factor"
   private val SLIDER_PROPS = Array(
     new SliderProperties(NUM_ITERATIONS_SLIDER, 0, 10, LSystemModel.DEFAULT_ITERATIONS),
     new SliderProperties(ANGLE_SLIDER, 0, 180, LSystemModel.DEFAULT_ANGLE, 100),
