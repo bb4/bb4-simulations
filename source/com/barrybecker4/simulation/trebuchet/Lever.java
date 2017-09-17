@@ -20,26 +20,26 @@ public class Lever extends RenderablePart {
     private static final Color LEVER_COLOR = new Color(80, 60, 180);
 
 
-    public Lever(double counterWightLeverLength, double slingLeverLength) {
+    Lever(double counterWightLeverLength, double slingLeverLength) {
 
         counterWeightLeverLength = counterWightLeverLength;
         this.slingLeverLength = slingLeverLength;
     }
 
 
-    public double getSlingLeverLength() {
+    double getSlingLeverLength() {
         return slingLeverLength;
     }
 
-    public void setSlingLeverLength(double slingLeverLength) {
+    void setSlingLeverLength(double slingLeverLength) {
         this.slingLeverLength = slingLeverLength;
     }
 
-    public double getCounterWeightLeverLength() {
+    double getCounterWeightLeverLength() {
         return counterWeightLeverLength;
     }
 
-    public void setCounterWeightLeverLength(double counterWeightLeverLength) {
+    void setCounterWeightLeverLength(double counterWeightLeverLength) {
         this.counterWeightLeverLength = counterWeightLeverLength;
     }
 
@@ -51,12 +51,12 @@ public class Lever extends RenderablePart {
         return LEVER_MASS_PER_METER * getTotalLength();
     }
 
-    public double getTotalLength() {
+    private double getTotalLength() {
         return counterWeightLeverLength + slingLeverLength;
     }
 
     // @@ make constant to improve perf?
-    public Vector2d getFulcrumPosition() {
+    Vector2d getFulcrumPosition() {
         return new Vector2d(STRUT_BASE_X, (int) (-SCALE_FACTOR * height));
     }
 
@@ -65,12 +65,11 @@ public class Lever extends RenderablePart {
      * see physics book.
      * @return the moment of inertia for the lever
      */
-    public double getInertia() {
+    double getInertia() {
         double sllSquared = slingLeverLength * slingLeverLength;
         double cwlSquared = counterWeightLeverLength * counterWeightLeverLength;
         return getMass() / 3.0 * (sllSquared + cwlSquared);
     }
-
 
 
     public void render(Graphics2D g2, double scale) {

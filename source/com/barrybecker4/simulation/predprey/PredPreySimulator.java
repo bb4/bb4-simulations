@@ -37,10 +37,10 @@ public class PredPreySimulator extends Simulator {
     private CountFunction rabbitFunction;
     private CountFunction foxFunction;
 
-    private DynamicOptions options_;
+    private DynamicOptions options;
 
     /** Constructor */
-    private PredPreySimulator() {
+    public PredPreySimulator() {
         super("Predator Prey Simulation");
 
         foxes = new Foxes();
@@ -58,9 +58,8 @@ public class PredPreySimulator extends Simulator {
 
     @Override
     protected void reset() {
-
         initGraph();
-        options_.reset();
+        options.reset();
     }
 
     @Override
@@ -82,7 +81,7 @@ public class PredPreySimulator extends Simulator {
         rabbitFunction.addValue(iteration, rabbits.getPopulation());
         foxFunction.addValue(iteration, foxes.getPopulation());
 
-        options_.update();
+        options.update();
 
         return timeStep_;
     }
@@ -112,8 +111,8 @@ public class PredPreySimulator extends Simulator {
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(this);
-        return options_;
+        options = new DynamicOptions(this);
+        return options;
     }
 
 

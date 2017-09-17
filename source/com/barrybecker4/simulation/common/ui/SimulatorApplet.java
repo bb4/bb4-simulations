@@ -86,7 +86,6 @@ public class SimulatorApplet extends ApplicationApplet {
 
         try {
 
-            System.out.println("sim = " + className + " c = " + simulatorClass);
             simulator = (Simulator) simulatorClass.newInstance();
 
         } catch (InstantiationException e) {

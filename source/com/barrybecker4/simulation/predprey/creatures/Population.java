@@ -12,7 +12,6 @@ public abstract class Population {
 
     public double birthRate;
     public double deathRate;
-
     private int population;
 
 
@@ -44,13 +43,10 @@ public abstract class Population {
     public abstract double getInitialBirthRate();
     public abstract double getInitialDeathRate();
 
-
     public double getMaxBirthRate() {
         return 3.0;
     }
-
     public double getMaxDeathRate() {
         return 30.0;
     }
-
 }
