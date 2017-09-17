@@ -11,7 +11,7 @@ import java.awt.*;
 
 
 /**
- * Simluates graphing a function
+ * Simulates graphing a function
  *
  * @author Barry Becker
  */
@@ -20,7 +20,7 @@ public class GraphSimulator extends Simulator {
     private SingleFunctionRenderer graph;
     private Function function;
 
-    private GraphSimulator() {
+    public GraphSimulator() {
         super("Graph");
         initGraph();
     }

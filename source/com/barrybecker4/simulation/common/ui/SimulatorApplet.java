@@ -59,7 +59,6 @@ public class SimulatorApplet extends ApplicationApplet {
     public JPanel createMainPanel() {
 
         if (simulator == null) {
-
             String className = getParameter("panel_class"); //NON-NLS
             className = className == null ? DEFAULT_SIMULATOR : className;
             simulator = createSimulationFromClassName(className);
@@ -87,6 +86,7 @@ public class SimulatorApplet extends ApplicationApplet {
 
         try {
 
+            System.out.println("sim = " + className + " c = " + simulatorClass);
             simulator = (Simulator) simulatorClass.newInstance();
 
         } catch (InstantiationException e) {

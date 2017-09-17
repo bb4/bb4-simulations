@@ -50,6 +50,19 @@ task runGraphing1(type: JavaExec, description: "Run Graphing simulator (legacy j
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runParameters(type: JavaExec, description: "Run Parameter simulator") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.parameter.ParameterSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task runParameters1(type: JavaExec, description: "Run Parameter simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.parameter1.ParameterSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
 
 task runFluid(type: JavaExec, description: "Run fluid dynamics simulator") {
     group = 'application'

@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.parameter;
+package com.barrybecker4.simulation.parameter1;
 
 import com.barrybecker4.common.math.MathUtil;
 import com.barrybecker4.common.math.function.InvertibleFunction;
@@ -25,7 +25,7 @@ public class ParameterSimulator extends DistributionSimulator {
 
     private boolean showRedistribution_ = true;
 
-    private ParameterSimulator() {
+    public ParameterSimulator() {
         super("Parameter Histogram");
         initHistogram();
     }
