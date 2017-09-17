@@ -21,9 +21,8 @@ public class ParameterSimulator extends DistributionSimulator {
     private static final int NUM_DOUBLE_BINS = 1000;
 
     /** initialize with some default */
-    private Parameter parameter_ = ParameterDistributionType.values()[0].getParameter();
-
-    private boolean showRedistribution_ = true;
+    private Parameter parameter = ParameterDistributionType.values()[0].getParameter();
+    private boolean showRedistribution = true;
 
     public ParameterSimulator() {
         super("Parameter Histogram");
@@ -31,30 +30,30 @@ public class ParameterSimulator extends DistributionSimulator {
     }
 
     public void setParameter(Parameter parameter) {
-        parameter_ = parameter;
+        this.parameter = parameter;
         initHistogram();
     }
 
     void setShowRedistribution(boolean show) {
-        showRedistribution_ = show;
+        showRedistribution = show;
     }
 
     boolean isShowRedistribution() {
-        return showRedistribution_;
+        return showRedistribution;
     }
 
     @Override
     protected void initHistogram() {
 
-        if (parameter_.isIntegerOnly()) {
-            data = new int[(int)parameter_.getRange() + 1];
+        if (parameter.isIntegerOnly()) {
+            data = new int[(int) parameter.getRange() + 1];
             histogram = new HistogramRenderer(data);
         }
         else {
             data = new int[NUM_DOUBLE_BINS];
 
-            double scale = NUM_DOUBLE_BINS / parameter_.getRange();
-            double offset = -parameter_.getMinValue();
+            double scale = NUM_DOUBLE_BINS / parameter.getRange();
+            double offset = -parameter.getMinValue();
             //System.out.println("new Lin scale = " +scale + " off="+ offset);
             InvertibleFunction xFunc = new LinearFunction(scale, offset);
 
@@ -70,18 +69,18 @@ public class ParameterSimulator extends DistributionSimulator {
     @Override
     protected double getXPositionToIncrement() {
 
-        if (showRedistribution_) {
-            parameter_.randomizeValue(MathUtil.RANDOM);
+        if (showRedistribution) {
+            parameter.randomizeValue(MathUtil.RANDOM);
         }
         else {
-            //System.out.println("parameter_.getRange()="+parameter_.getRange());
-            //double scale = parameter_.isIntegerOnly()?  parameter_.getRange() +1.0 : parameter_.getRange();
-            double scale = parameter_.getRange();
-            double v = parameter_.getMinValue() + MathUtil.RANDOM.nextDouble() * scale;
-            parameter_.setValue(v);
+            //System.out.println("parameter.getRange()="+parameter.getRange());
+            //double scale = parameter.isIntegerOnly()?  parameter.getRange() +1.0 : parameter.getRange();
+            double scale = parameter.getRange();
+            double v = parameter.getMinValue() + MathUtil.RANDOM.nextDouble() * scale;
+            parameter.setValue(v);
         }
 
-        return parameter_.getValue();
+        return parameter.getValue();
     }
 
     public static void main( String[] args ) {
@@ -89,5 +88,3 @@ public class ParameterSimulator extends DistributionSimulator {
         runSimulation(sim);
     }
 }
-
-

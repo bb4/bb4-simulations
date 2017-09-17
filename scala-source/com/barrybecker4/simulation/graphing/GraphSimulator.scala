@@ -37,12 +37,10 @@ class GraphSimulator private() extends Simulator("Graph") {
   override def timeStep: Double = timeStep_
   override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
 
-  private def initGraph() = {
+  private def initGraph() {
     if (function == null) function = DIAGONAL.function
     graph = new SingleFunctionRenderer(function)
   }
-
-
 
   override def paint(g: Graphics) {
     graph.setSize(getWidth, getHeight)
