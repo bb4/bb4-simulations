@@ -1,16 +1,16 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake;
+package com.barrybecker4.simulation.snake1;
 
-import com.barrybecker4.simulation.snake.data.ISnakeData;
-import com.barrybecker4.simulation.snake.geometry.HeadSegment;
-import com.barrybecker4.simulation.snake.geometry.Segment;
+import com.barrybecker4.simulation.snake1.data.SnakeData;
+import com.barrybecker4.simulation.snake1.geometry.HeadSegment;
+import com.barrybecker4.simulation.snake1.geometry.Segment;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 /**
  *  Data structure and methods for representing a single dynamic snake
- *  The geometry of the snake is defined by ISnakeData
+ *  The geometry of the snake is defined by SnakeData
  *  General Improvements:
  *    - auto optimize with hill-climbing (let the snake learn how to move faster on its own)
  *    - add texture for snake skin
@@ -29,7 +29,7 @@ import javax.vecmath.Vector2d;
 public class Snake {
 
     /** defines the snake geometry */
-    private ISnakeData snakeData;
+    private SnakeData snakeData;
 
     /** the array of segments which make up the snake */
     private Segment[] segment = null;
@@ -40,14 +40,14 @@ public class Snake {
      * use a hardcoded static data interface to initialize
      * so it can be easily run in an applet without using resources.
      */
-    public Snake(ISnakeData snakeData) {
+    public Snake(SnakeData snakeData) {
         setData(snakeData);
     }
 
     /**
      * @param snakeData the data defining the snakes geometrical shape.
      */
-    public void setData(ISnakeData snakeData) {
+    public void setData(SnakeData snakeData) {
         this.snakeData = snakeData;
         initFromData();
     }

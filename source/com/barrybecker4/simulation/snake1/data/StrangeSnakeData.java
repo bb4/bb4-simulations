@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.data;
+package com.barrybecker4.simulation.snake1.data;
 
 /**
  * Snake geometry data
@@ -8,7 +8,7 @@ package com.barrybecker4.simulation.snake.data;
  *
  *  @author Barry Becker
  */
-public final class StrangeSnakeData implements ISnakeData {
+public final class StrangeSnakeData implements SnakeData {
 
     /** The widths starting at the nose and edging at the tip of the tail  */
     private static final double[] WIDTHS = {

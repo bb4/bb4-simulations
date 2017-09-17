@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake;
+package com.barrybecker4.simulation.snake1;
 
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
@@ -58,9 +58,9 @@ class SnakeDynamicOptions extends JPanel
         sliderProps = new SliderProperties[]{
                 //                                     MIN  MAX   INITIAL   SCALE
                 new SliderProperties(DIRECTION_SLIDER, -1.0, 1.0, params.getDirection(), 100),
-                new SliderProperties(WAVE_SPEED_SLIDER, 0.0001, 0.1, params.getWaveSpeed(), 1000),
+                new SliderProperties(WAVE_SPEED_SLIDER, 0.00001, 0.01, params.getWaveSpeed(), 1000),
                 new SliderProperties(WAVE_AMPLITUDE_SLIDER, 0.000, 0.3, params.getWaveAmplitude(), 100),
-                new SliderProperties(WAVE_PERIOD_SLIDER, .5, 5.0, params.getWavePeriod(), 100),
+                new SliderProperties(WAVE_PERIOD_SLIDER, .5, 10.0, params.getWavePeriod(), 100),
                 new SliderProperties(MASS_SCALE_SLIDER, 0.1, 6.0, params.getMassScale(), 100),
                 new SliderProperties(SPRING_CONST_SLIDER, 0.1, 4.0, params.getSpringK(), 100),
                 new SliderProperties(SPRING_DAMPING_SLIDER, 0.1, 4.0, params.getSpringDamping(), 100),

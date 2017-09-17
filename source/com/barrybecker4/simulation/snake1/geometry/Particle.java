@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.geometry;
+package com.barrybecker4.simulation.snake1.geometry;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -17,7 +17,7 @@ public class Particle extends Point2d {
     public Vector2d velocity;
 
     /** the acceleration vector of the particle in m/s^2 */
-    public Vector2d acceleration;
+    Vector2d acceleration;
 
     /** the force vector (sum of all forces acting on the particle) */
     public Vector2d force;

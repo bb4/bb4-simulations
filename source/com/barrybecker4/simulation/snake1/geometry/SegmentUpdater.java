@@ -1,12 +1,12 @@
 // Copyright by Barry G. Becker, 2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.snake.geometry;
+package com.barrybecker4.simulation.snake1.geometry;
 
-import com.barrybecker4.simulation.snake.LocomotionParameters;
+import com.barrybecker4.simulation.snake1.LocomotionParameters;
 
 import javax.vecmath.Vector2d;
 
-import static com.barrybecker4.simulation.snake.geometry.Segment.CENTER_INDEX;
-import static com.barrybecker4.simulation.snake.geometry.Segment.NUM_PARTICLES;
+import static com.barrybecker4.simulation.snake1.geometry.Segment.CENTER_INDEX;
+import static com.barrybecker4.simulation.snake1.geometry.Segment.NUM_PARTICLES;
 
 
 /**

@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.snake.rendering;
+package com.barrybecker4.simulation.snake1.rendering;
 
-import com.barrybecker4.simulation.snake.Snake;
+import com.barrybecker4.simulation.snake1.Snake;
 
 import java.awt.*;
 

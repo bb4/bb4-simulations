@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake;
+package com.barrybecker4.simulation.snake1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.format.FormatUtil;
@@ -13,10 +13,10 @@ import com.barrybecker4.optimization.strategy.OptimizationStrategyType;
 import com.barrybecker4.simulation.common.rendering.BackgroundGridRenderer;
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.snake.data.ISnakeData;
-import com.barrybecker4.simulation.snake.data.LongSnakeData;
-import com.barrybecker4.simulation.snake.rendering.RenderingParameters;
-import com.barrybecker4.simulation.snake.rendering.SnakeRenderer;
+import com.barrybecker4.simulation.snake1.data.SnakeData;
+import com.barrybecker4.simulation.snake1.data.LongSnakeData;
+import com.barrybecker4.simulation.snake1.rendering.RenderingParameters;
+import com.barrybecker4.simulation.snake1.rendering.SnakeRenderer;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;
@@ -73,7 +73,7 @@ public class SnakeSimulator extends NewtonianSimulator {
         commonInit();
     }
 
-    public SnakeSimulator( ISnakeData snakeData ) {
+    public SnakeSimulator( SnakeData snakeData ) {
         super("Snake");
         setSnakeData(snakeData);
     }
@@ -88,7 +88,7 @@ public class SnakeSimulator extends NewtonianSimulator {
         return INITIAL_TIME_STEP;
     }
 
-    public void setSnakeData(ISnakeData snakeData) {
+    public void setSnakeData(SnakeData snakeData) {
         snake.setData(snakeData);
         commonInit();
     }

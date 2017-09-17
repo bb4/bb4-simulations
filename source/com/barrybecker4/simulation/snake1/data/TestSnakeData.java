@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.data;
+package com.barrybecker4.simulation.snake1.data;
 
 
 /**
@@ -9,7 +9,7 @@ package com.barrybecker4.simulation.snake.data;
  *
  *  @author Barry Becker
  */
-public final class TestSnakeData implements ISnakeData {
+public final class TestSnakeData implements SnakeData {
 
     private static final int NUM_SEGMENTS = 22;
 

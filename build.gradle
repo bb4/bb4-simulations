@@ -71,7 +71,6 @@ task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-
 task runPredPrey1(type: JavaExec, description: "Run Predator Prey Simulation (legacy java)") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
@@ -97,6 +96,14 @@ task runSnake(type: JavaExec, description: "Run snake movement simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.snake.SnakeSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+    enableAssertions = true
+}
+
+task runSnake1(type: JavaExec, description: "Run snake movement simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.snake1.SnakeSimulator"]
     classpath = sourceSets.main.runtimeClasspath
     enableAssertions = true
 }

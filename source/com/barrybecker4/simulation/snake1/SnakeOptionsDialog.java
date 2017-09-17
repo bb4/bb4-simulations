@@ -1,10 +1,10 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake;
+package com.barrybecker4.simulation.snake1;
 
 import com.barrybecker4.common.math.WaveType;
 import com.barrybecker4.simulation.common.ui.NewtonianSimOptionsDialog;
-import com.barrybecker4.simulation.snake.data.ISnakeData;
-import com.barrybecker4.simulation.snake.data.SnakeType;
+import com.barrybecker4.simulation.snake1.data.SnakeData;
+import com.barrybecker4.simulation.snake1.data.SnakeType;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;
@@ -21,10 +21,10 @@ class SnakeOptionsDialog extends NewtonianSimOptionsDialog
                          implements ActionListener {
 
     /** type of snake to show.   */
-    private JComboBox snakeCombo;
+    private JComboBox<SnakeType> snakeCombo;
 
     /** type of snake to show.   */
-    private JComboBox waveTypeCombo;
+    private JComboBox<WaveType> waveTypeCombo;
 
     // snake numeric param options controls
     private NumberInput waveSpeedField;
@@ -51,12 +51,12 @@ class SnakeOptionsDialog extends NewtonianSimOptionsDialog
         snakeParamPanel.setBorder(
                 BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Snake Parameters" ) );
 
-        ComboBoxModel snakeModel = new DefaultComboBoxModel(SnakeType.values());
-        snakeCombo = new JComboBox(snakeModel);
+        ComboBoxModel<SnakeType> snakeModel = new DefaultComboBoxModel<>(SnakeType.values());
+        snakeCombo = new JComboBox<SnakeType>(snakeModel);
         snakeCombo.setToolTipText("Select a type of snake to show.");
 
-        ComboBoxModel waveModel = new DefaultComboBoxModel(WaveType.values());
-        waveTypeCombo = new JComboBox(waveModel);
+        ComboBoxModel<WaveType> waveModel = new DefaultComboBoxModel<>(WaveType.values());
+        waveTypeCombo = new JComboBox<>(waveModel);
         waveTypeCombo.setToolTipText("Select a type of wave form to use for muscle contractions.");
 
         LocomotionParameters params = ((SnakeSimulator) getSimulator()).getLocomotionParams();
@@ -120,7 +120,7 @@ class SnakeOptionsDialog extends NewtonianSimOptionsDialog
         params.setSpringDamping(springDampingField.getValue());
         params.setWaveType((WaveType)(waveTypeCombo.getSelectedItem()));
 
-        ISnakeData snakeData = ((SnakeType) snakeCombo.getSelectedItem()).getData();
+        SnakeData snakeData = ((SnakeType) snakeCombo.getSelectedItem()).getData();
         simulator.setSnakeData(snakeData);
     }
 }

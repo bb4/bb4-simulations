@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.data;
+package com.barrybecker4.simulation.snake1.data;
 
 
 /**
@@ -7,7 +7,7 @@ package com.barrybecker4.simulation.snake.data;
  *
  *  @author Barry Becker
  */
-public final class BumpySnakeData implements ISnakeData {
+public final class BumpySnakeData implements SnakeData {
 
     private static final double BUMP_TROUGH = 14;
     private static final double BUMP_1 = 20;

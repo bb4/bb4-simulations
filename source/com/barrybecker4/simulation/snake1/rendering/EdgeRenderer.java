@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.rendering;
+package com.barrybecker4.simulation.snake1.rendering;
 
 import com.barrybecker4.ui.util.ColorMap;
-import com.barrybecker4.simulation.snake.geometry.Edge;
-import com.barrybecker4.simulation.snake.geometry.Particle;
+import com.barrybecker4.simulation.snake1.geometry.Edge;
+import com.barrybecker4.simulation.snake1.geometry.Particle;
 
 import java.awt.*;
 
@@ -15,7 +15,6 @@ import java.awt.*;
 public final class EdgeRenderer {
 
     private static final double EDGE_SCALE = 30.0;
-
 
     /** show the edge different colors depending on percentage stretched  ( one being 100% stretched)  */
     private static final double stretchVals_[] = {0.3, 0.9, 1.0, 1.1, 3.0};
@@ -34,7 +33,7 @@ public final class EdgeRenderer {
     /**
      * Constructor
      */
-    public EdgeRenderer(RenderingParameters params) {
+    EdgeRenderer(RenderingParameters params) {
         renderParams = params;
     }
 

@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.rendering;
+package com.barrybecker4.simulation.snake1.rendering;
 
-import com.barrybecker4.simulation.snake.geometry.Edge;
-import com.barrybecker4.simulation.snake.geometry.Particle;
-import com.barrybecker4.simulation.snake.geometry.Segment;
+import com.barrybecker4.simulation.snake1.geometry.Edge;
+import com.barrybecker4.simulation.snake1.geometry.Particle;
+import com.barrybecker4.simulation.snake1.geometry.Segment;
 
 import java.awt.*;
 

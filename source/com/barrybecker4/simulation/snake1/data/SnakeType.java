@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.snake.data;
+package com.barrybecker4.simulation.snake1.data;
 
 /**
  * Different types of snakes to test.
@@ -16,17 +16,17 @@ public enum SnakeType {
     FAT_SNAKE("Fat Snake", new FatSnakeData());
 
     private String name;
-    private ISnakeData snakeData;
+    private SnakeData snakeData;
 
     /**
      * Constructor
      */
-    SnakeType(String name, ISnakeData snakeData) {
+    SnakeType(String name, SnakeData snakeData) {
         this.name = name;
         this.snakeData = snakeData;
     }
 
-    public ISnakeData getData() {
+    public SnakeData getData() {
         return snakeData;
     }
 
