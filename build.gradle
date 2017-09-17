@@ -64,10 +64,18 @@ task runParameters1(type: JavaExec, description: "Run Parameter simulator (legac
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation(legacy java)") {
+task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.predprey.PredPreySimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
+task runPredPrey1(type: JavaExec, description: "Run Predator Prey Simulation (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.predprey1.PredPreySimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 

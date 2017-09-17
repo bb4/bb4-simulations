@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.predprey;
+package com.barrybecker4.simulation.predprey1;
 
 import com.barrybecker4.common.math.function.CountFunction;
 import com.barrybecker4.common.math.function.Function;
@@ -7,10 +7,10 @@ import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorApplet;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.graphing1.GraphOptionsDialog;
-import com.barrybecker4.simulation.predprey.creatures.Foxes;
-import com.barrybecker4.simulation.predprey.creatures.Population;
-import com.barrybecker4.simulation.predprey.creatures.Rabbits;
-import com.barrybecker4.simulation.predprey.options.DynamicOptions;
+import com.barrybecker4.simulation.predprey1.creatures.Foxes;
+import com.barrybecker4.simulation.predprey1.creatures.Population;
+import com.barrybecker4.simulation.predprey1.creatures.Rabbits;
+import com.barrybecker4.simulation.predprey1.options.DynamicOptions;
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer;
 import com.barrybecker4.ui.util.GUIUtil;
 

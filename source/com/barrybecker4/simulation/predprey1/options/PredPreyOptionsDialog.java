@@ -1,9 +1,9 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.predprey.options;
+package com.barrybecker4.simulation.predprey1.options;
 
 import com.barrybecker4.simulation.common.ui.Simulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.predprey.PredPreySimulator;
+import com.barrybecker4.simulation.predprey1.PredPreySimulator;
 
 import javax.swing.*;
 import java.awt.*;
