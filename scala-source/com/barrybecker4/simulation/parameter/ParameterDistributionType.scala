@@ -21,8 +21,6 @@ object ParameterDistributionType extends Enumeration {
   case class Val(name: String, param: Parameter, function: RedistributionFunction) extends super.Val
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
-  private val NULL_FUNC = null
-
   val GAUSSIAN8 = Val("Gaussian 0-8",
     new DoubleParameter(0, 0, 8.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.3))
   val GAUSSIAN_NARROW1 = Val("Gaussian (narrow 0-1)",
