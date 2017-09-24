@@ -29,7 +29,7 @@ public class SegmentRenderer {
     /**
      * constructor for the head segment
      */
-    public SegmentRenderer(RenderingParameters params) {
+    SegmentRenderer(RenderingParameters params) {
         renderParams = params;
         edgeRenderer = new EdgeRenderer(params);
     }

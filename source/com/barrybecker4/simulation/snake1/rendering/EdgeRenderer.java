@@ -17,16 +17,16 @@ public final class EdgeRenderer {
     private static final double EDGE_SCALE = 30.0;
 
     /** show the edge different colors depending on percentage stretched  ( one being 100% stretched)  */
-    private static final double stretchVals_[] = {0.3, 0.9, 1.0, 1.1, 3.0};
-    private static final Color stretchColors_[] = {
+    private static final double stretchVals[] = {0.3, 0.9, 1.0, 1.1, 3.0};
+    private static final Color stretchColors[] = {
         new Color( 255, 0, 0, 200 ),
         new Color( 230, 120, 57, 250 ),
         new Color( 50, 90, 60, 250 ),
         new Color( 70, 120, 210, 200 ),
         new Color( 10, 10, 255, 100 )
     };
-    private static final ColorMap stretchColorMap_ =
-            new ColorMap( stretchVals_, stretchColors_ );
+    private static final ColorMap stretchColorMap =
+            new ColorMap(stretchVals, stretchColors);
 
     private RenderingParameters renderParams;
 
@@ -39,7 +39,7 @@ public final class EdgeRenderer {
 
     public void render(Edge edge, Graphics2D g) {
         //graphics.setColor(EDGE_COLOR);
-        g.setColor( stretchColorMap_.getColorForValue( edge.getLength() / edge.getRestingLength() ) );
+        g.setColor( stretchColorMap.getColorForValue( edge.getLength() / edge.getRestingLength() ) );
 
         double ratio = edge.getRestingLength() / edge.getLength();
         double width = EDGE_SCALE * Math.max(0, (ratio - 0.95));

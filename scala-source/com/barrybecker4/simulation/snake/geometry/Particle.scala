@@ -16,7 +16,7 @@ class Particle(x: Double, y: Double, val m: Double) extends Point2d(x, y) {
   /** the velocity vector of the particle in m/s */
   var velocity = new Vector2d(0.0, 0.0)
 
-  /** the acceleration vector of the particle in m/s^2 */
+  /** the acceleration vector of the particle in m/s&#94;2 */
   private[geometry] var acceleration = new Vector2d(0.0, 0.0)
 
   /** the force vector (sum of all forces acting on the particle) */

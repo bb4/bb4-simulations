@@ -49,7 +49,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
     timeStep
   }
 
-  private def densityStep(prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double) = {
+  private def densityStep(prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double): Unit = {
     grid.swap(prop)
     diffuse(Boundary.NEITHER, prop, diffusionRate, dt)
     grid.swap(prop)

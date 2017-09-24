@@ -6,8 +6,4 @@ package com.barrybecker4.simulation.snake.data
   * The magnitude of each segment is the same as its longer width.
   * @author Barry Becker
   */
-trait SnakeData {
-  def getNumSegments: Int
-  def getSegmentLength: Double
-  def getWidths: Array[Double]
-}
+case class SnakeData(numSegments: Int, segmentLength: Int, widths: Array[Double])

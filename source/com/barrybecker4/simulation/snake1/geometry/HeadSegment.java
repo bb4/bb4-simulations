@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.snake1.geometry;
 
 import com.barrybecker4.simulation.snake1.LocomotionParameters;
-import com.barrybecker4.simulation.snake1.Snake;
 
 /**
  *  The head/nose segment of the snakes body.
@@ -18,10 +17,10 @@ public class HeadSegment extends Segment {
      * @param ypos position of the center of the segment
      */
     public HeadSegment(double width1, double width2, double length, double xpos, double ypos,
-                       int segmentIndex, Snake snake) {
+                       int segmentIndex) {
         this.length = length;
         halfLength = this.length / 2.0;
-        commonInit( width1, width2, xpos, ypos, segmentIndex, snake );
+        commonInit(width1, width2, xpos, ypos, segmentIndex);
         double scale = 1.0; //snake.getRenderingParams().getScale();
 
         particles[1] = new Particle( xpos + halfLength, ypos + scale * width1 / 2.0, particleMass);

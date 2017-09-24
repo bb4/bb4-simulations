@@ -56,7 +56,7 @@ public class Segment {
 
     /** temporary vector to aid in calculations (saves creating a lot of new vector objects)  */
     private Vector2d velocityVec = new Vector2d( 0, 0 );
-    private Vector2d changeVec = new Vector2d( 0, 0 );
+    //private Vector2d changeVec = new Vector2d( 0, 0 );
 
     protected Segment() {}
 
@@ -73,7 +73,7 @@ public class Segment {
         this.length = length;
         halfLength = this.length / 2.0;
         commonInit(width1, width2, (center.x - segmentInFront.getHalfLength() - halfLength),
-                   center.y, segmentIndex, snake);
+                   center.y, segmentIndex);
 
         this.segmentInFront = segmentInFront;
         segmentInFront.segmentInBack = this;
@@ -97,7 +97,7 @@ public class Segment {
     /**
      * Initialize the segment.
      */
-    protected void commonInit(double width1, double width2, double xpos, double ypos, int segmentIndex, Snake snake) {
+    protected void commonInit(double width1, double width2, double xpos, double ypos, int segmentIndex) {
         this.segmentIndex = segmentIndex;
 
         particles = new Particle[5];

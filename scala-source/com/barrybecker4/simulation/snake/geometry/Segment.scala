@@ -1,9 +1,10 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake.geometry
 
-import com.barrybecker4.simulation.snake1.LocomotionParameters
-import com.barrybecker4.simulation.snake1.Snake
-import javax.vecmath.Vector2d
+import com.barrybecker4.simulation.snake.LocomotionParameters
+import com.barrybecker4.simulation.snake.Snake
+import javax.vecmath.{Point2d, Vector2d}
+import Segment._
 
 
 /**
@@ -33,6 +34,11 @@ object Segment {
   private[geometry] val CENTER_INDEX = 4
   private val EPS = 0.00001
   private val MASS_SCALE = 1.0
+
+  def getPos(segmentInFront: Segment, length: Double): Point2d = {
+    val center: Particle = segmentInFront.getCenterParticle
+    new Point2d(center.x - segmentInFront.getHalfLength - length/2, center.y)
+  }
 }
 
 /**
@@ -41,15 +47,16 @@ object Segment {
   * @param width2         the width of the segment nearest the tail
   * @param segmentInFront point to segment in the front
   */
-class Segment(width1: Double, width2: Double, var length: Double, var segmentInFront: Segment, segmentIndex: Int, snake: Snake) {
+class Segment(width1: Double, width2: Double, var length: Double,
+              pos: Point2d, val segmentInFront: Segment,
+              segmentIndex: Int, snake: Snake) {
 
-  protected var halfLength = 0
+  protected var halfLength: Double = length / 2.0
   //private var segmentIndex = segmentIdx
   // keep pointers to the segments in front and in back
-  //protected var segmentInFront: Segment = _
   protected var segmentInBack: Segment = _
-  protected var edges: Array[Edge] = _
-  protected var particles: Array[Particle] = _
+  val edges: Array[Edge] = Array.ofDim[Edge](8)
+  val particles: Array[Particle] = Array.ofDim[Particle](5)
   protected var particleMass: Double = 0
   /** The unit directional spinal vector */
   protected var direction = new Vector2d(0, 0)
@@ -57,20 +64,34 @@ class Segment(width1: Double, width2: Double, var length: Double, var segmentInF
   private val velocityVec = new Vector2d(0, 0)
   private val changeVec = new Vector2d(0, 0)
 
-  def getEdges: Array[Edge] = edges
-  def getParticles: Array[Particle] = particles
+  def this(width1: Double, width2: Double, length: Double, segmentInFront: Segment, segmentIndex: Int, snake: Snake) {
+    this(width1, width2, length, getPos(segmentInFront, length), segmentInFront, segmentIndex, snake)
+    segmentInFront.segmentInBack = this
+
+    // reused particles
+    particles(1) = segmentInFront.getBackRightParticle
+    particles(2) = segmentInFront.getBackLeftParticle
+
+    initCommonEdges()
+    edges(1) = segmentInFront.getBackEdge // front
+  }
+
+  // head constructor
+  def this(width1: Double, width2: Double, length: Double, pos: Point2d, snake: Snake) {
+    this(width1, width2, length, pos, null, 0, snake)
+  }
+
+  commonInit(width1, width2, pos, segmentIndex, snake)
 
   /** Initialize the segment. */
-  protected def commonInit(width1: Double, width2: Double, xpos: Double, ypos: Double, segmentIdx: Int, snake: Snake): Unit = {
-
-    particles = new Array[Particle](5)
-    edges = new Array[Edge](8)
+  protected def commonInit(width1: Double, width2: Double, pos: Point2d,
+                           segmentIdx: Int, snake: Snake): Unit = {
     val segmentMass: Double = (width1 + width2) * halfLength
     particleMass = Segment.MASS_SCALE * segmentMass / 3
     val scale = 1.0 //snake.getRenderingParams().getScale();
-    particles(0) = new Particle(xpos - halfLength, ypos + scale * width2 / 2.0, particleMass)
-    particles(3) = new Particle(xpos - halfLength, ypos - scale * width2 / 2.0, particleMass)
-    particles(Segment.CENTER_INDEX) = new Particle(xpos, ypos, particleMass)
+    particles(0) = new Particle(pos.x - halfLength, pos.y + scale * width2 / 2.0, particleMass)
+    particles(3) = new Particle(pos.x - halfLength, pos.y - scale * width2 / 2.0, particleMass)
+    particles(Segment.CENTER_INDEX) = new Particle(pos.x, pos.y, particleMass)
   }
 
   protected def initCommonEdges(): Unit = {
@@ -94,10 +115,11 @@ class Segment(width1: Double, width2: Double, var length: Double, var segmentInF
   private def getLeftEdge = edges(2)
   def getCenterParticle: Particle = particles(Segment.CENTER_INDEX)
   private def getHalfLength = halfLength
-  protected def getRightForce: Vector2d = edges(0).getForce
-  protected def getLeftForce: Vector2d = edges(2).getForce
-  protected def getRightBackDiagForce: Vector2d = edges(4).getForce
-  protected def getLeftBackDiagForce: Vector2d = edges(7).getForce
+
+  def getRightForce: Vector2d = edges(0).getForce
+  def getLeftForce: Vector2d = edges(2).getForce
+  def getRightBackDiagForce: Vector2d = edges(4).getForce
+  def getLeftBackDiagForce: Vector2d = edges(7).getForce
 
   def getSpinalDirection: Vector2d = {
     if (isTail)
@@ -114,17 +136,17 @@ class Segment(width1: Double, width2: Double, var length: Double, var segmentInF
 
   /**
     * Contract the muscles on the left and right of the segment.
-    * Don't contract the nose because there are no muscles there
+    * Don't contract the nose because there are no muscles there.
     */
   def contractMuscles(params: LocomotionParameters, time: Double): Unit = {
-    val waveSpeed = params.getWaveSpeed
-    val amplitude = params.getWaveAmplitude
-    val period = params.getWavePeriod
+    val waveSpeed = params.waveSpeed
+    val amplitude = params.waveAmplitude
+    val period = params.wavePeriod
     //Vector2d muscleForce = v;
     val theta = segmentIndex.toDouble / period - waveSpeed * time
     var offset: Double = 0
-    val dir = params.getDirection
-    offset = amplitude * (params.getWaveType.calculateOffset(theta) - dir)
+    val dir = params.direction
+    offset = amplitude * (params.waveType.calculateOffset(theta) - dir)
     val contractionLeft = 1.0 + offset
     val contractionRight = 1.0 - offset
     if (contractionRight < 0) {
@@ -145,12 +167,12 @@ class Segment(width1: Double, width2: Double, var length: Double, var segmentInF
     }
   }
 
-  /** @return true if either of the edge segments bends to much when compared to its nbr in the next segment*/
+  /** @return true if either of the edge segments bends to much when compared to its nbr in the next segment */
   def isStable: Boolean = {
     val dot1 = edges(0).dot(segmentInFront.getRightEdge)
     val dot2 = edges(2).dot(segmentInFront.getLeftEdge)
     if (dot1 < Segment.MIN_EDGE_ANGLE || dot2 < Segment.MIN_EDGE_ANGLE) {
-      System.out.println("dot1=" + dot1 + " dot2=" + dot2)
+      println("dot1=" + dot1 + " dot2=" + dot2)
       return false
     }
     true

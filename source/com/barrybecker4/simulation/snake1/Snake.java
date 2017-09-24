@@ -79,7 +79,7 @@ public class Snake {
         double segmentLength = snakeData.getSegmentLength();
 
         double length = 80 + numSegments * segmentLength;
-        Segment segment = new HeadSegment(width1, width2, segmentLength, length, 320.0, 0, this);
+        Segment segment = new HeadSegment(width1, width2, segmentLength, length, 320.0, 0);
         this.segment[0] = segment;
         Segment segmentInFront = segment;
         width1 = width2;
@@ -92,7 +92,8 @@ public class Snake {
             segmentInFront = segment;
             width1 = width2;
         }
-        this.segment[numSegments - 1] = new Segment(width1, width2, segmentLength, segmentInFront, numSegments-1, this);
+        this.segment[numSegments - 1] =
+                new Segment(width1, width2, segmentLength, segmentInFront, numSegments-1, this);
     }
 
     /**

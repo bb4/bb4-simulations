@@ -38,7 +38,7 @@ public class SnakeSimulator extends NewtonianSimulator {
             new DoubleParameter( LocomotionParameters.WAVE_PERIOD, 0.5, 9.0, "wave period" ),
     };
 
-    private static final ParameterArray INITIAL_PARAMS = new NumericParameterArray( PARAMS);
+    private static final ParameterArray INITIAL_PARAMS = new NumericParameterArray(PARAMS);
 
     private Snake snake = new Snake(new LongSnakeData());
     private SnakeUpdater updater = new SnakeUpdater();
