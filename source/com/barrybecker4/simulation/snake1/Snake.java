@@ -84,7 +84,7 @@ public class Snake {
         Segment segmentInFront = segment;
         width1 = width2;
 
-        for ( int i = 1; i < numSegments-1; i++ ) {
+        for ( int i = 1; i < numSegments - 1; i++ ) {
             width2 = snakeData.getWidths()[i];
 
             segment = new Segment( width1, width2, segmentLength, segmentInFront, i, this );

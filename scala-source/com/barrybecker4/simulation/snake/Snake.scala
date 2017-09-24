@@ -22,7 +22,7 @@ import javax.vecmath.Vector2d
   *    - only draw every nth frame
   *    - run OptimizeIt
   * 3/2011 (java version) frames per second for basic snake = 64.5. Speed = 0.32
-  * 3/2017 (ported to scala)
+  * 3/2017 (ported to scala) frames per second for basic snake = 185.5. Speed = 0.36
   *
   * Use a hardcoded static data interface to initialize so it can be easily run in an applet without using resources.
   * @param snakeData defines the snake geometry
@@ -34,23 +34,19 @@ class Snake(var snakeData: SnakeData) {
   private var segment: Array[Segment] = _
   setData(snakeData)
 
-  /**
-    * @param snakeData the data defining the snakes geometrical shape.
-    */
+  /** @param snakeData the data defining the snakes geometrical shape. */
   def setData(snakeData: SnakeData): Unit = {
     this.snakeData = snakeData
     initFromData()
   }
 
   def reset(): Unit = { resetFromData() }
-
   def getNumSegments: Int = snakeData.numSegments
-
   def getSegment(i: Int): Segment = segment(i)
 
   /** use this if you need to avoid reading from a file */
   private def initFromData(): Unit = {
-    segment = new Array[Segment](snakeData.numSegments)
+    segment = Array.ofDim[Segment](snakeData.numSegments)
     resetFromData()
   }
 
@@ -64,7 +60,7 @@ class Snake(var snakeData: SnakeData) {
     this.segment(0) = segment
     var segmentInFront = segment
     width1 = width2
-    for (i <- 1 until numSegments) {
+    for (i <- 1 until numSegments - 1) {
       width2 = snakeData.widths(i)
       segment = new Segment(width1, width2, segmentLength, segmentInFront, i, this)
       this.segment(i) = segment
@@ -74,9 +70,7 @@ class Snake(var snakeData: SnakeData) {
     this.segment(numSegments - 1) = new Segment(width1, width2, segmentLength, segmentInFront, numSegments - 1, this)
   }
 
-  /**
-    * @return the center point of the snake
-    */
+  /** @return the center point of the snake */
   def getCenter: Point2d = {
     val center = new Point2d(0.0, 0.0)
     var ct = 0

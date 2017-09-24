@@ -50,7 +50,7 @@ class SegmentUpdater() {
     particles(CENTER_INDEX).force.add(e5Force)
     particles(CENTER_INDEX).force.add(e6Force)
     if (!segment.isHead) {
-      val segmentInFront = segment.segmentInFront
+      val segmentInFront = segment.segmentInFront.get
       particles(1).force.sub(segmentInFront.getRightForce)
       particles(1).force.sub(segmentInFront.getRightBackDiagForce)
       particles(2).force.add(segmentInFront.getLeftForce)

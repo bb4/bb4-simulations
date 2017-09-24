@@ -48,13 +48,12 @@ object Segment {
   * @param segmentInFront point to segment in the front
   */
 class Segment(width1: Double, width2: Double, var length: Double,
-              pos: Point2d, val segmentInFront: Segment,
+              pos: Point2d, val segmentInFront: Option[Segment],
               segmentIndex: Int, snake: Snake) {
 
   protected var halfLength: Double = length / 2.0
-  //private var segmentIndex = segmentIdx
   // keep pointers to the segments in front and in back
-  protected var segmentInBack: Segment = _
+  protected var segmentInBack: Option[Segment] = None
   val edges: Array[Edge] = Array.ofDim[Edge](8)
   val particles: Array[Particle] = Array.ofDim[Particle](5)
   protected var particleMass: Double = 0
@@ -64,9 +63,12 @@ class Segment(width1: Double, width2: Double, var length: Double,
   private val velocityVec = new Vector2d(0, 0)
   private val changeVec = new Vector2d(0, 0)
 
+  commonInit(width1, width2, pos, segmentIndex, snake)
+
+
   def this(width1: Double, width2: Double, length: Double, segmentInFront: Segment, segmentIndex: Int, snake: Snake) {
-    this(width1, width2, length, getPos(segmentInFront, length), segmentInFront, segmentIndex, snake)
-    segmentInFront.segmentInBack = this
+    this(width1, width2, length, getPos(segmentInFront, length), Some(segmentInFront), segmentIndex, snake)
+    segmentInFront.segmentInBack = Some(this)
 
     // reused particles
     particles(1) = segmentInFront.getBackRightParticle
@@ -78,10 +80,9 @@ class Segment(width1: Double, width2: Double, var length: Double,
 
   // head constructor
   def this(width1: Double, width2: Double, length: Double, pos: Point2d, snake: Snake) {
-    this(width1, width2, length, pos, null, 0, snake)
+    this(width1, width2, length, pos, None, 0, snake)
   }
 
-  commonInit(width1, width2, pos, segmentIndex, snake)
 
   /** Initialize the segment. */
   protected def commonInit(width1: Double, width2: Double, pos: Point2d,
@@ -106,8 +107,8 @@ class Segment(width1: Double, width2: Double, var length: Double,
     edges(7) = new Edge(particles(3), particles(Segment.CENTER_INDEX))
   }
 
-  def isHead: Boolean = segmentInFront == null
-  def isTail: Boolean = segmentInBack == null
+  def isHead: Boolean = segmentInFront.isEmpty
+  def isTail: Boolean = segmentInBack.isEmpty
   private def getBackEdge = edges(3)
   private def getBackRightParticle = particles(0)
   private def getBackLeftParticle = particles(3)
@@ -123,13 +124,13 @@ class Segment(width1: Double, width2: Double, var length: Double,
 
   def getSpinalDirection: Vector2d = {
     if (isTail)
-      direction.set(segmentInFront.getCenterParticle.x - particles(Segment.CENTER_INDEX).x,
-                    segmentInFront.getCenterParticle.y - particles(Segment.CENTER_INDEX).y)
+      direction.set(segmentInFront.get.getCenterParticle.x - particles(Segment.CENTER_INDEX).x,
+                    segmentInFront.get.getCenterParticle.y - particles(Segment.CENTER_INDEX).y)
     else if (isHead)
-      direction.set(particles(Segment.CENTER_INDEX).x - segmentInBack.getCenterParticle.x,
-                    particles(Segment.CENTER_INDEX).y - segmentInBack.getCenterParticle.y)
-    else direction.set(segmentInFront.getCenterParticle.x - segmentInBack.getCenterParticle.x,
-                       segmentInFront.getCenterParticle.y - segmentInBack.getCenterParticle.y)
+      direction.set(particles(Segment.CENTER_INDEX).x - segmentInBack.get.getCenterParticle.x,
+                    particles(Segment.CENTER_INDEX).y - segmentInBack.get.getCenterParticle.y)
+    else direction.set(segmentInFront.get.getCenterParticle.x - segmentInBack.get.getCenterParticle.x,
+                       segmentInFront.get.getCenterParticle.y - segmentInBack.get.getCenterParticle.y)
     direction.normalize()
     direction
   }
@@ -169,8 +170,8 @@ class Segment(width1: Double, width2: Double, var length: Double,
 
   /** @return true if either of the edge segments bends to much when compared to its nbr in the next segment */
   def isStable: Boolean = {
-    val dot1 = edges(0).dot(segmentInFront.getRightEdge)
-    val dot2 = edges(2).dot(segmentInFront.getLeftEdge)
+    val dot1 = edges(0).dot(segmentInFront.get.getRightEdge)
+    val dot2 = edges(2).dot(segmentInFront.get.getLeftEdge)
     if (dot1 < Segment.MIN_EDGE_ANGLE || dot2 < Segment.MIN_EDGE_ANGLE) {
       println("dot1=" + dot1 + " dot2=" + dot2)
       return false

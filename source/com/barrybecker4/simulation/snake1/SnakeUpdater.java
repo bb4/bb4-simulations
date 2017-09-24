@@ -5,7 +5,6 @@ import com.barrybecker4.simulation.snake1.geometry.SegmentUpdater;
 
 /**
  *  Makes the snake animate forward one time step.
- *
  *  @author Barry Becker
  */
 class SnakeUpdater {
