@@ -1,9 +1,11 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trebuchet;
+/*
+ * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.trebuchet.model;
 
 import java.awt.*;
 
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.HEIGHT;
+import static com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT;
 
 /**
  * A physical piece of an object.

@@ -1,23 +1,17 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trebuchet;
+/*
+ * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.trebuchet.model;
 
 import com.barrybecker4.common.app.ILog;
-import com.barrybecker4.ui.util.GUIUtil;
 import com.barrybecker4.ui.util.Log;
 
 import javax.vecmath.Vector2d;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import static com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_COUNTER_WEIGHT_MASS;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_CW_LEVER_LENGTH;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_PROJECTILE_MASS;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_SLING_LENGTH;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_SLING_LEVER_LENGTH;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.DEFAULT_SLING_RELEASE_ANGLE;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.HEIGHT;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.RAMP_FRICTION;
-import static com.barrybecker4.simulation.trebuchet.TrebuchetConstants.SCALE;
+import static com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.*;
 import static java.lang.Math.PI;
 import static java.lang.Math.asin;
 import static java.lang.Math.cos;
@@ -34,15 +28,10 @@ import static java.lang.Math.sin;
  */
 public class Trebuchet {
 
-    protected static final Font BASE_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12 );
-    protected static final int LOG_LEVEL = 1;
-
     protected static final double MIN_EDGE_ANGLE = 0.3;
-    protected static final Vector2d GRAVITY_VEC = new Vector2d(0, GRAVITY);
-    protected static final double MAX_LEVER_ANGLE = PI - 0.1;
+    private static final Vector2d GRAVITY_VEC = new Vector2d(0, GRAVITY);
+    private static final double MAX_LEVER_ANGLE = PI - 0.1;
 
-    // the parts
-    private Base base;
     private Lever lever;
     private CounterWeight counterWeight;
     private Sling sling;
@@ -50,7 +39,7 @@ public class Trebuchet {
 
     private Vector2d forceFromHook_ = new Vector2d(0, 0);
 
-    protected static final int NUM_PARTS = 5;
+    private static final int NUM_PARTS = 5;
     private RenderablePart[] part;
 
     // the time since the start of the simulation
@@ -85,7 +74,7 @@ public class Trebuchet {
 
         double angle = PI/2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH);
         RenderablePart.setAngle(angle);
-        base = new Base();
+        Base base = new Base();
         part[0] = base;
         lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH);
         part[1] = lever;

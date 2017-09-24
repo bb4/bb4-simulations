@@ -10,6 +10,8 @@ import com.barrybecker4.optimization.parameter.types.Parameter;
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType;
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.trebuchet.model.RenderablePart;
+import com.barrybecker4.simulation.trebuchet.model.Trebuchet;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;
@@ -26,16 +28,11 @@ public class TrebuchetSimulator extends NewtonianSimulator
                                 implements ChangeListener {
 
     private Trebuchet trebuchet = null;
-
-    JSlider zoomSlider;
-
+    private JSlider zoomSlider;
     private static final int DEFAULT_NUM_STEPS_PER_FRAME = 1;
-
     // the amount to advance the animation in time for each frame in seconds
     private static final double TIME_STEP = 0.002;
-
     private static final Color BACKGROUND_COLOR = new Color(253, 250, 253);
-
     private static final int NUM_PARAMS = 3;
 
 
@@ -246,7 +243,7 @@ public class TrebuchetSimulator extends NewtonianSimulator
             return 10000.0;
         }
         else {
-            return 1.0/oldVelocity;
+            return 1.0 / oldVelocity;
         }
     }
 }
