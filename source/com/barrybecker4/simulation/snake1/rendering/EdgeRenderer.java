@@ -53,7 +53,7 @@ public final class EdgeRenderer {
         int y1 = (int) (scale * part1.y);
         int x2 = (int) (scale * part2.x);
         int y2 = (int) (scale * part2.y);
-
+        //System.out.println("scale = " + scale + " x1 = " + x1 + " x2=" + x2);
         g.drawLine(x1, y1, x2, y2);
     }
 }

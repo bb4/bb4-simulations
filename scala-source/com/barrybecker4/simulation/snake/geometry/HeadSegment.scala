@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.snake.LocomotionParameters
 import com.barrybecker4.simulation.snake.Snake
 
 
+
 /**
   * The head/nose segment of the snakes body.
   * @param width1 the width of the segment that is nearest the nose
@@ -21,6 +22,7 @@ class HeadSegment(width1: Double, width2: Double, length: Double, val pos: Point
   val scale = 1.0 //snake.getRenderingParams().getScale();
   particles(1) = new Particle(pos.x + halfLength, pos.y + scale * width1 / 2.0, particleMass)
   particles(2) = new Particle(pos.x + halfLength, pos.y - scale * width1 / 2.0, particleMass)
+
   initCommonEdges()
   edges(1) = new Edge(particles(1), particles(2)) // front
 

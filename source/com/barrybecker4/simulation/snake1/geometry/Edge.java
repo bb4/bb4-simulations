@@ -56,19 +56,15 @@ public class Edge {
     public Particle getFirstParticle() {
         return firstParticle;
     }
-
     public Particle getSecondParticle() {
         return secondParticle;
     }
-
     public double getRestingLength() {
         return restingLength;
     }
-
     public double getLength() {
         return length;
     }
-
 
     private void commonInit( Particle p1, Particle p2, double k, double d ) {
         segment = new Line2D.Double( p1.x, p1.y, p2.x, p2.y );
@@ -80,6 +76,7 @@ public class Edge {
         restingLength = firstParticle.distance(secondParticle);
         effectiveLength = restingLength;
         length = restingLength; // current magnitude
+        //System.out.println("firstP = " + firstParticle + " second ="+ secondParticle);
     }
 
     /**

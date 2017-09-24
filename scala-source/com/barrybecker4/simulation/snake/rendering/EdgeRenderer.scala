@@ -26,19 +26,20 @@ object EdgeRenderer {
 final class EdgeRenderer private[rendering](val renderParams: RenderingParameters) {
 
   def render(edge: Edge, g: Graphics2D): Unit = {
-    g.setColor(EdgeRenderer.stretchColorMap.getColorForValue(edge.getLength / edge.getRestingLength))
-    val ratio = edge.getRestingLength / edge.getLength
+    g.setColor(EdgeRenderer.stretchColorMap.getColorForValue(edge.length / edge.restingLength))
+    val ratio = edge.restingLength / edge.length
     val width = EdgeRenderer.EDGE_SCALE * Math.max(0, ratio - 0.95)
     val stroke = new BasicStroke(width.toFloat)
     g.setStroke(stroke)
     val scale = renderParams.scale
-    println("scale = " + scale)
-    val part1 = edge.getFirstParticle
-    val part2 = edge.getSecondParticle
+
+    val part1 = edge.firstParticle
+    val part2 = edge.secondParticle
     val x1 = (scale * part1.x).toInt
     val y1 = (scale * part1.y).toInt
     val x2 = (scale * part2.x).toInt
     val y2 = (scale * part2.y).toInt
+    //println("scale = " + scale + "  x1 = " + x1 + " x2=" + x2)
     g.drawLine(x1, y1, x2, y2)
   }
 }

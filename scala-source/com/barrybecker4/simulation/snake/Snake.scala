@@ -60,7 +60,7 @@ class Snake(var snakeData: SnakeData) {
     val numSegments = snakeData.numSegments
     val segmentLength = snakeData.segmentLength
     val length = 80 + numSegments * segmentLength
-    var segment: Segment = new HeadSegment(width1, width2, length, new Point2d(length, 320.0), this)
+    var segment: Segment = new HeadSegment(width1, width2, segmentLength, new Point2d(length, 320.0), this)
     this.segment(0) = segment
     var segmentInFront = segment
     width1 = width2
