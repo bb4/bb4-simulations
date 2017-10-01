@@ -31,7 +31,9 @@ class SimpleParserSuite extends FunSuite {
   }
 
   test("Sentence") {
-    assertResult("[1.7] parsed: johnny") { sp.parse(sp.word, "johnny come lately").toString }
+    val r: sp.ParseResult[String] = sp.parse(sp.word, "johnny come lately")
+
+    assertResult("[1.7] parsed: johnny") { r.toString }
   }
 
 }

@@ -5,7 +5,6 @@ package com.barrybecker4.simulation.lsystem.model.expression2
 import scala.util.parsing.combinator._
 
 class LExpressionParser extends RegexParsers {
-  def factor: Parser[Any] = exp~rep("+"~exp | "-"~exp)
-  def exp: Parser[Any] = f | factor | "("~factor~")"
-  def f: Parser[Any] = "F"
+  def factor: Parser[String] = rep(exp | "+"~factor | "-"~factor) ^^ { _.toString }
+  def exp: Parser[String] = "F".r | "("~factor~")" ^^ { _.toString }
 }
