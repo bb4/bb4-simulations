@@ -4,10 +4,8 @@ package com.barrybecker4.simulation.liquid.model
 import com.barrybecker4.simulation.liquid.compute.MassConserver
 import com.barrybecker4.simulation.liquid.compute.SurfaceVelocityUpdater
 import com.barrybecker4.simulation.liquid.compute.VelocityUpdater
-import junit.framework.TestCase
 import javax.vecmath.Vector2d
 
-import com.barrybecker4.simulation.liquid.model.{Cell, CellBlock}
 import org.scalatest.FunSuite
 import CellSuite._
 

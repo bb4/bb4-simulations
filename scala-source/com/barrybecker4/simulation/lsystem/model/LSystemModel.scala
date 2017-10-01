@@ -19,6 +19,7 @@ import com.barrybecker4.simulation.lsystem.Panable
   */
 object LSystemModel {
   val DEFAULT_EXPRESSION = "F(+F)F(-F)F"
+  val KOCH_SNOWFLAKE = "F+F--F+F"
   val DEFAULT_ITERATIONS = 1
   val DEFAULT_ANGLE = 90.0
   val DEFAULT_SCALE = 0.9

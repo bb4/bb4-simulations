@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.conway.model.Conway
 
 
 /**
-  * The original Conway Life rule
+  * The original Conway Life rule.
   */
 class RuleB3S23 extends Rule {
   override private[rules] def applyRuleToCandidate(c: Location, conway: Conway, newConway: Conway) = {
@@ -14,7 +14,8 @@ class RuleB3S23 extends Rule {
     val isAlive = conway.isAlive(c)
 
     if (isAlive) {
-      if (numNbrs == 2 || numNbrs == 3) newConway.setValue(c, conway.getValue(c) + 1)
+      if (numNbrs == 2 || numNbrs == 3)
+        newConway.setValue(c, conway.getValue(c) + 1)
     } else if (numNbrs == 3) newConway.setValue(c, 1)
   }
 }

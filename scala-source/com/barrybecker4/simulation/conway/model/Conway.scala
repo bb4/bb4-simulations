@@ -32,7 +32,7 @@ class Conway private[model]() {
   private var width = -1
   private var height = -1
 
-  private[model] def setWrapping(wrap: Boolean, width: Int, height: Int) = {
+  private[model] def setWrapping(wrap: Boolean, width: Int, height: Int): Unit = {
     this.wrap = wrap
     this.width = width
     this.height = height

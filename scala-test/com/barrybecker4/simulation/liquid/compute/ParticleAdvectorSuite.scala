@@ -4,10 +4,8 @@ package com.barrybecker4.simulation.liquid.compute
 import com.barrybecker4.common.math.LinearUtil
 import com.barrybecker4.common.math.MathUtil
 import com.barrybecker4.simulation.liquid.model._
-import org.junit.Test
 import javax.vecmath.Vector2d
 
-import com.barrybecker4.simulation.liquid.compute.ParticleAdvector
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import ParticleAdvectorSuite._

@@ -4,8 +4,6 @@ package com.barrybecker4.simulation.liquid.compute
 import org.junit.Test
 import javax.vecmath.Vector2d
 
-import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
-import com.barrybecker4.simulation.liquid.compute.VelocityUpdater
 import com.barrybecker4.simulation.liquid.model._
 import org.junit.Assert.{assertEquals, assertTrue}
 import org.scalatest.FunSuite

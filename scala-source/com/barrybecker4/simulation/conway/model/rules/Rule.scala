@@ -22,7 +22,7 @@ trait Rule {
 
     // Loop through all the candidates, apply the life-rule, and update the new grid appropriately.
     if (parallel)
-      candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway)) // not working for some reason. Why?
+      candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway))
     else candidates.foreach(c => applyRuleToCandidate(c, conway, newConway))
 
     newConway
