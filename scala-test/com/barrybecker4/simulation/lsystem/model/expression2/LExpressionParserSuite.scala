@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression2
 
-import com.barrybecker4.common.expression.TreeNode
 import org.scalatest.FunSuite
 
 class LExpressionParserSuite extends FunSuite {
@@ -22,14 +21,16 @@ class LExpressionParserSuite extends FunSuite {
       "[1.15] parsed: List(F, F, (((~List(F, (((~List((-~List(F))))~))))~)), (((~List((+~List((+~List(F))))))~)))")
   }
 
+  // some negative tests
   test("InvalidExp") { verifyParse("XXX", "[1.1] failure: `-' expected but `X' found\n\nXXX\n^") }
+  test("Mismatched parens") { verifyParse("F)-F", "[1.2] failure: `-' expected but `)' found\n\nF)-F\n ^") }
 
   /**  @param exp the expression to parse */
   private def verifyParse(exp: String) { verifyParse(exp, exp) }
 
   private def verifyParse(expression: String, expSerializedStr: String) {
     val root = parser.parseAll(parser.factor, expression)
-    println(expression + " = " + root)
+    //println(expression + " = " + root)
     // val serialized = serializer.serialize(root)
     assertResult(expSerializedStr) { root.toString }
   }
