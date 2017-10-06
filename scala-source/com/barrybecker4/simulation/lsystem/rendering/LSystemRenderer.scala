@@ -123,15 +123,15 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
       else {
         val baseExp = child.getData
         for (i <- 0 until baseExp.length) {
-          processSymbol(length, numIterations, pos, baseExp.charAt(i), depth)
+          processSymbol(length, numIterations, pos, baseExp.substring(i, i + 1), depth)
         }
       }
     }
   }
 
   /** note: current position is changed by the processing of the symbol */
-  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: Char, depth: Int) {
-    if (c == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
+  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: String, depth: Int) {
+    if (c.toString == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
     else drawF(currentPos, length, depth)
     else if (c == MINUS.symbol) currentPos.angle -= angleIncrement
     else if (c == PLUS.symbol) currentPos.angle += angleIncrement
