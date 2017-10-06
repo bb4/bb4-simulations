@@ -129,6 +129,13 @@ task runTrading(type: JavaExec, description: "Run stock trading simulator") {
     classpath = sourceSets.main.runtimeClasspath
     enableAssertions = true
 }
+task runTrading1(type: JavaExec, description: "Run stock trading simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.trading1.TradingSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+    enableAssertions = true
+}
 
 task runReactionDiffusion(type: JavaExec, description: "Run reaction diffusion simulator") {
     group = 'application'
