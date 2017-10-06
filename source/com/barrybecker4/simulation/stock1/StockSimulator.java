@@ -27,7 +27,7 @@ public class StockSimulator extends DistributionSimulator {
      */
     private static final int LABEL_WIDTH = 70;
 
-    private StockSampleOptions opts_ = new StockSampleOptions();
+    private StockSampleOptions opts = new StockSampleOptions();
 
 
     public StockSimulator() {
@@ -37,19 +37,19 @@ public class StockSimulator extends DistributionSimulator {
     }
 
     public void setSampleOptions(StockSampleOptions stockSampleOptions) {
-        opts_ = stockSampleOptions;
+        opts = stockSampleOptions;
         initHistogram();
     }
 
     @Override
     protected void initHistogram() {
 
-        double max = opts_.getTheoreticalMaximum();
-        double xScale = Math.pow(10, Math.max(0, Math.log10(max) - opts_.xResolution));
-        double xLogScale = 3 * opts_.xResolution * opts_.xResolution;
+        double max = opts.getTheoreticalMaximum();
+        double xScale = Math.pow(10, Math.max(0, Math.log10(max) - opts.xResolution));
+        double xLogScale = 3 * opts.xResolution * opts.xResolution;
 
         InvertibleFunction xFunction =
-                opts_.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
+                opts.useLogScale ? new LogFunction(xLogScale, 10.0, true) : new LinearFunction(1/xScale);
 
         int maxX = (int)xFunction.getValue(max);
         data = new int[maxX + 1];
@@ -75,10 +75,10 @@ public class StockSimulator extends DistributionSimulator {
     private double createSample() {
 
         double total = 0;
-        for (int j = 0; j < opts_.numStocks; j++) {
+        for (int j = 0; j < opts.numStocks; j++) {
             total += calculateFinalStockPrice();
         }
-        return total / opts_.numStocks;
+        return total / opts.numStocks;
     }
 
     /**
@@ -86,11 +86,11 @@ public class StockSimulator extends DistributionSimulator {
      */
     private double calculateFinalStockPrice() {
 
-        double stockPrice = opts_.startingValue;
-        for (int i = 0; i < opts_.numTimePeriods; i++) {
+        double stockPrice = opts.startingValue;
+        for (int i = 0; i < opts.numTimePeriods; i++) {
             double percentChange =
-                    Math.random() > 0.5 ? opts_.percentIncrease : -opts_.percentDecrease;
-            if (opts_.useRandomChange)
+                    Math.random() > 0.5 ? opts.percentIncrease : -opts.percentDecrease;
+            if (opts.useRandomChange)
                 stockPrice *= (1.0 + Math.random() * percentChange);
             else
                 stockPrice *= (1.0 + percentChange);
