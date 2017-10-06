@@ -18,7 +18,6 @@ dependencies {
     def javaHome = System.properties.'java.home'
     compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
-    //compile 'org.scala-lang:scala-parser-combinators:2.11.0-M4'
     compile 'org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4'
     compile 'com.barrybecker4:bb4-sound:1.5-SNAPSHOT'
     compile 'com.barrybecker4:bb4-optimization:1.5-SNAPSHOT'
@@ -114,6 +113,12 @@ task runStock(type: JavaExec, description: "Run stock invetment simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.stock.StockSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
+task runStock1(type: JavaExec, description: "Run stock invetment simulator (java legacy)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.stock1.StockSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
