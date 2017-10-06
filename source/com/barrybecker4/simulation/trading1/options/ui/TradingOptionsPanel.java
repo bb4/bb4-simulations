@@ -39,7 +39,7 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     private JPanel strategyOptionsPanel;
 
     private StrategyPlugins<? extends ITradingStrategy> tradingPlugins =
-            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.tradingstrategy",
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading1.model.tradingstrategy",
                     ITradingStrategy.class,
                     Arrays.asList(
                             new BuyAndHoldStrategy(), new BuyPercentOfInvestmentStrategy(),
@@ -142,6 +142,8 @@ public class TradingOptionsPanel extends JPanel implements ItemListener{
     }
 
     private void setStrategyTooltip() {
+        System.out.println("selected = " +  strategyCombo.getSelectedItem());
+        System.out.println("plugins = " + tradingPlugins);
         strategyCombo.setToolTipText(
                 tradingPlugins.getStrategy((String) strategyCombo.getSelectedItem()).getDescription());
     }
