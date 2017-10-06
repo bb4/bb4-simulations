@@ -65,7 +65,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
 
   def setExpression(exp: String): Unit = {
     expression = exp
-    try root = parser.parse(expression)
+    try root = parser.parseToTree(expression)
     catch {
       case e: Exception =>
         throw new IllegalArgumentException(e.getMessage, e)

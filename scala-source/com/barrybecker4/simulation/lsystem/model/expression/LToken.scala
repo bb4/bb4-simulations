@@ -5,14 +5,14 @@ import LToken._
 
 
 object LToken {
-  val F = LToken('F')
-  val PLUS = LToken('+')
-  val MINUS = LToken('-')
+  val F = LToken("F")
+  val PLUS = LToken("+")
+  val MINUS = LToken("-")
 
-  def isTerminal(symbol: Char): Boolean = symbol == F.symbol || symbol == PLUS.symbol || symbol == MINUS.symbol
+  def isTerminal(symbol: String): Boolean = symbol == F.symbol || symbol == PLUS.symbol || symbol == MINUS.symbol
 }
 
-case class LToken(symbol: Char) {
+case class LToken(symbol: String) {
   def isTerminal: Boolean = LToken.isTerminal(symbol)
 }
 

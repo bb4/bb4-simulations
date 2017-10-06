@@ -5,10 +5,10 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 import org.scalatest.FunSuite
 
-class LExpressionParser2Suite extends FunSuite {
+class LExpressionParserSuite extends FunSuite {
 
   /** instance under test */
-  val parser = new LExpressionParser2
+  val parser = new LExpressionParser
   val serializer = new LTreeSerializer
 
   test("FOnlyExp") { verifyParse("F") }
@@ -37,7 +37,7 @@ class LExpressionParser2Suite extends FunSuite {
   private def verifyParse(expression: String, expSerializedStr: String) {
     //val root = parser.parseAll(parser.factor, expression)
     val root = parser.parseToTree(expression)
-    println("expression = " + root)
+    //println("expression = " + root)
 
     if (expSerializedStr.isEmpty)
       assertResult(None) {root}
