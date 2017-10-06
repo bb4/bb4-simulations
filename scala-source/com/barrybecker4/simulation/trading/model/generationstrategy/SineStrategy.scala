@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trading.model.generationstrategy
 import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
-import com.barrybecker4.simulation.trading1.model.generationstrategy.AbstractGenerationStrategy
 import SineStrategy._
 
 
@@ -16,7 +15,7 @@ object SineStrategy { // radians
 /**
   * @author Barry Becker
   */
-class SineStrategy extends AbstractGenerationStrategy {
+class SineStrategy extends GenerationStrategy {
   /** Amount to increase after each time period if heads   */
   private var amplitudeField: NumberInput = _
   private var incrementField: NumberInput = _
@@ -24,8 +23,8 @@ class SineStrategy extends AbstractGenerationStrategy {
   private var increment = DEFAULT_INCREMENT
   private var amplitude: Double = DEFAULT_AMPLITUDE
 
-  override def getName = "Sine wave"
-  override def getDescription = "Sine Wave strategy"
+  override def name = "Sine wave"
+  override def description = "Sine Wave strategy"
 
   override def calcNewPrice(stockPrice: Double): Double = {
     val change = amplitude * Math.sin(theta)

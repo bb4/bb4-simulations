@@ -47,6 +47,4 @@ public class StockRunResult {
     public double getFinalGain() {
         return finalGain;
     }
-
-
 }

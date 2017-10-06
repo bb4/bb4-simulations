@@ -18,7 +18,7 @@ object RandomUpAndDownStrategy {
   private val DEFAULT_USE_RANDOM_CHANGE = true
 }
 
-class RandomUpAndDownStrategy extends AbstractGenerationStrategy {
+class RandomUpAndDownStrategy extends GenerationStrategy {
   var percentIncrease: Double = DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = DEFAULT_PERCENT_DECREASE
   var useRandomChange: Boolean = DEFAULT_USE_RANDOM_CHANGE
@@ -29,9 +29,9 @@ class RandomUpAndDownStrategy extends AbstractGenerationStrategy {
   /** if true changes are between 0 and percent change. */
   private var useRandomChangeCB: JCheckBox = _
 
-  override def getName = "random ups and downs"
+  override def name = "random ups and downs"
 
-  override def getDescription: String = "Each time period the market goes up by some random percent or " +
+  override def description: String = "Each time period the market goes up by some random percent or " +
     "down some sandom percent, according to a coin toss."
 
   override def calcNewPrice(stockPrice: Double): Double = {

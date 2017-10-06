@@ -16,7 +16,7 @@ object RandomWithAdditiveMomentumStrategy {
 /**
   * @author Barry Becker
   */
-class RandomWithAdditiveMomentumStrategy extends AbstractGenerationStrategy {
+class RandomWithAdditiveMomentumStrategy extends GenerationStrategy {
   var percentIncrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_DECREASE
   var momentumFactor: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_MOMENTUM_FACTOR
@@ -27,9 +27,8 @@ class RandomWithAdditiveMomentumStrategy extends AbstractGenerationStrategy {
   private var percentDecreaseField: NumberInput = _
   private var momentumFactorField: NumberInput = _
 
-  override def getName = "random additive momentum"
-
-  override def getDescription = "The random movement at each step is added to " +
+  override def name = "random additive momentum"
+  override def description = "The random movement at each step is added to " +
     "momentumFactor time the random movement at the last step."
 
   override def calcNewPrice(stockPrice: Double): Double = {

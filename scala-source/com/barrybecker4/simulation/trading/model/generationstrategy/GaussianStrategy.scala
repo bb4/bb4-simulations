@@ -6,8 +6,6 @@ import javax.swing._
 import java.awt._
 import java.util.Random
 
-import com.barrybecker4.simulation.trading1.model.generationstrategy.{AbstractGenerationStrategy, IGenerationStrategy}
-
 
 object GaussianStrategy {
   private val DEFAULT_MEAN = 0.01
@@ -17,7 +15,8 @@ object GaussianStrategy {
 /**
   * @author Barry Becker
   */
-class GaussianStrategy extends AbstractGenerationStrategy with IGenerationStrategy {
+class GaussianStrategy extends GenerationStrategy {
+
   var mean: Double = GaussianStrategy.DEFAULT_MEAN
   var variance: Double = GaussianStrategy.DEFAULT_VARIANCE
   /** Amount to increase after each time period if heads   */
@@ -27,9 +26,9 @@ class GaussianStrategy extends AbstractGenerationStrategy with IGenerationStrate
   /** random number generator */
   private val rand = new Random
 
-  override def getName = "gaussian"
+  override def name = "gaussian"
 
-  override def getDescription: String =
+  override def description: String =
     "Each time period the market goes up or down by a guassian " +
     "distributed random value whose mean and variance are specified"
 

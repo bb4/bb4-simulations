@@ -6,6 +6,6 @@ package com.barrybecker4.simulation.trading.model.plugin
   */
 trait StrategyPlugin {
 
-  def getName: String
-  def getDescription: String
+  def name: String
+  def description: String
 }
