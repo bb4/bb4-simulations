@@ -18,19 +18,23 @@ class LExpressionParser2Suite extends FunSuite {
   test("Exp-F++F") { verifyParse("-F++F") }
   test("SimpleExpParen") { verifyParse("(F)") }
   test("SimpleExpWithParen") { verifyParse("F(-F)") }
-  test("ExpWithSpaces") { verifyParse("F (- F)", Some("F(-F)")) }
-  test("TwoLevelNestedExp") {
-    verifyParse("FF(F(-F))(++F)")
-  }
+  test("ExpWithSpaces") { verifyParse("F (- F)", "F(-F)") }
+  test("TwoLevelNestedExp") {verifyParse("FF(F(-F))(++F)")}
 
   // some negative tests
-  test("InvalidExp") { verifyParse("XXX", None) }
-  test("Mismatched parens") { verifyParse("F)-F", None) }
+  test("InvalidExp") {
+    val caught = intercept[IllegalArgumentException] {verifyParse("XXX", "")}
+    assert(caught.getMessage =="[1.1] failure: `-' expected but `X' found\n\nXXX\n^")
+  }
+  test("Mismatched parens") {
+    val caught = intercept[IllegalArgumentException] {verifyParse("F)-F", "") }
+    assert(caught.getMessage == "[1.2] failure: `-' expected but `)' found\n\nF)-F\n ^")
+  }
 
   /**  @param exp the expression to parse */
-  private def verifyParse(exp: String) { verifyParse(exp, Some(exp)) }
+  private def verifyParse(exp: String) { verifyParse(exp, exp) }
 
-  private def verifyParse(expression: String, expSerializedStr: Option[String]) {
+  private def verifyParse(expression: String, expSerializedStr: String) {
     //val root = parser.parseAll(parser.factor, expression)
     val root = parser.parseToTree(expression)
     println("expression = " + root)
@@ -39,8 +43,8 @@ class LExpressionParser2Suite extends FunSuite {
       assertResult(None) {root}
     // val serialized = serializer.serialize(root)
     else {
-      println("serialized = "  + serializer.serialize(root.get))
-      assertResult(expSerializedStr.get) { serializer.serialize(root.get) }
+      println("serialized = "  + serializer.serialize(root))
+      assertResult(expSerializedStr) { serializer.serialize(root) }
     }
   }
 }

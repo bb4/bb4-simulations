@@ -30,16 +30,15 @@ class LExpressionParser2 extends RegexParsers {
     case x => throw new UnsupportedOperationException("Unexpected: " + x.getClass.getName )
   }
 
-  def parseToTree(expression: String): Option[TreeNode] = {
+  def parseToTree(expression: String): TreeNode = {
     val parsed: ParseResult[Seq[TreeNode]] = parseAll(factor, expression)
-    println("parsed = " + parsed)
 
-    if (parsed.isEmpty) None
-    else if (parsed.get.length > 1) {
+    if (parsed.isEmpty) throw new IllegalArgumentException(parsed.toString)
+    if (parsed.get.length > 1) {
       val root = new TreeNode("", ops)
       //root.hasParens = true
       root.children = parsed.get.asJava
-      Some(root)
-    } else Some(parsed.get.head)
+      root
+    } else parsed.get.head
   }
 }
