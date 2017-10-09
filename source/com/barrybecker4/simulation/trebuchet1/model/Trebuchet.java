@@ -1,7 +1,7 @@
 /*
  * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
  */
-package com.barrybecker4.simulation.trebuchet.model;
+package com.barrybecker4.simulation.trebuchet1.model;
 
 import com.barrybecker4.common.app.ILog;
 import com.barrybecker4.ui.util.Log;
@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import static com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY;
-import static com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.*;
+import static com.barrybecker4.simulation.trebuchet1.model.TrebuchetConstants.*;
 import static java.lang.Math.PI;
 import static java.lang.Math.asin;
 import static java.lang.Math.cos;

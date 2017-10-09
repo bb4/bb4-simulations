@@ -1,7 +1,7 @@
 /*
  * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
  */
-package com.barrybecker4.simulation.trebuchet.model;
+package com.barrybecker4.simulation.trebuchet1.model;
 
 /**
  * @author Barry Becker Date: Sep 17, 2005

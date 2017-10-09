@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.trebuchet;
+package com.barrybecker4.simulation.trebuchet1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.util.FileUtil;
@@ -10,8 +10,8 @@ import com.barrybecker4.optimization.parameter.types.Parameter;
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType;
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator;
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
-import com.barrybecker4.simulation.trebuchet.model.RenderablePart;
-import com.barrybecker4.simulation.trebuchet.model.Trebuchet;
+import com.barrybecker4.simulation.trebuchet1.model.RenderablePart;
+import com.barrybecker4.simulation.trebuchet1.model.Trebuchet;
 import com.barrybecker4.ui.util.GUIUtil;
 
 import javax.swing.*;

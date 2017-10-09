@@ -255,6 +255,12 @@ task runTrebuchet(type: JavaExec, description: "Run treduchet simulator") {
     args = ["-panel_class", "com.barrybecker4.simulation.trebuchet.TrebuchetSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
+task runTrebuchet1(type: JavaExec, description: "Run treduchet simulator (legacy java)") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
+    args = ["-panel_class", "com.barrybecker4.simulation.trebuchet1.TrebuchetSimulator"]
+    classpath = sourceSets.main.runtimeClasspath
+}
 
 task runVerhulst(type: JavaExec, description: "Run Verhulst population simulator") {
     group = 'application'
