@@ -13,7 +13,6 @@ import java.awt.*;
  */
 public class Projectile extends RenderablePart {
 
-
     private double mass = 1.0;
     private double radius;
     private Vector2d position = new Vector2d();

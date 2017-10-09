@@ -14,7 +14,6 @@ import static java.lang.Math.atan;
  */
 public class Sling extends RenderablePart {
 
-
     private double length;
     private Lever lever;
     private Projectile projectile;

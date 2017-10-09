@@ -13,8 +13,8 @@ import java.awt.*;
  */
 public class CounterWeight extends RenderablePart {
 
-    private Lever lever_;
-    private double mass_;
+    private Lever lever;
+    private double mass;
 
     private static final int WEIGHT_HANG_LENGTH = 20;
 
@@ -23,16 +23,16 @@ public class CounterWeight extends RenderablePart {
     private static final Color FILL_COLOR = new Color(190, 180, 140);
 
     public CounterWeight(Lever lever, double mass) {
-        lever_ = lever;
-        mass_ = mass;
+        this.lever = lever;
+        this.mass = mass;
     }
 
     public double getMass() {
-        return mass_;
+        return mass;
     }
 
     public void setMass(double mass) {
-        this.mass_ = mass;
+        this.mass = mass;
     }
 
 
@@ -41,7 +41,7 @@ public class CounterWeight extends RenderablePart {
         g2.setStroke(STROKE);
         g2.setColor(COLOR);
 
-        double cwLeverLength = lever_.getCounterWeightLeverLength();
+        double cwLeverLength = lever.getCounterWeightLeverLength();
         double cos = SCALE_FACTOR * cwLeverLength* Math.cos(angle);
         double sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle);
         Vector2d attachPt = new Vector2d(STRUT_BASE_X + sin, (int) ( -SCALE_FACTOR * height) - cos);
@@ -52,7 +52,7 @@ public class CounterWeight extends RenderablePart {
                     (int) (scale * attachPt.x),
                     (int) (BASE_Y + scale * (attachPt.y + WEIGHT_HANG_LENGTH)));
 
-        int radius = (int) (SCALE_FACTOR * 0.05 *Math.cbrt( mass_));
+        int radius = (int) (SCALE_FACTOR * 0.05 *Math.cbrt(mass));
         g2.setColor(COLOR);
         int diameter = (int) (scale * 2.0 * radius);
         int xOval = (int) (scale * (attachPt.x - radius));
@@ -65,7 +65,7 @@ public class CounterWeight extends RenderablePart {
         if (getShowVelocityVectors()) {
             g2.setStroke(VELOCITY_VECTOR_STROKE);
             g2.setColor(VELOCITY_VECTOR_COLOR);
-            double velocityMagnitude = lever_.getCounterWeightLeverLength() * getAngularVelocity() * Math.sin(getAngle());
+            double velocityMagnitude = lever.getCounterWeightLeverLength() * getAngularVelocity() * Math.sin(getAngle());
             g2.drawLine((int) (scale * attachPt.x), (int) (scale *bottomY + BASE_Y), (int) (scale * attachPt.x), (int) (scale * (bottomY + velocityMagnitude) + BASE_Y));
         }
         if (getShowForceVectors())  {

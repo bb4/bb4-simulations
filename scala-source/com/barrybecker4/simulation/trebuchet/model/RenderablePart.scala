@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.trebuchet.model
 
 import java.awt._
-import com.barrybecker4.simulation.trebuchet1.model.TrebuchetConstants.HEIGHT
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
 
 
 /**
@@ -56,5 +56,5 @@ object RenderablePart {
 }
 
 abstract class RenderablePart() {
-  protected def render(g2: Graphics2D, scale: Double): Unit
+  def render(g2: Graphics2D, scale: Double): Unit
 }

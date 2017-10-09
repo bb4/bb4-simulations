@@ -37,7 +37,7 @@ public class Trebuchet {
     private Sling sling;
     private Projectile projectile;
 
-    private Vector2d forceFromHook_ = new Vector2d(0, 0);
+    private Vector2d forceFromHook = new Vector2d(0, 0);
 
     private static final int NUM_PARTS = 5;
     private RenderablePart[] part;
@@ -124,19 +124,19 @@ public class Trebuchet {
             //System.out.println("tangentialForceAtHook="+tangentialForceAtHook);
             double slingAngleWithHorz = sling.getAngleWithHorz();
 
-            forceFromHook_.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz));  //sin(PI - angle), -cos(PI + angle));
-            forceFromHook_.scale( tangentialForceAtHook * sin(slingAngle));
+            forceFromHook.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz));  //sin(PI - angle), -cos(PI + angle));
+            forceFromHook.scale( tangentialForceAtHook * sin(slingAngle));
             Vector2d gravityForce = new Vector2d(GRAVITY_VEC);
             gravityForce.scale(projectile.getMass());
-            forceFromHook_.add(gravityForce);
+            forceFromHook.add(gravityForce);
             // also add a restoring force which is proportional to the distnace from the attachpoint on the sling
             // if we have not yet been released.
 
             Vector2d restoreForce = sling.getProjectileAttachPoint();
             restoreForce.sub(projectile.getPosition());
             restoreForce.scale(100.0);
-            forceFromHook_.add(restoreForce);
-            projectile.setForce(forceFromHook_, timeStep);
+            forceFromHook.add(restoreForce);
+            projectile.setForce(forceFromHook, timeStep);
         }  else {
             Vector2d gravityForce = new Vector2d(GRAVITY_VEC);
             gravityForce.scale(projectile.getMass());
