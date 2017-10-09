@@ -36,6 +36,13 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
   startingTotalField.setAlignmentX(CENTER_ALIGNMENT)
   startingInvestmentPercentField.setAlignmentX(CENTER_ALIGNMENT)
   theoreticalMaxGainField.setAlignmentX(CENTER_ALIGNMENT)
+
+  private var strategyCombo: JComboBox[String] = _
+  private val tradingPlugins = new StrategyPlugins[TradingStrategy](
+    "com.barrybecker4.simulation.trading.model.tradingstrategy",
+    classOf[TradingStrategy], util.Arrays.asList(new BuyAndHoldStrategy,
+      new BuyPercentOfInvestmentStrategy, new BuyPercentOfReserveStrategy, new SellWhatWasBoughtStrategy))
+
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private var strategyOptionsPanel = new JPanel(new BorderLayout)
   strategyOptionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground))
@@ -47,11 +54,6 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
   add(strategyDropDownElement)
   add(strategyOptionsPanel)
   setBorder(Section.createBorder("Trading Options"))
-  private var strategyCombo: JComboBox[String] = _
-  private val tradingPlugins = new StrategyPlugins[TradingStrategy](
-    "com.barrybecker4.simulation.trading.model.tradingstrategy",
-    classOf[TradingStrategy], util.Arrays.asList(new BuyAndHoldStrategy,
-      new BuyPercentOfInvestmentStrategy, new BuyPercentOfReserveStrategy, new SellWhatWasBoughtStrategy))
 
   private def createStrategyDropDown = {
     val panel = new JPanel

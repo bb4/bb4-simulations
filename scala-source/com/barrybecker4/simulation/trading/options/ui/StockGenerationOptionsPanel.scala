@@ -45,6 +45,16 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
   numStocksField.setAlignmentX(CENTER_ALIGNMENT)
   numTimePeriodsField.setAlignmentX(CENTER_ALIGNMENT)
   startingValueField.setAlignmentX(CENTER_ALIGNMENT)
+
+  private val generationStrategies =
+    new StrategyPlugins[GenerationStrategy](
+      "com.barrybecker4.simulation.trading.model.generationstrategy",
+      classOf[GenerationStrategy],
+      util.Arrays.asList(
+        new FlatStrategy, new GaussianStrategy, new SineStrategy, new RandomUpAndDownStrategy,
+        new RandomWithAdditiveMomentumStrategy))
+  private var strategyCombo: JComboBox[String] = _
+
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private val strategyOptionsPanel = new JPanel(new BorderLayout)
   strategyOptionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground))
@@ -55,23 +65,16 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
   add(strategyDropDownElement)
   add(strategyOptionsPanel)
   setBorder(Section.createBorder("Stock Generation Options"))
-  private val generationStrategies =
-    new StrategyPlugins[GenerationStrategy](
-      "com.barrybecker4.simulation.trading.model.generationstrategy",
-      classOf[GenerationStrategy],
-      util.Arrays.asList(
-        new FlatStrategy, new GaussianStrategy, new SineStrategy, new RandomUpAndDownStrategy,
-        new RandomWithAdditiveMomentumStrategy))
-
-  val choices = generationStrategies.getStrategies
-  System.out.println("generation strategies: " + choices)
-  private var strategyCombo = new JComboBox[String](choices.toArray(new Array[String](choices.size)))
 
 
   private def createStrategyDropDown = {
     val panel = new JPanel
     panel.setLayout(new FlowLayout(FlowLayout.LEADING))
     val label = new JLabel("Stock generation strategy : ")
+
+    val choices = generationStrategies.getStrategies
+    println("generation strategies: " + choices)
+    strategyCombo = new JComboBox[String](choices.toArray(new Array[String](choices.size)))
 
     println("Default generation strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY)
     strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
