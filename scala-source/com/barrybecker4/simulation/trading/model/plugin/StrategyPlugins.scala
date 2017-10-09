@@ -19,6 +19,9 @@ import com.barrybecker4.simulation.trading.model.generationstrategy.GenerationSt
   */
 class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Class[_],
                                            val defaultStrategies: util.List[E]) {
+  private val strategyNames = new util.ArrayList[String]
+  private val valueMap = new util.HashMap[String, E]
+
   try {
     val strategyClasses: util.List[Class[_]] = new PackageReflector().getClasses(packageName)
     for (ci <- 0 until strategyClasses.size()) {
@@ -45,8 +48,6 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
     case e@(_: ClassNotFoundException | _: InstantiationException | _: IOException | _: IllegalAccessException) =>
       e.printStackTrace()
   }
-  private val strategyNames = new util.ArrayList[String]
-  private val valueMap = new util.HashMap[String, E]
 
   def getStrategies: util.List[String] = strategyNames
 

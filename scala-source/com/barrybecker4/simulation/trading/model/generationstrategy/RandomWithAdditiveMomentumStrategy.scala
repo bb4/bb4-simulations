@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trading.model.generationstrategy
 import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
-import com.barrybecker4.simulation.trading1.model.generationstrategy.AbstractGenerationStrategy
 
 
 object RandomWithAdditiveMomentumStrategy {

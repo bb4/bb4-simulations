@@ -6,8 +6,6 @@ import javax.swing._
 import java.awt._
 import RandomUpAndDownStrategy._
 
-import com.barrybecker4.simulation.trading1.model.generationstrategy.AbstractGenerationStrategy
-
 
 /**
   * @author Barry Becker

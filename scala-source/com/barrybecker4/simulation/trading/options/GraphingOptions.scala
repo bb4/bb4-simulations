@@ -13,8 +13,8 @@ object GraphingOptions {
 }
 
 class GraphingOptions {
-  var histogramXResolution = GraphingOptions.DEFAULT_X_RESOLUTION
-  var histogramUseLogScale = GraphingOptions.DEFAULT_USE_LOG_SCALE
+  var histogramXResolution: Int = GraphingOptions.DEFAULT_X_RESOLUTION
+  var histogramUseLogScale: Boolean = GraphingOptions.DEFAULT_USE_LOG_SCALE
   /** for stock and investment line charts, this shows some number of recent series */
-  var numRecentSeries = GraphingOptions.DEFAULT_NUM_RECENT_SERIES
+  var numRecentSeries: Int = GraphingOptions.DEFAULT_NUM_RECENT_SERIES
 }

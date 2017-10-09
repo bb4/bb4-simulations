@@ -46,7 +46,7 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
     private JPanel strategyOptionsPanel;
 
     private StrategyPlugins<? extends IGenerationStrategy> generationStrategies =
-            new StrategyPlugins<>("com.barrybecker4.simulation.trading.model.generationstrategy",
+            new StrategyPlugins<>("com.barrybecker4.simulation.trading1.model.generationstrategy",
                     IGenerationStrategy.class,
                     Arrays.asList(
                             new FlatStrategy(), new GaussianStrategy(), new SineStrategy(),
@@ -151,10 +151,7 @@ public class StockGenerationOptionsPanel extends JPanel implements ItemListener 
         generationOptions.numStocks = numStocksField.getIntValue();
         generationOptions.numTimePeriods = numTimePeriodsField.getIntValue();
         generationOptions.startingValue = startingValueField.getValue();
-
         generationOptions.generationStrategy.acceptSelectedOptions();
-
         return generationOptions;
     }
-
 }

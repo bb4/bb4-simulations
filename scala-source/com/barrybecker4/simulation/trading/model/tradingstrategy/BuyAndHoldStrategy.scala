@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy
 
 /**
   * This naive strategy puts everything in the market at the start and sells it all at the end.
-  *
   * @author Barry Becker
   */
 class BuyAndHoldStrategy extends TradingStrategy {

@@ -23,22 +23,23 @@ class StockRunner(var tradingOpts: TradingOptions) {
     var stockPrice: Double = generationOpts.startingValue
     val numPeriods = generationOpts.numTimePeriods
     // initial buy
-    var position = tradingStrategy.initialInvestment(stockPrice, tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent)
+    var position = tradingStrategy.initialInvestment(stockPrice,
+      tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent)
     val yValues = new Array[Double](numPeriods + 1)
     val investValues = new Array[Double](numPeriods + 1)
     val reserveValues = new Array[Double](numPeriods + 1)
     for (i <- 0 until numPeriods) {
       yValues(i) = stockPrice
-      investValues(i) = position.getInvested
-      reserveValues(i) = position.getReserve
+      investValues(i) = position.invested
+      reserveValues(i) = position.reserve
       stockPrice = generationStrategy.calcNewPrice(stockPrice)
       position = tradingStrategy.updateInvestment(stockPrice)
     }
     position = tradingStrategy.finalizeInvestment(stockPrice)
     yValues(numPeriods) = stockPrice
     investValues(numPeriods) = 0
-    reserveValues(numPeriods) = position.getReserve
-    //System.out.println("*** final sell = " + finalSell
+    reserveValues(numPeriods) = position.reserve
+    //println("*** final sell = " + finalSell
     //        + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
     new StockRunResult(
       new HeightFunction(yValues),

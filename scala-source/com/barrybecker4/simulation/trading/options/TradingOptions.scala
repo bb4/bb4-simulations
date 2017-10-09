@@ -1,7 +1,8 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.options
 
-import com.barrybecker4.simulation.trading1.model.tradingstrategy.BuyAndHoldStrategy
+import com.barrybecker4.simulation.trading.TradingSimulator
+import com.barrybecker4.simulation.trading.model.tradingstrategy.{BuyAndHoldStrategy, TradingStrategy}
 
 
 /**
@@ -17,8 +18,8 @@ object TradingOptions {
 }
 
 class TradingOptions {
-  var startingTotal = TradingOptions.DEFAULT_STARTING_TOTAL
-  var startingInvestmentPercent = TradingOptions.DEFAULT_STARTING_INVESTMENT_PERCENT
-  var theoreticalMaxGain = TradingOptions.DEFAULT_THEORETICAL_MAX_GAIN
-  var tradingStrategy = TradingOptions.DEFAULT_TRADING_STRATEGY
+  var startingTotal: Double = TradingOptions.DEFAULT_STARTING_TOTAL
+  var startingInvestmentPercent: Double = TradingOptions.DEFAULT_STARTING_INVESTMENT_PERCENT
+  var theoreticalMaxGain: Double = TradingOptions.DEFAULT_THEORETICAL_MAX_GAIN
+  var tradingStrategy: TradingStrategy = TradingOptions.DEFAULT_TRADING_STRATEGY
 }

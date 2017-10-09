@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.tradingstrategy
 
-import com.barrybecker4.simulation.trading1.options.ChangePolicy
-import com.barrybecker4.simulation.trading1.options.ui.ChangePolicyPanel
+import com.barrybecker4.simulation.trading.options.ChangePolicy
+import com.barrybecker4.simulation.trading.options.ui.ChangePolicyPanel
 import javax.swing._
 import java.awt._
 
@@ -23,19 +23,19 @@ class BuyPercentOfReserveStrategy extends TradingStrategy {
   private var gainPolicyPanel: ChangePolicyPanel = _
   private var lossPolicyPanel: ChangePolicyPanel = _
 
-  override def getName = "percent of reserve"
-  override def getDescription = "When the marked goes up, we sell a percent of investment; " +
+  override def name = "percent of reserve"
+  override def description: String = "When the marked goes up, we sell a percent of investment; " +
     "when it goes down we buy a percent of reserve"
 
   /** if this new price triggers a transaction, then do it */
   override def updateInvestment(stockPrice: Double): MarketPosition = {
     val pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction
-    if (pctChange >= gainPolicy.getChangePercent) { // sell, and take some profit. Assume we can sell partial shares
-      val sharesToSell = gainPolicy.getTransactPercent * sharesOwned
+    if (pctChange >= gainPolicy.changePercent) { // sell, and take some profit. Assume we can sell partial shares
+      val sharesToSell = gainPolicy.transactPercent * sharesOwned
       sell(sharesToSell, stockPrice)
     }
-    else if (-pctChange >= lossPolicy.getChangePercent) { // buy more because its cheaper
-      val amountToInvest = lossPolicy.getTransactPercent * reserve
+    else if (-pctChange >= lossPolicy.changePercent) { // buy more because its cheaper
+      val amountToInvest = lossPolicy.transactPercent * reserve
       buy(amountToInvest, stockPrice)
     }
     MarketPosition(invested, reserve, sharesOwned)
