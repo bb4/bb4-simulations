@@ -1,8 +1,8 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.stock1;
 
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;

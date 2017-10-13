@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.snake
 
 import com.barrybecker4.common.math.WaveType
-import com.barrybecker4.simulation.common.ui.NewtonianSimOptionsDialog
+import com.barrybecker4.simulation.common1.ui.NewtonianSimOptionsDialog
 import com.barrybecker4.simulation.snake.data.SnakeType
 import com.barrybecker4.ui.components.NumberInput
 import javax.swing._

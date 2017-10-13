@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.graphing1;
 
 import com.barrybecker4.common.math.function.Function;
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.animation.AnimationFrame;
 import com.barrybecker4.ui.renderers.SingleFunctionRenderer;
 

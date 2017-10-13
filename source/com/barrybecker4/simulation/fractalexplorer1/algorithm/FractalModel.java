@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer1.algorithm;
 
-import com.barrybecker4.simulation.common.RectangularModel;
+import com.barrybecker4.simulation.common1.RectangularModel;
 
 /**
  * Nothing but a big matrix to hold the resulting values.

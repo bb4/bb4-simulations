@@ -6,8 +6,8 @@ import com.barrybecker4.common.format.CurrencyFormatter;
 import com.barrybecker4.common.math.function.InvertibleFunction;
 import com.barrybecker4.common.math.function.LinearFunction;
 import com.barrybecker4.common.math.function.LogFunction;
-import com.barrybecker4.simulation.common.ui.DistributionSimulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.DistributionSimulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.renderers.HistogramRenderer;
 import com.barrybecker4.ui.util.Log;
 

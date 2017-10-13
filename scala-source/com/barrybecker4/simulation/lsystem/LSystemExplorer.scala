@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem
 
-import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common1.Profiler
+import com.barrybecker4.simulation.common1.ui.Simulator
 import com.barrybecker4.simulation.lsystem.model.LSystemModel
 import javax.swing.JPanel
 import java.awt.Graphics

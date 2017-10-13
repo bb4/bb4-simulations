@@ -6,7 +6,7 @@ import com.barrybecker4.common.geometry.Box;
 import com.barrybecker4.common.geometry.IntLocation;
 import com.barrybecker4.common.math.ComplexNumber;
 import com.barrybecker4.common.math.ComplexNumberRange;
-import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.simulation.common1.Profiler;
 
 import java.util.ArrayList;
 import java.util.List;

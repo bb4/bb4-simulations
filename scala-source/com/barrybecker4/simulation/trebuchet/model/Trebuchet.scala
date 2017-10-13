@@ -5,7 +5,7 @@ import com.barrybecker4.ui.util.Log
 import javax.vecmath.Vector2d
 import java.awt.Color
 import java.awt.Graphics2D
-import com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY
+import com.barrybecker4.simulation.common1.PhysicsConstants.GRAVITY
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants._
 import java.lang.Math.PI
 import java.lang.Math.asin

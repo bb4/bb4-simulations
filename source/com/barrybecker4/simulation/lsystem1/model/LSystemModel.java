@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem1.model;
 
-import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.simulation.common1.Profiler;
 import com.barrybecker4.simulation.lsystem1.rendering.LSystemRenderer;
 
 import javax.swing.JOptionPane;

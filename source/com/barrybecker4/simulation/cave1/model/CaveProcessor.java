@@ -5,7 +5,7 @@ import com.barrybecker4.common.math.Range;
 import com.barrybecker4.simulation.cave1.model.kernal.BasicKernel;
 import com.barrybecker4.simulation.cave1.model.kernal.Kernel;
 import com.barrybecker4.simulation.cave1.model.kernal.RadialKernel;
-import com.barrybecker4.simulation.common.rendering.bumps.HeightField;
+import com.barrybecker4.simulation.common1.rendering.bumps.HeightField;
 
 import java.util.ArrayList;
 import java.util.List;

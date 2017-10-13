@@ -3,8 +3,8 @@
 package com.barrybecker4.simulation.conway
 
 import com.barrybecker4.simulation.conway.model.ConwayModel
-import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common1.Profiler
+import com.barrybecker4.simulation.common1.ui.Simulator
 import javax.swing._
 import java.awt._
 

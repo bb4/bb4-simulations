@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import javax.vecmath.Vector2d;
 
-import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE;
+import static com.barrybecker4.simulation.common1.PhysicsConstants.ATMOSPHERIC_PRESSURE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

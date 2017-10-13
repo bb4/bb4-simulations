@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.henonphase.algorithm
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.common1.Profiler
 import java.awt.image.BufferedImage
 import HenonAlgorithm._
 

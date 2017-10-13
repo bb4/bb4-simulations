@@ -5,7 +5,7 @@ import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.format.IntegerFormatter
 import com.barrybecker4.common.math.MathUtil
 import com.barrybecker4.common.math.function.LinearFunction
-import com.barrybecker4.simulation.common.ui.DistributionSimulator
+import com.barrybecker4.simulation.common1.ui.DistributionSimulator
 import com.barrybecker4.ui.renderers.HistogramRenderer
 import com.barrybecker4.ui.util.Log
 import java.util

@@ -2,10 +2,10 @@
 package com.barrybecker4.simulation.fractalexplorer1;
 
 import com.barrybecker4.common.math.ComplexNumber;
-import com.barrybecker4.simulation.common.Profiler;
-import com.barrybecker4.simulation.common.rendering.ModelImage;
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.Profiler;
+import com.barrybecker4.simulation.common1.rendering.ModelImage;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.fractalexplorer1.algorithm.AlgorithmEnum;
 import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalAlgorithm1;
 import com.barrybecker4.simulation.fractalexplorer1.algorithm.FractalModel;

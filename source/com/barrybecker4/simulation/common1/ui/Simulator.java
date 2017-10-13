@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2013. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.common.ui;
+package com.barrybecker4.simulation.common1.ui;
 
 import com.barrybecker4.common.format.FormatUtil;
 import com.barrybecker4.common.util.FileUtil;

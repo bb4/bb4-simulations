@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.henonphase
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common1.Profiler
+import com.barrybecker4.simulation.common1.ui.Simulator
 import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm
 import javax.swing._
 import java.awt._

@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.liquid1.model;
 
-import static com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE;
+import static com.barrybecker4.simulation.common1.PhysicsConstants.ATMOSPHERIC_PRESSURE;
 
 /**
  *  A region of space containing particles, walls, or liquid.

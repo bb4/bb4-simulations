@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.dice1;
 
 
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.ui.components.NumberInput;
 
 import javax.swing.*;

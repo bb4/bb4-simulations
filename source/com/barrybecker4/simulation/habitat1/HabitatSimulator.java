@@ -3,9 +3,9 @@ package com.barrybecker4.simulation.habitat1;
 
 import com.barrybecker4.common.concurrency.ThreadUtil;
 import com.barrybecker4.common.math.MathUtil;
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorApplet;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorApplet;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.habitat1.creatures.Populations;
 import com.barrybecker4.simulation.habitat1.creatures.SerengetiPopulations;
 import com.barrybecker4.simulation.habitat1.options.DynamicOptions;

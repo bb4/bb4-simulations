@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.reactiondiffusion
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common1.ui.Simulator
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
 import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions
 import javax.swing._

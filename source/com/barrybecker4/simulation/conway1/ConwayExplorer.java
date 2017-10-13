@@ -2,9 +2,9 @@
 package com.barrybecker4.simulation.conway1;
 
 import com.barrybecker4.simulation.conway1.model.ConwayModel;
-import com.barrybecker4.simulation.common.Profiler;
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.Profiler;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 
 import javax.swing.*;
 import java.awt.*;

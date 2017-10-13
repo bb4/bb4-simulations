@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.trading1;
 
 import com.barrybecker4.common.app.AppContext;
-import com.barrybecker4.simulation.common.ui.Simulator;
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog;
+import com.barrybecker4.simulation.common1.ui.Simulator;
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog;
 import com.barrybecker4.simulation.trading1.charts.InvestmentChartPanel;
 import com.barrybecker4.simulation.trading1.charts.ProfitHistogramPanel;
 import com.barrybecker4.simulation.trading1.charts.StockChartPanel;

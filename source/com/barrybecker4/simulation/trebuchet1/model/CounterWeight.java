@@ -3,7 +3,7 @@
  */
 package com.barrybecker4.simulation.trebuchet1.model;
 
-import com.barrybecker4.simulation.common.PhysicsConstants;
+import com.barrybecker4.simulation.common1.PhysicsConstants;
 
 import javax.vecmath.Vector2d;
 import java.awt.*;

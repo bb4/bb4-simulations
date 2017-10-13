@@ -9,8 +9,8 @@ import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.{DoubleParameter, Parameter}
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType
-import com.barrybecker4.simulation.common.rendering.BackgroundGridRenderer
-import com.barrybecker4.simulation.common.ui.NewtonianSimulator
+import com.barrybecker4.simulation.common1.rendering.BackgroundGridRenderer
+import com.barrybecker4.simulation.common1.ui.NewtonianSimulator
 import com.barrybecker4.simulation.snake.rendering.RenderingParameters
 import com.barrybecker4.simulation.snake.rendering.SnakeRenderer
 import com.barrybecker4.ui.util.GUIUtil

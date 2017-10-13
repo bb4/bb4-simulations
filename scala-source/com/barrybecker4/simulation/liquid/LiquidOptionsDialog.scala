@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid
 
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
+import com.barrybecker4.simulation.common1.ui.SimulatorOptionsDialog
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
 import javax.swing._
 import java.awt._

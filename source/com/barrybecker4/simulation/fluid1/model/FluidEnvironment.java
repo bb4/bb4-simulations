@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fluid1.model;
 
-import com.barrybecker4.simulation.common.Profiler;
+import com.barrybecker4.simulation.common1.Profiler;
 
 /**
  *  This is the global space containing all the cells, walls, and fluid

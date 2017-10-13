@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.cave
 
 import com.barrybecker4.simulation.cave.model.CaveModel
-import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common1.Profiler
+import com.barrybecker4.simulation.common1.ui.Simulator
 import javax.swing._
 import java.awt._
 

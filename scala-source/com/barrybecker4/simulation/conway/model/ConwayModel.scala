@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2013-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.model
 
-import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.common1.Profiler
 import com.barrybecker4.simulation.conway.rendering.ConwayColorMap
 import com.barrybecker4.simulation.conway.rendering.ConwayRenderer
 import com.barrybecker4.ui.util.ColorMap

@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.cave.model
 
 import com.barrybecker4.simulation.cave.rendering.CaveColorMap
 import com.barrybecker4.simulation.cave.rendering.CaveRenderer
-import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.common1.Profiler
 import com.barrybecker4.ui.util.ColorMap
 import javax.swing._
 import java.awt.image.BufferedImage
