@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.verhulst;
+package com.barrybecker4.simulation.verhulst1;
 
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderProperties;
@@ -11,11 +11,11 @@ import com.barrybecker4.ui.sliders.SliderProperties;
  */
 public class CreatureSliderGroup extends SliderGroup {
 
-    private Population creaturePop_;
+    private Population creaturePop;
     private static final String BIRTH_RATE_LABEL = " Birth Rate";
 
     public CreatureSliderGroup(Population creaturePop) {
-        creaturePop_ = creaturePop;
+        this.creaturePop = creaturePop;
         commonInit(createSliderProperties());
     }
 
@@ -23,10 +23,10 @@ public class CreatureSliderGroup extends SliderGroup {
 
         SliderProperties[] props = new SliderProperties[1];
 
-        String creatureName = creaturePop_.getName();
+        String creatureName = creaturePop.getName();
 
         props[0] = new SliderProperties(creatureName + BIRTH_RATE_LABEL,
-                1.9, creaturePop_.getMaxBirthRate(), creaturePop_.getInitialBirthRate(), 1000.0);
+                1.9, creaturePop.getMaxBirthRate(), creaturePop.getInitialBirthRate(), 1000.0);
 
         return props;
     }
@@ -41,7 +41,7 @@ public class CreatureSliderGroup extends SliderGroup {
             if (sliderName.equals(props.getName()))  {
                 if (sliderName.endsWith(BIRTH_RATE_LABEL)) {
 
-                    creaturePop_.birthRate = value;
+                    creaturePop.birthRate = value;
                 }
                 else {
                     throw new IllegalStateException("Unexpected sliderName:" + sliderName);

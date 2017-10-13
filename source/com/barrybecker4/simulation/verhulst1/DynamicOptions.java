@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2012. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.verhulst;
+package com.barrybecker4.simulation.verhulst1;
 
 import com.barrybecker4.ui.sliders.SliderGroup;
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener;
@@ -14,10 +14,9 @@ import java.util.List;
  * They change the behavior of the simulation while it is running.
  * @author Barry Becker
  */
-public class DynamicOptions extends JPanel
-                            implements SliderGroupChangeListener {
+public class DynamicOptions extends JPanel implements SliderGroupChangeListener {
 
-    private List<CreatureSliderGroup> sliderGroups_;
+    private List<CreatureSliderGroup> sliderGroups;
 
     /**
      * Constructor
@@ -28,11 +27,11 @@ public class DynamicOptions extends JPanel
         setBorder(BorderFactory.createEtchedBorder());
         setPreferredSize(new Dimension(300, 300));
 
-        sliderGroups_ = new ArrayList<CreatureSliderGroup>();
+        sliderGroups = new ArrayList<CreatureSliderGroup>();
         for (Population creaturePop : simulator.getCreatures()) {
             CreatureSliderGroup group = new CreatureSliderGroup(creaturePop);
             group.addSliderChangeListener(this);
-            sliderGroups_.add(group);
+            sliderGroups.add(group);
             add(group);
         }
 
@@ -42,7 +41,7 @@ public class DynamicOptions extends JPanel
     }
 
     public void reset() {
-        for (SliderGroup group : sliderGroups_)  {
+        for (SliderGroup group : sliderGroups)  {
             group.reset();
         }
     }
@@ -52,7 +51,7 @@ public class DynamicOptions extends JPanel
      */
     public void sliderChanged(int sliderIndex, String sliderName, double value) {
 
-        for (CreatureSliderGroup group : sliderGroups_)  {
+        for (CreatureSliderGroup group : sliderGroups)  {
             group.checkSliderChanged(sliderName, value);
         }
     }

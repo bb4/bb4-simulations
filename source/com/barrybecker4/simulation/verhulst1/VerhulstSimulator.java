@@ -1,5 +1,5 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.verhulst;
+package com.barrybecker4.simulation.verhulst1;
 
 import com.barrybecker4.common.math.function.CountFunction;
 import com.barrybecker4.common.math.function.Function;
@@ -22,12 +22,12 @@ import java.util.List;
  */
 public class VerhulstSimulator extends Simulator {
 
-    MultipleFunctionRenderer graph_;
-    long iteration;
+    private MultipleFunctionRenderer graph;
+    private long iteration;
 
-    Rabbits rabbits;
-    CountFunction rabbitFunction;
-    DynamicOptions options_;
+    private Rabbits rabbits;
+    private CountFunction rabbitFunction;
+    private DynamicOptions options;
 
     /** Constructor */
     public VerhulstSimulator() {
@@ -44,9 +44,8 @@ public class VerhulstSimulator extends Simulator {
 
     @Override
     protected void reset() {
-
         initGraph();
-        options_.reset();
+        options.reset();
     }
 
     @Override
@@ -80,13 +79,13 @@ public class VerhulstSimulator extends Simulator {
         List<Color> lineColors = new LinkedList<Color>();
         lineColors.add(Rabbits.COLOR);
 
-        graph_ = new MultipleFunctionRenderer(functions, lineColors);
+        graph = new MultipleFunctionRenderer(functions, lineColors);
     }
 
     @Override
     public JPanel createDynamicControls() {
-        options_ = new DynamicOptions(this);
-        return options_;
+        options = new DynamicOptions(this);
+        return options;
     }
 
     @Override
@@ -96,8 +95,8 @@ public class VerhulstSimulator extends Simulator {
 
     @Override
     public void paint( Graphics g ) {
-        graph_.setSize(getWidth(), getHeight());
-        graph_.paint(g);
+        graph.setSize(getWidth(), getHeight());
+        graph.paint(g);
     }
 
     public static void main( String[] args ) {
