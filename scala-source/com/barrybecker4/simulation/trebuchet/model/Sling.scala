@@ -21,7 +21,9 @@ object Sling {
   private val ARC_COLOR = new Color(60, 90, 70, 150)
 }
 
-class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var projectile: Projectile) extends RenderablePart {
+class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var projectile: Projectile)
+  extends RenderablePart {
+
   val attachPt: Vector2d = getHookPosition
   projectile.setX(attachPt.x + SCALE_FACTOR * length)
   projectile.setY(attachPt.y - SCALE_FACTOR * projectile.getRadius)
@@ -57,25 +59,24 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
 
   /**
     * the sling angle is the bottom angle bwetween the lever and the sling.
-    *
     * @return the angle of the sling with the lever.
     */
   def getAngleWithLever: Double = {
-    val leverAngleWithHorz = PI / 2.0 - getAngle
+    val leverAngleWithHorz = PI / 2.0 - angle
     val slingAngleWithHorz = getAngleWithHorz
     //System.out.println("slingAngle = leverAngleWithHorz("+leverAngleWithHorz+") "
     // + "  slingAngleWithHorz("+ slingAngleWithHorz+") =  "+(leverAngleWithHorz + slingAngleWithHorz));
-    -(slingAngleWithHorz - leverAngleWithHorz)
+    leverAngleWithHorz - slingAngleWithHorz
   }
 
   def getAngleWithHorz: Double = {
     val hookPos = getHookPosition
     val deltaY = projectile.getY - hookPos.y
     val deltaX = projectile.getX - hookPos.x
-    var angle = atan(deltaY / deltaX)
+    var theAngle = atan(deltaY / deltaX)
     //System.out.println("angle=  "+angle);
-    if (deltaX < 0 || getAngle > PI / 2) angle += PI
-    -angle
+    if (deltaX < 0 || angle > PI / 2) theAngle += PI
+    -theAngle
   }
 
   override def render(g2: Graphics2D, scale: Double): Unit = {
@@ -83,14 +84,16 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     g2.setColor(Sling.COLOR)
     val attachPt = getHookPosition
     val projectileAttachPt = getProjectileAttachPoint
-    g2.drawLine((scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt, (scale * projectileAttachPt.x).toInt, (BASE_Y + scale * projectileAttachPt.y).toInt)
+    g2.drawLine((scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt,
+      (scale * projectileAttachPt.x).toInt, (BASE_Y + scale * projectileAttachPt.y).toInt)
     val startAngle = (getAngleWithHorz * 180.0 / PI).toInt
     val angle = (getAngleWithLever * 180.0 / PI).toInt
     val endAngle = startAngle + angle
     val diameter = (SCALE_FACTOR * 2 * length).toInt
     val rad = diameter >> 1
     g2.setColor(Sling.ARC_COLOR)
-    g2.drawArc((scale * (attachPt.x - rad)).toInt, (BASE_Y + scale * (attachPt.y - rad)).toInt, (scale * diameter).toInt, (scale * diameter).toInt, startAngle, angle)
+    g2.drawArc((scale * (attachPt.x - rad)).toInt, (BASE_Y + scale * (attachPt.y - rad)).toInt,
+      (scale * diameter).toInt, (scale * diameter).toInt, startAngle, angle)
     //g2.drawString("start = "+ startAngle, (int)(attachPt.x + rad), (int)(attachPt.y));
     //g2.drawString("end   = "+ endAngle, (int)(attachPt.x + rad), (int)(attachPt.y + 15));
     g2.drawString("angle = " + angle, (scale * (attachPt.x + rad)).toInt, (BASE_Y + scale * (attachPt.y + 30)).toInt)

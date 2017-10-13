@@ -35,7 +35,6 @@ class Lever private[model](// the angle of the level wrt horizontal (0 being hor
   }
 
   /**
-    *
     * @return the mass in kilograms
     */
   def getMass: Double = Lever.LEVER_MASS_PER_METER * getTotalLength

@@ -52,13 +52,13 @@ class Trebuchet() {
   commonInit()
 
   def reset(): Unit = {
-    RenderablePart.setAngularVelocity(0)
+    RenderablePart.angularVelocity = 0
     commonInit()
   }
 
   private def commonInit(): Unit = {
     val angle = PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH)
-    RenderablePart.setAngle(angle)
+    RenderablePart.angle = angle
     val base = new Base
     part(0) = base
     lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
@@ -78,8 +78,8 @@ class Trebuchet() {
     */
   def stepForward(timeStep: Double): Double = {
     //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
-    var angle = RenderablePart.getAngle
-    var angularVelocity = RenderablePart.getAngularVelocity
+    var angle = RenderablePart.angle
+    var angularVelocity = RenderablePart.angularVelocity
     val slingAngle = sling.getAngleWithLever
     val torque = calculateTorque(angle, slingAngle)
     val inertia = calculateInertia
@@ -94,8 +94,8 @@ class Trebuchet() {
       angularVelocity = 0
       angle = Trebuchet.MAX_LEVER_ANGLE
     }
-    RenderablePart.setAngle(angle)
-    RenderablePart.setAngularVelocity(angularVelocity)
+    RenderablePart.angle = angle
+    RenderablePart.angularVelocity = angularVelocity
     //System.out.println("angle="+angle+"  angularVelocity_="
     //  +angularVelocity +" angularAcceleration="+angularAcceleration);
     // calculate the forces acting on the projectile.
@@ -128,7 +128,7 @@ class Trebuchet() {
       println("##########################################################################")
       println("released!  slingAngle = " + slingAngle + " sling release angle = " + sling.getReleaseAngle)
       println("##########################################################################")
-      projectile.setReleased(true)
+      projectile.isReleased = true
     }
     timeStep
   }
@@ -203,7 +203,7 @@ class Trebuchet() {
   def getProjectileMass: Double = projectile.getMass
 
   def setProjectileMass(projectileMass: Double): Unit = {
-    this.projectile.setMass(projectileMass)
+    this.projectile.mass = projectileMass
   }
 
   def getSlingReleaseAngle: Double = sling.getReleaseAngle

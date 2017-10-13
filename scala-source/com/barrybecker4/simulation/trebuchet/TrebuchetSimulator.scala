@@ -77,18 +77,13 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     if (GUIUtil.hasBasicService) optimizer = new Optimizer(this)
     else optimizer = new Optimizer(this, FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt")
     val params = new Array[Parameter](TrebuchetSimulator.NUM_PARAMS)
-    //params[0] = new Parameter( WAVE_SPEED, 0.0001, 0.02, "wave speed" );
-    //params[1] = new Parameter( WAVE_AMPLITUDE, 0.001, 0.2, "wave amplitude" );
-    //params[2] = new Parameter( WAVE_PERIOD, 0.5, 9.0, "wave period" );
     val paramArray = new NumericParameterArray(params)
     setPaused(false)
     optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, paramArray, 0.3)
   }
 
   def getNumParameters: Int = TrebuchetSimulator.NUM_PARAMS
-
   override protected def getInitialTimeStep: Double = TrebuchetSimulator.TIME_STEP
-
   override protected def createOptionsDialog = new TrebuchetOptionsDialog(frame, this)
 
   override def timeStep: Double = {
@@ -112,34 +107,28 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override def setScale(scale: Double): Unit = {
     trebuchet.setScale(scale)
   }
-
   override def getScale: Double = trebuchet.getScale
 
   override def setShowVelocityVectors(show: Boolean): Unit = {
-    RenderablePart.setShowVelocityVectors(show)
+    RenderablePart.showVelocityVectors = show
   }
-
-  override def getShowVelocityVectors: Boolean = RenderablePart.getShowVelocityVectors
+  override def getShowVelocityVectors: Boolean = RenderablePart.showVelocityVectors
 
   override def setShowForceVectors(show: Boolean): Unit = {
-    RenderablePart.setShowForceVectors(show)
+    RenderablePart.showForceVectors = show
   }
-
-  override def getShowForceVectors: Boolean = RenderablePart.getShowForceVectors
+  override def getShowForceVectors: Boolean = RenderablePart.showForceVectors
 
   override def setDrawMesh(use: Boolean): Unit = {
     //trebuchet_.setDrawMesh(use);
   }
-
-  override def getDrawMesh: Boolean = { //return trebuchet_.getDrawMesh();
+  override def getDrawMesh: Boolean = {
     false
   }
 
   override def setStaticFriction(staticFriction: Double): Unit = {}
-
   override def getStaticFriction = 0.1
   override def setDynamicFriction(dynamicFriction: Double): Unit = {}
-
   override def getDynamicFriction = 0.01
 
   /** api for setting trebuchet params  */

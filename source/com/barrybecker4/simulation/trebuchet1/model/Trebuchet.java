@@ -78,7 +78,6 @@ public class Trebuchet {
         part[0] = base;
         lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH);
         part[1] = lever;
-        //System.out.println("cw mass="+DEFAULT_COUNTER_WEIGHT_MASS);
         counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS);
         part[2] = counterWeight;
         projectile = new Projectile(DEFAULT_PROJECTILE_MASS);

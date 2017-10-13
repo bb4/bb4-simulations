@@ -41,16 +41,19 @@ class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
     g2.setColor(CounterWeight.FILL_COLOR)
     g2.fillOval(xOval, yOval, diameter, diameter)
     val bottomY = attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH + diameter
-    if (getShowVelocityVectors) {
+    if (showVelocityVectors) {
       g2.setStroke(VELOCITY_VECTOR_STROKE)
       g2.setColor(VELOCITY_VECTOR_COLOR)
-      val velocityMagnitude = lever.getCounterWeightLeverLength * getAngularVelocity * Math.sin(getAngle)
-      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + BASE_Y).toInt, (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + BASE_Y).toInt)
+      val velocityMagnitude = lever.getCounterWeightLeverLength * angularVelocity * Math.sin(angle)
+      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + BASE_Y).toInt,
+        (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + BASE_Y).toInt)
     }
-    if (getShowForceVectors) {
+    if (showForceVectors) {
       g2.setStroke(FORCE_VECTOR_STROKE)
       g2.setColor(FORCE_VECTOR_COLOR)
-      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY).toInt + BASE_Y, (scale * attachPt.x).toInt, (scale * (bottomY + PhysicsConstants.GRAVITY * getMass)).toInt + BASE_Y)
+      g2.drawLine((scale * attachPt.x).toInt,
+        (scale * bottomY).toInt + BASE_Y, (scale * attachPt.x).toInt,
+        (scale * (bottomY + PhysicsConstants.GRAVITY * getMass)).toInt + BASE_Y)
     }
   }
 }

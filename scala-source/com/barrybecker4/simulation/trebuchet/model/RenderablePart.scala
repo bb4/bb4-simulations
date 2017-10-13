@@ -18,43 +18,16 @@ object RenderablePart {
   val FORCE_VECTOR_STROKE = new BasicStroke(0.3f)
   val VELOCITY_VECTOR_COLOR = new Color(70, 10, 255, 200)
   val FORCE_VECTOR_COLOR = new Color(200, 0, 80, 200)
+
   var height: Double = HEIGHT
   var angle = .0
-  var angularVelocity: Double = 0
+  var angularVelocity: Double = .0
   var showVelocityVectors = true
   var showForceVectors = true
-
-  def getHieght: Double = height
-
-  def setHeight(height: Double): Unit = {
-    RenderablePart.height = height
-  }
-
-  def getShowVelocityVectors: Boolean = showVelocityVectors
-
-  def setShowVelocityVectors(showVelocityVectors: Boolean): Unit = {
-    RenderablePart.showVelocityVectors = showVelocityVectors
-  }
-
-  def getShowForceVectors: Boolean = showForceVectors
-
-  def setShowForceVectors(showForceVectors: Boolean): Unit = {
-    RenderablePart.showForceVectors = showForceVectors
-  }
-
-  def getAngle: Double = angle
-
-  def setAngle(angle: Double): Unit = {
-    RenderablePart.angle = angle
-  }
-
-  def getAngularVelocity: Double = angularVelocity
-
-  def setAngularVelocity(angularVelocity: Double): Unit = {
-    this.angularVelocity = angularVelocity
-  }
 }
 
 abstract class RenderablePart() {
+
+
   def render(g2: Graphics2D, scale: Double): Unit
 }
