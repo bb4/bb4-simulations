@@ -29,7 +29,7 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
     private static final int MAX_NUM_STEPS_PER_FRAME = 10000;
 
     // bottom buttons
-    private GradientButton startButton_ = new GradientButton();
+    private GradientButton startButton = new GradientButton();
 
     // constructor
     public SimulatorOptionsDialog(Component parent, Simulator simulator) {
@@ -87,10 +87,10 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
     protected JPanel createButtonsPanel() {
         JPanel buttonsPanel = new JPanel( new FlowLayout() );
 
-        initBottomButton( startButton_, "Done", "Use these selections when running the simulation." );
+        initBottomButton(startButton, "Done", "Use these selections when running the simulation." );
         initBottomButton(cancelButton, "Cancel", "Resume the current simulation without changing the options" );
 
-        buttonsPanel.add( startButton_ );
+        buttonsPanel.add(startButton);
         buttonsPanel.add(cancelButton);
 
         return buttonsPanel;
@@ -190,7 +190,7 @@ public abstract class SimulatorOptionsDialog extends OptionsDialog {
 
         Object source = e.getSource();
 
-        if ( source == startButton_ ) {
+        if ( source == startButton) {
             ok();
         }
         else if ( source == cancelButton) {
