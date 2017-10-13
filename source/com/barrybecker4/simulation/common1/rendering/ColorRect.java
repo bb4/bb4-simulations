@@ -27,7 +27,6 @@ public class ColorRect {
         pixels = new int[width * height];
     }
 
-
     public void setColor(int x, int y, Color c) {
         setColor(x, y,  c.getRGB());
     }
@@ -55,6 +54,4 @@ public class ColorRect {
         int location = y * width + x;
         pixels[location] = color ;
     }
-
-
 }
