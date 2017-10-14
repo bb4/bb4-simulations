@@ -28,19 +28,13 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
 
   /** initialize with some default */
   private var parameter = ParameterDistributionType.VALUES(0).param
-  private var showRedistribution = true
+  private[parameter] var showRedistribution = true
   initHistogram()
 
   def setParameter(parameter: Parameter): Unit = {
     this.parameter = parameter
     initHistogram()
   }
-
-  private[parameter] def setShowRedistribution(show: Boolean): Unit = {
-    showRedistribution = show
-  }
-
-  private[parameter] def isShowRedistribution = showRedistribution
 
   override protected def initHistogram(): Unit = {
     if (parameter.isIntegerOnly) {
@@ -51,7 +45,7 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
       data = new Array[Int](ParameterSimulator.NUM_DOUBLE_BINS)
       val scale = ParameterSimulator.NUM_DOUBLE_BINS / parameter.getRange
       val offset = -parameter.getMinValue
-      //System.out.println("new Lin scale = " +scale + " off="+ offset);
+      println("new Lin scale = " +scale + " off=" + offset)
       val xFunc = new LinearFunction(scale, offset)
       histogram = new HistogramRenderer(data, xFunc)
     }

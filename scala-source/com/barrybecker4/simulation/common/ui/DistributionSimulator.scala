@@ -23,9 +23,10 @@ object DistributionSimulator {
 }
 
 abstract class DistributionSimulator(val title: String) extends Simulator(title) {
-  commonInit()
+
   protected var histogram: HistogramRenderer = _
   protected var data: Array[Int] = _
+  commonInit()
 
   override protected def reset(): Unit = {
     initHistogram()

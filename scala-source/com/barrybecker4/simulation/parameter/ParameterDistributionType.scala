@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.parameter
 
-import com.barrybecker4.common.math.function.{ArrayFunction, ErrorFunction, Function}
 import com.barrybecker4.optimization.parameter.redistribution._
 import com.barrybecker4.optimization.parameter.types.{BooleanParameter, DoubleParameter, IntegerParameter, Parameter}
 
@@ -18,7 +17,9 @@ object ParameterDistributionType extends Enumeration {
   val NUM_DISCRETES = 10
   val NUM_DISCRETESM1: Int = NUM_DISCRETES - 1
 
-  case class Val(name: String, param: Parameter, function: RedistributionFunction) extends super.Val
+  case class Val(name: String, param: Parameter, redistFunction: RedistributionFunction) extends super.Val {
+    if (redistFunction != null) this.param.setRedistributionFunction(redistFunction)
+  }
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
   val GAUSSIAN8 = Val("Gaussian 0-8",
@@ -28,8 +29,7 @@ object ParameterDistributionType extends Enumeration {
   val GAUSSIAN_NARROW8 = Val("Gaussian (narrow 0-8)",
     new DoubleParameter(0, 0, 8.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.15))
   val GAUSSIAN_NARROWER = Val("Gaussian (narrower)",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME),
-    new GaussianRedistribution(0.5, 0.1))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.1))
   val GAUSSIAN_NARROWEST = Val("Gaussian (narrowest)",
     new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.01)) // still has a problem
   val GAUSSIAN_WIDE = Val("Gaussian (wide)",
@@ -48,8 +48,7 @@ object ParameterDistributionType extends Enumeration {
   val LEFT_SKEWED_GAUSSIAN1 = Val("Left skewed gaussian1",
     new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.2, 0.1))
   val LEFT_SKEWED_GAUSSIAN2 = Val("Left skewed gaussian2",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME),
-    new GaussianRedistribution(0.1, 0.05))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.1, 0.05))
   val LEFT_SKEWED_GAUSSIAN3 = Val("Left skewed gaussian3",
     new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.1, 0.7))
   val MIN_SKEWED_GAUSSIAN = Val("Minimum skewed gaussian",

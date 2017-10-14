@@ -15,7 +15,7 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
 
   private var psim: ParameterSimulator = _
   /** type of distribution function to test.   */
-  private var parameterChoiceField: JComboBox[ParameterDistributionType.Val] = _
+  private var parameterChoiceField: JComboBox[String] = _
   private var showRedistribution: JCheckBox = _
 
   override def getTitle = "Parameter Simulation Configuration"
@@ -27,12 +27,12 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
 
     psim = getSimulator.asInstanceOf[ParameterSimulator]
-    parameterChoiceField = new JComboBox[ParameterDistributionType.Val]()
+    parameterChoiceField = new JComboBox[String]()
     parameterChoiceField.setModel(
-      new DefaultComboBoxModel[ParameterDistributionType.Val](ParameterDistributionType.VALUES)
+      new DefaultComboBoxModel[String](ParameterDistributionType.VALUES.map(_.name))
     )
     showRedistribution = new JCheckBox("Show Redistribution")
-    showRedistribution.setSelected(psim.isShowRedistribution)
+    showRedistribution.setSelected(psim.showRedistribution)
 
     innerPanel.add(parameterChoiceField)
     innerPanel.add(showRedistribution)
@@ -46,7 +46,8 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
     super.ok()
     val simulator = getSimulator.asInstanceOf[ParameterSimulator]
     // set the common rendering and global physics options
+    println("pr sel idx=" + parameterChoiceField.getSelectedIndex)
     simulator.setParameter(ParameterDistributionType.VALUES(parameterChoiceField.getSelectedIndex).param)
-    simulator.setShowRedistribution(showRedistribution.isSelected)
+    simulator.showRedistribution = showRedistribution.isSelected
   }
 }
