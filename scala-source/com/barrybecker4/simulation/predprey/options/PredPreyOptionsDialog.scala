@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.predprey.options
 
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
-import com.barrybecker4.simulation.predprey1.PredPreySimulator
+import com.barrybecker4.simulation.predprey.PredPreySimulator
 import javax.swing._
 import java.awt._
 

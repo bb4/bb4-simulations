@@ -30,24 +30,10 @@ task runDice(type: JavaExec, description: "Run dice simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runDice1(type: JavaExec, description: "Run dice simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.dice1.DiceSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runGraphing(type: JavaExec, description: "Run Graphing simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.graphing.GraphSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runGraphing1(type: JavaExec, description: "Run Graphing simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common1.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.graphing1.GraphSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -58,13 +44,6 @@ task runParameters(type: JavaExec, description: "Run Parameter simulator") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runParameters1(type: JavaExec, description: "Run Parameter simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common1.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.parameter1.ParameterSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
@@ -72,24 +51,10 @@ task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation") {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runPredPrey1(type: JavaExec, description: "Run Predator Prey Simulation (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.predprey1.PredPreySimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runFluid(type: JavaExec, description: "Run fluid dynamics simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.fluid.ui.FluidSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runFluid1(type: JavaExec, description: "Run fluid dynamics simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.fluid1.ui.FluidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -101,24 +66,10 @@ task runSnake(type: JavaExec, description: "Run snake movement simulator") {
     enableAssertions = true
 }
 
-task runSnake1(type: JavaExec, description: "Run snake movement simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common1.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.snake1.SnakeSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-    enableAssertions = true
-}
-
 task runStock(type: JavaExec, description: "Run stock invetment simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.stock.StockSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-task runStock1(type: JavaExec, description: "Run stock invetment simulator (java legacy)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.stock1.StockSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -126,13 +77,6 @@ task runTrading(type: JavaExec, description: "Run stock trading simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.trading.TradingSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-    enableAssertions = true
-}
-task runTrading1(type: JavaExec, description: "Run stock trading simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.trading1.TradingSimulator"]
     classpath = sourceSets.main.runtimeClasspath
     enableAssertions = true
 }
@@ -144,24 +88,10 @@ task runReactionDiffusion(type: JavaExec, description: "Run reaction diffusion s
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runReactionDiffusion1(type: JavaExec, description: "Run (java) reaction diffusion simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.reactiondiffusion1.RDSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runFractalExplorer(type: JavaExec, description: "Run (scala) fractal explorer simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runFractalExplorer1(type: JavaExec, description: "Run (java) fractal explorer simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer1.FractalExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -172,24 +102,10 @@ task runHenonPhaseExplorer(type: JavaExec, description: "Run henon phase simulat
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runHenonPhaseExplorer1(type: JavaExec, description: "Run henon phase simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.henonphase1.HenonPhaseExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runHabitatExplorer(type: JavaExec, description: "Run animal habitat simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.habitat.HabitatSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runHabitatExplorer1(type: JavaExec, description: "Run animal habitat simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.habitat1.HabitatSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -200,24 +116,10 @@ task runLSystemExplorer(type: JavaExec, description: "Run l-system tree simulato
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runLSystemExplorer1(type: JavaExec, description: "Run l-system tree simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.lsystem1.LSystemExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runCaveExplorer(type: JavaExec, description: "Run cave simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.cave.CaveExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runCaveExplorer1(type: JavaExec, description: "Run cave simulator (legacy java version)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.cave1.CaveExplorer"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -228,24 +130,10 @@ task runConwayExplorer(type: JavaExec, description: "Run Conway's game of life s
     classpath = sourceSets.main.runtimeClasspath
 }
 
-task runConwayExplorer1(type: JavaExec, description: "Run Conway's game of life simulator (legacy java version)", group: "Run") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.conway1.ConwayExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 task runLiquid(type: JavaExec, description: "Run liquid simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.liquid.LiquidSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runLiquid1(type: JavaExec, description: "Run liquid simulator (legacy java version)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.liquid1.LiquidSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -255,23 +143,11 @@ task runTrebuchet(type: JavaExec, description: "Run treduchet simulator") {
     args = ["-panel_class", "com.barrybecker4.simulation.trebuchet.TrebuchetSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
-task runTrebuchet1(type: JavaExec, description: "Run treduchet simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.trebuchet1.TrebuchetSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
 
 task runVerhulst(type: JavaExec, description: "Run Verhulst population simulator") {
     group = 'application'
     main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
     args = ["-panel_class", "com.barrybecker4.simulation.verhulst.VerhulstSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-task runVerhulst1(type: JavaExec, description: "Run Verhulst population simulator (legacy java)") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.verhulst1.VerhulstSimulator"]
     classpath = sourceSets.main.runtimeClasspath
 }
 
