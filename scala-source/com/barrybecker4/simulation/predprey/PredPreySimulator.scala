@@ -3,9 +3,9 @@ package com.barrybecker4.simulation.predprey
 
 import com.barrybecker4.common.math.function.CountFunction
 import com.barrybecker4.common.math.function.Function
-import com.barrybecker4.simulation.common1.ui.Simulator
-import com.barrybecker4.simulation.common1.ui.SimulatorApplet
-import com.barrybecker4.simulation.graphing1.GraphOptionsDialog
+import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.SimulatorApplet
+import com.barrybecker4.simulation.graphing.GraphOptionsDialog
 import com.barrybecker4.simulation.predprey.creatures.Foxes
 import com.barrybecker4.simulation.predprey.creatures.Population
 import com.barrybecker4.simulation.predprey.creatures.Rabbits
@@ -16,7 +16,6 @@ import javax.swing.JPanel
 import java.awt.Color
 import java.awt.Graphics
 import java.util
-import java.util.{ArrayList, LinkedList, List}
 
 
 /**
@@ -60,9 +59,11 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
 
   override def timeStep: Double = {
     iteration += 1
-    foxes.setPopulation(foxes.getPopulation * foxes.birthRate - foxes.getPopulation * foxes.deathRate / rabbits.getPopulation)
+    foxes.setPopulation(foxes.getPopulation * foxes.birthRate -
+      foxes.getPopulation * foxes.deathRate / rabbits.getPopulation)
     //                   - lions.getPopulation() * foxes.deathRate * foxes.getPopulation());
-    rabbits.setPopulation(rabbits.getPopulation * rabbits.birthRate - foxes.getPopulation * rabbits.deathRate * rabbits.getPopulation)
+    rabbits.setPopulation(rabbits.getPopulation * rabbits.birthRate -
+      foxes.getPopulation * rabbits.deathRate * rabbits.getPopulation)
     //                    - lions.getPopulation() * rabbits.deathRate * rabbits.getPopulation());
     rabbitFunction.addValue(iteration, rabbits.getPopulation)
     foxFunction.addValue(iteration, foxes.getPopulation)

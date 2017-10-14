@@ -20,7 +20,7 @@ object BumpMapper {
   private val SPECULAR_HIGHLIGHT_EXP = 4.0
   private val DEFAULT_SPECULAR_PERCENT = 0.1
 
-  try DEFAULT_LIGHT_SOURCE_DIR.normalize()
+  DEFAULT_LIGHT_SOURCE_DIR.normalize()
 }
 
 class BumpMapper {

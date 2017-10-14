@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.model.Grid
 import com.barrybecker4.simulation.liquid.model.Particles
 import javax.vecmath.Vector2d
-import com.barrybecker4.simulation.common1.PhysicsConstants.ATMOSPHERIC_PRESSURE
+import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
 
 
 /**

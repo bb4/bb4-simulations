@@ -8,7 +8,7 @@ import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType
-import com.barrybecker4.simulation.common1.ui.NewtonianSimulator
+import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
 import com.barrybecker4.ui.util.GUIUtil

@@ -3,8 +3,8 @@ package com.barrybecker4.simulation.verhulst
 
 import com.barrybecker4.common.math.function.CountFunction
 import com.barrybecker4.common.math.function.Function
-import com.barrybecker4.simulation.common1.ui.Simulator
-import com.barrybecker4.simulation.graphing1.GraphOptionsDialog
+import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.graphing.GraphOptionsDialog
 import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._

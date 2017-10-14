@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.reactiondiffusion
 
 import com.barrybecker4.common.format.FormatUtil
-import com.barrybecker4.simulation.common1.Profiler
+import com.barrybecker4.simulation.common.Profiler
 
 
 /**
@@ -12,7 +12,7 @@ import com.barrybecker4.simulation.common1.Profiler
   */
 object RDProfiler {
   private val CONCURRENT_CALCULATION = "concurrent_calculation"
-  private var instance: RDProfiler = null
+  private var instance: RDProfiler = _
 
   /**
     * @return singleton instance.

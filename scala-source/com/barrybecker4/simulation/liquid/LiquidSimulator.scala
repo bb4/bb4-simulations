@@ -6,7 +6,7 @@ import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType
-import com.barrybecker4.simulation.common1.ui.Simulator
+import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
 import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
 import com.barrybecker4.simulation.liquid.rendering.EnvironmentRenderer

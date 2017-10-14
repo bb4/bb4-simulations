@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.trading
 
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.common1.ui.Simulator
+import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.trading.charts.InvestmentChartPanel
 import com.barrybecker4.simulation.trading.charts.ProfitHistogramPanel
 import com.barrybecker4.simulation.trading.charts.StockChartPanel

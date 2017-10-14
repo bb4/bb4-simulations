@@ -8,8 +8,6 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 
-import com.barrybecker4.simulation.common1.ui.Simulator
-
 
 object SimulatorOptionsDialog {
   private val MAX_NUM_STEPS_PER_FRAME = 10000
@@ -19,9 +17,8 @@ object SimulatorOptionsDialog {
   * The options get set directly on the simulator object that is passed in
   * @author Barry Becker
   */
-abstract class SimulatorOptionsDialog(val parent: Component,
-                                      var simulator: Simulator) extends OptionsDialog(parent) {
-  showContent()
+abstract class SimulatorOptionsDialog(parent: Component,
+                                      simulator: Simulator) extends OptionsDialog(parent) {
   // rendering option controls
   private var antialiasingCheckbox: JCheckBox = _
   private var recordAnimationCheckbox: JCheckBox = _
@@ -31,6 +28,7 @@ abstract class SimulatorOptionsDialog(val parent: Component,
   private var scaleField: NumberInput = _
   // bottom buttons
   private val startButton = new GradientButton
+  showContent()
 
   def getSimulator: Simulator = simulator
 
@@ -93,16 +91,22 @@ abstract class SimulatorOptionsDialog(val parent: Component,
     recordAnimationCheckbox.setToolTipText("Record each animation frame to a unique file")
     recordAnimationCheckbox.addActionListener(this)
     togglesPanel.add(recordAnimationCheckbox)
+
     timeStepField = new NumberInput("Time Step (.001 slow - .9 fast but unstable):  ",
-      simulator.getTimeStep, "This controls the size of the numerical integration steps", 0.001, 10.0, false)
+      simulator.getTimeStep,
+      "This controls the size of the numerical integration steps", 0.001, 10.0, false)
+
     numStepsPerFrameField = new NumberInput("Num Steps Per Frame (1 slow but smooth - " +
-      SimulatorOptionsDialog.MAX_NUM_STEPS_PER_FRAME + " (fast but choppy):  ", simulator.getNumStepsPerFrame,
+      SimulatorOptionsDialog.MAX_NUM_STEPS_PER_FRAME + " (fast but choppy):  ",
+      simulator.getNumStepsPerFrame,
       "This controls the number of the numerical intergration steps per animation frame", 1,
       SimulatorOptionsDialog.MAX_NUM_STEPS_PER_FRAME, true)
+
     textInputsPanel.add(timeStepField)
     textInputsPanel.add(numStepsPerFrameField)
     scaleField = new NumberInput("Geometry Scale (1.0 = standard size):  ",
-      simulator.getScale, "This controls the size of the objects in the simulation", 0.01, 1000, false)
+      simulator.getScale,
+      "This controls the size of the objects in the simulation", 0.01, 1000, false)
     scaleField.setEnabled(false)
     textInputsPanel.add(scaleField)
     paramPanel.add(togglesPanel, BorderLayout.CENTER)

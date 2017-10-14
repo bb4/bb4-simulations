@@ -6,7 +6,7 @@ import com.barrybecker4.common.math.Range
 import com.barrybecker4.simulation.cave.model.kernal.BasicKernel
 import com.barrybecker4.simulation.cave.model.kernal.Kernel
 import com.barrybecker4.simulation.cave.model.kernal.RadialKernel
-import com.barrybecker4.simulation.common1.rendering.bumps.HeightField
+import com.barrybecker4.simulation.common.rendering.bumps.HeightField
 import java.util
 import CaveProcessor._
 import CaveProcessor.KernelType.KernelType

@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.common.rendering
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.ui.util.ImageUtil
-import com.barrybecker4.simulation.common1.RectangularModel
+import com.barrybecker4.simulation.common.RectangularModel
 import java.awt._
 import java.awt.image.BufferedImage
 
