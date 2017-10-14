@@ -44,7 +44,7 @@ abstract class DistributionSimulator(val title: String) extends Simulator(title)
 
   override def timeStep: Double = {
     if (!isPaused) histogram.increment(getXPositionToIncrement)
-    timeStep_
+    tStep
   }
 
   /**

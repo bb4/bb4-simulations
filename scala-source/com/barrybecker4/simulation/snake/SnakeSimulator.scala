@@ -126,8 +126,8 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
   }
 
   override def timeStep: Double = {
-    if (!isPaused) timeStep_ = updater.stepForward(snake, timeStep_)
-    timeStep_
+    if (!isPaused) tStep = updater.stepForward(snake, tStep)
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {
@@ -137,7 +137,7 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
     else RenderingHints.VALUE_ANTIALIAS_OFF)
     val newCenter = snake.getCenter
     val distanceDelta = new Vector2d(oldCenter.x - newCenter.x, oldCenter.y - newCenter.y)
-    velocity = distanceDelta.length / (getNumStepsPerFrame * timeStep_)
+    velocity = distanceDelta.length / (getNumStepsPerFrame * tStep)
     distance.add(distanceDelta)
     val bgRenderer = new BackgroundGridRenderer(gridColor)
     bgRenderer.drawGridBackground(g2, SnakeSimulator.CELL_SIZE, SnakeSimulator.XDIM, SnakeSimulator.YDIM, distance)

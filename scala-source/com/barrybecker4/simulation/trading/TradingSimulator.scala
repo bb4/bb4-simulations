@@ -84,7 +84,7 @@ class TradingSimulator() extends Simulator("Stock Market Simulation") {
 
   override def timeStep: Double = {
     if (!isPaused) profitPanel.increment(getXPositionToIncrement)
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {

@@ -89,11 +89,11 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   override def timeStep: Double = {
     if (!isPaused) {
       if (!useFixedSize) model.setSize(getWidth, getHeight)
-      algorithm.timeStep(timeStep_)
+      algorithm.timeStep(tStep)
       modelImage.updateImage(model.getLastRow, model.getCurrentRow)
       options.setCoordinates(algorithm.getRange)
     }
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {

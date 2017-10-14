@@ -84,8 +84,8 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
 
   /** @return a new recommended time step change. */
   override def timeStep: Double = {
-    if (!isPaused) timeStep_ = environment.stepForward(timeStep_)
-    timeStep_
+    if (!isPaused) tStep = environment.stepForward(tStep)
+    tStep
   }
 
   override def doOptimization() {

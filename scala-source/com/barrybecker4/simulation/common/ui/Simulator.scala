@@ -24,7 +24,7 @@ import java.awt.event.ActionListener
   */
 abstract class Simulator(val name: String) extends AnimationComponent with Optimizee {
 
-  protected var timeStep_ = getInitialTimeStep
+  protected var tStep = getInitialTimeStep
   private var optionsDialog: SimulatorOptionsDialog = _
   protected var frame: JFrame = _
   setName(name)
@@ -39,10 +39,10 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
   protected def getInitialTimeStep: Double
 
   def setTimeStep(timeStep: Double): Unit = {
-    timeStep_ = timeStep
+    tStep = timeStep
   }
 
-  def getTimeStep: Double = timeStep_
+  def getTimeStep: Double = tStep
 
   def setAntialiasing(use: Boolean): Unit = {
     useAntialiasing = use

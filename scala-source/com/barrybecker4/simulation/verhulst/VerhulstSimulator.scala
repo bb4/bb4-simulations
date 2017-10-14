@@ -47,7 +47,7 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
     //System.out.println("pop="+ newPop + " rate="+ rabbits.birthRate);
     rabbits.setPopulation(newPop)
     rabbitFunction.addValue(iteration, rabbits.getPopulation)
-    timeStep_
+    tStep
   }
 
   protected def initGraph(): Unit = {

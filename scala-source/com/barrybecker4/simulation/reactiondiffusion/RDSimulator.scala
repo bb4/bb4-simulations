@@ -72,10 +72,10 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   override def timeStep: Double = {
     if (!isPaused) {
       RDProfiler.getInstance.startCalculationTime()
-      grayScott.timeStep(timeStep_)
+      grayScott.timeStep(tStep)
       RDProfiler.getInstance.stopCalculationTime()
     }
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics) {

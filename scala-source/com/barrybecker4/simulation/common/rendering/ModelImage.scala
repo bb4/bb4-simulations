@@ -84,10 +84,12 @@ class ModelImage(var model: RectangularModel, var cmap: ColorMap, val scale: Int
   def getImage: Image = image
 
   private def updateImageSizeIfNeeded(): Unit = {
-    if (image.getWidth != scale * model.getWidth || image.getHeight != scale * model.getHeight) createBufferedImage()
+    if (image.getWidth != scale * model.getWidth || image.getHeight != scale * model.getHeight)
+      image = createBufferedImage()
   }
 
   /** @return the buffered image to draw into. */
-  private def createBufferedImage(): BufferedImage =
+  private def createBufferedImage(): BufferedImage = {
     new BufferedImage(scale * model.getWidth, scale * model.getHeight, BufferedImage.TYPE_INT_RGB)
+  }
 }

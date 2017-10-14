@@ -72,8 +72,8 @@ class LiquidSimulator()
 
   /** @return a new recommended time step change. */
   override def timeStep: Double = {
-    if (!isPaused) timeStep_ = environment.stepForward(timeStep_)
-    timeStep_
+    if (!isPaused) tStep = environment.stepForward(tStep)
+    tStep
   }
 
   def setSingleStepMode(singleStep: Boolean) {
@@ -111,7 +111,7 @@ class LiquidSimulator()
 
   override def mouseClicked(e: MouseEvent) {
     //System.out.println("mclick timeStep="+ timeStep_ );
-    environment.stepForward(timeStep_)
+    environment.stepForward(tStep)
     this.repaint()
   }
 

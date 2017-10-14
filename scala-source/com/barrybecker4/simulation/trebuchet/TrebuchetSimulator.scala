@@ -87,8 +87,8 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override protected def createOptionsDialog = new TrebuchetOptionsDialog(frame, this)
 
   override def timeStep: Double = {
-    if (!isPaused) timeStep_ = trebuchet.stepForward(timeStep_)
-    timeStep_
+    if (!isPaused) tStep = trebuchet.stepForward(tStep)
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {

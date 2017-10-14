@@ -61,9 +61,9 @@ class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
   override def timeStep: Double = {
     if (!isPaused) {
       if (!useFixedSize) algorithm.setSize(this.getWidth, this.getHeight)
-      algorithm.timeStep(timeStep_)
+      algorithm.timeStep(tStep)
     }
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics) {

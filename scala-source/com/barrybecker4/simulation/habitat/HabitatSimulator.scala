@@ -59,7 +59,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   override def timeStep: Double = {
     options.update()
     populations.nextDay()
-    timeStep_
+    tStep
   }
 
   def getPopulations: Populations = populations

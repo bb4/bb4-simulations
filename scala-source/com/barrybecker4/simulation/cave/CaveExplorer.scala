@@ -49,9 +49,9 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
   override def timeStep: Double = {
     if (!isPaused) {
       caveModel.setSize(this.getWidth, this.getHeight)
-      caveModel.timeStep(timeStep_)
+      caveModel.timeStep(tStep)
     }
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics) {

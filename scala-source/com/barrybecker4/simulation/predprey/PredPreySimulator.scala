@@ -68,7 +68,7 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     rabbitFunction.addValue(iteration, rabbits.getPopulation)
     foxFunction.addValue(iteration, foxes.getPopulation)
     options.update()
-    timeStep_
+    tStep
   }
 
   private def initGraph(): Unit = {

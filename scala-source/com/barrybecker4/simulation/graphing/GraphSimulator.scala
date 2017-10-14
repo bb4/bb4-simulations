@@ -34,7 +34,7 @@ class GraphSimulator private() extends Simulator("Graph") {
 
   override protected def reset(){initGraph() }
   override protected def getInitialTimeStep = 1.0
-  override def timeStep: Double = timeStep_
+  override def timeStep: Double = tStep
   override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
 
   private def initGraph() {

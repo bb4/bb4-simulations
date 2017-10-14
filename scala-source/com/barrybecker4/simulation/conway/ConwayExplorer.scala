@@ -47,9 +47,9 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
   override def timeStep: Double = {
     if (!isPaused) {
       conwayModel.setSize(this.getWidth, this.getHeight)
-      conwayModel.timeStep(timeStep_)
+      conwayModel.timeStep(tStep)
     }
-    timeStep_
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {
