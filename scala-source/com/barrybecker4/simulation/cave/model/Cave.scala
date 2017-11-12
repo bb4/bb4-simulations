@@ -5,8 +5,7 @@ import com.barrybecker4.common.math.Range
 import java.util.Random
 
 /**
-  * Ideas for future work:
-  *   - support mouse interaction to raise or lower the height field
+  * Data structure for representing an evolving cave system.
   * @author Barry Becker
   */
 object Cave {
@@ -14,6 +13,13 @@ object Cave {
   private val RAND = new Random
 }
 
+/**
+  *
+  * @param width width of the cave area
+  * @param length length of the cave area
+  * @param floorThresh values below this are in the floor
+  * @param ceilThresh values above this are in the ceiling
+  */
 class Cave(val width: Int, val length: Int,
            var floorThresh: Double = 0.2, var ceilThresh: Double = 0.9) {
 
@@ -24,6 +30,7 @@ class Cave(val width: Int, val length: Int,
   def getLength: Int = heightMap(0).length
 
   def getRange = new Range(floorThresh, ceilThresh)
+  randomInitialization()
 
   def setValue(x: Int, y: Int, value: Double) {
     heightMap(x)(y) = Math.min(Math.max(value, floorThresh), ceilThresh)
@@ -59,10 +66,11 @@ class Cave(val width: Int, val length: Int,
   def setFloorThresh(floor: Double) { this.floorThresh = floor }
   def setCeilThresh(ceil: Double) { this.ceilThresh = ceil }
 
+  /** @return a character representing the cave type at a specific location. Either wall, floor, or ceiling. */
   private def getChar(x: Int, y: Int) = {
     val v = heightMap(x)(y)
-    if (v < floorThresh) ' '
-    else if (v < ceilThresh) 'C'
+    if (v <= floorThresh) ' '
+    else if (v >= ceilThresh) 'C'
     else 'W'
   }
 
@@ -71,9 +79,7 @@ class Cave(val width: Int, val length: Int,
   override def toString: String = {
     val bldr = new StringBuilder
     for (y <- 0 until getLength) {
-      for (x <- 0 until getWidth) {
-        bldr.append(getChar(x, y))
-      }
+      for (x <- 0 until getWidth) bldr.append(getChar(x, y))
       bldr.append("\n")
     }
     bldr.toString

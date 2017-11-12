@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
-import com.barrybecker4.simulation.common1.PhysicsConstants.ATMOSPHERIC_PRESSURE
+import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
 import org.junit.Assert.assertEquals
 import org.scalatest.FunSuite
 import SurfaceVelocityUpdaterSuite._

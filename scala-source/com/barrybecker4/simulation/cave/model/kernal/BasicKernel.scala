@@ -22,7 +22,7 @@ class BasicKernel(cave: Cave) extends AbstractKernel(cave) {
         val neighborY = y + j
         // skip the middle point
         if (i != 0 || j != 0) {
-          // In case the index we're looking at it off the edge of the map, or a filled neighbor
+          // In case the index we're looking at is off the edge of the map, or a filled neighbor
           if (isOffEdge(neighborX, neighborY)) count += 1.0
           else count += cave.getValue(neighborX, neighborY)
         }

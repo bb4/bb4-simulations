@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.kernal
 
-import com.barrybecker4.simulation.cave1.model.Cave
-import com.barrybecker4.simulation.cave1.model.kernal.BasicKernel
+import com.barrybecker4.simulation.cave.model.Cave
+import com.barrybecker4.simulation.cave.model.kernal.BasicKernel
 import org.scalatest.FunSuite
 import BasicKernalSuite._
 import org.scalactic.{Equality, TolerantNumerics}
