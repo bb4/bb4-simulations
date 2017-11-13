@@ -53,7 +53,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
 
   def getWidth: Int = width
   def getHeight: Int = height
-  def getImage: BufferedImage = offlineGraphics.getOfflineImage
+  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
   def getSerializedExpression: String = serializer.serialize(root)
 
   def setDimensions(w: Int, h:Int): Unit = {

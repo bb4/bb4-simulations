@@ -1,14 +1,13 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.charts
 
+import java.awt.Graphics
+
 import com.barrybecker4.common.format.CurrencyFormatter
 import com.barrybecker4.common.math.function.Function
 import com.barrybecker4.simulation.trading.model.runner.StockSeries
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
-import java.awt._
-import java.util.Collections
-import java.util
 
 
 /**
@@ -21,14 +20,14 @@ object StockChartPanel {
 }
 
 class StockChartPanel() extends JPanel {
-  val functions: util.List[Function] = Collections.emptyList[Function]
+  val functions = List[Function]()
   private val stockChart = new MultipleFunctionRenderer(functions)
   stockChart.setXFormatter(new CurrencyFormatter)
   private val stockSeries = new StockSeries(10)
 
 
   def addSeries(function: Function): Unit = {
-    stockSeries.add(function)
+    stockSeries.append(function)
     stockChart.setFunctions(stockSeries)
   }
 

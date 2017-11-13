@@ -77,13 +77,9 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     foxes.reset()
     rabbitFunction = new CountFunction(Rabbits.INITIAL_NUM_RABBITS)
     foxFunction = new CountFunction(Foxes.INITIAL_NUM_FOXES)
-    val functions = new util.LinkedList[Function]
-    functions.add(rabbitFunction)
-    functions.add(foxFunction)
+    val functions = List[Function](rabbitFunction, foxFunction)
     //functions.add(lionFunction);
-    val lineColors = new util.LinkedList[Color]
-    lineColors.add(Rabbits.COLOR)
-    lineColors.add(Foxes.COLOR)
+    val lineColors = List[Color](Rabbits.COLOR, Foxes.COLOR)
     //lineColors.add(Lions.COLOR);
     graph = new MultipleFunctionRenderer(functions, lineColors)
   }

@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.habitat.ui.options
 import com.barrybecker4.simulation.habitat.creatures.Population
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
+import CreatureSliderGroup._
 
 
 /**
@@ -19,18 +20,14 @@ object CreatureSliderGroup {
   private val MAX_SPEED_LABEL = " top speed"
   private val MIN_FACTOR = 0.2
   private val MAX_FACTOR = 6
-}
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup {
-  commonInit(createSliderProperties)
-
-  private def createSliderProperties = {
+  private def createSliderProperties(creaturePop: Population) = {
     val ctype = creaturePop.creatureType
     val normSpeed = ctype.normalSpeed
     val props = if (normSpeed == 0) new Array[SliderProperties](4)
     else new Array[SliderProperties](6)
     val creatureName = ctype.name
-    setBackground(ctype.color)
+    //setBackground(ctype.color)
     val size = ctype.size
     props(0) = new SliderProperties(creatureName + CreatureSliderGroup.SIZE_LABEL,
       CreatureSliderGroup.MIN_FACTOR * size, CreatureSliderGroup.MAX_FACTOR * size, size, 200)
@@ -52,6 +49,11 @@ class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup {
     }
     props
   }
+}
+
+class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
+  //commonInit(createSliderProperties)
+
 
   /**
     * One of the sliders was potentially moved.

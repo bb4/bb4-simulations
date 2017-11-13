@@ -27,6 +27,6 @@ class RDOffscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRend
   }
 
   override protected def postRender(g2: Graphics2D) {
-    g2.drawImage(offlineGraphics.getOfflineImage, 0, 0, observer)
+    g2.drawImage(offlineGraphics.getOfflineImage.get, 0, 0, observer)
   }
 }

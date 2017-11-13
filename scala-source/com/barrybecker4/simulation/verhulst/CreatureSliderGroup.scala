@@ -2,6 +2,7 @@ package com.barrybecker4.simulation.verhulst
 
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
+import com.barrybecker4.simulation.verhulst.CreatureSliderGroup._
 
 
 /**
@@ -9,19 +10,20 @@ import com.barrybecker4.ui.sliders.SliderProperties
   * @author Barry Becker
   */
 object CreatureSliderGroup {
-  private val BIRTH_RATE_LABEL = " Birth Rate"
+  private val BIRTH_RATE_LABEL = "Birth Rate"
+
+  private def createSliderProperties(creaturePop: Population) = {
+    val creatureName = creaturePop.getName
+    Array[SliderProperties](
+      new SliderProperties(creatureName + CreatureSliderGroup.BIRTH_RATE_LABEL,
+        1.9, creaturePop.getMaxBirthRate, creaturePop.getInitialBirthRate, 1000.0)
+    )
+  }
 }
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup {
-  commonInit(createSliderProperties)
 
-  private def createSliderProperties = {
-    val props = new Array[SliderProperties](1)
-    val creatureName = creaturePop.getName
-    props(0) = new SliderProperties(creatureName + CreatureSliderGroup.BIRTH_RATE_LABEL,
-      1.9, creaturePop.getMaxBirthRate, creaturePop.getInitialBirthRate, 1000.0)
-    props
-  }
+class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
+  //commonInit(createSliderProperties)
 
   /** One of the sliders was potentially moved. Check for match based on name. */
   def checkSliderChanged(sliderName: String, value: Double): Unit = {

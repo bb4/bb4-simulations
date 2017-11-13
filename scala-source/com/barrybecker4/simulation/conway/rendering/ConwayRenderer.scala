@@ -26,7 +26,7 @@ class ConwayRenderer(val width: Double, val height: Double,
 
   def getWidth: Int = width.toInt
   def getHeight: Int = height.toInt
-  def getImage: BufferedImage = offlineGraphics.getOfflineImage
+  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
   /** render the live cells on the grid */
   def render(): Unit = synchronized {

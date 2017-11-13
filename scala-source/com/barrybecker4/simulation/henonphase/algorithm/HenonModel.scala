@@ -19,7 +19,7 @@ class HenonModel private[algorithm](val width: Int, val height: Int,
 
   /** offline rendering is fast  */
   final private var offlineGraphics = new OfflineGraphics(new Dimension(width, height), Color.BLACK)
-  def getImage: BufferedImage = offlineGraphics.getOfflineImage
+  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
   def getWidth: Int = width
   def getHeight: Int = height
 

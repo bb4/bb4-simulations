@@ -1,7 +1,4 @@
-/*
- * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
-
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fractalexplorer
 
 import java.awt.{BorderLayout, Dimension, GridLayout}

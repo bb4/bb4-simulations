@@ -1,6 +1,8 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.verhulst
 
+import java.awt.{Color, Graphics}
+
 import com.barrybecker4.common.math.function.CountFunction
 import com.barrybecker4.common.math.function.Function
 import com.barrybecker4.simulation.common.ui.Simulator
@@ -8,8 +10,6 @@ import com.barrybecker4.simulation.graphing.GraphOptionsDialog
 import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
-import java.awt._
-import java.util
 
 
 /**
@@ -55,10 +55,10 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
     rabbits.reset()
     rabbitFunction = new CountFunction(Rabbits.INITIAL_NUM_RABBITS)
     rabbitFunction.setMaxXValues(200)
-    val functions = new util.LinkedList[Function]
-    functions.add(rabbitFunction)
-    val lineColors = new util.LinkedList[Color]
-    lineColors.add(Rabbits.COLOR)
+    var functions: Seq[Function] = Seq[Function]()
+    functions :+= rabbitFunction
+    var lineColors = Seq[Color]()
+    lineColors :+= Rabbits.COLOR
     graph = new MultipleFunctionRenderer(functions, lineColors)
   }
 

@@ -25,7 +25,7 @@ class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcesso
 
   def getWidth: Int = width.toInt
   def getHeight: Int = height.toInt
-  def getImage: BufferedImage = offlineGraphics.getOfflineImage
+  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
   /**
     * Draw the floor of the cave.

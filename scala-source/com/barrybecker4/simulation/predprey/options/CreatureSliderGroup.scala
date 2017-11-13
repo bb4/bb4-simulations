@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.predprey.options
 import com.barrybecker4.simulation.predprey.creatures.Population
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
+import com.barrybecker4.simulation.predprey.options.CreatureSliderGroup._
 
 
 /**
@@ -14,12 +15,8 @@ object CreatureSliderGroup {
   private val POPULATION_LABEL = " Population"
   private val BIRTH_RATE_LABEL = " Birth Rate"
   private val DEATH_RATE_LABEL = " Death Rate"
-}
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup {
-  commonInit(createSliderProperties)
-
-  private def createSliderProperties = {
+  private def createSliderProperties(creaturePop: Population) = {
     val props = new Array[SliderProperties](3)
     val creatureName = creaturePop.getName
     props(0) = new SliderProperties(creatureName + CreatureSliderGroup.POPULATION_LABEL,
@@ -30,6 +27,11 @@ class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup {
       0, creaturePop.getMaxDeathRate, creaturePop.getInitialDeathRate, 1000.0)
     props
   }
+}
+
+class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
+  //commonInit(createSliderProperties)
+
 
   def update() { this.setSliderValue(0, creaturePop.getPopulation) }
 

@@ -1,14 +1,13 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.charts
 
+import java.awt.{Color, Graphics, Graphics2D}
+
 import com.barrybecker4.common.format.CurrencyFormatter
 import com.barrybecker4.common.math.function.Function
 import com.barrybecker4.simulation.trading.model.runner.StockSeries
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
-import java.awt._
-import java.util
-import java.util.Collections
 
 
 /**
@@ -26,20 +25,20 @@ object InvestmentChartPanel {
 
 class InvestmentChartPanel()
   extends JPanel {
-  val functions: util.List[Function] = Collections.emptyList[Function]
+  val functions = List[Function]()
   private var investmentChart = new MultipleFunctionRenderer(functions)
   investmentChart.setXFormatter(new CurrencyFormatter)
   private val series = new StockSeries(20)
 
   def addSeries(investmentFunction: Function, reserveFunction: Function): Unit = {
-    series.add(investmentFunction)
-    series.add(reserveFunction)
+    series.append(investmentFunction)
+    series.append(reserveFunction)
     // this should change
     val size = series.size
-    val lineColors = new util.ArrayList[Color](size)
+    var lineColors = Seq[Color]()
     for (i <- 0 until size) {
       val color = if (i % 2 == 0) InvestmentChartPanel.INVESTMENT_COLOR else InvestmentChartPanel.RESERVE_COLOR
-      lineColors.add(color)
+      lineColors :+= color
     }
     investmentChart.setFunctions(series, lineColors)
   }
