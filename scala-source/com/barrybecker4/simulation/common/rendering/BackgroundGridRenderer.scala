@@ -22,6 +22,7 @@ class BackgroundGridRenderer(var gridColor: Color) {
       val ht = (pos + j * cellSize).toInt
       g2.drawLine(1, ht, xMax, ht)
     }
+
     pos = offset.x % cellSize
     for (j <- 0 to xDim) {
       val w = (pos + j * cellSize).toInt

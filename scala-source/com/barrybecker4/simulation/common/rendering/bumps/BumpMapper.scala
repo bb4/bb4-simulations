@@ -44,7 +44,8 @@ class BumpMapper {
     * @return new color based on old, but accounting for lighting effects using the Phong reflection model.
     */
   def adjustForLighting(c: Color, x: Int, y: Int,
-                        field: HeightField, htScale: Double, specPercent: Double, lightSourceDir: Vector3d): Color = {
+                        field: HeightField, htScale: Double, specPercent: Double,
+                        lightSourceDir: Vector3d): Color = {
     var xdelta: Double = 0
     var ydelta: Double = 0
     //double centerValue = field.getValue(x, y);
@@ -88,7 +89,7 @@ class BumpMapper {
     if (specPct > 0) {
       val halfAngle = computeHalfAngle(lightSourceDir)
       specPct * Math.pow(Math.abs(surfaceNormal.dot(halfAngle)), SPECULAR_HIGHLIGHT_EXP)
-    } else 0
+    } else 0.0
   }
 
   private def computeHalfAngle(lightSourceDir: Vector3d) = {
