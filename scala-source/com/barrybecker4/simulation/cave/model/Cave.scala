@@ -2,15 +2,15 @@
 package com.barrybecker4.simulation.cave.model
 
 import com.barrybecker4.common.math.Range
-import java.util.Random
+import scala.util.Random
 
 /**
   * Data structure for representing an evolving cave system.
   * @author Barry Becker
   */
 object Cave {
-  private val SEED = 0
   private val RAND = new Random
+  RAND.setSeed(0)
 }
 
 /**
@@ -21,7 +21,7 @@ object Cave {
   * @param ceilThresh values above this are in the ceiling
   */
 class Cave(val width: Int, val length: Int,
-           var floorThresh: Double = 0.2, var ceilThresh: Double = 0.9) {
+           var floorThresh: Double = 0.2, var ceilThresh: Double = 0.9, rnd: Random = Cave.RAND) {
 
   /** a value representing the height. MAX_HEIGHT is wall, MIN_HEIGHT is floor  */
   private val heightMap = Array.ofDim[Double](width, length) //genMap(width, length)
@@ -38,10 +38,9 @@ class Cave(val width: Int, val length: Int,
 
   /** @return the initial random 2D typeMap data */
   def randomInitialization(): Unit = {
-    Cave.RAND.setSeed(Cave.SEED)
     for (x <- 0 until width) {
       for (y <- 0 until length) {
-        val r = Cave.RAND.nextDouble
+        val r = rnd.nextDouble
         heightMap(x)(y) = Math.min(Math.max(r, floorThresh), ceilThresh)
       }
     }

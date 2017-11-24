@@ -14,7 +14,7 @@ class CaveProcessorSuite extends FunSuite {
     val processor = new CaveProcessor(5, 5, 0.1, 0.9, 3.0, 2.0, CaveProcessor.KernelType.BASIC, false)
     processor.nextPhase()
 
-    assertResult("WWWCC\nWWWWW\nWCWWW\nWW WW\nWCWWW\n") { processor.toString }
+    assertResult("WC CW\nWW W \nWWWWW\nWWWWW\n WWWW\n") { processor.toString }
   }
 }
 

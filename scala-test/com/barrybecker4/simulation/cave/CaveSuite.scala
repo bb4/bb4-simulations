@@ -5,6 +5,8 @@ package com.barrybecker4.simulation.cave
 import com.barrybecker4.simulation.cave.model.Cave
 import org.scalatest.FunSuite
 
+import scala.util.Random
+
 
 object CaveSuite {
   private val FLOOR = 0.2
@@ -13,28 +15,31 @@ object CaveSuite {
 
 class CaveSuite extends FunSuite {
 
+  val RND: Random = new Random()
+  RND.setSeed(0)
+
   test("3by3Construction") {
-    val cave = new Cave(3, 3, CaveSuite.FLOOR, CaveSuite.CEILING)
+    val cave = new Cave(3, 3, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
     assertResult("WWW\nWWC\nWWC\n") { cave.toString }
   }
 
   test("5by5Construction") {
-    val cave = new Cave(5, 5, CaveSuite.FLOOR, CaveSuite.CEILING)
-    assertResult("WWWCC\nWW  W\nWC WW\nWC WW\nWCWWC\n") { cave.toString }
+    val cave = new Cave(5, 5, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
+    assertResult("CWWC \nWCCCC\n  WWW\n WWCW\n WW  \n") { cave.toString }
   }
 
   test("2by2Construction") {
-    val cave = new Cave(2, 2, CaveSuite.FLOOR, CaveSuite.CEILING)
-    assertResult("WW\nWW\n") { cave.toString }
+    val cave = new Cave(2, 2, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
+    assertResult("W \n W\n") { cave.toString }
   }
 
   test("4by1Construction") {
-    val cave = new Cave(4, 1, CaveSuite.FLOOR, CaveSuite.CEILING)
-    assertResult("WWWW\n") { cave.toString }
+    val cave = new Cave(4, 1, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
+    assertResult("WCCC\n") { cave.toString }
   }
 
   test("1by4Construction")  {
-    val cave = new Cave(1, 4, CaveSuite.FLOOR, CaveSuite.CEILING)
-    assertResult("W\nW\nW\nW\n") { cave.toString }
+    val cave = new Cave(1, 4, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
+    assertResult("W\n \nW\nC\n") { cave.toString }
   }
 }
