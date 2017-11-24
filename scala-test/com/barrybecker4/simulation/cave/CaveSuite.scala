@@ -13,11 +13,6 @@ object CaveSuite {
 
 class CaveSuite extends FunSuite {
 
-  test("2by2Construction") {
-    val cave = new Cave(2, 2, CaveSuite.FLOOR, CaveSuite.CEILING)
-    assertResult("WW\nWW\n") { cave.toString }
-  }
-
   test("3by3Construction") {
     val cave = new Cave(3, 3, CaveSuite.FLOOR, CaveSuite.CEILING)
     assertResult("WWW\nWWC\nWWC\n") { cave.toString }
@@ -26,6 +21,11 @@ class CaveSuite extends FunSuite {
   test("5by5Construction") {
     val cave = new Cave(5, 5, CaveSuite.FLOOR, CaveSuite.CEILING)
     assertResult("WWWCC\nWW  W\nWC WW\nWC WW\nWCWWC\n") { cave.toString }
+  }
+
+  test("2by2Construction") {
+    val cave = new Cave(2, 2, CaveSuite.FLOOR, CaveSuite.CEILING)
+    assertResult("WW\nWW\n") { cave.toString }
   }
 
   test("4by1Construction") {
