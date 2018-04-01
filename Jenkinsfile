@@ -1,4 +1,4 @@
 commonJenkinsPipeline(
     language: 'scala',
-    upstreamProjects: 'bb4-sound-pipeline,bb4-optimization-pipeline'
+    upstreamProjects: 'bb4-optimization-pipeline'
 )
