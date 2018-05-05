@@ -26,7 +26,7 @@ object StockSimulator {
 
 class StockSimulator() extends DistributionSimulator("Stock Market Simulation") {
 
-  AppContext.initialize("ENGLISH", util.Arrays.asList("com.barrybecker4.ui.message"), new Log)
+  AppContext.initialize("ENGLISH", List("com.barrybecker4.ui.message"), new Log)
   private var opts = new StockSampleOptions
   initHistogram()
 

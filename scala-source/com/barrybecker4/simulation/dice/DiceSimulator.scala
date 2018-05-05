@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.dice
 
 import com.barrybecker4.common.app.AppContext
@@ -14,7 +14,6 @@ import java.util
 /**
   * Simulates the rolling of N number of M sided dice lots of times
   * to see what kind of distribution of numbers you get.
-  *
   * @author Barry Becker
   */
 object DiceSimulator {
@@ -29,7 +28,7 @@ object DiceSimulator {
 class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
 
   private val options = new DiceOptions
-  AppContext.initialize("ENGLISH", util.Arrays.asList("com.barrybecker4.ui.message"), new Log)
+  AppContext.initialize("ENGLISH", List("com.barrybecker4.ui.message"), new Log)
   initHistogram()
 
   def setNumDice(numDice: Int) {

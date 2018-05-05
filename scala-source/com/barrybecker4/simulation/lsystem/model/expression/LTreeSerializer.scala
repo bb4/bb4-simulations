@@ -1,9 +1,7 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression
 
-import com.barrybecker4.common.expression.Tokens
-import com.barrybecker4.common.expression.TreeNode
-import scala.collection.JavaConverters._
+import com.barrybecker4.common.expression.{LEFT_PAREN, RIGHT_PAREN, TreeNode}
 
 
 /**
@@ -22,11 +20,11 @@ class LTreeSerializer {
   /** processing for inner nodes */
   private def traverse(node: TreeNode): String = {
     var text: String = ""
-    if (node.children.size > 0) {
-      text += (if (node.hasParens) Tokens.LEFT_PAREN.getSymbol else "")
-      for (n <- node.children.asScala)
+    if (node.children.nonEmpty) {
+      text += (if (node.hasParens) LEFT_PAREN.symbol else "")
+      for (n <- node.children)
         text += traverse(n)
-      text + (if (node.hasParens) Tokens.RIGHT_PAREN.getSymbol.toString else "")
+      text + (if (node.hasParens) RIGHT_PAREN.symbol.toString else "")
     }
     else text + node.getData
   }

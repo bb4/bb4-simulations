@@ -58,8 +58,8 @@ class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
   private var coordinate2: JLabel = _
 
   def setCoordinates(range: ComplexNumberRange): Unit = {
-    coordinate1.setText("c1: " + range.getPoint1)
-    coordinate2.setText("c2: " + range.getPoint2)
+    coordinate1.setText("c1: " + range.point1)
+    coordinate2.setText("c2: " + range.point2)
   }
 
   private def createCheckBoxes = {

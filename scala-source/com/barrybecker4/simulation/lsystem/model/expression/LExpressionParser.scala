@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 import com.barrybecker4.common.expression.TreeNode
 import scala.util.parsing.combinator._
-import scala.collection.JavaConverters._
 import LToken._
 
 /**
@@ -27,7 +26,7 @@ class LExpressionParser extends RegexParsers {
     case fact: Seq[_] =>
       val tn = new TreeNode("", ops)
       tn.hasParens = true
-      tn.children = fact.asInstanceOf[Seq[TreeNode]].asJava
+      tn.children = fact.asInstanceOf[Seq[TreeNode]]
       tn
     case x => throw new UnsupportedOperationException("Unexpected: " + x.getClass.getName )
   }
@@ -38,7 +37,7 @@ class LExpressionParser extends RegexParsers {
     if (parsed.isEmpty) throw new IllegalArgumentException(parsed.toString)
     if (parsed.get.length > 1) {
       val root = new TreeNode("", ops)
-      root.children = parsed.get.asJava
+      root.children = parsed.get
       root
     } else parsed.get.head
   }

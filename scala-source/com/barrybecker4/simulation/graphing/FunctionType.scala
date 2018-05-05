@@ -15,7 +15,7 @@ object FunctionType extends Enumeration {
   case class Val(name: String, function: Function) extends super.Val
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
-  private val NULL_FUNC = null
+  private val NULL_FUNC: Array[Double] = null
 
   val DIAGONAL = Val("Two point diagonal", new ArrayFunction(Array(0.0, 1.0), NULL_FUNC))
   val HORZ_LINE = Val("Horizontal Line", new ArrayFunction(Array(1.0, 1.0), NULL_FUNC))

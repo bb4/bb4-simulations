@@ -75,7 +75,12 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
     oldCenter = snake.getCenter
     renderer = new SnakeRenderer(renderParams)
     setNumStepsPerFrame(SnakeSimulator.NUM_STEPS_PER_FRAME)
-    this.setPreferredSize(new Dimension((SnakeSimulator.CELL_SIZE * SnakeSimulator.XDIM).toInt, (SnakeSimulator.CELL_SIZE * SnakeSimulator.YDIM).toInt))
+    this.setPreferredSize(
+      new Dimension(
+        (SnakeSimulator.CELL_SIZE * SnakeSimulator.XDIM).toInt,
+        (SnakeSimulator.CELL_SIZE * SnakeSimulator.YDIM).toInt
+      )
+    )
     initCommonUI()
   }
 

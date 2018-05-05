@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake
 
-import com.barrybecker4.common.math.WaveType
+import com.barrybecker4.common.math.{SINE_WAVE, WaveType}
 import LocomotionParameters._
 
 /**
@@ -37,7 +37,7 @@ object LocomotionParameters { // I used simulated annealing to come up with thes
   */
 class LocomotionParameters(
    var direction: Double = 0,
-   var waveType: WaveType = WaveType.SINE_WAVE,
+   var waveType: WaveType = SINE_WAVE,
    var useFriction: Boolean = USE_FRICTION,
    var waveSpeed: Double = LocomotionParameters.WAVE_SPEED,
    var waveAmplitude: Double = LocomotionParameters.WAVE_AMPLITUDE,

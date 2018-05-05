@@ -8,7 +8,7 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionListener
-
+import scala.collection.JavaConverters
 import com.barrybecker4.simulation.snake.data.SnakeType.Val
 
 
@@ -41,7 +41,8 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     val snakeModel = new DefaultComboBoxModel[String](SnakeType.VALUES.map(_.name))
     snakeCombo = new JComboBox[String](snakeModel)
     snakeCombo.setToolTipText("Select a type of snake to show.")
-    val waveModel = new DefaultComboBoxModel[WaveType](WaveType.values)
+    val waveModel = new DefaultComboBoxModel[WaveType]()
+    WaveType.VALUES.foreach(w => waveModel.addElement(w))
     waveTypeCombo = new JComboBox[WaveType](waveModel)
     waveTypeCombo.setToolTipText("Select a type of wave form to use for muscle contractions.")
     val params = getSimulator.asInstanceOf[SnakeSimulator].getLocomotionParams

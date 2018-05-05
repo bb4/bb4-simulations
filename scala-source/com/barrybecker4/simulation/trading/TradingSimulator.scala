@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.trading.charts.InvestmentChartPanel
 import com.barrybecker4.simulation.trading.charts.ProfitHistogramPanel
 import com.barrybecker4.simulation.trading.charts.StockChartPanel
-import com.barrybecker4.simulation.trading.model.runner.StockRunResult
 import com.barrybecker4.simulation.trading.model.runner.StockRunner
 import com.barrybecker4.simulation.trading.options.GraphingOptions
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions
@@ -16,7 +15,6 @@ import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.util.Log
 import javax.swing._
 import java.awt._
-import java.util.Collections
 
 
 /**
@@ -37,7 +35,7 @@ object TradingSimulator {
 }
 
 class TradingSimulator() extends Simulator("Stock Market Simulation") {
-  AppContext.initialize("ENGLISH", Collections.singletonList("com.barrybecker4.ui.message"), new Log)
+  AppContext.initialize("ENGLISH", Seq("com.barrybecker4.ui.message").toList, new Log)
 
   private var splitPane: JSplitPane = _
   private var stockChartPanel = new StockChartPanel

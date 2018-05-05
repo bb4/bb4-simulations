@@ -23,9 +23,9 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
   private val valueMap = new util.HashMap[String, E]
 
   try {
-    val strategyClasses: util.List[Class[_]] = new PackageReflector().getClasses(packageName)
-    for (ci <- 0 until strategyClasses.size()) {
-      val c = strategyClasses.get(ci)
+    val strategyClasses: Seq[Class[_]] = new PackageReflector().getClasses(packageName)
+    for (ci <- strategyClasses.indices) {
+      val c = strategyClasses(ci)
       // Skip the abstract class (if any) because it cannot (and should not) be instantiated.
       if (!Modifier.isAbstract(c.getModifiers) && clzz.isAssignableFrom(c)) {
         val strategy = c.newInstance.asInstanceOf[E]

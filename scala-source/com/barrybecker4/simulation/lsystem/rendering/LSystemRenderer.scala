@@ -9,12 +9,10 @@ import java.awt.Dimension
 import java.awt.image.BufferedImage
 
 import com.barrybecker4.simulation.lsystem.model.expression.LToken._
-import java.util
 
 import com.barrybecker4.common.geometry.{IntLocation, Location}
 import com.barrybecker4.simulation.lsystem.Panable
 
-import scala.collection.JavaConverters._
 
 
 /**
@@ -117,8 +115,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
     * @param pos the position and angle in radians that the turtle graphics used when rotating '+' or '-'
     */
   private def drawTree(pos: OrientedPosition, length: Double, tree: TreeNode, numIterations: Int, depth: Int){
-    val list = new util.LinkedList[TreeNode](tree.children)
-    for (child <- list.asScala) {
+    for (child <- tree.children) {
       if (child.hasParens) drawTree(new OrientedPosition(pos), scaleFactor * length, child, numIterations, depth + 1)
       else {
         val baseExp = child.getData

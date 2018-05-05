@@ -27,8 +27,8 @@ object ConwayColorMap {
   )
 
   private def getControlPoints(range: Range) = {
-    val floor = range.getMin
-    val ceil = range.getMax + 0.000001 * range.getExtent
+    val floor = range.min
+    val ceil = range.max + 0.000001 * range.getExtent
     val values = new Array[Double](COLORS.length)
     values(0) = floor
     val step = (range.getExtent - 1) / (COLORS.length - 2)
@@ -42,4 +42,4 @@ object ConwayColorMap {
 }
 
 class ConwayColorMap()
-  extends ColorMap(ConwayColorMap.getControlPoints(new Range(1, ConwayColorMap.MAX_TIME_STEP)), ConwayColorMap.COLORS)
+  extends ColorMap(ConwayColorMap.getControlPoints(Range(1, ConwayColorMap.MAX_TIME_STEP)), ConwayColorMap.COLORS)

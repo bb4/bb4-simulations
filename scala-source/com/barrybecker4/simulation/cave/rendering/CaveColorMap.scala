@@ -26,8 +26,8 @@ object CaveColorMap {
   )
 
   private def getControlPoints(range: Range) = {
-    val floor = range.getMin
-    val ceil = range.getMax + 0.000001 * range.getExtent
+    val floor = range.min
+    val ceil = range.max + 0.000001 * range.getExtent
     val values = new Array[Double](COLORS.length)
     val step = range.getExtent / (COLORS.length - 1)
     var ct = 0
@@ -40,5 +40,5 @@ object CaveColorMap {
 }
 
 class CaveColorMap(range: Range) extends ColorMap(CaveColorMap.getControlPoints(range), CaveColorMap.COLORS) {
-  def this() { this(new Range(0, 1.0)) }
+  def this() { this(Range(0, 1.0)) }
 }

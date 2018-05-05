@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.graphing
 
 import com.barrybecker4.common.math.function.{ArrayFunction, ErrorFunction}
-import com.barrybecker4.common.math.interplolation.InterpolationMethod
+import com.barrybecker4.common.math.interpolation.InterpolationMethod
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
@@ -29,7 +29,10 @@ class GraphOptionsDialog(parent: Component, simulator: Simulator)
     val model = new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
     functionCombo = new JComboBox[String](model)
     innerPanel.add(functionCombo)
-    interpolationTypeCombo = new JComboBox[InterpolationMethod](InterpolationMethod.values)
+    val cboxModel = new DefaultComboBoxModel[InterpolationMethod]()
+    InterpolationMethod.VALUES.foreach(m => cboxModel.addElement(m))
+
+    interpolationTypeCombo = new JComboBox(cboxModel)
     innerPanel.add(interpolationTypeCombo)
     interpolationTypeCombo.setSelectedIndex(1)
     val fill = new JPanel
@@ -41,12 +44,14 @@ class GraphOptionsDialog(parent: Component, simulator: Simulator)
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[GraphSimulator]
-    val func = FunctionType.VALUES(functionCombo.getSelectedIndex).function
+    var func: com.barrybecker4.common.math.function.Function = FunctionType.VALUES(functionCombo.getSelectedIndex).function
     func match {
       case function: ArrayFunction =>
-        function.setInterpolationMethod(
-          interpolationTypeCombo.getSelectedItem.asInstanceOf[InterpolationMethod])
-      case errFunc: ErrorFunction => // no interpolatpion method
+        val method: InterpolationMethod = interpolationTypeCombo.getSelectedItem.asInstanceOf[InterpolationMethod]
+        //val f1 = new ArrayFunction(function.functionMap)
+        //val f2 = new ArrayFunction(function.functionMap, function.inverseFunctionMap)
+        func = new ArrayFunction(function.functionMap, function.inverseFunctionMap, method)
+      case errFunc: ErrorFunction => // no interpolation method
       case _ => throw new IllegalArgumentException("Unexpected function type: " + func.getClass.getName)
     }
     simulator.setFunction(func)
