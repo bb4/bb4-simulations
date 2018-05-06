@@ -26,7 +26,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
 
   def getInteractionHandler: InteractionHandler = handler
 
-  private def commonInit() = {
+  private def commonInit(): Unit = {
     caveModel = new CaveModel
     initCommonUI()
     handler = new InteractionHandler(caveModel, caveModel.getScale)
@@ -44,7 +44,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
   }
 
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
-  override protected def getInitialTimeStep = CaveExplorer.INITIAL_TIME_STEP
+  override protected def getInitialTimeStep: Double = CaveExplorer.INITIAL_TIME_STEP
 
   override def timeStep: Double = {
     if (!isPaused) {

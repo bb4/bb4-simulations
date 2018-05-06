@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.cave.model.kernal
 
 import com.barrybecker4.simulation.cave.model.Cave
-
+import BasicKernel.TOTAL_WEIGHT
 
 /**
   * Looks only at immediate neighbors
@@ -28,6 +28,6 @@ class BasicKernel(cave: Cave) extends AbstractKernel(cave) {
         }
       }
     }
-    count / 8
+    count / TOTAL_WEIGHT
   }
 }

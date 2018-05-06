@@ -133,7 +133,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
     // verify that it is within the bounds of the grid
     assert(xPos <= this.gridWidth && xPos > 0, "invalid xpos = " + xPos)
     assert(yPos <= this.gridHeight && yPos > 0, "invalid ypos = " + yPos)
-    new IntLocation(yPos, xPos)
+    IntLocation(yPos, xPos)
   }
 
   private def parseVector(n: Node, vecAttribute: String) = {

@@ -16,7 +16,7 @@ object Logger {
   val LOG_LEVEL = 0
 
   /** The singleton instance */
-  private var logger: Log = null
+  private var logger: Log = _
 
   def getInstance: ILog = {
     if (logger == null) {

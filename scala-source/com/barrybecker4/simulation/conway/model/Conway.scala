@@ -13,14 +13,14 @@ import scala.util.Random
   */
 object Conway {
   private val NBR_OFFSETS = Array[Location](
-    new IntLocation(-1, -1),
-    new IntLocation(-1, 0),
-    new IntLocation(-1, 1),
-    new IntLocation(0, -1),
-    new IntLocation(0, 1),
-    new IntLocation(1, -1),
-    new IntLocation(1, 0),
-    new IntLocation(1, 1)
+    IntLocation(-1, -1),
+    IntLocation(-1, 0),
+    IntLocation(-1, 1),
+    IntLocation(0, -1),
+    IntLocation(0, 1),
+    IntLocation(1, -1),
+    IntLocation(1, 0),
+    IntLocation(1, 1)
   )
 }
 
@@ -53,7 +53,7 @@ class Conway private[model]() {
 
   /** @return the point constrained to the view bouns if wrap is true */
   private def keepInBounds(c: Location): Location =
-    if (wrap) new IntLocation((c.getRow + height) % height, (c.getCol + width) % width) else c
+    if (wrap) IntLocation((c.getRow + height) % height, (c.getCol + width) % width) else c
 
   private[model] def getPoints = points.keySet
 
@@ -75,22 +75,22 @@ class Conway private[model]() {
     if (points.contains(coord)) points(coord) else 0
   }
 
-  private def addGlider() = {
-    setValue(new IntLocation(10, 10), 1)
-    setValue(new IntLocation(11, 11), 1)
-    setValue(new IntLocation(11, 12), 1)
-    setValue(new IntLocation(10, 12), 1)
-    setValue(new IntLocation(9, 12), 1)
+  private def addGlider(): Unit = {
+    setValue(IntLocation(10, 10), 1)
+    setValue(IntLocation(11, 11), 1)
+    setValue(IntLocation(11, 12), 1)
+    setValue(IntLocation(10, 12), 1)
+    setValue(IntLocation(9, 12), 1)
   }
 
   /** generate some initial random 2D data */
-  private def genMap(width: Int, length: Int) = {
+  private def genMap(width: Int, length: Int): Unit = {
     val RAND = new Random(1)
     points = Map[Location, Integer]()
     for (x <- 0 until width) {
       for (y <- 0 until length) {
         val r = RAND.nextDouble
-        if (r > 0.7) setValue(new IntLocation(y, x), 1)
+        if (r > 0.7) setValue(IntLocation(y, x), 1)
       }
     }
   }

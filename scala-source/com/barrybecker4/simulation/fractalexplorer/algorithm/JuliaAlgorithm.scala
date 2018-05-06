@@ -13,7 +13,7 @@ import JuliaAlgorithm._
 object JuliaAlgorithm {
   val DEFAULT_JULIA_SEED: ComplexNumber = new ComplexNumber(0.233, 0.5378)
   private val INITIAL_RANGE: ComplexNumberRange =
-    new ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7))
+    ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7))
 }
 
 class JuliaAlgorithm(model: FractalModel)

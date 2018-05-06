@@ -15,5 +15,5 @@ class OrientedPosition private[rendering](var x: Double, var y: Double, var angl
     this(pos.x, pos.y, pos.angle)
   }
 
-  private[rendering] def getLocation = new IntLocation(y.toInt, x.toInt)
+  private[rendering] def getLocation = IntLocation(y.toInt, x.toInt)
 }

@@ -29,7 +29,7 @@ class Cave(val width: Int, val length: Int,
   def getWidth: Int = heightMap.length
   def getLength: Int = heightMap(0).length
 
-  def getRange = new Range(floorThresh, ceilThresh)
+  def getRange = Range(floorThresh, ceilThresh)
   randomInitialization()
 
   def setValue(x: Int, y: Int, value: Double) {

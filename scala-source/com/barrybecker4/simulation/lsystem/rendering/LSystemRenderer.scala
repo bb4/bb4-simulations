@@ -39,7 +39,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
   private val cmap = new DepthColorMap
   private var root: TreeNode = _
   private var angleIncrement: Double = _
-  private var offset: Location = new IntLocation(0, 0)
+  private var offset: Location = IntLocation(0, 0)
   private val parser = new LExpressionParser
   private val serializer = new LTreeSerializer
   private var needsRender: Boolean = true

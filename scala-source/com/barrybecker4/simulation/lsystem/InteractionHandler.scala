@@ -21,7 +21,7 @@ class InteractionHandler(var panable: Panable) extends MouseListener with MouseM
     currentY = e.getY
 
     // pan by the amount dragged
-    val loc = new IntLocation(lastY - currentY, currentX - lastX)
+    val loc = IntLocation(lastY - currentY, currentX - lastX)
     panable.incrementOffset(loc)
 
     lastX = currentX

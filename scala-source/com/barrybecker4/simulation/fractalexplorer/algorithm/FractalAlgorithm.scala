@@ -159,7 +159,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   def getRange(box: Box): ComplexNumberRange = {
     val firstCorner: ComplexNumber = getComplexPosition(box.getTopLeftCorner)
     val secondCorner: ComplexNumber = getComplexPosition(box.getBottomRightCorner)
-    new ComplexNumberRange(firstCorner, secondCorner)
+    ComplexNumberRange(firstCorner, secondCorner)
   }
 
   def getRange: ComplexNumberRange = range

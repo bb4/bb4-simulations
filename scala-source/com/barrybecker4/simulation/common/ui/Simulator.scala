@@ -58,16 +58,14 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
   protected def createOptionsButton: GradientButton = {
     val button = new GradientButton("Options")
     optionsDialog = createOptionsDialog
-    button.addActionListener(new ActionListener() {
-      override def actionPerformed(e: ActionEvent): Unit = {
-        optionsDialog.setLocationRelativeTo(e.getSource.asInstanceOf[Component])
-        // pause the snake while the options are open
-        val simulator = optionsDialog.getSimulator
-        val oldPauseVal = simulator.isPaused
-        simulator.setPaused(true)
-        optionsDialog.showDialog
-        simulator.setPaused(oldPauseVal)
-      }
+    button.addActionListener((e: ActionEvent) => {
+      optionsDialog.setLocationRelativeTo(e.getSource.asInstanceOf[Component])
+      // pause the snake while the options are open
+      val simulator = optionsDialog.getSimulator
+      val oldPauseVal = simulator.isPaused
+      simulator.setPaused(true)
+      optionsDialog.showDialog
+      simulator.setPaused(oldPauseVal)
     })
     button
   }
@@ -91,11 +89,7 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
   /** @return a reset button that allows you to restore the initial condition of the simulation.*/
   protected def createResetButton: JButton = {
     val resetButton = new JButton("Reset")
-    resetButton.addActionListener(new ActionListener() {
-      override def actionPerformed(e: ActionEvent): Unit = {
-        reset()
-      }
-    })
+    resetButton.addActionListener(e => reset())
     resetButton
   }
 

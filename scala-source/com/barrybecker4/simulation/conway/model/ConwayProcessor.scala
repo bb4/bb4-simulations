@@ -60,7 +60,7 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
   def getPoints: Set[Location] = conway.getPoints
 
   private[model] def setAlive(row: Int, col: Int) = {
-    conway.setValue(new IntLocation(row, col), 1)
+    conway.setValue(IntLocation(row, col), 1)
   }
 
   /** Compute the next step of the simulation. */

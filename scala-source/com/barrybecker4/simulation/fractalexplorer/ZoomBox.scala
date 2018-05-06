@@ -8,29 +8,28 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 
-/**
-  * Represents the zoom box used to zoom into a rectangular region.
-  *
-  * @author Barry Becker
-  */
 object ZoomBox {
   private val BOUNDING_BOX_COLOR = new Color(255, 100, 0)
 }
 
-class ZoomBox { // corner positions while dragging.
+/**
+  * Represents the zoom box used to zoom into a rectangular region (corner positions while dragging).
+  * @author Barry Becker
+  */
+class ZoomBox {
   private var firstCorner: Option[IntLocation] = None
   private var secondCorner: Option[IntLocation] = None
   private var box: Option[Box] = None
 
   def setFirstCorner(x: Int, y: Int): Unit = {
-    firstCorner = Some(new IntLocation(y, x))
+    firstCorner = Some(IntLocation(y, x))
   }
 
   def setSecondCorner(x: Int, y: Int): Unit = {
-    secondCorner = Some(new IntLocation(y, x))
+    secondCorner = Some(IntLocation(y, x))
   }
 
-  def getBox: Box = box.get //new Box(firstCorner, secondCorner);
+  def getBox: Box = box.get
 
   def clearBox(): Unit = {
     firstCorner = None
@@ -39,8 +38,7 @@ class ZoomBox { // corner positions while dragging.
 
   def isValidBox: Boolean = box.isDefined && firstCorner.isDefined && !(firstCorner == secondCorner)
 
-  /**
-    * Draw the bounding box if dragging.
+  /** Draw the bounding box if dragging.
     */
   def render(g: Graphics, aspectRatio: Double, keepAspectRatio: Boolean): Unit = {
     val g2 = g.asInstanceOf[Graphics2D]
@@ -59,7 +57,7 @@ class ZoomBox { // corner positions while dragging.
     if (keepAspectRatio) {
       if (width > height) height = (width / aspectRatio).toInt
       else width = (height * aspectRatio).toInt
-      box = new Box(topLeft, new IntLocation(topLeft.getY + height, topLeft.getX + width))
+      box = new Box(topLeft, IntLocation(topLeft.getY + height, topLeft.getX + width))
     }
     box
   }
