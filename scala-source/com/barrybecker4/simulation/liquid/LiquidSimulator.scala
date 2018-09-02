@@ -5,7 +5,7 @@ import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
 import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
@@ -39,7 +39,7 @@ class LiquidSimulator()
   private var advectionOnly = false
   commonInit()
 
-  private[liquid] def loadEnvironment(configFile: String) = {
+  private[liquid] def loadEnvironment(configFile: String): Unit = {
     environment = new LiquidEnvironment(configFile)
     environment.setAdvectionOnly(advectionOnly)
     commonInit()
@@ -53,7 +53,7 @@ class LiquidSimulator()
     setPaused(oldPaused)
   }
 
-  private def commonInit() = {
+  private def commonInit(): Unit = {
     initCommonUI()
     envRenderer = new EnvironmentRenderer(environment)
     val s = envRenderer.getScale.toInt
@@ -61,13 +61,13 @@ class LiquidSimulator()
   }
 
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
-  override protected def getInitialTimeStep = LiquidSimulator.INITIAL_TIME_STEP
+  override protected def getInitialTimeStep: Double = LiquidSimulator.INITIAL_TIME_STEP
   def getEnvironment: LiquidEnvironment = environment
   override def setScale(scale: Double) { envRenderer.setScale(scale)}
   override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions
   def getSingleStepMode: Boolean = !isAnimating
-  override def getBackground = LiquidSimulator.BG_COLOR
+  override def getBackground: Color = LiquidSimulator.BG_COLOR
   override protected def getFileNameBase: String = FileUtil.getHomeDir + "temp/animations/simulation/liquid/liquidFrame"
 
   /** @return a new recommended time step change. */
@@ -95,12 +95,13 @@ class LiquidSimulator()
   }
 
   override def doOptimization() {
-    val optimizer = if (GUIUtil.hasBasicService) new Optimizer(this)
-                    else  new Optimizer(this, FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt")
+    val optimizer =
+      if (GUIUtil.hasBasicService) new Optimizer(this)
+      else new Optimizer(this, Some(FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt"))
     val params = new Array[Parameter](3)
     val paramArray = new NumericParameterArray(params)
     setPaused(false)
-    optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, paramArray, 0.3)
+    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }
 
   override def paint(g: Graphics) {

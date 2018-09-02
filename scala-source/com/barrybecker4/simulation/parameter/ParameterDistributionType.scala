@@ -17,75 +17,94 @@ object ParameterDistributionType extends Enumeration {
   val NUM_DISCRETES = 10
   val NUM_DISCRETESM1: Int = NUM_DISCRETES - 1
 
-  case class Val(name: String, param: Parameter, redistFunction: RedistributionFunction) extends super.Val {
-    if (redistFunction != null) this.param.setRedistributionFunction(redistFunction)
-  }
+  case class Val(name: String, param: Parameter) extends super.Val
+
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
   val GAUSSIAN8 = Val("Gaussian 0-8",
-    new DoubleParameter(0, 0, 8.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.3))
+    new DoubleParameter(0, 0, 8.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.3))))
   val GAUSSIAN_NARROW1 = Val("Gaussian (narrow 0-1)",
-    new DoubleParameter(0, 0, 1.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.15))
+    new DoubleParameter(0, 0, 1.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.15))))
   val GAUSSIAN_NARROW8 = Val("Gaussian (narrow 0-8)",
-    new DoubleParameter(0, 0, 8.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.15))
+    new DoubleParameter(0, 0, 8.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.15))))
   val GAUSSIAN_NARROWER = Val("Gaussian (narrower)",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.1))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.1))))
   val GAUSSIAN_NARROWEST = Val("Gaussian (narrowest)",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.01)) // still has a problem
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.01)))) // still has a problem
   val GAUSSIAN_WIDE = Val("Gaussian (wide)",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new GaussianRedistribution(0.5, 0.8))
-  val UNIFORM = Val("Uniform", new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), null)
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.5, 0.8))))
+  val UNIFORM = Val("Uniform", new DoubleParameter(0, 0, 5.0, DEFAULT_NAME))
   val RIGHT_SKEWED_GAUSSIAN = Val("Right skewed gaussian",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.7, 0.3))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.7, 0.3))))
   val RIGHT_SKEWED_GAUSSIAN1 = Val("Right skewed gaussian1",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.8, 0.1))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.8, 0.1))))
   val RIGHT_SKEWED_GAUSSIAN2 = Val("Right skewed gaussian2",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.9, 0.05))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.9, 0.05))))
   val RIGHT_SKEWED_GAUSSIAN3 = Val("Right skewed gaussian3",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.9, 0.5))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.9, 0.5))))
   val LEFT_SKEWED_GAUSSIAN = Val("Left skewed gaussian",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.3, 0.3))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.3, 0.3))))
   val LEFT_SKEWED_GAUSSIAN1 = Val("Left skewed gaussian1",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.2, 0.1))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.2, 0.1))))
   val LEFT_SKEWED_GAUSSIAN2 = Val("Left skewed gaussian2",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.1, 0.05))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.1, 0.05))))
   val LEFT_SKEWED_GAUSSIAN3 = Val("Left skewed gaussian3",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.1, 0.7))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.1, 0.7))))
   val MIN_SKEWED_GAUSSIAN = Val("Minimum skewed gaussian",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(0.0, 0.1))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(0.0, 0.1))))
   val MAX_SKEWED_GAUSSIAN = Val("Maximum skewed gaussian",
-    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME), new GaussianRedistribution(1.0, 0.1))
+    new DoubleParameter(0, 0, 10.0, DEFAULT_NAME,
+      Some(new GaussianRedistribution(1.0, 0.1))))
   val SPECIAL_UNIFORM2 = Val("Special Uniform 0.2",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new UniformRedistribution(Array(0.2), Array(0.01)))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new UniformRedistribution(Array(0.2), Array(0.01)))))
   val SPECIAL_UNIFORM_LEFT = Val("Special Uniform Left only",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new UniformRedistribution(Array(0.0), Array(0.01)))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new UniformRedistribution(Array(0.0), Array(0.01)))))
   val SPECIAL_UNIFORM_RIGHT = Val("Special Uniform Right only",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new UniformRedistribution(Array(1.0), Array(0.02)))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new UniformRedistribution(Array(1.0), Array(0.02)))))
   val SPECIAL_UNIFORM_LEFTRIGHT = Val("Special Uniform Left and Right only",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME), new UniformRedistribution(Array(0.0, 1.0), Array(0.005, 0.005)))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+      Some(new UniformRedistribution(Array(0.0, 1.0), Array(0.005, 0.005)))))
   val SPECIAL_UNIFORM_SEVERAL = Val("Special Uniform Several",
-    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME),
-    new UniformRedistribution(Array(0.1, 0.3, 0.8, 0.832), Array(0.01, 0.02, 0.01, 0.01)))
+    new DoubleParameter(0, 0, 5.0, DEFAULT_NAME,
+    Some(new UniformRedistribution(Array(0.1, 0.3, 0.8, 0.832), Array(0.01, 0.02, 0.01, 0.01)))))
   val DISCRETE_UNIFORM = Val("Uniform discrete",
-    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME), null)
+    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME))
   val SPECIFIC_DISCRETE_1 = Val("Uniform discrete1",
-    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME),
-    new DiscreteRedistribution(NUM_DISCRETES, Array(3), Array(0.8)))
+    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME,
+    Some(DiscreteRedistribution(NUM_DISCRETES, Array(3), Array(0.8)))))
   val SPECIFIC_DISCRETE_2 = Val("Uniform discrete (0, 4)",
-    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME),
-    new DiscreteRedistribution(NUM_DISCRETES, Array(0, 4), Array(0.3, 0.3)))
+    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME,
+    Some(DiscreteRedistribution(NUM_DISCRETES, Array(0, 4), Array(0.3, 0.3)))))
   val SPECIFIC_DISCRETE_ALL = Val("Uniform discrete (all)",
-    new IntegerParameter(0, 0, 3, DEFAULT_NAME),
-    new DiscreteRedistribution(4, Array(0, 1, 2, 3), Array(0.25, 0.25, 0.25, 0.25)))
+    new IntegerParameter(0, 0, 3, DEFAULT_NAME,
+    Some(DiscreteRedistribution(4, Array(0, 1, 2, 3), Array(0.25, 0.25, 0.25, 0.25)))))
   val SPECIFIC_DISCRETE_3 = Val("Uniform discrete (1, 2, 6)",
-    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME),
-    new DiscreteRedistribution(NUM_DISCRETES, Array(1, 2, 6), Array(0.3, 0.3, 0.3)))
+    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME,
+    Some(DiscreteRedistribution(NUM_DISCRETES, Array(1, 2, 6), Array(0.3, 0.3, 0.3)))))
   val SPECIFIC_DISCRETE_3a = Val("Uniform discrete3a",
-    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME),
-    new DiscreteRedistribution(NUM_DISCRETES, Array(1, 2, 6), Array(0.2, 0.6, 0.2)))   // still has a problem
-  val BOOLEAN = Val("Boolean Uniform", new BooleanParameter(false, "Param"), null)
+    new IntegerParameter(0, 0, NUM_DISCRETESM1, DEFAULT_NAME,
+    Some(DiscreteRedistribution(NUM_DISCRETES, Array(1, 2, 6), Array(0.2, 0.6, 0.2)))))   // still has a problem
+  val BOOLEAN = Val("Boolean Uniform", new BooleanParameter(false, "Param"))
   val BOOLEAN_SKEWED = Val("Boolean Skewed",
-    new BooleanParameter(false, "Param"), new BooleanRedistribution(0.8))
+    new BooleanParameter(false, "Param", Some(new BooleanRedistribution(0.8))))
   
   val VALUES: Array[Val] = Array(GAUSSIAN8, GAUSSIAN_NARROW1,
     GAUSSIAN_NARROW8, GAUSSIAN_NARROWER, GAUSSIAN_NARROWEST, GAUSSIAN_WIDE, UNIFORM,

@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2015 - 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
 import com.barrybecker4.common.geometry.Box
@@ -190,7 +190,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
       for (y <- fromRow until toRow) rowCalculator.calculateRow(width, y)
     }
 
-    def run() = computeChunk(fromRow, toRow)
+    def run(): Unit = computeChunk(fromRow, toRow)
   }
 
 }

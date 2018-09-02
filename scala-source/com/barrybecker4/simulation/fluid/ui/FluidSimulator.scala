@@ -4,9 +4,8 @@ package com.barrybecker4.simulation.fluid.ui
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
-import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
@@ -90,11 +89,11 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
 
   override def doOptimization() {
     val optimizer = if (GUIUtil.hasBasicService) new Optimizer(this)
-                    else new Optimizer(this, FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt")
+                    else new Optimizer(this, Some(FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt"))
     val params = new Array[Parameter](3)
     val paramArray = new NumericParameterArray(params)
     setPaused(false)
-    optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, paramArray, 0.3)
+    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }
 
   override def paint(g: Graphics): Unit = {

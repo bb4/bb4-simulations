@@ -38,13 +38,13 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
 
   override protected def initHistogram(): Unit = {
     if (parameter.isIntegerOnly) {
-      data = new Array[Int](parameter.getRange.toInt + 1)
+      data = new Array[Int](parameter.range.toInt + 1)
       histogram = new HistogramRenderer(data)
     }
     else {
       data = new Array[Int](ParameterSimulator.NUM_DOUBLE_BINS)
-      val scale = ParameterSimulator.NUM_DOUBLE_BINS / parameter.getRange
-      val offset = -parameter.getMinValue
+      val scale = ParameterSimulator.NUM_DOUBLE_BINS / parameter.range
+      val offset = -parameter.minValue
       println("new Lin scale = " +scale + " off=" + offset)
       val xFunc = new LinearFunction(scale, offset)
       histogram = new HistogramRenderer(data, xFunc)
@@ -57,8 +57,8 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
     if (showRedistribution) parameter.randomizeValue(MathUtil.RANDOM)
     else { //System.out.println("parameter.getRange()="+parameter.getRange());
       //double scale = parameter.isIntegerOnly()?  parameter.getRange() +1.0 : parameter.getRange();
-      val scale = parameter.getRange
-      val v = parameter.getMinValue + MathUtil.RANDOM.nextDouble * scale
+      val scale = parameter.range
+      val v = parameter.minValue + MathUtil.RANDOM.nextDouble * scale
       parameter.setValue(v)
     }
     parameter.getValue

@@ -2,17 +2,13 @@
 plugins {
     id "com.github.maiflai.scalatest" version "0.19" // needed to run scala tests
 }
-description = 'A collection of java simulations.'
+description = 'A Scala framework for creating similations. Implemented simulations include dice, graphing, ' +
+        'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
 version = '1.5-SNAPSHOT'
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4.gradle'
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
-
-// This is needed for when java depends on scala. Remove when fully ported to scala.
-//sourceSets.main.scala.srcDir "source"
-//sourceSets.main.java.srcDirs = []
-
 
 dependencies {
     def javaHome = System.properties.'java.home'
