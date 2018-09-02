@@ -14,6 +14,8 @@ import com.barrybecker4.simulation.fluid.rendering.RenderingOptions
 import com.barrybecker4.ui.util.GUIUtil
 import java.awt._
 
+import scala.util.Random
+
 
 
 /**
@@ -91,7 +93,7 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
     val optimizer = if (GUIUtil.hasBasicService) new Optimizer(this)
                     else new Optimizer(this, Some(FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt"))
     val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params)
+    val paramArray = new NumericParameterArray(params, new Random(1))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }

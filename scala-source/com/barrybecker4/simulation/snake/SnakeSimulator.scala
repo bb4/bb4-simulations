@@ -8,7 +8,7 @@ import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.{DoubleParameter, Parameter}
-import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.rendering.BackgroundGridRenderer
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.snake.rendering.RenderingParameters
@@ -17,9 +17,8 @@ import com.barrybecker4.ui.util.GUIUtil
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
 import java.awt._
-
-import scala.collection.JavaConverters._
 import com.barrybecker4.simulation.snake.data.{SnakeData, SnakeType}
+import scala.util.Random
 
 
 /**
@@ -29,13 +28,13 @@ object SnakeSimulator {
   /** the amount to advance the animation in time for each frame in seconds. */
   protected val NUM_STEPS_PER_FRAME = 200
 
-  private val PARAMS: java.util.List[Parameter] = Seq[Parameter](
+  private val PARAMS = Array[Parameter](
     new DoubleParameter(LocomotionParameters.WAVE_SPEED, 0.0001, 0.02, "wave speed"),
     new DoubleParameter(LocomotionParameters.WAVE_AMPLITUDE, 0.001, 0.2, "wave amplitude"),
     new DoubleParameter(LocomotionParameters.WAVE_PERIOD, 0.5, 9.0, "wave period")
-  ).asJava
+  )
 
-  private val INITIAL_PARAMS: NumericParameterArray = new NumericParameterArray(PARAMS)
+  private val INITIAL_PARAMS: NumericParameterArray = new NumericParameterArray(PARAMS, new Random(1))
   /** initial time step */
   val INITIAL_TIME_STEP = 0.2
   // size of the background grid
@@ -125,9 +124,9 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
     if (GUIUtil.hasBasicService) { // need to verify
       optimizer = new Optimizer(this)
     }
-    else optimizer = new Optimizer(this, FileUtil.getHomeDir + "performance/snake/snake_optimization.txt")
+    else optimizer = new Optimizer(this, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
     setPaused(false)
-    optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
+    optimizer.doOptimization(GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
   }
 
   override def timeStep: Double = {

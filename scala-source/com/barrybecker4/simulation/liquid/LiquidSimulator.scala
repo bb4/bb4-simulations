@@ -17,6 +17,8 @@ import java.awt._
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 
+import scala.util.Random
+
 
 /**
   * Main class for particle liquid simulation.
@@ -99,7 +101,7 @@ class LiquidSimulator()
       if (GUIUtil.hasBasicService) new Optimizer(this)
       else new Optimizer(this, Some(FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt"))
     val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params)
+    val paramArray = new NumericParameterArray(params, new Random(1))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }

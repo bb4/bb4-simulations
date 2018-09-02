@@ -7,7 +7,7 @@ import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
@@ -16,6 +16,8 @@ import javax.swing._
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 import java.awt._
+
+import scala.util.Random
 
 
 /**
@@ -75,11 +77,11 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override def doOptimization(): Unit = {
     var optimizer: Optimizer = null
     if (GUIUtil.hasBasicService) optimizer = new Optimizer(this)
-    else optimizer = new Optimizer(this, FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt")
+    else optimizer = new Optimizer(this, Some(FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt"))
     val params = new Array[Parameter](TrebuchetSimulator.NUM_PARAMS)
-    val paramArray = new NumericParameterArray(params)
+    val paramArray = new NumericParameterArray(params, new Random(1))
     setPaused(false)
-    optimizer.doOptimization(OptimizationStrategyType.GENETIC_SEARCH, paramArray, 0.3)
+    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }
 
   def getNumParameters: Int = TrebuchetSimulator.NUM_PARAMS
