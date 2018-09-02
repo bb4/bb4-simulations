@@ -79,7 +79,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     if (GUIUtil.hasBasicService) optimizer = new Optimizer(this)
     else optimizer = new Optimizer(this, Some(FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt"))
     val params = new Array[Parameter](TrebuchetSimulator.NUM_PARAMS)
-    val paramArray = new NumericParameterArray(params, new Random(1))
+    val paramArray = new NumericParameterArray(params, 5, new Random(1))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }

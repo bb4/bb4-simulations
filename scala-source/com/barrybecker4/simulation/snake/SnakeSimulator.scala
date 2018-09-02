@@ -34,7 +34,7 @@ object SnakeSimulator {
     new DoubleParameter(LocomotionParameters.WAVE_PERIOD, 0.5, 9.0, "wave period")
   )
 
-  private val INITIAL_PARAMS: NumericParameterArray = new NumericParameterArray(PARAMS, new Random(1))
+  private val INITIAL_PARAMS: NumericParameterArray = new NumericParameterArray(PARAMS, 5, new Random(1))
   /** initial time step */
   val INITIAL_TIME_STEP = 0.2
   // size of the background grid

@@ -4,6 +4,8 @@ package com.barrybecker4.simulation.cave.rendering
 import com.barrybecker4.common.math.Range
 import com.barrybecker4.ui.util.ColorMap
 import java.awt.Color
+import scala.collection.immutable.Range.BigDecimal
+
 
 
 /**
@@ -31,8 +33,8 @@ object CaveColorMap {
     val values = new Array[Double](COLORS.length)
     val step = range.getExtent / (COLORS.length - 1)
     var ct = 0
-    for (v <- floor to ceil by step) {
-      values(ct) = v
+    for (v <- BigDecimal.inclusive(floor, ceil,step)) {
+      values(ct) = v.toDouble
       ct += 1
     }
     values

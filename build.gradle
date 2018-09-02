@@ -147,6 +147,12 @@ task runVerhulst(type: JavaExec, description: "Run Verhulst population simulator
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runSierpinski(type: JavaExec, description: "Run Sierpinski triangle simulator") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.sierpinski.SierpinskiApplet'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 ext.appMap = new LinkedHashMap()
 appMap.put('simulation', [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']])
 appMap.put('dice',       [include:['com/barrybecker4/simulation/dice/**']])
