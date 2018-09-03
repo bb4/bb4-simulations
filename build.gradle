@@ -153,6 +153,12 @@ task runSierpinski(type: JavaExec, description: "Run Sierpinski triangle simulat
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task runSprograph(type: JavaExec, description: "Run Spirograph simulator") {
+    group = 'application'
+    main = 'com.barrybecker4.simulation.spirograph.Spirograph'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 ext.appMap = new LinkedHashMap()
 appMap.put('simulation', [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']])
 appMap.put('dice',       [include:['com/barrybecker4/simulation/dice/**']])
@@ -171,5 +177,7 @@ appMap.put('stock',      [include:['com/barrybecker4/simulation/stock/**']])
 appMap.put('trading',    [include:['com/barrybecker4/simulation/trading/**']])
 appMap.put('trebuchet',  [include:['com/barrybecker4/simulation/trebuchet/**']])
 appMap.put('verhulst',   [include:['com/barrybecker4/simulation/verhulst/**']])
+appMap.put('verhulst',   [include:['com/barrybecker4/simulation/sierpinski/**']])
+appMap.put('verhulst',   [include:['com/barrybecker4/simulation/spirograph/**']])
 
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4-publish.gradle'
