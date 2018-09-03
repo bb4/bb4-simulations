@@ -24,12 +24,12 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
     var count = 0
     state.initialize(graphPanel.getWidth, graphPanel.getHeight)
     state.setRendering(true)
-    val r2 = state.params.getR2
-    val p = state.params.getPos
+    val r2 = state.params.r2
+    val p = state.params.pos
     // avoid degenerate (divide by 0 case) curves.
     if (r2 == 0) return
     val revs = state.getNumRevolutions
-    val n = 1.0f + state.getNumSegmentsPerRev * Math.abs(p / r2)
+    val n = 1.0f + state.numSegmentsPerRev * Math.abs(p / r2)
 
     while ( {
       {
@@ -52,8 +52,8 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
   /** Sets the center point. */
   def setPoint(pos: Float, phi: Float): Unit = {
     val center = state.params.getCenter(graphPanel.getWidth, graphPanel.getHeight)
-    state.params.setX((center.getX + pos * Math.cos(phi)).toFloat)
-    state.params.setY((center.getY - pos * Math.sin(phi)).toFloat)
+    state.params.x = (center.getX + pos * Math.cos(phi)).toFloat
+    state.params.y = (center.getY - pos * Math.sin(phi)).toFloat
   }
 
   /** Stop the rendering as quickly as possible */
@@ -69,21 +69,23 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
     var r1 = .0f
     var r2 = .0f
     var p = .0f
-    r1 = state.params.getR1
-    r2 = state.params.getR2
-    p = state.params.getPos
-    getOfflineGraphics.setColor(state.getColor)
-    if (count == (n * revs + 0.5).toInt) state.params.setTheta(0.0f)
-    else state.params.setTheta((2.0f * Math.PI * count / n).toFloat)
-    val theta = state.params.getTheta
-    state.params.setPhi(theta * (1.0f + r1 / r2))
-    val phi = state.params.getPhi
+    r1 = state.params.r1
+    r2 = state.params.r2
+    p = state.params.pos
+    getOfflineGraphics.setColor(state.color)
+    if (count == (n * revs + 0.5).toInt)
+      state.params.theta = 0.0f
+    else
+      state.params.theta = (2.0f * Math.PI * count / n).toFloat
+    val theta = state.params.theta
+    state.params.phi = theta * (1.0f + r1 / r2)
+    val phi = state.params.phi
     setPoint(p, phi)
     graphPanel.waitIfPaused()
-    val stroke = new BasicStroke(state.getWidth.toFloat / GraphState.INITIAL_LINE_WIDTH.toFloat)
+    val stroke = new BasicStroke(state.width.toFloat / GraphState.INITIAL_LINE_WIDTH.toFloat)
     getOfflineGraphics.setStroke(stroke)
-    getOfflineGraphics.drawLine(state.oldParams.getX.toInt, state.oldParams.getY.toInt,
-                                state.params.getX.toInt, state.params.getY.toInt)
+    getOfflineGraphics.drawLine(state.oldParams.x.toInt, state.oldParams.y.toInt,
+                                state.params.x.toInt, state.params.y.toInt)
     if (!state.isMaxVelocity) {
       graphPanel.repaint()
       doSmallDelay()

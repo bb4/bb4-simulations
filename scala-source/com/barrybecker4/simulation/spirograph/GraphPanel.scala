@@ -36,10 +36,8 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
   private var paused = false
 
   def setPaused(newPauseState: Boolean): Unit = synchronized {
-    if (paused != newPauseState) {
+    if (paused != newPauseState)
       paused = newPauseState
-      //pauseLock.notifyAll()
-    }
   }
 
   def reset(): Unit = {
@@ -59,8 +57,7 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
     this.repaint()
   }
 
-  /**
-    * If we are just going to draw the graph as quickly as possible, and block until its done,
+  /** If we are just going to draw the graph as quickly as possible, and block until its done,
     * then don't mess with trying to draw it in a separate thread.
     */
   def startDrawingGraph(): Unit = {

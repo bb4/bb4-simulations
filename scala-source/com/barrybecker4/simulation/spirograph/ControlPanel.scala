@@ -103,12 +103,12 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
     }
     else if (AppContext.getLabel("HIDE_DECORATION") == obj) {
       hideButton.setText(AppContext.getLabel("SHOW_DECORATION"))
-      state.setShowDecoration(false)
+      state.showDecoration = false
       graphPanel.repaint()
     }
     else if (AppContext.getLabel("SHOW_DECORATION") == obj) {
       hideButton.setText(AppContext.getLabel("HIDE_DECORATION"))
-      state.setShowDecoration(true)
+      state.showDecoration = true
       graphPanel.repaint()
     }
   }

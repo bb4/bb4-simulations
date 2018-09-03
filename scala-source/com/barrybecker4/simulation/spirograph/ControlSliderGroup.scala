@@ -36,12 +36,12 @@ object ControlSliderGroup { // slider indices
 
   def createGraphState: GraphState = {
     val state = new GraphState
-    state.params.setR1(SLIDER_PROPS(RADIUS1).getInitialValue.toFloat)
-    state.params.setR2(SLIDER_PROPS(RADIUS2).getInitialValue.toFloat)
-    state.params.setPos(SLIDER_PROPS(POSITION).getInitialValue.toFloat)
+    state.params.r1 = SLIDER_PROPS(RADIUS1).getInitialValue.toFloat
+    state.params.r2 = SLIDER_PROPS(RADIUS2).getInitialValue.toFloat
+    state.params.pos = SLIDER_PROPS(POSITION).getInitialValue.toFloat
     state.setVelocity(SLIDER_PROPS(VELOCITY).getInitialValue.toInt)
-    state.setWidth(SLIDER_PROPS(LINE_WIDTH).getInitialValue.toInt)
-    state.setNumSegmentsPerRev(SLIDER_PROPS(SEGMENTS).getInitialValue.toInt)
+    state.width = SLIDER_PROPS(LINE_WIDTH).getInitialValue.toInt
+    state.numSegmentsPerRev = SLIDER_PROPS(SEGMENTS).getInitialValue.toInt
     state
   }
 }
@@ -73,8 +73,8 @@ class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
     else if (src == ControlSliderGroup.RADIUS2) state.setR2(value)
     else if (src == ControlSliderGroup.POSITION) state.setPos(value)
     else if (src == ControlSliderGroup.VELOCITY) state.setVelocity(value)
-    else if (src == ControlSliderGroup.LINE_WIDTH) state.setWidth(value)
-    else if (src == ControlSliderGroup.SEGMENTS) state.setNumSegmentsPerRev(value)
+    else if (src == ControlSliderGroup.LINE_WIDTH) state.width = value
+    else if (src == ControlSliderGroup.SEGMENTS) state.numSegmentsPerRev = value
     else throw new IllegalArgumentException("Unexpected slider index=" + src)
     autoUpdate()
   }

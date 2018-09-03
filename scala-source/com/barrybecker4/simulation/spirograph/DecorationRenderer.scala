@@ -12,8 +12,8 @@ import java.awt._
   */
 object DecorationRenderer {
   private val AXES_COLOR = new Color(120, 120, 200)
-  private val CIRCLE_COLOR = new Color(220, 0, 0)
-  private val CIRCLE2_FILL_COLOR = new Color(200, 0, 0, 40)
+  private val CIRCLE_COLOR = new Color(120, 0, 220)
+  private val CIRCLE2_FILL_COLOR = new Color(100, 0, 200, 70)
   private val AXES_STROKE = new BasicStroke(1)
   private val CIRCLE_STROKE = new BasicStroke(2)
   private val SPOKE_STROKE = new BasicStroke(3)
@@ -45,7 +45,7 @@ class DecorationRenderer(var params: Parameters) {
   private def drawCentralCircle(g: Graphics2D): Unit = {
     g.setColor(DecorationRenderer.CIRCLE_COLOR)
     g.setStroke(DecorationRenderer.CIRCLE_STROKE)
-    val r1 = params.getR1
+    val r1 = params.r1
     g.drawOval(((width >> 1) - r1).toInt, ((height >> 1) - r1).toInt, (2 * r1).toInt, (2 * r1).toInt)
   }
 
@@ -57,8 +57,8 @@ class DecorationRenderer(var params: Parameters) {
 
   private def drawCircle2(g: Graphics2D): Unit = {
     val center = params.getCenter(width, height)
-    val sign = params.getSign
-    val r2 = params.getR2
+    val sign = params.sign
+    val r2 = params.r2
     g.drawOval((center.getX - sign * r2).toInt, (center.getY - sign * r2).toInt, (2 * sign * r2).toInt, (2 * sign * r2).toInt)
     g.setColor(DecorationRenderer.CIRCLE2_FILL_COLOR)
     g.fillOval((center.getX - sign * r2).toInt, (center.getY - sign * r2).toInt, (2 * sign * r2).toInt, (2 * sign * r2).toInt)
@@ -67,14 +67,14 @@ class DecorationRenderer(var params: Parameters) {
   private def drawLineAndDot(g: Graphics2D): Unit = {
     g.setColor(DecorationRenderer.CIRCLE_COLOR)
     val center = params.getCenter(width, height)
-    var side = params.getSign
-    val pos = params.getPos
-    val r2 = params.getR2
-    val phi = params.getPhi
+    var side = params.sign
+    val pos = params.pos
+    val r2 = params.r2
+    val phi = params.phi
     val dotPos = new Point((center.getX + pos * Math.cos(phi)).toInt, (center.getY - pos * Math.sin(phi)).toInt)
     if (pos < 0) side = -side
     g.setStroke(DecorationRenderer.SPOKE_STROKE)
-    if (params.getY > 0) {
+    if (params.y > 0) {
       val startX = (center.getX + side * r2 * Math.cos(phi)).toInt
       val startY = (center.getY - side * r2 * Math.sin(phi)).toInt
       g.drawLine(startX, startY, dotPos.x, dotPos.y)
