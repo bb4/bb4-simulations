@@ -177,7 +177,7 @@ appMap.put('stock',      [include:['com/barrybecker4/simulation/stock/**']])
 appMap.put('trading',    [include:['com/barrybecker4/simulation/trading/**']])
 appMap.put('trebuchet',  [include:['com/barrybecker4/simulation/trebuchet/**']])
 appMap.put('verhulst',   [include:['com/barrybecker4/simulation/verhulst/**']])
-appMap.put('verhulst',   [include:['com/barrybecker4/simulation/sierpinski/**']])
-appMap.put('verhulst',   [include:['com/barrybecker4/simulation/spirograph/**']])
+appMap.put('sierpinski',   [include:['com/barrybecker4/simulation/sierpinski/**']])
+appMap.put('spirograph',   [include:['com/barrybecker4/simulation/spirograph/**']])
 
 apply from: 'https://raw.github.com/barrybecker4/bb4-common/master/bb4-publish.gradle'

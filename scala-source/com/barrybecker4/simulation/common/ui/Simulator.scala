@@ -83,8 +83,9 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
     controls
   }
 
-  override protected def getFileNameBase: String = FileUtil.getHomeDir +
-    "temp/animations/simulation/" + getClass.getName
+  override protected def getFileNameBase: String =
+    "undefined (can't call getHomeDir from applet without extra security)."
+    //FileUtil.getHomeDir + "temp/animations/simulation/" + getClass.getName
 
   /** @return a reset button that allows you to restore the initial condition of the simulation.*/
   protected def createResetButton: JButton = {

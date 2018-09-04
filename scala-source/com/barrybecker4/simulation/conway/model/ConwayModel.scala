@@ -86,7 +86,7 @@ class ConwayModel() {
   def getImage: BufferedImage = renderer.getImage
   def doRender() { renderer.render() }
 
-  private def requestRestart(width: Int, height: Int) = {
+  private def requestRestart(width: Int, height: Int): Unit = {
     try {
       numIterations = 0
       processor.setWrap(wrapGrid, width / scale, height / scale)

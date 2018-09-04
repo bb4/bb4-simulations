@@ -124,7 +124,7 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
     if (GUIUtil.hasBasicService) { // need to verify
       optimizer = new Optimizer(this)
     }
-    else optimizer = new Optimizer(this, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
+    else optimizer = new Optimizer(this) //, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
   }
