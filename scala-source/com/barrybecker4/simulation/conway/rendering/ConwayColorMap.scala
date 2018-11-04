@@ -1,9 +1,11 @@
-// Copyright by Barry G. Becker, 2014-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2014-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.rendering
 
 import com.barrybecker4.common.math.Range
 import com.barrybecker4.ui.util.ColorMap
 import java.awt._
+import scala.collection.immutable.Range.BigDecimal
+
 
 /**
   * Default colormap for cave visualization. May be edited in the UI.
@@ -33,8 +35,8 @@ object ConwayColorMap {
     values(0) = floor
     val step = (range.getExtent - 1) / (COLORS.length - 2)
     var ct = 1
-    for (v <- floor + 1 to ceil by step) {
-      values(ct) = v
+    for (v <- BigDecimal(floor + 1, ceil, step)) {
+      values(ct) = v.toDouble
       ct += 1
     }
     values

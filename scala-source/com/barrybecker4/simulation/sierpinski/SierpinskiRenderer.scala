@@ -15,21 +15,15 @@ object SierpinskiRenderer {
   * @author Barry Becker
   */
 class SierpinskiRenderer() {
-  styler = new GraphicsStyler(SierpinskiRenderer.DEFAULT_LINE_WIDTH)
-  triangleRenderer = new TriangleRenderer(styler)
+  private var styler: GraphicsStyler = new GraphicsStyler(SierpinskiRenderer.DEFAULT_LINE_WIDTH)
+  private var triangleRenderer = new TriangleRenderer(styler)
   private var width = 0
   private var height = 0
   private var g2: Graphics2D = _
-  private var styler: GraphicsStyler = _
-  private var triangleRenderer: TriangleRenderer = _
 
-  def setDepth(depth: Int): Unit = {
-    triangleRenderer.setDepth(depth)
-  }
 
-  def setLineWidth(width: Float): Unit = {
-    styler.setLineWidth(width)
-  }
+  def setDepth(depth: Int): Unit = triangleRenderer.setDepth(depth)
+  def setLineWidth(width: Float): Unit = styler.setLineWidth(width)
 
   def setSize(width: Int, height: Int): Unit = {
     this.width = width

@@ -9,7 +9,7 @@ import com.barrybecker4.simulation.liquid.config.ConfigurationEnum.FILE_BASE
   */
 object ConfigurationEnum {
   val FILE_BASE = "com/barrybecker4/simulation/liquid/data/"
-  val DEFAULT_VALUE = PULSE_LARGE
+  val DEFAULT_VALUE: ConfigurationEnum = PULSE_LARGE
   val values = Array(SPIGOT_RIGHT, SPIGOT_LEFT, BASIC, FALLING_BLOB, FALLING_BLOB_SMALL, WATER_WALL_LEFT,
     WATER_WALL_RIGHT, PULSE_LARGE, PULSE_SMALL, PULSE_SMALLEST)
 
