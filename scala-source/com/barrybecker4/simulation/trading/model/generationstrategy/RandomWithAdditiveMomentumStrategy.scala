@@ -46,9 +46,11 @@ class RandomWithAdditiveMomentumStrategy extends GenerationStrategy {
     strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS))
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
     percentIncreaseField = new NumberInput("% to increase each time period if heads (0 - 100): ",
-      100 * percentIncrease, "Amount to increase after each time period if coin toss is heads.", 0, 100, false)
+      100 * percentIncrease, "Amount to increase after each time period if coin toss is heads.",
+      0, 100, false)
     percentDecreaseField = new NumberInput("% to decrease each time period if tails (0 - 100): ",
-      100 * percentDecrease, "Amount to decrease after each time period if coin toss is tails.", -100, 100, false)
+      100 * percentDecrease, "Amount to decrease after each time period if coin toss is tails.",
+      -100, 100, false)
     momentumFactorField = new NumberInput("Weight to give the last percent change (0, 1):",
       momentumFactor, "The amount of weight to give the last percent change when calculating the new one. " +
         "Zero is no impact, 1 means the last value is used as is.", 0, 2, false)

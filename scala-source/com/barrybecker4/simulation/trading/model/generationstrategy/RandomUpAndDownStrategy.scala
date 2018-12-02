@@ -44,9 +44,11 @@ class RandomUpAndDownStrategy extends GenerationStrategy {
     strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS))
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
     percentIncreaseField = new NumberInput("% to increase each time period if heads (0 - 100): ",
-      100 * percentIncrease, "Amount to increase after each time period if coin toss is heads.", 0, 100, false)
+      100 * percentIncrease, "Amount to increase after each time period if coin toss is heads.",
+      0, 100, false)
     percentDecreaseField = new NumberInput("% to decrease each time period if tails (0 - 100): ",
-      100 * percentDecrease, "Amount to decrease after each time period if coin toss is tails.", -100, 100, false)
+      100 * percentDecrease, "Amount to decrease after each time period if coin toss is tails.",
+      -100, 100, false)
     useRandomChangeCB = new JCheckBox("Use random change", useRandomChange)
     useRandomChangeCB.setToolTipText("If checked, " +
       "then the amount of change at each time step will be a " +

@@ -51,9 +51,12 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
       "com.barrybecker4.simulation.trading.model.generationstrategy",
       classOf[GenerationStrategy],
       util.Arrays.asList(
-        new FlatStrategy, new GaussianStrategy, new SineStrategy, new RandomUpAndDownStrategy,
+        new FlatStrategy,
+        new GaussianStrategy,
+        new SineStrategy,
+        new RandomUpAndDownStrategy,
         new RandomWithAdditiveMomentumStrategy))
-  private var strategyCombo: JComboBox[String] = _
+  private var generationStrategyCombo: JComboBox[String] = _
 
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private val strategyOptionsPanel = new JPanel(new BorderLayout)
@@ -74,16 +77,16 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
 
     val choices = generationStrategies.getStrategies
     println("generation strategies: " + choices)
-    strategyCombo = new JComboBox[String](choices.toArray(new Array[String](choices.size)))
+    generationStrategyCombo = new JComboBox[String](choices.toArray(new Array[String](choices.size)))
 
     println("Default generation strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY)
-    strategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
+    generationStrategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
     println("currently selected strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
     generationOptions.generationStrategy = getCurrentlySelectedStrategy
-    strategyCombo.addItemListener(this)
+    generationStrategyCombo.addItemListener(this)
     setStrategyTooltip()
     panel.add(label)
-    panel.add(strategyCombo)
+    panel.add(generationStrategyCombo)
     panel
   }
 
@@ -98,12 +101,13 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
   }
 
   private def getCurrentlySelectedStrategy = {
-    System.out.println("Currently selected = " + strategyCombo.getSelectedItem + " out of " + strategyCombo.getItemCount)
-    generationStrategies.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String])
+    println(s"Currently selected = ${generationStrategyCombo.getSelectedItem} " +
+      s"out of ${generationStrategyCombo.getItemCount}")
+    generationStrategies.getStrategy(generationStrategyCombo.getSelectedItem.asInstanceOf[String])
   }
 
   private def setStrategyTooltip(): Unit = {
-    strategyCombo.setToolTipText(getCurrentlySelectedStrategy.description)
+    generationStrategyCombo.setToolTipText(getCurrentlySelectedStrategy.description)
   }
 
   private[ui] def getOptions = {

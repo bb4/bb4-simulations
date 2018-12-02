@@ -37,7 +37,8 @@ class SineStrategy extends GenerationStrategy {
     val strategyPanel = new JPanel
     strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS))
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
-    amplitudeField = new NumberInput("Amplitude of the sin wave : ", amplitude, "amp", 0.0, 500.0, false)
+    amplitudeField = new NumberInput("Amplitude of the sin wave : ",
+      amplitude, "amp", 0.0, 500.0, false)
     incrementField = new NumberInput("Increment for each step (in radians) : ",
       increment, "x increment", 0.0, 500.0, false)
     amplitudeField.setAlignmentX(Component.CENTER_ALIGNMENT)
