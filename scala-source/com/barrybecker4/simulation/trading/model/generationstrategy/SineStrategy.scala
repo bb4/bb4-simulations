@@ -29,7 +29,7 @@ class SineStrategy extends GenerationStrategy {
   override def calcNewPrice(stockPrice: Double): Double = {
     val change = amplitude * Math.sin(theta)
     theta += increment
-    Math.max(0, stockPrice + change)
+    Math.max(0.01, stockPrice + change)
   }
 
   /** The UI to allow the user to configure the options */

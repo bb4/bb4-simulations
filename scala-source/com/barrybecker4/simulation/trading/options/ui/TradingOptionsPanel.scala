@@ -100,7 +100,7 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
 
   private def setStrategyTooltip(): Unit = {
     println("selected = " + strategyCombo.getSelectedItem)
-    println("plugins = " + tradingPlugins)
+    println("plugins = " + tradingPlugins.getStrategies.mkString(", "))
     strategyCombo.setToolTipText(
       tradingPlugins.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String]).description)
   }

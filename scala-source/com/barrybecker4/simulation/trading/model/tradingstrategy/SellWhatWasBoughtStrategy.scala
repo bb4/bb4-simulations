@@ -63,15 +63,23 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
     // loop through all the buys and see if any of them are ready to sell.
     transactions = transactions.filter(trans => {
       val sellIt = stockPrice >= (1.0 + gainThresholdPct) * trans.stockPrice
-      if (sellIt) sell(Math.max(trans.numShares, sharesOwned), stockPrice)
+      //println(s"numShares = ${trans.numShares}, sharesOwned = $sharesOwned")
+      if (sellIt) {
+        val sharesToSell = Math.min(trans.numShares, sharesOwned)
+        sell(sharesToSell, stockPrice)
+      }
       !sellIt
     })
 
-    val pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction
+    assert(priceAtLastTransaction > 0)
+    assert(stockPrice > 0, "The stockPrice must be > 0")
+    val pctChange =(stockPrice - priceAtLastTransaction) / priceAtLastTransaction
     if (-pctChange >= lossThresholdPct) { // buy more because its cheaper
       val amountToInvest = Math.min(reserve, fixedPurchaseAmount)
-      buy(amountToInvest, stockPrice)
-      transactions = transactions :+ Transaction(stockPrice, amountToInvest)
+      if (amountToInvest > 0) {
+        buy(amountToInvest, stockPrice)
+        transactions = transactions :+ Transaction(stockPrice, amountToInvest)
+      }
     }
     MarketPosition(invested, reserve, sharesOwned)
   }

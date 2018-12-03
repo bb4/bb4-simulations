@@ -6,5 +6,5 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy
   * @author Barry Becker
   */
 case class Transaction private[tradingstrategy](stockPrice: Double, amount: Double) {
-  val numShares: Double = amount / stockPrice
+  val numShares: Double = if (stockPrice == 0) 0 else amount / stockPrice
 }

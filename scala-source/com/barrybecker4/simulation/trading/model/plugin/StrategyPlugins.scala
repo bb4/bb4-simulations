@@ -35,7 +35,7 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
         valueMap += name -> strategy
       }
     }
-    println("Trading strategy plugins found: " + valueMap)
+    println("Trading strategy plugins found: " + valueMap.values.map(_.name).mkString(", "))
   } catch {
     case e@(_: AccessControlException | _: NullPointerException) =>
       // fallback to local strategies if cannot access filesystem (as for applet or webstart)
@@ -45,10 +45,11 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
         strategyNames.append(s.name)
         valueMap += s.name -> s
       }
-      println("default strategies are : " + valueMap)
+      println("default strategies are : " + valueMap.values.map(_.name).mkString(", "))
     case e@(_: ClassNotFoundException | _: InstantiationException | _: IOException | _: IllegalAccessException) =>
       e.printStackTrace()
   }
+  println("strategyNames = " + strategyNames.mkString(", "))
 
   def getStrategies: Seq[String] = strategyNames
 

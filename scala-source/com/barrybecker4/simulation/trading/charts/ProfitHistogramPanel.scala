@@ -29,8 +29,9 @@ class ProfitHistogramPanel extends JPanel {
     val xLogScale = 3 * graphingOpts.histogramXResolution * graphingOpts.histogramXResolution
     val maxX = (maxGain / xScale).toInt
     // go from domain to bin index
-    val xFunction = if (graphingOpts.histogramUseLogScale) new LogFunction(xLogScale, 10.0, false)
-    else new LinearFunction(1 / (1.5 * xScale), maxX / 4.0)
+    val xFunction =
+      if (graphingOpts.histogramUseLogScale) new LogFunction(xLogScale, 10.0, false)
+      else new LinearFunction(1 / (1.5 * xScale), maxX / 4.0)
     val data = new Array[Int](maxX + 1)
     histogram = new HistogramRenderer(data, xFunction)
     histogram.setXFormatter(new CurrencyFormatter)

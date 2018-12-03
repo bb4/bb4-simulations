@@ -20,6 +20,7 @@ trait TradingStrategy extends StrategyPlugin {
   def initialInvestment(stockPrice: Double, startingTotal: Double,
                         startingInvestmentPercent: Double): MarketPosition = {
     this.startingTotal = startingTotal
+    assert(stockPrice > 0)
     invested = startingInvestmentPercent * startingTotal
     sharesOwned = invested / stockPrice
     reserve = startingTotal - invested
@@ -42,7 +43,9 @@ trait TradingStrategy extends StrategyPlugin {
 
   /** buy some shares */
   protected def buy(amountToInvest: Double, stockPrice: Double): Unit = {
+    assert(amountToInvest > 0, "The amount to invest must be > 0. It was " + amountToInvest)
     assert(amountToInvest <= reserve)
+    assert(stockPrice > 0, "The stockPrice needs to be > 0. It was " + stockPrice)
     reserve -= amountToInvest
     val sharesToBuy = amountToInvest / stockPrice
     //println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
@@ -60,7 +63,7 @@ trait TradingStrategy extends StrategyPlugin {
     reserve += sharesToSell * stockPrice
     invested = sharesOwned * stockPrice
     priceAtLastTransaction = stockPrice
-    //println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice);
+    //println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice)
   }
 
   /** The UI to allow the user to configure the options */

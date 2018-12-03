@@ -48,7 +48,7 @@ class TradingSimulator() extends Simulator("Stock Market Simulation") {
 
   def setOptions(stockSampleOpts: StockGenerationOptions, tradingOpts: TradingOptions,
                  graphingOpts: GraphingOptions) {
-    generationOpts = stockSampleOpts
+    this.generationOpts = stockSampleOpts
     this.tradingOpts = tradingOpts
     this.graphingOpts = graphingOpts
     update()
