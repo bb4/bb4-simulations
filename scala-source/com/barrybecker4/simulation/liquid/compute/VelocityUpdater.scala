@@ -64,7 +64,7 @@ class VelocityUpdater {
       val newu = cell.getU + dt * pf
       /*
         if (Math.abs(pf) > 10) {
-            System.out.println("much bigger x change than expected. oldu ="
+            println("much bigger x change than expected. oldu ="
               + uip_[current_] + " newu="+ newu
                     + " forceX=" + forceX + " forceY="+forceY
                     + "\ncXp1=" + cXp1 + " cXm1=" + cXm1
@@ -94,7 +94,7 @@ class VelocityUpdater {
       val newv = cell.getV + dt * pf
       /*
       if (Math.abs(pf) > 5.0) {
-          System.out.println("much bigger y change than expected. oldv ="
+          println("much bigger y change than expected. oldv ="
                 + vjp_[current_] + " newv="+ newv
                   + "\nforceX=" + forceX + " forceY="+forceY
                   + "\ncXp1=" + cXp1 + " cXm1=" + cXm1

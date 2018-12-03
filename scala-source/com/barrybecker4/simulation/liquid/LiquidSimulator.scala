@@ -113,7 +113,7 @@ class LiquidSimulator()
   }
 
   override def mouseClicked(e: MouseEvent) {
-    //System.out.println("mclick timeStep="+ timeStep_ );
+    //println("mclick timeStep="+ timeStep_ );
     environment.stepForward(tStep)
     this.repaint()
   }

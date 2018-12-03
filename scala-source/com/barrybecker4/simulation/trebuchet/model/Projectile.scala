@@ -63,7 +63,7 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
     position.set(position.x + SCALE_FACTOR * timeStep * velocity.x, position.y + SCALE_FACTOR * timeStep * velocity.y)
     if (isOnRamp && position.y < -4) {
       isOnRamp = false
-      System.out.println("*********** no longer on ramp!")
+      println("*********** no longer on ramp!")
     }
   }
 

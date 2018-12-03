@@ -80,7 +80,7 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
       force.scale(k * (lengthDiff + 100000.0 * (halfEffectiveL - length)) / halfEffectiveL - damp)
     }
     else { //if (d>1.0)
-      //   System.out.println("f="+k*(effectiveLength-length)+" - d="+d);
+      //   println("f="+k*(effectiveLength-length)+" - d="+d);
       force.scale(k * (effectiveLength - length) - damp)
     }
     force

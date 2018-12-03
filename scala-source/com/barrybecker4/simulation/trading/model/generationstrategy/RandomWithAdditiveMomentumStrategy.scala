@@ -9,16 +9,18 @@ import java.awt._
 object RandomWithAdditiveMomentumStrategy {
   private val DEFAULT_PERCENT_INCREASE = 0.04
   private val DEFAULT_PERCENT_DECREASE = 0.03
-  private val DEFAULT_MOMENTUM_FACTOR = 1.0
+  private val DEFAULT_MOMENTUM_FACTOR = 0.9
 }
 
 /**
   * @author Barry Becker
   */
 class RandomWithAdditiveMomentumStrategy extends GenerationStrategy {
+
   var percentIncrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_DECREASE
   var momentumFactor: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_MOMENTUM_FACTOR
+
   private var lastPercentChange: Double = 0
   /** Amount to increase after each time period if heads   */
   private var percentIncreaseField: NumberInput = _
@@ -27,7 +29,7 @@ class RandomWithAdditiveMomentumStrategy extends GenerationStrategy {
   private var momentumFactorField: NumberInput = _
 
   override def name = "random additive momentum"
-  override def description = "The random movement at each step is added to " +
+  override def description: String = "The random movement at each step is added to " +
     "momentumFactor time the random movement at the last step."
 
   override def calcNewPrice(stockPrice: Double): Double = {

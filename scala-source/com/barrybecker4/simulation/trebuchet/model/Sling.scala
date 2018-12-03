@@ -60,7 +60,7 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
   def getAngleWithLever: Double = {
     val leverAngleWithHorz = PI / 2.0 - angle
     val slingAngleWithHorz = getAngleWithHorz
-    //System.out.println("slingAngle = leverAngleWithHorz("+leverAngleWithHorz+") "
+    //println("slingAngle = leverAngleWithHorz("+leverAngleWithHorz+") "
     // + "  slingAngleWithHorz("+ slingAngleWithHorz+") =  "+(leverAngleWithHorz + slingAngleWithHorz));
     leverAngleWithHorz - slingAngleWithHorz
   }
@@ -70,7 +70,7 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     val deltaY = projectile.getY - hookPos.y
     val deltaX = projectile.getX - hookPos.x
     var theAngle = atan(deltaY / deltaX)
-    //System.out.println("angle=  "+angle);
+    //println("angle=  "+angle);
     if (deltaX < 0 || angle > PI / 2) theAngle += PI
     -theAngle
   }

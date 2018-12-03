@@ -34,6 +34,10 @@ class OptionsDialog(parent: Component, simulator: Simulator) extends SimulatorOp
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[TradingSimulator]
-    simulator.setOptions(stockGenerationOptionsPanel.getOptions, tradingOptionsPanel.getOptions, graphingOptionsPanel.getOptions)
+    simulator.setOptions(
+      stockGenerationOptionsPanel.getOptions,
+      tradingOptionsPanel.getOptions,
+      graphingOptionsPanel.getOptions
+    )
   }
 }

@@ -10,15 +10,15 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
 
 
-/**
-  * Shows series of generated stock market simulations represented as height functions.
-  * @author Barry Becker
-  */
 object StockChartPanel {
   /** Sometimes the numbers on the x axis can get very large. If this is large, there will be fewer labels shown. */
   private val LABEL_WIDTH = 70
 }
 
+/**
+  * Shows series of generated stock market simulations represented as height functions.
+  * @author Barry Becker
+  */
 class StockChartPanel() extends JPanel {
   val functions = List[Function]()
   private val stockChart = new MultipleFunctionRenderer(functions)

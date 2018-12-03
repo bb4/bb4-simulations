@@ -48,7 +48,9 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
     "Initial investment is never sold, but a fixed percentage is bought when market drops, " +
     "and that same amount is then sold when market rises some threshold above the price that it was bought at."
 
-  override def initialInvestment(stockPrice: Double, startingTotal: Double, startingInvestmentPercent: Double): MarketPosition = {
+  override def initialInvestment(stockPrice: Double,
+                                 startingTotal: Double,
+                                 startingInvestmentPercent: Double): MarketPosition = {
     fixedPurchaseAmount = fixedPurchasePercent * startingTotal
     transactions = Seq[Transaction]() //(100)
     super.initialInvestment(stockPrice, startingTotal, startingInvestmentPercent)
@@ -57,7 +59,8 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
   /**
     * if this new price triggers a transaction, then do it
     */
-  override def updateInvestment(stockPrice: Double): MarketPosition = { // loop through all the buys and see if any of them are ready to sell.
+  override def updateInvestment(stockPrice: Double): MarketPosition = {
+    // loop through all the buys and see if any of them are ready to sell.
     transactions = transactions.filter(trans => {
       val sellIt = stockPrice >= (1.0 + gainThresholdPct) * trans.stockPrice
       if (sellIt) sell(Math.max(trans.numShares, sharesOwned), stockPrice)
@@ -78,9 +81,19 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
     val strategyPanel = new JPanel
     strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS))
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
-    fixedPurchasePctField = new NumberInput("Fixed purchase percent: ", 100 * gainThresholdPct, "This is the fixed amount that is bought and sold at each transaction," + " specified as a percent of the starting amount.", 0, 100, false)
-    gainThresholdField = new NumberInput("Gain threshold percent: ", 100 * gainThresholdPct, "Triggers a sale if market goes up by this much.", 0, 100, false)
-    lossThresholdField = new NumberInput("Loss threshold percent: ", 100 * gainThresholdPct, "Triggers a buy if market goes down by this much from last transaction.", 0, 100, false)
+    fixedPurchasePctField = new NumberInput("Fixed purchase percent: ",
+      100 * gainThresholdPct,
+      "This is the fixed amount that is bought and sold at each transaction," +
+        " specified as a percent of the starting amount.",
+      0, 100, false)
+    gainThresholdField = new NumberInput("Gain threshold percent: ",
+      100 * gainThresholdPct,
+      "Triggers a sale if market goes up by this much.",
+      0, 100, false)
+    lossThresholdField = new NumberInput("Loss threshold percent: ",
+      100 * gainThresholdPct,
+      "Triggers a buy if market goes down by this much from last transaction.",
+      0, 100, false)
     fixedPurchasePctField.setAlignmentX(Component.CENTER_ALIGNMENT)
     gainThresholdField.setAlignmentX(Component.CENTER_ALIGNMENT)
     lossThresholdField.setAlignmentX(Component.CENTER_ALIGNMENT)

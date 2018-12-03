@@ -179,7 +179,7 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
       stable = snake.isStable
     }
     if (!stable) {
-      System.out.println("SnakeSim unstable")
+      println("SnakeSim unstable")
       100000.0
     }
     else 1.0 / oldVelocity

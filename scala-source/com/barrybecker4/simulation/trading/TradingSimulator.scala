@@ -46,7 +46,8 @@ class TradingSimulator() extends Simulator("Stock Market Simulation") {
   private var graphingOpts = new GraphingOptions
   initUI()
 
-  def setOptions(stockSampleOpts: StockGenerationOptions, tradingOpts: TradingOptions, graphingOpts: GraphingOptions) {
+  def setOptions(stockSampleOpts: StockGenerationOptions, tradingOpts: TradingOptions,
+                 graphingOpts: GraphingOptions) {
     generationOpts = stockSampleOpts
     this.tradingOpts = tradingOpts
     this.graphingOpts = graphingOpts

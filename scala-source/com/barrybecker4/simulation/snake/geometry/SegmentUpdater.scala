@@ -153,7 +153,7 @@ class SegmentUpdater() {
         velocityVec.set(particles(i).velocity)
         changeVec.set(particles(i).acceleration)
         changeVec.scale(timeStep)
-        if (changeVec.length > 100.0) { //System.out.println("becoming unstable vel mag="+changeVec.magnitude());
+        if (changeVec.length > 100.0) { //println("becoming unstable vel mag="+changeVec.magnitude());
           unstable = true
         }
         velocityVec.add(changeVec)

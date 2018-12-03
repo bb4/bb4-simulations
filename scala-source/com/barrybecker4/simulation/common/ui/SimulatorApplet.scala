@@ -17,7 +17,7 @@ import java.util
   */
 object SimulatorApplet {
   private val RUN_OPTIMIZATION = false
-  private val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer1.FractalExplorer"
+  private val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"
 
   private def createSimulationFromClassName(className: String): Simulator = {
     if (className == null) return null
@@ -41,7 +41,7 @@ object SimulatorApplet {
     var simulatorClassName = DEFAULT_SIMULATOR
     if (args.length == 1) simulatorClassName = args(0)
     else if (args.length > 1) simulatorClassName = args(1)
-    System.out.println("ARGS = " + args.mkString(", "))
+    println("ARGS = " + args.mkString(", "))
     val applet = new SimulatorApplet(args, simulatorClassName)
     GUIUtil.showApplet(applet)
   }
@@ -93,5 +93,3 @@ class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationAp
     this.repaint()
   }
 }
-
-

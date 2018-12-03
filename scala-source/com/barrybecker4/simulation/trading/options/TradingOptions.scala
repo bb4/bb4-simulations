@@ -1,13 +1,11 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.options
 
-import com.barrybecker4.simulation.trading.TradingSimulator
 import com.barrybecker4.simulation.trading.model.tradingstrategy.{BuyAndHoldStrategy, TradingStrategy}
 
 
 /**
   * Stock trading strategy options and default values.
-  *
   * @author Barry Becker
   */
 object TradingOptions {

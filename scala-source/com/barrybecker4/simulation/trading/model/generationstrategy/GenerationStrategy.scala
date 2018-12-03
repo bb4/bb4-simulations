@@ -10,8 +10,6 @@ import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugin
   * Defines how a stock series should be generated.
   * There are various strategies that we might employ varying from simple to sophisticated.
   * The default naive strategy puts everything in the market at the start and sells it all at the end.
-  *
-  *
   * @author Barry Becker
   */
 trait GenerationStrategy extends StrategyPlugin {

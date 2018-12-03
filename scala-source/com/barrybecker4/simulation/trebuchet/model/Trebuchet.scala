@@ -96,13 +96,13 @@ class Trebuchet() {
     }
     RenderablePart.angle = angle
     RenderablePart.angularVelocity = angularVelocity
-    //System.out.println("angle="+angle+"  angularVelocity_="
+    //println("angle="+angle+"  angularVelocity_="
     //  +angularVelocity +" angularAcceleration="+angularAcceleration);
     // calculate the forces acting on the projectile.
     // the magnitude of the tangential force at the hook
     if (!projectile.isReleased) {
       val tangentialForceAtHook = torque / lever.getSlingLeverLength
-      //System.out.println("tangentialForceAtHook="+tangentialForceAtHook);
+      //println("tangentialForceAtHook="+tangentialForceAtHook);
       val slingAngleWithHorz = sling.getAngleWithHorz
       forceFromHook.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz)) //sin(PI - angle), -cos(PI + angle));
 

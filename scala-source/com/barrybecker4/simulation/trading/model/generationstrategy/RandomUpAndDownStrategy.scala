@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.generationstrategy
 
 import com.barrybecker4.ui.components.NumberInput
@@ -7,15 +7,15 @@ import java.awt._
 import RandomUpAndDownStrategy._
 
 
-/**
-  * @author Barry Becker
-  */
 object RandomUpAndDownStrategy {
   private val DEFAULT_PERCENT_INCREASE = 0.04
   private val DEFAULT_PERCENT_DECREASE = 0.03
   private val DEFAULT_USE_RANDOM_CHANGE = true
 }
 
+/**
+  * @author Barry Becker
+  */
 class RandomUpAndDownStrategy extends GenerationStrategy {
   var percentIncrease: Double = DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = DEFAULT_PERCENT_DECREASE

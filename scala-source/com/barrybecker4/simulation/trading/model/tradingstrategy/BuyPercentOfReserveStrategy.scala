@@ -46,9 +46,11 @@ class BuyPercentOfReserveStrategy extends TradingStrategy {
     val strategyPanel = new JPanel(new BorderLayout)
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
     gainPolicyPanel = new ChangePolicyPanel(
-      "% gain which triggers next transaction", "% of current investment to sell on gain", gainPolicy)
+      "% gain which triggers next transaction",
+      "% of current investment to sell on gain", gainPolicy)
     lossPolicyPanel = new ChangePolicyPanel(
-      "% market loss which triggers next transaction", "% of current reserve to use to buy on loss", lossPolicy)
+      "% market loss which triggers next transaction",
+      "% of current reserve to use to buy on loss", lossPolicy)
     gainPolicyPanel.setAlignmentX(Component.CENTER_ALIGNMENT)
     lossPolicyPanel.setAlignmentX(Component.CENTER_ALIGNMENT)
     strategyPanel.add(gainPolicyPanel, BorderLayout.NORTH)

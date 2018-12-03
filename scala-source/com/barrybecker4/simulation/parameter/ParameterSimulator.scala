@@ -55,7 +55,7 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
 
   override protected def getXPositionToIncrement: Double = {
     if (showRedistribution) parameter.randomizeValue(MathUtil.RANDOM)
-    else { //System.out.println("parameter.getRange()="+parameter.getRange());
+    else { //println("parameter.getRange()="+parameter.getRange());
       //double scale = parameter.isIntegerOnly()?  parameter.getRange() +1.0 : parameter.getRange();
       val scale = parameter.range
       val v = parameter.minValue + MathUtil.RANDOM.nextDouble * scale

@@ -40,8 +40,14 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
   private var strategyCombo: JComboBox[String] = _
   private val tradingPlugins = new StrategyPlugins[TradingStrategy](
     "com.barrybecker4.simulation.trading.model.tradingstrategy",
-    classOf[TradingStrategy], util.Arrays.asList(new BuyAndHoldStrategy,
-      new BuyPercentOfInvestmentStrategy, new BuyPercentOfReserveStrategy, new SellWhatWasBoughtStrategy))
+    classOf[TradingStrategy],
+    Seq(
+      new BuyAndHoldStrategy,
+      new BuyPercentOfInvestmentStrategy,
+      new BuyPercentOfReserveStrategy,
+      new SellWhatWasBoughtStrategy
+    )
+  )
 
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private var strategyOptionsPanel = new JPanel(new BorderLayout)
@@ -61,8 +67,7 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
     val label = new JLabel("Trading strategy : ")
     val choices = tradingPlugins.getStrategies
 
-    val ch = choices.toArray(new Array[String](choices.size))
-    strategyCombo = new JComboBox[String](ch)
+    strategyCombo = new JComboBox[String](choices.map(_.toString).toArray)
     strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.name)
     tradingOptions.tradingStrategy = getCurrentlySelectedStrategy
     strategyCombo.addItemListener(this)
@@ -94,8 +99,8 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
     tradingPlugins.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String])
 
   private def setStrategyTooltip(): Unit = {
-    System.out.println("selected = " + strategyCombo.getSelectedItem)
-    System.out.println("plugins = " + tradingPlugins)
+    println("selected = " + strategyCombo.getSelectedItem)
+    println("plugins = " + tradingPlugins)
     strategyCombo.setToolTipText(
       tradingPlugins.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String]).description)
   }

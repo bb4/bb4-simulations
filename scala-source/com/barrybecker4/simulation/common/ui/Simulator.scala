@@ -100,7 +100,7 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
   override protected def getStatusMessage: String = "frames/second=" + FormatUtil.formatNumber(getFrameRate)
 
   def doOptimization(): Unit = {
-    System.out.println("not implemented for this simulator")
+    println("not implemented for this simulator")
   }
 
   override def evaluateByComparison = false

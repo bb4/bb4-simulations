@@ -31,11 +31,13 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
   /** number of dice to use.  */
   private val numStocksField = new NumberInput("Number of stocks in each sample (1 - 1000): ",
     generationOptions.numStocks,
-    "The number of stocks in each trial. The average value of which will be one data point.", 1, 1000, true)
+    "The number of stocks in each trial. The average value of which will be one data point.",
+    1, 1000, true)
 
   /** Number of time periods (for example months or years)  */
   private val numTimePeriodsField  = new NumberInput("Number of time periods (1 - 1000): ",
-    generationOptions.numTimePeriods, "Number of time periods (for example months or years).", 1, 1000, true)
+    generationOptions.numTimePeriods, "Number of time periods (for example months or years).",
+    1, 1000, true)
   /** Starting value of each stock in dollars  */
   private val startingValueField = new NumberInput("Starting stock value : ", generationOptions.startingValue,
     "Starting value of each stock in the sample (in dollars). For simplicity, they are all the same.",
@@ -50,7 +52,7 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
     new StrategyPlugins[GenerationStrategy](
       "com.barrybecker4.simulation.trading.model.generationstrategy",
       classOf[GenerationStrategy],
-      util.Arrays.asList(
+      Seq(
         new FlatStrategy,
         new GaussianStrategy,
         new SineStrategy,
@@ -60,7 +62,8 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
 
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private val strategyOptionsPanel = new JPanel(new BorderLayout)
-  strategyOptionsPanel.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground))
+  strategyOptionsPanel.setBorder(
+    BorderFactory.createMatteBorder(0, 5, 0, 0, this.getBackground))
   strategyOptionsPanel.add(generationOptions.generationStrategy.getOptionsUI, BorderLayout.CENTER)
   add(numStocksField)
   add(numTimePeriodsField)
@@ -77,7 +80,7 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
 
     val choices = generationStrategies.getStrategies
     println("generation strategies: " + choices)
-    generationStrategyCombo = new JComboBox[String](choices.toArray(new Array[String](choices.size)))
+    generationStrategyCombo = new JComboBox[String](choices.map(_.toString).toArray)
 
     println("Default generation strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY)
     generationStrategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)

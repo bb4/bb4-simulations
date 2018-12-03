@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.trading.model.generationstrategy.{GenerationS
 /**
   * Defaults for stock time series generation.
   * A single stock or a collection of stocks can be simulated.
-  *
   * @author Barry Becker
   */
 object StockGenerationOptions {

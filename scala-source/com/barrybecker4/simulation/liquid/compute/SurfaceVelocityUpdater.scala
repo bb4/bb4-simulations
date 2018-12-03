@@ -74,7 +74,7 @@ class SurfaceVelocityUpdater(var pressure0: Double) {
     */
   private def dissipateOverflow(cell: Cell, numSurfaces: Int, overflow: Double, neighbors: CellNeighbors) = {
     if (Math.abs(overflow) > 100)
-      System.out.println("dissipating large overflow =" + overflow)
+      println("dissipating large overflow =" + overflow)
     var count = 0
     val overflowX = dims.dx * overflow / numSurfaces
     val overflowY = dims.dy * overflow / numSurfaces

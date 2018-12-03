@@ -164,7 +164,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
       //stable = trebuchet_.isStable();
     }
     if (!stable) {
-      System.out.println("Trebuchet Sim unstable")
+      println("Trebuchet Sim unstable")
       10000.0
     }
     else 1.0 / oldVelocity

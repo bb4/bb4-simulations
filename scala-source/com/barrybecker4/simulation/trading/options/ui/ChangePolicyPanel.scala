@@ -20,12 +20,14 @@ class ChangePolicyPanel(val threshChangePercentLabel: String, val transactPercen
   /** The % market gain/loss necessary to trigger next transaction. */
   private var thresholdChangePercentField =
     new NumberInput(threshChangePercentLabel, defaultPolicy.changePercent * 100,
-      "When gain/loss percent happens, execute the specified transaction.", 0, 100, false)
+      "When gain/loss percent happens, execute the specified transaction.",
+      0, 100, false)
 
   /** Percent of current investment/reserve to sell/buy when threshold reached.  */
   private var transactPercentField =
     new NumberInput(transactPercentLabel, defaultPolicy.transactPercent * 100,
-      "Percent of current investment/reserve to sell/buy when threshold reached. ", -100, 100, false)
+      "Percent of current investment/reserve to sell/buy when threshold reached. ",
+      -100, 100, false)
 
   panel.add(thresholdChangePercentField)
   panel.add(transactPercentField)

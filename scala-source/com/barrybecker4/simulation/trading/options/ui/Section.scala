@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.trading.options.ui
 
 import javax.swing._
 import javax.swing.border.Border
+import BorderFactory._
 import java.awt._
 
 
@@ -16,12 +17,12 @@ object Section {
   private val MATTE_COLOR = new Color(40, 70, 180, 0)
 
   def createBorder(title: String): Border =
-    BorderFactory.createCompoundBorder(
-      BorderFactory.createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, OUTER_MARGIN_COLOR),
-      BorderFactory.createCompoundBorder(
-        BorderFactory.createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, MATTE_COLOR),
-        BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(title),
-          BorderFactory.createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, MATTE_COLOR)
+    createCompoundBorder(
+      createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, OUTER_MARGIN_COLOR),
+      createCompoundBorder(
+        createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, MATTE_COLOR),
+        createCompoundBorder(BorderFactory.createTitledBorder(title),
+          createMatteBorder(VERT_MARGIN, HORZ_MARGIN, VERT_MARGIN, HORZ_MARGIN, MATTE_COLOR)
         )
       )
     )

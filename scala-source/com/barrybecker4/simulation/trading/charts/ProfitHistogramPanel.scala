@@ -10,18 +10,17 @@ import javax.swing._
 import java.awt._
 
 
-/**
-  * Show histogram of expected profit distribution given current strategy.
-  * @author Barry Becker
-  */
 object ProfitHistogramPanel {
-  /**
-    * Sometime the numbers on the x axis can get very large. Scientific notation is used in those cases.
+  /** Sometimes the numbers on the x axis can get very large. Scientific notation is used in those cases.
     * If this is large, there will be fewer labels shown.
     */
   private val LABEL_WIDTH = 70
 }
 
+/**
+  * Show histogram of expected profit distribution given current strategy.
+  * @author Barry Becker
+  */
 class ProfitHistogramPanel extends JPanel {
   private var histogram: HistogramRenderer = _
 

@@ -66,9 +66,11 @@ class InvestmentChartPanel()
       InvestmentChartPanel.LEGEND_Y + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
       InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
     g2.setColor(InvestmentChartPanel.TEXT_COLOR)
-    g2.drawString("Investment amount", InvestmentChartPanel.LEGEND_X + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
+    g2.drawString("Investment amount",
+      InvestmentChartPanel.LEGEND_X + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
       InvestmentChartPanel.LEGEND_Y + 10)
-    g2.drawString("Reserve amount", InvestmentChartPanel.LEGEND_X + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
+    g2.drawString("Reserve amount",
+      InvestmentChartPanel.LEGEND_X + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
       InvestmentChartPanel.LEGEND_Y + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 20)
   }
 }

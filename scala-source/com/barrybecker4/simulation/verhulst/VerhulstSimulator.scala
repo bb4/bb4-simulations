@@ -44,7 +44,7 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
   override def timeStep: Double = {
     iteration += 1
     val newPop = rabbits.getPopulation * ((1.0 + rabbits.birthRate) - rabbits.birthRate * rabbits.getPopulation)
-    //System.out.println("pop="+ newPop + " rate="+ rabbits.birthRate);
+    //println("pop="+ newPop + " rate="+ rabbits.birthRate);
     rabbits.setPopulation(newPop)
     rabbitFunction.addValue(iteration, rabbits.getPopulation)
     tStep

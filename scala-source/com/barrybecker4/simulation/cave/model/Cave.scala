@@ -73,7 +73,7 @@ class Cave(val width: Int, val length: Int,
     else 'W'
   }
 
-  def print() {System.out.println(this.toString)}
+  def print() {println(this.toString)}
 
   override def toString: String = {
     val bldr = new StringBuilder

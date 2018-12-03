@@ -64,7 +64,7 @@ class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends 
     else if (mouse3Down) { // if the right mouse is down, add ink (density)
       grid.incrementDensity(i, j, weight * sourceDensity)
     }
-    else System.out.println("dragged with no button down")
+    else println("dragged with no button down")
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {

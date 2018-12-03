@@ -60,7 +60,7 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     val sim = getSimulator
     val selected = algorithmChoice.getSelectedIndex
     sim.setAlgorithm(AlgorithmEnum.VALUES(selected))
-    System.out.println("from field seed = " + juliaSeedField.getValue)
+    println("from field seed = " + juliaSeedField.getValue)
     sim.setJuliaSeed(juliaSeedField.getValue)
     this.setVisible(false)
     sim.repaint()
