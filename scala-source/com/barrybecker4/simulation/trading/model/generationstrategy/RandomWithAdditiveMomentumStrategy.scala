@@ -15,7 +15,7 @@ object RandomWithAdditiveMomentumStrategy {
 /**
   * @author Barry Becker
   */
-class RandomWithAdditiveMomentumStrategy extends GenerationStrategy {
+class RandomWithAdditiveMomentumStrategy extends IncrementalGenerationStrategy {
 
   var percentIncrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_DECREASE

@@ -12,37 +12,37 @@ import com.barrybecker4.simulation.trading.options.TradingOptions
   * @author Barry Becker
   */
 class StockRunner(var tradingOpts: TradingOptions) {
-  /**
-    * @return everything about the run including the time series for the stock, the amounts invested in the stock and
+
+  /** @return everything about the run including the time series for the stock, the amounts invested in the stock and
     *         in the reserve account, and the amount of gain (or loss if negative) achieved by applying a certain
     *         trading strategy to a generated time series simulating a changing stock price over time.
     */
   def doRun(generationOpts: StockGenerationOptions): StockRunResult = {
     val generationStrategy = generationOpts.generationStrategy
     val tradingStrategy = tradingOpts.tradingStrategy
-    var stockPrice: Double = generationOpts.startingValue
     val numPeriods = generationOpts.numTimePeriods
+
     // initial buy
-    var position = tradingStrategy.initialInvestment(stockPrice,
+    val stockPrices = generationStrategy.getSeries(generationOpts.startingValue, numPeriods)
+    var position = tradingStrategy.initialInvestment(stockPrices(0),
       tradingOpts.startingTotal, tradingOpts.startingInvestmentPercent)
-    val yValues = new Array[Double](numPeriods + 1)
     val investValues = new Array[Double](numPeriods + 1)
     val reserveValues = new Array[Double](numPeriods + 1)
+
+
     for (i <- 0 until numPeriods) {
-      yValues(i) = stockPrice
       investValues(i) = position.invested
       reserveValues(i) = position.reserve
-      stockPrice = generationStrategy.calcNewPrice(stockPrice)
-      position = tradingStrategy.updateInvestment(stockPrice)
+      position = tradingStrategy.updateInvestment(stockPrices(i))
     }
-    position = tradingStrategy.finalizeInvestment(stockPrice)
-    yValues(numPeriods) = stockPrice
+    position = tradingStrategy.finalizeInvestment(stockPrices(numPeriods))
     investValues(numPeriods) = 0
     reserveValues(numPeriods) = position.reserve
     //println("*** final sell = " + finalSell
     //        + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
+
     new StockRunResult(
-      new HeightFunction(yValues),
+      new HeightFunction(stockPrices.toArray),
       new HeightFunction(investValues),
       new HeightFunction(reserveValues), tradingStrategy.getGain)
   }

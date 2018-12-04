@@ -13,7 +13,13 @@ import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugin
   * @author Barry Becker
   */
 trait GenerationStrategy extends StrategyPlugin {
-  def calcNewPrice(stockPrice: Double): Double
+
+  /**
+    * @param initialPrice initial price is usually needed by most strategies
+    * @param numSteps the array returned will have numSteps + 1.
+    * @return the series of prices (one per day)
+    */
+  def getSeries(initialPrice: Double, numSteps: Int): IndexedSeq[Double]
 
   /** The UI to allow the user to configure the generation options */
   def getOptionsUI: JPanel = new JPanel

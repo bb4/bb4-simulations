@@ -16,14 +16,18 @@ object RandomUpAndDownStrategy {
 /**
   * @author Barry Becker
   */
-class RandomUpAndDownStrategy extends GenerationStrategy {
+class RandomUpAndDownStrategy extends IncrementalGenerationStrategy {
+
   var percentIncrease: Double = DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = DEFAULT_PERCENT_DECREASE
   var useRandomChange: Boolean = DEFAULT_USE_RANDOM_CHANGE
+
   /** Amount to increase after each time period if heads   */
   private var percentIncreaseField: NumberInput = _
+
   /** Amount to decrease after each time period if tails  */
   private var percentDecreaseField: NumberInput = _
+
   /** if true changes are between 0 and percent change. */
   private var useRandomChangeCB: JCheckBox = _
 

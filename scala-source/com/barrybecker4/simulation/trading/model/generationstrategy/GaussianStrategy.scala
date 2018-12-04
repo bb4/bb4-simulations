@@ -15,7 +15,7 @@ object GaussianStrategy {
 /**
   * @author Barry Becker
   */
-class GaussianStrategy extends GenerationStrategy {
+class GaussianStrategy extends IncrementalGenerationStrategy {
 
   var mean: Double = GaussianStrategy.DEFAULT_MEAN
   var variance: Double = GaussianStrategy.DEFAULT_VARIANCE
