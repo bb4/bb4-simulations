@@ -32,11 +32,13 @@ class BuyPercentOfInvestmentStrategy extends TradingStrategy {
     val pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction
     if (pctChange >= gainPolicy.changePercent) { // sell, and take some profit. Assume we can sell partial shares
       val sharesToSell = Math.min(sharesOwned, gainPolicy.transactPercent * reserve / stockPrice)
-      sell(sharesToSell, stockPrice)
+      if (sharesToSell > 0)
+        sell(sharesToSell, stockPrice)
     }
     else if (-pctChange >= lossPolicy.changePercent) { // buy more because its cheaper
       val amountToInvest = Math.min(reserve, lossPolicy.transactPercent * sharesOwned * stockPrice)
-      buy(amountToInvest, stockPrice)
+      if (amountToInvest > 0)
+        buy(amountToInvest, stockPrice)
     }
     MarketPosition(invested, reserve, sharesOwned)
   }
