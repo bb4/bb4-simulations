@@ -21,13 +21,13 @@ object InvestmentChartPanel {
   private val LEGEND_X = 140
   private val LEGEND_Y = 10
   private val LEGEND_SWATCH_SIZE = 12
+  private val FORMATTER = new CurrencyFormatter
 }
 
 class InvestmentChartPanel()
   extends JPanel {
   val functions = List[Function]()
   private var investmentChart = new MultipleFunctionRenderer(functions)
-  investmentChart.setXFormatter(new CurrencyFormatter)
   private val series = new StockSeries(20)
 
   def addSeries(investmentFunction: Function, reserveFunction: Function): Unit = {
@@ -40,7 +40,7 @@ class InvestmentChartPanel()
       val color = if (i % 2 == 0) InvestmentChartPanel.INVESTMENT_COLOR else InvestmentChartPanel.RESERVE_COLOR
       lineColors :+= color
     }
-    investmentChart.setFunctions(series, lineColors)
+    investmentChart = new MultipleFunctionRenderer(series, Some(lineColors))
   }
 
   def clear(numRecentSeries: Int): Unit = { series.clear(numRecentSeries) }

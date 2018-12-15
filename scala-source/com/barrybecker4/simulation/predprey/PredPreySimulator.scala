@@ -81,7 +81,7 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     //functions.add(lionFunction);
     val lineColors = List[Color](Rabbits.COLOR, Foxes.COLOR)
     //lineColors.add(Lions.COLOR);
-    graph = new MultipleFunctionRenderer(functions, lineColors)
+    graph = new MultipleFunctionRenderer(functions, Some(lineColors))
   }
 
   override def createDynamicControls: JPanel = {

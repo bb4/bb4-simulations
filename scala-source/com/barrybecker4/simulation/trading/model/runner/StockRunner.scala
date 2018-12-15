@@ -1,9 +1,10 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2017 - 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.runner
 
 import com.barrybecker4.common.math.function.HeightFunction
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions
 import com.barrybecker4.simulation.trading.options.TradingOptions
+import com.barrybecker4.common.math.Range
 
 
 /**
@@ -29,7 +30,6 @@ class StockRunner(var tradingOpts: TradingOptions) {
     val investValues = new Array[Double](numPeriods + 1)
     val reserveValues = new Array[Double](numPeriods + 1)
 
-
     for (i <- 0 until numPeriods) {
       investValues(i) = position.invested
       reserveValues(i) = position.reserve
@@ -41,9 +41,10 @@ class StockRunner(var tradingOpts: TradingOptions) {
     //println("*** final sell = " + finalSell
     //        + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
 
+    val domain = Range(0.0, stockPrices.length.toDouble - 1.0) // Range(0, 1) //
     new StockRunResult(
-      new HeightFunction(stockPrices.toArray),
-      new HeightFunction(investValues),
-      new HeightFunction(reserveValues), tradingStrategy.getGain)
+      new HeightFunction(stockPrices.toArray, domain),
+      new HeightFunction(investValues, domain),
+      new HeightFunction(reserveValues, domain), tradingStrategy.getGain)
   }
 }

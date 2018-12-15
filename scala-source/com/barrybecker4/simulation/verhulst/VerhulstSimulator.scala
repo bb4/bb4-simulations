@@ -59,7 +59,7 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
     functions :+= rabbitFunction
     var lineColors = Seq[Color]()
     lineColors :+= Rabbits.COLOR
-    graph = new MultipleFunctionRenderer(functions, lineColors)
+    graph = new MultipleFunctionRenderer(functions, Some(lineColors))
   }
 
   override def createDynamicControls: JPanel = {

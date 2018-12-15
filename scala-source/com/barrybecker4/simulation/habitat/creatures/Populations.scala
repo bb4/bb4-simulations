@@ -56,7 +56,7 @@ abstract class Populations extends ArrayBuffer[Population] {
       lineColors +:= pop.creatureType.color
       functionMap += pop -> func
     }
-    new MultipleFunctionRenderer(functions, lineColors)
+    new MultipleFunctionRenderer(functions, Some(lineColors))
   }
 
   private def updateFunctions(iteration: Long) = {
