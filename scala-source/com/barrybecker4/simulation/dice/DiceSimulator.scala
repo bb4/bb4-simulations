@@ -8,7 +8,6 @@ import com.barrybecker4.common.math.function.LinearFunction
 import com.barrybecker4.simulation.common.ui.DistributionSimulator
 import com.barrybecker4.ui.renderers.HistogramRenderer
 import com.barrybecker4.ui.util.Log
-import java.util
 
 
 /**
@@ -43,7 +42,8 @@ class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
 
   override protected def initHistogram() {
     data = new Array[Int](options.numDice * (options.numSides - 1) + 1)
-    histogram = new HistogramRenderer(data, new LinearFunction(1.0, -options.numDice))
+    histogram =
+      new HistogramRenderer(data, new LinearFunction(1.0, -options.numDice), true)
     histogram.setXFormatter(new IntegerFormatter)
   }
 
