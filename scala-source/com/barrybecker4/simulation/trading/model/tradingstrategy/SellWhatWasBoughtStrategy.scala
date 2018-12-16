@@ -43,10 +43,12 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
   private var gainThresholdField: NumberInput = _
   private var lossThresholdField: NumberInput = _
 
-  override def name = "sell what was bought"
+  override def name = "Sell What Was Bought"
   override def description: String =
-    "Initial investment is never sold, but a fixed percentage is bought when market drops, " +
-    "and that same amount is then sold when market rises some threshold above the price that it was bought at."
+    s"Initial investment is never sold, but ${100 * fixedPurchasePercent}% " +
+      s"is bought when market drops ${100 * lossThresholdPct}%, " +
+    s"and that same amount is then sold when market rises ${100 * gainThresholdPct}% " +
+      s"above the price that it was bought at."
 
   override def initialInvestment(stockPrice: Double,
                                  startingTotal: Double,

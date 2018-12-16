@@ -31,10 +31,11 @@ class RandomUpAndDownStrategy extends IncrementalGenerationStrategy {
   /** if true changes are between 0 and percent change. */
   private var useRandomChangeCB: JCheckBox = _
 
-  override def name = "random ups and downs"
+  override def name = "Random Ups and Downs"
 
-  override def description: String = "Each time period the market goes up by some random percent or " +
-    "down some sandom percent, according to a coin toss."
+  override def description: String =
+    s"Each time period the market goes up by ${100 * percentIncrease}% or " +
+    s"down by ${100 * percentDecrease}%, according to a coin toss."
 
   override def calcNewPrice(stockPrice: Double): Double = {
     val percentChange = if (Math.random > 0.5) percentIncrease else -percentDecrease

@@ -7,17 +7,19 @@ import com.barrybecker4.ui.application.ApplicationApplet
 import com.barrybecker4.ui.util.GUIUtil
 import javax.swing.JPanel
 import java.awt.BorderLayout
-import java.util
+import SimulatorAppletConsts._
 
+object SimulatorAppletConsts {
+  val RUN_OPTIMIZATION = false
+  val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"
+}
 
 /**
   * Base class for all simulator applets.
   * Resizable applet for showing simulations.
   * @author Barry Becker
   */
-object SimulatorApplet {
-  private val RUN_OPTIMIZATION = false
-  private val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"
+object SimulatorApplet extends App {
 
   private def createSimulationFromClassName(className: String): Simulator = {
     if (className == null) return null
@@ -28,7 +30,6 @@ object SimulatorApplet {
     catch {
       case e: InstantiationException =>
         System.err.println("Could not create class for " + className) //NON-NLS
-
         e.printStackTrace()
       case e: IllegalAccessException =>
         e.printStackTrace()
@@ -36,20 +37,18 @@ object SimulatorApplet {
     simulator
   }
 
-  def main(args: Array[String]): Unit = { // create a simulator panel of the appropriate type based on the name of the class passed in.
-    // if no simulator is specified as an argument, then we use the default.
-    var simulatorClassName = DEFAULT_SIMULATOR
-    if (args.length == 1) simulatorClassName = args(0)
-    else if (args.length > 1) simulatorClassName = args(1)
-    println("ARGS = " + args.mkString(", "))
-    val applet = new SimulatorApplet(args, simulatorClassName)
-    GUIUtil.showApplet(applet)
-  }
+  // Create a simulator panel of the appropriate type based on the name of the class passed in.
+  // If no simulator is specified as an argument, then we use the default.
+  var simulatorClassName = DEFAULT_SIMULATOR
+  if (args.length == 1) simulatorClassName = args(0)
+  else if (args.length > 1) simulatorClassName = args(1)
+  println("ARGS = " + args.mkString(", "))
+  val applet = new SimulatorApplet(args, simulatorClassName)
+  GUIUtil.showApplet(applet)
 }
 
 /**
   * Construct the applet
-  *
   */
 class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationApplet(args) {
   private var simulator = sim
@@ -66,16 +65,14 @@ class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationAp
 
   override def getName: String = simulator.getName
 
-  /**
-    * create and initialize the simulation
+  /** Create and initialize the simulation
     * The top controls define common buttons like start / reset
     * There is an optional set of dynamic options on the right for modifying the simulation as it runs.
     */
   override def createMainPanel: JPanel = {
     if (simulator == null) {
       var className = getParameter("panel_class") //NON-NLS
-      className = if (className == null) SimulatorApplet.DEFAULT_SIMULATOR
-      else className
+      className = if (className == null) DEFAULT_SIMULATOR else className
       simulator = SimulatorApplet.createSimulationFromClassName(className)
     }
     val animPanel = new AnimationPanel(simulator)
@@ -89,7 +86,7 @@ class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationAp
   /** The applet's start method. */
   override def start(): Unit = {
     super.start()
-    if (SimulatorApplet.RUN_OPTIMIZATION) simulator.doOptimization()
+    if (RUN_OPTIMIZATION) simulator.doOptimization()
     this.repaint()
   }
 }

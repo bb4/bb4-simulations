@@ -28,15 +28,17 @@ class RandomWithAdditiveMomentumStrategy extends IncrementalGenerationStrategy {
   private var percentDecreaseField: NumberInput = _
   private var momentumFactorField: NumberInput = _
 
-  override def name = "random additive momentum"
-  override def description: String = "The random movement at each step is added to " +
-    "momentumFactor time the random movement at the last step."
+  override def name = "Random Additive Momentum"
+  override def description: String =
+    s"The random movement at each step (up ${100 * percentIncrease}%; down ${100 * percentDecrease}%) is added to " +
+    s"momentumFactor, $momentumFactor, times the random movement at the last step."
 
   override def calcNewPrice(stockPrice: Double): Double = {
     val percentChange = if (Math.random > 0.5) percentIncrease
     else -percentDecrease
     val newPercentChange = Math.random * percentChange
-    val actualPercentChange: Double = momentumFactor * lastPercentChange + (1.0 - momentumFactor) * newPercentChange
+    val actualPercentChange: Double =
+      momentumFactor * lastPercentChange + (1.0 - momentumFactor) * newPercentChange
     val newStockPrice = stockPrice * (1.0 + actualPercentChange)
     lastPercentChange = actualPercentChange
     newStockPrice

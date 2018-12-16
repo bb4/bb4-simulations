@@ -24,7 +24,7 @@ import java.awt.event.ActionListener
   */
 abstract class Simulator(val name: String) extends AnimationComponent with Optimizee {
 
-  protected var tStep = getInitialTimeStep
+  protected var tStep: Double = getInitialTimeStep
   private var optionsDialog: SimulatorOptionsDialog = _
   protected var frame: JFrame = _
   setName(name)
@@ -50,8 +50,7 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
 
   def getAntialiasing: Boolean = useAntialiasing
 
-  def setScale(scale: Double): Unit = {
-  }
+  def setScale(scale: Double): Unit = {}
 
   def getScale: Double = 1.0
 

@@ -84,7 +84,6 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
 
     println("Default generation strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY)
     generationStrategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
-    println("currently selected strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
     generationOptions.generationStrategy = getCurrentlySelectedStrategy
     generationStrategyCombo.addItemListener(this)
     setStrategyTooltip()
@@ -104,8 +103,8 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
   }
 
   private def getCurrentlySelectedStrategy = {
-    println(s"Currently selected = ${generationStrategyCombo.getSelectedItem} " +
-      s"out of ${generationStrategyCombo.getItemCount}")
+    //println(s"Currently selected = ${generationStrategyCombo.getSelectedItem} " +
+    // s"out of ${generationStrategyCombo.getItemCount}")
     generationStrategies.getStrategy(generationStrategyCombo.getSelectedItem.asInstanceOf[String])
   }
 

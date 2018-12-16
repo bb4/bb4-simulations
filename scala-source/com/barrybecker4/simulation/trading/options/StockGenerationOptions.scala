@@ -21,4 +21,8 @@ class StockGenerationOptions {
   var numTimePeriods: Int = StockGenerationOptions.DEFAULT_NUM_TIME_PERIODS
   var startingValue: Double = StockGenerationOptions.DEFAULT_STARTING_VALUE
   var generationStrategy: GenerationStrategy = StockGenerationOptions.DEFAULT_GENERATION_STRATEGY
+
+  def getDescription: String = {
+    generationStrategy.toString
+  }
 }

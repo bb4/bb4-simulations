@@ -26,11 +26,11 @@ class GaussianStrategy extends IncrementalGenerationStrategy {
   /** random number generator */
   private val rand = new Random
 
-  override def name = "gaussian"
+  override def name = "Gaussian"
 
   override def description: String =
-    "Each time period the market goes up or down by a guassian " +
-    "distributed random value whose mean and variance are specified"
+    s"Each time period the market goes up or down by a guassian " +
+    s"distributed random value with mean, $mean, and variance, $variance."
 
   override def calcNewPrice(stockPrice: Double): Double = {
     val change = variance * rand.nextGaussian + mean

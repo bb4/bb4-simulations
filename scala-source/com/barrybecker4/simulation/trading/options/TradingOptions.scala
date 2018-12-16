@@ -20,4 +20,6 @@ class TradingOptions {
   var startingInvestmentPercent: Double = TradingOptions.DEFAULT_STARTING_INVESTMENT_PERCENT
   var theoreticalMaxGain: Double = TradingOptions.DEFAULT_THEORETICAL_MAX_GAIN
   var tradingStrategy: TradingStrategy = TradingOptions.DEFAULT_TRADING_STRATEGY
+
+  def getDescription: String = tradingStrategy.toString
 }

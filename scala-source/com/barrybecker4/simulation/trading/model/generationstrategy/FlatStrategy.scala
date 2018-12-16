@@ -7,7 +7,7 @@ package com.barrybecker4.simulation.trading.model.generationstrategy
   */
 class FlatStrategy extends IncrementalGenerationStrategy {
 
-  override def name = "flat"
-  override def description = "Does not change at all. Horizontal line."
+  override def name = "Flat"
+  override def description = "Does not change at all over time. A horizontal line."
   override def calcNewPrice(stockPrice: Double): Double = stockPrice
 }

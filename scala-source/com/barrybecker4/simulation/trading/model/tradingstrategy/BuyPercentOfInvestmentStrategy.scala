@@ -23,9 +23,12 @@ class BuyPercentOfInvestmentStrategy extends TradingStrategy {
   private var gainPolicyPanel: ChangePolicyPanel = _
   private var lossPolicyPanel: ChangePolicyPanel = _
 
-  override def name = "percent of investment"
-  override def description =
-    "When the market goes up some %, sell a % of reserver; when the market goes down som %, sell a % of invested."
+  override def name = "Percent of Investment"
+  override def description: String =
+    s"When the market goes up ${100 * gainPolicy.changePercent}%, " +
+      s"sell ${100 * gainPolicy.transactPercent}% of reserve; " +
+    s"when the market goes down ${100 * lossPolicy.changePercent}%, " +
+      s"buy ${100 * lossPolicy.transactPercent}% of invested."
 
   /** if this new price triggers a transaction, then do it */
   override def updateInvestment(stockPrice: Double): MarketPosition = {

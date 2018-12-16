@@ -71,4 +71,6 @@ trait TradingStrategy extends StrategyPlugin {
 
   /** Call when OK button is pressed to persist selections */
   def acceptSelectedOptions(): Unit = {}
+
+  override def toString: String = description
 }

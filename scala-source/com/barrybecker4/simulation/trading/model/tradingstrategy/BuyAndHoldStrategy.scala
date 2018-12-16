@@ -8,7 +8,7 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy
   */
 class BuyAndHoldStrategy extends TradingStrategy {
 
-  override def name = "buy and hold"
+  override def name = "Buy and Hold"
   override def description = "No transactions are made after the initial investment"
 
   override def updateInvestment(stockPrice: Double): MarketPosition = {

@@ -23,8 +23,8 @@ class SineStrategy extends IncrementalGenerationStrategy {
   private var increment = DEFAULT_INCREMENT
   private var amplitude: Double = DEFAULT_AMPLITUDE
 
-  override def name = "Sine wave"
-  override def description = "Sine Wave strategy"
+  override def name = "Sine Wave"
+  override def description = s"Sine Wave strategy. The Sine function is $amplitude * sin(lastx + $increment)"
 
   override def calcNewPrice(stockPrice: Double): Double = {
     val change = amplitude * Math.sin(theta)
