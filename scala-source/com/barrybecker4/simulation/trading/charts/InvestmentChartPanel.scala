@@ -26,7 +26,7 @@ object InvestmentChartPanel {
 
 class InvestmentChartPanel()
   extends JPanel {
-  val functions = List[Function]()
+  private val functions = List[Function]()
   private var investmentChart = new MultipleFunctionRenderer(functions)
   private val series = new StockSeries(20)
 
