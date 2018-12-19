@@ -12,7 +12,6 @@ import com.barrybecker4.ui.renderers.HistogramRenderer
   * To see what kind of distribution of numbers you get.
   * If showRedistribution is true, then the plot should show uniform because
   * the redistribution of a function applied to that function should be uniform.
-  *
   * @author Barry Becker
   */
 object ParameterSimulator {
@@ -45,7 +44,7 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
       data = new Array[Int](ParameterSimulator.NUM_DOUBLE_BINS)
       val scale = ParameterSimulator.NUM_DOUBLE_BINS / parameter.range
       val offset = -parameter.minValue
-      println("new Lin scale = " +scale + " off=" + offset)
+      println(s"new Lin scale=$scale  off=$offset")
       val xFunc = new LinearFunction(scale, offset)
       histogram = new HistogramRenderer(data, xFunc)
     }
@@ -54,13 +53,11 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
   override protected def createOptionsDialog = new ParameterOptionsDialog(frame, this)
 
   override protected def getXPositionToIncrement: Double = {
-    if (showRedistribution) parameter.randomizeValue(MathUtil.RANDOM)
-    else { //println("parameter.getRange()="+parameter.getRange());
+    if (showRedistribution) parameter.randomizeValue(MathUtil.RANDOM).getValue
+    else {
       //double scale = parameter.isIntegerOnly()?  parameter.getRange() +1.0 : parameter.getRange();
-      val scale = parameter.range
-      val v = parameter.minValue + MathUtil.RANDOM.nextDouble * scale
-      parameter.setValue(v)
+      val v = parameter.minValue + MathUtil.RANDOM.nextDouble * parameter.range
+      parameter.setValue(v).getValue
     }
-    parameter.getValue
   }
 }

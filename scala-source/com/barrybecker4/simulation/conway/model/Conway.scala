@@ -53,7 +53,7 @@ class Conway private[model]() {
 
   /** @return the point constrained to the view bouns if wrap is true */
   private def keepInBounds(c: Location): Location =
-    if (wrap) IntLocation((c.getRow + height) % height, (c.getCol + width) % width) else c
+    if (wrap) IntLocation((c.row + height) % height, (c.col + width) % width) else c
 
   private[model] def getPoints = points.keySet
 
