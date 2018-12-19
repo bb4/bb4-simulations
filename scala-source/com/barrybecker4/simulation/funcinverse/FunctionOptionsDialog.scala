@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2016-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.parameter
+package com.barrybecker4.simulation.funcinverse
 
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
@@ -10,14 +10,13 @@ import java.awt._
 /**
   * @author Barry Becker
   */
-class ParameterOptionsDialog private[parameter](parent: Component, simulator: Simulator)
-    extends SimulatorOptionsDialog(parent, simulator) {
+class FunctionOptionsDialog(parent: Component, simulator: Simulator)
+  extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var paramSim: ParameterSimulator = _
+  private var paramSim: FunctionInverseSimulator = _
 
   /** type of distribution function to test.   */
   private var parameterChoiceField: JComboBox[String] = _
-  private var showRedistribution: JCheckBox = _
 
   override def getTitle = "Parameter Simulation Configuration"
 
@@ -27,16 +26,14 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
 
-    paramSim = getSimulator.asInstanceOf[ParameterSimulator]
+    paramSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
     parameterChoiceField = new JComboBox[String]()
     parameterChoiceField.setModel(
-      new DefaultComboBoxModel[String](ParameterDistributionType.VALUES.map(_.name))
+      new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
     )
-    showRedistribution = new JCheckBox("Show Redistribution")
-    showRedistribution.setSelected(paramSim.showRedistribution)
+
 
     innerPanel.add(parameterChoiceField)
-    innerPanel.add(showRedistribution)
     val fill = new JPanel
     paramPanel.add(innerPanel, BorderLayout.NORTH)
     paramPanel.add(fill, BorderLayout.CENTER)
@@ -45,8 +42,7 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
 
   override protected def ok(): Unit = {
     super.ok()
-    val simulator = getSimulator.asInstanceOf[ParameterSimulator]
-    simulator.setParameter(ParameterDistributionType.VALUES(parameterChoiceField.getSelectedIndex).param)
-    simulator.showRedistribution = showRedistribution.isSelected
+    val simulator = getSimulator.asInstanceOf[FunctionInverseSimulator]
+    simulator.setFunction(FunctionType.VALUES(parameterChoiceField.getSelectedIndex).func)
   }
 }
