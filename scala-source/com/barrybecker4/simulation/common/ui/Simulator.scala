@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.common.ui
 
 import com.barrybecker4.common.format.FormatUtil
-import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.optimizee.Optimizee
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.ui.animation.AnimationComponent
@@ -13,7 +12,6 @@ import javax.swing.JFrame
 import javax.swing.JPanel
 import java.awt.Component
 import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
 
 
 /**
@@ -106,14 +104,15 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
 
   /** part of the Optimizee interface */
   override def getOptimalFitness = 0
-  override def compareFitness(params1: ParameterArray, params2: ParameterArray): Double = evaluateFitness(params1) - evaluateFitness(params2)
+  override def compareFitness(params1: ParameterArray, params2: ParameterArray): Double =
+    evaluateFitness(params1) - evaluateFitness(params2)
 
   /**
     * *** implements the key method of the Optimizee interface
     * evaluates the fitness.
     */
   override def evaluateFitness(params: ParameterArray): Double = {
-    assert(false, "not implemented yet")
+    throw new UnsupportedOperationException("evaluateFitness not implemented yet")
     0.0
   }
 }

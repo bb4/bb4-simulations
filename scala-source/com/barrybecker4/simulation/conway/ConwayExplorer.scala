@@ -16,12 +16,12 @@ import java.awt._
   * @author Barry Becker.
   */
 class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
-  commonInit()
   private var conwayModel: ConwayModel = _
   private var options: DynamicOptions = _
   private var handler: InteractionHandler = _
+  commonInit()
 
-  private def commonInit() = {
+  private def commonInit(): Unit = {
     conwayModel = new ConwayModel
     initCommonUI()
     handler = new InteractionHandler(conwayModel, conwayModel.getScale)

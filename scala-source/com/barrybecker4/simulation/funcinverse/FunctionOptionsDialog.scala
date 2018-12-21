@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.funcinverse
 
 import com.barrybecker4.simulation.common.ui.Simulator
@@ -13,36 +13,34 @@ import java.awt._
 class FunctionOptionsDialog(parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var paramSim: FunctionInverseSimulator = _
+  private var funcInverseSim: FunctionInverseSimulator = _
 
   /** type of distribution function to test.   */
-  private var parameterChoiceField: JComboBox[String] = _
+  private var functionChoiceField: JComboBox[String] = _
 
-  override def getTitle = "Parameter Simulation Configuration"
+  override def getTitle = "Function Inverse Configuration"
 
   override protected def createCustomParamPanel: JPanel = {
-    val paramPanel = new JPanel
-    paramPanel.setLayout(new BorderLayout)
+    val funcPanel = new JPanel(new BorderLayout)
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
 
-    paramSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
-    parameterChoiceField = new JComboBox[String]()
-    parameterChoiceField.setModel(
+    funcInverseSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
+    functionChoiceField = new JComboBox[String]()
+    functionChoiceField.setModel(
       new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
     )
 
-
-    innerPanel.add(parameterChoiceField)
+    innerPanel.add(functionChoiceField)
     val fill = new JPanel
-    paramPanel.add(innerPanel, BorderLayout.NORTH)
-    paramPanel.add(fill, BorderLayout.CENTER)
-    paramPanel
+    funcPanel.add(innerPanel, BorderLayout.NORTH)
+    funcPanel.add(fill, BorderLayout.CENTER)
+    funcPanel
   }
 
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[FunctionInverseSimulator]
-    simulator.setFunction(FunctionType.VALUES(parameterChoiceField.getSelectedIndex).func)
+    simulator.setFunction(FunctionType.VALUES(functionChoiceField.getSelectedIndex))
   }
 }
