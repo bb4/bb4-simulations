@@ -4,9 +4,11 @@ package com.barrybecker4.simulation.funcinverse
 import java.awt.{Color, Graphics}
 
 import com.barrybecker4.common.math.function.{ArrayFunction, Function, LinearFunction}
+import com.barrybecker4.common.math.interpolation.InterpolationMethod
 import com.barrybecker4.simulation.common.ui.{DistributionSimulator, Simulator}
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing.JPanel
+import com.barrybecker4.common.math.interpolation.LINEAR
 
 
 /**
@@ -15,10 +17,11 @@ import javax.swing.JPanel
   */
 class FunctionInverseSimulator extends Simulator("Function Inverse Simulator")  {
 
-  private val FUNC_COLOR = new Color(0, 60, 190)
-  private val INV_FUNC_COLOR = new Color(160, 20, 0)
+  private val FUNC_COLOR = new Color(0, 50, 180)
+  private val INV_FUNC_COLOR = new Color(150, 10, 0)
 
   private var func: FunctionType.Val = FunctionType.QUADRATIC
+  private var interpMethod: InterpolationMethod = LINEAR
   private var funcRenderer: MultipleFunctionRenderer = _
 
   initFuncWithInverse()
@@ -28,9 +31,14 @@ class FunctionInverseSimulator extends Simulator("Function Inverse Simulator")  
     initFuncWithInverse()
   }
 
+  def setInterpolationMethod(interpMethod: InterpolationMethod): Unit = {
+    this.interpMethod = interpMethod
+    initFuncWithInverse()
+  }
+
   protected def initFuncWithInverse(): Unit = {
-    val theFunction = new ArrayFunction(func.func)
-    val inverseFunction = new ArrayFunction(theFunction.inverseFunctionMap)
+    val theFunction = new ArrayFunction(func.func, interpMethod)
+    val inverseFunction = new ArrayFunction(theFunction.inverseFunctionMap, interpMethod)
     funcRenderer = new MultipleFunctionRenderer(
       Seq(theFunction, inverseFunction),
       Some(Seq(FUNC_COLOR, INV_FUNC_COLOR))

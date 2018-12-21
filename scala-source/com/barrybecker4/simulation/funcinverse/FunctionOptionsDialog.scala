@@ -5,7 +5,16 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
+import com.barrybecker4.common.math.interpolation.InterpolationMethod
+import com.barrybecker4.common.math.interpolation._
+import FunctionOptionsDialog.INTERP_METHODS
 
+
+object FunctionOptionsDialog {
+  private val INTERP_METHODS = Array(
+    ("Linear", LINEAR), ("Cosine", COSINE), ("Cubic", CUBIC), ("Hermite", HERMITE), ("Step", STEP)
+  )
+}
 
 /**
   * @author Barry Becker
@@ -17,6 +26,8 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
 
   /** type of distribution function to test.   */
   private var functionChoiceField: JComboBox[String] = _
+  /** manner in which to interpolate the function values */
+  private var interpolationChoiceField: JComboBox[String] = _
 
   override def getTitle = "Function Inverse Configuration"
 
@@ -31,16 +42,31 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
       new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
     )
 
-    innerPanel.add(functionChoiceField)
+    interpolationChoiceField = new JComboBox[String]()
+    interpolationChoiceField.setModel(
+      new DefaultComboBoxModel[String](INTERP_METHODS.map(_._1))
+    )
+
+    innerPanel.add(createChoicePanel("Function: ", functionChoiceField))
+    innerPanel.add(createChoicePanel("Interpolation method: ", interpolationChoiceField))
+
     val fill = new JPanel
     funcPanel.add(innerPanel, BorderLayout.NORTH)
     funcPanel.add(fill, BorderLayout.CENTER)
     funcPanel
   }
 
+  private def createChoicePanel(label: String, chooser: JComboBox[String]): Panel = {
+    val choicePanel = new Panel(new FlowLayout)
+    choicePanel.add(new JLabel(label))
+    choicePanel.add(chooser)
+    choicePanel
+  }
+
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[FunctionInverseSimulator]
     simulator.setFunction(FunctionType.VALUES(functionChoiceField.getSelectedIndex))
+    simulator.setInterpolationMethod(INTERP_METHODS(interpolationChoiceField.getSelectedIndex)._2)
   }
 }
