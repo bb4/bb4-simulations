@@ -21,13 +21,14 @@ object EnvironmentRenderer { // rendering attributes
 
 final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
 
-  private var modelImage = new ModelImage(grid, EnvironmentRenderer.PRESSURE_COLOR_MAP, options.getScale.toInt)
+  private val modelImage = new ModelImage(grid, EnvironmentRenderer.PRESSURE_COLOR_MAP, options.getScale.toInt)
 
-  def getColorMap = EnvironmentRenderer.PRESSURE_COLOR_MAP
+  def getColorMap: PressureColorMap = EnvironmentRenderer.PRESSURE_COLOR_MAP
   def getOptions: RenderingOptions = options
 
   /** Render the Environment on the screen. */
-  def render(g: Graphics2D) { // draw the cells colored by ---pressure--- val
+  def render(g: Graphics2D) {
+    // draw the cells colored by ---pressure--- val
     if (options.getShowPressures) concurrentRenderPressures(g)
     // outer boundary
     val scale = options.getScale

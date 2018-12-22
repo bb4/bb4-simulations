@@ -5,7 +5,7 @@ import java.awt._
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.water.model.Grid
+import com.barrybecker4.simulation.water.model.Environment
 import com.barrybecker4.simulation.water.{model, rendering}
 
 
@@ -21,20 +21,21 @@ object WaterSimulator {
   private val BG_COLOR = Color.white
 }
 
-class WaterSimulator(var grid: Grid) extends Simulator("Water") {
+class WaterSimulator(var env: Environment) extends Simulator("Water") {
   private val renderOptions = new rendering.RenderingOptions
   private var envRenderer: rendering.EnvironmentRenderer = _
   private var handler: InteractionHandler = _
   commonInit()
 
-  def this() { this(Grid(250, 200)) }
+  def this() { this(new Environment(320, 200)) }
 
   private def commonInit() {
     initCommonUI()
-    envRenderer = new rendering.EnvironmentRenderer(grid, renderOptions)
-    setPreferredSize(new Dimension(grid.width, grid.height))
+    env.reset()
+    envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
+    setPreferredSize(new Dimension(env.width, env.height))
     setNumStepsPerFrame(WaterSimulator.DEFAULT_STEPS_PER_FRAME)
-    handler = new InteractionHandler(grid.width, grid.height)
+    handler = new InteractionHandler(env.width, env.height)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }
