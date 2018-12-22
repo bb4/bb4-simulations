@@ -5,7 +5,6 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
-import com.barrybecker4.common.math.interpolation.InterpolationMethod
 import com.barrybecker4.common.math.interpolation._
 import FunctionOptionsDialog.INTERP_METHODS
 
