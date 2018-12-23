@@ -21,8 +21,8 @@ object WaterDynamicOptions {
   private val DEFAULT_VISCOSITY = 0
 
   private val SLIDER_PROPS = Array(
-    new SliderProperties(VISC_SLIDER, 0, 50.0, DEFAULT_VISCOSITY, 100.0),
-    new SliderProperties(TIME_STEP_SLIDER, 0.0001, 0.1, WaterSimulator.INITIAL_TIME_STEP, 10000.0)
+    new SliderProperties(VISC_SLIDER, 0, 0.2, DEFAULT_VISCOSITY, 100.0),
+    new SliderProperties(TIME_STEP_SLIDER, 0.0001, 0.05, WaterSimulator.INITIAL_TIME_STEP, 10000.0)
   )
 }
 
@@ -81,6 +81,7 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
     sliderName match {
       //case WaterDynamicOptions.VISC_SLIDER => simulator.getEnvironment.setViscosity(value)
       case WaterDynamicOptions.TIME_STEP_SLIDER => simulator.setTimeStep(value)
+      case WaterDynamicOptions.VISC_SLIDER => simulator.setViscosity(value)
     }
   }
 }

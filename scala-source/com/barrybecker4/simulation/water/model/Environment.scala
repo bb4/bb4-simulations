@@ -26,18 +26,15 @@ class Environment(val width: Int, val height: Int) {
   reset()
 
   def reset(): Unit = initBoundary()
-
-  def setViscosity(v: Double): Unit = {
-    viscosity = v
-    reset()
-  }
+  def setViscosity(v: Double): Unit = {viscosity = v}
 
   private def initBoundary(): Unit = {
+    val yrat = height / 400
     for (i <- 0 until width) {
-      val ht = 10.0 + 25.0 * Math.sin(0.06 * i)  + i / 3.0
+      val ht = yrat * (10.0 + 25.0 * Math.sin(0.04 * i)  + i / 3.0)
       h0(i) = ht
       h1(i) = ht
-      floor(i) = 160.0 + 42.0 * Math.cos(0.045 * i)
+      floor(i) = yrat * (180.0 + 42.0 * Math.cos(0.03 * i) + i / 4.0)
     }
   }
 

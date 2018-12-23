@@ -50,6 +50,7 @@ class WaterSimulator() extends Simulator("Water") {
   override def getBackground: Color = WaterSimulator.BG_COLOR
   override protected def getInitialTimeStep: Double = WaterSimulator.INITIAL_TIME_STEP
 
+  def setViscosity(v: Double) {env.setViscosity(v)}
   def setShowVelocityVectors(show: Boolean) { envRenderer.getOptions.setShowVelocities(show)}
   def getShowVelocityVectors: Boolean = envRenderer.getOptions.getShowVelocities
 
