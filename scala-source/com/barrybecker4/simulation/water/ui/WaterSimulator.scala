@@ -21,13 +21,14 @@ object WaterSimulator {
   private val BG_COLOR = Color.white
 }
 
-class WaterSimulator(var env: Environment) extends Simulator("Water") {
+class WaterSimulator() extends Simulator("Water") {
+
+  private var env: Environment = new Environment(320, 200)
   private val renderOptions = new rendering.RenderingOptions
   private var envRenderer: rendering.EnvironmentRenderer = _
   private var handler: InteractionHandler = _
+  private var oldDimensions = new Dimension(0, 0)
   commonInit()
-
-  def this() { this(new Environment(320, 200)) }
 
   private def commonInit() {
     initCommonUI()
@@ -76,6 +77,12 @@ class WaterSimulator(var env: Environment) extends Simulator("Water") {
   override def paint(g: Graphics): Unit = {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
+
+    if (env == null || !oldDimensions.equals(this.getSize())) {
+      env = new Environment(this.getWidth, this.getHeight)
+      envRenderer.setEnvironment(env)
+      oldDimensions = this.getSize()
+    }
     envRenderer.render(g2)
   }
 }

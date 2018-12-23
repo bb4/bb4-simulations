@@ -17,7 +17,7 @@ import java.awt.Graphics
   * @author Barry Becker.
   */
 object FractalExplorer {
-  val DEFAULT_ALGORITHM_ENUM = MANDELBROT
+  val DEFAULT_ALGORITHM_ENUM: AlgorithmEnum = MANDELBROT
 }
 
 class FractalExplorer extends Simulator("Fractal Explorer") {
@@ -43,7 +43,7 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
 
   def getUseFixedSize: Boolean = useFixedSize
 
-  private def commonInit() = {
+  private def commonInit(): Unit = {
     initCommonUI()
     algorithmEnum = FractalExplorer.DEFAULT_ALGORITHM_ENUM
     reset()
@@ -84,7 +84,7 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
 
   override protected def createOptionsDialog = new FractalOptionsDialog(frame, this)
 
-  override protected def getInitialTimeStep = DynamicOptions.INITIAL_TIME_STEP
+  override protected def getInitialTimeStep: Double = DynamicOptions.INITIAL_TIME_STEP
 
   override def timeStep: Double = {
     if (!isPaused) {

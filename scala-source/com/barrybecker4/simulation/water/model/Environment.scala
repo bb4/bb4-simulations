@@ -18,17 +18,14 @@ object Environment {
 class Environment(val width: Int, val height: Int) {
 
   val h0, h1, floor = Array.ofDim[Double](width)
-  private var x, y, t, df: Double = 0
   private var viscosity: Double = 0.0
-  private var triSolver = TriDiagonalMatrixSolver(EPS)
+  private val triSolver = TriDiagonalMatrixSolver(EPS)
 
   /** Number of pixels in x direction for every discrete bin */
   var xStep: Int = 1
   reset()
 
-  def reset(): Unit = {
-    initBoundary()
-  }
+  def reset(): Unit = initBoundary()
 
   def setViscosity(v: Double): Unit = {
     viscosity = v
@@ -37,7 +34,7 @@ class Environment(val width: Int, val height: Int) {
 
   private def initBoundary(): Unit = {
     for (i <- 0 until width) {
-      val ht = 70.0 + 25.0 * Math.sin(0.06 * i)  + i / 3.0
+      val ht = 10.0 + 25.0 * Math.sin(0.06 * i)  + i / 3.0
       h0(i) = ht
       h1(i) = ht
       floor(i) = 160.0 + 42.0 * Math.cos(0.045 * i)
@@ -70,9 +67,9 @@ class Environment(val width: Int, val height: Int) {
       a(2) = -d(i)
     }
     a = array(width - 1)
-    a(0) = -d(width - 2)    // right boundary
+    a(0) = -d(width - 2)   // right boundary
     a(1) = 1.0 + d(width - 2)
-    a(2) = 1.0           // unused
+    a(2) = 1.0            // unused
     for (i <- 0 until width)
       h0(i) = h1(i)
 

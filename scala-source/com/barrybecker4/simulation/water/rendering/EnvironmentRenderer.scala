@@ -31,6 +31,10 @@ final class EnvironmentRenderer(var env: Environment, var options: RenderingOpti
     dt
   }
 
+  def setEnvironment(env: Environment): Unit = {
+    this.env = env
+  }
+
   /** Render the Environment on the screen. */
   def render(g: Graphics2D) {
     drawBorder(g)
