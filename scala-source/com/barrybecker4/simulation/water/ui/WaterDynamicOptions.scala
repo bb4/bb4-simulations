@@ -3,11 +3,9 @@ package com.barrybecker4.simulation.water.ui
 
 import java.awt._
 import java.awt.event.{ActionEvent, ActionListener}
-
-import com.barrybecker4.simulation.water.model
-import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
+import WaterDynamicOptions._
 
 
 /**
@@ -18,11 +16,14 @@ object WaterDynamicOptions {
 
   private val VISC_SLIDER = "Viscosity"
   private val TIME_STEP_SLIDER = "Time Step"
+  private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps / frame"
   private val DEFAULT_VISCOSITY = 0
+  val DEFAULT_STEPS_PER_FRAME = 1
 
   private val SLIDER_PROPS = Array(
     new SliderProperties(VISC_SLIDER, 0, 0.2, DEFAULT_VISCOSITY, 100.0),
-    new SliderProperties(TIME_STEP_SLIDER, 0.0001, 0.05, WaterSimulator.INITIAL_TIME_STEP, 10000.0)
+    new SliderProperties(TIME_STEP_SLIDER, 0.0001, 0.05, WaterSimulator.INITIAL_TIME_STEP, 10000.0),
+    new SliderProperties(NUM_STEPS_PER_FRAME_SLIDER, 1, 10, DEFAULT_STEPS_PER_FRAME)
   )
 }
 
@@ -80,8 +81,9 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
       //case WaterDynamicOptions.VISC_SLIDER => simulator.getEnvironment.setViscosity(value)
-      case WaterDynamicOptions.TIME_STEP_SLIDER => simulator.setTimeStep(value)
-      case WaterDynamicOptions.VISC_SLIDER => simulator.setViscosity(value)
+      case TIME_STEP_SLIDER => simulator.setTimeStep(value)
+      case VISC_SLIDER => simulator.setViscosity(value)
+      case NUM_STEPS_PER_FRAME_SLIDER => simulator.setNumStepsPerFrame(value.toInt)
     }
   }
 }

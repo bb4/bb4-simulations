@@ -14,7 +14,6 @@ object EnvironmentRenderer {
   private val VECTOR_COLOR = new Color(200, 60, 30, 50)
   private val VECTOR_SCALE = 40.0
   private val OFFSET = 10
-  private val NUM_STEPS_PER_FRAME = 1
 
   private val GROUND_COLOR = new Color(90, 60, 50)
   private val WATER_COLOR = new Color(90, 210, 255)
@@ -25,9 +24,7 @@ final class EnvironmentRenderer(var env: Environment, var options: RenderingOpti
   def getOptions: RenderingOptions = options
 
   def stepForward(dt: Double): Double = {
-    for (i <- 0 until NUM_STEPS_PER_FRAME) {
-      env.integrate(dt)
-    }
+    env.integrate(dt)
     dt
   }
 

@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.water.ui
 
 import java.awt._
-
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.water.model.Environment
@@ -35,7 +34,7 @@ class WaterSimulator() extends Simulator("Water") {
     env.reset()
     envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
     setPreferredSize(new Dimension(env.width, env.height))
-    setNumStepsPerFrame(WaterSimulator.DEFAULT_STEPS_PER_FRAME)
+    setNumStepsPerFrame(WaterDynamicOptions.DEFAULT_STEPS_PER_FRAME)
     handler = new InteractionHandler(env.width, env.height)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
