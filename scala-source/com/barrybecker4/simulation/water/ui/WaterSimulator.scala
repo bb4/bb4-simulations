@@ -33,9 +33,9 @@ class WaterSimulator() extends Simulator("Water") {
     initCommonUI()
     env.reset()
     envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
-    setPreferredSize(new Dimension(env.width, env.height))
+    //setPreferredSize(new Dimension(env.width, env.height))
     setNumStepsPerFrame(WaterDynamicOptions.DEFAULT_STEPS_PER_FRAME)
-    handler = new InteractionHandler(env.width, env.height)
+    handler = new InteractionHandler(env)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }
@@ -81,6 +81,7 @@ class WaterSimulator() extends Simulator("Water") {
     if (env == null || !oldDimensions.equals(this.getSize())) {
       env = new Environment(this.getWidth, this.getHeight)
       envRenderer.setEnvironment(env)
+      handler.setEnvironment(env)
       oldDimensions = this.getSize()
     }
     envRenderer.render(g2)

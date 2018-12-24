@@ -12,9 +12,7 @@ import EnvironmentRenderer._
   */
 object EnvironmentRenderer {
   private val VECTOR_COLOR = new Color(200, 60, 30, 50)
-  private val VECTOR_SCALE = 40.0
   private val OFFSET = 10
-
   private val GROUND_COLOR = new Color(90, 60, 50)
   private val WATER_COLOR = new Color(90, 210, 255)
 }
@@ -64,6 +62,7 @@ final class EnvironmentRenderer(var env: Environment, var options: RenderingOpti
     }
   }
 
+  /*
   private def drawVectors(g: Graphics2D): Unit = {
     g.setColor(EnvironmentRenderer.VECTOR_COLOR)
     for (j <- 0 until env.height) {
@@ -77,5 +76,5 @@ final class EnvironmentRenderer(var env: Environment, var options: RenderingOpti
           (j + VECTOR_SCALE).toInt + OFFSET)
       }
     }
-  }
+  }*/
 }

@@ -31,10 +31,10 @@ class Environment(val width: Int, val height: Int) {
   private def initBoundary(): Unit = {
     val yrat = height / 400
     for (i <- 0 until width) {
-      val ht = yrat * (10.0 + 25.0 * Math.sin(0.04 * i)  + i / 3.0)
+      val ht = yrat * (50.0 + 20.0 * Math.sin(0.018 * i)  + i / 5.0)
       h0(i) = ht
       h1(i) = ht
-      floor(i) = yrat * (180.0 + 42.0 * Math.cos(0.03 * i) + i / 4.0)
+      floor(i) = yrat * (180.0 + 42.0 * Math.cos(0.01 * i) + i / 8.0)
     }
   }
 
@@ -92,7 +92,6 @@ class Environment(val width: Int, val height: Int) {
       while (i < width && h1(i) >= floor(i))   // should not need i < width &&
         i += 1 // step over empty region
 
-      //if (h1(i)<=floor(i)) && ((i==0) or (h1(i-1)>floor(i-1))) then...
       start(connect) = i  // valid region
       while (i < width && h1(i) < floor(i)) {   // should not need i < width &&
         oldVolume(connect) = oldVolume(connect) + floor(i) - h0(i)
