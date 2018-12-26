@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.water.model
 
 import Environment._
+import com.barrybecker4.common.concurrency.ThreadUtil
 
 
 object Environment {
@@ -20,6 +21,7 @@ class Environment(val width: Int, val height: Int) {
   val h0, h1, floor = Array.ofDim[Double](width)
   private var viscosity: Double = 0.0
   private val triSolver = TriDiagonalMatrixSolver(EPS)
+  private var paused = false
 
   /** Number of pixels in x direction for every discrete bin */
   var xStep: Int = 1
@@ -27,9 +29,12 @@ class Environment(val width: Int, val height: Int) {
 
   def reset(): Unit = initBoundary()
   def setViscosity(v: Double): Unit = {viscosity = v}
+  def pause(): Unit = { paused = true }
+  def resume(): Unit = { paused = false }
 
   private def initBoundary(): Unit = {
     val yrat = height / 400
+    println("initBoundary")
     for (i <- 0 until width) {
       val ht = yrat * (50.0 + 20.0 * Math.sin(0.018 * i)  + i / 5.0)
       h0(i) = ht
@@ -39,6 +44,8 @@ class Environment(val width: Int, val height: Int) {
   }
 
   def integrate(dt: Double): Unit = {
+    //ThreadUtil.sleep(500)
+    if (paused) return
     val array = Array.fill[Double](width, 3)(0)
     val rhs, d, dist = Array.fill[Double](width)(0)
 
