@@ -2,7 +2,7 @@
 plugins {
     id "com.github.maiflai.scalatest" version "0.19" // needed to run scala tests
 }
-description = 'A Scala framework for creating similations. Implemented simulations include dice, graphing, ' +
+description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
 version = '1.5-SNAPSHOT'
