@@ -9,6 +9,10 @@ import java.awt.event.ComponentEvent
 import com.barrybecker4.simulation.spirograph.model.GraphState
 
 
+object GraphPanel {
+  private val BACKGROUND_COLOR = Color.WHITE
+}
+
 /**
   * Panel to contain the SpiroGraph curve and control its rendering.
   * Adapted from David Little's original work.
@@ -16,10 +20,6 @@ import com.barrybecker4.simulation.spirograph.model.GraphState
   * @author David Little
   * @author Barry Becker
   */
-object GraphPanel {
-  private val BACKGROUND_COLOR = Color.WHITE
-}
-
 class GraphPanel(var state: GraphState) extends JPanel with Runnable {
 
   setBackground(GraphPanel.BACKGROUND_COLOR)
@@ -27,13 +27,12 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
   private var thread = new Thread(this)
   private val decorRenderer = new DecorationRenderer(this.state.params)
   private var graphRenderer = new GraphRenderer(this.state, this)
+
   this.addComponentListener(new ComponentAdapter() {
-    override def componentResized(ce: ComponentEvent): Unit = {
-      graphRenderer.clear()
-    }
+    override def componentResized(ce: ComponentEvent): Unit = graphRenderer.clear()
   })
 
-  private var paused = false
+  private var paused: Boolean = false
 
   def setPaused(newPauseState: Boolean): Unit = synchronized {
     if (paused != newPauseState)
@@ -46,7 +45,7 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
     state.reset()
     graphRenderer = new GraphRenderer(state, this)
     paused = true
-    this.repaint()
+    repaint()
   }
 
   def drawCompleteGraph(): Unit = {
@@ -54,7 +53,7 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
     state.reset()
     startDrawingGraph()
     waitUntilDoneRendering()
-    this.repaint()
+    repaint()
   }
 
   /** If we are just going to draw the graph as quickly as possible, and block until its done,
@@ -73,11 +72,8 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
     thread = new Thread(this)
   }
 
-  private def waitUntilDoneRendering(): Unit = {
-    while ( {
-      state.isRendering
-    }) ThreadUtil.sleep(100)
-  }
+  private def waitUntilDoneRendering(): Unit =
+    while (state.isRendering) ThreadUtil.sleep(100)
 
   /** Starts the rendering thread. */
   override def run(): Unit = {
@@ -88,11 +84,8 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
   /** Does nothing if not paused.
     * If paused, it will discontinue processing on this thread until pauseLock is released.
     */
-  def waitIfPaused(): Unit = synchronized {
-      while ( {
-        paused
-      }) ThreadUtil.wait(100)
-  }
+  def waitIfPaused(): Unit =
+      while (paused) ThreadUtil.sleep(200)
 
   def clear(): Unit = {
     graphRenderer.clear()
