@@ -22,7 +22,7 @@ object FunctionType extends Enumeration {
   val VERT_LINE = Val("Vertical Line", new ArrayFunction(Array(0.0, 0.0, 0.0, 1.0, 1.0, 1.0), NULL_FUNC))
   val SQUARE = Val("Square", new ArrayFunction(Array(0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0), NULL_FUNC))
   val TEETH = Val("Teeth", new ArrayFunction(Array(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0), NULL_FUNC))
-  val JAGGED = Val("Jaggen", new ArrayFunction(Array(0.0, .5, 0.1, 0.8, 0.6, 1.0), NULL_FUNC))
+  val JAGGED = Val("Jagged", new ArrayFunction(Array(0.0, .5, 0.1, 0.8, 0.6, 1.0), NULL_FUNC))
   val ERROR = Val("Error Function", new ErrorFunction)
 
   val SMOOTH = Val("Smooth Function", new ArrayFunction(Array(0.0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0), NULL_FUNC))
@@ -30,5 +30,7 @@ object FunctionType extends Enumeration {
     new ArrayFunction(Array(0.0, .1, 0.3, 0.6, 0.7, 0.75, 0.7, 0.5, 0.4, 0.36, 0.39, 0.45, 0.56, 0.7, 1.0), NULL_FUNC))
   val V = Val("V Function", new ArrayFunction(Array(1.0, 0.0, 1.0), NULL_FUNC))
 
-  val VALUES: Array[Val] = Array(DIAGONAL, HORZ_LINE, VERT_LINE, SQUARE, TEETH, JAGGED, ERROR, SMOOTH, TYPICAL_SMOOTH)
+  val VALUES: Array[Val] = Array(
+    DIAGONAL, HORZ_LINE, VERT_LINE, SQUARE, TEETH, JAGGED, ERROR, SMOOTH, TYPICAL_SMOOTH
+  )
 }
