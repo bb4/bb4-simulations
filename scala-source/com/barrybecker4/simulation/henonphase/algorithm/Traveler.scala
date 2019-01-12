@@ -9,7 +9,7 @@ import java.awt._
   * Henon travelers travel through time
   * @author Barry Becker
   */
-class Traveler private[algorithm](var x: Double, var y: Double, var color: Color, var params: TravelerParams) {
+class Traveler private[algorithm](var x: Double, var y: Double, val color: Color, var params: TravelerParams) {
 
   // last position
   private var lastX = x
@@ -17,8 +17,6 @@ class Traveler private[algorithm](var x: Double, var y: Double, var color: Color
 
   private[algorithm] def getLastX = lastX
   private[algorithm] def getLastY = lastY
-
-  def getColor: Color = color
 
   /** increment forward one iteration */
   def increment() {

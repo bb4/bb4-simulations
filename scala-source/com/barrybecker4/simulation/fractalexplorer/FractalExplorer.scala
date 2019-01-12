@@ -26,17 +26,13 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   private var algorithmEnum: AlgorithmEnum = _
   private var juliaSeed = JuliaAlgorithm.DEFAULT_JULIA_SEED
   private var model: FractalModel = _
-  private var modelImage: ModelImage = _
   private var options: DynamicOptions = _
   private var zoomHandler: ZoomHandler = _
-  private val colorMap: FractalColorMap = new FractalColorMap()
   private var useFixedSize: Boolean = false
 
   commonInit()
 
-  /**
-    * @param fixed if true then the render area does not resize automatically.
-    */
+  /** @param fixed if true then the render area does not resize automatically.*/
   def setUseFixedSize(fixed: Boolean): Unit = {
     useFixedSize = fixed
   }
@@ -70,7 +66,6 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
       case _ =>
     }
 
-    modelImage = new ModelImage(model, colorMap)
     setNumStepsPerFrame(DynamicOptions.DEFAULT_STEPS_PER_FRAME)
     if (zoomHandler != null) {
       this.removeMouseListener(zoomHandler)
@@ -88,9 +83,10 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
 
   override def timeStep: Double = {
     if (!isPaused) {
-      if (!useFixedSize) model.setSize(getWidth, getHeight)
+      if (!useFixedSize)
+        model.setSize(getWidth, getHeight)
       algorithm.timeStep(tStep)
-      modelImage.updateImage(model.getLastRow, model.getCurrentRow)
+      model.updateImage(model.getLastRow, model.getCurrentRow)
       options.setCoordinates(algorithm.getRange)
     }
     tStep
@@ -99,7 +95,8 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   override def paint(g: Graphics): Unit = {
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
-    if (g != null) g.drawImage(modelImage.getImage, 0, 0, null)
+    if (g != null)
+      g.drawImage(model.getImage, 0, 0, null)
     zoomHandler.render(g, model.getAspectRatio)
     options.setCoordinates(algorithm.getRange)
     Profiler.getInstance.stopRenderingTime()
@@ -115,5 +112,5 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
     options
   }
 
-  def getColorMap: ColorMap = modelImage.getColorMap
+  def getColorMap: ColorMap = model.getColorMap
 }

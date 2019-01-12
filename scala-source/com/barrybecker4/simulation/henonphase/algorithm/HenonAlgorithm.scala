@@ -7,12 +7,6 @@ import java.awt.image.BufferedImage
 import HenonAlgorithm._
 
 
-/**
-  * Abstract implementation common to all Henon Phase algorithms.
-  * Uses concurrency when parallelized is set.
-  * This will give good speedup on multi-core machines.
-  * @author Barry Becker
-  */
 object HenonAlgorithm {
   val DEFAULT_MAX_ITERATIONS = 1000
   val DEFAULT_FRAME_ITERATIONS = 10
@@ -23,11 +17,17 @@ object HenonAlgorithm {
   private val DEFAULT_CONNECT_POINTS = false
 }
 
+/**
+  * Abstract implementation common to all Henon Phase algorithms.
+  * Uses concurrency when parallelized is set.
+  * This will give good speedup on multi-core machines.
+  * @author Barry Becker
+  */
 class HenonAlgorithm() {
 
   private var model: HenonModel = _
   // should extract these into ModelParams class
-  private var numTravelors: Int = 0
+  private var numTravelers: Int = 0
   private var maxIterations: Int = 0
   private var numStepsPerFrame: Int = 0
   private var travelerParams: TravelerParams = _
@@ -40,12 +40,13 @@ class HenonAlgorithm() {
   private var iterations: Int = 0
   reset()
 
+  /** if the size changes from what we have not, then request a restart */
   def setSize(width: Int, height: Int) {
     if (width != model.getWidth || height != model.getHeight) requestRestart(width, height)
   }
 
   def reset() {
-    numTravelors = HenonAlgorithm.DEFAULT_NUM_TRAVELERS
+    numTravelers = HenonAlgorithm.DEFAULT_NUM_TRAVELERS
     maxIterations = HenonAlgorithm.DEFAULT_MAX_ITERATIONS
     numStepsPerFrame = HenonAlgorithm.DEFAULT_FRAME_ITERATIONS
     travelerParams = new TravelerParams
@@ -53,7 +54,7 @@ class HenonAlgorithm() {
     connectPoints = HenonAlgorithm.DEFAULT_CONNECT_POINTS
     alpha = HenonAlgorithm.DEFAULT_ALPHA
     cmap = new HenonColorMap(alpha)
-    model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelors, cmap)
+    model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
   }
 
   def setTravelerParams(newParams: TravelerParams) {
@@ -88,8 +89,8 @@ class HenonAlgorithm() {
   }
 
   def setNumTravelors(newNumTravelors: Int) {
-    if (newNumTravelors != numTravelors) {
-      numTravelors = newNumTravelors
+    if (newNumTravelors != numTravelers) {
+      numTravelers = newNumTravelors
       requestRestart(model.getWidth, model.getHeight)
     }
   }
@@ -109,12 +110,11 @@ class HenonAlgorithm() {
   }
 
   private def requestRestart(width: Int, height: Int) = {
-    model = new HenonModel(width, height, travelerParams, useUniformSeeds, connectPoints, numTravelors, cmap)
+    model = new HenonModel(width, height, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
     restartRequested = true
   }
 
-  /**
-    * @param timeStep number of rows to compute on this timestep.
+  /** @param timeStep number of rows to compute on this time-step.
     * @return true when done computing whole model.
     */
   def timeStep(timeStep: Double): Boolean = {
@@ -128,7 +128,6 @@ class HenonAlgorithm() {
     if (iterations > maxIterations) {
       showProfileInfo()
       return true // we are done.
-
     }
     model.increment(numStepsPerFrame)
     iterations += numStepsPerFrame

@@ -10,9 +10,9 @@ import java.awt._
 
 
 /**
-  * Interactively explores the Henon Phase attractors.
-  * See   http://mathworld.wolfram.com/HenonMap.html
-  * See   http://www.complexification.net/gallery/machines/henonPhaseDeep/
+  * Interactively explores Henon Phase attractors.
+  * See http://mathworld.wolfram.com/HenonMap.html
+  * See http://www.complexification.net/gallery/machines/henonPhaseDeep/
   * @author Barry Becker.
   */
 object HenonPhaseExplorer {
@@ -21,10 +21,11 @@ object HenonPhaseExplorer {
 }
 
 class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
-  commonInit()
+
   private var algorithm: HenonAlgorithm = _
   private var options: DynamicOptions = _
   private var useFixedSize = false
+  commonInit()
 
   /** @param fixed if true then the render area does not resize automatically.*/
   def setUseFixedSize(fixed: Boolean): Unit = {

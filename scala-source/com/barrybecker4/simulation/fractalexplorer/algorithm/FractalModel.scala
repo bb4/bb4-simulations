@@ -1,34 +1,45 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
-import com.barrybecker4.simulation.common.RectangularModel
+import java.awt.Image
 
-/**
-  * Nothing but a big matrix to hold the resulting values.
-  * @author Barry Becker
-  */
+import com.barrybecker4.simulation.common.RectangularModel
+import com.barrybecker4.simulation.common.rendering.ModelImage
+import com.barrybecker4.ui.util.ColorMap
+
+
 object FractalModel {
   private val FIXED_SIZE: Int = 200
 }
 
+/**
+  * A big matrix to hold the resulting values, and the image that gets rendered from it.
+  * @author Barry Becker
+  */
 class FractalModel extends RectangularModel {
+  private var image: ModelImage = _
   private var values: Array[Array[Double]] = _
+  private val colorMap: ColorMap = new FractalColorMap()
   private var lastRow: Int = 0
   private var currentRow: Int = 0
 
   initialize(FractalModel.FIXED_SIZE, FractalModel.FIXED_SIZE)
 
-  /**
-    * We can change the size of the model, but doing so will clear all current results.
-    * We only resize if the new dimensions are different than we had to prevent clearing results unnecessarily.
+  /** Changing the size of the model will clear all current results.
+    * Only resize if the new dimensions are different to prevent clearing results unnecessarily.
     */
   def setSize(width: Int, height: Int) {
     if (width != getWidth || height != getHeight)
       initialize(width, height)
   }
 
+  def updateImage(lastRow: Int, currentRow: Int): Unit = {
+    image.updateImage(lastRow, currentRow)
+  }
+
   private def initialize(width: Int, height: Int) {
-    values = Array.ofDim[Double](width, height) //new Array[Array[Double]](width, height)
+    values = Array.ofDim[Double](width, height)
+    image = new ModelImage(this, colorMap)
   }
 
   def setValue(x: Int, y: Int, value: Double) {
@@ -44,9 +55,12 @@ class FractalModel extends RectangularModel {
   def getHeight: Int = values(0).length
   def getAspectRatio: Double = getWidth / getHeight
   def isDone: Boolean = currentRow >= getHeight
+  def getCurrentRow: Int = currentRow
+  def getLastRow: Int = lastRow
+  def getImage: Image = image.getImage
+  def getColorMap: ColorMap = colorMap
 
-  /**
-    * Set the row that we have calculated up to.
+  /** Set the row that we have calculated up to.
     * @param row new row
     */
   def setCurrentRow(row: Int) {
@@ -55,7 +69,4 @@ class FractalModel extends RectangularModel {
     if (currentRow == 0)
       lastRow = 0
   }
-
-  def getCurrentRow: Int = currentRow
-  def getLastRow: Int = lastRow
 }

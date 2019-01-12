@@ -1,13 +1,12 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+package com.barrybecker4.simulation.fractalexplorer.algorithm
 
-package com.barrybecker4.simulation.fractalexplorer
-
-import com.barrybecker4.ui.util.ColorMap
 import java.awt._
+import com.barrybecker4.ui.util.ColorMap
+
 
 /**
   * Default colormap for visualization. May be edited in the UI.
-  *
   * @author Barry Becker
   */
 object FractalColorMap {

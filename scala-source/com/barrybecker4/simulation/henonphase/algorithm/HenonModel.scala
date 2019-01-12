@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage
   */
 class HenonModel private[algorithm](val width: Int, val height: Int,
                                     var params: TravelerParams, val uniformSeeds: Boolean, val connectPoints: Boolean,
-                                    var numTravelors: Int, var cmap: ColorMap) {
+                                    var numTravelers: Int, var cmap: ColorMap) {
 
   final private var travelers: Array[Traveler] = _
 
@@ -23,11 +23,11 @@ class HenonModel private[algorithm](val width: Int, val height: Int,
   def getWidth: Int = width
   def getHeight: Int = height
 
-  def reset() {
-    travelers = Array.ofDim[Traveler](numTravelors)
-    val inc = 1.0 / numTravelors
+  def reset(): Unit = synchronized {
+    travelers = Array.ofDim[Traveler](numTravelers)
+    val inc = 1.0 / numTravelers
     var xpos = 0.0
-    for (i <- 0 until numTravelors) {
+    for (i <- 0 until numTravelers) {
       if (uniformSeeds) {
         val color = cmap.getColorForValue(xpos)
         travelers(i) = new Traveler(xpos, 0, color, params)
@@ -42,9 +42,13 @@ class HenonModel private[algorithm](val width: Int, val height: Int,
   }
 
   /** @param numSteps number of steps to increment each traveler */
-  def increment(numSteps: Int) {
+  def increment(numSteps: Int): Unit = synchronized {
+    if (travelers == null) { // this should not happen, but it does sometimes
+      System.err.println("travelers array was unexpectedly null. numTravelers = " + numTravelers)
+      return
+    }
     for (traveler <- travelers) {
-      offlineGraphics.setColor(traveler.getColor)
+      offlineGraphics.setColor(traveler.color)
       for (i <- 0 until numSteps) {
         val xpos = (width * (traveler.x / 2.0 + 0.5)).toInt
         val ypos = (height * (traveler.y / 2.0 + 0.5)).toInt

@@ -14,18 +14,17 @@ import java.awt._
   * Simulates graphing a function
   * @author Barry Becker
   */
-object GraphSimulator {
-  def main(args: Array[String]): Unit = {
-    val sim = new GraphSimulator
-    sim.setPaused(true)
-    new AnimationFrame(sim)
-  }
+object GraphSimulator extends App {
+  val sim = new GraphSimulator
+  sim.setPaused(true)
+  new AnimationFrame(sim)
 }
 
 class GraphSimulator private() extends Simulator("Graph") {
-  initGraph()
+
   private var graph: AbstractFunctionRenderer = _
   private var function: Function = _
+  initGraph()
 
   def setFunction(function: Function): Unit = {
     this.function = function
@@ -38,11 +37,12 @@ class GraphSimulator private() extends Simulator("Graph") {
   override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
 
   private def initGraph() {
-    if (function == null) function = DIAGONAL.function
+    if (function == null)
+      function = DIAGONAL.function
     graph = new SingleFunctionRenderer(function)
   }
 
-  override def paint(g: Graphics) {
+  override def paint(g: Graphics): Unit = {
     graph.setSize(getWidth, getHeight)
     graph.paint(g)
   }
