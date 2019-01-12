@@ -73,9 +73,8 @@ class ModelImage(var model: RectangularModel, var cmap: ColorMap, val scale: Int
     else {
       val color = cmap.getColorForValue(model.getValue(xStart, yPos)).getRGB
       for (xx <- 0 until scale) {
-        for (yy <- 0 until scale) {
+        for (yy <- 0 until scale)
           pixels((yScaledStart + yy) * width + xScaledStart + xx) = color
-        }
       }
     }
   }

@@ -17,10 +17,10 @@ sealed trait AlgorithmEnum  {
   /**
     * Create an instance of the algorithm given the controller and a refreshable.
     */
-  def createInstance(model: FractalModel): FractalAlgorithm = {
+  def createInstance(): FractalAlgorithm = {
     this match {
-      case MANDELBROT => new MandelbrotAlgorithm(model)
-      case JULIA => new JuliaAlgorithm(model)
+      case MANDELBROT => new MandelbrotAlgorithm()
+      case JULIA => new JuliaAlgorithm()
     }
   }
 

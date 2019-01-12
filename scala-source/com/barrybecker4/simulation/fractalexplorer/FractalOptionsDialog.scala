@@ -42,7 +42,6 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
 
   /**
     * The dropdown menu at the top for selecting an algorithm for solving the puzzle.
-    *
     * @return a dropdown/down component.
     */
   private def createAlgorithmDropdown = {
@@ -60,9 +59,9 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     val sim = getSimulator
     val selected = algorithmChoice.getSelectedIndex
     sim.setAlgorithm(AlgorithmEnum.VALUES(selected))
-    println("from field seed = " + juliaSeedField.getValue)
+    println("from seed field = " + juliaSeedField.getValue)
     sim.setJuliaSeed(juliaSeedField.getValue)
-    this.setVisible(false)
+    setVisible(false)
     sim.repaint()
   }
 }

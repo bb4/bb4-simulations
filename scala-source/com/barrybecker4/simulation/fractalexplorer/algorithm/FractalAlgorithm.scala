@@ -1,12 +1,14 @@
 /** Copyright by Barry G. Becker, 2015 - 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
+import java.awt.Image
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.math.ComplexNumber
 import com.barrybecker4.common.math.ComplexNumberRange
 import com.barrybecker4.simulation.common.Profiler
 import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
+import com.barrybecker4.ui.util.ColorMap
 
 /**
   * Abstract implementation common to all fractal algorithms.
@@ -39,7 +41,10 @@ object FractalAlgorithm {
   val DEFAULT_MAX_ITERATIONS = 500
 }
 
-abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumberRange) {
+abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
+
+  private val model: FractalModel = new FractalModel()
+  model.setCurrentRow(0)
 
   /** range of bounding box in complex plane. */
   private var range: ComplexNumberRange = initialRange
@@ -99,8 +104,9 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
   }
 
   def getModel: FractalModel = model
+  def setSize(width: Int, height: Int): Unit = model.setSize(width, height)
 
-  /** @param timeStep number of rows to compute on this timestep.
+  /** @param timeStep number of rows to compute on this time-step.
     * @return true when done computing whole model.
     */
   def timeStep(timeStep: Double): Boolean = {
@@ -136,6 +142,7 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
       workers.foreach(x => x.run())
 
     model.setCurrentRow(currentRow)
+    model.updateImage()
     false
   }
 
@@ -143,9 +150,11 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
     *         Typically corresponds to the number times we had to iterate before the point escaped (or not).
     */
   def getFractalValue(seed: ComplexNumber): Double
+  def getImage: Image = model.getImage
+  def getAspectRatio: Double = model.getAspectRatio
+  def getColorMap: ColorMap = model.getColorMap
 
   /** Converts from screen coordinates to data coordinates.
-    *
     * @param x real valued coordinate
     * @param y pure imaginary coordinate
     * @return corresponding position in complex number plane represented by the model.
@@ -192,5 +201,4 @@ abstract class FractalAlgorithm(model: FractalModel, initialRange: ComplexNumber
 
     def run(): Unit = computeChunk(fromRow, toRow)
   }
-
 }

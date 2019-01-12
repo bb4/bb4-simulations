@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer
 
 import com.barrybecker4.common.math.ComplexNumber
@@ -11,21 +11,19 @@ import javax.swing.JPanel
 import java.awt.Graphics
 
 
-/**
-  * Interactively explores the Mandelbrot set.
-  *
-  * @author Barry Becker.
-  */
 object FractalExplorer {
   val DEFAULT_ALGORITHM_ENUM: AlgorithmEnum = MANDELBROT
 }
 
+/**
+  * Interactively explores the Mandelbrot set.
+  * @author Barry Becker.
+  */
 class FractalExplorer extends Simulator("Fractal Explorer") {
 
   private var algorithm: FractalAlgorithm = _
   private var algorithmEnum: AlgorithmEnum = _
   private var juliaSeed = JuliaAlgorithm.DEFAULT_JULIA_SEED
-  private var model: FractalModel = _
   private var options: DynamicOptions = _
   private var zoomHandler: ZoomHandler = _
   private var useFixedSize: Boolean = false
@@ -58,8 +56,7 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   def getAlgorithm: FractalAlgorithm = algorithm
 
   override protected def reset(): Unit = {
-    model = new FractalModel()
-    algorithm = algorithmEnum.createInstance(model)
+    algorithm = algorithmEnum.createInstance()
     // this is a hack. The Options dialog should only know about this seed
     algorithm match {
       case algorithm1: JuliaAlgorithm => algorithm1.setJuliaSeed(juliaSeed)
@@ -78,15 +75,13 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   }
 
   override protected def createOptionsDialog = new FractalOptionsDialog(frame, this)
-
   override protected def getInitialTimeStep: Double = DynamicOptions.INITIAL_TIME_STEP
 
   override def timeStep: Double = {
     if (!isPaused) {
       if (!useFixedSize)
-        model.setSize(getWidth, getHeight)
+        algorithm.setSize(getWidth, getHeight)
       algorithm.timeStep(tStep)
-      model.updateImage(model.getLastRow, model.getCurrentRow)
       options.setCoordinates(algorithm.getRange)
     }
     tStep
@@ -96,15 +91,13 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
     if (g != null)
-      g.drawImage(model.getImage, 0, 0, null)
-    zoomHandler.render(g, model.getAspectRatio)
+      g.drawImage(algorithm.getImage, 0, 0, null)
+    zoomHandler.render(g, algorithm.getAspectRatio)
     options.setCoordinates(algorithm.getRange)
     Profiler.getInstance.stopRenderingTime()
   }
 
-  override def setScale(scale: Double): Unit = {
-  }
-
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
@@ -112,5 +105,5 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
     options
   }
 
-  def getColorMap: ColorMap = model.getColorMap
+  def getColorMap: ColorMap = algorithm.getColorMap
 }

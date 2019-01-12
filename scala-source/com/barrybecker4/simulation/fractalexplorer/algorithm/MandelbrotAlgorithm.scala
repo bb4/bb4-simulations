@@ -13,10 +13,7 @@ object MandelbrotAlgorithm {
    ComplexNumberRange(new ComplexNumber(-2.1, -1.5), new ComplexNumber(1.1, 1.5))
 }
 
-class MandelbrotAlgorithm(model: FractalModel)
-  extends FractalAlgorithm(model, MandelbrotAlgorithm.INITIAL_RANGE) {
-
-  model.setCurrentRow(0)
+class MandelbrotAlgorithm extends FractalAlgorithm(MandelbrotAlgorithm.INITIAL_RANGE) {
 
   def getFractalValue(initialValue: ComplexNumber): Double = {
     var z: ComplexNumber = initialValue

@@ -27,19 +27,21 @@ class FractalModel extends RectangularModel {
 
   /** Changing the size of the model will clear all current results.
     * Only resize if the new dimensions are different to prevent clearing results unnecessarily.
+    * @return true if the size changed
     */
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     if (width != getWidth || height != getHeight)
       initialize(width, height)
   }
 
-  def updateImage(lastRow: Int, currentRow: Int): Unit = {
+  def updateImage(): Unit = {
     image.updateImage(lastRow, currentRow)
   }
 
   private def initialize(width: Int, height: Int) {
     values = Array.ofDim[Double](width, height)
     image = new ModelImage(this, colorMap)
+    setCurrentRow(0)
   }
 
   def setValue(x: Int, y: Int, value: Double) {
