@@ -19,180 +19,285 @@ dependencies {
     compile 'com.barrybecker4:bb4-optimization:1.5-SNAPSHOT'
 }
 
-task runDice(type: JavaExec, description: "Run dice simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.dice.DiceSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
 
-task runGraphing(type: JavaExec, description: "Run Graphing simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.graphing.GraphSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runParameters(type: JavaExec, description: "Run Parameter simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.parameter.ParameterSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runInverseFunctions(type: JavaExec, description: "Show Funtions and their Inverses") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runPredPrey(type: JavaExec, description: "Run Predator Prey Simulation", group: "Run") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.predprey.PredPreySimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runFluid(type: JavaExec, description: "Run fluid dynamics simulator", group: "Run") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.fluid.ui.FluidSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runWater(type: JavaExec, description: "Run 1D Water Simulation", group: "Run") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.water.ui.WaterSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runSnake(type: JavaExec, description: "Run snake movement simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.snake.SnakeSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-    enableAssertions = true
-}
-
-task runStock(type: JavaExec, description: "Run stock invetment simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.stock.StockSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runTrading(type: JavaExec, description: "Run stock trading simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.trading.TradingSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-    enableAssertions = true
-}
-
-task runReactionDiffusion(type: JavaExec, description: "Run reaction diffusion simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.reactiondiffusion.RDSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runFractalExplorer(type: JavaExec, description: "Run (scala) fractal explorer simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runHenonPhaseExplorer(type: JavaExec, description: "Run henon phase simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.henonphase.HenonPhaseExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runHabitatExplorer(type: JavaExec, description: "Run animal habitat simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.habitat.HabitatSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runLSystemExplorer(type: JavaExec, description: "Run l-system tree simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.lsystem.LSystemExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runCaveExplorer(type: JavaExec, description: "Run cave simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.cave.CaveExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runConwayExplorer(type: JavaExec, description: "Run Conway's game of life simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.conway.ConwayExplorer"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runLiquid(type: JavaExec, description: "Run liquid simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.liquid.LiquidSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runTrebuchet(type: JavaExec, description: "Run treduchet simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.trebuchet.TrebuchetSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runVerhulst(type: JavaExec, description: "Run Verhulst population simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.common.ui.SimulatorApplet'
-    args = ["-panel_class", "com.barrybecker4.simulation.verhulst.VerhulstSimulator"]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runSierpinski(type: JavaExec, description: "Run Sierpinski triangle simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.sierpinski.SierpinskiApplet'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task runSprograph(type: JavaExec, description: "Run Spirograph simulator") {
-    group = 'application'
-    main = 'com.barrybecker4.simulation.spirograph.Spirograph'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
+// The appMap is used to create the list of available application in the html index page and to generate the app tasks.
 ext.appMap = new LinkedHashMap()
-appMap.put('simulation', [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']])
-appMap.put('dice',       [include:['com/barrybecker4/simulation/dice/**']])
-appMap.put('fluid',      [include:['com/barrybecker4/simulation/fluid/**']])
-appMap.put('fractalexplorer', [include:['com/barrybecker4/simulation/fractalexplorer/**']])
-appMap.put('habitat',    [include:['com/barrybecker4/simulation/habitat/**']])
-appMap.put('henonexplorer', [include:['com/barrybecker4/simulation/henonphase/**']])
-appMap.put('cave', [include:['com/barrybecker4/simulation/cave/**']])
-appMap.put('conway', [include:['com/barrybecker4/simulation/conway/**']])
-appMap.put('liquid',     [include:['com/barrybecker4/simulation/liquid/**']])
-appMap.put('lsystem',    [include:['com/barrybecker4/simulation/lsystem/**']])
-appMap.put('predprey',   [include:['com/barrybecker4/simulation/predprey/**']])
-appMap.put('reactiondiffusion', [include:['com/barrybecker4/simulation/reactiondiffusion/**']])
-appMap.put('snake',      [include:['com/barrybecker4/simulation/snake/**']])
-appMap.put('stock',      [include:['com/barrybecker4/simulation/stock/**']])
-appMap.put('trading',    [include:['com/barrybecker4/simulation/trading/**']])
-appMap.put('trebuchet',  [include:['com/barrybecker4/simulation/trebuchet/**']])
-appMap.put('verhulst',   [include:['com/barrybecker4/simulation/verhulst/**']])
-appMap.put('sierpinski',   [include:['com/barrybecker4/simulation/sierpinski/**']])
-appMap.put('spirograph',   [include:['com/barrybecker4/simulation/spirograph/**']])
+appMap['reactiondiffusion'] = [
+        title: 'Reaction Diffusion',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
+        panel_class: 'com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
+        description: 'Simulates an interaction between 2 chemicals in a reaction diffusion simulation. ' +
+                'Based work by <a href="http://www.joakimlinde.se/java/ReactionDiffusion/">Joakim Linde</a>. ' +
+                'You can adjust parameters to influence simulation. Uncheck pause to begin animation.',
+        longDescription: 'Simulates a interaction between 2 chemicals in a reaction diffusion simulation. ' +
+                'The program is based on an applet by ' +
+                '<a href="http://www.joakimlinde.se/java/ReactionDiffusion/">Joakim Linde</a>. ' +
+                'There are 2 chemicals that react in complex ways as defined by a non-linear differential ' +
+                'equation that cannot be solved analytically. The simulation solves it numerically.'
+]
+appMap['henonexplorer'] = [
+        title: 'Henon Phase Explorer',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.henonphase.HenonPhaseExplorer',
+        panel_class: 'com.barrybecker4.simulation.henonphase.HenonPhaseExplorer',
+        description: 'Allows you to explorer the parameters of a Henon phase attractor',
+        longDescription: 'The ' +
+                '<a href="http://www.complexification.net/gallery/machines/henonPhaseDeep/">Henon Strange Attractor</a> ' +
+                'is defined by the following transformations:<br/>' +
+                'Xn+1 = Xn cos(a) - (Yn - Xn^2) sin(a) <br/>' +
+                'Yn+1 = Xn sin(a) + (Yn - Xn^2) cos(a)'
+]
+appMap['fractalexplorer'] = [
+        title: 'Fractal Explorer',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.fractalexplorer.FractalExplorer',
+        panel_class: 'com.barrybecker4.simulation.fractalexplorer.FractalExplorer',
+        description: 'Allows you to navigate through the Mandelbrot set. Drag open a bock to zoom, and click ' +
+                'the "go back" button to reverse your zooms.',
+        longDescription: 'This program allows you to navigate through the most complex object in mathematics, ' +
+                'the <a href="http://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>. ' +
+                'Drag open a bock to zoom, and click ' +
+                'the "go back" button to undo the last zoom. ' +
+                'When I created my first implementation of this program in turbo pascal in high school, ' +
+                'I can remember waiting for hours for the images to generate ' +
+                '(on a 640 by 200 pixel screen). Now its almost instantaneous.'
+]
+appMap['cave'] = [
+        title: 'Cave Explorer',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.cave.CaveExplorer',
+        panel_class: 'com.barrybecker4.simulation.cave.CaveExplorer',
+        description: 'Allows you to generate random caves using cellular automata.',
+        longDescription: 'This program allows you generate random caves that might be used in a game or for other purposes. ' +
+                'The technique is described in this ' +
+                '<a href="https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664">article</a>.'
+]
+appMap['conway'] = [
+        title: "Conway's Game of Life",
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.conway.ConwayExplorer',
+        panel_class: 'com.barrybecker4.simulation.conway.ConwayExplorer',
+        description: 'Allows you to simulate Conway\'s game of life with different rule systems.',
+        longDescription: 'This program allows you to ' +
+                '  simulate <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway\'s game of life</a>. ' +
+                '  Color is used to indicate the age of the particles. Several different rule systems are allowed.'
+]
+appMap['snake'] = [
+        title: 'Snake',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.snake.SnakeSimulator',
+        panel_class: 'com.barrybecker4.simulation.snake.SnakeSimulator',
+        description: 'Simulates the movement of a real snake. Based on a 1988 SIGGRAPH paper by Gavin Miller. ' +
+                'by Gavin Miller. You can adjust parameters to influence the way that ' +
+                'the snake moves. Uncheck pause to begin animation.',
+        longDescription: 'Simulate a living snake. The program uses a spring based model to represent the snake. ' +
+                'There is a sinusoidal force function applied to each side to simulate muscular contractions. ' +
+                'Directional friction is used to make the snake go forward (as happens with a real snake). ' +
+                'Snakes have 4 ways of moving: rectilinear progression, horizontal undulatory progression, sindwinding, ' +
+                'and concertina progression (rarely used). I only used the most common gait, horizontal ' +
+                'undulatory progression, in this demo, but will probably add the others. You can also change ' +
+                'the parameters of this gait to get different behaviors. ' +
+                'The snake "learns" to move more efficiently by a process of automated optimization. ' +
+                'It uses exactly the optimization code I use for improving the performance of the game programs. ' +
+                'I now understand really well how a snake moves. ' +
+                'Based on work by <a href="http://www.snakerobots.com/simulation.html">Gavin Miller</a>' +
+                ' in his 1988 SIGGRAPH paper.'
+]
+appMap['dice'] = [
+        title: 'Dice',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.dice.DiceSimulator',
+        panel_class: 'com.barrybecker4.simulation.dice.DiceSimulator',
+        description: 'Simulates rolling N dice with M sides.',
+        longDescription: 'This simulator evolved out of looking for a good way to explain ' +
+                'probability distributions to my son and his clasmates. This simple program illustrates ' +
+                'the different sorts of bell-curve (or gaussian) distributions that can arise as you vary ' +
+                'the number of dice and the number of sides that they have.'
+]
+appMap['stock'] = [
+        title: 'Stock Price Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.stock.StockSimulator',
+        panel_class: 'com.barrybecker4.simulation.stock.StockSimulator',
+        description: 'Simulates the expected outcome for M stocks over N time periods. ' +
+                '  The stock(s) will go up U% or down D% with equal liklihood in each time period.',
+        longDescription: 'This simulation was motivated by the following ' +
+                '<a href="http://www.barrybecker4.com/puzzle_answers.html">problem</a>.<br/>' +
+                'You invest $100,000 in a volatile stock. Each year, with equal probability, it either rises 60% or falls by 40%. ' +
+                'What would be the expected (mean), median, and mode stock valuations after 100 years? <br/> ' +
+                'The moral of the story is Diversify!'
+]
+appMap['trading'] = [
+        title: 'Stock Trading Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.trading.TradingSimulator',
+        panel_class: 'com.barrybecker4.simulation.trading.TradingSimulator',
+        description: 'Simulates profitability of different trading strategies applied ' +
+                '  to buying and selling M stocks over N time periods. ' +
+                '  The stock(s) will go up U% or down D% with equal liklihood in each time period.',
+        longDescription: 'This work was requested by a friend. The public version of this project ' +
+                'has some trivial generation and trading strategies, ' +
+                'but there is a private repo that has proprietary strategies.'
+]
+appMap['habitat'] = [
+        title: 'Habitat Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.habitat.HabitatSimulator',
+        panel_class: 'com.barrybecker4.simulation.habitat.HabitatSimulator',
+        description: 'Simulates a habitat with different creatures.',
+        longDescription: 'Create and maintain a set of creatures in a self-sustaining habitat. In the future, I ' +
+                'would like to add many more attributes to each creature to make the simulation more realistic.'
+]
+appMap['verhulst'] = [
+        title: 'Verhulst Population Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.verhulst.VerhulstSimulator',
+        panel_class: 'com.barrybecker4.simulation.verhulst.VerhulstSimulator',
+        description: 'Simulate fox and rabbit population dynamics based on Verhulst growth model',
+        longDescription: 'Chaotic behavior can emerge from using a dynamic logistic population growth model ' +
+                'like the one researched by Pierr Verhulst. ' +
+                ' See <a href="https://fractalfoundation.org/OFC/OFC-6-1.html">Rabbits and Coyotes</a>.'
+]
+appMap['predprey'] = [
+        title: 'Predator Prey Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.predprey.PredPreySimulator',
+        panel_class: 'com.barrybecker4.simulation.predprey.PredPreySimulator',
+        description: 'Simulates foxes and rabbit populations over time.',
+        longDescription: 'Simulates foxes (predators) and rabbits (prey) in the wild. Simulating the ' +
+                '<a href="http://home.messiah.edu/~deroos/csc171/PredPrey/PPIntro.htm">predator prey relationship</a> ' +
+                'can help us understand how complex systems can arise from very simple rules.'
+]
+appMap['fluid'] = [
+        title: 'Fluid Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.fluid.ui.FluidSimulator',
+        panel_class: 'com.barrybecker4.simulation.fluid.ui.FluidSimulator',
+        description: 'Simulates deep water dynamics. ' +
+                'Uncheck pause to begin animation. You can click and drag in the animaiton to introduce disturbances.',
+        longDescription: 'Deep water simulation based on work ' +
+                'by <a href="http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf">Jos Stam</a>. ' +
+                'Use the mouse to stir up the fluid by clicking and dragging.'
+]
+appMap['liquid'] = [
+        title: 'Liquid Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.liquid.LiquidSimulator',
+        panel_class: 'com.barrybecker4.simulation.liquid.LiquidSimulator',
+        description: 'Particle based simulation of some liquid flowing.',
+        longDescription: 'Particle based fluid simulation based on ' +
+                '<a href="http://physbam.stanford.edu/~fedkiw/papers/stanford2001-02.pdf">Nick Fosters SIGGRAPH paper</a>. ' +
+                'Numerical instability (due to a bug) causes this simulation to blow up after a ' +
+                'relatively short time unfortunately.'
+]
+appMap['water'] = [
+        title: '2D Deep Water Simulation',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.water.ui.WaterSimulator',
+        panel_class: 'com.barrybecker4.simulation.water.ui.WaterSimulator',
+        description: 'Simulates waves in deep water using a simple linear differential equation.',
+        longDescription: 'Deep water simulation based on work by ' +
+                '<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.89.1204&rep=rep1&type=pdf">Kass and Miller</a>. ' +
+                'Drag the mouse to interactively change the height of the water or of the ocean floor.'
+]
+appMap['trebuchet'] = [
+        title: 'Trebuchet',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.trebuchet.TrebuchetSimulator',
+        panel_class: 'com.barrybecker4.simulation.trebuchet.TrebuchetSimulator',
+        description: 'Simulates the movement of a real trebuchet. ' +
+                'You can adjust parameters to influence the way that the trebuchet operates. ' +
+                'Uncheck pause to begin animation.',
+        longDescription: 'Simulate a <a href="http://en.wikipedia.org/wiki/Trebuchet">trebuchet</a>.' +
+                'This program uses a physically based model to represent a trebuchet. ' +
+                'When my son and I were watching Lord of the Rings, we noticed that Minas Tirith used trebuchets to defend itself. ' +
+                'We built one out of lego, but optimizing lego is tedious, so I made this virtual ' +
+                'trebuchet in order to try different designs. ' +
+                'The trebuchet can also "learn" to move more efficiently by a process of automated optimization. ' +
+                'It uses exactly the optimization code I use for improving the performance of the game programs. ' +
+                'This is still a work in progress. I need to use constrained dynamics for the projectile\'s attachement to the sling ' +
+                '(instead of a simple spring based restorative force which leads to instability). ' +
+                'When done, I hope to build a trebuchet with my son according to the optimized specifications.'
+]
+appMap['spirograph'] = [
+        title: 'Spirograph',
+        command: 'bb4-spirograph',
+        mainClass: "com.barrybecker4.simulation.spirograph.Spirograph",
+        description: 'Modify the parameters and press the draw button. Adapted from work done by ' +
+                '<a href="http://www.math.psu.edu/dlittle/java/parametricequations/spirograph/index.html">David Little</a>.',
+        longDescription: 'Remember that psychodelic toy from the 70\'s?  ' +
+                'Here\'s a version of <a href="http://en.wikipedia.org/wiki/Spirograph">Spirograph</a> for the computer, ' +
+                'that can do things beyond what that old toy could do. ' +
+                'Adapted from work done by ' +
+                '<a href=http://www.math.psu.edu/dlittle/java/parametricequations/spirograph/index.html>David Little</a>.'
+]
+appMap['sierpinski'] = [
+        title: 'Sierpinski Triangle',
+        command: 'bb4-sierpinski',
+        mainClass: "com.barrybecker4.simulation.sierpinski.Sierpinski",
+        description: 'A triangular fractal discovered by Waclaw Sierpinski.',
+        longDescription: 'This is an example of a self-similar set. \\\n' +
+                'It is a mathematically generated pattern that can be reproducible at any magnification. \\\n' +
+                'See <a href="http://en.wikipedia.org/wiki/Sierpinski_triangle">Sierpinski Triangle</a>'
+]
+appMap['lsystem'] = [
+        title: 'L-System Tree',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.lsystem.LSystemExplorer',
+        panel_class: 'com.barrybecker4.simulation.lsystem.LSystemExplorer',
+        description: 'A method for building realistic looking trees out of fractals defined by a simple expression.',
+        longDescription: 'Create trees from l-system expressions. ' +
+                ' See <a href="http://www.javaview.de/vgp/tutor/lsystem/PaLSystem.html">Java View implementation</a> ' +
+                ' or <a href="http://nodebox.net/code/index.php/L-system">NodeBox implemenation</a> for other examples.'
+]
+appMap['graphing'] = [
+        title: 'Graphing Simulator',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.graphing.GraphSimulator',
+        panel_class: 'com.barrybecker4.simulation.graphing.GraphSimulator',
+        description: 'Plot some Graphs.',
+        longDescription: 'Tests out the graph plotting code from bb4-ui. ' +
+                'There are a variety of predifined functions to graph.'
+]
+appMap['funcinverse'] = [
+        title: 'Inverse Function Simulator',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
+        panel_class: 'com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
+        description: 'Verify function inverses by plotting them.',
+        longDescription: 'Tests out functions and their inverses from  bb4-common. ' +
+                'There are a variety of functions to plot.'
+]
+appMap['parameter'] = [
+        title: 'Parameter Simulator',
+        command: 'bb4-simulator panel_class com.barrybecker4.simulation.parameter.ParameterSimulator',
+        panel_class: 'com.barrybecker4.simulation.parameter.ParameterSimulator',
+        description: 'Plot some Parameters.',
+        longDescription: 'Tests out the parameter  code from bb4-optimization. ' +
+                'There are a variety of parameter types to plot.'
+]
+
+appMap.each { appId, propMap ->
+
+    def mainClass = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
+    if (propMap.containsKey('mainClass'))
+        mainClass = propMap['mainClass']
+
+    def argsList = []
+    if (propMap.containsKey('panel_class'))
+        argsList = ["-panel_class", "${propMap['panel_class']}"]
+
+    tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
+        group = 'application'
+        main = "${mainClass}"
+        args = argsList
+        classpath = sourceSets.main.runtimeClasspath
+    }
+}
+
+ext.jarMap = new LinkedHashMap()
+jarMap['reactiondiffusion'] =  [include:['com/barrybecker4/simulation/reactiondiffusion/**']]
+jarMap['henonexplorer'] =  [include:['com/barrybecker4/simulation/henonphase/**']]
+jarMap['simulation'] = [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']]
+jarMap['dice'] =       [include:['com/barrybecker4/simulation/dice/**']]
+jarMap['fluid'] =      [include:['com/barrybecker4/simulation/fluid/**']]
+jarMap['fractalexplorer'] = [include:['com/barrybecker4/simulation/fractalexplorer/**']]
+jarMap['habitat'] =    [include:['com/barrybecker4/simulation/habitat/**']]
+jarMap['cave'] =  [include:['com/barrybecker4/simulation/cave/**']]
+jarMap['conway'] =  [include:['com/barrybecker4/simulation/conway/**']]
+jarMap['liquid'] =      [include:['com/barrybecker4/simulation/liquid/**']]
+jarMap['lsystem'] =     [include:['com/barrybecker4/simulation/lsystem/**']]
+jarMap['predprey'] =    [include:['com/barrybecker4/simulation/predprey/**']]
+jarMap['snake'] =       [include:['com/barrybecker4/simulation/snake/**']]
+jarMap['stock'] =       [include:['com/barrybecker4/simulation/stock/**']]
+jarMap['trading'] =     [include:['com/barrybecker4/simulation/trading/**']]
+jarMap['trebuchet'] =   [include:['com/barrybecker4/simulation/trebuchet/**']]
+jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
+jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
+jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
+
 
 // add extra execution scripts
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.

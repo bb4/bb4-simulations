@@ -11,7 +11,6 @@ import java.lang.Math.PI
 import java.lang.Math.asin
 import java.lang.Math.cos
 import java.lang.Math.sin
-import com.barrybecker4.simulation.trebuchet.model._
 
 
 /**

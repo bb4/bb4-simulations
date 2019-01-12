@@ -31,7 +31,11 @@ class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
     val cos = SCALE_FACTOR * cwLeverLength * Math.cos(angle)
     val sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle)
     val attachPt = new Vector2d(STRUT_BASE_X + sin, (-SCALE_FACTOR * height).toInt - cos)
-    g2.drawLine((scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt, (scale * attachPt.x).toInt, (BASE_Y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt)
+
+    g2.drawLine(
+      (scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt,
+      (scale * attachPt.x).toInt, (BASE_Y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt
+    )
     val radius = (SCALE_FACTOR * 0.05 * Math.cbrt(mass)).toInt
     g2.setColor(CounterWeight.COLOR)
     val diameter = (scale * 2.0 * radius).toInt
