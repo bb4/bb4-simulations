@@ -12,6 +12,8 @@ import javax.swing._
 import java.awt._
 import java.awt.event._
 
+import com.barrybecker4.common.app.AppContext
+
 
 /**
   * Dynamic controls for the RD simulation that will show on the right.
@@ -173,7 +175,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
 
   private def createButtons = {
     val buttonsPanel = new JPanel
-    resetButton = new JButton("Reset")
+    resetButton = new JButton(AppContext.getLabel("RESET"))
     resetButton.addActionListener(this)
     buttonsPanel.add(resetButton)
     buttonsPanel

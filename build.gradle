@@ -20,7 +20,7 @@ dependencies {
 }
 
 
-task runFractExpJap(type: JavaExec) {
+task runFractExpLocalized(type: JavaExec) {
     group = 'application'
     main = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
     args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"]

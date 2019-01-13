@@ -8,6 +8,8 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 
+import com.barrybecker4.common.app.AppContext
+
 
 object SimulatorOptionsDialog {
   private val MAX_NUM_STEPS_PER_FRAME = 10000
@@ -71,7 +73,7 @@ abstract class SimulatorOptionsDialog(parent: Component,
     buttonsPanel
   }
 
-  override def getTitle = "Simulation Configuration"
+  override def getTitle: String = AppContext.getLabel("SIM_CONFIG")
 
   protected def createRenderingParamPanel: JPanel = {
     val paramPanel = new JPanel

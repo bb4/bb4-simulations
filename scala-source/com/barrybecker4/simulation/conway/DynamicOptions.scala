@@ -144,7 +144,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
 
   private def createButtons: JPanel = {
     val buttonsPanel: JPanel = new JPanel
-    //resetButton = new JButton("Reset");
+    //resetButton = new JButton(AppContext.getLabel("RESET"));
     //resetButton.addActionListener(this);
     //buttonsPanel.add(resetButton);
     buttonsPanel

@@ -13,6 +13,8 @@ import javax.swing.JPanel
 import java.awt.Component
 import java.awt.event.ActionEvent
 
+import com.barrybecker4.common.app.AppContext
+
 
 /**
   * Base class for all simulations.
@@ -40,20 +42,17 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
     tStep = timeStep
   }
 
-  def getTimeStep: Double = tStep
-
   def setAntialiasing(use: Boolean): Unit = {
     useAntialiasing = use
   }
 
+  def getTimeStep: Double = tStep
   def getAntialiasing: Boolean = useAntialiasing
-
   def setScale(scale: Double): Unit = {}
-
   def getScale: Double = 1.0
 
   protected def createOptionsButton: GradientButton = {
-    val button = new GradientButton("Options")
+    val button = new GradientButton(AppContext.getLabel("OPTIONS"))
     optionsDialog = createOptionsDialog
     button.addActionListener((e: ActionEvent) => {
       optionsDialog.setLocationRelativeTo(e.getSource.asInstanceOf[Component])
@@ -86,7 +85,7 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
 
   /** @return a reset button that allows you to restore the initial condition of the simulation.*/
   protected def createResetButton: JButton = {
-    val resetButton = new JButton("Reset")
+    val resetButton = new JButton(AppContext.getLabel("RESET"))
     resetButton.addActionListener(e => reset())
     resetButton
   }
