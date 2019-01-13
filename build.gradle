@@ -20,6 +20,15 @@ dependencies {
 }
 
 
+task runFractExpJap(type: JavaExec) {
+    group = 'application'
+    main = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
+    args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"]
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ["-ea"]
+}
+
+
 // The appMap is used to create the list of available application in the html index page and to generate the app tasks.
 ext.appMap = new LinkedHashMap()
 appMap['reactiondiffusion'] = [
@@ -274,6 +283,7 @@ appMap.each { appId, propMap ->
         main = "${mainClass}"
         args = argsList
         classpath = sourceSets.main.runtimeClasspath
+        jvmArgs = ["-ea"]
     }
 }
 

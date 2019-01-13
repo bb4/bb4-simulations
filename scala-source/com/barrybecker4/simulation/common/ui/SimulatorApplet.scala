@@ -1,13 +1,15 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.common.ui
 
-import com.barrybecker4.common.app.ClassLoaderSingleton
+import com.barrybecker4.common.app.{AppContext, ClassLoaderSingleton, CommandLineOptions}
 import com.barrybecker4.ui.animation.AnimationPanel
 import com.barrybecker4.ui.application.ApplicationApplet
-import com.barrybecker4.ui.util.GUIUtil
+import com.barrybecker4.ui.util.{GUIUtil, Log}
 import javax.swing.JPanel
 import java.awt.BorderLayout
+
 import SimulatorAppletConsts._
+import com.barrybecker4.common.i18n.LocaleType
 
 object SimulatorAppletConsts {
   val RUN_OPTIMIZATION = false
@@ -53,9 +55,23 @@ object SimulatorApplet extends App {
 class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationApplet(args) {
   private var simulator = sim
 
+  if (args.length > 1) {
+    val options = new CommandLineOptions(args)
+    if (options.contains("help")) {
+      println(0, "Usage: -panel_class <simulation panel class name> [-locale <locale>]\n" +
+        s"where <locale> is one of ${LocaleType.VALUES.mkString(", ")}")
+    }
+    if (options.contains("locale")) { // then a locale has been specified
+      val localeName = options.getValueForOption("locale", "ENGLISH")
+      AppContext.initialize(localeName,
+        List("com.barrybecker4.ui.message", "com.barrybecker4.simulation.common.ui.message"),
+        new Log)
+    }
+  }
+
   /** @param simulatorClassName name of the simulator class to show. */
   def this(args: Array[String], simulatorClassName: String) {
-    this(Array[String](), SimulatorApplet.createSimulationFromClassName(simulatorClassName))
+    this(args, SimulatorApplet.createSimulationFromClassName(simulatorClassName))
   }
 
   /** @param sim the simulator to show.*/

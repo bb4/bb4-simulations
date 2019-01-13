@@ -81,7 +81,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
-  private var kernelChoice: Choice = _
+  private var kernelChoice: JComboBox[String] = _
   private var nextButton: JButton = _
   private var resetButton: JButton = _
   private var generalSliderGroup: SliderGroup = _
@@ -129,11 +129,11 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   private def createKernalDropdown = {
     val kernelChoicePanel = new JPanel
     val label = new JLabel("Kernal type: ")
-    kernelChoice = new Choice
+    kernelChoice = new JComboBox[String]
     for (kernelType <- CaveProcessor.KernelType.values) {
-      kernelChoice.add(kernelType.toString) //name)
+      kernelChoice.addItem(kernelType.toString) //name)
     }
-    kernelChoice.select(CaveProcessor.DEFAULT_KERNEL_TYPE.id)
+    kernelChoice.setSelectedItem(CaveProcessor.DEFAULT_KERNEL_TYPE.id)
     kernelChoice.addItemListener(this)
     kernelChoicePanel.add(label)
     kernelChoicePanel.add(kernelChoice)
@@ -214,7 +214,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   }
 
   override def itemStateChanged(e: ItemEvent) {
-    val `type` = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem)
+    val `type` = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem.toString)
     caveModel.setKernelType(`type`)
   }
 

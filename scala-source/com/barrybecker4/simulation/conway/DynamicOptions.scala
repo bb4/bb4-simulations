@@ -16,6 +16,7 @@ import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 
 import com.barrybecker4.common.concurrency.ThreadUtil
+import javafx.scene.control.ComboBox
 
 
 /**
@@ -59,7 +60,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   fill.setPreferredSize (new Dimension (1, 1000) )
   add (fill)
   private var nextButton: JButton = _
-  private var ruleChoice: Choice = _
+  private var ruleChoice: JComboBox[String] = _
   private var generalSliderGroup: SliderGroup = _
   private var useContinuousIteration: JCheckBox = _
   private var useParallelComputation: JCheckBox = _
@@ -130,11 +131,11 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   private def createRuleDropdown: JPanel = {
     val ruleChoicePanel: JPanel = new JPanel
     val label: JLabel = new JLabel ("Rule to apply: ")
-    ruleChoice = new Choice
+    ruleChoice = new JComboBox[String]
     for (ruleType <- ConwayProcessor.RuleType.values) {
-      ruleChoice.add (ruleType.toString) // .name
+      ruleChoice.addItem(ruleType.toString) // .name
     }
-    ruleChoice.select(ConwayProcessor.DEFAULT_RULE_TYPE.id)
+    ruleChoice.setSelectedIndex(ConwayProcessor.DEFAULT_RULE_TYPE.id)
     ruleChoice.addItemListener (this)
     ruleChoicePanel.add (label)
     ruleChoicePanel.add (ruleChoice)
@@ -162,7 +163,8 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   }
 
   override def itemStateChanged (e: ItemEvent) {
-    val ruleType: ConwayProcessor.RuleType.RuleType = ConwayProcessor.RuleType.withName(ruleChoice.getSelectedItem)
+    val ruleType: ConwayProcessor.RuleType.RuleType =
+      ConwayProcessor.RuleType.withName(ruleChoice.getSelectedItem.toString)
     conwayModel.setRuleType (ruleType)
   }
 

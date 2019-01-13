@@ -6,9 +6,7 @@ import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import com.barrybecker4.simulation.fractalexplorer.algorithm.AlgorithmEnum
 import com.barrybecker4.simulation.fractalexplorer.algorithm.JuliaAlgorithm
 import com.barrybecker4.ui.components.ComplexNumberInput
-import javax.swing.BoxLayout
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.{BoxLayout, JComboBox, JLabel, JPanel}
 import java.awt._
 
 
@@ -18,7 +16,7 @@ import java.awt._
 class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 
-  private var algorithmChoice: Choice = _
+  private var algorithmChoice: JComboBox[String] = _
   private var juliaSeedField: ComplexNumberInput = _
 
   override protected def createRenderingParamPanel = new JPanel
@@ -45,11 +43,11 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     * @return a dropdown/down component.
     */
   private def createAlgorithmDropdown = {
-    algorithmChoice = new Choice
+    algorithmChoice = new JComboBox[String]()
     for (algorithm <- AlgorithmEnum.VALUES) {
-      algorithmChoice.add(algorithm.getLabel)
+      algorithmChoice.addItem(algorithm.getLabel)
     }
-    algorithmChoice.select(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal())
+    algorithmChoice.setSelectedIndex(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal())
     algorithmChoice
   }
 

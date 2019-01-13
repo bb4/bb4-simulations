@@ -12,7 +12,6 @@ import java.awt._
 /**
   * Interactively explores Conway's game of life.
   * See https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
-  *
   * @author Barry Becker.
   */
 class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
