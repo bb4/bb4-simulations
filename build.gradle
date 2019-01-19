@@ -249,7 +249,8 @@ appMap['graphing'] = [
         panel_class: 'com.barrybecker4.simulation.graphing.GraphSimulator',
         description: 'Plot some Graphs.',
         longDescription: 'Tests out the graph plotting code from bb4-ui. ' +
-                'There are a variety of predifined functions to graph.'
+                'There are a variety of predifined functions to graph.',
+        deploy: false
 ]
 appMap['funcinverse'] = [
         title: 'Inverse Function Simulator',
@@ -257,7 +258,8 @@ appMap['funcinverse'] = [
         panel_class: 'com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
         description: 'Verify function inverses by plotting them.',
         longDescription: 'Tests out functions and their inverses from  bb4-common. ' +
-                'There are a variety of functions to plot.'
+                'There are a variety of functions to plot.',
+        deploy: false
 ]
 appMap['parameter'] = [
         title: 'Parameter Simulator',
@@ -265,7 +267,8 @@ appMap['parameter'] = [
         panel_class: 'com.barrybecker4.simulation.parameter.ParameterSimulator',
         description: 'Plot some Parameters.',
         longDescription: 'Tests out the parameter  code from bb4-optimization. ' +
-                'There are a variety of parameter types to plot.'
+                'There are a variety of parameter types to plot.',
+        deploy: false
 ]
 
 appMap.each { appId, propMap ->
