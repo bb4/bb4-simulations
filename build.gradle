@@ -33,7 +33,7 @@ task runFractExpLocalized(type: JavaExec) {
 ext.appMap = new LinkedHashMap()
 appMap['reactiondiffusion'] = [
         title: 'Reaction Diffusion',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
         panel_class: 'com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
         description: 'Simulates an interaction between 2 chemicals in a reaction diffusion simulation. ' +
                 'Based work by <a href="http://www.joakimlinde.se/java/ReactionDiffusion/">Joakim Linde</a>. ' +
@@ -46,7 +46,7 @@ appMap['reactiondiffusion'] = [
 ]
 appMap['henonexplorer'] = [
         title: 'Henon Phase Explorer',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.henonphase.HenonPhaseExplorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.henonphase.HenonPhaseExplorer',
         panel_class: 'com.barrybecker4.simulation.henonphase.HenonPhaseExplorer',
         description: 'Allows you to explorer the parameters of a Henon phase attractor',
         longDescription: 'The ' +
@@ -57,7 +57,7 @@ appMap['henonexplorer'] = [
 ]
 appMap['fractalexplorer'] = [
         title: 'Fractal Explorer',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.fractalexplorer.FractalExplorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.fractalexplorer.FractalExplorer',
         panel_class: 'com.barrybecker4.simulation.fractalexplorer.FractalExplorer',
         description: 'Allows you to navigate through the Mandelbrot set. Drag open a bock to zoom, and click ' +
                 'the "go back" button to reverse your zooms.',
@@ -71,7 +71,7 @@ appMap['fractalexplorer'] = [
 ]
 appMap['cave'] = [
         title: 'Cave Explorer',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.cave.CaveExplorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.cave.CaveExplorer',
         panel_class: 'com.barrybecker4.simulation.cave.CaveExplorer',
         description: 'Allows you to generate random caves using cellular automata.',
         longDescription: 'This program allows you generate random caves that might be used in a game or for other purposes. ' +
@@ -80,7 +80,7 @@ appMap['cave'] = [
 ]
 appMap['conway'] = [
         title: "Conway's Game of Life",
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.conway.ConwayExplorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.conway.ConwayExplorer',
         panel_class: 'com.barrybecker4.simulation.conway.ConwayExplorer',
         description: 'Allows you to simulate Conway\'s game of life with different rule systems.',
         longDescription: 'This program allows you to ' +
@@ -89,7 +89,7 @@ appMap['conway'] = [
 ]
 appMap['snake'] = [
         title: 'Snake',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.snake.SnakeSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.snake.SnakeSimulator',
         panel_class: 'com.barrybecker4.simulation.snake.SnakeSimulator',
         description: 'Simulates the movement of a real snake. Based on a 1988 SIGGRAPH paper by Gavin Miller. ' +
                 'by Gavin Miller. You can adjust parameters to influence the way that ' +
@@ -109,7 +109,7 @@ appMap['snake'] = [
 ]
 appMap['dice'] = [
         title: 'Dice',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.dice.DiceSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.dice.DiceSimulator',
         panel_class: 'com.barrybecker4.simulation.dice.DiceSimulator',
         description: 'Simulates rolling N dice with M sides.',
         longDescription: 'This simulator evolved out of looking for a good way to explain ' +
@@ -119,7 +119,7 @@ appMap['dice'] = [
 ]
 appMap['stock'] = [
         title: 'Stock Price Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.stock.StockSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.stock.StockSimulator',
         panel_class: 'com.barrybecker4.simulation.stock.StockSimulator',
         description: 'Simulates the expected outcome for M stocks over N time periods. ' +
                 '  The stock(s) will go up U% or down D% with equal liklihood in each time period.',
@@ -131,7 +131,7 @@ appMap['stock'] = [
 ]
 appMap['trading'] = [
         title: 'Stock Trading Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.trading.TradingSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.trading.TradingSimulator',
         panel_class: 'com.barrybecker4.simulation.trading.TradingSimulator',
         description: 'Simulates profitability of different trading strategies applied ' +
                 '  to buying and selling M stocks over N time periods. ' +
@@ -142,7 +142,7 @@ appMap['trading'] = [
 ]
 appMap['habitat'] = [
         title: 'Habitat Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.habitat.HabitatSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.habitat.HabitatSimulator',
         panel_class: 'com.barrybecker4.simulation.habitat.HabitatSimulator',
         description: 'Simulates a habitat with different creatures.',
         longDescription: 'Create and maintain a set of creatures in a self-sustaining habitat. In the future, I ' +
@@ -150,7 +150,7 @@ appMap['habitat'] = [
 ]
 appMap['verhulst'] = [
         title: 'Verhulst Population Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.verhulst.VerhulstSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.verhulst.VerhulstSimulator',
         panel_class: 'com.barrybecker4.simulation.verhulst.VerhulstSimulator',
         description: 'Simulate fox and rabbit population dynamics based on Verhulst growth model',
         longDescription: 'Chaotic behavior can emerge from using a dynamic logistic population growth model ' +
@@ -159,7 +159,7 @@ appMap['verhulst'] = [
 ]
 appMap['predprey'] = [
         title: 'Predator Prey Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.predprey.PredPreySimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.predprey.PredPreySimulator',
         panel_class: 'com.barrybecker4.simulation.predprey.PredPreySimulator',
         description: 'Simulates foxes and rabbit populations over time.',
         longDescription: 'Simulates foxes (predators) and rabbits (prey) in the wild. Simulating the ' +
@@ -168,7 +168,7 @@ appMap['predprey'] = [
 ]
 appMap['fluid'] = [
         title: 'Fluid Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.fluid.ui.FluidSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.fluid.ui.FluidSimulator',
         panel_class: 'com.barrybecker4.simulation.fluid.ui.FluidSimulator',
         description: 'Simulates deep water dynamics. ' +
                 'Uncheck pause to begin animation. You can click and drag in the animaiton to introduce disturbances.',
@@ -178,7 +178,7 @@ appMap['fluid'] = [
 ]
 appMap['liquid'] = [
         title: 'Liquid Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.liquid.LiquidSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.liquid.LiquidSimulator',
         panel_class: 'com.barrybecker4.simulation.liquid.LiquidSimulator',
         description: 'Particle based simulation of some liquid flowing.',
         longDescription: 'Particle based fluid simulation based on ' +
@@ -188,7 +188,7 @@ appMap['liquid'] = [
 ]
 appMap['water'] = [
         title: '2D Deep Water Simulation',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.water.ui.WaterSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.water.ui.WaterSimulator',
         panel_class: 'com.barrybecker4.simulation.water.ui.WaterSimulator',
         description: 'Simulates waves in deep water using a simple linear differential equation.',
         longDescription: 'Deep water simulation based on work by ' +
@@ -197,7 +197,7 @@ appMap['water'] = [
 ]
 appMap['trebuchet'] = [
         title: 'Trebuchet',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.trebuchet.TrebuchetSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.trebuchet.TrebuchetSimulator',
         panel_class: 'com.barrybecker4.simulation.trebuchet.TrebuchetSimulator',
         description: 'Simulates the movement of a real trebuchet. ' +
                 'You can adjust parameters to influence the way that the trebuchet operates. ' +
@@ -236,7 +236,7 @@ appMap['sierpinski'] = [
 ]
 appMap['lsystem'] = [
         title: 'L-System Tree',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.lsystem.LSystemExplorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.lsystem.LSystemExplorer',
         panel_class: 'com.barrybecker4.simulation.lsystem.LSystemExplorer',
         description: 'A method for building realistic looking trees out of fractals defined by a simple expression.',
         longDescription: 'Create trees from l-system expressions. ' +
@@ -245,7 +245,7 @@ appMap['lsystem'] = [
 ]
 appMap['graphing'] = [
         title: 'Graphing Simulator',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.graphing.GraphSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.graphing.GraphSimulator',
         panel_class: 'com.barrybecker4.simulation.graphing.GraphSimulator',
         description: 'Plot some Graphs.',
         longDescription: 'Tests out the graph plotting code from bb4-ui. ' +
@@ -254,7 +254,7 @@ appMap['graphing'] = [
 ]
 appMap['funcinverse'] = [
         title: 'Inverse Function Simulator',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
         panel_class: 'com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
         description: 'Verify function inverses by plotting them.',
         longDescription: 'Tests out functions and their inverses from  bb4-common. ' +
@@ -263,7 +263,7 @@ appMap['funcinverse'] = [
 ]
 appMap['parameter'] = [
         title: 'Parameter Simulator',
-        command: 'bb4-simulator panel_class com.barrybecker4.simulation.parameter.ParameterSimulator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.parameter.ParameterSimulator',
         panel_class: 'com.barrybecker4.simulation.parameter.ParameterSimulator',
         description: 'Plot some Parameters.',
         longDescription: 'Tests out the parameter  code from bb4-optimization. ' +
@@ -273,9 +273,7 @@ appMap['parameter'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
-    if (propMap.containsKey('mainClass'))
-        mainClass = propMap['mainClass']
+    def mainClass = appMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApplet"
 
     def argsList = []
     if (propMap.containsKey('panel_class'))
@@ -310,6 +308,7 @@ jarMap['trebuchet'] =   [include:['com/barrybecker4/simulation/trebuchet/**']]
 jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
 jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
 jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
+jarMap['water'] =    [include:['com/barrybecker4/simulation/water/**']]
 
 
 // add extra execution scripts

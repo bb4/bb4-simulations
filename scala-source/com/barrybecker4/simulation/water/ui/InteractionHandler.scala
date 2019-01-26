@@ -75,9 +75,9 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
     for (i <- s1 to s2) {
       val xdiff = Math.abs(i - xpos)
       val heightDelta = 0.3 * absYDiff * (1.0 - gaussFunc.getValue(0.5 * xdiff / absYDiff))
-//      if (i == xpos) {
-//        println(s"heightDelta = $heightDelta  floor($i) = ${env.floor(i)} absYDiff = $absYDiff" )
-//      }
+      //      if (i == xpos) {
+      //        println(s"heightDelta = $heightDelta  floor($i) = ${env.floor(i)} absYDiff = $absYDiff" )
+      //      }
       if (ground) {
         if (ydiff > 0) {
           if (i == xpos) println("floor before = " + env.floor(i))
