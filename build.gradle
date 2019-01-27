@@ -5,7 +5,7 @@ plugins {
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '1.5-SNAPSHOT'
+version = '1.5'
 apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4.gradle'
 project.archivesBaseName = 'bb4-simulation'
 mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
@@ -15,8 +15,8 @@ dependencies {
     compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
     compile 'org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4'
-    compile 'com.barrybecker4:bb4-sound:1.5-SNAPSHOT'
-    compile 'com.barrybecker4:bb4-optimization:1.5-SNAPSHOT'
+    compile 'com.barrybecker4:bb4-sound:1.5'
+    compile 'com.barrybecker4:bb4-optimization:1.5'
 }
 
 
