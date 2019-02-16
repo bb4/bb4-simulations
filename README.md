@@ -1,19 +1,23 @@
 # bb4-simulations
 
-A collection of java simulations. Examples include reaction diffusion, fractals, henon phase exploration, snakes, dice, and fluid flow.
-Here are the simulations added so far (hopefully others will contribute more)
-  - [Reaction Diffusion](http://barrybecker4.com/applets/reactiondiffusion_en.html)
-  - [Henon Phase Explorer](http://barrybecker4.com/applets/henonexplorer_en.html)
-  - [Fractal Explorer](http://barrybecker4.com/applets/fractalexplorer_en.html)
-  - [Snake](http://barrybecker4.com/applets/snake_en.html)
-  - [Dice](http://barrybecker4.com/applets/dice_en.html)
-  - [Stocks](http://barrybecker4.com/applets/stock_en.html)
-  - [Habitat](http://barrybecker4.com/applets/habitat_en.html)
-  - [Predator Prey](http://barrybecker4.com/applets/predprey_en.html)
-  - [Fluid](http://barrybecker4.com/applets/fluid_en.html)
-  - [Liquid](http://barrybecker4.com/applets/liquid_en.html)
-  - [Trebuchet](http://barrybecker4.com/applets/trebuchet_en.html)
-  - [Sierpinski](http://barrybecker4.com/applets/sierpinski_en.html)
+A collection of Scala simulations. 
+Here are the [simulations added so far](http://barrybecker4.com/bb4-projects/rbb4-simulations.html)
+  - Reaction Diffusion
+  - Henon Phase Explorer
+  - Cave Explorer
+  - Conway's game of life
+  - Fractal Explorer
+  - Snake
+  - L-Systems
+  - Dice
+  - Stocks
+  - Habitat
+  - Predator Prey
+  - Fluid
+  - Liquid
+  - Water
+  - Trebuchet
+  - Sierpinski
 
 
 ### [How to Build](https://github.com/barrybecker4/bb4-common/wiki/Building-bb4-Projects)

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--DOCTYPE environment SYSTEM "G:\projects\java_projects\trunk\source\com\barrybecker4\simulation\liquid\config\liquid.dtd"-->
-<!DOCTYPE environment SYSTEM "http://barrybecker4.com/bb4-projects/schema/liquid.dtd">
+<!-- cannot use this because of InfinityFree js challenge on every request. use raw from github instead -->
+<!--DOCTYPE environment SYSTEM "http://barrybecker4.com/bb4-projects/schema/liquid.dtd"-->
+<!DOCTYPE environment SYSTEM "https://raw.githubusercontent.com/bb4/bb4-simulations/master/scala-source/com/barrybecker4/simulation/liquid/config/liquid.dtd">
+
 
 <environment date="1/9/2009" author="Barry Becker"
                         gridWidth="3" gridHeight="3" cellSize="10.0" gravity="-9.8">

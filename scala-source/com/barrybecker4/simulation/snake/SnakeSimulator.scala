@@ -120,11 +120,8 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
 
   override def createDynamicControls = new SnakeDynamicOptions(this)
   override def doOptimization(): Unit = {
-    var optimizer: Optimizer = null
-    if (GUIUtil.hasBasicService) { // need to verify
-      optimizer = new Optimizer(this)
-    }
-    else optimizer = new Optimizer(this) //, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
+    val optimizer = new Optimizer(this)
+      //, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
   }

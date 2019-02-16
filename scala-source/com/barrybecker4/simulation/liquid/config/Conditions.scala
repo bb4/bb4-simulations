@@ -29,7 +29,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   val file: String = if (configFile == null) BASIC.fileName else configFile
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
-  DomUtil.printTree(document, 0)
+  println(DomUtil.toString(document, 0))
 
   private var gridWidth = 0
   private var gridHeight = 0
