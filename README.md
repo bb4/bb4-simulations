@@ -1,7 +1,7 @@
 # bb4-simulations
 
 A collection of Scala simulations. 
-Here are the [simulations added so far](http://barrybecker4.com/bb4-projects/rbb4-simulations.html)
+Here are the [simulations added so far](http://barrybecker4.com/bb4-projects/bb4-simulations/simulations_index.html)
   - Reaction Diffusion
   - Henon Phase Explorer
   - Cave Explorer
