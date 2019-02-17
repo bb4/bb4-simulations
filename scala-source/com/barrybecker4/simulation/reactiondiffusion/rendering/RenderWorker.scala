@@ -6,7 +6,6 @@ import java.awt._
 
 /**
   * Renders one of the rectangular strips.
-  *
   * @author Barry Becker
   */
 class RenderWorker private[rendering](var minX: Int, var maxX: Int, var renderer: RDRenderer, var g2: Graphics2D)

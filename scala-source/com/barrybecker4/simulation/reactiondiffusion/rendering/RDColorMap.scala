@@ -7,7 +7,6 @@ import java.awt._
 
 /**
   * Default colormap for visualization. May be edited in the UI.
-  *
   * @author Barry Becker
   */
 object RDColorMap {

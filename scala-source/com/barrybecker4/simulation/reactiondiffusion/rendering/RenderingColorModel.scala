@@ -9,7 +9,6 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 
 /**
   * Determines pixel colors based on chemical concentrations and lighting models.
-  *
   * @author Barry Becker
   */
 class RenderingColorModel private[rendering](var model: GrayScottModel, var cmap: ColorMap, var options: RDRenderingOptions) {

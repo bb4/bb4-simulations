@@ -9,7 +9,6 @@ import java.awt._
 
 /**
   * Renders the state of the GrayScottController model to the screen.
-  *
   * @author Barry Becker
   */
 class RDOnscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRenderingOptions)

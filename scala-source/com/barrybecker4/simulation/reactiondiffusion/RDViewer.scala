@@ -47,7 +47,7 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   }
 
   /** Sets to new size if needed. */
-  private def checkDimensions() = {
+  private def checkDimensions(): Unit = {
     var w = RDViewer.FIXED_SIZE_DIM
     var h = RDViewer.FIXED_SIZE_DIM
     if (!useFixedSize) {
@@ -57,7 +57,7 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
     initRenderers(w, h)
   }
 
-  private def initRenderers(w: Int, h: Int) = {
+  private def initRenderers(w: Int, h: Int): Unit = {
     if (w != oldWidth || h != oldHeight) {
       grayScott.setSize(w, h)
       onScreenRenderer = None

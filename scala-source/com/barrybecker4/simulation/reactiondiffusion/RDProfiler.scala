@@ -23,13 +23,12 @@ object RDProfiler {
   }
 }
 
-class RDProfiler private()
-
 /**
   * Private constructor. Use getInstance instead.
   */
-//add(COMMIT_CHANGES, CALCULATION);
-  extends Profiler {
+class RDProfiler private() extends Profiler {
+
+  //add(COMMIT_CHANGES, CALCULATION);
   add(RDProfiler.CONCURRENT_CALCULATION, Profiler.CALCULATION)
   private var numFrames = 0
 

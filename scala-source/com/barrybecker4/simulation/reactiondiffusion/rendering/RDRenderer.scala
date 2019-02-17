@@ -9,7 +9,6 @@ import java.awt.Graphics2D
 
 /**
   * Renders the state of the GrayScottController model to the screen.
-  *
   * @author Barry Becker
   */
 abstract class RDRenderer private[rendering](var model: GrayScottModel,

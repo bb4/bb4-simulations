@@ -35,12 +35,12 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
-    doBrush()
+    doBrush
     lastX = currentX
     lastY = currentY
   }
 
-  private def doBrush() = {
+  private def doBrush: Unit = {
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
@@ -67,9 +67,10 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   }
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
-  private def applyChange(i: Int, j: Int, weight: Double) = {
+  private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val amountToAdd = brushStrength * weight
-    //println("m1 = " + mouse1Down + " m3 = " + mouse3Down + " amountToAdd " + amountToAdd + " at " + i + " " + j + " curY=" + model.u(i)(j) + " curV=" + model.v(i)(j))
+    //println("m1 = " + mouse1Down + " m3 = " + mouse3Down + " amountToAdd " + amountToAdd +
+    // " at " + i + " " + j + " curY=" + model.u(i)(j) + " curV=" + model.v(i)(j))
     // if the left mouse is down, make waves
     if (mouse1Down) model.u(i)(j) += amountToAdd
     else if (mouse3Down) model.v(i)(j) += amountToAdd
@@ -83,7 +84,7 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent) {doBrush() }
+  override def mouseClicked(e: MouseEvent): Unit = { doBrush }
 
   /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {

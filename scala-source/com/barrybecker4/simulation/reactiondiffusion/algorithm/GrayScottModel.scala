@@ -7,7 +7,6 @@ import java.awt._
 
 /**
   * Data structure for the Gray-Scott algorithm.
-  *
   * @author Barry Becker.
   */
 object GrayScottModel {
@@ -84,7 +83,7 @@ final class GrayScottModel(var width: Int, var height: Int)  {
       tmp(x)(getPeriodicXValue(y - 1, height))
 
   /** Create some initial pattern of chemical that represents the initial condition. */
-  private[algorithm] def resetState() = {
+  private[algorithm] def resetState(): Unit = {
     f = initialF
     k = initialK
 
@@ -107,7 +106,9 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   /**
     * Place a square of chemicals with the initial concentrations.
     */
-  private def stampInitialSquare(startX: Int, startY: Int, width: Int, height: Int, initialU: Double, initialV: Double) = {
+  private def stampInitialSquare(startX: Int, startY: Int,
+                                 width: Int, height: Int,
+                                 initialU: Double, initialV: Double): Unit = {
     for (x <- 0 until width) {
       for (y <- 0 until height) {
         tmpU(startX + x)(startY + y) = initialU

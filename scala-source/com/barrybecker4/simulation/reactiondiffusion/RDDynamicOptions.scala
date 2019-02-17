@@ -14,11 +14,9 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 
 
-
 /**
   * Dynamic controls for the RD simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  *
   * @author Barry Becker
   */
 object RDDynamicOptions {

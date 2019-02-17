@@ -11,7 +11,6 @@ import java.awt._
 /**
   * Renders the state of the GrayScottController model to an offscreen image,
   * then copies the whole image to the screen.
-  *
   * @author Barry Becker
   */
 class RDOffscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRenderingOptions, var observer: Container)

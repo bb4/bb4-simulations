@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 /**
   * Rendering specific options
-  *
   * @author Barry Becker
   */
 class RDRenderingOptions() {

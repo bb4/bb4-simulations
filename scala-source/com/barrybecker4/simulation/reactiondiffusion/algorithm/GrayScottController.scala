@@ -18,15 +18,15 @@ import java.awt.Dimension
   * Using offscreen rendering slowed things by about 10%
   * These numbers are with Hyper-threading off. The difference compared to hyper-threading off is barely 10%.
   *
-  * pr/ns  pr/sync  npr/ns  npr/synch
-  * ------- -------  -------  -------
-  * parallel calc       | 23.8     21.1    20.9    20.5
-  * n-par calc          | 19.0     17.1            17.0
-  * n-par calc/offscreen|                  12.8    12.9
-  * par calc/offscreen  | 17.2     14.2    14.3    14.1
+  *                      pr/ns   pr/sync  npr/ns   npr/synch
+  *                      ------- -------  -------  -------
+  * parallel calc       | 23.8     21.1     20.9     20.5
+  * n-par calc          | 19.0     17.1              17.0
+  * n-par calc/offscreen|                   12.8     12.9
+  * par calc/offscreen  | 17.2     14.2     14.3     14.1
   *
-  * pr/ns : parallel rendering/ no synchronized
-  * npr/ns : no parallel rendering no synchronization.
+  * pr/ns : parallel rendering/ not synchronized
+  * npr/ns : no parallel rendering/ no synchronization.
   * Parallel rendering without synchronization is fast, but has bad rendering artifacts.
   *
   * Made some more improvements
@@ -39,15 +39,15 @@ import java.awt.Dimension
   *   - Getting really great CPU utilization of cores - somewhere around 85%.
   *   - The temperature of the CPU really heats up. Saw max temp of 76C.
   *
-  * par rend          non-par rendering
-  * ------------       --------------
+  *                         par rend           non-par rendering
+  *                         ------------       --------------
   * parallel calc       |   180 fps             78 fps
   * n-par calc          |   102 fps             66 fps
   *
-  * For larger rectangle than fixed the performance increases seem even better
+  * For larger rectangle than fixed, the performance increases seem even better
   *
-  * par rend          non-par rendering
-  * ------------       --------------
+  *                         par rend           non-par rendering
+  *                         ------------       --------------
   * parallel calc       |   19.5 fps            8.1 fps
   * n-par calc          |   13.2 fps            6.8 fps
   *

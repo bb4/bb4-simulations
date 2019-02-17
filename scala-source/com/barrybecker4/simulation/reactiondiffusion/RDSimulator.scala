@@ -67,7 +67,7 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   }
 
   override protected def createOptionsDialog = new RDOptionsDialog(frame, this)
-  override protected def getInitialTimeStep = RDSimulator.INITIAL_TIME_STEP
+  override protected def getInitialTimeStep: Double = RDSimulator.INITIAL_TIME_STEP
 
   override def timeStep: Double = {
     if (!isPaused) {

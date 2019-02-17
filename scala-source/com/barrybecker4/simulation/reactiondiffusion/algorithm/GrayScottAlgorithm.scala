@@ -1,8 +1,6 @@
 /** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
-import com.barrybecker4.common.concurrency.ThreadUtil
-
 
 /**
   * This is the core of the Gray-Scott reaction diffusion simulation implementation.
@@ -55,7 +53,7 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
   }
 
   /** Calculate new values on an edge. */
-  private def calcEdge(x: Int, y: Int, dt: Double) = {
+  private def calcEdge(x: Int, y: Int, dt: Double): Unit = {
     val tmpV = model.tmpV(x)(y)
     val uv2 = model.tmpU(x)(y) * tmpV * tmpV
     model.u(x)(y) = calcNewEdge(model.tmpU, x, y, duDivh2, useF =  true, uv2, dt)
