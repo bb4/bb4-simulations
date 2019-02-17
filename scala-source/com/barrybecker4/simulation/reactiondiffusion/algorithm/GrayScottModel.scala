@@ -4,26 +4,30 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 import GrayScottModel._
 import java.awt._
 
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.{InitializableGrid, Initializer, InterlockedSquaresInitializer, RingInitializer}
+
 
 /**
   * Data structure for the Gray-Scott algorithm.
   * @author Barry Becker.
   */
 object GrayScottModel {
+  /** Feed rate */
+  val F0: Double =  0.025 // 0.0545 //
+
   /** Decay rate */
   val K0: Double =  0.079 // 0.062 //
-  /** Feed rate */
-  val F0: Double =  0.02 // 0.0545 //
-  val H0: Double = 0.01
-  private val INITIAL_U: Double = 0.5
-  private val INITIAL_V: Double = 0.25
+
+  val H0: Double = 1.0
 
   /** Radius for area of effect when doing manual modification with click/drag brush */
   val DEFAULT_BRUSH_RADIUS = 2
   /** The amount of impact that the brush has. */
   val DEFAULT_BRUSH_STRENGTH = 0.3
 
-  /**  Periodic boundary conditions.
+  private val DEFAULT_INITIALIZER = new InterlockedSquaresInitializer() // new RingInitializer() //
+
+  /** Periodic boundary conditions.
     * @return new x value taking into account wrapping boundaries.
     */
   def getPeriodicXValue(x: Int, max: Int): Int = {
@@ -36,13 +40,17 @@ object GrayScottModel {
   * @param width  width of computational space.
   * @param height height of computational space.
   */
-final class GrayScottModel(var width: Int, var height: Int)  {
+final class GrayScottModel(var width: Int, var height: Int) extends InitializableGrid {
+
+  var initializer: Initializer = DEFAULT_INITIALIZER
 
   /** concentrations of the 2 chemicals, u and v. */
   var u: Array[Array[Double]] = _
   var v: Array[Array[Double]] = _
+
   private[algorithm] var tmpU: Array[Array[Double]] = _
   private[algorithm] var tmpV: Array[Array[Double]] = _
+
   private var k: Double = _
   private var f: Double = _
   resetState()
@@ -53,6 +61,10 @@ final class GrayScottModel(var width: Int, var height: Int)  {
   def setSize(requestedNewSize: Dimension) {
     this.width = requestedNewSize.width
     this.height = requestedNewSize.height
+  }
+
+  def setInitializer(init: Initializer): Unit = {
+    initializer = init
   }
 
   def setF(f: Double) { this.f = f }
@@ -93,28 +105,16 @@ final class GrayScottModel(var width: Int, var height: Int)  {
     tmpU = Array.ofDim[Double](width, height)
     tmpV = Array.ofDim[Double](width, height)
 
-    stampInitialSquare(0, 0, width, height, 1.0, 0)
-    // random square 1
-    val w3 = width / 3
-    val h3 = height / 3
-    stampInitialSquare(w3, h3, w3, h3, INITIAL_U, INITIAL_V)
-    // random square 2
-    val w7 = width / 7
-    val h5 = height / 5
-    stampInitialSquare(5 * w7, 3 * h5, w7, h5, INITIAL_U, INITIAL_V)
+    initializer.initialize(this, width, height)
+    commitChanges()
   }
 
-  /**
-    * Place a square of chemicals with the initial concentrations.
-    */
-  private def stampInitialSquare(startX: Int, startY: Int,
-                                 width: Int, height: Int,
-                                 initialU: Double, initialV: Double): Unit = {
-    for (x <- 0 until width) {
-      for (y <- 0 until height) {
-        tmpU(startX + x)(startY + y) = initialU
-        tmpV(startX + x)(startY + y) = initialV
-      }
+  def initializePoint(x: Int, y: Int, initialU: Double, initialV: Double): Unit = {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      tmpU(x)(y) = initialU
+      tmpV(x)(y) = initialV
+      u(x)(y) = initialU
+      v(x)(y) = initialV
     }
   }
 }

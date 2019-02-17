@@ -9,8 +9,8 @@ import GrayScottAlgorithm._
   */
 object GrayScottAlgorithm {
   /** These are the diffusion rates of the 2 chemicals. We could add scrollbars to scale these */
-  private val DU: Double = 2.0e-5
-  private val DV: Double = 1.0e-5
+  private val DU: Double = 2.0e-1
+  private val DV: Double = 1.0e-1
 }
 
 final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {

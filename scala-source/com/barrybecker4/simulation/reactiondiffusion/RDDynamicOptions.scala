@@ -37,7 +37,7 @@ object RDDynamicOptions {
   private val SLIDER_PROPS = Array(
     new SliderProperties(F_SLIDER, 0, 0.25, GrayScottModel.F0, 10000),
     new SliderProperties(K_SLIDER, 0, 0.25, GrayScottModel.K0, 10000),
-    new SliderProperties(H_SLIDER, 0.01, 0.04, GrayScottModel.H0, 10000),
+    new SliderProperties(H_SLIDER, 0.5, 4.0, GrayScottModel.H0, 10000),
     new SliderProperties(BH_SLIDER, 0, 20.0, 0.0, 10),
     new SliderProperties(SH_SLIDER, 0, 1.0, 0.0, 100),
     new SliderProperties(NS_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),
