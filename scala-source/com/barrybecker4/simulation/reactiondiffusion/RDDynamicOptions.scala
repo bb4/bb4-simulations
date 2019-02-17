@@ -20,8 +20,9 @@ import java.awt.event.ActionListener
   * @author Barry Becker
   */
 object RDDynamicOptions {
-  private val K_SLIDER = "K"
-  private val F_SLIDER = "F"
+  private val F_SLIDER = "Feed Rate (F)"
+  private val K_SLIDER = "Decay Rate (K)"
+
   private val H_SLIDER = "H"
   private val BH_SLIDER = "Bump Height"
   private val SH_SLIDER = "Specular Highlight"
@@ -34,9 +35,9 @@ object RDDynamicOptions {
   private val SPACER_HT = 10
 
   private val SLIDER_PROPS = Array(
-    new SliderProperties(K_SLIDER, 0, 0.3, GrayScottModel.K0, 1000),
-    new SliderProperties(F_SLIDER, 0, 0.3, GrayScottModel.F0, 1000),
-    new SliderProperties(H_SLIDER, 0.008, 0.05, GrayScottController.H0, 10000),
+    new SliderProperties(F_SLIDER, 0, 0.25, GrayScottModel.F0, 10000),
+    new SliderProperties(K_SLIDER, 0, 0.25, GrayScottModel.K0, 10000),
+    new SliderProperties(H_SLIDER, 0.01, 0.04, GrayScottModel.H0, 10000),
     new SliderProperties(BH_SLIDER, 0, 20.0, 0.0, 10),
     new SliderProperties(SH_SLIDER, 0, 1.0, 0.0, 100),
     new SliderProperties(NS_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),

@@ -1,13 +1,14 @@
 /** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
+import GrayScottAlgorithm._
 
 /**
   * This is the core of the Gray-Scott reaction diffusion simulation implementation.
   * Based on an work by Joakim Linde and modified by Barry Becker.
   */
 object GrayScottAlgorithm {
-  /** We could add scrollbars to scale these */
+  /** These are the diffusion rates of the 2 chemicals. We could add scrollbars to scale these */
   private val DU: Double = 2.0e-5
   private val DV: Double = 1.0e-5
 }
@@ -48,8 +49,8 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
 
   def setH(h: Double) {
     val h2 = h * h
-    duDivh2 = GrayScottAlgorithm.DU / h2
-    dvDivh2 = GrayScottAlgorithm.DV / h2
+    duDivh2 = DU / h2
+    dvDivh2 = DV / h2
   }
 
   /** Calculate new values on an edge. */

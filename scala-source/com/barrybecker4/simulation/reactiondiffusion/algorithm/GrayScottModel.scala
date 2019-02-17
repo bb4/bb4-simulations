@@ -10,15 +10,18 @@ import java.awt._
   * @author Barry Becker.
   */
 object GrayScottModel {
-  val K0: Double = 0.079
-  val F0: Double = 0.02
+  /** Decay rate */
+  val K0: Double =  0.079 // 0.062 //
+  /** Feed rate */
+  val F0: Double =  0.02 // 0.0545 //
+  val H0: Double = 0.01
   private val INITIAL_U: Double = 0.5
   private val INITIAL_V: Double = 0.25
 
   /** Radius for area of effect when doing manual modification with click/drag brush */
   val DEFAULT_BRUSH_RADIUS = 2
   /** The amount of impact that the brush has. */
-  val DEFAULT_BRUSH_STRENGTH = 0.5
+  val DEFAULT_BRUSH_STRENGTH = 0.3
 
   /**  Periodic boundary conditions.
     * @return new x value taking into account wrapping boundaries.
@@ -34,8 +37,6 @@ object GrayScottModel {
   * @param height height of computational space.
   */
 final class GrayScottModel(var width: Int, var height: Int)  {
-  private var initialK = K0
-  private var initialF = F0
 
   /** concentrations of the 2 chemicals, u and v. */
   var u: Array[Array[Double]] = _
@@ -84,8 +85,8 @@ final class GrayScottModel(var width: Int, var height: Int)  {
 
   /** Create some initial pattern of chemical that represents the initial condition. */
   private[algorithm] def resetState(): Unit = {
-    f = initialF
-    k = initialK
+    f = F0
+    k = K0
 
     u = Array.ofDim[Double](width, height)
     v = Array.ofDim[Double](width, height)

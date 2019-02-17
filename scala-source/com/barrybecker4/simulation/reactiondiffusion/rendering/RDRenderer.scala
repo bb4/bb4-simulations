@@ -41,9 +41,7 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
     postRender(g2)
   }
 
-  /**
-    * Determine the colors for a rectangular strip of pixels.
-    *
+  /** Determine the colors for a rectangular strip of pixels.
     * @return array of colors that will be used to define an image for quick rendering.
     */
   def getColorRect(minX: Int, maxX: Int): ColorRect = {

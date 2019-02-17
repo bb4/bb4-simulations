@@ -51,18 +51,9 @@ import java.awt.Dimension
   * parallel calc       |   19.5 fps            8.1 fps
   * n-par calc          |   13.2 fps            6.8 fps
   *
-  * @author Barry Becker
-  */
-object GrayScottController {
-  /** default values for constants. */
-  val H0 = 0.01
-}
-
-/**
-  * Constructor
-  *
   * @param initialWidth  width of computational space.
   * @param initialHeight height of computational space.
+  * @author Barry Becker
   */
 final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   val model: GrayScottModel = new GrayScottModel(initialWidth, initialHeight)
@@ -74,9 +65,8 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   private var paralellized = true
   def getModel: GrayScottModel = model
 
-  /**
-    * doesn't change the size immediately since running threads may
-    * be using the current array. We wait until the current timeStep completes
+  /** doesn't change the size immediately since running threads may
+    * be using the current array. Wait until the current timeStep completes
     * before reinitializing with the new size.
     */
   def setSize(width: Int, height: Int) {
@@ -84,14 +74,13 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   }
 
   def reset() {
-    algorithm.setH(GrayScottController.H0)
+    algorithm.setH(GrayScottModel.H0)
     model.resetState()
   }
 
   def setH(h: Double) { algorithm.setH(h) }
 
-  /**
-    * Set this to true if you want to run the version
+  /** Set this to true if you want to run the version
     * that will partition the task of computing the next timeStop
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
@@ -99,10 +88,8 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   def setParallelized(parallelized: Boolean) { this.paralellized = parallelized }
   def isParallelized: Boolean = this.paralellized
 
-  /**
-    * Advance one time step increment.
+  /** Advance one time step increment.
     * u and v are calculated based on tmpU and tmpV, then the result is committed to tmpU and tmpV.
-    *
     * @param dt time step in seconds.
     */
   def timeStep(dt: Double) {
@@ -119,15 +106,9 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     val maxXEdge = model.getWidth - 2
     workers(numThreads - 1) = new Worker(minXEdge, maxXEdge, dt)
     // also add the border calculations in a separate thread.
-    val edgeWorker = new Runnable() {
-      override def run() {
-        algorithm.computeNewEdgeValues(dt)
-      }
-    }
-    workers(numThreads) = edgeWorker
+    workers(numThreads) = new EdgeWorker(dt)
 
-    if (paralellized)
-      workers.par.foreach(w => w.run())
+    if (paralellized) workers.par.foreach(w => w.run())
     else workers.foreach(w => w.run())
 
     prof.stopConcurrentCalculationTime()
@@ -143,6 +124,12 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   private class Worker(minX: Int, maxX: Int,  dt: Double) extends Runnable {
     override def run() {
       algorithm.computeNextTimeStep(minX, maxX, dt)
+    }
+  }
+
+  private class EdgeWorker(dt: Double) extends Runnable {
+    override def run() {
+      algorithm.computeNewEdgeValues(dt)
     }
   }
 }

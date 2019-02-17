@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.reactiondiffusion
 
 import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
@@ -13,6 +13,8 @@ object InteractionHandler {
 /**
   * Handle mouse interactions - converting them in to physical manifestations.
   * Using this handler, you can add more chemicals to the reaction.
+  * Drag with left click to add U chemical locally.
+  * Drag with right click to add V chemical locally.
   * @author Barry Becker
   */
 class InteractionHandler(var model: GrayScottModel, var scale: Double)
@@ -35,12 +37,12 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
-    doBrush
+    doBrush()
     lastX = currentX
     lastY = currentY
   }
 
-  private def doBrush: Unit = {
+  private def doBrush(): Unit = {
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
@@ -84,7 +86,7 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent): Unit = { doBrush }
+  override def mouseClicked(e: MouseEvent): Unit = { doBrush() }
 
   /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
