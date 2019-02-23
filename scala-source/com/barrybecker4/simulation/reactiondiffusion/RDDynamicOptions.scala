@@ -10,8 +10,10 @@ import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 import javax.swing._
 import java.awt._
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
+import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
+
+import com.barrybecker4.simulation.cave.model.CaveProcessor
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Initializer
 
 
 /**
@@ -45,39 +47,49 @@ object RDDynamicOptions {
   )
 
   private val BRUSH_SLIDER_PROPS = Array(
-    new SliderProperties(BRUSH_RADIUS_SLIDER, 1, 20, GrayScottModel.DEFAULT_BRUSH_RADIUS),
+    new SliderProperties(BRUSH_RADIUS_SLIDER, 1, 30, GrayScottModel.DEFAULT_BRUSH_RADIUS),
     new SliderProperties(BRUSH_STRENGTH_SLIDER, 0.1, 1.0, GrayScottModel.DEFAULT_BRUSH_STRENGTH, 100)
   )
 }
 
 class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, var simulator: RDSimulator)
-  extends JPanel with ActionListener with SliderGroupChangeListener {
+  extends JPanel with ActionListener with ItemListener with SliderGroupChangeListener {
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
-
-  private var sliderGroup  = new SliderGroup(RDDynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
-
-  val checkBoxes: JPanel = createCheckBoxes
-  val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
-  add(sliderGroup)
-
-  add(Box.createVerticalStrut(SPACER_HT))
-  add(createBrushControls)
-  add(Box.createVerticalStrut(SPACER_HT))
-  add(checkBoxes)
-  add(Box.createVerticalStrut(SPACER_HT))
-  add(legend)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(SPACER_HT, 1000))
-  add(fill)
   private var showU: JCheckBox = _
   private var showV: JCheckBox = _
   private var useComputeConcurrency: JCheckBox = _
   private var useRenderingConcurrency: JCheckBox = _
   private var useFixedSize: JCheckBox = _
+  private var sliderGroup: SliderGroup = _
+  private var initialConditionsDroplist: JComboBox[Initializer] = _
+
+  initialize()
+
+  private def initialize(): Unit = {
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
+    setBorder(BorderFactory.createEtchedBorder)
+    setPreferredSize(new Dimension(300, 300))
+
+    sliderGroup = new SliderGroup(RDDynamicOptions.SLIDER_PROPS)
+    sliderGroup.addSliderChangeListener(this)
+
+    val checkBoxes: JPanel = createCheckBoxes
+    val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
+
+    add(sliderGroup)
+    add(Box.createVerticalStrut(SPACER_HT))
+    add(createBrushControls)
+    add(Box.createVerticalStrut(SPACER_HT))
+    add(checkBoxes)
+    add(Box.createVerticalStrut(SPACER_HT))
+    add(legend)
+    add(Box.createVerticalStrut(SPACER_HT))
+    add(createInitialConditionsDroplist())
+
+    val fill = new JPanel
+    fill.setPreferredSize(new Dimension(SPACER_HT, 1000))
+    add(fill)
+  }
 
   private def createCheckBoxes = {
     val renderingOptions = simulator.getRenderingOptions
@@ -104,6 +116,24 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     checkBoxes
   }
 
+  /**
+    * The dropdown menu at the top for selecting an initializer.
+    * @return initializer dropdown/down component.
+    */
+  private def createInitialConditionsDroplist(): JPanel = {
+    val choicePanel = new JPanel()
+    val label = new JLabel("Initial conditions: ")
+    initialConditionsDroplist = new JComboBox[Initializer]
+    for (initializer <- Initializer.VALUES) {
+      initialConditionsDroplist.addItem(initializer)
+    }
+    initialConditionsDroplist.setSelectedItem(Initializer.DEFAULT_INITIALIZER)
+    initialConditionsDroplist.addItemListener(this)
+    choicePanel.add(label)
+    choicePanel.add(initialConditionsDroplist)
+    choicePanel
+  }
+
   private def createBrushControls = {
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Brush Parameters (left: add U; right: add V)"))
@@ -128,6 +158,10 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
 
   def reset() {
     sliderGroup.reset()
+  }
+
+  override def itemStateChanged(e: ItemEvent){
+    gs.setInitializer(initialConditionsDroplist.getSelectedItem.asInstanceOf[Initializer])
   }
 
   /** One of the buttons was pressed. */

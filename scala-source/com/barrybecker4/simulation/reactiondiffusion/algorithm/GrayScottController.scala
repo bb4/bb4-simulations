@@ -4,6 +4,8 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler
 import java.awt.Dimension
 
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Initializer
+
 
 /**
   * Makes the GrayScott algorithm run concurrently if setParallelized is set to true.
@@ -87,6 +89,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     */
   def setParallelized(parallelized: Boolean) { this.paralellized = parallelized }
   def isParallelized: Boolean = this.paralellized
+  def setInitializer(initializer: Initializer): Unit = model.setInitializer(initializer)
 
   /** Advance one time step increment.
     * u and v are calculated based on tmpU and tmpV, then the result is committed to tmpU and tmpV.

@@ -4,7 +4,8 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration
 import Initializer.{INITIAL_U, INITIAL_V}
 
 
-class InterlockedSquaresInitializer(initialU: Double = INITIAL_U, initialV: Double = INITIAL_V) extends Initializer {
+case object InterlockedSquaresInitializer
+  extends Initializer("Interlocking squares", INITIAL_U, INITIAL_V) {
 
   override def initialize(grid: InitializableGrid, width: Int, height: Int): Unit = {
 
@@ -20,5 +21,4 @@ class InterlockedSquaresInitializer(initialU: Double = INITIAL_U, initialV: Doub
     val h5 = height / 5
     stampSquare(5 * w7, 3 * h5, w7, h5, INITIAL_U, INITIAL_V, grid)
   }
-
 }

@@ -216,8 +216,8 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   }
 
   override def itemStateChanged(e: ItemEvent) {
-    val `type` = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem.toString)
-    caveModel.setKernelType(`type`)
+    val kType = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem.toString)
+    caveModel.setKernelType(kType)
   }
 
   override def actionPerformed(e: ActionEvent) {

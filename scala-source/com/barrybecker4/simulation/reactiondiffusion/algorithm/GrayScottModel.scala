@@ -3,8 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import GrayScottModel._
 import java.awt._
-
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.{InitializableGrid, Initializer, InterlockedSquaresInitializer, RingInitializer}
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration._
 
 
 /**
@@ -13,10 +12,10 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.{In
   */
 object GrayScottModel {
   /** Feed rate */
-  val F0: Double =  0.025 // 0.0545 //
+  val F0: Double =  0.025
 
   /** Decay rate */
-  val K0: Double =  0.079 // 0.062 //
+  val K0: Double =  0.079
 
   val H0: Double = 1.0
 
@@ -24,8 +23,6 @@ object GrayScottModel {
   val DEFAULT_BRUSH_RADIUS = 2
   /** The amount of impact that the brush has. */
   val DEFAULT_BRUSH_STRENGTH = 0.3
-
-  private val DEFAULT_INITIALIZER = new InterlockedSquaresInitializer() // new RingInitializer() //
 
   /** Periodic boundary conditions.
     * @return new x value taking into account wrapping boundaries.
@@ -42,7 +39,7 @@ object GrayScottModel {
   */
 final class GrayScottModel(var width: Int, var height: Int) extends InitializableGrid {
 
-  var initializer: Initializer = DEFAULT_INITIALIZER
+  var initializer: Initializer = Initializer.DEFAULT_INITIALIZER
 
   /** concentrations of the 2 chemicals, u and v. */
   var u: Array[Array[Double]] = _
@@ -65,6 +62,7 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
 
   def setInitializer(init: Initializer): Unit = {
     initializer = init
+    resetState()
   }
 
   def setF(f: Double) { this.f = f }

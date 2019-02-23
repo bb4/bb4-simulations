@@ -47,13 +47,8 @@ class RDProfiler private() extends Profiler {
     numFrames = 0
   }
 
-  def startConcurrentCalculationTime() {
-    this.start(RDProfiler.CONCURRENT_CALCULATION)
-  }
-
-  def stopConcurrentCalculationTime() {
-    this.stop(RDProfiler.CONCURRENT_CALCULATION)
-  }
+  def startConcurrentCalculationTime(): Unit  = start(RDProfiler.CONCURRENT_CALCULATION)
+  def stopConcurrentCalculationTime(): Unit = this.stop(RDProfiler.CONCURRENT_CALCULATION)
 
   override def stopRenderingTime() {
     super.stopRenderingTime()
