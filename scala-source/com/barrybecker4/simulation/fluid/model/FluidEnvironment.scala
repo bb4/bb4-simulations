@@ -15,7 +15,7 @@ import com.barrybecker4.simulation.fluid.model.Boundary.Boundary
   */
 object FluidEnvironment {
   val DEFAULT_DIFFUSION_RATE = 0.0f
-  val DEFAULT_VISCOSITY = 0.0f
+  val DEFAULT_VISCOSITY = 10.0f
   val DEFAULT_NUM_SOLVER_ITERATIONS = 20
 }
 
@@ -27,6 +27,11 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   private var diffusionRate: Double = FluidEnvironment.DEFAULT_DIFFUSION_RATE
   private var viscosity: Double = FluidEnvironment.DEFAULT_VISCOSITY
   private var numSolverIterations = FluidEnvironment.DEFAULT_NUM_SOLVER_ITERATIONS
+
+  def setSize(width: Int, height: Int) {
+    if (width != dimX || height != dimY)
+      grid = new Grid(width, height)
+  }
 
   /** reset to original state */
   def reset() { grid = new Grid(grid.getWidth, grid.getHeight) }
@@ -56,7 +61,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
     advect(Boundary.NEITHER, prop, u, v, dt)
   }
 
-  private def velocityStep(visc: Double, dt: Double) = {
+  private def velocityStep(visc: Double, dt: Double): Unit = {
     //addSource( u, dt );
     //addSource( v, dt );
     val g0 = grid.getGrid0
@@ -74,7 +79,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   }
 
   /** project the fluid */
-  private def project(u: TwoDArray, v: TwoDArray, p: TwoDArray, div: TwoDArray) = {
+  private def project(u: TwoDArray, v: TwoDArray, p: TwoDArray, div: TwoDArray): Unit = {
     val width = grid.getWidth
     val height = grid.getHeight
     for (i <- 1 to width)
@@ -101,13 +106,13 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
     * @param prop the cell property to diffuse
     * @param diff either diffusion rate or viscosity.
     */
-  private def diffuse(boundary: Boundary, prop: CellProperty, diff: Double, dt: Double) = {
+  private def diffuse(boundary: Boundary, prop: CellProperty, diff: Double, dt: Double): Unit = {
     val a = dt * diff * grid.getWidth * grid.getHeight
     linearSolve(boundary, grid.getGrid1.getProperty(prop), grid.getGrid0.getProperty(prop), a, 1 + 4 * a)
   }
 
   /** Advect the fluid in the field.  */
-  private def advect(bound: Boundary, prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double) = {
+  private def advect(bound: Boundary, prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double): Unit = {
     val width = grid.getWidth
     val height = grid.getHeight
     val d0 = grid.getGrid0.getProperty(prop)
@@ -136,7 +141,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   }
 
   /** Solve the system */
-  private def linearSolve(bound: Boundary, x: TwoDArray, x0: TwoDArray, a: Double, c: Double) = {
+  private def linearSolve(bound: Boundary, x: TwoDArray, x0: TwoDArray, a: Double, c: Double): Unit = {
     for (k <- 0 until numSolverIterations) {
       for (i <- 1 to grid.getWidth)
         for (j <- 1 to grid.getHeight)
@@ -146,7 +151,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   }
 
   /** Add a fluid source to the environment */
-  private def addSource(x0: TwoDArray, x1: TwoDArray, dt: Double) = {
+  private def addSource(x0: TwoDArray, x1: TwoDArray, dt: Double): Unit = {
     for (i <- 0 until getWidth)
       for (j <- 0 until getHeight)
         x1(i)(j) += dt * x0(i)(j)

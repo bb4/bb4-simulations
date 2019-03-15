@@ -36,8 +36,8 @@ object FluidSimulator {
   private val BG_COLOR = Color.white
 }
 
-class FluidSimulator private(var environment: FluidEnvironment) extends Simulator("Fuild") {
-  private var renderOptions = new RenderingOptions
+class FluidSimulator private(var environment: FluidEnvironment) extends Simulator("Fluid") {
+  private val renderOptions = new RenderingOptions
   private var envRenderer: EnvironmentRenderer = _
   private var handler: InteractionHandler = _
   commonInit()
@@ -85,7 +85,10 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
 
   /** @return a new recommended time step change. */
   override def timeStep: Double = {
-    if (!isPaused) tStep = environment.stepForward(tStep)
+    if (!isPaused) {
+      //environment.setSize(this.getWidth, this.getHeight)
+      tStep = environment.stepForward(tStep)
+    }
     tStep
   }
 

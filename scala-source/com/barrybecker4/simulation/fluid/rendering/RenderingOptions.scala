@@ -20,7 +20,7 @@ class RenderingOptions() {
   private var scale: Double = RenderingOptions.DEFAULT_SCALE
   private var showVelocities = false
   private var showPressures = true
-  private var useLinearInterpolation = false
+  private var useLinearInterpolation = true
   private var showGrid = false
 
   def setScale(scale: Double) {this.scale = scale }

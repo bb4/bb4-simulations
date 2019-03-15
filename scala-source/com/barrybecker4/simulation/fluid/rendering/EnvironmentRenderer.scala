@@ -63,7 +63,7 @@ final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
     g2.drawImage(modelImage.getImage, EnvironmentRenderer.OFFSET, EnvironmentRenderer.OFFSET, null)
   }
 
-  private def drawGrid(g: Graphics2D) = {
+  private def drawGrid(g: Graphics2D): Unit = {
     g.setColor(EnvironmentRenderer.GRID_COLOR)
     val scale = options.getScale
     val rightEdgePos = (scale * grid.getWidth).toInt
@@ -80,7 +80,7 @@ final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
     }
   }
 
-  private def drawVectors(g: Graphics2D) = {
+  private def drawVectors(g: Graphics2D): Unit = {
     g.setColor(EnvironmentRenderer.VECTOR_COLOR)
     val scale = options.getScale
     for (j <- 0 until grid.getHeight) {
