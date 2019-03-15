@@ -8,7 +8,7 @@ import scala.util.Random
 
 
 /**
-  * The data for points in the conway life simulation.
+  * The data for neighboring points in the conway life simulation.
   * @author Barry Becker
   */
 object Conway {
@@ -51,7 +51,7 @@ class Conway private[model]() {
     candidates
   }
 
-  /** @return the point constrained to the view bouns if wrap is true */
+  /** @return the point constrained to the view bounds if wrap is true */
   private def keepInBounds(c: Location): Location =
     if (wrap) IntLocation((c.row + height) % height, (c.col + width) % width) else c
 

@@ -43,6 +43,13 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
   override def setScale(scale: Double) {}
   override def getScale = 0.01
 
+  override def createTopControls: JPanel = {
+    val controls = new JPanel
+    controls.add(createResetButton)
+    controls.add(createOptionsButton)
+    controls
+  }
+
   override def timeStep: Double = {
     if (!isPaused) {
       conwayModel.setSize(this.getWidth, this.getHeight)

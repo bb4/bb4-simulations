@@ -24,7 +24,6 @@ trait Rule {
     if (parallel)
       candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway))
     else candidates.foreach(c => applyRuleToCandidate(c, conway, newConway))
-
     newConway
   }
 

@@ -88,18 +88,26 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
 
   /**
     * The dropdown menu at the top for selecting a kernel type.
-    *
     * @return a dropdown/down component.
     */
   private def createIncrementPanel: JPanel = {
     val panel: JPanel = new JPanel (new BorderLayout)
-    useContinuousIteration = createCheckbox ("Continuous iteration", ConwayModel.DEFAULT_USE_CONTINUOUS_ITERATION)
+    useContinuousIteration =
+      createCheckbox("Continuous iteration", ConwayModel.DEFAULT_USE_CONTINUOUS_ITERATION,
+        "When checked, the simulation proceeds continuously. " +
+          "When unchecked, use the 'Next' button to advance one time step at a time.")
+
+    val nextPanel = new JPanel()
+    nextPanel.setToolTipText("Click to advance one time step at a time")
+    nextPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20))
     nextButton = new JButton ("Next")
-    nextButton.addActionListener (this)
+    nextButton.addActionListener(this)
     nextButton.setEnabled (!useContinuousIteration.isSelected )
-    panel.add (useContinuousIteration, BorderLayout.CENTER)
-    panel.add (nextButton, BorderLayout.EAST)
-    panel.add (createCheckboxPanel, BorderLayout.SOUTH)
+    nextPanel.add(nextButton)
+
+    panel.add(useContinuousIteration, BorderLayout.CENTER)
+    panel.add(nextPanel, BorderLayout.EAST)
+    panel.add(createCheckboxPanel, BorderLayout.SOUTH)
     panel
   }
 
@@ -107,17 +115,21 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   private def createCheckboxPanel: JPanel = {
     val panel: JPanel = new JPanel
     panel.setLayout (new BoxLayout (panel, BoxLayout.Y_AXIS) )
-    useParallelComputation = createCheckbox ("Parallel computation", ConwayProcessor.DEFAULT_USE_PARALLEL)
-    showShadowsCheckbox = createCheckbox ("Show shadows", ConwayModel.DEFAULT_SHOW_SHADOWS)
-    wrapCheckbox = createCheckbox ("Wrap grid", ConwayModel.DEFAULT_WRAP_GRID)
-    panel.add (useParallelComputation)
-    panel.add (showShadowsCheckbox)
-    panel.add (wrapCheckbox)
+    useParallelComputation = createCheckbox("Parallel computation", ConwayProcessor.DEFAULT_USE_PARALLEL,
+      "When checked, computation is don in parallel, using all available processors.")
+    showShadowsCheckbox = createCheckbox ("Show shadows", ConwayModel.DEFAULT_SHOW_SHADOWS,
+      "When checked, you will see trails of where life has been.")
+    wrapCheckbox = createCheckbox ("Wrap grid", ConwayModel.DEFAULT_WRAP_GRID,
+      "When checked, any life that expands beyond a border will wrap to the other edge.")
+    panel.add(useParallelComputation)
+    panel.add(showShadowsCheckbox)
+    panel.add(wrapCheckbox)
     panel
   }
 
-  private def createCheckbox (labelText: String, defaultValue: Boolean): JCheckBox = {
-    val cb: JCheckBox = new JCheckBox (labelText)
+  private def createCheckbox(labelText: String, defaultValue: Boolean, tooltip: String): JCheckBox = {
+    val cb: JCheckBox = new JCheckBox(labelText)
+    cb.setToolTipText(tooltip)
     cb.setSelected (defaultValue)
     cb.addActionListener (this)
     cb
@@ -130,15 +142,15 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     */
   private def createRuleDropdown: JPanel = {
     val ruleChoicePanel: JPanel = new JPanel
-    val label: JLabel = new JLabel ("Rule to apply: ")
+    val label: JLabel = new JLabel("Rule to apply: ")
     ruleChoice = new JComboBox[String]
     for (ruleType <- ConwayProcessor.RuleType.values) {
       ruleChoice.addItem(ruleType.toString) // .name
     }
     ruleChoice.setSelectedIndex(ConwayProcessor.DEFAULT_RULE_TYPE.id)
-    ruleChoice.addItemListener (this)
-    ruleChoicePanel.add (label)
-    ruleChoicePanel.add (ruleChoice)
+    ruleChoice.addItemListener(this)
+    ruleChoicePanel.add(label)
+    ruleChoicePanel.add(ruleChoice)
     ruleChoicePanel
   }
 
@@ -175,10 +187,10 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     }
     else {
       if (source == useContinuousIteration) {
-        val useCont: Boolean = useContinuousIteration.isSelected
-        conwayModel.setDefaultUseContinuousIteration (useCont)
-        nextButton.setEnabled (!useCont)
-        if (!useCont) {
+        val useContinuous: Boolean = useContinuousIteration.isSelected
+        conwayModel.setUseContinuousIteration(useContinuous)
+        nextButton.setEnabled (!useContinuous)
+        if (!useContinuous) {
           // do one last step in case the rendering was interrupted.
           ThreadUtil.sleep (100)
           conwayModel.requestNextStep ()

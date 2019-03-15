@@ -21,7 +21,7 @@ object ConwayProcessor {
     val TraditionalB3S23, AmoebaB34S456, HighlifeB36S23, SwarmB356S23 = Value
   }
 
-  val DEFAULT_RULE_TYPE = RuleType.TraditionalB3S23
+  val DEFAULT_RULE_TYPE: RuleType= RuleType.TraditionalB3S23
 
   def main(args: Array[String]): Unit = {
     val proc = new ConwayProcessor(DEFAULT_USE_PARALLEL)
@@ -42,13 +42,13 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
     this(ConwayProcessor.DEFAULT_USE_PARALLEL)
   }
 
-  private[model] def setWrap(wrapGrid: Boolean, width: Int, height: Int) = {
+  private[model] def setWrap(wrapGrid: Boolean, width: Int, height: Int): Unit = {
     this.wrapGrid = wrapGrid
     this.width = width
     this.height = height
   }
 
-  private[model] def setRuleType(ruleType: RuleType) = {
+  private[model] def setRuleType(ruleType: RuleType): Unit = {
     rule = ruleType match {
       case TraditionalB3S23 => new RuleB3S23
       case AmoebaB34S456 => new RuleB34S456Amoeba

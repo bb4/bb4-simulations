@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2013-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2013-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.model
 
 import com.barrybecker4.simulation.common.Profiler
@@ -18,7 +18,7 @@ import ConwayModel._
   */
 object ConwayModel {
   val DEFAULT_SCALE_FACTOR = 2
-  val DEFAULT_USE_CONTINUOUS_ITERATION = false
+  val DEFAULT_USE_CONTINUOUS_ITERATION = true
   val DEFAULT_SHOW_SHADOWS = false
   val DEFAULT_WRAP_GRID = true
   val DEFAULT_NUM_STEPS_PER_FRAME = 1
@@ -54,7 +54,7 @@ class ConwayModel() {
   def getWidth: Int = renderer.getWidth
   def getHeight: Int = renderer.getHeight
 
-  def setDefaultUseContinuousIteration(continuous: Boolean) {
+  def setUseContinuousIteration(continuous: Boolean) {
     this.continuousIteration = continuous
     doRender()
   }
@@ -99,7 +99,7 @@ class ConwayModel() {
   }
 
   /**
-    * @param timeStep number of rows to compute on this timestep.
+    * @param timeStep number of rows to compute on this time step.
     * @return true when done computing whole renderer.
     */
   def timeStep(timeStep: Double): Boolean = {
