@@ -19,7 +19,7 @@ object CaveModel {
   val DEFAULT_SPECULAR_PCT = 0.1
   val DEFAULT_LIGHT_SOURCE_ELEVATION: Double = Math.PI / 4.0
   val DEFAULT_LIGHT_SOURCE_AZYMUTH: Double = Math.PI / 4.0
-  val DEFAULT_USE_CONTINUOUS_ITERATION = false
+  val DEFAULT_USE_CONTINUOUS_ITERATION = true
   val DEFAULT_NUM_STEPS_PER_FRAME = 1
   /** Radius for area of effect when doing manual modification with click/drag brush */
   val DEFAULT_BRUSH_RADIUS = 8

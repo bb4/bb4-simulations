@@ -32,7 +32,7 @@ object DynamicOptions {
   private val SPECULAR_PCT_SLIDER = "Specular Highlight (for bumps)"
   private val LIGHT_SOURCE_ELEVATION_SLIDER = "Light source elevation angle (for bumps)"
   private val LIGHT_SOURCE_AZYMUTH_SLIDER = "Light azymuthal angle (for bumps)"
-  private val NUM_STEPS_PER_FRAME_SLIDER = "Mum steps per frame"
+  private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame"
   private val SCALE_SLIDER = "Scale"
   private val PI_D2 = Math.PI / 2.0
   private val PREFERRED_WIDTH = 300
@@ -70,7 +70,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   val legend = new ContinuousColorLegend(null, caveModel.getColormap, true)
 
   add(createKernalDropdown)
-  add(createIncrementPanel)
+  add(createCheckboxPanel)
   add(createButtons)
   add(legend)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
@@ -142,48 +142,57 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     kernelChoicePanel
   }
 
-  private def createIncrementPanel = {
-    val panel = new JPanel(new BorderLayout)
-    val label = new JLabel("Continuous iteration: ")
-    useContinuousIteration = new JCheckBox
-    useContinuousIteration.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION)
-    useContinuousIteration.addActionListener(this)
-    nextButton = new JButton("Next")
-    nextButton.addActionListener(this)
-    nextButton.setEnabled(!useContinuousIteration.isSelected)
-    panel.add(label, BorderLayout.WEST)
-    panel.add(useContinuousIteration, BorderLayout.CENTER)
-    panel.add(nextButton, BorderLayout.EAST)
-    panel.add(createCheckboxPanel, BorderLayout.SOUTH)
-    panel
-  }
-
   /**
     * @return checkbox options.
     */
   private def createCheckboxPanel = {
     val panel = new JPanel
-    val label = new JLabel("Parallel computation: ")
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
+
+    val continuousIterPanel = new JPanel
+    continuousIterPanel.setToolTipText("When checked, iteration proceeds continuously. " +
+      "When unchecked, click 'Next' to advance a times step at a time.")
+    val continuousIterLabel = new JLabel("Continuous iteration: ")
+    useContinuousIteration = new JCheckBox
+    useContinuousIteration.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION)
+    useContinuousIteration.addActionListener(this)
+    continuousIterPanel.add(continuousIterLabel)
+    continuousIterPanel.add(useContinuousIteration)
+
+    val parallelCompPanel = new JPanel
+    parallelCompPanel.setToolTipText(
+      "When checked, computation is done is parallel, taking advantage of all available cores.")
+    val parallelCompLabel = new JLabel("Parallel computation: ")
     useParallelComputation = new JCheckBox
     useParallelComputation.setSelected(CaveProcessor.DEFAULT_USE_PARALLEL)
     useParallelComputation.addActionListener(this)
-    panel.add(label)
-    panel.add(useParallelComputation)
+    parallelCompPanel.add(parallelCompLabel)
+    parallelCompPanel.add(useParallelComputation)
+
+    panel.add(continuousIterPanel)
+    panel.add(parallelCompPanel)
     panel.add(Box.createHorizontalGlue)
     panel
   }
 
   private def createButtons = {
     val buttonsPanel = new JPanel
+    nextButton = new JButton("Next")
+    nextButton.setToolTipText("Advance the simulation by one time step")
+    nextButton.addActionListener(this)
+    nextButton.setEnabled(!useContinuousIteration.isSelected)
+
     resetButton = new JButton(AppContext.getLabel("RESET"))
+    resetButton.setToolTipText("Restore the initial configuration")
     resetButton.addActionListener(this)
+
+    buttonsPanel.add(nextButton)
     buttonsPanel.add(resetButton)
     buttonsPanel
   }
 
-  def reset(): Unit = {
-    generalSliderGroup.reset()
-  }
+  def reset(): Unit = generalSliderGroup.reset()
+
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
