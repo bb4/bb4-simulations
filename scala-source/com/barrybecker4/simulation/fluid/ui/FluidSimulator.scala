@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-20179 Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.common.util.FileUtil
@@ -11,20 +11,15 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer
 import com.barrybecker4.simulation.fluid.rendering.RenderingOptions
-import com.barrybecker4.ui.util.GUIUtil
 import java.awt._
-
 import scala.util.Random
-
 
 
 /**
   * Simulate deep water.
   * Based on work by Jos Stam  (http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf)
   *
-  * TODO
-  * Have the grid resize as the panel resizes
-  * Fluid specific parameters
+  * TODO: have fluid specific parameters
   *   - number of cells (x,y) - auto-calculate the scale size based on the window size.
   */
 object FluidSimulator {
@@ -36,21 +31,20 @@ object FluidSimulator {
   private val BG_COLOR = Color.white
 }
 
-class FluidSimulator private(var environment: FluidEnvironment) extends Simulator("Fluid") {
+class FluidSimulator() extends Simulator("Fluid") {
   private val renderOptions = new RenderingOptions
   private var envRenderer: EnvironmentRenderer = _
   private var handler: InteractionHandler = _
-  commonInit()
+  private val environment: FluidEnvironment = new FluidEnvironment(10, 10)
 
-  def this() { this(new FluidEnvironment(250, 200)) }
+  commonInit()
 
   private def commonInit() {
     initCommonUI()
-    envRenderer = new EnvironmentRenderer(environment.getGrid, renderOptions)
-    val scale = envRenderer.getOptions.getScale.toInt
-    setPreferredSize(new Dimension(environment.getWidth * scale, environment.getHeight * scale))
+    val scale = renderOptions.getScale.toInt
+    envRenderer = new EnvironmentRenderer(environment, renderOptions)
     setNumStepsPerFrame(FluidSimulator.DEFAULT_STEPS_PER_FRAME)
-    handler = new InteractionHandler(environment.getGrid, scale)
+    handler = new InteractionHandler(environment, scale)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }
@@ -84,9 +78,8 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
   }
 
   /** @return a new recommended time step change. */
-  override def timeStep: Double = {
+  override def timeStep: Double = synchronized {
     if (!isPaused) {
-      //environment.setSize(this.getWidth, this.getHeight)
       tStep = environment.stepForward(tStep)
     }
     tStep
@@ -101,8 +94,13 @@ class FluidSimulator private(var environment: FluidEnvironment) extends Simulato
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }
 
-  override def paint(g: Graphics): Unit = {
+  /** Synchronized so that paint is not called until call to timestep is done */
+  override def paint(g: Graphics): Unit = synchronized {
     if (g == null) return
+
+    val s = renderOptions.getScale
+    environment.setSize((getWidth / s).toInt - 2, (getHeight / s).toInt - 2)
+
     val g2 = g.asInstanceOf[Graphics2D]
     Profiler.getInstance.startRenderingTime()
     envRenderer.render(g2)

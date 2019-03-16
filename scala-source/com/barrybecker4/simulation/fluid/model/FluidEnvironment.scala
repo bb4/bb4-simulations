@@ -1,25 +1,26 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.model
 
-import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.common.{Profiler, RectangularModel}
 import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
 import com.barrybecker4.simulation.fluid.model.Boundary.Boundary
 
 
-/**
-  * This is the global space containing all the cells, walls, and fluid
-  * Assumes an M*N grid of cells.
-  * X axis increases to the left
-  * Y axis increases downwards to be consistent with java graphics
-  * @author Jos Stam, ported to scala by Barry Becker and enhanced.
-  */
 object FluidEnvironment {
   val DEFAULT_DIFFUSION_RATE = 0.0f
   val DEFAULT_VISCOSITY = 10.0f
   val DEFAULT_NUM_SOLVER_ITERATIONS = 20
 }
 
-class FluidEnvironment(val dimX: Int, val dimY: Int) {
+/**
+  * Represents the global space containing all the cells, walls, and fluid.
+  * Assumes an M * N grid of cells. X axis increases to the left.
+  * Y axis increases downwards to be consistent with java graphics.
+  * @param dimX initial grid width
+  * @param dimY initial grid height
+  * @author Jos Stam, ported to scala by Barry Becker and enhanced.
+  */
+class FluidEnvironment(val dimX: Int, val dimY: Int) extends RectangularModel {
 
   private var grid = new Grid(dimX, dimY)
 
@@ -29,18 +30,26 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   private var numSolverIterations = FluidEnvironment.DEFAULT_NUM_SOLVER_ITERATIONS
 
   def setSize(width: Int, height: Int) {
-    if (width != dimX || height != dimY)
+    if (width != grid.getWidth || height != grid.getHeight) {
       grid = new Grid(width, height)
+    }
   }
 
   /** reset to original state */
   def reset() { grid = new Grid(grid.getWidth, grid.getHeight) }
-  def getGrid: Grid = grid
-  def getWidth: Int = grid.getWidth + 2
-  def getHeight: Int = grid.getHeight + 2
+  def getWidth: Int = grid.getWidth
+  def getHeight: Int = grid.getHeight
+  def getCurrentRow: Int = getHeight
+  def getLastRow: Int = 0
+  def getValue(i: Int, j: Int): Double = grid.getValue(i, j)
   def setDiffusionRate(rate: Double) { diffusionRate = rate }
   def setViscosity(v: Double) { viscosity = v }
   def setNumSolverIterations(numIterations: Int) { numSolverIterations = numIterations }
+  def getU(i: Int, j: Int): Double = grid.getU(i, j)
+  def getV(i: Int, j: Int): Double = grid.getV(i, j)
+  def incrementU(i: Int, j: Int, fu: Double): Unit = grid.incrementU(i, j, fu)
+  def incrementV(i: Int, j: Int, fv: Double): Unit = grid.incrementV(i, j, fv)
+  def incrementDensity(i: Int, j: Int, densityInc: Double): Unit = grid.incrementDensity(i, j, densityInc)
 
   /**
     * Advance a timeStep
@@ -62,8 +71,6 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
   }
 
   private def velocityStep(visc: Double, dt: Double): Unit = {
-    //addSource( u, dt );
-    //addSource( v, dt );
     val g0 = grid.getGrid0
     val g1 = grid.getGrid1
     grid.swap(CellProperty.U)
@@ -101,8 +108,7 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
     grid.setBoundary(Boundary.HORIZONTAL, v)
   }
 
-  /**
-    * Diffuse the pressure.
+  /** Diffuse the pressure.
     * @param prop the cell property to diffuse
     * @param diff either diffusion rate or viscosity.
     */
@@ -148,12 +154,5 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) {
           x(i)(j) = (x0(i)(j) + a * (x(i - 1)(j) + x0(i + 1)(j) + x(i)(j - 1) + x(i)(j + 1))) / c
       grid.setBoundary(bound, x)
     }
-  }
-
-  /** Add a fluid source to the environment */
-  private def addSource(x0: TwoDArray, x1: TwoDArray, dt: Double): Unit = {
-    for (i <- 0 until getWidth)
-      for (j <- 0 until getHeight)
-        x1(i)(j) += dt * x0(i)(j)
   }
 }

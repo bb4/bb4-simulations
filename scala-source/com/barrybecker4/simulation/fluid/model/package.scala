@@ -9,7 +9,7 @@ package object model {
   object Boundary extends Enumeration {
     type Boundary = Value
 
-    /** negates on neither the vertical or horizontal boundary */
+    /** negates on neither, the vertical, or horizontal boundary */
     val NEITHER, HORIZONTAL, VERTICAL = Value
   }
 

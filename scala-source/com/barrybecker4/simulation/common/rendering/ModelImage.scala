@@ -29,21 +29,21 @@ class ModelImage(var model: RectangularModel, var cmap: ColorMap, val scale: Int
     */
   def updateImage(lastRow: Int, currentRow: Int): Unit = {
     updateImageSizeIfNeeded()
-    val width = model.getWidth
+    val rectWidth = model.getWidth
     val rectHeight = currentRow - lastRow
     if (rectHeight <= 0) return
-    val pixels = new Array[Int](scale * width * scale * rectHeight)
+    val pixels = new Array[Int](scale * rectWidth * scale * rectHeight)
 
-    for (x <- 0 until width)
+    for (x <- 0 until rectWidth)
       for (y <- 0 until rectHeight) {
         if (scale > 1) setColorRect(x, y, lastRow, pixels)
         else {
           val c = cmap.getColorForValue(model.getValue(x, y + lastRow))
-          pixels(y * width + x) = c.getRGB
+          pixels(y * rectWidth + x) = c.getRGB
         }
       }
 
-    image.setRGB(0, scale * lastRow, scale * width, scale * rectHeight, pixels, 0, scale * width)
+    image.setRGB(0, scale * lastRow, scale * rectWidth, scale * rectHeight, pixels, 0, scale * rectWidth)
   }
 
   /** Determine the colors for a rectangular strip of pixels. */

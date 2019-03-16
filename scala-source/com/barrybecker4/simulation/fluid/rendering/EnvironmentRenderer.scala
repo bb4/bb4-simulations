@@ -2,9 +2,10 @@
 package com.barrybecker4.simulation.fluid.rendering
 
 import com.barrybecker4.simulation.common.rendering.ModelImage
-import com.barrybecker4.simulation.fluid.model.Grid
+import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import java.awt.Color
 import java.awt.Graphics2D
+import EnvironmentRenderer._
 
 
 /**
@@ -19,11 +20,11 @@ object EnvironmentRenderer { // rendering attributes
   private val PRESSURE_COLOR_MAP = new PressureColorMap
 }
 
-final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
+final class EnvironmentRenderer(var env: FluidEnvironment, var options: RenderingOptions) {
 
-  private val modelImage = new ModelImage(grid, EnvironmentRenderer.PRESSURE_COLOR_MAP, options.getScale.toInt)
+  private val modelImage = new ModelImage(env, PRESSURE_COLOR_MAP, options.getScale.toInt)
 
-  def getColorMap: PressureColorMap = EnvironmentRenderer.PRESSURE_COLOR_MAP
+  def getColorMap: PressureColorMap = PRESSURE_COLOR_MAP
   def getOptions: RenderingOptions = options
 
   /** Render the Environment on the screen. */
@@ -32,8 +33,8 @@ final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
     if (options.getShowPressures) concurrentRenderPressures(g)
     // outer boundary
     val scale = options.getScale
-    g.drawRect(EnvironmentRenderer.OFFSET,
-      EnvironmentRenderer.OFFSET, (grid.getWidth * scale).toInt, (grid.getHeight * scale).toInt)
+    g.drawRect(OFFSET,
+      OFFSET, (env.getWidth * scale).toInt, (env.getHeight * scale).toInt)
 
     // draw the ---velocity--- field (and status)
     if (options.getShowVelocities) drawVectors(g)
@@ -42,7 +43,7 @@ final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
 
   /** If the render options say to use parallelism, then we will render the pressures concurrently. */
   private def concurrentRenderPressures(g2: Graphics2D) = {
-    val height = grid.getHeight
+    val height = env.getHeight
     modelImage.setUseLinearInterpolation(options.getUseLinearInterpolation)
     val numProcs = Runtime.getRuntime.availableProcessors()
 
@@ -60,38 +61,37 @@ final class EnvironmentRenderer(var grid: Grid, var options: RenderingOptions) {
     if (options.isParallelized) workers.par.foreach(_.run())
     else workers.foreach(_.run())
 
-    g2.drawImage(modelImage.getImage, EnvironmentRenderer.OFFSET, EnvironmentRenderer.OFFSET, null)
+    g2.drawImage(modelImage.getImage, OFFSET, OFFSET, null)
   }
 
   private def drawGrid(g: Graphics2D): Unit = {
-    g.setColor(EnvironmentRenderer.GRID_COLOR)
+    g.setColor(GRID_COLOR)
     val scale = options.getScale
-    val rightEdgePos = (scale * grid.getWidth).toInt
-    val bottomEdgePos = (scale * grid.getHeight).toInt
-    for (j <- 0 until grid.getHeight) { //  -----
+    val rightEdgePos = (scale * env.getWidth).toInt
+    val bottomEdgePos = (scale * env.getHeight).toInt
+    for (j <- 0 until env.getHeight) { //  -----
       val ypos = (j * scale).toInt
-      g.drawLine(EnvironmentRenderer.OFFSET,
-        ypos + EnvironmentRenderer.OFFSET, rightEdgePos + EnvironmentRenderer.OFFSET, ypos + EnvironmentRenderer.OFFSET)
+      g.drawLine(OFFSET, ypos + OFFSET, rightEdgePos + OFFSET, ypos + OFFSET)
     }
-    for (i <- 0 until grid.getWidth) { //  ||||
+    for (i <- 0 until env.getWidth) { //  ||||
       val xpos = (i * scale).toInt
-      g.drawLine(xpos + EnvironmentRenderer.OFFSET,
-        EnvironmentRenderer.OFFSET, xpos + EnvironmentRenderer.OFFSET, bottomEdgePos + EnvironmentRenderer.OFFSET)
+      g.drawLine(xpos + OFFSET,
+        OFFSET, xpos + OFFSET, bottomEdgePos + OFFSET)
     }
   }
 
   private def drawVectors(g: Graphics2D): Unit = {
-    g.setColor(EnvironmentRenderer.VECTOR_COLOR)
+    g.setColor(VECTOR_COLOR)
     val scale = options.getScale
-    for (j <- 0 until grid.getHeight) {
-      for (i <- 0 until grid.getWidth) {
-        val u = grid.getU(i, j)
-        val v = grid.getV(i, j)
-        val x = (scale * i).toInt + EnvironmentRenderer.OFFSET
-        val y = (scale * j).toInt + EnvironmentRenderer.OFFSET
+    for (j <- 0 until env.getHeight) {
+      for (i <- 0 until env.getWidth) {
+        val u = env.getU(i, j)
+        val v = env.getV(i, j)
+        val x = (scale * i).toInt + OFFSET
+        val y = (scale * j).toInt + OFFSET
         g.drawLine(x, y,
-          (scale * i + EnvironmentRenderer.VECTOR_SCALE * u).toInt + EnvironmentRenderer.OFFSET,
-          (scale * j + EnvironmentRenderer.VECTOR_SCALE * v).toInt + EnvironmentRenderer.OFFSET)
+          (scale * i + VECTOR_SCALE * u).toInt + OFFSET,
+          (scale * j + VECTOR_SCALE * v).toInt + OFFSET)
       }
     }
   }

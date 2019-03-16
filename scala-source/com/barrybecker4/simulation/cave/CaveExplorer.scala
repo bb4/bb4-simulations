@@ -34,7 +34,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
     this.addMouseMotionListener(handler)
   }
 
-  override protected def reset(): Unit = { //caveModel.reset();
+  override protected def reset(): Unit = {
     setNumStepsPerFrame(CaveExplorer.DEFAULT_STEPS_PER_FRAME)
     // remove handlers to void memory leak
     this.removeMouseListener(handler)

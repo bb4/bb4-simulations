@@ -9,7 +9,7 @@ import com.barrybecker4.common.concurrency._
   * @author Barry Becker
   */
 object RenderingOptions {
-  /** scales the size of everything   */
+  /** scales the size of everything. Number of pixels on edge of cell.   */
   private val DEFAULT_SCALE = 4
 }
 

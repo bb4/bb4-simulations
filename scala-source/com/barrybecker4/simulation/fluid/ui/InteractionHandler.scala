@@ -1,7 +1,7 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.ui
 
-import com.barrybecker4.simulation.fluid.model.Grid
+import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
@@ -16,7 +16,8 @@ object InteractionHandler {
   private[ui] val DEFAULT_SOURCE_DENSITY = 1.0f
 }
 
-class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends MouseListener with MouseMotionListener {
+class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Double)
+  extends MouseListener with MouseMotionListener {
 
   private var force: Double = InteractionHandler.DEFAULT_FORCE
   private var sourceDensity: Double = InteractionHandler.DEFAULT_SOURCE_DENSITY
@@ -38,9 +39,9 @@ class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends 
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
     val startX = Math.max(1, i - 1)
-    val stopX = Math.min(grid.getWidth, i + 1)
+    val stopX = Math.min(env.getWidth, i + 1)
     val startY = Math.max(1, j - 1)
-    val stopY = Math.min(grid.getHeight, j + 1)
+    val stopY = Math.min(env.getHeight, j + 1)
     for (ii <- startX until stopX) {
       for (jj <- startY until stopY) {
         val weight = if (ii == i && jj == j) 1.0f
@@ -58,11 +59,11 @@ class InteractionHandler private[ui](var grid: Grid, var scale: Double) extends 
     if (mouse1Down) {
       val fu = weight * force * (currentX - lastX) / scale
       val fv = weight * force * (currentY - lastY) / scale
-      grid.incrementU(i, j, fu)
-      grid.incrementV(i, j, fv)
+      env.incrementU(i, j, fu)
+      env.incrementV(i, j, fv)
     }
     else if (mouse3Down) { // if the right mouse is down, add ink (density)
-      grid.incrementDensity(i, j, weight * sourceDensity)
+      env.incrementDensity(i, j, weight * sourceDensity)
     }
     else println("dragged with no button down")
   }

@@ -53,7 +53,8 @@ class CaveModel() {
   reset()
 
   def setSize(width: Int, height: Int) {
-    if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
+    if (width != renderer.getWidth || height != renderer.getHeight)
+      requestRestart(width, height)
   }
 
   def reset() {
