@@ -63,13 +63,6 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) extends RectangularModel {
     timeStep
   }
 
-  private def densityStep(prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double): Unit = {
-    grid.swap(prop)
-    diffuse(Boundary.NEITHER, prop, diffusionRate, dt)
-    grid.swap(prop)
-    advect(Boundary.NEITHER, prop, u, v, dt)
-  }
-
   private def velocityStep(visc: Double, dt: Double): Unit = {
     val g0 = grid.getGrid0
     val g1 = grid.getGrid1
@@ -83,6 +76,13 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) extends RectangularModel {
     advect(Boundary.VERTICAL, CellProperty.U, g0.u, g0.v, dt)
     advect(Boundary.HORIZONTAL, CellProperty.V, g0.u, g0.v, dt)
     project(g1.u, g1.v, g0.u, g0.v)
+  }
+
+  private def densityStep(prop: CellProperty, u: TwoDArray, v: TwoDArray, dt: Double): Unit = {
+    grid.swap(prop)
+    diffuse(Boundary.NEITHER, prop, diffusionRate, dt)
+    grid.swap(prop)
+    advect(Boundary.NEITHER, prop, u, v, dt)
   }
 
   /** project the fluid */

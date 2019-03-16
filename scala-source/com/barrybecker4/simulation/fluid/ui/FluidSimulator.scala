@@ -23,7 +23,6 @@ import scala.util.Random
   *   - number of cells (x,y) - auto-calculate the scale size based on the window size.
   */
 object FluidSimulator {
-  val CONFIG_FILE = "com/barrybecker4/fluid/initialStateTest.data"
   val DEFAULT_STEPS_PER_FRAME = 1
   /** if true it will save all the animation steps to file */
   val INITIAL_TIME_STEP = 0.03 // initial time step
@@ -44,7 +43,9 @@ class FluidSimulator() extends Simulator("Fluid") {
     val scale = renderOptions.getScale.toInt
     envRenderer = new EnvironmentRenderer(environment, renderOptions)
     setNumStepsPerFrame(FluidSimulator.DEFAULT_STEPS_PER_FRAME)
-    handler = new InteractionHandler(environment, scale)
+
+    val force = if (handler != null) handler.force else InteractionHandler.DEFAULT_FORCE
+    handler = new InteractionHandler(environment, scale, force)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }

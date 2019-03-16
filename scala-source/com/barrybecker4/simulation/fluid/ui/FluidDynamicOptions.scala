@@ -30,7 +30,7 @@ object FluidDynamicOptions {
   private val SLIDER_PROPS = Array(
     new SliderProperties(DR_SLIDER, 0, 10.0, FluidEnvironment.DEFAULT_DIFFUSION_RATE, 100.0),
     new SliderProperties(VISC_SLIDER, 0, 50.0, FluidEnvironment.DEFAULT_VISCOSITY, 100.0),
-    new SliderProperties(FORCE_SLIDER, 0.01, 30.0, InteractionHandler.DEFAULT_FORCE, 100.0),
+    new SliderProperties(FORCE_SLIDER, 0.01, 3.0, InteractionHandler.DEFAULT_FORCE, 100.0),
     new SliderProperties(SD_SLIDER, 0.01, 4.0, InteractionHandler.DEFAULT_SOURCE_DENSITY, 100.0),
     new SliderProperties(NUM_ITERATIONS_SLIDER, 1, 100, FluidEnvironment.DEFAULT_NUM_SOLVER_ITERATIONS, 1.0),
     new SliderProperties(NS_SLIDER, MIN_STEPS, MAX_STEPS, FluidSimulator.DEFAULT_STEPS_PER_FRAME, 1.0),

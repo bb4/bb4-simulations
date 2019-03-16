@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.fluid.model
 
 import com.barrybecker4.simulation.fluid.model
 import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
+import model.CellProperty._
 
 
 /**
@@ -19,17 +20,17 @@ class CellGrid(var dimX: Int, var dimY: Int) {
 
   def getProperty(prop: CellProperty): TwoDArray = {
     prop match {
-      case model.CellProperty.U => u
-      case model.CellProperty.V => v
-      case model.CellProperty.DENSITY => density
+      case U => u
+      case V => v
+      case DENSITY => density
     }
   }
 
   def setProperty(prop: CellProperty, values: TwoDArray): Unit = {
     prop match {
-      case model.CellProperty.U => u = values
-      case model.CellProperty.V => v = values
-      case model.CellProperty.DENSITY => density = values
+      case U => u = values
+      case V => v = values
+      case DENSITY => density = values
     }
   }
 
