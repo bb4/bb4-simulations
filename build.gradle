@@ -89,6 +89,7 @@ appMap['conway'] = [
 ]
 appMap['snake'] = [
         title: 'Snake',
+        imageName: 'snake.png',
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.snake.SnakeSimulator',
         panel_class: 'com.barrybecker4.simulation.snake.SnakeSimulator',
         description: 'Simulates the movement of a real snake. Based on a 1988 SIGGRAPH paper by Gavin Miller. ' +
