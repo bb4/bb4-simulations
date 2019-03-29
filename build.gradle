@@ -33,6 +33,7 @@ task runFractExpLocalized(type: JavaExec) {
 ext.appMap = new LinkedHashMap()
 appMap['reactiondiffusion'] = [
         title: 'Reaction Diffusion',
+        imageName: "reactiondiffusion.png",
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
         panel_class: 'com.barrybecker4.simulation.reactiondiffusion.RDSimulator',
         description: 'Simulates an interaction between 2 chemicals in a reaction diffusion simulation. ' +
