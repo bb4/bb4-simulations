@@ -39,7 +39,7 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
   /** usually the effectiveLength is the same as restingLength except when muscular contraction are happening  */
   var effectiveLength: Double = restingLength
   /** the current magnitude of the spring */
-  var length = restingLength // current magnitude
+  var length: Double = restingLength // current magnitude
 
 
   /**

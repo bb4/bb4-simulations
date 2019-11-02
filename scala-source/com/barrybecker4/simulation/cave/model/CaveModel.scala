@@ -142,7 +142,7 @@ class CaveModel() {
     this.kernelType = `type`
   }
 
-  private def requestRestart(width: Int, height: Int) = {
+  private def requestRestart(width: Int, height: Int): Unit = {
     try {
       val caveWidth = (width / scale).toInt
       val caveHeight = (height / scale).toInt

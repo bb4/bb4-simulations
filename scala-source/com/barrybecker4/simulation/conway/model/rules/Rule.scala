@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.conway.model.rules
 
 import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.conway.model.Conway
+import scala.collection.parallel.CollectionConverters._
 
 
 /**

@@ -28,7 +28,7 @@ object SimulatorApplet extends App {
     val simulatorClass = ClassLoaderSingleton.loadClass(className)
     var simulator: Simulator = null
     try
-      simulator = simulatorClass.newInstance.asInstanceOf[Simulator]
+      simulator = simulatorClass.getDeclaredConstructor().newInstance().asInstanceOf[Simulator]
     catch {
       case e: InstantiationException =>
         System.err.println("Could not create class for " + className) //NON-NLS

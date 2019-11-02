@@ -109,7 +109,7 @@ class HenonAlgorithm() {
     }
   }
 
-  private def requestRestart(width: Int, height: Int) = {
+  private def requestRestart(width: Int, height: Int): Unit = {
     model = new HenonModel(width, height, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
     restartRequested = true
   }

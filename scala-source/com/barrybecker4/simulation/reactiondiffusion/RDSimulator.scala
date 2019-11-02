@@ -49,7 +49,7 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     }
   }
 
-  private def commonInit() = {
+  private def commonInit(): Unit = {
     initCommonUI()
     grayScott = new GrayScottController(1, 1)
     setNumStepsPerFrame(RDSimulator.DEFAULT_STEPS_PER_FRAME)

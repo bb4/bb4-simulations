@@ -9,7 +9,7 @@ import com.barrybecker4.simulation.conway.model.Conway
   * The original Conway Life rule.
   */
 class RuleB3S23 extends Rule {
-  override private[rules] def applyRuleToCandidate(c: Location, conway: Conway, newConway: Conway) = {
+  override private[rules] def applyRuleToCandidate(c: Location, conway: Conway, newConway: Conway): Unit = {
     val numNbrs = conway.getNumNeighbors(c)
     val isAlive = conway.isAlive(c)
 

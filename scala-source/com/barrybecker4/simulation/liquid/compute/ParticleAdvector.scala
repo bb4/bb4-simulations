@@ -33,7 +33,7 @@ class ParticleAdvector(var grid: Grid) {
   def advectParticles(timeStep: Double, particles: Particles): Double = { // keep track of the biggest velocity magnitude so we can adjust the timestep if needed.
     var maxLength = Double.MinValue
 
-    for (particle <- particles) {
+    for (particle <- particles.iterator) {
       val length = advectParticle(timeStep, particle)
       if (length > maxLength) maxLength = length
     }

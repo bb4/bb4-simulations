@@ -224,12 +224,12 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     }
   }
 
-  override def itemStateChanged(e: ItemEvent) {
+  override def itemStateChanged(e: ItemEvent): Unit = {
     val kType = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem.toString)
     caveModel.setKernelType(kType)
   }
 
-  override def actionPerformed(e: ActionEvent) {
+  override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == nextButton) caveModel.requestNextStep()
     else if (e.getSource == resetButton) caveModel.requestRestart()
     else if (e.getSource == useContinuousIteration) {

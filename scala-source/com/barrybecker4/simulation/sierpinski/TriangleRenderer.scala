@@ -39,7 +39,7 @@ class TriangleRenderer(var styler: GraphicsStyler) {
     val a = midpoint(triangle.B, triangle.C)
     val b = midpoint(triangle.A, triangle.C)
     val c = midpoint(triangle.B, triangle.A)
-    if (depth >= maxDepth) drawTriangle(new Triangle(a, b, c), true)
+    if (depth >= maxDepth) drawTriangle(new Triangle(a, b, c), fill = true)
     else {
       draw(new Triangle(triangle.A, c, b), depth + 1)
       draw(new Triangle(c, triangle.B, a), depth + 1)

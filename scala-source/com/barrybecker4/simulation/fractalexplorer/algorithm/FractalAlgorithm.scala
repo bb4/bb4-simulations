@@ -9,6 +9,7 @@ import com.barrybecker4.common.math.ComplexNumberRange
 import com.barrybecker4.simulation.common.Profiler
 import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
 import com.barrybecker4.ui.util.ColorMap
+import scala.collection.parallel.CollectionConverters._
 
 /**
   * Abstract implementation common to all fractal algorithms.
@@ -58,13 +59,13 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
   setParallelized(true)
   rowCalculator = new RowCalculator(this)
 
-  def setRange(range: ComplexNumberRange) {
+  def setRange(range: ComplexNumberRange): Unit = {
     history.addRangeToHistory(range)
     processRange(range)
   }
 
   /** Back up one step in the history */
-  def goBack() {
+  def goBack(): Unit = {
     if (history.hasHistory) {
       var newRange: ComplexNumberRange = history.popLastRange
       if (range == newRange) {
@@ -74,14 +75,14 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
     }
   }
 
-  private def processRange(rang: ComplexNumberRange) {
+  private def processRange(rang: ComplexNumberRange): Unit = {
     range = rang
     restartRequested = true
   }
 
   def isParallelized: Boolean = parallelized
 
-  def setParallelized(parallelized: Boolean) {
+  def setParallelized(parallelized: Boolean): Unit = {
     if (this.parallelized != parallelized) {
       this.parallelized = parallelized
       model.setCurrentRow(0)
@@ -90,7 +91,7 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
 
   def getMaxIterations: Int = maxIterations
 
-  def setMaxIterations(value: Int) {
+  def setMaxIterations(value: Int): Unit =  {
     if (value != maxIterations) {
       maxIterations = value
       model.setCurrentRow(0)
@@ -99,7 +100,7 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
 
   def getUseRunLengthOptimization: Boolean = rowCalculator.getUseRunLengthOptimization
 
-  def setUseRunLengthOptimization(value: Boolean) {
+  def setUseRunLengthOptimization(value: Boolean): Unit =  {
     rowCalculator.setUseRunLengthOptimization(value)
   }
 

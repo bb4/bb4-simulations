@@ -28,9 +28,9 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
   private var mouse1Down = false
   private var mouse3Down = false
 
-  def setScale(scale: Double) {this.scale = scale }
-  def setBrushRadius(rad: Int){ brushRadius = rad}
-  def setBrushStrength(strength: Double) {brushStrength = strength}
+  def setScale(scale: Double): Unit =  { this.scale = scale }
+  def setBrushRadius(rad: Int): Unit = { brushRadius = rad }
+  def setBrushStrength(strength: Double): Unit = { brushStrength = strength }
 
   /** Lowers (or raises) cave walls when dragging. Left mouse lowers; right mouse drag raises. */
   override def mouseDragged(e: MouseEvent): Unit = {
@@ -41,7 +41,7 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
     lastY = currentY
   }
 
-  private def doBrush() = {
+  private def doBrush(): Unit = {
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
@@ -61,7 +61,7 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
   }
 
   /** @return the weight is 1 / distance. */
-  private def getWeight(i: Int, j: Int, ii: Int, jj: Int, minWt: Double) = {
+  private def getWeight(i: Int, j: Int, ii: Int, jj: Int, minWt: Double): Double = {
     val deltaX = i.toDouble - ii
     val deltaY = j.toDouble - jj
     var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
@@ -70,7 +70,7 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
   }
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
-  private def applyChange(i: Int, j: Int, weight: Double) = {
+  private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     if (mouse1Down || mouse3Down) {
       val sign = if (mouse1Down) 1 else -1
       cave.incrementHeight(i, j, sign * brushStrength * weight)

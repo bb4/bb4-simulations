@@ -21,7 +21,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   private var grid: HabitatGrid = _
   initialize()
 
-  private def initialize() = {
+  private def initialize(): Unit = {
     grid = new HabitatGrid(20, 15)
     this.clear()
     addPopulations()
@@ -59,14 +59,14 @@ abstract class Populations extends ArrayBuffer[Population] {
     new MultipleFunctionRenderer(functions, Some(lineColors))
   }
 
-  private def updateFunctions(iteration: Long) = {
+  private def updateFunctions(iteration: Long): Unit = {
     for (pop <- this) {
       val func = functionMap(pop)
       func.addValue(iteration, pop.getSize)
     }
   }
 
-  private def updateGridCellCounts() = {
+  private def updateGridCellCounts(): Unit = {
     for (pop <- this) {
       for (c <- pop.creatures) {
         val cell = grid.getCellForPosition(c.getLocation)

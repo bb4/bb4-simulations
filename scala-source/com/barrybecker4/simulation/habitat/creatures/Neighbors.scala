@@ -22,7 +22,7 @@ class Neighbors private[creatures](var creature: Creature, var grid: HabitatGrid
   findNeighbors()
 
 
-  private def findNeighbors() = {
+  private def findNeighbors(): Unit = {
     val cType = creature.getType
     nearestPrey = null
     nearestFriend = null

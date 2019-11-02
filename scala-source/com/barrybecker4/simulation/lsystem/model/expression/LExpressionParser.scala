@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.lsystem.model.expression
 import com.barrybecker4.common.expression.TreeNode
 import scala.util.parsing.combinator._
 import LToken._
+//import scala.collection.mutable
 
 /**
   * Parses the text form of an L-system expression into a tree representation.
@@ -37,7 +38,7 @@ class LExpressionParser extends RegexParsers {
     if (parsed.isEmpty) throw new IllegalArgumentException(parsed.toString)
     if (parsed.get.length > 1) {
       val root = new TreeNode("", ops)
-      root.children = parsed.get
+      root.children = Seq(parsed.get:_*)
       root
     } else parsed.get.head
   }

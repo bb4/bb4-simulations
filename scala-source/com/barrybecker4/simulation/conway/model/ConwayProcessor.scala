@@ -59,12 +59,12 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
 
   def getPoints: Set[Location] = conway.getPoints
 
-  private[model] def setAlive(row: Int, col: Int) = {
+  private[model] def setAlive(row: Int, col: Int): Unit = {
     conway.setValue(IntLocation(row, col), 1)
   }
 
   /** Compute the next step of the simulation. */
-  private[model] def nextPhase() = {
+  private[model] def nextPhase(): Unit = {
     val newConway = new Conway
     newConway.setWrapping(wrapGrid, width, height)
     conway = rule.applyRule(conway, newConway, useParallel)

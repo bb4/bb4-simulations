@@ -41,7 +41,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   private var initialLiquidRegions: List[Region]= _
   parseFromDocument(document)
 
-  private def parseFromDocument(document: Document) = {
+  private def parseFromDocument(document: Document): Unit = {
     val envRoot = document.getDocumentElement
     // environment element
     val children = envRoot.getChildNodes
@@ -68,7 +68,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
     * </walls>
     * </pre>
     */
-  private def parseWalls(wallsNode: Node) = {
+  private def parseWalls(wallsNode: Node): Unit = {
 
     val children = wallsNode.getChildNodes
     val num = children.getLength
@@ -88,7 +88,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
     * </liquid>
     * </pre>
     */
-  private def parseLiquidRegions(wallsNode: Node) = {
+  private def parseLiquidRegions(wallsNode: Node): Unit = {
     sources = List[Source]()
     sinks = List[Region]()
     initialLiquidRegions = List[Region]()

@@ -8,6 +8,7 @@ import com.barrybecker4.simulation.cave.model.kernal.RadialKernel
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField
 import CaveProcessor._
 import CaveProcessor.KernelType.KernelType
+import scala.collection.parallel.CollectionConverters._
 
 /**
   * This Cave simulation program is based on work by Michael Cook

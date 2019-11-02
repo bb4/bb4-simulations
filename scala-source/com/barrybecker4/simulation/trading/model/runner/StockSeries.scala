@@ -2,9 +2,7 @@
 package com.barrybecker4.simulation.trading.model.runner
 
 import com.barrybecker4.common.math.function.Function
-import java.util
-
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -14,12 +12,12 @@ import scala.collection.mutable.{ArrayBuffer, ListBuffer}
   */
 class StockSeries(var maxNum: Int) extends ArrayBuffer[Function] {
 
-  def append(func: Function): Unit = {
+  def appendSeries(func: Function): Unit = {
     super.append(func)
     if (size > maxNum) remove(0)
   }
 
-  def clear(newNumeriesToKeep: Int): Unit = {
+  def clearSeries(newNumeriesToKeep: Int): Unit = {
     maxNum = newNumeriesToKeep
     super.clear()
   }

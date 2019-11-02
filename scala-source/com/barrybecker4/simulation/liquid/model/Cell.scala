@@ -27,7 +27,7 @@ class Cell() {
   private var pressure = ATMOSPHERIC_PRESSURE // pressure at the center of the cell
 
   /** velocities in x, y directions defined at the center of each face */
-  private var velocity = new CellVelocity
+  private val velocity = new CellVelocity
   private var numParticles = 0  //  Num particles in this cell
   private var status = CellStatus.EMPTY // type of cell
 
@@ -35,8 +35,8 @@ class Cell() {
   def swap() { velocity.step() }
   def setPressure(p: Double) { pressure = p }
   def getPressure: Double = pressure
-  private[model] def initializeU(u: Double) = {velocity.initializeU(u)}
-  private[model] def initializeV(v: Double) = {velocity.initializeV(v)}
+  private[model] def initializeU(u: Double): Unit = {velocity.initializeU(u)}
+  private[model] def initializeV(v: Double): Unit = {velocity.initializeV(v)}
 
   def initializeVelocity(u: Double, v: Double) { velocity.initialize(u, v)}
   def setU(u: Double) {velocity.setCurrentU(u)}

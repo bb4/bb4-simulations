@@ -5,6 +5,7 @@ import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.rendering.ColorRect
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import java.awt.Graphics2D
+import scala.collection.parallel.CollectionConverters._
 
 
 /**

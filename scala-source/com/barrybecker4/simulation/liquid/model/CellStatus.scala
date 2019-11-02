@@ -7,9 +7,9 @@ package com.barrybecker4.simulation.liquid.model
   */
 object CellStatus extends Enumeration {
   type CellStatus = Value
-  val EMPTY = Value(".")
-  val SURFACE = Value("S")
-  val FULL = Value("F")
-  val OBSTACLE = Value("o")
-  val ISOLATED = Value("I")
+  val EMPTY: Value = Value(".")
+  val SURFACE: Value = Value("S")
+  val FULL: Value  = Value("F")
+  val OBSTACLE: Value  = Value("o")
+  val ISOLATED: Value  = Value("I")
 }

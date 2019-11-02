@@ -8,9 +8,6 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionListener
-import scala.collection.JavaConverters
-import com.barrybecker4.simulation.snake.data.SnakeType.Val
-
 
 
 /**

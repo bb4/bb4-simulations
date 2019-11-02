@@ -14,9 +14,8 @@ import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
-
 import com.barrybecker4.common.concurrency.ThreadUtil
-import javafx.scene.control.ComboBox
+
 
 
 /**
@@ -28,7 +27,6 @@ import javafx.scene.control.ComboBox
 object DynamicOptions {
   private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame"
   private val SCALE_SLIDER = "Scale"
-  private val PI_D2 = Math.PI / 2.0
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
   private val GENERAL_SLIDER_PROPS = Array(

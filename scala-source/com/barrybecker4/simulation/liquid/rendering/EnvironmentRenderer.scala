@@ -44,7 +44,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** Figure out the biggest scale based in on which dimension is bumped up to first */
-  private def determineScaling(width: Int, height: Int) = {
+  private def determineScaling(width: Int, height: Int): Unit = {
     val grid = env.getGrid
     val proposedXScale = width / grid.getXDimension
     val proposedYScale = height / grid.getYDimension
@@ -76,7 +76,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   private def getMaxY = scale * env.getGrid.getYDimension + EnvironmentRenderer.OFFSET
 
   /** Draw the cells/grid */
-  private def drawGrid(g: Graphics2D) = {
+  private def drawGrid(g: Graphics2D): Unit = {
     g.setColor(EnvironmentRenderer.GRID_COLOR)
     val grid = env.getGrid
     val xDim = grid.getXDimension
@@ -95,7 +95,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** Draw the particles in the liquid in the environment. */
-  private def drawParticles(g: Graphics2D) = { // draw the ---particles--- of liquid
+  private def drawParticles(g: Graphics2D): Unit = { // draw the ---particles--- of liquid
     val a: Array[Double] = new Array[Double](2)
     val maxY = getMaxY
 
@@ -118,7 +118,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     new Color(comp, green, 255 - comp, 80)
   }
 
-  private def drawParticleVelocities(g: Graphics2D) = {
+  private def drawParticleVelocities(g: Graphics2D): Unit = {
     g.setStroke(EnvironmentRenderer.PARTICLE_VELOCITY_STROKE)
     g.setColor(EnvironmentRenderer.PARTICLE_VELOCITY_COLOR)
     val a: Array[Double] = new Array[Double](2)
@@ -140,7 +140,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** PathColor the squares according to the pressure in that discrete region. */
-  private def renderPressure(g: Graphics2D) = {
+  private def renderPressure(g: Graphics2D): Unit = {
     val grid = env.getGrid
     val maxY = getMaxY
 
@@ -153,7 +153,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** Draw walls and boundary.  */
-  private def drawWalls(g: Graphics2D) = {
+  private def drawWalls(g: Graphics2D): Unit = {
     val wallStroke = new BasicStroke(wallLineWidth)
     g.setStroke(wallStroke)
     g.setColor(EnvironmentRenderer.WALL_COLOR)
@@ -173,7 +173,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** Draw text representing internal state for debug purposes. */
-  private def drawCellSymbols(g: Graphics2D) = {
+  private def drawCellSymbols(g: Graphics2D): Unit = {
     val grid = env.getGrid
     g.setColor(EnvironmentRenderer.TEXT_COLOR)
     g.setFont(EnvironmentRenderer.BASE_FONT)
@@ -195,7 +195,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   /** There is a velocity vector in the center of each cell face. */
-  private def drawCellFaceVelocities(g: Graphics2D) = {
+  private def drawCellFaceVelocities(g: Graphics2D): Unit = {
     g.setStroke(EnvironmentRenderer.FACE_VELOCITY_STROKE)
     g.setColor(EnvironmentRenderer.FACE_VELOCITY_COLOR)
     val grid = env.getGrid

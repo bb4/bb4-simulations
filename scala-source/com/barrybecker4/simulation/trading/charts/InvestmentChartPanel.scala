@@ -2,8 +2,6 @@
 package com.barrybecker4.simulation.trading.charts
 
 import java.awt.{Color, Graphics, Graphics2D}
-
-import com.barrybecker4.common.format.CurrencyFormatter
 import com.barrybecker4.common.math.function.Function
 import com.barrybecker4.simulation.trading.model.runner.StockSeries
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
@@ -21,7 +19,6 @@ object InvestmentChartPanel {
   private val LEGEND_X = 140
   private val LEGEND_Y = 10
   private val LEGEND_SWATCH_SIZE = 12
-  private val FORMATTER = new CurrencyFormatter
 }
 
 class InvestmentChartPanel()
@@ -31,8 +28,8 @@ class InvestmentChartPanel()
   private val series = new StockSeries(20)
 
   def addSeries(investmentFunction: Function, reserveFunction: Function): Unit = {
-    series.append(investmentFunction)
-    series.append(reserveFunction)
+    series.appendSeries(investmentFunction)
+    series.appendSeries(reserveFunction)
     // this should change
     val size = series.size
     var lineColors = Seq[Color]()
@@ -40,10 +37,10 @@ class InvestmentChartPanel()
       val color = if (i % 2 == 0) InvestmentChartPanel.INVESTMENT_COLOR else InvestmentChartPanel.RESERVE_COLOR
       lineColors :+= color
     }
-    investmentChart = new MultipleFunctionRenderer(series, Some(lineColors))
+    investmentChart = new MultipleFunctionRenderer(series.toSeq, Some(lineColors))
   }
 
-  def clear(numRecentSeries: Int): Unit = { series.clear(numRecentSeries) }
+  def clear(numRecentSeries: Int): Unit = series.clearSeries(numRecentSeries)
 
   override def paint(g: Graphics): Unit = {
     investmentChart.setSize(getWidth, getHeight)

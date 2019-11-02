@@ -72,7 +72,7 @@ class SurfaceVelocityUpdater(var pressure0: Double) {
     *                    surface sides that do not have liquid.
     *                    RISK:3
     */
-  private def dissipateOverflow(cell: Cell, numSurfaces: Int, overflow: Double, neighbors: CellNeighbors) = {
+  private def dissipateOverflow(cell: Cell, numSurfaces: Int, overflow: Double, neighbors: CellNeighbors): Unit = {
     if (Math.abs(overflow) > 100)
       println("dissipating large overflow =" + overflow)
     var count = 0

@@ -22,7 +22,7 @@ class RadialKernel(cave: Cave, val size: Int = 5) extends AbstractKernel(cave) {
   private var totalWeight = .0
   initDistanceLookup()
 
-  private def initDistanceLookup() = {
+  private def initDistanceLookup(): Unit = {
     var sum: Double = 0
     val range = size / 2
     for (i <- 0 to range) {

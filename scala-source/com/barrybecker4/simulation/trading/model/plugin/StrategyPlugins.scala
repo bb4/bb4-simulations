@@ -29,7 +29,7 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
       val c = strategyClasses(ci)
       // Skip the abstract class (if any) because it cannot (and should not) be instantiated.
       if (!Modifier.isAbstract(c.getModifiers) && clzz.isAssignableFrom(c)) {
-        val strategy: E = c.newInstance.asInstanceOf[E]
+        val strategy: E = c.getDeclaredConstructor().newInstance().asInstanceOf[E]
         val name = strategy.name
         strategyNames.append(name)
         valueMap += name -> strategy
@@ -51,7 +51,7 @@ class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Cl
   }
   println("strategyNames = " + strategyNames.mkString(", "))
 
-  def getStrategies: Seq[String] = strategyNames
+  def getStrategies: Seq[String] = strategyNames.toSeq
 
   /** Create an instance of the algorithm given the controller and a refreshable. */
   def getStrategy(name: String): E = {

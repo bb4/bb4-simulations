@@ -15,11 +15,11 @@ object CellDimensions {
 class CellDimensions() {
 
   // size of a cell
-  final var dx = CELL_SIZE
-  final var dy = CELL_SIZE
+  final val dx: Double = CELL_SIZE
+  final val dy: Double = CELL_SIZE
 
   // squares of edge lengths
-  final var dxSq: Double = dx * dx
-  final var dySq: Double = dy * dy
+  final val dxSq: Double = dx * dx
+  final val dySq: Double = dy * dy
 
 }

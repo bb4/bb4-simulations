@@ -22,7 +22,7 @@ class Population(var creatureType: CreatureType) {
   var creatures: Set[Creature] = Set[Creature]()
   private var initialSize = 0
 
-  private def createInitialSet(num: Int) = {
+  private def createInitialSet(num: Int): Unit = {
     this.initialSize = num
     create()
   }
@@ -30,7 +30,7 @@ class Population(var creatureType: CreatureType) {
   /** Reset the population to its original size */
   def reset() {create()}
 
-  private def create() = {
+  private def create(): Unit = {
     creatures = Set[Creature]()
     for (i <- 0 until initialSize)
       creatures += new Creature(creatureType, new Point2d(MathUtil.RANDOM.nextDouble, MathUtil.RANDOM.nextDouble))
@@ -64,7 +64,7 @@ class Population(var creatureType: CreatureType) {
   }
 
   /** Remove dead after next day is done. */
-  private[creatures] def removeDead(grid: HabitatGrid) = creatures = creatures.filter(_.isAlive)
+  private[creatures] def removeDead(grid: HabitatGrid): Unit = creatures = creatures.filter(_.isAlive)
 
   def getSize: Int = creatures.size
   def getName: String = "Population of " + creatureType.name

@@ -19,19 +19,19 @@ object StockSampleOptions {
 }
 
 class StockSampleOptions {
-  var numStocks = StockSampleOptions.DEFAULT_NUM_STOCKS
-  var numTimePeriods = StockSampleOptions.DEFAULT_NUM_TIME_PERIODS
+  var numStocks: Int = StockSampleOptions.DEFAULT_NUM_STOCKS
+  var numTimePeriods: Int = StockSampleOptions.DEFAULT_NUM_TIME_PERIODS
   var percentIncrease: Double = StockSampleOptions.DEFAULT_PERCENT_INCREASE
   var percentDecrease: Double = StockSampleOptions.DEFAULT_PERCENT_DECREASE
   var startingValue: Double = StockSampleOptions.DEFAULT_STARTING_VALUE
-  var xResolution = StockSampleOptions.DEFAULT_X_RESOLUTION
-  var useLogScale = StockSampleOptions.DEFAULT_USE_LOG_SCALE
-  var useRandomChange = StockSampleOptions.DEFAULT_USE_RANDOM_CHANGE
+  var xResolution: Int = StockSampleOptions.DEFAULT_X_RESOLUTION
+  var useLogScale: Boolean = StockSampleOptions.DEFAULT_USE_LOG_SCALE
+  var useRandomChange: Boolean = StockSampleOptions.DEFAULT_USE_RANDOM_CHANGE
 
   /**
     * This theoretical maximum is something that could occur but rarely
     * ever would by chance. One use of it is used to set an upper limit on the axis.
     * @return upper limit on sample value.
     */
-  def getTheoreticalMaximum = startingValue * Math.pow(1.0 + percentIncrease, numTimePeriods)
+  def getTheoreticalMaximum: Double = startingValue * Math.pow(1.0 + percentIncrease, numTimePeriods)
 }

@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler
 import java.awt.Dimension
-
+import scala.collection.parallel.CollectionConverters._
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Initializer
 
 

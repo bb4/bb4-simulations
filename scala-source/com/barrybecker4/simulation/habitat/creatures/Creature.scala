@@ -76,7 +76,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     spawn
   }
 
-  private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature) = { //println(this +" chasing "  + nearestPrey);
+  private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature): Unit = {
     pursuing = true
     speed = cType.maxSpeed
     val distance = nearestPrey.getLocation.distance(location)
@@ -106,7 +106,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     direction = (nearestFriend.direction + directionToCOM) / 2.0
   }
 
-  private def moveToNewLocation(grid: HabitatGrid) = {
+  private def moveToNewLocation(grid: HabitatGrid): Unit = {
     location = computeNewPosition
     val oldCell = grid.getCellForPosition(location)
     val newCell = grid.getCellForPosition(location)
@@ -119,7 +119,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
   /**
     * @param creature the creature we will now eat.
     */
-  private def eat(creature: Creature) = {
+  private def eat(creature: Creature): Unit = {
     hunger -= creature.cType.nutritionalValue
     creature.kill()
     hunger = Math.max(0, hunger)

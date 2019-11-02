@@ -43,7 +43,7 @@ class VelocityUpdater {
 
   /** Update new U component of velocity. */
   private def calcUTilde(cell: Cell, neighbors: CellNeighbors, lowerRightV: Double, ipjp2: Double, dt: Double,
-                         forceX: Double, viscosity: Double) = {
+                         forceX: Double, viscosity: Double): Unit = {
     // u(i, j) = 0.5*(u(i+0.5, j) + u(i-0.5, j))
     val u_i = (cell.getU + neighbors.getLeft.getU) / 2.0
     // u(i+1, j) = 0.5*(u(i+1.5, j) + u(i+0.5, j))

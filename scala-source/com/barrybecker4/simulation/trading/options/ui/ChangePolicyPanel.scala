@@ -18,7 +18,7 @@ class ChangePolicyPanel(val threshChangePercentLabel: String, val transactPercen
   panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
   /** The % market gain/loss necessary to trigger next transaction. */
-  private var thresholdChangePercentField =
+  private val thresholdChangePercentField =
     new NumberInput(threshChangePercentLabel, defaultPolicy.changePercent * 100,
       "When gain/loss percent happens, execute the specified transaction.",
       0, 100, false)

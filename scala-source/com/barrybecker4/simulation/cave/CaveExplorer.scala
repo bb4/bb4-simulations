@@ -54,7 +54,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
     tStep
   }
 
-  override def paint(g: Graphics) {
+  override def paint(g: Graphics): Unit = {
     if (g == null) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
@@ -62,7 +62,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
     Profiler.getInstance.stopRenderingTime()
   }
 
-  override def setScale(scale: Double) {}
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {

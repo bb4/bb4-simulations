@@ -35,7 +35,7 @@ class HabitatRenderer private[habitat](var populations: Populations) {
     }
   }
 
-  private def drawCreature(creature: Creature, g2: Graphics2D) = {
+  private def drawCreature(creature: Creature, g2: Graphics2D): Unit = {
     val w = (creature.getSize * width * HabitatRenderer.SIZE_SCALE + 1.0).toInt
     val h = (creature.getSize * height * HabitatRenderer.SIZE_SCALE + 1.0).toInt
     val centerX = (creature.getLocation.x * width).toInt

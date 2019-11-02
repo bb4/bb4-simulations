@@ -41,13 +41,13 @@ class CellBlock() {
   /** @return the cell at the specified position in the array (excluding the outer obstacle cells). */
   def getAbsolute(x: Int, y: Int): Cell = block(x + 1)(y + 1)
 
-  def setPressures(p: Double) {
+  def setPressures(p: Double): Unit = {
     for (i <- 0 until DIM)
       for (j <- 0 until DIM)
         block(i)(j).setPressure(p)
   }
 
-  def setVelocities(u: Double, v: Double) {
+  def setVelocities(u: Double, v: Double): Unit = {
     var i = 0
     for (i <- 0 until DIM)
       for (j <- 0 until DIM)
@@ -55,7 +55,7 @@ class CellBlock() {
   }
 
   /** @param numParticles number of particles to add to each cell in the block. */
-  def setCenterCellParticles(numParticles: Int) {
+  def setCenterCellParticles(numParticles: Int): Unit = {
     setSingleCellParticles(1, 1, numParticles)
     updateCellStatuses()
   }
@@ -64,39 +64,39 @@ class CellBlock() {
     * Set all the cell particles with numParticlesPerCell
     * @param numParticlesPerCell number of particles to add to each cell in the block.
     */
-  def setAllCellParticles(numParticlesPerCell: Int) {
+  def setAllCellParticles(numParticlesPerCell: Int): Unit = {
     setCellBlockParticles(1, 1, CellBlock.DIM - 1, CellBlock.DIM - 1, numParticlesPerCell)
   }
 
   /** set left 6 cells */
-  def setLeftCellParticles(numParticlesPerCell: Int) {
+  def setLeftCellParticles(numParticlesPerCell: Int): Unit = {
     setCellBlockParticles(1, 1, CellBlock.DIM - 2, CellBlock.DIM - 1, numParticlesPerCell)
   }
 
   /** set right 6 cells */
-  def setRightCellParticles(numParticlesPerCell: Int) {
+  def setRightCellParticles(numParticlesPerCell: Int): Unit = {
     setCellBlockParticles(2, 1, CellBlock.DIM - 1, CellBlock.DIM - 1, numParticlesPerCell)
   }
 
   /** set top 6 cells */
-  def setTopCellParticles(numParticlesPerCell: Int) {
+  def setTopCellParticles(numParticlesPerCell: Int): Unit = {
     setCellBlockParticles(1, 1, CellBlock.DIM - 1, CellBlock.DIM - 2, numParticlesPerCell)
   }
 
   /** set bottom 6 cells */
-  def setBottomCellParticles(numParticlesPerCell: Int) {
+  def setBottomCellParticles(numParticlesPerCell: Int): Unit = {
     setCellBlockParticles(1, 2, CellBlock.DIM - 1, CellBlock.DIM - 1, numParticlesPerCell)
   }
 
   /** @param numParticlesPerCell number of particles to add to each cell in the block.*/
-  private def setCellBlockParticles(minX: Int, minY: Int, maxX: Int, maxY: Int, numParticlesPerCell: Int) = {
+  private def setCellBlockParticles(minX: Int, minY: Int, maxX: Int, maxY: Int, numParticlesPerCell: Int): Unit = {
     for (i <- minX until maxX)
       for (j <- minY until maxY)
         setSingleCellParticles(i, j, numParticlesPerCell)
     updateCellStatuses()
   }
 
-  private def setSingleCellParticles(xpos: Int, ypos: Int, numParticles: Int) = {
+  private def setSingleCellParticles(xpos: Int, ypos: Int, numParticles: Int): Unit = {
     val cell = getAbsolute(xpos, ypos)
     val n = cell.getNumParticles
 
@@ -106,7 +106,7 @@ class CellBlock() {
       cell.incParticles()
   }
 
-  def updateCellStatuses() {
+  def updateCellStatuses(): Unit = {
     for (i <- 1 until DIM - 2)
       for (j <- 1 until DIM - 2)
         block(i)(j).updateStatus(findNeighbors(i, j))

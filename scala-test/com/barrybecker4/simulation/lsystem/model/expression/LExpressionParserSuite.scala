@@ -1,9 +1,8 @@
-/*
- * // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression
 
 import org.scalatest.FunSuite
+import com.barrybecker4.common.testsupport.strip
 
 class LExpressionParserSuite extends FunSuite {
 
@@ -24,17 +23,17 @@ class LExpressionParserSuite extends FunSuite {
   // some negative tests
   test("InvalidExp") {
     val caught = intercept[IllegalArgumentException] {verifyParse("XXX", "")}
-    assert(caught.getMessage =="[1.1] failure: `-' expected but `X' found\n\nXXX\n^")
+    assert(strip(caught.getMessage) === "[1.1] failure: end of input expected\n\nXXX\n^")
   }
   test("Mismatched parens") {
     val caught = intercept[IllegalArgumentException] {verifyParse("F)-F", "") }
-    assert(caught.getMessage == "[1.2] failure: `-' expected but `)' found\n\nF)-F\n ^")
+    assert(strip(caught.getMessage) === "[1.2] failure: end of input expected\n\nF)-F\n ^")
   }
 
   /**  @param exp the expression to parse */
-  private def verifyParse(exp: String) { verifyParse(exp, exp) }
+  private def verifyParse(exp: String): Unit = { verifyParse(exp, exp) }
 
-  private def verifyParse(expression: String, expSerializedStr: String) {
+  private def verifyParse(expression: String, expSerializedStr: String): Unit = {
     //val root = parser.parseAll(parser.factor, expression)
     val root = parser.parseToTree(expression)
     //println("expression = " + root)

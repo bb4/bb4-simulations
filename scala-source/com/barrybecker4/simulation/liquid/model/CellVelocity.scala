@@ -25,17 +25,17 @@ class CellVelocity {
   /** global swap of fields (use with care). (hack) */
   def step() {current = 1 - current}
 
-  private[model] def passThrough() = {
+  private[model] def passThrough(): Unit = {
     uip(1 - current) = uip(current) // + dt * forceX;
     vjp(1 - current) = vjp(current) // + dt * forceY;
   }
 
-  private[model] def initializeU(u: Double) = {
+  private[model] def initializeU(u: Double): Unit = {
     uip(0) = u
     uip(1) = u
   }
 
-  private[model] def initializeV(v: Double) = {
+  private[model] def initializeV(v: Double): Unit = {
     vjp(0) = v
     vjp(1) = v
   }
@@ -43,12 +43,13 @@ class CellVelocity {
   def getU: Double = uip(current)
   def getV: Double = vjp(current)
 
-  private[model] def setCurrentU(u: Double) = {uip(current) = u}
-  private[model] def setCurrentV(v: Double) = {vjp(current) = v}
-  private[model] def setNewU(newu: Double) = {uip(1 - current) = newu}
-  private[model] def setNewV(newv: Double) = {vjp(1 - current) = newv}
-  private[model] def incrementU(inc: Double) = {uip(current) += inc}
-  private[model] def incrementV(inc: Double) = {vjp(current) += inc}
+  private[model] def setCurrentU(u: Double): Unit = {uip(current) = u}
+
+  private[model] def setCurrentV(v: Double): Unit = {vjp(current) = v}
+  private[model] def setNewU(newu: Double): Unit = {uip(1 - current) = newu}
+  private[model] def setNewV(newv: Double): Unit = {vjp(1 - current) = newv}
+  private[model] def incrementU(inc: Double): Unit = {uip(current) += inc}
+  private[model] def incrementV(inc: Double): Unit = {vjp(current) += inc}
 
   def initialize(u: Double, v: Double): Unit = {
     uip(0) = u

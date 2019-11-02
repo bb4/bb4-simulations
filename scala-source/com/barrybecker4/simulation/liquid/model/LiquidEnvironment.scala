@@ -42,14 +42,14 @@ class LiquidEnvironment(val configFile: String) {
   private var time = 0.0
   private var advectionOnly = false
 
-  private def initializeFromConfigFile(configFile: String) = {
+  private def initializeFromConfigFile(configFile: String): Unit = {
     conditions = new Conditions(configFile)
     initEnvironment()
   }
 
   def reset() { initEnvironment() }
 
-  private def initEnvironment() = {
+  private def initEnvironment(): Unit = {
     val xDim = conditions.getGridWidth + 2
     val yDim = conditions.getGridHeight + 2
     grid = new VortexGrid(xDim, yDim)
@@ -63,7 +63,7 @@ class LiquidEnvironment(val configFile: String) {
   def getWidth: Int = grid.getXDimension + 2
   def getHeight: Int = grid.getYDimension + 2
   def getGrid: Grid = grid
-  def getParticles: Particles = particles
+  def getParticles: Iterator[Particle] = particles.iterator
 
   def setViscosity(v: Double) { gridUpdater.setViscosity(v)}
   def setB0(b0: Double) { gridUpdater.setB0(b0) }
@@ -98,7 +98,7 @@ class LiquidEnvironment(val configFile: String) {
     newTimeStep
   }
 
-  private def setInitialLiquid() = {
+  private def setInitialLiquid(): Unit = {
     for (region <- conditions.getInitialLiquidRegions) {
       for (i <- region.getStart.getX to region.getStop.getX) {
         for (j <- region.getStart.getY to region.getStop.getY) {
@@ -108,7 +108,7 @@ class LiquidEnvironment(val configFile: String) {
     }
   }
 
-  private def setConstraints() = {
+  private def setConstraints(): Unit = {
     grid.setBoundaryConstraints()
     //addWalls();
     addSources()
@@ -121,7 +121,7 @@ class LiquidEnvironment(val configFile: String) {
     }
   }
 
-  private def addSource(source: Source) = { //add a spigot of liquid
+  private def addSource(source: Source): Unit = { //add a spigot of liquid
     val velocity = source.getVelocity
     if (source.isOn(time)) {
       for (i <- source.getStart.getX to source.getStop.getX) {

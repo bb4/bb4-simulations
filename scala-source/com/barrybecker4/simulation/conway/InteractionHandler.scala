@@ -33,7 +33,7 @@ class InteractionHandler(var model: ConwayModel, var scale: Double)
     doBrush()
   }
 
-  private def doBrush() = {
+  private def doBrush(): Unit = {
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
     // apply the change to a convolution kernel area
@@ -62,7 +62,7 @@ class InteractionHandler(var model: ConwayModel, var scale: Double)
   }
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
-  private def applyChange(i: Int, j: Int, weight: Double) = {
+  private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val sign = if (mouse3Down) -1 else 1
     model.setAlive(j, i)
   }

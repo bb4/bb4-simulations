@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import java.awt.Color
 import java.awt.Graphics2D
 import EnvironmentRenderer._
-
+import scala.collection.parallel.CollectionConverters._
 
 /**
   * Renders a specified fluid environment.
