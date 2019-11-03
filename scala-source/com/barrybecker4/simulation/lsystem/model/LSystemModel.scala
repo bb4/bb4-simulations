@@ -13,8 +13,6 @@ import com.barrybecker4.simulation.lsystem.Panable
   * See https://en.wikipedia.org/wiki/L-system
   * For explanation of the grammar and different types of L-systems.
   * The language should be expanded to include support for more terms.
-  *
-  * move all the private vars into renderer.
   * @author Barry Becker
   */
 object LSystemModel {

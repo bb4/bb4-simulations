@@ -85,7 +85,7 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent) {doBrush() }
+  override def mouseClicked(e: MouseEvent): Unit = {doBrush() }
 
   /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
@@ -93,7 +93,7 @@ class InteractionHandler(var cave: CaveModel, var scale: Double)
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent){}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

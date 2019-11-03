@@ -23,11 +23,11 @@ object Edge {
   */
 class Edge private[geometry](val firstParticle: Particle, val secondParticle: Particle) {
 
-  private var segment = new Line2D.Double(firstParticle.x, firstParticle.y, secondParticle.x, secondParticle.y)
+  private val segment = new Line2D.Double(firstParticle.x, firstParticle.y, secondParticle.x, secondParticle.y)
   /** the spring constant K (large K = stiffer) */
-  private var k = Edge.K
+  private val k = Edge.K
   /** damping constant  */
-  private var damping = Edge.D
+  private val damping = Edge.D
 
   /** these act like temporary variables for some calculations avoiding many object constructions */
   private val direction = new Vector2d

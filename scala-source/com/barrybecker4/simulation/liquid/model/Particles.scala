@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.liquid.model
 import scala.collection.immutable.HashSet
 import scala.util.Random
 
-
 /**
   * A set of particles in a grid. These particles represent the fluid.
   * @author Barry Becker

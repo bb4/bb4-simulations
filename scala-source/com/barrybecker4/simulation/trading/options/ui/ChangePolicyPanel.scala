@@ -24,7 +24,7 @@ class ChangePolicyPanel(val threshChangePercentLabel: String, val transactPercen
       0, 100, false)
 
   /** Percent of current investment/reserve to sell/buy when threshold reached.  */
-  private var transactPercentField =
+  private val transactPercentField =
     new NumberInput(transactPercentLabel, defaultPolicy.transactPercent * 100,
       "Percent of current investment/reserve to sell/buy when threshold reached. ",
       -100, 100, false)

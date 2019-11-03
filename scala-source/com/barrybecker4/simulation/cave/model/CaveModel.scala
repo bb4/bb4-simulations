@@ -52,12 +52,12 @@ class CaveModel() {
   private val cmap = new CaveColorMap
   reset()
 
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     if (width != renderer.getWidth || height != renderer.getHeight)
       requestRestart(width, height)
   }
 
-  def reset() {
+  def reset(): Unit = {
     floorThresh = DEFAULT_FLOOR_THRESH
     ceilThresh = DEFAULT_CEIL_THRESH
     val caveWidth = (CaveModel.DEFAULT_WIDTH / scale).toInt
@@ -70,54 +70,54 @@ class CaveModel() {
   def getWidth: Int = cave.getWidth
   def getHeight: Int = cave.getHeight
 
-  def setFloorThresh(floor: Double) {
+  def setFloorThresh(floor: Double): Unit = {
     cave.setFloorThresh(floor)
     this.floorThresh = floor
     doRender()
   }
 
-  def setCeilThresh(ceil: Double) {
+  def setCeilThresh(ceil: Double): Unit = {
     cave.setCeilThresh(ceil)
     this.ceilThresh = ceil
     doRender()
   }
 
-  def setLossFactor(lossFactor: Double) {
+  def setLossFactor(lossFactor: Double): Unit = {
     cave.setLossFactor(lossFactor)
     this.lossFactor = lossFactor
   }
 
-  def setEffectFactor(effectFactor: Double) {
+  def setEffectFactor(effectFactor: Double): Unit = {
     cave.setEffectFactor(effectFactor)
     this.effectFactor = effectFactor
   }
 
-  def setBumpHeight(ht: Double) {
+  def setBumpHeight(ht: Double): Unit = {
     this.bumpHeight = ht
     doRender()
   }
 
-  def setSpecularPercent(pct: Double) {
+  def setSpecularPercent(pct: Double): Unit = {
     this.specularPct = pct
     doRender()
   }
 
-  def setDefaultUseContinuousIteration(continuous: Boolean) {
+  def setDefaultUseContinuousIteration(continuous: Boolean): Unit = {
     this.continuousIteration = continuous
     doRender()
   }
 
-  def setLightSourceDescensionAngle(descensionAngle: Double) {
+  def setLightSourceDescensionAngle(descensionAngle: Double): Unit = {
     this.lightSourceDescensionAngle = descensionAngle
     doRender()
   }
 
-  def setLightSourceAzymuthAngle(azymuthAngle: Double) {
+  def setLightSourceAzymuthAngle(azymuthAngle: Double): Unit = {
     this.lightSourceAzymuthAngle = azymuthAngle
     doRender()
   }
 
-  def setScale(scale: Double) {
+  def setScale(scale: Double): Unit = {
     this.scale = scale
     requestRestart(renderer.getWidth, renderer.getHeight)
   }
@@ -125,15 +125,15 @@ class CaveModel() {
   def getScale: Double = this.scale
   def setNumStepsPerFrame(steps: Int) { this.numStepsPerFrame = steps}
 
-  def setUseParallelComputation(use: Boolean) {
+  def setUseParallelComputation(use: Boolean): Unit = {
     useParallel = use
     cave.setUseParallel(use)
   }
 
-  def incrementHeight(x: Int, y: Int, amount: Double) {cave.incrementHeight(x, y, amount) }
+  def incrementHeight(x: Int, y: Int, amount: Double): Unit = {cave.incrementHeight(x, y, amount) }
   def getColormap: ColorMap = cmap
-  def requestRestart() { requestRestart(renderer.getWidth, renderer.getHeight) }
-  def requestNextStep() { nextStepRequested = true }
+  def requestRestart(): Unit = { requestRestart(renderer.getWidth, renderer.getHeight) }
+  def requestNextStep(): Unit = { nextStepRequested = true }
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
 

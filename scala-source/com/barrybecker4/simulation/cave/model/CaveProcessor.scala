@@ -87,18 +87,18 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
     }
   }
 
-  def setLossFactor(loss: Double) { lossFactor = loss}
-  def setEffectFactor(scale: Double) { effectFactor = scale}
-  def setFloorThresh(floor: Double) { cave.setFloorThresh(floor)}
-  def setCeilThresh(ceil: Double){ cave.setCeilThresh(ceil) }
-  def incrementHeight(x: Int, y: Int, amount: Double) { cave.incrementHeight(x, y, amount) }
+  def setLossFactor(loss: Double): Unit = { lossFactor = loss}
+  def setEffectFactor(scale: Double): Unit = { effectFactor = scale}
+  def setFloorThresh(floor: Double): Unit = { cave.setFloorThresh(floor)}
+  def setCeilThresh(ceil: Double): Unit = { cave.setCeilThresh(ceil) }
+  def incrementHeight(x: Int, y: Int, amount: Double): Unit = { cave.incrementHeight(x, y, amount) }
 
   override def getValue(x: Int, y: Int): Double = cave.getValue(x, y)
   def getRange: Range = cave.getRange
   def printCave() {cave.print() }
 
   override def toString: String = cave.toString
-  def setUseParallel(parallelized: Boolean) {
+  def setUseParallel(parallelized: Boolean): Unit = {
     useParallel = parallelized
   }
 

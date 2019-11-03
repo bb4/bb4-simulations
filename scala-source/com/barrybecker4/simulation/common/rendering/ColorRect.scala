@@ -13,7 +13,7 @@ import java.awt.Image
 class ColorRect(var width: Int, var height: Int) {
 
   /** 2d array represented with a 1 dimensional array */
-  private var pixels = Array.ofDim[Int](width * height)
+  private val pixels = Array.ofDim[Int](width * height)
 
   def setColor(x: Int, y: Int, c: Color): Unit = setColor(x, y, c.getRGB)
 

@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.lsystem.model.expression
 import com.barrybecker4.common.expression.TreeNode
 import scala.util.parsing.combinator._
 import LToken._
-//import scala.collection.mutable
 
 /**
   * Parses the text form of an L-system expression into a tree representation.

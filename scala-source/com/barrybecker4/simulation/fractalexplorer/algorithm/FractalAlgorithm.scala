@@ -174,14 +174,14 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
 
   def getRange: ComplexNumberRange = range
 
-  private def startProfileTimeIfNeeded(currentRow: Int) {
+  private def startProfileTimeIfNeeded(currentRow: Int): Unit = {
     if (currentRow == 0) {
       Profiler.getInstance.startCalculationTime()
       wasDone = false
     }
   }
 
-  private def showProfileInfoWhenFinished() {
+  private def showProfileInfoWhenFinished(): Unit = {
     if (!wasDone) {
       val prof: Profiler = Profiler.getInstance
       prof.stopCalculationTime()

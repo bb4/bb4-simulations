@@ -21,7 +21,7 @@ object ConwayRenderer {
 class ConwayRenderer(val width: Double, val height: Double,
  val showShadows: Boolean, val scale: Int, var processor: ConwayProcessor, var cmap: ColorMap) {
 
-  final private var offlineGraphics: OfflineGraphics =
+  final private val offlineGraphics: OfflineGraphics =
     new OfflineGraphics(new Dimension(width.toInt, height.toInt), ConwayRenderer.FLOOR_COLOR)
 
   def getWidth: Int = width.toInt

@@ -32,7 +32,7 @@ class Cave(val width: Int, val length: Int,
   def getRange = Range(floorThresh, ceilThresh)
   randomInitialization()
 
-  def setValue(x: Int, y: Int, value: Double) {
+  def setValue(x: Int, y: Int, value: Double): Unit = {
     heightMap(x)(y) = Math.min(Math.max(value, floorThresh), ceilThresh)
   }
 
@@ -62,11 +62,11 @@ class Cave(val width: Int, val length: Int,
     heightMap(x)(y) = Math.max(floorThresh, Math.min(ceilThresh, oldVal + amount))
   }
 
-  def setFloorThresh(floor: Double) { this.floorThresh = floor }
-  def setCeilThresh(ceil: Double) { this.ceilThresh = ceil }
+  def setFloorThresh(floor: Double): Unit = { this.floorThresh = floor }
+  def setCeilThresh(ceil: Double): Unit = { this.ceilThresh = ceil }
 
   /** @return a character representing the cave type at a specific location. Either wall, floor, or ceiling. */
-  private def getChar(x: Int, y: Int) = {
+  private def getChar(x: Int, y: Int): Char = {
     val v = heightMap(x)(y)
     if (v <= floorThresh) ' '
     else if (v >= ceilThresh) 'C'
