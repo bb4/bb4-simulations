@@ -123,7 +123,7 @@ class CaveModel() {
   }
 
   def getScale: Double = this.scale
-  def setNumStepsPerFrame(steps: Int) { this.numStepsPerFrame = steps}
+  def setNumStepsPerFrame(steps: Int): Unit =  { this.numStepsPerFrame = steps}
 
   def setUseParallelComputation(use: Boolean): Unit = {
     useParallel = use
@@ -137,7 +137,7 @@ class CaveModel() {
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
 
-  def setKernelType(`type`: KernelType.KernelType) {
+  def setKernelType(`type`: KernelType.KernelType): Unit = {
     cave.setKernelType(`type`)
     this.kernelType = `type`
   }
@@ -179,7 +179,7 @@ class CaveModel() {
     false
   }
 
-  def doRender() {
+  def doRender(): Unit =  {
     renderer.render(bumpHeight, specularPct, lightSourceAzymuthAngle, lightSourceDescensionAngle)
   }
 }

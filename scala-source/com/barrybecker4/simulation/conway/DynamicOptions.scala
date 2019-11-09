@@ -159,10 +159,10 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     //buttonsPanel.add(resetButton);
     buttonsPanel
   }
-  def reset() { generalSliderGroup.reset() }
+  def reset(): Unit = { generalSliderGroup.reset() }
 
   /** One of the sliders was moved. */
-  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double){
+  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
       case DynamicOptions.NUM_STEPS_PER_FRAME_SLIDER => conwayModel.setNumStepsPerFrame(value.toInt)
       case DynamicOptions.SCALE_SLIDER =>
@@ -172,13 +172,13 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     }
   }
 
-  override def itemStateChanged (e: ItemEvent) {
+  override def itemStateChanged (e: ItemEvent): Unit = {
     val ruleType: ConwayProcessor.RuleType.RuleType =
       ConwayProcessor.RuleType.withName(ruleChoice.getSelectedItem.toString)
     conwayModel.setRuleType (ruleType)
   }
 
-  override def actionPerformed (e: ActionEvent) {
+  override def actionPerformed (e: ActionEvent): Unit = {
     val source: Component = e.getSource.asInstanceOf[Component]
     if (source == nextButton) {
       conwayModel.requestNextStep ()

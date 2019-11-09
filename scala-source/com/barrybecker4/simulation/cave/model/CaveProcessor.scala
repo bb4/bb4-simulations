@@ -95,7 +95,7 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
 
   override def getValue(x: Int, y: Int): Double = cave.getValue(x, y)
   def getRange: Range = cave.getRange
-  def printCave() {cave.print() }
+  def printCave(): Unit = {cave.print() }
 
   override def toString: String = cave.toString
   def setUseParallel(parallelized: Boolean): Unit = {
@@ -108,7 +108,7 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
     * - if a cell is alive but has too few neighbors, kill it.
     * - otherwise, if the cell is dead now, check if it has the right number of neighbors to be 'born'
     */
-  def nextPhase() {
+  def nextPhase(): Unit = {
     val newCave = cave.createCopy
     val numThreads = Runtime.getRuntime.availableProcessors()
     val workers = Array.ofDim[Runnable](numThreads)
@@ -134,9 +134,9 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
   /** Runs one of the chunks. */
   private class Worker(minX: Int, maxX: Int, newCave: Cave) extends Runnable {
 
-    override def run() {nextPhase() }
+    override def run(): Unit = {nextPhase() }
 
-    private def nextPhase() { // Loop over each row and column of the map
+    private def nextPhase(): Unit = { // Loop over each row and column of the map
       for (x <- minX until maxX) {
         for (y <- 0 until cave.length) {
           val neibNum = kernel.countNeighbors(x, y)

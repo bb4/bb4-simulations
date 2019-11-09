@@ -45,7 +45,7 @@ class ConwayModel() {
     if (width != renderer.getWidth || height != renderer.getHeight) requestRestart(width, height)
   }
 
-  def reset() {
+  def reset(): Unit = {
     processor = new ConwayProcessor(useParallel)
     processor.setWrap(wrapGrid, DEFAULT_WIDTH / scale, DEFAULT_HEIGHT / scale)
     renderer = new ConwayRenderer(DEFAULT_WIDTH, DEFAULT_HEIGHT, showShadows, scale, processor, colorMap)
@@ -54,7 +54,7 @@ class ConwayModel() {
   def getWidth: Int = renderer.getWidth
   def getHeight: Int = renderer.getHeight
 
-  def setUseContinuousIteration(continuous: Boolean) {
+  def setUseContinuousIteration(continuous: Boolean): Unit = {
     this.continuousIteration = continuous
     doRender()
   }

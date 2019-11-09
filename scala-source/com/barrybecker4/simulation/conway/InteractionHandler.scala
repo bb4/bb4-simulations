@@ -21,7 +21,7 @@ class InteractionHandler(var model: ConwayModel, var scale: Double)
   private var mouse1Down = false
   private var mouse3Down = false
 
-  def setScale(scale: Double) { this.scale = scale }
+  def setScale(scale: Double): Unit = { this.scale = scale }
 
   /**
     * Lowers (or raises) cave walls when dragging.
@@ -67,13 +67,13 @@ class InteractionHandler(var model: ConwayModel, var scale: Double)
     model.setAlive(j, i)
   }
 
-  override def mouseMoved(e: MouseEvent) {
+  override def mouseMoved(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
   }
 
   /*** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent) { doBrush() }
+  override def mouseClicked(e: MouseEvent): Unit = { doBrush() }
 
   /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
@@ -81,7 +81,7 @@ class InteractionHandler(var model: ConwayModel, var scale: Double)
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent) {}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

@@ -40,7 +40,7 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
   private[conway] def getInteractionHandler = handler
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
   override protected def getInitialTimeStep = 1
-  override def setScale(scale: Double) {}
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def createTopControls: JPanel = {

@@ -1,7 +1,6 @@
 /* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.complexmapping
 
-import com.barrybecker4.common.math.function.{ArrayFunction, ErrorFunction, Function}
 import com.barrybecker4.simulation.complexmapping.functions.{ComplexFunction, RiemannZetaFunction, SquaredFunction}
 
 
