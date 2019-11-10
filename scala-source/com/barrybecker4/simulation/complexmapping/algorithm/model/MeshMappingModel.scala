@@ -1,8 +1,12 @@
-/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
-package com.barrybecker4.simulation.complexmapping.algorithm
+/*
+ * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import java.awt.image.BufferedImage
+
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, IdentityFunction}
+import com.barrybecker4.simulation.complexmapping.algorithm.{GridRenderer, MeshColorMap}
 import com.barrybecker4.ui.util.ColorMap
 
 

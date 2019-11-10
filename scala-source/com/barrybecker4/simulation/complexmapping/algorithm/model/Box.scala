@@ -1,5 +1,8 @@
-/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.complexmapping.algorithm
+/*
+ * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+
+package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import javax.vecmath.Point2d
 
@@ -8,6 +11,6 @@ case class Box(upperLeft: Point2d, lowerRight: Point2d) {
   def rightX: Double = lowerRight.x
   def topY: Double = upperLeft.y
   def bottomY: Double = lowerRight.y
-  def width: Double = leftX - rightX
+  def width: Double = rightX - leftX
   def height: Double = topY - bottomY
 }

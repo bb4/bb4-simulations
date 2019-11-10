@@ -1,5 +1,8 @@
-/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.complexmapping.algorithm
+/*
+ * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+
+package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import com.barrybecker4.common.math.ComplexNumber
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction

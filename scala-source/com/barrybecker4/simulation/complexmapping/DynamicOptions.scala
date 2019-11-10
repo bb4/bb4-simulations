@@ -3,16 +3,18 @@ package com.barrybecker4.simulation.complexmapping
 
 import java.awt.event.{ActionEvent, ActionListener}
 import java.awt.{BorderLayout, Dimension, GridLayout}
-
 import com.barrybecker4.common.math.ComplexNumberRange
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.RiemannZetaFunction
-import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm
+import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
+import ComplexMappingExplorer.DEFAULT_VIEWPORT
+import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
+import javax.vecmath.Point2d
 
 /**
-  * Dynamic controls for the Fractal explorer simulation that will show on the right.
+  * Dynamic controls for the complex mapping explorer simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
   * @author Barry Becker
   */
@@ -33,22 +35,26 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   sliderGroup.addSliderChangeListener(this)
   val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
-  val coordinates: JPanel = createCoordinatesView
+  val viewport: JPanel = createViewpointUI
   add(sliderGroup)
-  add(Box.createVerticalStrut(10))
+  add(javax.swing.Box.createVerticalStrut(10))
   add(checkBoxes)
-  add(Box.createVerticalStrut(10))
+  add(javax.swing.Box.createVerticalStrut(10))
   add(legend)
-  add(coordinates)
-  private var backButton = new JButton("Go Back")
-  backButton.addActionListener(this)
-  add(backButton)
+  add(viewport)
+  private var updateButton = new JButton("Update")
+  updateButton.addActionListener(this)
+  add(updateButton)
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(10, 1000))
   add(fill)
 
   private var coordinate1: JLabel = _
   private var coordinate2: JLabel = _
+  private var upperLeftX: NumberInput = _
+  private var upperLeftY: NumberInput = _
+  private var lowerRightX: NumberInput = _
+  private var lowerRightY: NumberInput = _
 
   def setCoordinates(range: ComplexNumberRange): Unit = {
     coordinate1.setText("c1: " + range.point1)
@@ -61,26 +67,55 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     checkBoxes
   }
 
-  private def createCoordinatesView = {
+  private def createViewpointUI = {
     val view = new JPanel
     view.setLayout(new BorderLayout)
-    coordinate1 = new JLabel("Upper Left: ")
     coordinate2 = new JLabel("Lower Right: ")
-    view.add(coordinate1, BorderLayout.NORTH)
-    view.add(coordinate2, BorderLayout.CENTER)
+    view.add(createUpperLeftInput, BorderLayout.NORTH)
+    view.add(createLowerRightInput, BorderLayout.CENTER)
     view
+  }
+
+  private def createUpperLeftInput: JPanel = {
+    val panel = new JPanel()
+    panel.setLayout(new BorderLayout)
+    coordinate1 = new JLabel("Upper Left: ")
+    upperLeftX = new NumberInput("x: ",
+      DEFAULT_VIEWPORT.upperLeft.x, "x coordinate of upper left viewport.", -10, 100.0, false)
+    upperLeftY = new NumberInput("y: ",
+      DEFAULT_VIEWPORT.upperLeft.y, "y coordinate of upper left viewport.", 0, 10.0, false)
+
+    panel.add(coordinate1, BorderLayout.NORTH)
+    panel.add(upperLeftX, BorderLayout.WEST)
+    panel.add(upperLeftY, BorderLayout.CENTER)
+    panel
+  }
+
+  private def createLowerRightInput: JPanel = {
+    val panel = new JPanel()
+    panel.setLayout(new BorderLayout)
+    coordinate2 = new JLabel("Lower right: ")
+    lowerRightX = new NumberInput("x: ",
+      DEFAULT_VIEWPORT.lowerRight.x, "x coordinate of lower right viewport.", 0, 100.0, false)
+    lowerRightY = new NumberInput("y: ",
+      DEFAULT_VIEWPORT.lowerRight.y, "y coordinate of lower right viewport.", -10, 0.0, false)
+    panel.add(coordinate2, BorderLayout.NORTH)
+    panel.add(lowerRightX, BorderLayout.WEST)
+    panel.add(lowerRightY, BorderLayout.CENTER)
+    panel
   }
 
   def reset(): Unit = sliderGroup.reset()
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
-    val function = simulator.getFunction
+    simulator.setViewpoint(Box(
+      new Point2d(upperLeftX.getValue, upperLeftY.getValue),
+      new Point2d(lowerRightX.getValue, lowerRightY.getValue)
+    ))
   }
 
-  /**
-    * One of the sliders was moved.
-    */
+  /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     if (sliderName == DynamicOptions.EXPONENT_SLIDER) {
       simulator.setFunction(RiemannZetaFunction(value.toInt))

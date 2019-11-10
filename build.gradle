@@ -272,6 +272,15 @@ appMap['parameter'] = [
                 'There are a variety of parameter types to plot.',
         deploy: false
 ]
+appMap['complexmapping'] = [
+        title: 'Complex Mapping Explorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.complexmapping.ComplexMappingExplorer',
+        panel_class: 'com.barrybecker4.simulation.complexmapping.ComplexMappingExplorer',
+        description: 'Applying transformations to a grid in the complex plane.',
+        longDescription: 'Explore the effect of applying functions like the ' +
+                'Riemann Zeta function to numbers in the complex plane.',
+        deploy: false
+]
 
 appMap.each { appId, propMap ->
 

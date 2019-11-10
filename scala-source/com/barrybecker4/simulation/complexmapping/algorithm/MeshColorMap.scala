@@ -15,21 +15,21 @@ object MeshColorMap {
   private val RANGE = MAX_VALUE - MIN_VALUE
 
   private val VALUES = Array(
-    MIN_VALUE, MIN_VALUE + 0.04 * RANGE,
-    MIN_VALUE + 0.1 * RANGE,
-    MIN_VALUE + 0.3 * RANGE,
-    MIN_VALUE + 0.5 * RANGE,
-    MIN_VALUE + 0.7 * RANGE,
-    MIN_VALUE + 0.94 * RANGE,
+    MIN_VALUE,
+    MIN_VALUE + 0.2 * RANGE,
+    MIN_VALUE + 0.4 * RANGE,
+    MIN_VALUE + 0.6 * RANGE,
+    MIN_VALUE + 0.8 * RANGE,
     MIN_VALUE + RANGE)
 
-  private val COLORS = Array(Color.WHITE, new Color(0, 0, 255), // .04
-    new Color(100, 0, 250), // .1
-    new Color(0, 255, 255), // .3
-    new Color(0, 255, 0), // .5
+  private val COLORS = Array(
+    new Color(255, 0, 0),  // 0
+    new Color(250, 0, 255), // .2
+    new Color(0, 0, 255), // .4
+    new Color(0, 255, 0), // .8
     new Color(255, 255, 0), // .7
-    new Color(255, 0, 0), // .94
-    Color.BLACK)
+    new Color(255, 0, 0)
+  )
 }
 
 class MeshColorMap() extends ColorMap(MeshColorMap.VALUES, MeshColorMap.COLORS)

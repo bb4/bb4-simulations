@@ -1,14 +1,17 @@
-/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.complexmapping.algorithm
+/*
+ * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction
-import Grid.createMesh
+import com.barrybecker4.simulation.complexmapping.algorithm.model.Grid.createMesh
 
 object Grid {
 
   // this should be a function passed in
   private def computeValue(x: Double, y: Double): Double = {
-    val base = Math.abs(x + y) / 10.0
+    //val base = Math.abs(x + y) / 10.0
+    val base = Math.sqrt(x * x + y * y) / 4.0
     base - base.toInt
   }
 

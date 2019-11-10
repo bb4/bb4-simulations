@@ -2,8 +2,11 @@
 package com.barrybecker4.simulation.complexmapping.algorithm
 
 import java.awt.image.BufferedImage
+
 import com.barrybecker4.ui.util.ColorMap
 import java.awt.Graphics2D
+
+import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
 
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
@@ -46,7 +49,7 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     val centerValue = meshPoints.map(_.value).sum / 4.0
     val avgX: Double = meshPoints.map(_.x).sum / 4.0
     val avgY: Double = meshPoints.map(_.y).sum / 4.0
-    val centerPoint = MeshPoint(new Point2d(avgX, avgY), centerValue)
+    val centerPoint = model.MeshPoint(new Point2d(avgX, avgY), centerValue)
 
     renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
     renderTriangle(Array(meshPoints(1), meshPoints(3), centerPoint), g)
@@ -64,7 +67,7 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     val value = pts.map(_.value).sum / 3
 
     g.setColor(cmap.getColorForValue(value))
-    g.drawPolygon(x, y, x.length)
+    g.fillPolygon(x, y, x.length)
   }
 
   /** @return the buffered image to draw into. */
