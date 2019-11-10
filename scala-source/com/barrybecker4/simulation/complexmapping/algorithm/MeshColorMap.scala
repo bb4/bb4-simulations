@@ -1,7 +1,7 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
-package com.barrybecker4.simulation.fractalexplorer.algorithm
+/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
+package com.barrybecker4.simulation.complexmapping.algorithm
 
-import java.awt._
+import java.awt.Color
 import com.barrybecker4.ui.util.ColorMap
 
 
@@ -9,7 +9,7 @@ import com.barrybecker4.ui.util.ColorMap
   * Default colormap for visualization. May be edited in the UI.
   * @author Barry Becker
   */
-object FractalColorMap {
+object MeshColorMap {
   private val MIN_VALUE = 0
   private val MAX_VALUE = 1.0
   private val RANGE = MAX_VALUE - MIN_VALUE
@@ -32,4 +32,4 @@ object FractalColorMap {
     Color.BLACK)
 }
 
-class FractalColorMap() extends ColorMap(FractalColorMap.VALUES, FractalColorMap.COLORS)
+class MeshColorMap() extends ColorMap(MeshColorMap.VALUES, MeshColorMap.COLORS)

@@ -37,9 +37,9 @@ class GridUpdater(var grid: Grid) {
   /** used in mass conservation as a relaxation constant */
   private var b0 = GridUpdater.DEFAULT_B0
 
-  def setViscosity(v: Double) { viscosity = v }
+  def setViscosity(v: Double): Unit =  { viscosity = v }
 
-  def setB0(b0: Double) {this.b0 = b0 }
+  def setB0(b0: Double): Unit =  {this.b0 = b0 }
 
   /** Compute tilde velocity of each cell */
   def updateVelocity(timeStep: Double, gravity: Double): Unit = {

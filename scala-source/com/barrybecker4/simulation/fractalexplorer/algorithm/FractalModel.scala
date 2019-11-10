@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.fractalexplorer.algorithm
 import java.awt.Image
 
 import com.barrybecker4.simulation.common.RectangularModel
-import com.barrybecker4.simulation.common.rendering.ModelImage
+import com.barrybecker4.simulation.common.rendering.RectangularModelImage
 import com.barrybecker4.ui.util.ColorMap
 
 
@@ -17,7 +17,7 @@ object FractalModel {
   * @author Barry Becker
   */
 class FractalModel extends RectangularModel {
-  private var image: ModelImage = _
+  private var image: RectangularModelImage = _
   private var values: Array[Array[Double]] = _
   private val colorMap: ColorMap = new FractalColorMap()
   private var lastRow: Int = 0
@@ -40,7 +40,7 @@ class FractalModel extends RectangularModel {
 
   private def initialize(width: Int, height: Int) {
     values = Array.ofDim[Double](width, height)
-    image = new ModelImage(this, colorMap)
+    image = new RectangularModelImage(this, colorMap)
     setCurrentRow(0)
   }
 

@@ -6,7 +6,6 @@ import com.barrybecker4.common.math.ComplexNumber
 /**
   * Calculate fractal values for a row.
   * Use run magnitude optimization if specified.
-  *
   * @author Barry Becker
   */
 object RowCalculator {

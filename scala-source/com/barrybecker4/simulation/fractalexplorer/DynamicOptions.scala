@@ -28,9 +28,8 @@ object DynamicOptions {
 }
 
 class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
-
-/** Constructor */
   extends JPanel with ActionListener with SliderGroupChangeListener {
+
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))

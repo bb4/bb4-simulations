@@ -21,12 +21,12 @@ import scala.collection.parallel.CollectionConverters._
   * - parallel     19.5 seconds
   *
   * For i7 2600k
-  * original                    after rendering optimization.
+  *                  original            after rendering optimization.
   * - not-parallel  16.0  seconds         6.1
   * - parallel       5.1 seconds          2.1
   *
   * * Initial benchmark
-  * calcTime     renderTime
+  *                                           calcTime     renderTime
   * Scala with java style parallelization:     7.8         2.4 - 6.8
   * Scala with java style                     18.6         2.0 - 7.09
   *

@@ -26,7 +26,7 @@ class VelocityUpdater {
     * RISK:5
     */
   def updateTildeVelocities(cell: Cell, neighbors: CellNeighbors, cXm1Yp1: Cell, cXp1Ym1: Cell, dt: Double,
-                            force: Vector2d, viscosity: Double) {
+                            force: Vector2d, viscosity: Double): Unit = {
     if (!cell.isFull) {
       cell.passVelocityThrough()
       return

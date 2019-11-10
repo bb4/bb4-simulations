@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.rendering
 
-import com.barrybecker4.simulation.common.rendering.ModelImage
+import com.barrybecker4.simulation.common.rendering.RectangularModelImage
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import java.awt.Color
 import java.awt.Graphics2D
@@ -22,7 +22,7 @@ object EnvironmentRenderer { // rendering attributes
 
 final class EnvironmentRenderer(var env: FluidEnvironment, var options: RenderingOptions) {
 
-  private val modelImage = new ModelImage(env, PRESSURE_COLOR_MAP, options.getScale.toInt)
+  private val modelImage = new RectangularModelImage(env, PRESSURE_COLOR_MAP, options.getScale.toInt)
 
   def getColorMap: PressureColorMap = PRESSURE_COLOR_MAP
   def getOptions: RenderingOptions = options
