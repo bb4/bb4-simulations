@@ -9,7 +9,7 @@ import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
-import ComplexMappingExplorer.DEFAULT_VIEWPORT
+import ComplexMappingExplorer.{DEFAULT_VIEWPORT, DEFAULT_INTERPOLATION_VAL}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
 import javax.vecmath.Point2d
 
@@ -22,7 +22,11 @@ object DynamicOptions {
 
   private[complexmapping] val DEFAULT_N = 1
   private val EXPONENT_SLIDER = "Exponent N"
-  private val SLIDER_PROPS = Array(new SliderProperties(EXPONENT_SLIDER, 1, 100, DEFAULT_N, 1))
+  private val INTERPOLATION_SLIDER = "Interpolation from original"
+  private val SLIDER_PROPS = Array(
+    new SliderProperties(EXPONENT_SLIDER, 1, 100, DEFAULT_N, 1),
+    new SliderProperties(INTERPOLATION_SLIDER, 0.0, 1.0, DEFAULT_INTERPOLATION_VAL, 200),
+  )
 }
 
 class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplorer)
@@ -117,8 +121,9 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    if (sliderName == DynamicOptions.EXPONENT_SLIDER) {
-      simulator.setFunction(RiemannZetaFunction(value.toInt))
+    sliderName match {
+      case DynamicOptions.EXPONENT_SLIDER => simulator.setFunction(RiemannZetaFunction(value.toInt))
+      case DynamicOptions.INTERPOLATION_SLIDER => simulator.setInterpolation(value)
     }
   }
 }

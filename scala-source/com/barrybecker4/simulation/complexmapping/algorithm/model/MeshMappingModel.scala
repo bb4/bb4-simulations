@@ -17,19 +17,15 @@ import com.barrybecker4.ui.util.ColorMap
   * same units as the original mesh.
   * @author Barry Becker
   */
-class MeshMappingModel(grid: Grid, function: ComplexFunction = IdentityFunction()) {
+case class MeshMappingModel(grid: Grid, function: ComplexFunction = IdentityFunction(), interpolationVal: Double) {
 
   private val colorMap: ColorMap = new MeshColorMap()
-  private var transformedGrid: Grid = grid.transform(function)
+  private val transformedGrid: Grid = grid.transform(function, interpolationVal)
   private var lastTransformedGrid: Grid = _
   private var lastViewport: Box = _
   private var lastImage: BufferedImage = _
 
   def getColorMap: ColorMap = colorMap
-
-  def transformGrid(function: ComplexFunction): Unit = {
-    transformedGrid = grid.transform(function)
-  }
 
   /* get the image given specified viewport */
   def getImage(viewport: Box, pixelWidth: Int, pixelHeight: Int): BufferedImage = {

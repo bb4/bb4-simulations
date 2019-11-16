@@ -13,8 +13,9 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, Me
 
 
 object ComplexMappingExplorer {
-  val DEFAULT_VIEWPORT: Box = Box(new Point2d(0, 5), new Point2d(7, -4))
+  val DEFAULT_VIEWPORT: Box = Box(new Point2d(-2, 4), new Point2d(5, -4))
   val DEFAULT_FUNCTION: FunctionType.Val = FunctionType.RIEMANN_ZETA
+  val DEFAULT_INTERPOLATION_VAL: Double = 1.0
 }
 
 /**
@@ -25,10 +26,11 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   private var function: ComplexFunction = DEFAULT_FUNCTION.function
   private val grid = new Grid(Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0)), 0.1, 0.1)
-  private var model: MeshMappingModel = new MeshMappingModel(grid, function)
+  private var model: MeshMappingModel = MeshMappingModel(grid, function, DEFAULT_INTERPOLATION_VAL)
   private var options: DynamicOptions = _
   private var useFixedSize: Boolean = false
   private var viewport: Box = DEFAULT_VIEWPORT
+  private var interpolationValue = DEFAULT_INTERPOLATION_VAL
 
   commonInit()
 
@@ -54,6 +56,11 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
     update()
   }
 
+  def setInterpolation(v: Double): Unit = {
+    interpolationValue = v
+    update()
+  }
+
   /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
   def getFunction: ComplexFunction = function
 
@@ -63,7 +70,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   }
 
   protected def update(): Unit = {
-    model = new MeshMappingModel(grid, function)
+    model = MeshMappingModel(grid, function, interpolationValue)
     this.repaint()
   }
 
