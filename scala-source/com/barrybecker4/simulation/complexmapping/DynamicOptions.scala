@@ -1,15 +1,16 @@
 /* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT   */
 package com.barrybecker4.simulation.complexmapping
 
-import java.awt.event.{ActionEvent, ActionListener}
+import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
 import java.awt.{BorderLayout, Dimension, GridLayout}
+
 import com.barrybecker4.common.math.ComplexNumberRange
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.RiemannZetaFunction
 import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
-import ComplexMappingExplorer.{DEFAULT_VIEWPORT, DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL}
+import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_VIEWPORT}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
 import javax.vecmath.Point2d
 
@@ -39,7 +40,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   setPreferredSize(new Dimension(300, 300))
   private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   sliderGroup.addSliderChangeListener(this)
-  val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
+  val legend: ContinuousColorLegend = new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
   val viewport: JPanel = createViewpointUI
   add(sliderGroup)

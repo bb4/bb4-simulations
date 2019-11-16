@@ -2,13 +2,16 @@
 package com.barrybecker4.simulation.complexmapping.algorithm
 
 import java.awt.image.BufferedImage
-
 import com.barrybecker4.ui.util.ColorMap
-import java.awt.Graphics2D
-
+import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
+import GridRenderer.AXIS_COLOR
 
+
+object GridRenderer {
+  private val AXIS_COLOR = new Color(230, 230, 245)
+}
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
   // these are global to avoid having to pass them in every internal method.
@@ -27,10 +30,11 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
     xScale = width / viewport.width
     yScale = -height / viewport.height
-    xOffset = viewport.leftX //(-viewport.leftX * xScale).toInt
-    yOffset = viewport.topY  //(-viewport.topY * yScale).toInt
+    xOffset = viewport.leftX
+    yOffset = viewport.topY
 
     renderGrid(g)
+    renderAxes(g, viewport)
     buf
   }
 
@@ -40,6 +44,14 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
         val meshPoints = Array(grid(i, j), grid(i + 1, j), grid(i, j+ 1), grid(i + 1, j + 1))
         renderQuadrilateral(meshPoints, g)
       }
+  }
+
+  private def renderAxes(g: Graphics2D, viewport: Box): Unit = {
+    val x0 = convertX(0)
+    val y0 = convertY(0)
+    g.setColor(AXIS_COLOR)
+    g.drawLine(x0, convertY(viewport.bottomY), x0, convertY(viewport.topY))
+    g.drawLine(convertX(viewport.leftX), y0, convertX(viewport.rightX), y0)
   }
 
   /** Draw 4 triangles to approximate the quadrilateral region.
@@ -61,13 +73,20 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   private def convertY(y: Double): Int =((y - yOffset) * yScale).toInt
 
   private def renderTriangle(pts: Array[MeshPoint], g: Graphics2D): Unit = {
-
+    g.setColor(getInterpolatedColor(pts))
     val x = pts.map(pt => convertX(pt.x))
     val y = pts.map(pt => convertY(pt.y))
-    val value = pts.map(_.value).sum / 3
-
-    g.setColor(cmap.getColorForValue(value))
     g.fillPolygon(x, y, x.length)
+  }
+
+  private def getInterpolatedColor(pts: Array[MeshPoint]): Color = {
+    if (Math.abs(2 * pts(0).value - pts(1).value - pts(2).value) > 0.2) {
+      // avoid strange values across the colormap wrap threshold
+      cmap.getColorForValue(pts(0).value)
+    } else {
+      val value = pts.map(_.value).sum / 3
+      cmap.getColorForValue(value)
+    }
   }
 
   /** @return the buffered image to draw into. */

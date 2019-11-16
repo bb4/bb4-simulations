@@ -2,8 +2,9 @@
 package com.barrybecker4.simulation.complexmapping
 
 import java.awt.Graphics
+
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
+import com.barrybecker4.simulation.complexmapping.algorithm.{FunctionType, MeshColorMap}
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, IdentityFunction}
 import com.barrybecker4.ui.util.ColorMap
 import javax.swing.JPanel
@@ -22,9 +23,7 @@ object ComplexMappingExplorer {
 /**
   * Interactively explores what happens when a specified function is applied to a grid of points in the complex plane.
   * Ideas for improvement:
-  *  - show axes
   *  - auto fit displayed function instead of manually setting viewport
-  *  - scale for grid resolution
   *  - dropdown for color function, slider for scaling color
   *  - dropdown for complex mapping function and UI for its options
   *  - figure out how to analytically extend zeta function.
@@ -40,6 +39,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   private var useFixedSize: Boolean = false
   private var viewport: Box = DEFAULT_VIEWPORT
   private var interpolationValue = DEFAULT_INTERPOLATION_VAL
+  private var colorMap: ColorMap = new MeshColorMap()
 
   commonInit()
 
@@ -84,7 +84,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   }
 
   protected def update(): Unit = {
-    model = MeshMappingModel(grid, function, interpolationValue)
+    model = MeshMappingModel(grid, function, interpolationValue, colorMap)
     this.repaint()
   }
 
@@ -98,6 +98,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
       g.drawImage(model.getImage(viewport, this.getWidth, this.getHeight), 0, 0, null)
     }
   }
+
 
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01

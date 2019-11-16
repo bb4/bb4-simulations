@@ -17,9 +17,10 @@ import com.barrybecker4.ui.util.ColorMap
   * same units as the original mesh.
   * @author Barry Becker
   */
-case class MeshMappingModel(grid: Grid, function: ComplexFunction = IdentityFunction(), interpolationVal: Double) {
+case class MeshMappingModel(grid: Grid,
+  function: ComplexFunction = IdentityFunction(),
+  interpolationVal: Double, colorMap: ColorMap = new MeshColorMap()) {
 
-  private val colorMap: ColorMap = new MeshColorMap()
   private val transformedGrid: Grid = grid.transform(function, interpolationVal)
   private var lastTransformedGrid: Grid = _
   private var lastViewport: Box = _
