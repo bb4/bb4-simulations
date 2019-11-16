@@ -1,6 +1,4 @@
-/*
- * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
 package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction
@@ -10,12 +8,11 @@ object Grid {
 
   // this should be a function passed in
   private def computeValue(x: Double, y: Double): Double = {
-    //val base = Math.abs(x + y) / 10.0
     val base = Math.sqrt(x * x + y * y) / 4.0
     base - base.toInt
   }
 
-  private def createMesh(bounds: Box, incX: Double = 0.1, incY: Double = 0.1): Array[Array[MeshPoint]] = {
+  def createMesh(bounds: Box, incX: Double = 0.1, incY: Double = 0.1): Array[Array[MeshPoint]] = {
     val xdim: Int = (bounds.width / incX).toInt
     val ydim: Int = (bounds.height / incY).toInt
     val mesh: Array[Array[MeshPoint]] = Array.ofDim[MeshPoint](xdim, ydim)

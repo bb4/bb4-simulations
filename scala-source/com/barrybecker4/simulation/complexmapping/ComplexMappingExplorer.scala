@@ -16,16 +16,25 @@ object ComplexMappingExplorer {
   val DEFAULT_VIEWPORT: Box = Box(new Point2d(-2, 4), new Point2d(5, -4))
   val DEFAULT_FUNCTION: FunctionType.Val = FunctionType.RIEMANN_ZETA
   val DEFAULT_INTERPOLATION_VAL: Double = 1.0
+  val DEFAULT_MESH_DETAIL: Double = 0.1
 }
 
 /**
   * Interactively explores what happens when a specified function is applied to a grid of points in the complex plane.
+  * Ideas for improvement:
+  *  - show axes
+  *  - auto fit displayed function instead of manually setting viewport
+  *  - scale for grid resolution
+  *  - dropdown for color function, slider for scaling color
+  *  - dropdown for complex mapping function and UI for its options
+  *  - figure out how to analytically extend zeta function.
   * @author Barry Becker.
   */
 class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   private var function: ComplexFunction = DEFAULT_FUNCTION.function
-  private val grid = new Grid(Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0)), 0.1, 0.1)
+  private val origGridBounds = Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0))
+  private var grid = new Grid(origGridBounds, DEFAULT_MESH_DETAIL, DEFAULT_MESH_DETAIL)
   private var model: MeshMappingModel = MeshMappingModel(grid, function, DEFAULT_INTERPOLATION_VAL)
   private var options: DynamicOptions = _
   private var useFixedSize: Boolean = false
@@ -58,6 +67,11 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   def setInterpolation(v: Double): Unit = {
     interpolationValue = v
+    update()
+  }
+
+  def setMeshDetailIncrement(inc: Double): Unit = {
+    grid = new Grid(origGridBounds, inc, inc)
     update()
   }
 

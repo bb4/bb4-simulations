@@ -9,7 +9,7 @@ import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
-import ComplexMappingExplorer.{DEFAULT_VIEWPORT, DEFAULT_INTERPOLATION_VAL}
+import ComplexMappingExplorer.{DEFAULT_VIEWPORT, DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
 import javax.vecmath.Point2d
 
@@ -23,9 +23,11 @@ object DynamicOptions {
   private[complexmapping] val DEFAULT_N = 1
   private val EXPONENT_SLIDER = "Exponent N"
   private val INTERPOLATION_SLIDER = "Interpolation from original"
+  private val MESH_DETAIL_SLIDER = "Mesh granularity"
   private val SLIDER_PROPS = Array(
-    new SliderProperties(EXPONENT_SLIDER, 1, 100, DEFAULT_N, 1),
+    new SliderProperties(EXPONENT_SLIDER, 1, 1000, DEFAULT_N, 1),
     new SliderProperties(INTERPOLATION_SLIDER, 0.0, 1.0, DEFAULT_INTERPOLATION_VAL, 200),
+    new SliderProperties(MESH_DETAIL_SLIDER, 0.01, 0.4, DEFAULT_MESH_DETAIL, 100),
   )
 }
 
@@ -124,6 +126,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     sliderName match {
       case DynamicOptions.EXPONENT_SLIDER => simulator.setFunction(RiemannZetaFunction(value.toInt))
       case DynamicOptions.INTERPOLATION_SLIDER => simulator.setInterpolation(value)
+      case DynamicOptions.MESH_DETAIL_SLIDER => simulator.setMeshDetailIncrement(value)
     }
   }
 }
