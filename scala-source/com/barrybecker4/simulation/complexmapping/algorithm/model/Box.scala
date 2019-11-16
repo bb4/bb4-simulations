@@ -13,4 +13,20 @@ case class Box(upperLeft: Point2d, lowerRight: Point2d) {
   def bottomY: Double = lowerRight.y
   def width: Double = rightX - leftX
   def height: Double = topY - bottomY
+
+  def extendBy(pt: Point2d): Box = {
+    if (pt.x < upperLeft.x || pt.y > upperLeft.y) {
+      Box(new Point2d(Math.min(pt.x, upperLeft.x), Math.max(pt.y, upperLeft.y)), lowerRight)
+    }
+    else if (pt.x > lowerRight.x || pt.y < lowerRight.y) {
+      Box(upperLeft, new Point2d(Math.max(pt.x, lowerRight.x), Math.min(pt.y, lowerRight.y)))
+    } else this
+  }
+
+  def addMargin(margin: Double): Box = {
+    Box(
+      new Point2d(upperLeft.x - margin, upperLeft.y + margin),
+      new Point2d(lowerRight.x + margin, lowerRight.y - margin)
+    )
+  }
 }

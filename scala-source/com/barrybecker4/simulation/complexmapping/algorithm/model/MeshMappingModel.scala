@@ -1,14 +1,10 @@
-/*
- * Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
 package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import java.awt.image.BufferedImage
-
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, IdentityFunction}
 import com.barrybecker4.simulation.complexmapping.algorithm.{GridRenderer, MeshColorMap}
 import com.barrybecker4.ui.util.ColorMap
-
 
 
 /**
@@ -35,6 +31,15 @@ case class MeshMappingModel(grid: Grid,
       lastTransformedGrid = transformedGrid
       val gridRenderer = GridRenderer(transformedGrid, colorMap)
       lastImage = gridRenderer.render(viewport, pixelWidth, pixelHeight)
+    }
+    lastImage
+  }
+
+  def getImage(pixelWidth: Int, pixelHeight: Int): BufferedImage = {
+    if (transformedGrid != lastTransformedGrid) {
+      lastTransformedGrid = transformedGrid
+      val gridRenderer = GridRenderer(transformedGrid, colorMap)
+      lastImage = gridRenderer.render(pixelWidth, pixelHeight)
     }
     lastImage
   }

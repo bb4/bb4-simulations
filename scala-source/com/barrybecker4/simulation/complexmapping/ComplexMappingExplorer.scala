@@ -52,27 +52,22 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   private def commonInit(): Unit = {
     initCommonUI()
-    update()
-  }
-
-  def setViewpoint(vp: Box): Unit = {
-    viewport = vp
-    update()
+    redraw()
   }
 
   def setFunction(func: ComplexFunction): Unit = {
     function = func
-    update()
+    redraw()
   }
 
   def setInterpolation(v: Double): Unit = {
     interpolationValue = v
-    update()
+    redraw()
   }
 
   def setMeshDetailIncrement(inc: Double): Unit = {
     grid = new Grid(origGridBounds, inc, inc)
-    update()
+    redraw()
   }
 
   /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
@@ -80,10 +75,10 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   override protected def reset(): Unit = {
     if (options != null) options.reset()
-    update()
+    redraw()
   }
 
-  protected def update(): Unit = {
+  def redraw(): Unit = {
     model = MeshMappingModel(grid, function, interpolationValue, colorMap)
     this.repaint()
   }
@@ -95,7 +90,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   override def paint(g: Graphics): Unit = {
     super.paint(g)
     if (g != null) {
-      g.drawImage(model.getImage(viewport, this.getWidth, this.getHeight), 0, 0, null)
+      g.drawImage(model.getImage(this.getWidth, this.getHeight), 0, 0, null)
     }
   }
 

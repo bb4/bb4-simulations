@@ -78,8 +78,8 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     val view = new JPanel
     view.setLayout(new BorderLayout)
     coordinate2 = new JLabel("Lower Right: ")
-    view.add(createUpperLeftInput, BorderLayout.NORTH)
-    view.add(createLowerRightInput, BorderLayout.CENTER)
+    //view.add(createUpperLeftInput, BorderLayout.NORTH)
+    //view.add(createLowerRightInput, BorderLayout.CENTER)
     view
   }
 
@@ -116,10 +116,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
-    simulator.setViewpoint(Box(
-      new Point2d(upperLeftX.getValue, upperLeftY.getValue),
-      new Point2d(lowerRightX.getValue, lowerRightY.getValue)
-    ))
+      simulator.redraw();
   }
 
   /** One of the sliders was moved. */

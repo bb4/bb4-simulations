@@ -6,11 +6,12 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
-import GridRenderer.AXIS_COLOR
+import GridRenderer.{MARGIN, AXIS_COLOR}
 
 
 object GridRenderer {
   private val AXIS_COLOR = new Color(230, 230, 245)
+  private val MARGIN = 0.3
 }
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
@@ -19,6 +20,15 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   private var yScale: Double = _
   private var xOffset: Double = _
   private var yOffset: Double = _
+
+  /**
+    * The viewport will be automatically determined from the bounds of the grid.
+    * It will then be scaled to the specified pixel width and height.
+    * @return the image with grid rendered onto it
+    */
+  def render(width: Int, height: Int): BufferedImage = {
+    render(findViewport(), width, height)
+  }
 
   /**
     * The viewport will be scaled to the specified pixel width and height.
@@ -36,6 +46,19 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     renderGrid(g)
     renderAxes(g, viewport)
     buf
+  }
+
+  private def findViewport(): Box = {
+    var box: Box = Box(new Point2d(0, 0), new Point2d(0, 0))
+    for (j <- 0 until grid.height - 1) {
+       box = box.extendBy(grid(0, j).pt)
+       box = box.extendBy(grid(grid.width - 1, j).pt)
+    }
+    for (i <- 0 until grid.width - 1) {
+      box = box.extendBy(grid(i, 0).pt)
+      box = box.extendBy(grid(i, grid.height - 1).pt)
+    }
+    box.addMargin(MARGIN);
   }
 
   private def renderGrid(g: Graphics2D): Unit = {
@@ -70,7 +93,7 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   }
 
   private def convertX(x: Double): Int = ((x - xOffset) * xScale).toInt
-  private def convertY(y: Double): Int =((y - yOffset) * yScale).toInt
+  private def convertY(y: Double): Int = ((y - yOffset) * yScale).toInt
 
   private def renderTriangle(pts: Array[MeshPoint], g: Graphics2D): Unit = {
     g.setColor(getInterpolatedColor(pts))
