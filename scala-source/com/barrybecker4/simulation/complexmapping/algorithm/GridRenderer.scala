@@ -6,12 +6,13 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
-import GridRenderer.{MARGIN, AXIS_COLOR}
+import GridRenderer.{MARGIN, AXIS_COLOR, SKIP}
 
 
 object GridRenderer {
   private val AXIS_COLOR = new Color(230, 230, 245)
   private val MARGIN = 0.3
+  private val SKIP = 5
 }
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
@@ -48,6 +49,8 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     buf
   }
 
+  /** As a first approximation, just look at where the border and a few middle points map to.
+    * That should be much faster than checking all points. */
   private def findViewport(): Box = {
     var box: Box = Box(new Point2d(0, 0), new Point2d(0, 0))
     for (j <- 0 until grid.height - 1) {
@@ -58,7 +61,12 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
       box = box.extendBy(grid(i, 0).pt)
       box = box.extendBy(grid(i, grid.height - 1).pt)
     }
-    box.addMargin(MARGIN);
+    for (i <- SKIP until (grid.height - SKIP) by SKIP) {
+      for (j <- SKIP until grid.width - SKIP by SKIP) {
+        box = box.extendBy(grid(j, i).pt)
+      }
+    }
+    box.addMargin(MARGIN)
   }
 
   private def renderGrid(g: Graphics2D): Unit = {
@@ -85,11 +93,12 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     val avgX: Double = meshPoints.map(_.x).sum / 4.0
     val avgY: Double = meshPoints.map(_.y).sum / 4.0
     val centerPoint = model.MeshPoint(new Point2d(avgX, avgY), centerValue)
-
-    renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
-    renderTriangle(Array(meshPoints(1), meshPoints(3), centerPoint), g)
-    renderTriangle(Array(meshPoints(3), meshPoints(2), centerPoint), g)
-    renderTriangle(Array(meshPoints(2), meshPoints(0), centerPoint), g)
+    if (!centerPoint.x.isNaN && !centerPoint.x.isNaN) {
+      renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
+      renderTriangle(Array(meshPoints(1), meshPoints(3), centerPoint), g)
+      renderTriangle(Array(meshPoints(3), meshPoints(2), centerPoint), g)
+      renderTriangle(Array(meshPoints(2), meshPoints(0), centerPoint), g)
+    }
   }
 
   private def convertX(x: Double): Int = ((x - xOffset) * xScale).toInt

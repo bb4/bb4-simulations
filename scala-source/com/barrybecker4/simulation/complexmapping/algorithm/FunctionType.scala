@@ -15,9 +15,10 @@ object FunctionType extends Enumeration {
 
   val IDENTITY = Val("Identity", IdentityFunction())
   val SQUARED = Val("s ^ 2", SquaredFunction())
-  val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction(8))
+  val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction(2))
+  val DERICHLET_ETA = Val("Derichlet Eta", DerichletEtaFunction(8))
 
   val VALUES: Array[Val] = Array(
-    IDENTITY, SQUARED, RIEMANN_ZETA
+    IDENTITY, SQUARED, RIEMANN_ZETA, DERICHLET_ETA
   )
 }

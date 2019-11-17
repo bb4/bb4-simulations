@@ -2,10 +2,9 @@
 package com.barrybecker4.simulation.complexmapping
 
 import java.awt.Graphics
-
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.complexmapping.algorithm.{FunctionType, MeshColorMap}
-import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, IdentityFunction}
+import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, DerichletEtaFunction, IdentityFunction}
 import com.barrybecker4.ui.util.ColorMap
 import javax.swing.JPanel
 import javax.vecmath.Point2d
@@ -23,7 +22,7 @@ object ComplexMappingExplorer {
 /**
   * Interactively explores what happens when a specified function is applied to a grid of points in the complex plane.
   * Ideas for improvement:
-  *  - auto fit displayed function instead of manually setting viewport
+  *  - use editable Box coordinates to specity rectangular region mapped.
   *  - dropdown for color function, slider for scaling color
   *  - dropdown for complex mapping function and UI for its options
   *  - figure out how to analytically extend zeta function.
@@ -32,8 +31,9 @@ object ComplexMappingExplorer {
 class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   private var function: ComplexFunction = DEFAULT_FUNCTION.function
-  private val origGridBounds = Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0))
-  private var grid = new Grid(origGridBounds, DEFAULT_MESH_DETAIL, DEFAULT_MESH_DETAIL)
+  private var origGridBounds = Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0))
+  private var increment = DEFAULT_MESH_DETAIL
+  private var grid = new Grid(origGridBounds, increment, increment)
   private var model: MeshMappingModel = MeshMappingModel(grid, function, DEFAULT_INTERPOLATION_VAL)
   private var options: DynamicOptions = _
   private var useFixedSize: Boolean = false
@@ -60,13 +60,20 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
     redraw()
   }
 
+  def setOriginalGridBounds(bounds: Box): Unit = {
+    origGridBounds = bounds
+    grid = new Grid(origGridBounds, increment, increment)
+    redraw()
+  }
+
   def setInterpolation(v: Double): Unit = {
     interpolationValue = v
     redraw()
   }
 
   def setMeshDetailIncrement(inc: Double): Unit = {
-    grid = new Grid(origGridBounds, inc, inc)
+    increment = inc
+    grid = new Grid(origGridBounds, increment, increment)
     redraw()
   }
 

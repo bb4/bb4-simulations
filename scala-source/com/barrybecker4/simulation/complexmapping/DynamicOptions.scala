@@ -5,7 +5,7 @@ import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
 import java.awt.{BorderLayout, Dimension, GridLayout}
 
 import com.barrybecker4.common.math.ComplexNumberRange
-import com.barrybecker4.simulation.complexmapping.algorithm.functions.RiemannZetaFunction
+import com.barrybecker4.simulation.complexmapping.algorithm.functions.{DerichletEtaFunction, RiemannZetaFunction}
 import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
@@ -42,13 +42,13 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   sliderGroup.addSliderChangeListener(this)
   val legend: ContinuousColorLegend = new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
-  val viewport: JPanel = createViewpointUI
+  val gridBox: JPanel = createOriginalGridBoxUI
   add(sliderGroup)
   add(javax.swing.Box.createVerticalStrut(10))
   add(checkBoxes)
   add(javax.swing.Box.createVerticalStrut(10))
   add(legend)
-  add(viewport)
+  add(gridBox)
   private var updateButton = new JButton("Update")
   updateButton.addActionListener(this)
   add(updateButton)
@@ -63,23 +63,24 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   private var lowerRightX: NumberInput = _
   private var lowerRightY: NumberInput = _
 
-  def setCoordinates(range: ComplexNumberRange): Unit = {
-    coordinate1.setText("c1: " + range.point1)
-    coordinate2.setText("c2: " + range.point2)
-  }
-
   private def createCheckBoxes = {
     val checkBoxes = new JPanel(new GridLayout(0, 1))
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
     checkBoxes
   }
 
-  private def createViewpointUI = {
+  private def createOriginalGridBoxUI = {
     val view = new JPanel
     view.setLayout(new BorderLayout)
-    coordinate2 = new JLabel("Lower Right: ")
-    //view.add(createUpperLeftInput, BorderLayout.NORTH)
-    //view.add(createLowerRightInput, BorderLayout.CENTER)
+
+    val title = new JLabel("Original grid extent: ")
+    view.add(title, BorderLayout.NORTH)
+
+    val boundingBoxPanel = new JPanel()
+    boundingBoxPanel.setLayout(new BoxLayout(boundingBoxPanel, BoxLayout.Y_AXIS))
+    boundingBoxPanel.add(createUpperLeftInput)
+    boundingBoxPanel.add(createLowerRightInput)
+    view.add(boundingBoxPanel, BorderLayout.CENTER)
     view
   }
 
@@ -116,7 +117,12 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
-      simulator.redraw();
+    val box: Box = Box(
+      new Point2d(upperLeftX.getValue, upperLeftY.getValue),
+      new Point2d(lowerRightX.getValue, lowerRightY.getValue)
+    )
+    simulator.setOriginalGridBounds(box)
+    simulator.redraw()
   }
 
   /** One of the sliders was moved. */
