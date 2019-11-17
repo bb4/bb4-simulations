@@ -13,7 +13,7 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, Me
 
 
 object ComplexMappingExplorer {
-  val DEFAULT_VIEWPORT: Box = Box(new Point2d(-2, 4), new Point2d(5, -4))
+  val DEFAULT_ORIG_GRID_BOUNDS: Box = Box(new Point2d(1.0, 3.0), new Point2d(3, -3))
   val DEFAULT_FUNCTION: FunctionType.Val = FunctionType.RIEMANN_ZETA
   val DEFAULT_N: Int = 2
   val DEFAULT_INTERPOLATION_VAL: Double = 1.0
@@ -31,7 +31,7 @@ object ComplexMappingExplorer {
 class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   private var function: ComplexFunction = DEFAULT_FUNCTION.function
-  private var origGridBounds = Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0))
+  private var origGridBounds = DEFAULT_ORIG_GRID_BOUNDS
   private var increment = DEFAULT_MESH_DETAIL
   private var grid = new Grid(origGridBounds, increment, increment)
   private var theN = DEFAULT_N

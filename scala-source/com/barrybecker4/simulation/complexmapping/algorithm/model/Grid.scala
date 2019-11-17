@@ -39,15 +39,16 @@ case class Grid(mesh: Array[Array[MeshPoint]]) {
   def apply(i: Int, j: Int): MeshPoint = mesh(i)(j)
 
   def transform(func: ComplexFunction, n: Int, interpolationVal: Double = 1.0): Grid = {
+    if (interpolationVal <= 0) this
+    else if (interpolationVal >= 1.0) doTransform(mpt => mpt.transform(func, n))
+    else doTransform(mpt => mpt + (mpt.transform(func, n) - mpt).scale(interpolationVal))
+  }
 
+  private def doTransform(tfunc: MeshPoint => MeshPoint): Grid = {
     val transformedMesh: Array[Array[MeshPoint]] = Array.ofDim[MeshPoint](width, height)
-    for (i <- 0 until width) {
-      for (j <- 0 until height) {
-        val pt: MeshPoint = mesh(i)(j)
-        val tpt = pt + (pt.transform(func, n) - pt).scale(interpolationVal)
-        transformedMesh(i)(j) = tpt
-      }
-    }
+    for (i <- 0 until width)
+      for (j <- 0 until height)
+        transformedMesh(i)(j) = tfunc(mesh(i)(j))
     Grid(transformedMesh)
   }
 }

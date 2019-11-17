@@ -7,7 +7,7 @@ import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
-import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_VIEWPORT}
+import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_ORIG_GRID_BOUNDS }
 import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
 import javax.vecmath.Point2d
@@ -19,7 +19,7 @@ import javax.vecmath.Point2d
   */
 object DynamicOptions {
 
-  private[complexmapping] val DEFAULT_N = 1
+  private[complexmapping] val DEFAULT_N = 2
   private val EXPONENT_SLIDER = "Exponent N"
   private val INTERPOLATION_SLIDER = "Interpolation from original"
   private val MESH_DETAIL_SLIDER = "Mesh granularity"
@@ -55,6 +55,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     val gridBox: JPanel = createOriginalGridBoxUI
     functionChoice = createFunctionDropdown
 
+    add(new JLabel("Function to apply to a grid in the complex plane:"))
     add(functionChoice)
     add(sliderGroup)
     add(javax.swing.Box.createVerticalStrut(10))
@@ -110,9 +111,11 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     panel.setLayout(new BorderLayout)
     coordinate1 = new JLabel("Upper Left: ")
     upperLeftX = new NumberInput("x: ",
-      DEFAULT_VIEWPORT.upperLeft.x, "x coordinate of upper left viewport.", -10, 100.0, false)
+      DEFAULT_ORIG_GRID_BOUNDS.upperLeft.x, "x coordinate of upper left viewport.",
+      -10, 100.0, false)
     upperLeftY = new NumberInput("y: ",
-      DEFAULT_VIEWPORT.upperLeft.y, "y coordinate of upper left viewport.", 0, 10.0, false)
+      DEFAULT_ORIG_GRID_BOUNDS.upperLeft.y, "y coordinate of upper left viewport.",
+      0, 10.0, false)
 
     panel.add(coordinate1, BorderLayout.NORTH)
     panel.add(upperLeftX, BorderLayout.WEST)
@@ -125,9 +128,11 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     panel.setLayout(new BorderLayout)
     coordinate2 = new JLabel("Lower right: ")
     lowerRightX = new NumberInput("x: ",
-      DEFAULT_VIEWPORT.lowerRight.x, "x coordinate of lower right viewport.", 0, 100.0, false)
+      DEFAULT_ORIG_GRID_BOUNDS.lowerRight.x, "x coordinate of lower right viewport.",
+      0, 100.0, false)
     lowerRightY = new NumberInput("y: ",
-      DEFAULT_VIEWPORT.lowerRight.y, "y coordinate of lower right viewport.", -10, 0.0, false)
+      DEFAULT_ORIG_GRID_BOUNDS.lowerRight.y, "y coordinate of lower right viewport.",
+      -10, 0.0, false)
     panel.add(coordinate2, BorderLayout.NORTH)
     panel.add(lowerRightX, BorderLayout.WEST)
     panel.add(lowerRightY, BorderLayout.CENTER)

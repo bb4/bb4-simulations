@@ -4,8 +4,7 @@ package com.barrybecker4.simulation.complexmapping.algorithm.functions
 import com.barrybecker4.common.math.ComplexNumber
 
 
-/**
-  * Compute https://en.wikipedia.org/wiki/Riemann_zeta_function for a specified n.
+/** Compute https://en.wikipedia.org/wiki/Riemann_zeta_function for a specified n.
   * This function is not defined when R < 1. If those values are passed, have them map to ComplexNumber.NaN.
   */
 case class RiemannZetaFunction() extends ComplexFunction {
