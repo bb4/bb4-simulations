@@ -3,14 +3,12 @@ package com.barrybecker4.simulation.complexmapping
 
 import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
 import java.awt.{BorderLayout, Dimension, GridLayout}
-
-import com.barrybecker4.common.math.ComplexNumberRange
-import com.barrybecker4.simulation.complexmapping.algorithm.functions.{DerichletEtaFunction, RiemannZetaFunction}
 import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
 import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_VIEWPORT}
+import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
 import javax.vecmath.Point2d
 
@@ -38,30 +36,53 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
-  private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
-  val legend: ContinuousColorLegend = new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
-  val checkBoxes: JPanel = createCheckBoxes
-  val gridBox: JPanel = createOriginalGridBoxUI
-  add(sliderGroup)
-  add(javax.swing.Box.createVerticalStrut(10))
-  add(checkBoxes)
-  add(javax.swing.Box.createVerticalStrut(10))
-  add(legend)
-  add(gridBox)
-  private var updateButton = new JButton("Update")
-  updateButton.addActionListener(this)
-  add(updateButton)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(10, 1000))
-  add(fill)
 
+  private var functionChoice: JComboBox[String] = _
+  var sliderGroup: SliderGroup = _
   private var coordinate1: JLabel = _
   private var coordinate2: JLabel = _
   private var upperLeftX: NumberInput = _
   private var upperLeftY: NumberInput = _
   private var lowerRightX: NumberInput = _
   private var lowerRightY: NumberInput = _
+  createUI()
+
+  private def createUI(): Unit = {
+    sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
+    sliderGroup.addSliderChangeListener(this)
+    val legend: ContinuousColorLegend = new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
+    val checkBoxes: JPanel = createCheckBoxes
+    val gridBox: JPanel = createOriginalGridBoxUI
+    functionChoice = createFunctionDropdown
+
+    add(functionChoice)
+    add(sliderGroup)
+    add(javax.swing.Box.createVerticalStrut(10))
+    add(checkBoxes)
+    add(javax.swing.Box.createVerticalStrut(10))
+    add(legend)
+    add(gridBox)
+    val updateButton = new JButton("Update")
+    updateButton.addActionListener(this)
+    add(updateButton)
+    val fill = new JPanel
+    fill.setPreferredSize(new Dimension(10, 1000))
+    add(fill)
+  }
+
+
+  /** The dropdown menu at the top for selecting an algorithm for solving the puzzle.
+    * @return a dropdown/down component.
+    */
+  private def createFunctionDropdown: JComboBox[String] = {
+    functionChoice = new JComboBox[String]()
+    functionChoice.addActionListener(this)
+    for (func <- FunctionType.VALUES) {
+      functionChoice.addItem(func.name)
+    }
+    functionChoice.setSelectedIndex(FunctionType.VALUES.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
+    functionChoice
+  }
 
   private def createCheckBoxes = {
     val checkBoxes = new JPanel(new GridLayout(0, 1))
@@ -117,18 +138,22 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
-    val box: Box = Box(
-      new Point2d(upperLeftX.getValue, upperLeftY.getValue),
-      new Point2d(lowerRightX.getValue, lowerRightY.getValue)
-    )
-    simulator.setOriginalGridBounds(box)
-    simulator.redraw()
+    if (e.getSource == functionChoice) {
+      simulator.setFunction(FunctionType.VALUES(functionChoice.getSelectedIndex).function)
+    } else {
+      val box: Box = Box(
+        new Point2d(upperLeftX.getValue, upperLeftY.getValue),
+        new Point2d(lowerRightX.getValue, lowerRightY.getValue)
+      )
+      simulator.setOriginalGridBounds(box)
+      simulator.redraw()
+    }
   }
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
-      case DynamicOptions.EXPONENT_SLIDER => simulator.setFunction(RiemannZetaFunction(value.toInt))
+      case DynamicOptions.EXPONENT_SLIDER => simulator.setN(value.toInt)
       case DynamicOptions.INTERPOLATION_SLIDER => simulator.setInterpolation(value)
       case DynamicOptions.MESH_DETAIL_SLIDER => simulator.setMeshDetailIncrement(value)
     }

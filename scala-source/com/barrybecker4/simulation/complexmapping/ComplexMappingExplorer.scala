@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.complexmapping
 import java.awt.Graphics
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.complexmapping.algorithm.{FunctionType, MeshColorMap}
-import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, DerichletEtaFunction, IdentityFunction}
+import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction
 import com.barrybecker4.ui.util.ColorMap
 import javax.swing.JPanel
 import javax.vecmath.Point2d
@@ -15,6 +15,7 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, Me
 object ComplexMappingExplorer {
   val DEFAULT_VIEWPORT: Box = Box(new Point2d(-2, 4), new Point2d(5, -4))
   val DEFAULT_FUNCTION: FunctionType.Val = FunctionType.RIEMANN_ZETA
+  val DEFAULT_N: Int = 2
   val DEFAULT_INTERPOLATION_VAL: Double = 1.0
   val DEFAULT_MESH_DETAIL: Double = 0.1
 }
@@ -22,7 +23,6 @@ object ComplexMappingExplorer {
 /**
   * Interactively explores what happens when a specified function is applied to a grid of points in the complex plane.
   * Ideas for improvement:
-  *  - use editable Box coordinates to specity rectangular region mapped.
   *  - dropdown for color function, slider for scaling color
   *  - dropdown for complex mapping function and UI for its options
   *  - figure out how to analytically extend zeta function.
@@ -34,10 +34,10 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   private var origGridBounds = Box(new Point2d(1.0, 3.0), new Point2d(3.0, -3.0))
   private var increment = DEFAULT_MESH_DETAIL
   private var grid = new Grid(origGridBounds, increment, increment)
-  private var model: MeshMappingModel = MeshMappingModel(grid, function, DEFAULT_INTERPOLATION_VAL)
+  private var theN = DEFAULT_N
+  private var model: MeshMappingModel = MeshMappingModel(grid, function, theN, DEFAULT_INTERPOLATION_VAL)
   private var options: DynamicOptions = _
   private var useFixedSize: Boolean = false
-  private var viewport: Box = DEFAULT_VIEWPORT
   private var interpolationValue = DEFAULT_INTERPOLATION_VAL
   private var colorMap: ColorMap = new MeshColorMap()
 
@@ -71,6 +71,11 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
     redraw()
   }
 
+  def setN(n: Int): Unit = {
+    theN = n
+    redraw()
+  }
+
   def setMeshDetailIncrement(inc: Double): Unit = {
     increment = inc
     grid = new Grid(origGridBounds, increment, increment)
@@ -86,7 +91,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   }
 
   def redraw(): Unit = {
-    model = MeshMappingModel(grid, function, interpolationValue, colorMap)
+    model = MeshMappingModel(grid, function, theN, interpolationValue, colorMap)
     this.repaint()
   }
 
@@ -100,7 +105,6 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
       g.drawImage(model.getImage(this.getWidth, this.getHeight), 0, 0, null)
     }
   }
-
 
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01

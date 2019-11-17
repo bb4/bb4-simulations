@@ -4,9 +4,9 @@ package com.barrybecker4.simulation.complexmapping.algorithm.functions
 import com.barrybecker4.common.math.ComplexNumber
 
 
-case class SquaredFunction() extends ComplexFunction {
+case class PowerFunction() extends ComplexFunction {
 
-  override def compute(v: ComplexNumber): ComplexNumber = {
-    v.multiply(v)
+  override def compute(v: ComplexNumber, n: Int): ComplexNumber = {
+    ComplexNumber.pow(n, v)
   }
 }

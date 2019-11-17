@@ -17,8 +17,8 @@ case class MeshPoint(pt: Point2d, value: Double) {
   def x: Double = pt.x
   def y: Double = pt.y
 
-  def transform(func: ComplexFunction): MeshPoint = {
-    val transformed = func.compute(ComplexNumber(pt.x, pt.y))
+  def transform(func: ComplexFunction, n: Int): MeshPoint = {
+    val transformed = func.compute(ComplexNumber(pt.x, pt.y), n)
     MeshPoint(new Point2d(transformed.real, transformed.imaginary), value)
   }
 

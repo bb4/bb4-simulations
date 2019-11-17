@@ -14,11 +14,12 @@ object FunctionType extends Enumeration {
   implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
 
   val IDENTITY = Val("Identity", IdentityFunction())
-  val SQUARED = Val("s ^ 2", SquaredFunction())
-  val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction(2))
-  val DERICHLET_ETA = Val("Derichlet Eta", DerichletEtaFunction(8))
+  val INT_POWER = Val("s ^ n, n is int; s is complex", IntPowerFunction())
+  val POWER = Val("n ^ s, n is int; s is complex", PowerFunction())
+  val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction())
+  val DERICHLET_ETA = Val("Derichlet Eta", DerichletEtaFunction())
 
   val VALUES: Array[Val] = Array(
-    IDENTITY, SQUARED, RIEMANN_ZETA, DERICHLET_ETA
+    IDENTITY, INT_POWER, POWER, RIEMANN_ZETA, DERICHLET_ETA
   )
 }

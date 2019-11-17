@@ -8,9 +8,9 @@ import com.barrybecker4.common.math.ComplexNumber
   * See
   * @param n the number of iterations. The larger this is, the more accurate the result.
   */
-case class DerichletEtaFunction(n: Int) extends ComplexFunction {
+case class DerichletEtaFunction() extends ComplexFunction {
 
-  override def compute(s: ComplexNumber): ComplexNumber = {
+  override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
     var sum: ComplexNumber = ComplexNumber(0, 0)
     for (i <- 1 to n) {
       val i2 = (2 * i).toDouble

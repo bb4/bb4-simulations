@@ -14,10 +14,10 @@ import com.barrybecker4.ui.util.ColorMap
   * @author Barry Becker
   */
 case class MeshMappingModel(grid: Grid,
-  function: ComplexFunction = IdentityFunction(),
+  function: ComplexFunction = IdentityFunction(), n: Int = 1,
   interpolationVal: Double, colorMap: ColorMap = new MeshColorMap()) {
 
-  private val transformedGrid: Grid = grid.transform(function, interpolationVal)
+  private val transformedGrid: Grid = grid.transform(function, n, interpolationVal)
   private var lastTransformedGrid: Grid = _
   private var lastViewport: Box = _
   private var lastImage: BufferedImage = _

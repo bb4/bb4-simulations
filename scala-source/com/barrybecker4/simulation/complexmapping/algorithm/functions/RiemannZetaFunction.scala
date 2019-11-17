@@ -7,11 +7,14 @@ import com.barrybecker4.common.math.ComplexNumber
 /**
   * Compute https://en.wikipedia.org/wiki/Riemann_zeta_function for a specified n.
   * This function is not defined when R < 1. If those values are passed, have them map to ComplexNumber.NaN.
-  * @param n the number of iterations. The larger this is, the more accurate the result.
   */
-case class RiemannZetaFunction(n: Int) extends ComplexFunction {
+case class RiemannZetaFunction() extends ComplexFunction {
 
-  override def compute(s: ComplexNumber): ComplexNumber = {
+  /** @param s the complex coordinate parameter
+    * @param n the number of iterations. The larger this is, the more accurate the result.
+    * @return zeta function result
+    */
+  override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
     if (s.real < 1) ComplexNumber(Double.NaN, Double.NaN)
     else {
       var sum: ComplexNumber = ComplexNumber(0, 0)
