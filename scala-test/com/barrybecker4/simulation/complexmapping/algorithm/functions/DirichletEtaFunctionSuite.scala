@@ -4,11 +4,12 @@ package com.barrybecker4.simulation.complexmapping.algorithm.functions
 import com.barrybecker4.common.math.ComplexNumber
 import org.scalatest.FunSuite
 
+
 // This is the analytic extension of the zeta function
 class DirichletEtaFunctionSuite extends FunSuite {
 
-  val fun = DirichletEtaFunction()
-/*
+  private val fun = DirichletEtaFunction()
+
   test("eta(2) with n=1000") {
     assertResult(ComplexNumber(0.8224669084866097, 0)) {
       fun.compute(ComplexNumber(2.0, 0), 1000)
@@ -16,7 +17,7 @@ class DirichletEtaFunctionSuite extends FunSuite {
   }
 
   test("eta(1) with n=1") {
-    assertResult(ComplexNumber(0.5, 0)) {
+    assertResult(ComplexNumber(0.25, 0)) {
       fun.compute(ComplexNumber(1.0, 0), 1)
     }
   }
@@ -28,13 +29,13 @@ class DirichletEtaFunctionSuite extends FunSuite {
   }
 
   test("eta(1, i) with n=1") {
-    assertResult(ComplexNumber(0.615380549318014, 0.3194806381568174)) {
+    assertResult(ComplexNumber(0.307690274659007, 0.1597403190784087)) {
       fun.compute(ComplexNumber(1.0, 1.0), 1)
     }
-  }*/
+  }
 
   test("eta(-1) with n=100 should be -1/12") {
-    assertResult(ComplexNumber(-100.00000000000013, 0)) {
+    assertResult(ComplexNumber(-0.5000000000000007, 0)) {
       fun.compute(ComplexNumber(-1, 0), 100)
     }
   }

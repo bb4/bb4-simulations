@@ -9,7 +9,7 @@ import org.scalatest.FunSuite
 // This is the analytic extension of the zeta function
 class ZetaAnalyticExtensionFunctionSuite extends FunSuite {
 
-  val fun = ZetaAnalyticExtensionFunction()
+  private val fun = ZetaAnalyticExtensionFunction()
 
   test("eta(2) with n=1000") {
     assertResult(ComplexNumber(1.644909191845102, 0)) {
