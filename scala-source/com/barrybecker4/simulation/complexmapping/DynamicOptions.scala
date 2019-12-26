@@ -3,14 +3,11 @@ package com.barrybecker4.simulation.complexmapping
 
 import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
 import java.awt.{BorderLayout, Dimension, GridLayout}
-import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
 import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_ORIG_GRID_BOUNDS }
 import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
-import com.barrybecker4.simulation.complexmapping.algorithm.model.Box
-import javax.vecmath.Point2d
 
 /**
   * Dynamic controls for the complex mapping explorer simulation that will show on the right.
@@ -39,18 +36,14 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   private var functionChoice: JComboBox[String] = _
   var sliderGroup: SliderGroup = _
-  private var coordinate1: JLabel = _
-  private var coordinate2: JLabel = _
-  private var upperLeftX: NumberInput = _
-  private var upperLeftY: NumberInput = _
-  private var lowerRightX: NumberInput = _
-  private var lowerRightY: NumberInput = _
+
   createUI()
 
   private def createUI(): Unit = {
     sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
     sliderGroup.addSliderChangeListener(this)
-    val legend: ContinuousColorLegend = new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
+    val legend: ContinuousColorLegend =
+      new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
     val checkBoxes: JPanel = createCheckBoxes
     val gridBox: JPanel = createOriginalGridBoxUI
     functionChoice = createFunctionDropdown
@@ -100,43 +93,8 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
     val boundingBoxPanel = new JPanel()
     boundingBoxPanel.setLayout(new BoxLayout(boundingBoxPanel, BoxLayout.Y_AXIS))
-    boundingBoxPanel.add(createUpperLeftInput)
-    boundingBoxPanel.add(createLowerRightInput)
     view.add(boundingBoxPanel, BorderLayout.CENTER)
     view
-  }
-
-  private def createUpperLeftInput: JPanel = {
-    val panel = new JPanel()
-    panel.setLayout(new BorderLayout)
-    coordinate1 = new JLabel("Upper Left: ")
-    upperLeftX = new NumberInput("x: ",
-      DEFAULT_ORIG_GRID_BOUNDS.upperLeft.x, "x coordinate of upper left viewport.",
-      -10, 100.0, false)
-    upperLeftY = new NumberInput("y: ",
-      DEFAULT_ORIG_GRID_BOUNDS.upperLeft.y, "y coordinate of upper left viewport.",
-      0, 10.0, false)
-
-    panel.add(coordinate1, BorderLayout.NORTH)
-    panel.add(upperLeftX, BorderLayout.WEST)
-    panel.add(upperLeftY, BorderLayout.CENTER)
-    panel
-  }
-
-  private def createLowerRightInput: JPanel = {
-    val panel = new JPanel()
-    panel.setLayout(new BorderLayout)
-    coordinate2 = new JLabel("Lower right: ")
-    lowerRightX = new NumberInput("x: ",
-      DEFAULT_ORIG_GRID_BOUNDS.lowerRight.x, "x coordinate of lower right viewport.",
-      0, 100.0, false)
-    lowerRightY = new NumberInput("y: ",
-      DEFAULT_ORIG_GRID_BOUNDS.lowerRight.y, "y coordinate of lower right viewport.",
-      -10, 0.0, false)
-    panel.add(coordinate2, BorderLayout.NORTH)
-    panel.add(lowerRightX, BorderLayout.WEST)
-    panel.add(lowerRightY, BorderLayout.CENTER)
-    panel
   }
 
   def reset(): Unit = sliderGroup.reset()
@@ -145,14 +103,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == functionChoice) {
       simulator.setFunction(FunctionType.VALUES(functionChoice.getSelectedIndex).function)
-    } else {
-      val box: Box = Box(
-        new Point2d(upperLeftX.getValue, upperLeftY.getValue),
-        new Point2d(lowerRightX.getValue, lowerRightY.getValue)
-      )
-      simulator.setOriginalGridBounds(box)
-      simulator.redraw()
-    }
+    } else simulator.redraw()
   }
 
   /** One of the sliders was moved. */

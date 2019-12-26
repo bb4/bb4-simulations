@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.complexmapping.algorithm.model
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction
 import com.barrybecker4.simulation.complexmapping.algorithm.model.Grid.createMesh
 
+
 object Grid {
 
   // this should be a function passed in

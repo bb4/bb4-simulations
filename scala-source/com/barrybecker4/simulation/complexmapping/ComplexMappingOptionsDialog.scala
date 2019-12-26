@@ -12,7 +12,6 @@ import javax.swing.{BoxLayout, JComboBox, JLabel, JPanel}
 class ComplexMappingOptionsDialog(val parent1: Component, val simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 
-
   override protected def createRenderingParamPanel = new JPanel
 
   override protected def createCustomParamPanel: JPanel = {
@@ -23,7 +22,6 @@ class ComplexMappingOptionsDialog(val parent1: Component, val simulator: Simulat
     mainPanel.add(panel, BorderLayout.NORTH)
     mainPanel
   }
-
 
   override def getSimulator: ComplexMappingExplorer = super.getSimulator.asInstanceOf[ComplexMappingExplorer]
 

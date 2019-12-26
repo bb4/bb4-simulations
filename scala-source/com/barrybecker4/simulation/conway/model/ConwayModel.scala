@@ -65,7 +65,7 @@ class ConwayModel() {
   }
 
   def getScale: Double = this.scale
-  def setWrapGrid(wrap: Boolean) { this.wrapGrid = wrap }
+  def setWrapGrid(wrap: Boolean): Unit = { this.wrapGrid = wrap }
   def setShowShadows(showShadows: Boolean) { this.showShadows = showShadows }
   def setNumStepsPerFrame(steps: Int) { this.numStepsPerFrame = steps }
   def getColormap: ColorMap = colorMap

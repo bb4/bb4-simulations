@@ -38,7 +38,7 @@ class Conway private[model]() {
     this.height = height
   }
 
-  def initialize() { addGlider() }
+  def initialize(): Unit = { addGlider() }
 
   def getCandidates: Set[Location] = {
     var candidates = Set[Location]()

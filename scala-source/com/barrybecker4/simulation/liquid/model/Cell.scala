@@ -32,14 +32,14 @@ class Cell() {
   private var status = CellStatus.EMPTY // type of cell
 
   /** global swap of fields (use with care). (hack) */
-  def swap() { velocity.step() }
-  def setPressure(p: Double) { pressure = p }
+  def swap(): Unit = { velocity.step() }
+  def setPressure(p: Double): Unit = { pressure = p }
   def getPressure: Double = pressure
   private[model] def initializeU(u: Double): Unit = {velocity.initializeU(u)}
   private[model] def initializeV(v: Double): Unit = {velocity.initializeV(v)}
 
-  def initializeVelocity(u: Double, v: Double) { velocity.initialize(u, v)}
-  def setU(u: Double) {velocity.setCurrentU(u)}
+  def initializeVelocity(u: Double, v: Double): Unit = { velocity.initialize(u, v)}
+  def setU(u: Double): Unit = {velocity.setCurrentU(u)}
   def setV(v: Double): Unit = {velocity.setCurrentV(v)}
   def getU: Double = velocity.getU
   def getV: Double = velocity.getV
