@@ -16,11 +16,12 @@ object FunctionType extends Enumeration {
   val IDENTITY = Val("Identity", IdentityFunction())
   val INT_POWER = Val("s ^ n, n is int; s is complex", IntPowerFunction())
   val POWER = Val("n ^ s, n is int; s is complex", PowerFunction())
+  val GAMMA = Val("Gamma", GammaFunction())
   val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction())
   val DIRICHLET_ETA = Val("Dirichlet Eta", DirichletEtaFunction())
   val ZETA_ANALYTIC_EXTENSION = Val("Analytic extension of Zeta", ZetaAnalyticExtensionFunction())
 
   val VALUES: Array[Val] = Array(
-    IDENTITY, INT_POWER, POWER, RIEMANN_ZETA, DIRICHLET_ETA, ZETA_ANALYTIC_EXTENSION
+    IDENTITY, INT_POWER, POWER, GAMMA, RIEMANN_ZETA, DIRICHLET_ETA, ZETA_ANALYTIC_EXTENSION
   )
 }

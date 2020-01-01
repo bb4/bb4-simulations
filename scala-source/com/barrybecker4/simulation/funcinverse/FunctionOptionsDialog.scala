@@ -25,6 +25,7 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
 
   /** type of distribution function to test.   */
   private var functionChoiceField: JComboBox[String] = _
+
   /** manner in which to interpolate the function values */
   private var interpolationChoiceField: JComboBox[String] = _
 

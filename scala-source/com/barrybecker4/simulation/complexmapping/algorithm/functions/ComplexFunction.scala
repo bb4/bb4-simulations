@@ -6,9 +6,9 @@ import com.barrybecker4.common.math.ComplexNumber
 
 trait ComplexFunction {
 
-   /** @param v the complex valued parameter
+   /** @param s the complex valued parameter
      * @param n an exponent that may or may not be used in the function
      * @return the result of applying the function
      */
-   def compute(v: ComplexNumber, n: Int): ComplexNumber
+   def compute(s: ComplexNumber, n: Int): ComplexNumber
 }
