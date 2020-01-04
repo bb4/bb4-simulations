@@ -6,13 +6,14 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
-import GridRenderer.{MARGIN, AXIS_COLOR, SKIP}
+import GridRenderer.{MARGIN, AXIS_COLOR, SKIP, WIREFRAME_MODE}
 
 
 object GridRenderer {
   private val AXIS_COLOR = new Color(230, 230, 245)
   private val MARGIN = 0.3
   private val SKIP = 5
+  private val WIREFRAME_MODE = true
 }
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
@@ -72,7 +73,7 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   private def renderGrid(g: Graphics2D): Unit = {
     for (j <- 0 until grid.height - 1)
       for (i <- 0 until grid.width - 1) {
-        val meshPoints = Array(grid(i, j), grid(i + 1, j), grid(i, j+ 1), grid(i + 1, j + 1))
+        val meshPoints = Array(grid(i, j), grid(i + 1, j), grid(i + 1, j+ 1), grid(i, j + 1))
         renderQuadrilateral(meshPoints, g)
       }
   }
@@ -94,10 +95,21 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     val avgY: Double = meshPoints.map(_.y).sum / 4.0
     val centerPoint = model.MeshPoint(new Point2d(avgX, avgY), centerValue)
     if (!centerPoint.x.isNaN && !centerPoint.x.isNaN) {
-      renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
-      renderTriangle(Array(meshPoints(1), meshPoints(3), centerPoint), g)
-      renderTriangle(Array(meshPoints(3), meshPoints(2), centerPoint), g)
-      renderTriangle(Array(meshPoints(2), meshPoints(0), centerPoint), g)
+      if (WIREFRAME_MODE) {
+        drawLine(meshPoints(0), meshPoints(1), g)
+        drawLine(meshPoints(1), meshPoints(2), g)
+        drawLine(meshPoints(2), meshPoints(3), g)
+        drawLine(meshPoints(3), meshPoints(0), g)
+        drawLine(meshPoints(0), centerPoint, g)
+        drawLine(meshPoints(1), centerPoint, g)
+        drawLine(meshPoints(2), centerPoint, g)
+        drawLine(meshPoints(3), centerPoint, g)
+      } else {
+        renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
+        renderTriangle(Array(meshPoints(1), meshPoints(2), centerPoint), g)
+        renderTriangle(Array(meshPoints(2), meshPoints(3), centerPoint), g)
+        renderTriangle(Array(meshPoints(3), meshPoints(0), centerPoint), g)
+      }
     }
   }
 
@@ -111,12 +123,19 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     g.fillPolygon(x, y, x.length)
   }
 
+  private def drawLine(from: MeshPoint, to: MeshPoint, g: Graphics2D): Unit = {
+    g.setColor(getInterpolatedColor(Array(from, to)))
+    g.drawLine(convertX(from.x), convertY(from.y), convertX(to.x), convertY(to.y))
+  }
+
   private def getInterpolatedColor(pts: Array[MeshPoint]): Color = {
-    if (Math.abs(2 * pts(0).value - pts(1).value - pts(2).value) > 0.2) {
+    val len = pts.length
+    val third = if (len == 3) pts(2).value else 0
+    if (Math.abs(2 * pts(0).value - pts(1).value - third) > 0.2) {
       // avoid strange values across the colormap wrap threshold
       cmap.getColorForValue(pts(0).value)
     } else {
-      val value = pts.map(_.value).sum / 3
+      val value = pts.map(_.value).sum / len
       cmap.getColorForValue(value)
     }
   }

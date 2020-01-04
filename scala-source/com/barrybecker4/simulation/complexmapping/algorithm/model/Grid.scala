@@ -8,9 +8,16 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.Grid.createMes
 object Grid {
 
   // this should be a function passed in
-  private def computeValue(x: Double, y: Double): Double = {
+  private def computeContinuousValue(x: Double, y: Double): Double = {
     val base = Math.sqrt(x * x + y * y) / 4.0
     base - base.toInt
+  }
+  private def computeQuadrantValue(x: Double, y: Double): Double = {
+      if (x * y < 0) {
+        if (x > 0) 0.33 else 0.66
+      } else {
+        if (x > 0) 0.01 else 0.99
+      }
   }
 
   def createMesh(bounds: Box, incX: Double = 0.1, incY: Double = 0.1): Array[Array[MeshPoint]] = {
@@ -22,7 +29,7 @@ object Grid {
       for (j <- 0 until ydim) {
         val x = bounds.leftX + i * incX
         val y = bounds.bottomY + j * incY
-        mesh(i)(j) = new MeshPoint(x, y, computeValue(x, y))
+        mesh(i)(j) = new MeshPoint(x, y, computeQuadrantValue(x, y))
       }
     }
     mesh
