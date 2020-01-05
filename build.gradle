@@ -230,12 +230,13 @@ appMap['spirograph'] = [
 appMap['sierpinski'] = [
         title: 'Sierpinski Triangle',
         command: 'bb4-sierpinski',
-        mainClass: "com.barrybecker4.simulation.sierpinski.Sierpinski",
+        mainClass: "com.barrybecker4.simulation.sierpinski.SierpinskiApplet",
         description: 'A triangular fractal discovered by Waclaw Sierpinski.',
         longDescription: 'This is an example of a self-similar set. \\\n' +
                 'It is a mathematically generated pattern that can be reproducible at any magnification. \\\n' +
                 'See <a href="http://en.wikipedia.org/wiki/Sierpinski_triangle">Sierpinski Triangle</a>'
 ]
+
 appMap['lsystem'] = [
         title: 'L-System Tree',
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.lsystem.LSystemExplorer',
@@ -284,7 +285,7 @@ appMap['complexmapping'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = appMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApplet"
+    def mainClass = propMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApplet"
 
     def argsList = []
     if (propMap.containsKey('panel_class'))
