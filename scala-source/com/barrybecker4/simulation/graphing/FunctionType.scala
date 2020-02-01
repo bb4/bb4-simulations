@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.graphing
 
-import com.barrybecker4.common.math.function.ArrayFunction
-import com.barrybecker4.common.math.function.ErrorFunction
-import com.barrybecker4.common.math.function.Function
+import com.barrybecker4.math.function.ArrayFunction
+import com.barrybecker4.math.function.ErrorFunction
+import com.barrybecker4.math.function.Function
 
 
 /**

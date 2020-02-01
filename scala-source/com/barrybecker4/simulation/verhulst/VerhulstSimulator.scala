@@ -3,8 +3,8 @@ package com.barrybecker4.simulation.verhulst
 
 import java.awt.{Color, Graphics}
 
-import com.barrybecker4.common.math.function.CountFunction
-import com.barrybecker4.common.math.function.Function
+import com.barrybecker4.math.function.CountFunction
+import com.barrybecker4.math.function.Function
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.graphing.GraphOptionsDialog
 import com.barrybecker4.ui.animation.AnimationFrame

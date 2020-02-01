@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
-import com.barrybecker4.common.math.ComplexNumberRange
+import com.barrybecker4.math.ComplexNumberRange
 
 /**
   * Maintains regions (ranges) in the complex space that were visited, so we can back up.

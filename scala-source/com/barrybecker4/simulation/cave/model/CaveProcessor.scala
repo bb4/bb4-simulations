@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave.model
 
-import com.barrybecker4.common.math.Range
+import com.barrybecker4.math.Range
 import com.barrybecker4.simulation.cave.model.kernal.BasicKernel
 import com.barrybecker4.simulation.cave.model.kernal.Kernel
 import com.barrybecker4.simulation.cave.model.kernal.RadialKernel

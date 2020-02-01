@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.trading.charts
 import java.awt.Graphics
 
 import com.barrybecker4.common.format.CurrencyFormatter
-import com.barrybecker4.common.math.function.Function
+import com.barrybecker4.math.function.Function
 import com.barrybecker4.simulation.trading.model.runner.StockSeries
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._

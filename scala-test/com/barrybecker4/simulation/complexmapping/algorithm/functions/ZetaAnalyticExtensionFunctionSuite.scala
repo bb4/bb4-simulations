@@ -3,7 +3,7 @@
  */
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
-import com.barrybecker4.common.math.ComplexNumber
+import com.barrybecker4.math.ComplexNumber
 import org.scalatest.FunSuite
 
 
@@ -14,31 +14,31 @@ class ZetaAnalyticExtensionFunctionSuite extends FunSuite {
 
   test("z(2) with n=1000") {
     assertResult(ComplexNumber(1.6349839001848923, 0)) {
-      fun.compute(ComplexNumber(2.0, 0), 100)
+      fun.compute(ComplexNumber(2.0), 100)
     }
   }
 
   test("z(1) with n=1") {
-    assertResult(ComplexNumber(Double.PositiveInfinity, 0)) {
-      fun.compute(ComplexNumber(1.0, 0), 1)
+    assertResult(ComplexNumber(0)) {
+      fun.compute(ComplexNumber(1.0), 1)
     }
   }
 
   test("z(0) with n=100 should be 1/2") {
-    assertResult(ComplexNumber(-0.5, 0)) {
-      fun.compute(ComplexNumber(0, 0), 100)
+    assertResult(ComplexNumber(-0.5)) {
+      fun.compute(ComplexNumber(0), 100)
     }
   }
 
   test("z(1, i) with n=1") {
-    assertResult(ComplexNumber(Double.PositiveInfinity, 0)) {
+    assertResult(ComplexNumber(0)) {
       fun.compute(ComplexNumber(1.0, 1.0), 1)
     }
   }
 
   test("z(-1) with n=100 should be -1/12") {
     assertResult(ComplexNumber(-0.08282925200144968, 0)) {  // this should be about -1/12
-      fun.compute(ComplexNumber(-1, 0), 100)
+      fun.compute(ComplexNumber(-1), 100)
     }
   }
 
@@ -61,7 +61,7 @@ class ZetaAnalyticExtensionFunctionSuite extends FunSuite {
   }
 
   test("z(1, i) with n=2") {
-    assertResult(ComplexNumber(Double.PositiveInfinity)) {
+    assertResult(ComplexNumber(0)) {
       fun.compute(ComplexNumber(1.0, 1.0), 2)
     }
   }

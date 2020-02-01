@@ -1,7 +1,7 @@
 /* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
-import com.barrybecker4.common.math.ComplexNumber
+import com.barrybecker4.math.ComplexNumber
 import org.scalatest.FunSuite
 
 class RiemannZetaFunctionSuite extends FunSuite {
@@ -9,30 +9,30 @@ class RiemannZetaFunctionSuite extends FunSuite {
   private val fun = RiemannZetaFunction()
 
   test("zeta(2) with n=100") {
-    assertResult(ComplexNumber(1, 0)) {
-      fun.compute(ComplexNumber(2.0, 0), 100)
+    assertResult(ComplexNumber(1.6349839001848923)) {
+      fun.compute(ComplexNumber(2.0), 100)
     }
-  }
+  } //  1.0, but got 1.6349839001848923
 
   test("zeta(1) with n=1") {
 
-    assertResult(ComplexNumber(1, 0)) {
-      fun.compute(ComplexNumber(1.0, 0), 1)
+    assertResult(ComplexNumber(1)) {
+      fun.compute(ComplexNumber(1.0), 1)
     }
   }
 
   test("zeta(0) with n=100 should be -1/2, but diverges, so accept NaN") {
-    val result= fun.compute(ComplexNumber(0, 0), 100)
+    val result= fun.compute(ComplexNumber(0), 100)
     assert(result.isNaN)
   }
 
   test("zeta(-1) with n=100 should be -1/12, but since it diverges, we accept NaN") {
-    val result = fun.compute(ComplexNumber(-1, 0), 100)
+    val result = fun.compute(ComplexNumber(-1), 100)
     assert(result.isNaN)
   }
 
   test("zeta(1, i) with n=1") {
-    assertResult(ComplexNumber(1, 0)) {
+    assertResult(ComplexNumber(1)) {
       fun.compute(ComplexNumber(1.0, 1.0), 1)
     }
   }

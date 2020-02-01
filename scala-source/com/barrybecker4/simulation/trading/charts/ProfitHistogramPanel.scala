@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.trading.charts
 
 import com.barrybecker4.common.format.CurrencyFormatter
-import com.barrybecker4.common.math.function.LinearFunction
-import com.barrybecker4.common.math.function.LogFunction
+import com.barrybecker4.math.function.LinearFunction
+import com.barrybecker4.math.function.LogFunction
 import com.barrybecker4.simulation.trading.options.GraphingOptions
 import com.barrybecker4.ui.renderers.HistogramRenderer
 import javax.swing._

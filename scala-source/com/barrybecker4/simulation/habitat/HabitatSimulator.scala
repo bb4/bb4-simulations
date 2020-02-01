@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.habitat
 
 import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.common.math.MathUtil
+import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.habitat.creatures.Populations

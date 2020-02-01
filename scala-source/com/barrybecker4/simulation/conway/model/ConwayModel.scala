@@ -13,7 +13,6 @@ import ConwayModel._
 
 /**
   * Communicates changing dynamic options to ConwayProcessor and controls the rendering.
-  *
   * @author Barry Becker
   */
 object ConwayModel {
@@ -66,25 +65,25 @@ class ConwayModel() {
 
   def getScale: Double = this.scale
   def setWrapGrid(wrap: Boolean): Unit = { this.wrapGrid = wrap }
-  def setShowShadows(showShadows: Boolean) { this.showShadows = showShadows }
-  def setNumStepsPerFrame(steps: Int) { this.numStepsPerFrame = steps }
+  def setShowShadows(showShadows: Boolean): Unit = { this.showShadows = showShadows }
+  def setNumStepsPerFrame(steps: Int): Unit = { this.numStepsPerFrame = steps }
   def getColormap: ColorMap = colorMap
 
-  def setRuleType(ruleType: RuleType.RuleType) {
+  def setRuleType(ruleType: RuleType.RuleType): Unit = {
     processor.setRuleType(ruleType)
   }
 
-  def setUseParallelComputation(use: Boolean) {
+  def setUseParallelComputation(use: Boolean): Unit = {
     useParallel = use
     processor.useParallel = use
   }
 
-  def requestRestart() { requestRestart(renderer.getWidth, renderer.getHeight) }
-  def requestNextStep() { nextStepRequested = true }
-  def setAlive(i: Int, j: Int) { processor.setAlive(i, j)}
+  def requestRestart(): Unit = { requestRestart(renderer.getWidth, renderer.getHeight) }
+  def requestNextStep(): Unit = { nextStepRequested = true }
+  def setAlive(i: Int, j: Int): Unit = { processor.setAlive(i, j)}
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
-  def doRender() { renderer.render() }
+  def doRender(): Unit = { renderer.render() }
 
   private def requestRestart(width: Int, height: Int): Unit = {
     try {

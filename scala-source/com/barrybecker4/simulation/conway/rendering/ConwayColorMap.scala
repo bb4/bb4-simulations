@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2014-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.conway.rendering
 
-import com.barrybecker4.common.math.Range
+import com.barrybecker4.math.Range
 import com.barrybecker4.ui.util.ColorMap
 import java.awt._
 import scala.collection.immutable.Range.BigDecimal

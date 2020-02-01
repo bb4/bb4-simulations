@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2017 - 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.parameter
 
-import com.barrybecker4.common.math.MathUtil
-import com.barrybecker4.common.math.function.LinearFunction
+import com.barrybecker4.math.MathUtil
+import com.barrybecker4.math.function.LinearFunction
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.simulation.common.ui.DistributionSimulator
 import com.barrybecker4.ui.renderers.HistogramRenderer

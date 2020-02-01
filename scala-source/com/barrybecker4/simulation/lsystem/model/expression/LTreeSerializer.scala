@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression
 
-import com.barrybecker4.common.expression.{LEFT_PAREN, RIGHT_PAREN, TreeNode}
+import com.barrybecker4.expression.{LEFT_PAREN, RIGHT_PAREN, TreeNode}
 
 
 /**

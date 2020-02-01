@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.water.ui
 
 import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
-import com.barrybecker4.common.math.function.ErrorFunction
+import com.barrybecker4.math.function.ErrorFunction
 import com.barrybecker4.simulation.water.model.Environment
 import InteractionHandler.X_SCALE
 

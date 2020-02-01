@@ -3,12 +3,12 @@ package com.barrybecker4.simulation.funcinverse
 
 import java.awt.{Color, Graphics}
 
-import com.barrybecker4.common.math.function.{ArrayFunction, Function, LinearFunction}
-import com.barrybecker4.common.math.interpolation.InterpolationMethod
+import com.barrybecker4.math.function.{ArrayFunction, Function, LinearFunction}
+import com.barrybecker4.math.interpolation.InterpolationMethod
 import com.barrybecker4.simulation.common.ui.{DistributionSimulator, Simulator}
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing.JPanel
-import com.barrybecker4.common.math.interpolation.LINEAR
+import com.barrybecker4.math.interpolation.LINEAR
 
 
 /**

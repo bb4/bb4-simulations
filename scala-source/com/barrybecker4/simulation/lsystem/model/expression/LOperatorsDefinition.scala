@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression
 
-import com.barrybecker4.common.expression.Operator
-import com.barrybecker4.common.expression.OperatorsDefinition
-import com.barrybecker4.common.expression.TreeNode
+import com.barrybecker4.expression.Operator
+import com.barrybecker4.expression.OperatorsDefinition
+import com.barrybecker4.expression.TreeNode
 import scala.collection.mutable.ListBuffer
 
 

@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.runner
 
-import com.barrybecker4.common.math.function.Function
+import com.barrybecker4.math.function.Function
 import scala.collection.mutable.ArrayBuffer
 
 

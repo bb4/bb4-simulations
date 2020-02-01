@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer
 
-import com.barrybecker4.common.math.ComplexNumber
+import com.barrybecker4.math.ComplexNumber
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.fractalexplorer.algorithm._

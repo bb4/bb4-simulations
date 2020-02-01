@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.rendering
 
-import com.barrybecker4.common.expression.TreeNode
+import com.barrybecker4.expression.TreeNode
 import com.barrybecker4.simulation.lsystem.model.expression.{LExpressionParser, LTreeSerializer}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt.Color

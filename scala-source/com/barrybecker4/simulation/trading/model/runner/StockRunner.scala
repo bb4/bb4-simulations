@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2017 - 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.runner
 
-import com.barrybecker4.common.math.function.HeightFunction
+import com.barrybecker4.math.function.HeightFunction
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions
 import com.barrybecker4.simulation.trading.options.TradingOptions
-import com.barrybecker4.common.math.Range
+import com.barrybecker4.math.Range
 
 
 /**

@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.graphing
 
-import com.barrybecker4.common.math.function.{ArrayFunction, ErrorFunction}
-import com.barrybecker4.common.math.interpolation.InterpolationMethod
+import com.barrybecker4.math.function.{ArrayFunction, ErrorFunction}
+import com.barrybecker4.math.interpolation.InterpolationMethod
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
@@ -44,7 +44,7 @@ class GraphOptionsDialog(parent: Component, simulator: Simulator)
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[GraphSimulator]
-    var func: com.barrybecker4.common.math.function.Function = FunctionType.VALUES(functionCombo.getSelectedIndex).function
+    var func: com.barrybecker4.math.function.Function = FunctionType.VALUES(functionCombo.getSelectedIndex).function
     func match {
       case function: ArrayFunction =>
         val method: InterpolationMethod = interpolationTypeCombo.getSelectedItem.asInstanceOf[InterpolationMethod]

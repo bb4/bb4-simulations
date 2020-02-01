@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.model.runner
 
-import com.barrybecker4.common.math.function.HeightFunction
+import com.barrybecker4.math.function.HeightFunction
 
 /**
   * Contains the result of a stock simulation run.

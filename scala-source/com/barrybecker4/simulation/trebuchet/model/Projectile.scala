@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model
 
-import com.barrybecker4.common.math.LinearUtil
+import com.barrybecker4.math.LinearUtil
 import javax.vecmath.Vector2d
 import java.awt._
 import RenderablePart._
