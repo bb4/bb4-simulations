@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
-import com.barrybecker4.math.ComplexNumber
+import com.barrybecker4.math.complex.ComplexNumber
 
 /**
   * Calculate fractal values for a row.

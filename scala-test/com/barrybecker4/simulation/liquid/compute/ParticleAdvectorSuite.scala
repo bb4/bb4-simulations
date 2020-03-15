@@ -1,15 +1,14 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.compute
 
-import com.barrybecker4.math.LinearUtil
+import com.barrybecker4.math.linear.LinearUtil
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
-
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import ParticleAdvectorSuite._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 
 /**
@@ -22,7 +21,7 @@ object ParticleAdvectorSuite {
   private val TOL = 0.0000000001
 }
 
-class ParticleAdvectorSuite extends FunSuite {
+class ParticleAdvectorSuite extends AnyFunSuite {
 
   /** instance under test. */
   private var particleAdvector: ParticleAdvector = _

@@ -6,7 +6,7 @@ import javax.vecmath.Vector2d
 
 import com.barrybecker4.simulation.liquid.model._
 import org.junit.Assert.{assertEquals, assertTrue}
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import VelocityUpdaterSuite._
 
 /**
@@ -22,7 +22,7 @@ object VelocityUpdaterSuite {
   private val DIM = 6
 }
 
-class VelocityUpdaterSuite extends FunSuite {
+class VelocityUpdaterSuite extends AnyFunSuite {
 
   /** instance under test. */
   private var velocityUpdater: VelocityUpdater = _

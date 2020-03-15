@@ -3,12 +3,12 @@
  */
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
-import com.barrybecker4.math.ComplexNumber
-import org.scalatest.FunSuite
+import com.barrybecker4.math.complex.ComplexNumber
+import org.scalatest.funsuite.AnyFunSuite
 
 
 // This is the analytic extension of the zeta function
-class ZetaAnalyticExtensionFunctionSuite extends FunSuite {
+class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite {
 
   private val fun = ZetaAnalyticExtensionFunction()
 

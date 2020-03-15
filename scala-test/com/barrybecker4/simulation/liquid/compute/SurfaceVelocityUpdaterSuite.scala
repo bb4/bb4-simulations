@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
 import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
 import org.junit.Assert.assertEquals
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import SurfaceVelocityUpdaterSuite._
 
 
@@ -24,7 +24,7 @@ object SurfaceVelocityUpdaterSuite {
   private val TOL = 0.0000000001
 }
 
-class SurfaceVelocityUpdaterSuite extends FunSuite {
+class SurfaceVelocityUpdaterSuite extends AnyFunSuite {
 
   /** instance under test. */
   private var svUpdater: SurfaceVelocityUpdater = _

@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.graphing
 
 import com.barrybecker4.math.function.Function
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.renderers.{AbstractFunctionRenderer, SingleFunctionRenderer}
 import FunctionType.DIAGONAL

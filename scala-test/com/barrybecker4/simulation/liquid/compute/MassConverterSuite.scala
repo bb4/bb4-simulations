@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
 
 import org.junit.Assert.assertEquals
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import MassConserverSuite.{DT, DIM, EPS, TOL}
 import com.barrybecker4.simulation.liquid.model.UniformGrid
 
@@ -13,7 +13,7 @@ import com.barrybecker4.simulation.liquid.model.UniformGrid
 /**
   * @author Barry Becker
   */
-object MassConserverSuite extends FunSuite {
+object MassConserverSuite extends AnyFunSuite {
   /** delta time */
   val DT = 0.1
   val EPS = 0.0000000001
@@ -21,7 +21,7 @@ object MassConserverSuite extends FunSuite {
   val TOL = 0.000000000001
 }
 
-class MassConserverTest extends FunSuite {
+class MassConserverTest extends AnyFunSuite {
 
   /** instance under test. */
   private var conserver: MassConserver = _

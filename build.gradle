@@ -6,9 +6,12 @@ description = 'A Scala framework for creating simulations. Implementations inclu
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
 version = '1.6-SNAPSHOT'
+ext {
+    archivesBaseName = 'bb4-simulation'
+    mainClass = "com.barrybecker4.simulation.dice.DiceSimulator"
+}
 apply from: 'https://raw.githubusercontent.com/bb4/bb4-common/master/bb4.gradle'
-project.archivesBaseName = 'bb4-simulation'
-mainClassName = "com.barrybecker4.simulation.dice.DiceSimulator"
+
 
 dependencies {
     def javaHome = System.properties.'java.home'

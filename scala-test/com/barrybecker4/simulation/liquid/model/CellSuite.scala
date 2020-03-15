@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.liquid.compute.SurfaceVelocityUpdater
 import com.barrybecker4.simulation.liquid.compute.VelocityUpdater
 import javax.vecmath.Vector2d
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import CellSuite._
 
 
@@ -18,7 +18,7 @@ object CellSuite {
   private val DT = 0.1
 }
 
-class CellSuite extends FunSuite {
+class CellSuite extends AnyFunSuite {
   test("CellStatus1") {
 
     val cb = new CellBlock

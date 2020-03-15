@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.model.expression
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import com.barrybecker4.common.testsupport.strip
 
-class LExpressionParserSuite extends FunSuite {
+class LExpressionParserSuite extends AnyFunSuite {
 
   /** instance under test */
   val parser = new LExpressionParser

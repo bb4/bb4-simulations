@@ -1,10 +1,10 @@
 /* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
-import com.barrybecker4.math.ComplexNumber
-import org.scalatest.FunSuite
+import com.barrybecker4.math.complex.ComplexNumber
+import org.scalatest.funsuite.AnyFunSuite
 
-class RiemannZetaFunctionSuite extends FunSuite {
+class RiemannZetaFunctionSuite extends AnyFunSuite {
 
   private val fun = RiemannZetaFunction()
 

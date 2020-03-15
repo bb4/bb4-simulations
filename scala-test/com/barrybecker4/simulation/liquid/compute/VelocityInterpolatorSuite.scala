@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.liquid.model._
 import org.junit.Test
 import javax.vecmath.Vector2d
 import org.junit.Assert.assertEquals
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import VelocityInterpolatorSuite._
 
 
@@ -17,7 +17,7 @@ object VelocityInterpolatorSuite {
   private val TEST_COORDS = Array(Array(2.1, 3.7), Array(2.0, 2.0), Array(2.5, 2.0), Array(2.0, 2.5), Array(2.1, 2.9), Array(3.5, 2.0))
 }
 
-class VelocityInterpolatorSuite extends FunSuite {
+class VelocityInterpolatorSuite extends AnyFunSuite {
 
   /** instance under test. */
   private var interpolator: VelocityInterpolator = _

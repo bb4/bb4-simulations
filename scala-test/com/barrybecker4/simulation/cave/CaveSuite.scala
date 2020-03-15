@@ -3,7 +3,7 @@
 package com.barrybecker4.simulation.cave
 
 import com.barrybecker4.simulation.cave.model.Cave
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random
 
@@ -13,7 +13,7 @@ object CaveSuite {
   private val CEILING = 0.8
 }
 
-class CaveSuite extends FunSuite {
+class CaveSuite extends AnyFunSuite {
 
   val RND: Random = new Random()
   RND.setSeed(0)

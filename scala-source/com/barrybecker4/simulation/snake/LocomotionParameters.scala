@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake
 
-import com.barrybecker4.math.{SINE_WAVE, WaveType}
+import com.barrybecker4.math.function.{SINE_WAVE, WaveType}
 import LocomotionParameters._
 
 /**

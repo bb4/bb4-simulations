@@ -3,17 +3,17 @@ package com.barrybecker4.simulation.liquid.config
 
 import com.barrybecker4.common.geometry.ByteLocation
 import javax.vecmath.Vector2d
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import com.barrybecker4.simulation.liquid.config.SourceSuite.{LOCATION_START, LOCATION_STOP, VELOCITY1}
 
 
-object SourceSuite extends FunSuite {
+object SourceSuite extends AnyFunSuite {
   val LOCATION_START = new ByteLocation(1, 1)
   val LOCATION_STOP = new ByteLocation(1, 1)
   val VELOCITY1 = new Vector2d(1, 1)
 }
 
-class TestSource extends FunSuite {
+class TestSource extends AnyFunSuite {
   /** class under test. */
   private var src: Source = _
 

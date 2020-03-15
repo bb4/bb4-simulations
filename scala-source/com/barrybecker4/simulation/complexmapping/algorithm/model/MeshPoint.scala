@@ -4,7 +4,7 @@
 
 package com.barrybecker4.simulation.complexmapping.algorithm.model
 
-import com.barrybecker4.math.ComplexNumber
+import com.barrybecker4.math.complex.ComplexNumber
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.ComplexFunction
 import javax.vecmath.Point2d
 

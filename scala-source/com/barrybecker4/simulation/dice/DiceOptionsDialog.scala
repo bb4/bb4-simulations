@@ -39,7 +39,7 @@ class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
     paramPanel
   }
 
-  override protected def ok() {
+  override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[DiceSimulator]
     simulator.setNumDice(numDiceField.getIntValue)

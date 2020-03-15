@@ -1,8 +1,8 @@
 package com.barrybecker4.simulation.water.model
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TriDiagonalMatrixSolverSuite extends FunSuite {
+class TriDiagonalMatrixSolverSuite extends AnyFunSuite {
 
   val solver = TriDiagonalMatrixSolver(0.0001)
 

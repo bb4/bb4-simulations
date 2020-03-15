@@ -5,7 +5,7 @@ import java.awt.{BorderLayout, Dimension, GridLayout}
 import java.awt.event.{ActionEvent, ActionListener}
 import javax.swing._
 
-import com.barrybecker4.math.ComplexNumberRange
+import com.barrybecker4.math.complex.ComplexNumberRange
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}

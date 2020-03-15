@@ -1,12 +1,12 @@
 /** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * @author Barry
   */
-class GrayScottModelSuite extends FunSuite {
+class GrayScottModelSuite extends AnyFunSuite {
 
 
   test("periodic mid") {

@@ -30,17 +30,17 @@ class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
   AppContext.initialize("ENGLISH", List("com.barrybecker4.ui.message"), new Log)
   initHistogram()
 
-  def setNumDice(numDice: Int) {
+  def setNumDice(numDice: Int): Unit = {
     options.numDice = numDice
     initHistogram()
   }
 
-  def setNumSides(numSides: Int) {
+  def setNumSides(numSides: Int): Unit = {
     options.numSides = numSides
     initHistogram()
   }
 
-  override protected def initHistogram() {
+  override protected def initHistogram(): Unit = {
     data = new Array[Int](options.numDice * (options.numSides - 1) + 1)
     histogram =
       new HistogramRenderer(data, new LinearFunction(1.0, -options.numDice), true)

@@ -4,8 +4,8 @@ package com.barrybecker4.simulation.fractalexplorer.algorithm
 import java.awt.Image
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.common.geometry.IntLocation
-import com.barrybecker4.math.ComplexNumber
-import com.barrybecker4.math.ComplexNumberRange
+import com.barrybecker4.math.complex.ComplexNumber
+import com.barrybecker4.math.complex.ComplexNumberRange
 import com.barrybecker4.simulation.common.Profiler
 import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
 import com.barrybecker4.ui.util.ColorMap

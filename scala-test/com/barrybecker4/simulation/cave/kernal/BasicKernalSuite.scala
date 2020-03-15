@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.cave.kernal
 
 import com.barrybecker4.simulation.cave.model.Cave
 import com.barrybecker4.simulation.cave.model.kernal.BasicKernel
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import BasicKernalSuite._
 import org.scalactic.{Equality, TolerantNumerics}
 
@@ -19,7 +19,7 @@ object BasicKernalSuite  {
   private val CEILING = 0.9
 }
 
-class BasicKernalSuite extends FunSuite {
+class BasicKernalSuite extends AnyFunSuite {
 
   /** instance under test */
   private var kernel: BasicKernel = _

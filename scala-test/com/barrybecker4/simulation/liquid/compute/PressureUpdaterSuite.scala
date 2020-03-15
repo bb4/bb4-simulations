@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.liquid.compute
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
 import org.junit.Assert.assertEquals
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import PressureUpdaterSuite._
 
 
@@ -18,7 +18,7 @@ object PressureUpdaterSuite {
   private val TOL = 0.0000000001
 }
 
-class PressureUpdaterSuite extends FunSuite {
+class PressureUpdaterSuite extends AnyFunSuite {
   /** instance under test. */
   private var pressureUpdater: PressureUpdater = _
 

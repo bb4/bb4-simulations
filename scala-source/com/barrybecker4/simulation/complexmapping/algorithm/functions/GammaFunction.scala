@@ -1,7 +1,7 @@
 /* Copyright by Barry G. Becker, 2020. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
-import com.barrybecker4.math.ComplexNumber
+import com.barrybecker4.math.complex.ComplexNumber
 import GammaFunction._
 
 object GammaFunction {
