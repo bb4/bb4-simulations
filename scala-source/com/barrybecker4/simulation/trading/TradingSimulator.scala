@@ -21,6 +21,7 @@ import TradingSimulatorConsts._
 object TradingSimulatorConsts {
   val TIME_STEP = 1.0
   val DEFAULT_STEPS_PER_FRAME = 100
+  val DEFAULT_SIZE = new Dimension(1200, 900)
 }
 
 /**
@@ -32,7 +33,8 @@ object TradingSimulatorConsts {
 object TradingSimulator extends App{
   val simulator = new TradingSimulator
   simulator.setPaused(false)
-  new AnimationFrame(simulator)
+  val af = new AnimationFrame(simulator)
+  af.setSize(DEFAULT_SIZE)
 }
 
 class TradingSimulator() extends Simulator("Stock Market Simulation") {

@@ -17,8 +17,8 @@ class StockSeries(var maxNum: Int) extends ArrayBuffer[Function] {
     if (size > maxNum) remove(0)
   }
 
-  def clearSeries(newNumeriesToKeep: Int): Unit = {
-    maxNum = newNumeriesToKeep
+  def clearSeries(newNumSeriesToKeep: Int): Unit = {
+    maxNum = newNumSeriesToKeep
     super.clear()
   }
 }

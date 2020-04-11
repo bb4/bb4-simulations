@@ -16,16 +16,18 @@ import javax.swing._
 class StockChartPanel() extends JPanel {
 
   private val stockSeries = new StockSeries(10)
-  private val stockChart = new MultipleFunctionRenderer(stockSeries.toSeq)
-  stockChart.setXFormatter(new CurrencyFormatter)
 
   def addSeries(function: Function): Unit = {
     stockSeries.append(function)
   }
 
-  def clear(numRecentSeries: Int): Unit = { stockSeries.clearSeries(numRecentSeries) }
+  def clear(numRecentSeries: Int): Unit = {
+    stockSeries.clearSeries(numRecentSeries)
+  }
 
   override def paint(g: Graphics): Unit = {
+    val stockChart = new MultipleFunctionRenderer(stockSeries.toSeq)
+    stockChart.setXFormatter(new CurrencyFormatter)
     stockChart.setSize(getWidth, getHeight)
     stockChart.paint(g)
   }
