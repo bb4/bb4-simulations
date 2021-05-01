@@ -32,13 +32,13 @@ class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
     useFixedSize = fixed
   }
 
-  private def commonInit() {
+  private def commonInit(): Unit = {
     algorithm = new HenonAlgorithm
     initCommonUI()
     reset()
   }
 
-  override protected def reset() {
+  override protected def reset(): Unit = {
     algorithm.reset()
     setNumStepsPerFrame(HenonPhaseExplorer.DEFAULT_STEPS_PER_FRAME)
     if (options != null) options.reset()
@@ -47,7 +47,7 @@ class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
   def getUseFixedSize: Boolean = useFixedSize
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = HenonPhaseExplorer.INITIAL_TIME_STEP
-  override def setScale(scale: Double) {}
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
   def getColorMap: ColorMap = algorithm.getColorMap
 

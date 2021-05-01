@@ -34,7 +34,9 @@ object SnakeSimulator {
     new DoubleParameter(LocomotionParameters.WAVE_PERIOD, 0.5, 9.0, "wave period")
   )
 
-  private val INITIAL_PARAMS: NumericParameterArray = new NumericParameterArray(PARAMS, 5, new Random(1))
+  private val INITIAL_PARAMS: NumericParameterArray =
+    new NumericParameterArray(PARAMS, 5, new Random(1))
+
   /** initial time step */
   val INITIAL_TIME_STEP = 0.2
   // size of the background grid
@@ -60,7 +62,7 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
   private var renderer: SnakeRenderer = _
   commonInit()
 
-  def this() { this(SnakeType.LONG_SNAKE.snakeData) }
+  def this() = { this(SnakeType.LONG_SNAKE.snakeData) }
 
   override protected def reset(): Unit = { snake.reset()}
   override protected def getInitialTimeStep: Double = SnakeSimulator.INITIAL_TIME_STEP

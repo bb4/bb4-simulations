@@ -32,7 +32,7 @@ class RDProfiler private() extends Profiler {
   add(RDProfiler.CONCURRENT_CALCULATION, Profiler.CALCULATION)
   private var numFrames = 0
 
-  override def print() {
+  override def print(): Unit = {
     super.print()
     val calcTime = getCalcTime
     val renderingTime = getRenderingTime
@@ -42,7 +42,7 @@ class RDProfiler private() extends Profiler {
     printMessage("FPS: " + FormatUtil.formatNumber((calcTime + renderingTime) / numFrames))
   }
 
-  override def resetAll() {
+  override def resetAll(): Unit = {
     super.resetAll()
     numFrames = 0
   }
@@ -50,7 +50,7 @@ class RDProfiler private() extends Profiler {
   def startConcurrentCalculationTime(): Unit  = start(RDProfiler.CONCURRENT_CALCULATION)
   def stopConcurrentCalculationTime(): Unit = this.stop(RDProfiler.CONCURRENT_CALCULATION)
 
-  override def stopRenderingTime() {
+  override def stopRenderingTime(): Unit = {
     super.stopRenderingTime()
     numFrames += 1
   }

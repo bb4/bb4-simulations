@@ -19,7 +19,7 @@ class Traveler private[algorithm](var x: Double, var y: Double, val color: Color
   private[algorithm] def getLastY = lastY
 
   /** increment forward one iteration */
-  def increment() {
+  def increment(): Unit = {
     lastX = x
     lastY = y
     val sin = Math.sin(params.angle)

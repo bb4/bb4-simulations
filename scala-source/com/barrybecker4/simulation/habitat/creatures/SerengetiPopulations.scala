@@ -7,7 +7,7 @@ package com.barrybecker4.simulation.habitat.creatures
   * @author Barry Becker
   */
 class SerengetiPopulations extends Populations {
-  override def addPopulations() {
+  override def addPopulations(): Unit = {
     this.append(Population.createPopulation(CreatureType.GRASS, 40))
     this.append(Population.createPopulation(CreatureType.WILDEBEEST, 10))
     this.append(Population.createPopulation(CreatureType.RAT, 15))

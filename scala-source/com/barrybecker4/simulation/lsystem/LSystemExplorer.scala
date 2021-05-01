@@ -55,7 +55,7 @@ class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
   private[lsystem] def getUseFixedSize = useFixedSize
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = LSystemExplorer.INITIAL_TIME_STEP
-  override def setScale(scale: Double) {}
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def timeStep: Double = {
@@ -66,7 +66,7 @@ class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
     tStep
   }
 
-  override def paint(g: Graphics) {
+  override def paint(g: Graphics): Unit = {
     if (g == null) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()

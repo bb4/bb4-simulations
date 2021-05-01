@@ -57,16 +57,16 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
     sliderProps
   }
 
-  def reset() { sliderGroup.reset() }
+  def reset(): Unit = { sliderGroup.reset() }
 
   /** One of the sliders was moved. */
-  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double) {
+  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     if (sliderName == LiquidDynamicOptions.VISCOSITY_SLIDER) liquidSim.getEnvironment.setViscosity(value)
     else if (sliderName == LiquidDynamicOptions.B0_SLIDER) liquidSim.getEnvironment.setB0(value)
     else if (sliderName == LiquidDynamicOptions.TIMESTEP_SLIDER) liquidSim.setTimeStep(value)
   }
 
-  override def actionPerformed(e: ActionEvent) {
+  override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource eq advectionOnlyCheckBox) liquidSim.setAdvectionOnly(advectionOnlyCheckBox.isSelected)
   }
 }

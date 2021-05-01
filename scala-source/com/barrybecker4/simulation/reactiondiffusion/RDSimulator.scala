@@ -29,19 +29,19 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   /**
     * @param fixed if true then the render area does not resize automatically.
     */
-  def setUseFixedSize(fixed: Boolean) {
+  def setUseFixedSize(fixed: Boolean): Unit = {
     viewer.setUseFixedSize(fixed)
   }
 
   def getUseFixedSize: Boolean = viewer.getUseFixedSize
 
-  def setUseOffscreenRendering(use: Boolean) {
+  def setUseOffscreenRendering(use: Boolean): Unit = {
     viewer.setUseOffscreenRendering(use)
   }
 
   def getUseOffScreenRendering: Boolean = viewer.getUseOffScreenRendering
 
-  override def setPaused(bPaused: Boolean) {
+  override def setPaused(bPaused: Boolean): Unit = {
     super.setPaused(bPaused)
     if (isPaused) {
       RDProfiler.getInstance.print()
@@ -61,7 +61,7 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
 
   def getInteractionHandler: InteractionHandler = handler
 
-  override protected def reset() {
+  override protected def reset(): Unit = {
     grayScott.reset()
     rdOptions.reset()
   }
@@ -78,14 +78,14 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     tStep
   }
 
-  override def paint(g: Graphics) {
+  override def paint(g: Graphics): Unit = {
     super.paint(g)
     RDProfiler.getInstance.startRenderingTime()
     viewer.paint(g)
     RDProfiler.getInstance.stopRenderingTime()
   }
 
-  override def setScale(scale: Double) {}
+  override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {

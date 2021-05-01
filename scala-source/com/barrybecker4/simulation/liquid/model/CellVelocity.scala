@@ -23,7 +23,7 @@ class CellVelocity {
   //vjp(0) = vjp(1)
 
   /** global swap of fields (use with care). (hack) */
-  def step() {current = 1 - current}
+  def step(): Unit = {current = 1 - current}
 
   private[model] def passThrough(): Unit = {
     uip(1 - current) = uip(current) // + dt * forceX;

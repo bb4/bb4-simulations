@@ -29,10 +29,10 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
   private var mouse3Down = false
 
   def setForce(force: Double): Unit = { this.force = force }
-  private[ui] def setSourceDensity(sourceDensity: Double) { this.sourceDensity = sourceDensity }
+  private[ui] def setSourceDensity(sourceDensity: Double): Unit = { this.sourceDensity = sourceDensity }
 
   /** Make waves or adds ink when dragging depending on the mouse key held down. */
-  override def mouseDragged(e: MouseEvent) {
+  override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
     val i = (currentX / scale).toInt
@@ -54,7 +54,7 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
   }
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
-  private def applyChange(i: Int, j: Int, weight: Double) {
+  private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     // if the left mouse is down, make waves
     if (mouse1Down) {
       val fu = weight * force * (currentX - lastX) / scale
@@ -76,15 +76,15 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent) {}
+  override def mouseClicked(e: MouseEvent): Unit = {}
 
   /** Remember the mouse button that is pressed. */
-  override def mousePressed(e: MouseEvent) {
+  override def mousePressed(e: MouseEvent): Unit = {
     mouse1Down = e.getButton == MouseEvent.BUTTON1
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent) {}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

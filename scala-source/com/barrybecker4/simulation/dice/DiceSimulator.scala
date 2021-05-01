@@ -16,7 +16,7 @@ import com.barrybecker4.ui.util.Log
   * @author Barry Becker
   */
 object DiceSimulator {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val sim = new DiceSimulator
     sim.setNumDice(3)
     sim.setNumSides(6)

@@ -156,16 +156,16 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     cb
   }
 
-  def reset() {
+  def reset(): Unit = {
     sliderGroup.reset()
   }
 
-  override def itemStateChanged(e: ItemEvent){
+  override def itemStateChanged(e: ItemEvent): Unit = {
     gs.setInitializer(initialConditionsDroplist.getSelectedItem.asInstanceOf[Initializer])
   }
 
   /** One of the buttons was pressed. */
-  override def actionPerformed(e: ActionEvent) {
+  override def actionPerformed(e: ActionEvent): Unit = {
     val renderingOptions = simulator.getRenderingOptions
     if (e.getSource eq showU) renderingOptions.setShowingU(!renderingOptions.isShowingU)
     else if (e.getSource eq showV) {
@@ -184,7 +184,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
   }
 
   /** One of the sliders was moved. */
-  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double) {
+  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
       case F_SLIDER => gs.getModel.setF(value)
       case K_SLIDER => gs.getModel.setK(value)

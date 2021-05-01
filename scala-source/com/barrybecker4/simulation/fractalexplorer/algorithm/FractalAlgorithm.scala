@@ -195,7 +195,7 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
   private class Worker(fromRow: Int, toRow: Int) extends Runnable {
 
     /** Do a chunk of work (i.e. compute the specified rows) */
-    private def computeChunk(fromRow: Int, toRow: Int) {
+    private def computeChunk(fromRow: Int, toRow: Int): Unit = {
       val width: Int = model.getWidth
       for (y <- fromRow until toRow) rowCalculator.calculateRow(width, y)
     }

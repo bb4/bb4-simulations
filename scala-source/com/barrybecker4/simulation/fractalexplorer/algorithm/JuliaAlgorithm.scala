@@ -20,7 +20,7 @@ class JuliaAlgorithm extends FractalAlgorithm(JuliaAlgorithm.INITIAL_RANGE) {
 
   private var seed: ComplexNumber = JuliaAlgorithm.DEFAULT_JULIA_SEED
 
-  def setJuliaSeed(seed: ComplexNumber) {
+  def setJuliaSeed(seed: ComplexNumber): Unit = {
     println("setting jSeed to " + seed)
     this.seed = seed
   }

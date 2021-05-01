@@ -66,7 +66,7 @@ class Segment(width1: Double, width2: Double, var length: Double,
   commonInit(width1, width2, pos, segmentIndex, snake)
 
 
-  def this(width1: Double, width2: Double, length: Double, segmentInFront: Segment, segmentIndex: Int, snake: Snake) {
+  def this(width1: Double, width2: Double, length: Double, segmentInFront: Segment, segmentIndex: Int, snake: Snake) = {
     this(width1, width2, length, getPos(segmentInFront, length), Some(segmentInFront), segmentIndex, snake)
     segmentInFront.segmentInBack = Some(this)
 
@@ -79,7 +79,7 @@ class Segment(width1: Double, width2: Double, var length: Double,
   }
 
   // head constructor
-  def this(width1: Double, width2: Double, length: Double, pos: Point2d, snake: Snake) {
+  def this(width1: Double, width2: Double, length: Double, pos: Point2d, snake: Snake) = {
     this(width1, width2, length, pos, None, 0, snake)
   }
 

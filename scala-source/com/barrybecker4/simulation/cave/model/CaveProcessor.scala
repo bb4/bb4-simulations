@@ -59,13 +59,13 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
   setKernelType(kernelType)
 
   /** Constructor that allows you to specify the dimensions of the cave */
-  def this(width: Int, height: Int) {
+  def this(width: Int, height: Int) = {
     this(width, height, DEFAULT_FLOOR_THRESH, DEFAULT_CEIL_THRESH, DEFAULT_LOSS_FACTOR, DEFAULT_EFFECT_FACTOR,
       KernelType.BASIC, DEFAULT_USE_PARALLEL)
   }
 
   /** Default no argument constructor */
-  def this() {
+  def this() = {
     this(CaveProcessor.DEFAULT_WIDTH, CaveProcessor.DEFAULT_HEIGHT)
   }
 

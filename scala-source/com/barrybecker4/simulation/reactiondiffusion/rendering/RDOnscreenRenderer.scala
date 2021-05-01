@@ -15,10 +15,10 @@ class RDOnscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRende
   extends RDRenderer(model, cmap, options) {
 
   /** Renders a rectangular strip of pixels. */
-  override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D) {
+  override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D): Unit = {
     val img = rect.getAsImage
     if (g2 != null) g2.drawImage(img, minX, 0, null)
   }
 
-  override protected def postRender(g2: Graphics2D) {}
+  override protected def postRender(g2: Graphics2D): Unit = {}
 }

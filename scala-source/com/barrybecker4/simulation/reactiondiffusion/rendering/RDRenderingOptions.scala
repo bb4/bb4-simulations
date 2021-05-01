@@ -15,18 +15,18 @@ class RDRenderingOptions() {
   private var specularConst: Double = 0
   private var runParallelized = true
 
-  def setParallelized(useParallelization: Boolean) { runParallelized = useParallelization}
+  def setParallelized(useParallelization: Boolean): Unit = { runParallelized = useParallelization}
   def isParallelized: Boolean = runParallelized
 
-  def setHeightScale(h: Double) { heightScale = h }
+  def setHeightScale(h: Double): Unit = { heightScale = h }
   def getHeightScale: Double = heightScale
 
-  def setSpecular(s: Double) { specularConst = s}
+  def setSpecular(s: Double): Unit = { specularConst = s}
   def getSpecular: Double = specularConst
 
   def isShowingU: Boolean = this.showingU
-  def setShowingU(showingU: Boolean) {this.showingU = showingU}
+  def setShowingU(showingU: Boolean): Unit = {this.showingU = showingU}
 
   def isShowingV: Boolean = showingV
-  def setShowingV(showingV: Boolean) { this.showingV = showingV}
+  def setShowingV(showingV: Boolean): Unit = { this.showingV = showingV}
 }

@@ -93,7 +93,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
     textPanel
   }
 
-  private def updateFormulaText() {
+  private def updateFormulaText(): Unit = {
     val text = new StringBuilder
     text.append("term = ")
     if (currentParams.isDefaultMultiplier)
@@ -109,7 +109,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
     formulaText.setText(text.toString)
   }
 
-  def reset(){ sliderGroup.reset() }
+  def reset(): Unit = { sliderGroup.reset() }
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
@@ -119,7 +119,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   }
 
   /** One of the sliders was moved. */
-  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double) {
+  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     if (sliderName == DynamicOptions.PHASE_ANGLE_SLIDER) {
       currentParams = new TravelerParams(value, currentParams.multiplier, currentParams.offset)
       algorithm.setTravelerParams(currentParams)

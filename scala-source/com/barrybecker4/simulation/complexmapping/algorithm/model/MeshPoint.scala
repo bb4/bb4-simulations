@@ -10,7 +10,7 @@ import javax.vecmath.Point2d
 
 case class MeshPoint(pt: Point2d, value: Double) {
 
-  def this(x: Double, y: Double, value: Double) {
+  def this(x: Double, y: Double, value: Double) = {
     this(new Point2d(x, y), value)
   }
 

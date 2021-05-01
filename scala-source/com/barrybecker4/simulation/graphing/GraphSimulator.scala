@@ -30,12 +30,12 @@ class GraphSimulator private() extends Simulator("Graph") {
     initGraph()
   }
 
-  override protected def reset(){initGraph() }
+  override protected def reset(): Unit = { initGraph() }
   override protected def getInitialTimeStep = 1.0
   override def timeStep: Double = tStep
   override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
 
-  private def initGraph() {
+  private def initGraph(): Unit = {
     if (function == null)
       function = DIAGONAL.function
     graph = new SingleFunctionRenderer(function)

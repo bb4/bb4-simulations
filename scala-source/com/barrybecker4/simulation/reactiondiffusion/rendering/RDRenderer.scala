@@ -20,7 +20,7 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
   def getColorMap: ColorMap = renderingModel.getColorMap
 
   /** Draw the model representing the current state of the GrayScottController rd implementation. */
-  def render(g2: Graphics2D) {
+  def render(g2: Graphics2D): Unit = {
     val width = model.getWidth
     val numProcs = Runtime.getRuntime.availableProcessors
     val range = width / numProcs

@@ -70,12 +70,12 @@ class SimulatorApplet(args: Array[String], sim: Simulator) extends ApplicationAp
   }
 
   /** @param simulatorClassName name of the simulator class to show. */
-  def this(args: Array[String], simulatorClassName: String) {
+  def this(args: Array[String], simulatorClassName: String) = {
     this(args, SimulatorApplet.createSimulationFromClassName(simulatorClassName))
   }
 
   /** @param sim the simulator to show.*/
-  def this(sim: Simulator) {
+  def this(sim: Simulator) = {
     this(Array[String](), sim)
   }
 

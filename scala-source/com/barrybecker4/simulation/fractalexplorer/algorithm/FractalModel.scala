@@ -38,13 +38,13 @@ class FractalModel extends RectangularModel {
     image.updateImage(lastRow, currentRow)
   }
 
-  private def initialize(width: Int, height: Int) {
+  private def initialize(width: Int, height: Int): Unit = {
     values = Array.ofDim[Double](width, height)
     image = new RectangularModelImage(this, colorMap)
     setCurrentRow(0)
   }
 
-  def setValue(x: Int, y: Int, value: Double) {
+  def setValue(x: Int, y: Int, value: Double): Unit = {
     if (x < getWidth && y < getHeight) values(x)(y) = value
   }
 
@@ -65,7 +65,7 @@ class FractalModel extends RectangularModel {
   /** Set the row that we have calculated up to.
     * @param row new row
     */
-  def setCurrentRow(row: Int) {
+  def setCurrentRow(row: Int): Unit = {
     lastRow = currentRow
     currentRow = row
     if (currentRow == 0)

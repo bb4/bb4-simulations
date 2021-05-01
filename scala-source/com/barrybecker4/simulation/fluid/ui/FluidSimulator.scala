@@ -38,7 +38,7 @@ class FluidSimulator() extends Simulator("Fluid") {
 
   commonInit()
 
-  private def commonInit() {
+  private def commonInit(): Unit = {
     initCommonUI()
     val scale = renderOptions.getScale.toInt
     envRenderer = new EnvironmentRenderer(environment, renderOptions)
@@ -58,9 +58,9 @@ class FluidSimulator() extends Simulator("Fluid") {
   def getInteractionHandler: InteractionHandler = handler
   override def getBackground: Color = FluidSimulator.BG_COLOR
   override protected def getInitialTimeStep: Double = FluidSimulator.INITIAL_TIME_STEP
-  override def setScale(scale: Double) { envRenderer.getOptions.setScale(scale) }
+  override def setScale(scale: Double): Unit = { envRenderer.getOptions.setScale(scale) }
   override def getScale: Double = envRenderer.getOptions.getScale
-  def setShowVelocityVectors(show: Boolean) { envRenderer.getOptions.setShowVelocities(show)}
+  def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.setShowVelocities(show)}
   def getShowVelocityVectors: Boolean = envRenderer.getOptions.getShowVelocities
 
   override def setPaused(bPaused: Boolean): Unit = {
@@ -86,7 +86,7 @@ class FluidSimulator() extends Simulator("Fluid") {
     tStep
   }
 
-  override def doOptimization() {
+  override def doOptimization(): Unit = {
     val optimizer =  new Optimizer(this)
     //, Some(FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt"))
     val params = new Array[Parameter](3)

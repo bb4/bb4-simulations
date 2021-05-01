@@ -42,5 +42,5 @@ object CaveColorMap {
 }
 
 class CaveColorMap(range: Range) extends ColorMap(CaveColorMap.getControlPoints(range), CaveColorMap.COLORS) {
-  def this() { this(Range(0, 1.0)) }
+  def this() = { this(Range(0, 1.0)) }
 }

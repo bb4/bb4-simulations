@@ -51,7 +51,7 @@ class SnakeDynamicOptions private[snake](var snakeSim: SnakeSimulator) extends J
       new SliderProperties(SnakeDynamicOptions.TIMESTEP_SLIDER, 0.001, 0.5, SnakeSimulator.INITIAL_TIME_STEP, 1000))
   }
 
-  def reset() { sliderGroup.reset() }
+  def reset(): Unit = { sliderGroup.reset() }
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {

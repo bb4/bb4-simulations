@@ -31,8 +31,8 @@ class DynamicOptions(val simulator: HabitatSimulator) extends JPanel with Slider
   add(fill)
 
 
-  def update() {}
-  def reset(){ for (group <- sliderGroups) group.reset() }
+  def update(): Unit = {}
+  def reset(): Unit = { for (group <- sliderGroups) group.reset() }
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {

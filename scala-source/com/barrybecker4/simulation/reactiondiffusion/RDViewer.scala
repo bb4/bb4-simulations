@@ -32,15 +32,15 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   /**
     * @param fixed if true then the render area does not resize automatically.
     */
-  def setUseFixedSize(fixed: Boolean) { useFixedSize = fixed }
+  def setUseFixedSize(fixed: Boolean): Unit = { useFixedSize = fixed }
   def getUseFixedSize: Boolean = useFixedSize
 
-  def setUseOffscreenRendering(use: Boolean) {useOfflineRendering = use}
+  def setUseOffscreenRendering(use: Boolean): Unit = {useOfflineRendering = use}
   def getUseOffScreenRendering: Boolean = useOfflineRendering
 
   def getColorMap: ColorMap = cmap
 
-  def paint(g: Graphics) {
+  def paint(g: Graphics): Unit = {
     checkDimensions()
     val g2 = g.asInstanceOf[Graphics2D]
     getRenderer.get.render(g2)

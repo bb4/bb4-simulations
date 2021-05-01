@@ -47,13 +47,13 @@ class Cell() {
   def incrementU(inc: Double): Unit = {velocity.incrementU(inc)}
   def incrementV(inc: Double): Unit = {velocity.incrementV(inc)}
 
-  def setNewU(u: Double) {velocity.setNewU(u)}
-  def setNewV(v: Double) {velocity.setNewV(v)}
+  def setNewU(u: Double): Unit = {velocity.setNewU(u)}
+  def setNewV(v: Double): Unit = {velocity.setNewV(v)}
 
-  def passVelocityThrough() {velocity.passThrough()}
-  def incParticles() { numParticles += 1 }
+  def passVelocityThrough(): Unit = {velocity.passThrough()}
+  def incParticles(): Unit = { numParticles += 1 }
 
-  def decParticles() {
+  def decParticles(): Unit = {
     numParticles -= 1
     assert(numParticles >= 0)
   }

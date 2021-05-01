@@ -28,7 +28,7 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
   def getOptions: RenderingOptions = options
 
   /** Render the Environment on the screen. */
-  def render(g: Graphics2D) {
+  def render(g: Graphics2D): Unit = {
     // draw the cells colored by ---pressure--- val
     if (options.getShowPressures) concurrentRenderPressures(g)
     // outer boundary

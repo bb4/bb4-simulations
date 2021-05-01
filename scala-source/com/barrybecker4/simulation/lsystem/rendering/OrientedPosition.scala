@@ -11,7 +11,7 @@ import com.barrybecker4.common.geometry.IntLocation
 class OrientedPosition private[rendering](var x: Double, var y: Double, var angle: Double) {
 
   /** Copy constructor */
-  def this(pos: OrientedPosition) {
+  def this(pos: OrientedPosition) = {
     this(pos.x, pos.y, pos.angle)
   }
 

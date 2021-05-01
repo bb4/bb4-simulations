@@ -29,9 +29,9 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   private var mouse1Down = false
   private var mouse3Down = false
 
-  def setScale(scale: Double) {this.scale = scale }
-  def setBrushRadius(rad: Int){ brushRadius = rad}
-  def setBrushStrength(strength: Double) {brushStrength = strength}
+  def setScale(scale: Double): Unit = {this.scale = scale }
+  def setBrushRadius(rad: Int): Unit = { brushRadius = rad}
+  def setBrushStrength(strength: Double): Unit = {brushStrength = strength}
 
   /** adds chemical U or V depending on the button pressed. */
   override def mouseDragged(e: MouseEvent): Unit = {
@@ -94,7 +94,7 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent){}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

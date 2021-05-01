@@ -38,7 +38,7 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
   conway.initialize()
 
   /** Constructor that allows you to specify the dimensions of the conway */
-  def this() {
+  def this() = {
     this(ConwayProcessor.DEFAULT_USE_PARALLEL)
   }
 

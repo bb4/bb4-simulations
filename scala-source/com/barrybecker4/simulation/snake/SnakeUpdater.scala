@@ -47,12 +47,12 @@ class SnakeUpdater private[snake]() {
   }
 
   /** update accelerations */
-  private def updateFrictionalForces() {
+  private def updateFrictionalForces(): Unit = {
     for (i <- 0 until snake.getNumSegments)
       segmentUpdater.updateFrictionalForce(snake.getSegment(i), locomotionParams)
   }
 
-  private def updateParticleAccelerations() {
+  private def updateParticleAccelerations(): Unit = {
     for (i <- 0 until snake.getNumSegments)
       segmentUpdater.updateAccelerations(snake.getSegment(i))
   }
@@ -66,7 +66,7 @@ class SnakeUpdater private[snake]() {
   }
 
   /** move particles according to vector field */
-  private def updateParticlePositions(timeStep: Double) {
+  private def updateParticlePositions(timeStep: Double): Unit = {
     for (i <- 0 until snake.getNumSegments)
       segmentUpdater.updatePositions(snake.getSegment(i), timeStep)
   }

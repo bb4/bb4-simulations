@@ -29,22 +29,22 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) extends RectangularModel {
   private var viscosity: Double = FluidEnvironment.DEFAULT_VISCOSITY
   private var numSolverIterations = FluidEnvironment.DEFAULT_NUM_SOLVER_ITERATIONS
 
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     if (width != grid.getWidth || height != grid.getHeight) {
       grid = new Grid(width, height)
     }
   }
 
   /** reset to original state */
-  def reset() { grid = new Grid(grid.getWidth, grid.getHeight) }
+  def reset(): Unit = { grid = new Grid(grid.getWidth, grid.getHeight) }
   def getWidth: Int = grid.getWidth
   def getHeight: Int = grid.getHeight
   def getCurrentRow: Int = getHeight
   def getLastRow: Int = 0
   def getValue(i: Int, j: Int): Double = grid.getValue(i, j)
-  def setDiffusionRate(rate: Double) { diffusionRate = rate }
-  def setViscosity(v: Double) { viscosity = v }
-  def setNumSolverIterations(numIterations: Int) { numSolverIterations = numIterations }
+  def setDiffusionRate(rate: Double): Unit = { diffusionRate = rate }
+  def setViscosity(v: Double): Unit = { viscosity = v }
+  def setNumSolverIterations(numIterations: Int): Unit = { numSolverIterations = numIterations }
   def getU(i: Int, j: Int): Double = grid.getU(i, j)
   def getV(i: Int, j: Int): Double = grid.getV(i, j)
   def incrementU(i: Int, j: Int, fu: Double): Unit = grid.incrementU(i, j, fu)

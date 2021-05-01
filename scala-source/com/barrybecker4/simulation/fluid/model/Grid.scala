@@ -32,15 +32,15 @@ class Grid(var dimX: Int, var dimY: Int) extends RectangularModel {
   override def getLastRow = 0
 
   /** Swap x[0] and x[1] arrays */
-  def swap(prop: CellProperty) {
+  def swap(prop: CellProperty): Unit = {
     val temp = grid0.getProperty(prop)
     grid0.setProperty(prop, grid1.getProperty(prop))
     grid1.setProperty(prop, temp)
   }
 
-  def incrementU(i: Int, j: Int, value: Double) { grid0.u(i)(j) += value }
-  def incrementV(i: Int, j: Int, value: Double) { grid0.v(i)(j) += value }
-  def incrementDensity(i: Int, j: Int, value: Double) { grid0.density(i)(j) += value }
+  def incrementU(i: Int, j: Int, value: Double): Unit = { grid0.u(i)(j) += value }
+  def incrementV(i: Int, j: Int, value: Double): Unit = { grid0.v(i)(j) += value }
+  def incrementDensity(i: Int, j: Int, value: Double): Unit = { grid0.density(i)(j) += value }
 
   /** Set a boundary to contain the liquid. */
   def setBoundary(boundary: Boundary, x: TwoDArray): Unit = {

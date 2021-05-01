@@ -12,15 +12,15 @@ final class RenderingOptions() {
   private var showCellStatus = true
   private var showGrid = true
 
-  def setShowVelocities(show: Boolean) { showVelocities = show }
+  def setShowVelocities(show: Boolean): Unit = { showVelocities = show }
   def getShowVelocities: Boolean = showVelocities
 
-  def setShowPressures(show: Boolean) { showPressures = show }
+  def setShowPressures(show: Boolean): Unit = { showPressures = show }
   def getShowPressures: Boolean = showPressures
 
-  def setShowCellStatus(show: Boolean) {showCellStatus = show }
+  def setShowCellStatus(show: Boolean): Unit = {showCellStatus = show }
   def getShowCellStatus: Boolean = showCellStatus
 
-  def setShowGrid(show: Boolean) {showGrid = show}
+  def setShowGrid(show: Boolean): Unit = {showGrid = show}
   def getShowGrid: Boolean = showGrid
 }

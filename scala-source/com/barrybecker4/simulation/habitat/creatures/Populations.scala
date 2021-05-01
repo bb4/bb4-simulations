@@ -28,7 +28,7 @@ abstract class Populations extends ArrayBuffer[Population] {
     updateGridCellCounts()
   }
 
-  def reset() {
+  def reset(): Unit = {
     grid = new HabitatGrid(20, 15)
     for (pop <- this) pop.reset()
     updateGridCellCounts()
@@ -62,7 +62,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   private def updateFunctions(iteration: Long): Unit = {
     for (pop <- this) {
       val func = functionMap(pop)
-      func.addValue(iteration, pop.getSize)
+      func.addValue(iteration, pop.getSize.toDouble)
     }
   }
 

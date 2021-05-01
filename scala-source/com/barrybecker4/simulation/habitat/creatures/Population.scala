@@ -28,12 +28,12 @@ class Population(var creatureType: CreatureType) {
   }
 
   /** Reset the population to its original size */
-  def reset() {create()}
+  def reset(): Unit = {create()}
 
   private def create(): Unit = {
     creatures = Set[Creature]()
     for (i <- 0 until initialSize)
-      creatures += new Creature(creatureType, new Point2d(MathUtil.RANDOM.nextDouble, MathUtil.RANDOM.nextDouble))
+      creatures += new Creature(creatureType, new Point2d(MathUtil.RANDOM.nextDouble(), MathUtil.RANDOM.nextDouble()))
   }
 
   /**
@@ -51,8 +51,8 @@ class Population(var creatureType: CreatureType) {
       if (spawn) {
         val loc = creature.getLocation
         spawnLocations +:= new Point2d(
-          absMod(loc.x + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble),
-          absMod(loc.y + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble))
+          absMod(loc.x + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()),
+          absMod(loc.y + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()))
       }
     }
 

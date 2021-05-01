@@ -21,7 +21,7 @@ class OptionsDialog(parent: Component, simulator: Simulator)
     panel
   }
 
-  override def actionPerformed(e: ActionEvent) {
+  override def actionPerformed(e: ActionEvent): Unit = {
     super.actionPerformed(e)
     val source = e.getSource
   }

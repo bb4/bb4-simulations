@@ -11,7 +11,7 @@ import java.awt._
 class RenderWorker private[rendering](var minX: Int, var maxX: Int, var renderer: RDRenderer, var g2: Graphics2D)
   extends Runnable {
 
-  override def run() {
+  override def run(): Unit = {
     if (maxX - minX > 0) {
       val colorRect = renderer.getColorRect(minX, maxX)
       renderer.renderStrip(minX, colorRect, g2)

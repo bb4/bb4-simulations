@@ -17,7 +17,7 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
   private var duDivh2: Double = _
   private var dvDivh2: Double = _
 
-  def computeNextTimeStep(minX: Int, maxX: Int, dt: Double) {
+  def computeNextTimeStep(minX: Int, maxX: Int, dt: Double): Unit = {
     val u = model.tmpU
     val v = model.tmpV
     val height = model.getHeight
@@ -32,7 +32,7 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
       }
   }
 
-  def computeNewEdgeValues(dt: Double) {
+  def computeNewEdgeValues(dt: Double): Unit = {
     val width = model.getWidth
     val height = model.getHeight
 
@@ -47,7 +47,7 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
     }
   }
 
-  def setH(h: Double) {
+  def setH(h: Double): Unit = {
     val h2 = h * h
     duDivh2 = DU / h2
     dvDivh2 = DV / h2

@@ -39,7 +39,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   private var trebuchet: Trebuchet = _
   private var zoomSlider: JSlider = _
 
-  def this(trebuchet: Trebuchet) {
+  def this(trebuchet: Trebuchet) = {
     this()
     commonInit(trebuchet)
   }

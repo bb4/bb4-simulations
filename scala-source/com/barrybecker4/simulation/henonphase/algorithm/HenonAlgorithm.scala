@@ -41,11 +41,11 @@ class HenonAlgorithm() {
   reset()
 
   /** if the size changes from what we have not, then request a restart */
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     if (width != model.getWidth || height != model.getHeight) requestRestart(width, height)
   }
 
-  def reset() {
+  def reset(): Unit = {
     numTravelers = HenonAlgorithm.DEFAULT_NUM_TRAVELERS
     maxIterations = HenonAlgorithm.DEFAULT_MAX_ITERATIONS
     numStepsPerFrame = HenonAlgorithm.DEFAULT_FRAME_ITERATIONS
@@ -57,14 +57,14 @@ class HenonAlgorithm() {
     model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
   }
 
-  def setTravelerParams(newParams: TravelerParams) {
+  def setTravelerParams(newParams: TravelerParams): Unit = {
     if (!(newParams == travelerParams)) {
       travelerParams = newParams
       requestRestart(model.getWidth, model.getHeight)
     }
   }
 
-  def setAlpha(newAlpha: Int){
+  def setAlpha(newAlpha: Int): Unit = {
     if (newAlpha != alpha) {
       alpha = newAlpha
       cmap = new HenonColorMap(newAlpha)
@@ -74,7 +74,7 @@ class HenonAlgorithm() {
 
   def getUseUniformSeeds: Boolean = useUniformSeeds
 
-  def toggleUseUniformSeeds() {
+  def toggleUseUniformSeeds(): Unit = {
     useUniformSeeds = !useUniformSeeds
     requestRestart(model.getWidth, model.getHeight)
   }
@@ -83,26 +83,26 @@ class HenonAlgorithm() {
   def getColorMap: ColorMap = cmap
   def getImage: BufferedImage = model.getImage
 
-  def toggleConnectPoints() {
+  def toggleConnectPoints(): Unit = {
     connectPoints = !connectPoints
     requestRestart(model.getWidth, model.getHeight)
   }
 
-  def setNumTravelors(newNumTravelors: Int) {
+  def setNumTravelors(newNumTravelors: Int): Unit = {
     if (newNumTravelors != numTravelers) {
       numTravelers = newNumTravelors
       requestRestart(model.getWidth, model.getHeight)
     }
   }
 
-  def setMaxIterations(value: Int) {
+  def setMaxIterations(value: Int): Unit = {
     if (value != maxIterations) {
       maxIterations = value
       requestRestart(model.getWidth, model.getHeight)
     }
   }
 
-  def setStepsPerFrame(numSteps: Int) {
+  def setStepsPerFrame(numSteps: Int): Unit = {
     if (numSteps != numStepsPerFrame) {
       numStepsPerFrame = numSteps
       requestRestart(model.getWidth, model.getHeight)
@@ -134,7 +134,7 @@ class HenonAlgorithm() {
     false
   }
 
-  private def showProfileInfo() {
+  private def showProfileInfo(): Unit = {
     if (!finished) {
       finished = true
       val prof = Profiler.getInstance

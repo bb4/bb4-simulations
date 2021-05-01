@@ -16,7 +16,7 @@ class InteractionHandler(var panable: Panable) extends MouseListener with MouseM
   private var lastY = 0
 
   /** pan the panable. */
-  override def mouseDragged(e: MouseEvent) {
+  override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
 
@@ -35,11 +35,11 @@ class InteractionHandler(var panable: Panable) extends MouseListener with MouseM
     lastY = currentY
   }
 
-  override def mouseExited(e: MouseEvent) {}
-  override def mousePressed(e: MouseEvent) {}
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseClicked(e: MouseEvent) {
+  override def mouseExited(e: MouseEvent): Unit = {}
+  override def mousePressed(e: MouseEvent): Unit = {}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseClicked(e: MouseEvent): Unit = {
     lastX = e.getX
     lastY = e.getY
   }

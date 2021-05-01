@@ -71,23 +71,23 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     * be using the current array. Wait until the current timeStep completes
     * before reinitializing with the new size.
     */
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     requestedNewSize = Some(new Dimension(width, height))
   }
 
-  def reset() {
+  def reset(): Unit = {
     algorithm.setH(GrayScottModel.H0)
     model.resetState()
   }
 
-  def setH(h: Double) { algorithm.setH(h) }
+  def setH(h: Double): Unit = { algorithm.setH(h) }
 
   /** Set this to true if you want to run the version
     * that will partition the task of computing the next timeStop
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
     */
-  def setParallelized(parallelized: Boolean) { this.paralellized = parallelized }
+  def setParallelized(parallelized: Boolean): Unit = { this.paralellized = parallelized }
   def isParallelized: Boolean = this.paralellized
   def setInitializer(initializer: Initializer): Unit = model.setInitializer(initializer)
 
@@ -95,7 +95,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     * u and v are calculated based on tmpU and tmpV, then the result is committed to tmpU and tmpV.
     * @param dt time step in seconds.
     */
-  def timeStep(dt: Double) {
+  def timeStep(dt: Double): Unit = {
     val numThreads = Runtime.getRuntime.availableProcessors()
     val workers = Array.ofDim[Runnable](numThreads + 1)
     val range = model.getWidth / numThreads
@@ -125,13 +125,13 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
 
   /**  Runs one of the chunks. */
   private class Worker(minX: Int, maxX: Int,  dt: Double) extends Runnable {
-    override def run() {
+    override def run(): Unit = {
       algorithm.computeNextTimeStep(minX, maxX, dt)
     }
   }
 
   private class EdgeWorker(dt: Double) extends Runnable {
-    override def run() {
+    override def run(): Unit = {
       algorithm.computeNewEdgeValues(dt)
     }
   }

@@ -34,7 +34,7 @@ class CellGrid(var dimX: Int, var dimY: Int) {
     }
   }
 
-  def addInitialInkDensity() {
+  def addInitialInkDensity(): Unit = {
     for (i <- 2 until dimX / 2) {
       for (j <- 2 until dimY / 2) {
         u(i)(j) = 0.01 + (Math.cos(0.4 * i) + Math.sin(0.3 * j)) / 10.0

@@ -55,7 +55,7 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   def getWidth: Int = width
   def getHeight: Int = height
 
-  def setSize(requestedNewSize: Dimension) {
+  def setSize(requestedNewSize: Dimension): Unit = {
     this.width = requestedNewSize.width
     this.height = requestedNewSize.height
   }
@@ -65,14 +65,14 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
     resetState()
   }
 
-  def setF(f: Double) { this.f = f }
+  def setF(f: Double): Unit = { this.f = f }
   private[algorithm] def getF = f
 
-  def setK(k: Double) {this.k = k}
+  def setK(k: Double): Unit = {this.k = k}
   private[algorithm] def getK = k
 
   /** Exchange the u, v fields with the tmp versions.  */
-  private[algorithm] def commitChanges()  {
+  private[algorithm] def commitChanges(): Unit = {
     var temp = tmpU
     tmpU = u
     u = temp

@@ -38,7 +38,7 @@ object Grid {
 
 case class Grid(mesh: Array[Array[MeshPoint]]) {
 
-  def this(bounds: Box, incX: Double = 0.1, incY: Double = 0.1) {
+  def this(bounds: Box, incX: Double = 0.1, incY: Double = 0.1) = {
     this(createMesh(bounds, incX, incY))
   }
 

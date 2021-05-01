@@ -89,12 +89,12 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
     textPanel
   }
 
-  private def updateFormulaText() {
+  private def updateFormulaText(): Unit = {
     val text = new StringBuilder(algorithm.getExpression)
     formulaText.setText(text.toString)
   }
 
-  def reset() {sliderGroup.reset()}
+  def reset(): Unit = {sliderGroup.reset()}
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
@@ -113,9 +113,9 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
     * Implement keyListener interface.
     * @param key key that was pressed
     */
-  override def keyTyped(key: KeyEvent) {}
-  override def keyPressed(key: KeyEvent) {}
-  override def keyReleased(key: KeyEvent) {
+  override def keyTyped(key: KeyEvent): Unit = {}
+  override def keyPressed(key: KeyEvent): Unit = {}
+  override def keyReleased(key: KeyEvent): Unit = {
     val keyChar = key.getKeyChar
     if (keyChar == '\n') {
       algorithm.setExpression(expression.getValue)

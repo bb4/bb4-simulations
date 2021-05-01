@@ -29,22 +29,22 @@ class LSystemModel() extends Panable {
   private var renderer: LSystemRenderer = _
   reset()
 
-  def reset() {
+  def reset(): Unit = {
     renderer = new LSystemRenderer(DEFAULT_SIZE, DEFAULT_SIZE,
       DEFAULT_EXPRESSION, DEFAULT_ITERATIONS, DEFAULT_ANGLE, DEFAULT_SCALE, DEFAULT_SCALE_FACTOR)
     renderer.render()
   }
 
-  def setSize(width: Int, height: Int) {
+  def setSize(width: Int, height: Int): Unit = {
     if (width != renderer.getWidth || height != renderer.getHeight) renderer.setDimensions(width, height)
   }
 
-  def incrementOffset(incrementAmount: Location) { renderer.incrementOffset(incrementAmount) }
-  def setNumIterations(num: Int) { renderer.setNumIterations(num) }
-  def setAngle(ang: Double) { renderer.setAngleInc(ang) }
-  def setScale(value: Double) { renderer.setScale(value)}
-  def setScaleFactor(value: Double) { renderer.setScaleFactor(value) }
-  def setExpression(exp: String) { renderer.setExpression(exp) }
+  def incrementOffset(incrementAmount: Location): Unit = { renderer.incrementOffset(incrementAmount) }
+  def setNumIterations(num: Int): Unit = { renderer.setNumIterations(num) }
+  def setAngle(ang: Double): Unit = { renderer.setAngleInc(ang) }
+  def setScale(value: Double): Unit = { renderer.setScale(value)}
+  def setScaleFactor(value: Double): Unit = { renderer.setScaleFactor(value) }
+  def setExpression(exp: String): Unit = { renderer.setExpression(exp) }
   def getExpression: String = {renderer.getSerializedExpression }
   def getImage: BufferedImage = renderer.getImage
 
@@ -52,7 +52,7 @@ class LSystemModel() extends Panable {
     * @param timeStep number of rows to compute on this timestep.
     * @return true when done computing whole renderer.
     */
-  def timeStep(timeStep: Double) {
+  def timeStep(timeStep: Double): Unit = {
     renderer.render()
   }
 }

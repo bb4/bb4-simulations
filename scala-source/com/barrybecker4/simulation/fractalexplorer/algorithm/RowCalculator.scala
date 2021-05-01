@@ -22,7 +22,7 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
 
   def getUseRunLengthOptimization: Boolean = useRunLengthOpt
 
-  def setUseRunLengthOptimization(value: Boolean) {
+  def setUseRunLengthOptimization(value: Boolean): Unit = {
     if (useRunLengthOpt != value) {
       useRunLengthOpt = value
       model.setCurrentRow(0)
@@ -30,13 +30,13 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
   }
 
   /** Computes values for a row. */
-  def calculateRow(width: Int, y: Int) {
+  def calculateRow(width: Int, y: Int): Unit = {
     if (useRunLengthOpt) calculateRowOptimized(width, y)
     else calculateRowSimple(width, y)
   }
 
   /** Computes values for a row. */
-  private def calculateRowSimple(width: Int, y: Int) {
+  private def calculateRowSimple(width: Int, y: Int): Unit = {
     var x: Int = 0
     while (x < width) {
        computeFractalValueForPosition(x, y)
@@ -57,7 +57,7 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
     * When that happens, back up N  pixels and evaluate each one again.
     * Need something to avoid skipping the tips of long thin triangular sections.
     */
-  private def calculateRowOptimized(width: Int, y: Int) {
+  private def calculateRowOptimized(width: Int, y: Int): Unit = {
     var runLength: Int = 0
     var increment: Int = 1
     var lastValue: Double = 0

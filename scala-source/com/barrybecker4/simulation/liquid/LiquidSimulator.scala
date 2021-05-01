@@ -65,7 +65,7 @@ class LiquidSimulator()
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = LiquidSimulator.INITIAL_TIME_STEP
   def getEnvironment: LiquidEnvironment = environment
-  override def setScale(scale: Double) { envRenderer.setScale(scale)}
+  override def setScale(scale: Double): Unit = { envRenderer.setScale(scale)}
   override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions
   def getSingleStepMode: Boolean = !isAnimating
@@ -78,7 +78,7 @@ class LiquidSimulator()
     tStep
   }
 
-  def setSingleStepMode(singleStep: Boolean) {
+  def setSingleStepMode(singleStep: Boolean): Unit = {
     setAnimating(!singleStep)
     if (singleStep) addMouseListener(this)
     else removeMouseListener(this)
@@ -86,7 +86,7 @@ class LiquidSimulator()
 
   def getAdvectionOnly: Boolean = advectionOnly
 
-  def setAdvectionOnly(advectOnly: Boolean) {
+  def setAdvectionOnly(advectOnly: Boolean): Unit = {
     advectionOnly = advectOnly
     environment.setAdvectionOnly(advectOnly)
   }
@@ -96,7 +96,7 @@ class LiquidSimulator()
     dynamicOptions
   }
 
-  override def doOptimization() {
+  override def doOptimization(): Unit = {
     val optimizer = new Optimizer(this)
       //, Some(FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt"))
     val params = new Array[Parameter](3)
@@ -105,20 +105,20 @@ class LiquidSimulator()
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }
 
-  override def paint(g: Graphics) {
+  override def paint(g: Graphics): Unit = {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
     envRenderer.render(g2, getWidth, getHeight)
   }
 
-  override def mouseClicked(e: MouseEvent) {
+  override def mouseClicked(e: MouseEvent): Unit = {
     //println("mclick timeStep="+ timeStep_ );
     environment.stepForward(tStep)
     this.repaint()
   }
 
-  override def mousePressed(e: MouseEvent) {}
-  override def mouseReleased(e: MouseEvent) {}
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent) {}
+  override def mousePressed(e: MouseEvent): Unit = {}
+  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

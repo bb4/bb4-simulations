@@ -23,7 +23,7 @@ class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSi
   private var showVelocitiesCheckbox: JCheckBox = _
   private var useSingleStepModeCheckbox: JCheckBox = _
 
-  override protected def addAdditionalToggles(togglesPanel: JPanel) {
+  override protected def addAdditionalToggles(togglesPanel: JPanel): Unit = {
     val sim = getSimulator.asInstanceOf[LiquidSimulator]
     val ropts = sim.getRenderingOptions
     showGridCheckbox = createCheckBox(

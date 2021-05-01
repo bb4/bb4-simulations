@@ -8,7 +8,7 @@ package com.barrybecker4.simulation.habitat.creatures
   */
 class SinglePopulation extends Populations {
 
-  override def addPopulations() {
+  override def addPopulations(): Unit = {
     this.append(Population.createPopulation(CreatureType.CAT, 9))
   }
 }

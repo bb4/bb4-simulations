@@ -24,7 +24,7 @@ class Wall private(val x1: Double, val y1: Double, val x2: Double, val y2: Doubl
     * @param startLocation begin point for wall
     * @param stopLocation  endpoint for wall
     */
-  def this(startLocation: Location, stopLocation: Location) {
+  def this(startLocation: Location, stopLocation: Location) = {
     this(startLocation.getX, startLocation.getY, stopLocation.getX, stopLocation.getY)
   }
 

@@ -47,7 +47,7 @@ class LiquidEnvironment(val configFile: String) {
     initEnvironment()
   }
 
-  def reset() { initEnvironment() }
+  def reset(): Unit = { initEnvironment() }
 
   private def initEnvironment(): Unit = {
     val xDim = conditions.getGridWidth + 2
@@ -65,10 +65,10 @@ class LiquidEnvironment(val configFile: String) {
   def getGrid: Grid = grid
   def getParticles: Iterator[Particle] = particles.iterator
 
-  def setViscosity(v: Double) { gridUpdater.setViscosity(v)}
-  def setB0(b0: Double) { gridUpdater.setB0(b0) }
+  def setViscosity(v: Double): Unit = { gridUpdater.setViscosity(v)}
+  def setB0(b0: Double): Unit = { gridUpdater.setB0(b0) }
   def getAdvectionOnly: Boolean = advectionOnly
-  def setAdvectionOnly(advectOnly: Boolean) { advectionOnly = advectOnly }
+  def setAdvectionOnly(advectOnly: Boolean): Unit = { advectionOnly = advectOnly }
 
   /**
     * Steps the simulation forward in time.

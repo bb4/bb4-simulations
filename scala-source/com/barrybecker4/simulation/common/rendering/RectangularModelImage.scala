@@ -18,7 +18,7 @@ class RectangularModelImage(var model: RectangularModel, var cmap: ColorMap, val
   private var image = createBufferedImage()
   private var useLinearInterpolation = false
 
-  def this(model: RectangularModel, cmap: ColorMap) { this(model, cmap, 1) }
+  def this(model: RectangularModel, cmap: ColorMap) = { this(model, cmap, 1) }
   def getColorMap: ColorMap = cmap
   def setUseLinearInterpolation(useInterp: Boolean): Unit = {useLinearInterpolation = useInterp }
 

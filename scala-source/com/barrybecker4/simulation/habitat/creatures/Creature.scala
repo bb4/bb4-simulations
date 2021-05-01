@@ -24,16 +24,16 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
 
   /** if becomes too large, then starve */
   private var hunger  = 0
-  private var direction = randomDirection
+  private var direction = randomDirection()
   private var speed = cType.normalSpeed
   private var alive = true
   private var pursuing = false // chasing prey
 
   /** not mature (capable of having children) until eaten at least once (and can eat). */
   private var mature = speed == 0
-  private def randomDirection = 2.0 * Math.PI * MathUtil.RANDOM.nextDouble
+  private def randomDirection() = 2.0 * Math.PI * MathUtil.RANDOM.nextDouble()
   def getVelocity = new Vector2d(Math.sin(direction) * speed, Math.cos(direction) * speed)
-  def kill() { alive = false}
+  def kill(): Unit = { alive = false}
   def isAlive: Boolean = alive
   def isPursuing: Boolean = pursuing
   def getName: String = cType.name
@@ -82,7 +82,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     val distance = nearestPrey.getLocation.distance(location)
     if (distance < Creature.THRESHOLD_TO_PREY) { //println( this + " about to eat " + nearestPrey);
       eat(nearestPrey)
-      direction = randomDirection
+      direction = randomDirection()
     }
     else {
       direction = MathUtil.getDirectionTo(getLocation, nearestPrey.getLocation)
@@ -95,7 +95,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     * Move toward the center of mass of neighbors and turn in same direction as nearest friend.
     * @param friends nearby friends
     */
-  private def flock(friends: List[Creature], nearestFriend: Creature) {
+  private def flock(friends: List[Creature], nearestFriend: Creature): Unit = {
     if (nearestFriend == null) return
     val centerOfMass = new Point2d(0, 0)
     for (c <- friends) {

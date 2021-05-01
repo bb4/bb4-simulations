@@ -91,14 +91,14 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
     needsRender = true
   }
 
-  def incrementOffset(incrementAmount: Location) {
+  def incrementOffset(incrementAmount: Location): Unit = {
     offset = offset.incrementOnCopy(incrementAmount)
     needsRender = true
     //render() ??
   }
 
   /** draw the tree */
-  def render() {
+  def render(): Unit = {
     if (needsRender) {
       offlineGraphics.clear()
       offlineGraphics.setColor(Color.RED)
@@ -114,7 +114,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
     * Draw the tree recursively.
     * @param pos the position and angle in radians that the turtle graphics used when rotating '+' or '-'
     */
-  private def drawTree(pos: OrientedPosition, length: Double, tree: TreeNode, numIterations: Int, depth: Int){
+  private def drawTree(pos: OrientedPosition, length: Double, tree: TreeNode, numIterations: Int, depth: Int): Unit = {
     for (child <- tree.children) {
       if (child.hasParens) drawTree(new OrientedPosition(pos), scaleFactor * length, child, numIterations, depth + 1)
       else {
@@ -127,15 +127,15 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
   }
 
   /** note: current position is changed by the processing of the symbol */
-  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: String, depth: Int) {
-    if (c.toString == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
+  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: String, depth: Int): Unit = {
+    if (c == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
     else drawF(currentPos, length, depth)
     else if (c == MINUS.symbol) currentPos.angle -= angleIncrement
     else if (c == PLUS.symbol) currentPos.angle += angleIncrement
     else throw new IllegalStateException("Unexpected char: " + c)
   }
 
-  private def drawF(pos: OrientedPosition, length: Double, num: Int) {
+  private def drawF(pos: OrientedPosition, length: Double, num: Int): Unit = {
     val startX = pos.x.toInt
     val startY = -pos.y.toInt
     pos.x += scale * length * Math.cos(pos.angle)
