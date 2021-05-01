@@ -40,7 +40,7 @@ class Cave(val width: Int, val length: Int,
   def randomInitialization(): Unit = {
     for (x <- 0 until width) {
       for (y <- 0 until length) {
-        val r = rnd.nextDouble
+        val r = rnd.nextDouble()
         heightMap(x)(y) = Math.min(Math.max(r, floorThresh), ceilThresh)
       }
     }

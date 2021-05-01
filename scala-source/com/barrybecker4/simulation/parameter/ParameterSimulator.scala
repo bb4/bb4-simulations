@@ -56,7 +56,7 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") 
     if (showRedistribution) parameter.randomizeValue(MathUtil.RANDOM).getValue
     else {
       //double scale = parameter.isIntegerOnly()?  parameter.getRange() +1.0 : parameter.getRange();
-      val v = parameter.minValue + MathUtil.RANDOM.nextDouble * parameter.range
+      val v = parameter.minValue + MathUtil.RANDOM.nextDouble() * parameter.range
       parameter.setValue(v).getValue
     }
   }

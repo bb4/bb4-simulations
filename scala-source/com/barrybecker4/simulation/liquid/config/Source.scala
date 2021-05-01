@@ -23,8 +23,14 @@ class Source(start: Location, stop: Location,
   assert(startTime >= 0)
   if (repeatInterval > 0) assert(duration < repeatInterval, " The duration cannot be longer than the repeatInterval")
 
-  def this(start: Location, stop: Location, velocity: Vector2d) { this(start, stop, velocity, 0, -1, -1) }
-  def this(start: Location, velocity: Vector2d) { this(start, null, velocity) }
+  def this(start: Location, stop: Location, velocity: Vector2d) = {
+    this(start, stop, velocity, 0, -1, -1)
+  }
+
+  def this(start: Location, velocity: Vector2d) = {
+    this(start, null, velocity)
+  }
+
   def getVelocity: Vector2d = velocity
 
   /**

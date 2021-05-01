@@ -25,7 +25,7 @@ class Particles {
     */
   private[model] def addRandomParticles(x: Double, y: Double, numParticles: Int, grid: Grid): Unit = {
     for (i <- 0 until numParticles)
-      addParticle(x + Particles.RANDOM.nextDouble, y + Particles.RANDOM.nextDouble, grid)
+      addParticle(x + Particles.RANDOM.nextDouble(), y + Particles.RANDOM.nextDouble(), grid)
   }
 
   def addParticle(x: Double, y: Double, grid: Grid): Unit = {

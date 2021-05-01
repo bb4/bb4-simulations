@@ -89,7 +89,7 @@ class Conway private[model]() {
     points = Map[Location, Integer]()
     for (x <- 0 until width) {
       for (y <- 0 until length) {
-        val r = RAND.nextDouble
+        val r = RAND.nextDouble()
         if (r > 0.7) setValue(IntLocation(y, x), 1)
       }
     }

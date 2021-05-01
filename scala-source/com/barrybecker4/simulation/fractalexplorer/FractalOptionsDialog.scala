@@ -53,7 +53,7 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
 
   override def getSimulator: FractalExplorer = super.getSimulator.asInstanceOf[FractalExplorer]
 
-  override protected def ok() { // set the common rendering and global options
+  override protected def ok(): Unit = { // set the common rendering and global options
     val sim = getSimulator
     val selected = algorithmChoice.getSelectedIndex
     sim.setAlgorithm(AlgorithmEnum.VALUES(selected))
