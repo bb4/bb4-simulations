@@ -28,18 +28,23 @@ object CreatureSliderGroup {
     else new Array[SliderProperties](6)
     val creatureName = ctype.name
     //setBackground(ctype.color)
+
     val size = ctype.size
     props(0) = new SliderProperties(creatureName + CreatureSliderGroup.SIZE_LABEL,
       CreatureSliderGroup.MIN_FACTOR * size, CreatureSliderGroup.MAX_FACTOR * size, size, 200)
+
     val gestation = ctype.gestationPeriod
     props(1) = new SliderProperties(creatureName + CreatureSliderGroup.GESTATION_LABEL, 1,
       CreatureSliderGroup.MAX_FACTOR * gestation, gestation)
+
     val starveTime = ctype.starvationThreshold
     props(2) = new SliderProperties(creatureName + CreatureSliderGroup.STARVATION_LABEL,
       (CreatureSliderGroup.MIN_FACTOR * starveTime).toInt, CreatureSliderGroup.MAX_FACTOR * starveTime, starveTime)
+
     val nutrition = ctype.nutritionalValue
     props(3) = new SliderProperties(creatureName + CreatureSliderGroup.NUTRITION_LABEL, 1,
       CreatureSliderGroup.MAX_FACTOR * nutrition, nutrition)
+
     if (normSpeed > 0) {
       props(4) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
         CreatureSliderGroup.MAX_FACTOR * normSpeed, normSpeed, 1000.0)

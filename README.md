@@ -18,6 +18,7 @@ Here are the [simulations added so far](http://barrybecker4.com/bb4-projects/bb4
   - Water
   - Trebuchet
   - Sierpinski
+  - WaveFunctionCollapse
 
 
 ### [How to Build](https://github.com/barrybecker4/bb4-common/wiki/Building-bb4-Projects)

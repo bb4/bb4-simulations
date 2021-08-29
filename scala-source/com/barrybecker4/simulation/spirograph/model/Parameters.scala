@@ -26,7 +26,7 @@ class Parameters() {
   def initialize(width: Int, height: Int): Unit = {
     resetAngle()
     x = (width >> 1) + r1 + (r2 + sign) + pos
-    y = height >> 1
+    y = (height >> 1).toFloat
   }
 
   def sign: Int = if (r2 < 0) -1 else 1

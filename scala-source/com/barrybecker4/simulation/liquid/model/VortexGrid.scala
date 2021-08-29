@@ -28,7 +28,7 @@ class VortexGrid private[model](xDim: Int, yDim: Int, val status: CellStatus) ex
     }
   }
 
-  def this(xDim: Int, yDim: Int) {
+  def this(xDim: Int, yDim: Int) = {
     this(xDim, yDim, CellStatus.EMPTY)
   }
 }

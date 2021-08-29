@@ -34,7 +34,7 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
 
   /** Adjusts the water or land depending on whether you are above or below the ground level when you start dragging.
     */
-  override def mouseDragged(e: MouseEvent) {
+  override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
   }

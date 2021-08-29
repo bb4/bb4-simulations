@@ -28,7 +28,9 @@ dependencies {
     def javaHome = System.properties.'java.home'
     compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
+    // compile -> implementation
     compile 'org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2'
+    compile 'com.google.code.gson:gson:2.8.5'
     compile 'com.barrybecker4:bb4-expression:1.6-SNAPSHOT'
     compile 'com.barrybecker4:bb4-sound:1.6-SNAPSHOT'
     compile 'com.barrybecker4:bb4-optimization:1.6-SNAPSHOT'
@@ -296,6 +298,15 @@ appMap['complexmapping'] = [
         longDescription: 'Explore the effect of applying functions like the ' +
                 'Riemann Zeta function to numbers in the complex plane.',
         deploy: false
+]
+appMap['waveFunctoinCollapse'] = [
+        title: 'Wave Function Collapse',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer',
+        panel_class: 'com.barrybecker4.simulation.cave.waveFunctionCollapse',
+        description: 'Allows you to create procedurally generated scenes based on seed.',
+        longDescription: 'This program allows you generate random scenes based on seed image. ' +
+                'See ' +
+                '<a href="https://github.com/mxgmn/WaveFunctionCollapse">original source</a>.'
 ]
 
 appMap.each { appId, propMap ->

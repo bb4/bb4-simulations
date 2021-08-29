@@ -46,7 +46,7 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
     val newPop = rabbits.getPopulation * ((1.0 + rabbits.birthRate) - rabbits.birthRate * rabbits.getPopulation)
     //println("pop="+ newPop + " rate="+ rabbits.birthRate);
     rabbits.setPopulation(newPop)
-    rabbitFunction.addValue(iteration, rabbits.getPopulation.toDouble)
+    rabbitFunction.addValue(iteration.toDouble, rabbits.getPopulation)
     tStep
   }
 

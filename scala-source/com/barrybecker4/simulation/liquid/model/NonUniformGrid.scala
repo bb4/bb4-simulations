@@ -29,7 +29,7 @@ class NonUniformGrid(xDim: Int, yDim: Int, val velocity: Vector2d, val status: C
     }
   }
 
-  def this(xDim: Int, yDim: Int, velocity: Vector2d) {
+  def this(xDim: Int, yDim: Int, velocity: Vector2d) = {
     this(xDim, yDim, velocity, CellStatus.EMPTY)
   }
 }

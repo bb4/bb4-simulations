@@ -7,5 +7,5 @@ import com.barrybecker4.common.geometry.Location
 /** Something that can be panned in x and y directions */
 trait Panable {
 
-  def incrementOffset(incrementAmount: Location)
+  def incrementOffset(incrementAmount: Location): Unit
 }
