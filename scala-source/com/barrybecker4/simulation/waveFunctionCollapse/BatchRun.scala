@@ -5,14 +5,14 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, SimpleTiledModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, Simpletiled}
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{BASE_DIR, CURRENT_DIR}
 import com.google.gson.Gson
 
 import java.io.{BufferedReader, File, FileReader}
 import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import scala.util.Random
-import scala.util.control.Breaks.break
+import scala.util.control.Breaks.{break, breakable}
 
 
 
@@ -70,15 +70,18 @@ object BatchRun extends App {
       }
 
       for (i <- 0 until screenshots) {
-        for(k <- 0 until 10) {
-          val seed = random.nextInt()
-          val finished = model.run(seed, limit)
-          if (finished) {
-            println("> DONE - $name")
-            val image = model.graphics()
-            val outputFile = new File(s"out/$counter $name $i.png")
-            ImageIO.write(image, "png", outputFile)
-            break()
+        breakable {
+          for (k <- 0 until 10) {
+            val seed = random.nextInt()
+            println(s"now running ${model.getName}")
+            val finished = model.run(seed, limit)
+            if (finished) {
+              println(s"> DONE - $name")
+              val image = model.graphics()
+              val outputFile = new File(CURRENT_DIR + s"out/$counter $name $i.png")
+              ImageIO.write(image, "png", outputFile)
+              break()
+            }
           }
         }
       }

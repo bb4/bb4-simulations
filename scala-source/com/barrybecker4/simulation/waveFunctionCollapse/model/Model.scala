@@ -1,22 +1,20 @@
-/*
- * Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+/* Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
 
 import java.awt.image.BufferedImage
 import scala.util.Random
-import scala.util.control.Breaks.break
+import scala.util.control.Breaks.{break, breakable}
 
 
-abstract class Model(val FMX: Int, val FMY: Int) {
+abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
   type IntArray = Array[Int]
   type DoubleArray = Array[Double]
   var dxFun: IntArray = Array[Int](-1, 0, 1, 0)
   var dyFun: IntArray = Array[Int](0, 1, 0, -1)
-  private var opposite = Array[Int](2, 3, 0, 1)
+  private val opposite = Array[Int](2, 3, 0, 1)
   var wave: Array[Array[Boolean]] = _
   var propagator: Array[Array[IntArray]] = _
   private var compatible: Array[Array[IntArray]] = _
@@ -36,6 +34,8 @@ abstract class Model(val FMX: Int, val FMY: Int) {
   private var stackSize: Int = 0
   var periodic: Boolean = false
 
+  def getName: String = name
+
   private def init(): Unit = {
 
     wave = Array.fill(FMX * FMY)(null)
@@ -52,7 +52,7 @@ abstract class Model(val FMX: Int, val FMY: Int) {
       }
     }
 
-    weightLogWeights = Array[Double](tCounter)
+    weightLogWeights = Array.ofDim[Double](tCounter)
     sumOfWeights = 0.0
     sumOfWeightLogWeights = 0.0
 
@@ -97,11 +97,13 @@ abstract class Model(val FMX: Int, val FMY: Int) {
     if (argMin == -1) {
       observed = Array.fill(FMX * FMY)(0)
       for (i <- wave.indices) {
-        for (t <- 0 until tCounter) {
-          if (wave(i) != null && wave(i)(t)) {
-            assert(observed != null)
-            observed(i) = t
-            break()
+        breakable {
+          for (t <- 0 until tCounter) {
+            if (wave(i) != null && wave(i)(t)) {
+              assert(observed != null)
+              observed(i) = t
+              break
+            }
           }
         }
       }

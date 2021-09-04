@@ -3,7 +3,6 @@
  */
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
-
 import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.data.SampleData
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils.trimToColor
@@ -21,7 +20,7 @@ import scala.collection.mutable.ListBuffer
 class SimpleTiledModel(
   var width: Int, var height: Int,
   val name: String, subsetName: String,
-  var isPeriodic: Boolean, var black: Boolean) extends Model(width, height) {
+  var isPeriodic: Boolean, var black: Boolean) extends Model(name, width, height) {
 
   private var tiles: Seq[Array[Color]] = _
   private var tilenames: Seq[String] = _

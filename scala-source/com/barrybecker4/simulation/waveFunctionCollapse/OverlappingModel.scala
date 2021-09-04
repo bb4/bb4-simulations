@@ -18,7 +18,7 @@ import scala.util.control.Breaks.{break, breakable}
 
 class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
-  periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends Model(width, height) {
+  periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends Model(name, width, height) {
 
   type ByteArray = Array[Byte]
   private var patterns: Array[ByteArray] = _
