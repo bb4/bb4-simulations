@@ -7,11 +7,9 @@ import com.google.gson.annotations.SerializedName
 
 
 case class Samples(
-  @SerializedName("overlapping")
-  val overlapping: List[Overlapping],
-  @SerializedName("simpletiled")
-  val simpletiled: List[Simpletiled]
-) {
+  @(SerializedName @scala.annotation.meta.field)("overlapping") overlapping: Array[Overlapping],
+  @(SerializedName @scala.annotation.meta.field)("simpletiled") simpletiled: Array[Simpletiled]) {
+
   def all(): Seq[CommonModel] = {
     var toReturn = Seq[CommonModel]()
 

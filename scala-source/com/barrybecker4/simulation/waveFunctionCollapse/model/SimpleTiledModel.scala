@@ -38,7 +38,7 @@ class SimpleTiledModel(
     val file = new File(fileName)
     if (file.exists()) {
       val bufferedReader = new BufferedReader(new FileReader(fileName))
-      val data: SampleData = gson.fromJson(bufferedReader, SampleData.getClass)
+      val data: SampleData = gson.fromJson(bufferedReader, classOf[SampleData])
 
       val dataset = data.set
       tilesize = if (dataset.size != null) dataset.size.toInt else 16
@@ -84,7 +84,7 @@ class SimpleTiledModel(
 
       for (tile <- dataset.tiles.tile) {
         val tileName = tile.name
-        if ((!useSubset || subset.contains(tileName))) {
+        if (!useSubset || subset.contains(tileName)) {
           var a: Int => Int = null
           var b: Int => Int = null
           var cardinality: Int = 0

@@ -3,6 +3,7 @@
  */
 package com.barrybecker4.simulation.waveFunctionCollapse
 
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
 import model.Model
 
 import java.awt.Color
@@ -11,7 +12,7 @@ import javax.imageio.ImageIO
 import java.io.File
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.util.control.Breaks.break
+import scala.util.control.Breaks.{break, breakable}
 
 
 
@@ -25,7 +26,8 @@ class OverlappingModel(val name: String,
   private var ground: Int = 0
 
   periodic = periodicOutput
-  val imageFile = new File(s"samples/$name.png")
+  private val fname = BASE_DIR + s"samples/$name.png"
+  val imageFile = new File(fname)
   val bitmap: BufferedImage = ImageIO.read(imageFile)
 
   val smx: Int = bitmap.getWidth
@@ -37,9 +39,12 @@ class OverlappingModel(val name: String,
     for (x <- 0 until smx) {
       val color = new Color(bitmap.getRGB(x, y))
       var i = 0
-      for (c <- colors) {
-        if (c == color) break()
-        i += 1
+      breakable {
+        for (c <- colors) {
+          if (c == color)
+            break
+          i += 1
+        }
       }
 
       if (i == colors.length) colors :+= color

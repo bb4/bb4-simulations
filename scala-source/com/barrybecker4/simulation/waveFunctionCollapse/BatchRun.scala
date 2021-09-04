@@ -5,9 +5,11 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, SimpleTiledModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, Simpletiled}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
 import com.google.gson.Gson
 
 import java.io.{BufferedReader, File, FileReader}
+import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import scala.util.Random
 import scala.util.control.Breaks.break
@@ -21,13 +23,17 @@ object BatchRun extends App {
   val startTime = System.currentTimeMillis()
   println(s"start time = $startTime")
 
-  val currentDir = System.getProperty("user.dir").replace("\\", "/")
-  val fileName = currentDir + "/scala-source/com/barrybecker4/simulation/waveFunctionCollapse/samples.json"
+  val fileName = BASE_DIR + "samples.json"
   val file = new File(fileName)
   if (file.exists()) {
     val bufferedReader = new BufferedReader(new FileReader(fileName))
 
-    val data: SampleJson = gson.fromJson(bufferedReader, SampleJson.getClass)
+    val content = bufferedReader.lines().toArray().mkString("")
+    println(s"$fileName content ------")
+    println(content)
+    println("-------")
+    //val data: SampleJson = gson.fromJson(bufferedReader, classOf[SampleJson])
+    val data: SampleJson = gson.fromJson(content, classOf[SampleJson])
 
     var model: Model = null
     var screenshots = 2
@@ -38,28 +44,28 @@ object BatchRun extends App {
       commonModel match {
         case overlapping: Overlapping => // need defaults?
           model = new OverlappingModel(
-            overlapping.name,
-            overlapping.n.toInt,
-            overlapping.width.toInt,
-            overlapping.height.toInt,
-            overlapping.periodicInput.toBoolean,
-            overlapping.periodic.toBoolean,
-            overlapping.symmetry.toInt,
-            overlapping.ground.toInt)
-          screenshots = overlapping.screenshots.toInt
-          limit = overlapping.limit.toInt
-          name = overlapping.name
+            overlapping.getName,
+            overlapping.getN,
+            overlapping.getWidth,
+            overlapping.getHeight,
+            overlapping.getPeriodicInput,
+            overlapping.getPeriodic,
+            overlapping.getSymmetry,
+            overlapping.getGround)
+          screenshots = overlapping.getScreenshots
+          limit = overlapping.getLimit
+          name = overlapping.getName
         case simpleTiled: Simpletiled => // need defaults?
           model = new SimpleTiledModel(
-            simpleTiled.width.toInt,
-            simpleTiled.height.toInt,
-            simpleTiled.name,
-            simpleTiled.subset,
-            simpleTiled.periodic.toBoolean,
-            simpleTiled.black.toBoolean)
-          screenshots = simpleTiled.screenshots.toInt
-          limit = simpleTiled.limit.toInt
-          name = simpleTiled.name
+            simpleTiled.getWidth,
+            simpleTiled.getHeight,
+            simpleTiled.getName,
+            simpleTiled.getSubset,
+            simpleTiled.getPeriodic,
+            simpleTiled.getBlack)
+          screenshots = simpleTiled.getScreenshots
+          limit = simpleTiled.getLimit
+          name = simpleTiled.getName
         case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
       }
 
