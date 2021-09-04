@@ -26,8 +26,7 @@ class OverlappingModel(val name: String,
   private var ground: Int = 0
 
   periodic = periodicOutput
-  private val fname = BASE_DIR + s"samples/$name.png"
-  val imageFile = new File(fname)
+  val imageFile = new File(BASE_DIR + s"samples/$name.png")
   val bitmap: BufferedImage = ImageIO.read(imageFile)
 
   val smx: Int = bitmap.getWidth
@@ -192,7 +191,7 @@ class OverlappingModel(val name: String,
       }
     }
     else {
-      for (i <- wave.indices) {
+      for (i <- 0 until wave.length) {
         var contributors = 0
         var r = 0
         var g = 0

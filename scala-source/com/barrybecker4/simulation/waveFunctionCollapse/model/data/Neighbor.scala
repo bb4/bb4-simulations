@@ -7,8 +7,6 @@ import com.google.gson.annotations.SerializedName
 
 
 case class Neighbor(
-  @SerializedName("-left")
-  val left: String,
-  @SerializedName("-right")
-  val right: String
+  @(SerializedName @scala.annotation.meta.field)("-left") left: String,
+  @(SerializedName @scala.annotation.meta.field)("-right") right: String
 )

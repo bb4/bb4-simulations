@@ -7,6 +7,5 @@ import com.google.gson.annotations.SerializedName
 
 
 case class Tiles(
-  @SerializedName("tile")
-  val tile: Seq[Tile]
+  @(SerializedName @scala.annotation.meta.field)("tile") tile: Array[Tile]
 )

@@ -7,10 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 
 case class Tile(
-  @SerializedName("-name")
-  val name: String,
-  @SerializedName("-symmetry")
-  val symmetry: String,
-  @SerializedName("-weight")
-  val weight: String
+  @(SerializedName @scala.annotation.meta.field)("-name") name: String,
+  @(SerializedName @scala.annotation.meta.field)("-symmetry") symmetry: String,
+  @(SerializedName @scala.annotation.meta.field)("-weight") weight: String
 )

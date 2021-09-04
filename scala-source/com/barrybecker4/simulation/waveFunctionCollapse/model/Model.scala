@@ -41,7 +41,7 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
     wave = Array.fill(FMX * FMY)(null)
     compatible = Array.fill(FMX * FMY)(null)
 
-    for (i <- wave.indices) {
+    for (i <- 0 until wave.length) {
       wave(i) = Array.fill(tCounter)(false)
       compatible(i) = Array.fill(tCounter)(null)
 
@@ -78,7 +78,7 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
     var min = 1E+3
     var argMin = -1
 
-    for (i <- wave.indices) {
+    for (i <- 0 until wave.length) {
       if (!onBoundary(i % FMX, i / FMX)) {
         val amount = sumsOfOnes(i)
         if (amount == 0) return Some(false)
@@ -96,7 +96,7 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
     if (argMin == -1) {
       observed = Array.fill(FMX * FMY)(0)
-      for (i <- wave.indices) {
+      for (i <- 0 until wave.length) {
         breakable {
           for (t <- 0 until tCounter) {
             if (wave(i) != null && wave(i)(t)) {
@@ -206,7 +206,7 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
   }
 
   def clear(): Unit = {
-    for (i <- wave.indices) {
+    for (i <- 0 until wave.length) {
       for (t <- 0 until tCounter) {
         if (wave(i) != null) {
           wave(i)(t) = true

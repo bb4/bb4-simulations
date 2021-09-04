@@ -21,5 +21,5 @@ case class Simpletiled(
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
   def getScreenshots: Int = if (screenshots == null) 0 else screenshots.toInt
   def getBlack: Boolean = if (black == null) false else black.toBoolean
-  def getSubset: String = if (subset == null) "Knots" else subset
+  def getSubset: String = subset //if (subset == null) "Knots" else subset
 }

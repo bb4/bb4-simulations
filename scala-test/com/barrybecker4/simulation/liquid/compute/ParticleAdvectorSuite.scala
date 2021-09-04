@@ -30,7 +30,7 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val grid = new UniformGrid(DIM, DIM, new Vector2d(0.0, 0.0), CellStatus.FULL)
     particleAdvector = new ParticleAdvector(grid)
     val particles = createParticles(2.1, 2.5, grid)
-    val part = particles.iterator.next
+    val part = particles.iterator.next()
     particleAdvector.advectParticles(DT, particles)
     assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
     val pos = new Vector2d(part.x, part.y)
@@ -42,7 +42,7 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val grid = new UniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL)
     particleAdvector = new ParticleAdvector(grid)
     val particles = createParticles(2.1, 2.5, grid)
-    val part = particles.iterator.next
+    val part = particles.iterator.next()
     val newDt = particleAdvector.advectParticles(DT, particles)
     assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
     val pos = new Vector2d(part.x, part.y)
@@ -55,7 +55,7 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL)
     particleAdvector = new ParticleAdvector(grid)
     val particles = createParticles(2.1, 2.5, grid)
-    val part = particles.iterator.next
+    val part = particles.iterator.next()
     val newDt = particleAdvector.advectParticles(DT, particles)
     assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
     val pos = new Vector2d(part.x, part.y)

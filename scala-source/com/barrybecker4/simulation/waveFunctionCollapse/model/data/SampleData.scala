@@ -7,6 +7,5 @@ import com.google.gson.annotations.SerializedName
 
 
 case class SampleData(
-  @SerializedName("set")
-  val set: SampleSet
+  @(SerializedName @scala.annotation.meta.field)("set") set: SampleSet
 )

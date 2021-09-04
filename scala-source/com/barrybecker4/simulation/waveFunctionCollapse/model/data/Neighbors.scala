@@ -7,6 +7,5 @@ import com.google.gson.annotations.SerializedName
 
 
 case class Neighbors(
-  @SerializedName("neighbor")
-  val neighbor: Seq[Neighbor]
+  @(SerializedName @scala.annotation.meta.field)("neighbor") neighbor: Array[Neighbor]
 )

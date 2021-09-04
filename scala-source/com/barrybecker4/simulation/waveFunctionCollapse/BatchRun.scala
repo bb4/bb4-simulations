@@ -29,10 +29,6 @@ object BatchRun extends App {
     val bufferedReader = new BufferedReader(new FileReader(fileName))
 
     val content = bufferedReader.lines().toArray().mkString("")
-    println(s"$fileName content ------")
-    println(content)
-    println("-------")
-    //val data: SampleJson = gson.fromJson(bufferedReader, classOf[SampleJson])
     val data: SampleJson = gson.fromJson(content, classOf[SampleJson])
 
     var model: Model = null
@@ -40,6 +36,7 @@ object BatchRun extends App {
     var limit = 0
     var counter = 1
     var name = ""
+    println("num samples = " + data.samples.all().size)
     for (commonModel: CommonModel <- data.samples.all()) {
       commonModel match {
         case overlapping: Overlapping => // need defaults?
@@ -69,6 +66,7 @@ object BatchRun extends App {
         case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
       }
 
+      println("Now processing " + name)
       for (i <- 0 until screenshots) {
         breakable {
           for (k <- 0 until 10) {

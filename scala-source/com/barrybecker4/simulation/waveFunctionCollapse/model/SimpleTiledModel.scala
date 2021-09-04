@@ -5,6 +5,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.data.SampleData
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils.trimToColor
 
 import java.awt.Color
@@ -25,18 +26,19 @@ class SimpleTiledModel(
   private var tiles: Seq[Array[Color]] = _
   private var tilenames: Seq[String] = _
   private var tilesize: Int = 0
-  private val useSubset = subsetName.nonEmpty
+  private val useSubset = subsetName != null
   val gson = new Gson()
 
   this.periodic = isPeriodic
 
-  val fileName = "samples/$name/data.json"
+  private val fileName = BASE_DIR + s"samples/$name/data.json"
   processFile(fileName)
 
-  def processFile(str: String): Unit = {
-    val file = new File(fileName)
+  def processFile(fname: String): Unit = {
+    val file = new File(fname)
+    println("processing " + fname)
     if (file.exists()) {
-      val bufferedReader = new BufferedReader(new FileReader(fileName))
+      val bufferedReader = new BufferedReader(new FileReader(fname))
       val data: SampleData = gson.fromJson(bufferedReader, classOf[SampleData])
 
       val dataset = data.set
@@ -44,8 +46,8 @@ class SimpleTiledModel(
       val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
 
       var subset: Seq[String] = null
-      if (subsetName.nonEmpty) {
-        val xSubSet = dataset.subsets.subset.head.name
+      if (subsetName != null) {
+        val xSubSet = dataset.subsets.subset(0).name
         if (xSubSet == null) {
           println(s"ERROR SUBSET $subsetName not found")
         }
@@ -137,13 +139,13 @@ class SimpleTiledModel(
 
           if (unique) {
             for (t <- 0 until cardinality) {
-              val bufferedImage: BufferedImage = ImageIO.read(new File(s"samples/$name/$tileName $t.png"))
+              val bufferedImage: BufferedImage = ImageIO.read(new File(BASE_DIR + s"samples/$name/$tileName $t.png"))
               tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
               tilenames :+= s"$tileName $t"
             }
           }
           else {
-            val bufferedImage: BufferedImage = ImageIO.read(new File(s"samples/$name/$tileName.png"))
+            val bufferedImage: BufferedImage = ImageIO.read(new File(BASE_DIR + s"samples/$name/$tileName.png"))
             tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
             tilenames :+= s"$tileName ${0}"
 

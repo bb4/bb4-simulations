@@ -7,14 +7,9 @@ import com.google.gson.annotations.SerializedName
 
 
 case class SampleSet(
-  @SerializedName("-size")
-  val size: String,
-  @SerializedName("-unique")
-  val unique: String,
-  @SerializedName("neighbors")
-  val neighbors: Neighbors,
-  @SerializedName("tiles")
-  val tiles: Tiles,
-  @SerializedName("subsets")
-  val subsets: Subsets
+  @(SerializedName @scala.annotation.meta.field)("-size") size: String,
+  @(SerializedName @scala.annotation.meta.field)("-unique") unique: String,
+  @(SerializedName @scala.annotation.meta.field)("neighbors") neighbors: Neighbors,
+  @(SerializedName @scala.annotation.meta.field)("tiles") tiles: Tiles,
+  @(SerializedName @scala.annotation.meta.field)("subsets") subsets: Subsets
 )

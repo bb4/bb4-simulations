@@ -1,0 +1,133 @@
+/*
+ * Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+ */
+package com.barrybecker4.simulation.waveFunctionCollapse
+
+import com.barrybecker4.simulation.waveFunctionCollapse.MainTestSuite.SEED
+import com.barrybecker4.simulation.waveFunctionCollapse.model.SimpleTiledModel
+import org.scalatest.funsuite.AnyFunSuite
+
+import java.awt.Color
+import java.awt.image.BufferedImage
+import java.io.File
+import scala.collection.mutable
+import scala.io.Source
+
+
+object MainTestSuite {
+  val SEED = 1236548748
+}
+
+
+class MainTestSuite extends AnyFunSuite {
+
+  test("overlappingModelTestConsistency") {
+    val image = generateOverlappingImage()
+    if (image == null) {
+      fail("Image was null")
+    }
+
+    val actualHexes = new mutable.HashMap[String, Int]()
+    for (x <- 0 until image.getWidth()) {
+      for (y <- 0 until image.getHeight()) {
+        val color = new Color(image.getRGB(x, y))
+        val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
+        actualHexes(hex) = (actualHexes.getOrElse(hex, 0) + 1)
+      }
+    }
+
+    val expectedHexes = new mutable.HashMap[String, Int]()
+    val file: File = new File(this.getClass.getClassLoader.getResource("overlapping_hex.txt").getFile)
+    val src = Source.fromFile(file)
+    for (hex <- src.getLines()) {
+      expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
+    }
+    src.close()
+
+    if (expectedHexes.keys.size != actualHexes.keys.size) {
+      fail("Different map size")
+    }
+
+    for (h <- expectedHexes.keys) {
+      assertResult(expectedHexes(h), "did not match for " + h) { actualHexes(h) }
+    }
+  }
+
+  private def generateOverlappingImage(): BufferedImage = {
+    val model = new OverlappingModel(
+      name = "Skyline",
+      N = 3,
+      symmetry = 2,
+      groundParam = -1,
+      periodicInput = true,
+      periodicOutput = true,
+      width = 48,
+      height = 48
+    )
+
+    for (i <- 0 until 2) {
+      for (k <- 0 until 10) {
+        val finished = model.run(SEED, 0)
+        if (finished) {
+          return model.graphics()
+        }
+      }
+    }
+
+    null
+  }
+
+  test("simpleModelTestConsistency") {
+    val image = generateSimpleImage()
+    if (image == null) {
+      fail("Image was null")
+    }
+
+    val actualHexes = new mutable.HashMap[String, Int]()
+    for (x <- 0 until image.getWidth) {
+      for (y <- 0 until image.getHeight) {
+        val color = new Color(image.getRGB(x, y))
+        val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
+        actualHexes(hex) = actualHexes.getOrElse(hex, 0) + 1
+      }
+    }
+
+    val expectedHexes = new mutable.HashMap[String, Int]()
+    val file = new File(this.getClass.getClassLoader.getResource("simple.txt").getFile)
+    val src = Source.fromFile(file)
+    for (hex <- src.getLines()) {
+      expectedHexes(hex) = (expectedHexes.getOrElse(hex, 0) + 1)
+    }
+    src.close()
+
+    if (expectedHexes.keys.size != actualHexes.keys.size) {
+      fail("Different map size")
+    }
+
+    for (h <- expectedHexes.keys) {
+      assertResult(expectedHexes(h)) { actualHexes(h) }
+    }
+  }
+
+  private def generateSimpleImage(): BufferedImage = {
+    val model = new SimpleTiledModel(
+      name = "Knots",
+      width = 24,
+      height = 24,
+      subsetName = "Dense Fabric",
+      isPeriodic = true,
+      black = false
+    )
+
+    for (i <- 0 until 2) {
+      for (k <- 0 until 10) {
+        val finished = model.run(SEED, 0)
+        if (finished) {
+          return model.graphics()
+        }
+      }
+    }
+
+    null
+  }
+}

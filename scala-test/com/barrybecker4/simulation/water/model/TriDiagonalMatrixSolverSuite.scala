@@ -2,9 +2,10 @@ package com.barrybecker4.simulation.water.model
 
 import org.scalatest.funsuite.AnyFunSuite
 
+
 class TriDiagonalMatrixSolverSuite extends AnyFunSuite {
 
-  val solver = TriDiagonalMatrixSolver(0.0001)
+  private val solver = TriDiagonalMatrixSolver(0.0001)
 
   /** Simple case from https://math.la.asu.edu/~gardner/tridiag.pdf
     * but it did not give the result expected. Probably because the implementation used is specific to
