@@ -61,7 +61,7 @@ object BatchRun extends App {
     for (i <- 0 until screenshots) {
       breakable {
         for (k <- 0 until 10) {
-          val seed = i * k
+          val seed = i * 10 + k
           val finished = model.run(seed, limit)
           if (finished) {
             println(s"> DONE - $name")

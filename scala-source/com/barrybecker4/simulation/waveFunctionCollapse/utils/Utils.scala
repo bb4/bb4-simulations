@@ -26,6 +26,4 @@ object Utils {
 
     0
   }
-
-  def trimToColor(c: Int): Int = if (c <= 255) c else 255
 }

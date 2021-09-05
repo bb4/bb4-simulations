@@ -1,13 +1,12 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
+import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.OverlappingImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagator
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{BASE_DIR, readImage}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.readImage
 
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
 import scala.collection.mutable
 import scala.util.control.Breaks.{break, breakable}
 
@@ -135,60 +134,10 @@ class OverlappingModel(val name: String,
   }
 
   propagator = new OverlappingPropagator(tCounter, patterns, N)
+  imageExtractor = new OverlappingImageExtractor(FMX, FMY, N, tCounter, patterns, colors, onBoundary)
 
   override def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x + N > FMX || y + N > FMY || x < 0 || y < 0)
-  }
-
-  override def graphics(): BufferedImage = {
-    val result = new BufferedImage(FMX, FMY, BufferedImage.TYPE_4BYTE_ABGR)
-    if (wave.hasObserved) {
-      for (y <- 0 until FMY) {
-        val dy = if (y < FMY - N + 1) 0 else N - 1
-        for (x <- 0 until FMX) {
-          val dx = if (x < FMX - N + 1) 0 else N - 1
-          val isObserved = wave.get(x - dx + (y - dy) * FMX).observed
-          val c = colors(patterns(isObserved)(dx + dy * N).toInt)
-          result.setRGB(x, y, c.getRGB)
-        }
-      }
-    }
-    else {
-      for (i <- 0 until wave.size()) {
-        var contributors = 0
-        var r = 0
-        var g = 0
-        var b = 0
-        val x = i % FMX
-        val y = i / FMX
-
-        for (dy <- 0 until N) {
-          for (dx <- 0 until N) {
-            var sx = x - dx
-            if (sx < 0) sx += FMX
-
-            var sy = y - dy
-            if (sy < 0) sy += FMY
-
-            val s = sx + sy * FMX
-            if (!onBoundary(sx, sy)){
-              for (t <- 0 until tCounter) {
-                if (wave.get(s).enabled(t)) {
-                  contributors += 1
-                  val color = colors(patterns(t)(dx + dy * N).toInt)
-                  r += color.getRed
-                  g += color.getGreen
-                  b += color.getBlue
-                }
-              }
-              val c = new Color(r / contributors, g / contributors, b / contributors)
-              result.setRGB(x, y, c.getRGB)
-            }
-          }
-        }
-      }
-    }
-    result
   }
 
   override def clear(): Unit = {
