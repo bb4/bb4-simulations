@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.utils
 
 object Utils {
 
+  /** @return index from probability distribution given random number r */
   def randomFromArray(array: Array[Double], r: Double): Int = {
     var sum: Double = array.sum
 

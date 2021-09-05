@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.Propagator
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY, OPPOSITE}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, IntArray}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
@@ -61,6 +62,7 @@ class Wave(val FMX: Int, val FMY: Int) {
   }
 
 
+  /** @return true if in observed state. i.e complete. */
   def observe(
     tCounter: Int, weights: DoubleArray,
     onBoundary: (Int, Int) => Boolean,
@@ -130,7 +132,7 @@ class Wave(val FMX: Int, val FMY: Int) {
     waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
-  def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propagator: Array[Array[IntArray]]): Unit = {
+  def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propagator: Propagator): Unit = {
     while (stackSize > 0) {
       val e1 = stack(stackSize - 1)
       stackSize -= 1
@@ -151,7 +153,7 @@ class Wave(val FMX: Int, val FMY: Int) {
           else if (y2 >= FMY) y2 -= FMY
 
           val i2 = x2 + y2 * FMX
-          val p = propagator(d)(e1._2) // check for null  propagator(d)?
+          val p = propagator.get(d, e1._2)
           val compat = waveCells(i2).compatible
 
           for (l <- 0 until (if (p == null) 0 else p.length)) {
@@ -168,14 +170,14 @@ class Wave(val FMX: Int, val FMY: Int) {
     }
   }
 
-  def clear(tCounter: Int, weights: DoubleArray, propagator: Array[Array[IntArray]]): Unit = {
+  def clear(tCounter: Int, weights: DoubleArray, propagator: Propagator): Unit = {
     for (i <- 0 until size()) {
       val waveCell = waveCells(i)
       for (t <- 0 until tCounter) {
         if (waveCell != null) {
           waveCell.enabled(t) = true
           for (d <- 0 to 3)
-            waveCell.compatible(t)(d) = propagator(OPPOSITE(d))(t).length
+            waveCell.compatible(t)(d) = propagator.get(OPPOSITE(d), t).length
         }
       }
 

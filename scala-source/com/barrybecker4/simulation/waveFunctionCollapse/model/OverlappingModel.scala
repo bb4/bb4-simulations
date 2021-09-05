@@ -1,15 +1,14 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY}
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagator
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{BASE_DIR, readImage}
 
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.{break, breakable}
 
 
@@ -17,14 +16,12 @@ class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
   periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends Model(name, width, height) {
 
-  type ByteArray = Array[Byte]
   private var patterns: Array[ByteArray] = _
   private var colors: Seq[Color] = Seq()
   private var ground: Int = 0
 
   periodic = periodicOutput
-  val imageFile = new File(BASE_DIR + s"samples/$name.png")
-  val bitmap: BufferedImage = ImageIO.read(imageFile)
+  val bitmap: BufferedImage = readImage(s"samples/$name.png")
 
   val smx: Int = bitmap.getWidth
   val smy: Int = bitmap.getHeight
@@ -137,35 +134,7 @@ class OverlappingModel(val name: String,
     counter += 1
   }
 
-  def agrees(p1: ByteArray, p2: ByteArray, dx: Int, dy: Int): Boolean = {
-    val xMin = if (dx < 0) 0 else dx
-    val xMax = if (dx < 0) dx + N else N
-    val yMin = if (dy < 0) 0 else dy
-    val yMax = if (dy < 0) dy + N else N
-
-    for (y <- yMin until yMax) {
-      for (x <- xMin until xMax) {
-        if (p1(x + N * y) != p2(x - dx + N * (y - dy))) return false
-      }
-    }
-    true
-  }
-
-  propagator = Array.fill(4)(null)
-  for (d <- 0 until 4) {
-    propagator(d) = Array.fill(tCounter)(null)
-    for (t <- 0 until tCounter) {
-      val list = ListBuffer[Int]()
-      for (t2 <- 0 until tCounter) {
-        if (agrees(patterns(t), patterns(t2), DX(d), DY(d)))
-          list.append(t2)
-      }
-
-      propagator(d)(t) = new IntArray(list.size)
-      for (i <- list.indices)
-        propagator(d)(t)(i) = list(i)
-    }
-  }
+  propagator = new OverlappingPropagator(tCounter, patterns, N)
 
   override def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x + N > FMX || y + N > FMY || x < 0 || y < 0)
@@ -180,7 +149,7 @@ class OverlappingModel(val name: String,
           val dx = if (x < FMX - N + 1) 0 else N - 1
           val isObserved = wave.get(x - dx + (y - dy) * FMX).observed
           val c = colors(patterns(isObserved)(dx + dy * N).toInt)
-          result.setRGB(x, y, c.getRGB /* temp */)
+          result.setRGB(x, y, c.getRGB)
         }
       }
     }
