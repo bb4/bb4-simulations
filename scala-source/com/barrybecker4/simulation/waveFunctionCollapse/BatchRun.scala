@@ -13,24 +13,32 @@ import scala.util.control.Breaks.{break, breakable}
 
 
 object BatchRun extends App {
-  private val gson = new Gson()
 
   val startTime = System.currentTimeMillis()
-  println(s"start time = $startTime")
-
-  val bufferedReader = getFileReader("samples.json")
-  val content = bufferedReader.lines().toArray().mkString("")
-  val data: SampleJson = gson.fromJson(content, classOf[SampleJson])
-
-  var model: Model = _
-  var screenshots = 2
-  var limit = 0
   var counter = 1
-  var name = ""
-  println("num samples = " + data.samples.all().size)
-  for (commonModel: CommonModel <- data.samples.all()) {
+
+  for (commonModel: CommonModel <- getSampleData.samples.all()) {
+    process(commonModel, counter)
+    counter += 1
+  }
+
+  println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
+
+
+  private def getSampleData: SampleJson = {
+    val bufferedReader = getFileReader("samples.json")
+    val content = bufferedReader.lines().toArray().mkString("")
+    val gson = new Gson()
+    gson.fromJson(content, classOf[SampleJson])
+  }
+
+  def process(commonModel: CommonModel, counter: Int): Unit = {
+    var model: Model = null
+    val limit = commonModel.getLimit
+    val screenshots = commonModel.getScreenshots
+
     commonModel match {
-      case overlapping: Overlapping => // need defaults?
+      case overlapping: Overlapping =>
         model = new OverlappingModel(
           overlapping.getName,
           overlapping.getN,
@@ -40,10 +48,8 @@ object BatchRun extends App {
           overlapping.getPeriodic,
           overlapping.getSymmetry,
           overlapping.getGround)
-        screenshots = overlapping.getScreenshots
-        limit = overlapping.getLimit
-        name = overlapping.getName
-      case simpleTiled: Simpletiled => // need defaults?
+      case simpleTiled: Simpletiled =>
+
         model = new SimpleTiledModel(
           simpleTiled.getWidth,
           simpleTiled.getHeight,
@@ -51,12 +57,14 @@ object BatchRun extends App {
           simpleTiled.getSubset,
           simpleTiled.getPeriodic,
           simpleTiled.getBlack)
-        screenshots = simpleTiled.getScreenshots
-        limit = simpleTiled.getLimit
-        name = simpleTiled.getName
       case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
     }
 
+    createScreenshots(model, limit, screenshots)
+  }
+
+  def createScreenshots(model: Model, limit: Int, screenshots: Int): Unit = {
+    val name = model.getName
     println("Now processing " + name + "screenshots = " + screenshots)
     for (i <- 0 until screenshots) {
       breakable {
@@ -73,9 +81,5 @@ object BatchRun extends App {
         }
       }
     }
-
-    counter += 1
   }
-
-  println(s"time = ${System.currentTimeMillis() - startTime} milliseconds")
 }
