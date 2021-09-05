@@ -1,15 +1,14 @@
 /*
  * Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
  */
-package com.barrybecker4.simulation.waveFunctionCollapse
+package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
-import model.Model
 
 import java.awt.Color
 import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
 import java.io.File
+import javax.imageio.ImageIO
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.{break, breakable}

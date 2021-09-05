@@ -4,7 +4,7 @@
 package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.waveFunctionCollapse.MainTestSuite.SEED
-import com.barrybecker4.simulation.waveFunctionCollapse.model.SimpleTiledModel
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel}
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.awt.Color

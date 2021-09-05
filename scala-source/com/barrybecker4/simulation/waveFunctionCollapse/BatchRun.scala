@@ -3,13 +3,12 @@
  */
 package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, SimpleTiledModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, OverlappingModel, SimpleTiledModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, Simpletiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{BASE_DIR, CURRENT_DIR}
 import com.google.gson.Gson
 
 import java.io.{BufferedReader, File, FileReader}
-import java.util.stream.Collectors
 import javax.imageio.ImageIO
 import scala.util.Random
 import scala.util.control.Breaks.{break, breakable}
@@ -87,7 +86,7 @@ object BatchRun extends App {
       counter += 1
     }
 
-    println("time = ${System.currentTimeMillis() - startTime} milliseconds")
+    println(s"time = ${System.currentTimeMillis() - startTime} milliseconds")
   }
 
 }
