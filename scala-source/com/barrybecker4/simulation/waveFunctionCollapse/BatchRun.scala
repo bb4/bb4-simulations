@@ -66,12 +66,11 @@ object BatchRun extends App {
         case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
       }
 
-      println("Now processing " + name)
+      println("Now processing " + name + "screenshots = " + screenshots)
       for (i <- 0 until screenshots) {
         breakable {
           for (k <- 0 until 10) {
             val seed = random.nextInt()
-            println(s"now running ${model.getName}")
             val finished = model.run(seed, limit)
             if (finished) {
               println(s"> DONE - $name")
@@ -80,6 +79,7 @@ object BatchRun extends App {
               ImageIO.write(image, "png", outputFile)
               break()
             }
+            else println(s"$name didn't finish ${model.getName} for $i $k")
           }
         }
       }

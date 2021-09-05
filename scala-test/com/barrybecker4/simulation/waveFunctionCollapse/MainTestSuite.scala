@@ -32,7 +32,7 @@ class MainTestSuite extends AnyFunSuite {
       for (y <- 0 until image.getHeight()) {
         val color = new Color(image.getRGB(x, y))
         val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
-        actualHexes(hex) = (actualHexes.getOrElse(hex, 0) + 1)
+        actualHexes(hex) = actualHexes.getOrElse(hex, 0) + 1
       }
     }
 
@@ -77,7 +77,7 @@ class MainTestSuite extends AnyFunSuite {
     null
   }
 
-  test("simpleModelTestConsistency") {
+  test("simpleTileModelTestConsistency") {
     val image = generateSimpleImage()
     if (image == null) {
       fail("Image was null")
@@ -96,7 +96,7 @@ class MainTestSuite extends AnyFunSuite {
     val file = new File(this.getClass.getClassLoader.getResource("simple.txt").getFile)
     val src = Source.fromFile(file)
     for (hex <- src.getLines()) {
-      expectedHexes(hex) = (expectedHexes.getOrElse(hex, 0) + 1)
+      expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
     }
     src.close()
 

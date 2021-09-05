@@ -15,7 +15,6 @@ import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.{break, breakable}
 
 
-
 class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
   periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends Model(name, width, height) {
@@ -31,8 +30,7 @@ class OverlappingModel(val name: String,
 
   val smx: Int = bitmap.getWidth
   val smy: Int = bitmap.getHeight
-  // val sample: Array[Array[Integer]] = new Array[Array[Integer]](SMX, SMY)
-  val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy) //Array(smx) { ByteArray(smy) }
+  val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
 
   for (y <- 0 until smy) {
     for (x <- 0 until smx) {
@@ -171,7 +169,6 @@ class OverlappingModel(val name: String,
     }
   }
 
-
   override def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x + N > FMX || y + N > FMY || x < 0 || y < 0)
   }
@@ -183,9 +180,7 @@ class OverlappingModel(val name: String,
         val dy = if (y < FMY - N + 1) 0 else N - 1
         for (x <- 0 until FMX) {
           val dx = if (x < FMX - N + 1) 0 else N - 1
-
           val c = colors(patterns(observed(x - dx + (y - dy) * FMX))(dx + dy * N).toInt)
-          //val temp = -0x1000000 | (c.getRed << 16) | (c.getGreen << 8) | c.getBlue
           result.setRGB(x, y, c.getRGB /* temp */)
         }
       }

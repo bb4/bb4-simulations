@@ -13,11 +13,15 @@ case class Samples(
   def all(): Seq[CommonModel] = {
     var toReturn = Seq[CommonModel]()
 
-    for (it <- overlapping)
-      toReturn :+= it
+    if (overlapping != null) {
+      for (it <- overlapping)
+        toReturn :+= it
+    }
 
-    for (it <- simpletiled)
-      toReturn :+= it
+    if (simpletiled != null) {
+      for (it <- simpletiled)
+        toReturn :+= it
+    }
 
     toReturn
   }

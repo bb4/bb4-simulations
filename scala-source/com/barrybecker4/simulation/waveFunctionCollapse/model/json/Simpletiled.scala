@@ -19,7 +19,7 @@ case class Simpletiled(
   def getWidth: Int = if (width == null) 10 else width.toInt
   def getLimit: Int = if (limit == null) 0 else limit.toInt
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
-  def getScreenshots: Int = if (screenshots == null) 0 else screenshots.toInt
+  def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt
   def getBlack: Boolean = if (black == null) false else black.toBoolean
   def getSubset: String = subset //if (subset == null) "Knots" else subset
 }
