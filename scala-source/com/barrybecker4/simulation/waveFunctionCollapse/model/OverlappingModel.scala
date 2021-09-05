@@ -38,7 +38,7 @@ class OverlappingModel(val name: String,
       breakable {
         for (c <- colors) {
           if (c == color)
-            break
+            break()
           i += 1
         }
       }
@@ -174,12 +174,13 @@ class OverlappingModel(val name: String,
 
   override def graphics(): BufferedImage = {
     val result = new BufferedImage(FMX, FMY, BufferedImage.TYPE_4BYTE_ABGR)
-    if (observed != null) {
+    if (hasObserved) {
       for (y <- 0 until FMY) {
         val dy = if (y < FMY - N + 1) 0 else N - 1
         for (x <- 0 until FMX) {
           val dx = if (x < FMX - N + 1) 0 else N - 1
-          val c = colors(patterns(observed(x - dx + (y - dy) * FMX))(dx + dy * N).toInt)
+          val isObserved = wave(x - dx + (y - dy) * FMX).observed
+          val c = colors(patterns(isObserved)(dx + dy * N).toInt)
           result.setRGB(x, y, c.getRGB /* temp */)
         }
       }
@@ -204,7 +205,7 @@ class OverlappingModel(val name: String,
             val s = sx + sy * FMX
             if (!onBoundary(sx, sy)){
               for (t <- 0 until tCounter) {
-                if (wave(s)(t)) {
+                if (wave(s).enabled(t)) {
                   contributors += 1
                   val color = colors(patterns(t)(dx + dy * N).toInt)
                   r += color.getRed

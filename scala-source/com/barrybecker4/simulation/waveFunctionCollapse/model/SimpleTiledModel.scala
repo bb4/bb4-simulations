@@ -233,10 +233,10 @@ class SimpleTiledModel(
   def graphics(): BufferedImage = {
     val result = new BufferedImage(FMX * tilesize, FMY * tilesize, BufferedImage.TYPE_4BYTE_ABGR)
 
-    if (observed != null) {
+    if (hasObserved) {
       for (x <- 0 until FMX) {
         for (y <- 0 until FMY) {
-          val tile: Array[Color] = tiles(observed(x + y * FMX))
+          val tile: Array[Color] = tiles(wave(x + y * FMX).observed)
           for (yt <- 0 until tilesize) {
             for (xt <- 0 until tilesize) {
               val c = tile(xt + yt * tilesize)
@@ -249,9 +249,10 @@ class SimpleTiledModel(
     else {
       for (x <- 0 until FMX) {
         for (y <- 0 until FMY) {
-          val a = wave(x + y * FMX)
+          val waveCell = wave(x + y * FMX)
+          val a = waveCell.enabled
 
-          val amount = a.toSeq.map(a => if (a) 1 else 0).sum
+          val amount = a.map(a => if (a) 1 else 0).sum
           val lambda = 1.0 / (0 until tCounter).filter(t => a(t)).map(t => weights(t)).sum
           for (yt <- 0 until tilesize) {
             for (xt <- 0 until tilesize) {
@@ -263,7 +264,7 @@ class SimpleTiledModel(
                 var g = 0.0
                 var b = 0.0
                 for (t <- 0 until tCounter) {
-                  if (wave(x + y * FMX)(t)) {
+                  if (waveCell.enabled(t)) {
                     val c = tiles(t)(xt + yt * tilesize)
                     r += c.getRed.toDouble * weights(t) * lambda
                     g += c.getGreen.toDouble * weights(t) * lambda
@@ -288,7 +289,7 @@ class SimpleTiledModel(
     val result = new StringBuilder()
     for (x <- 0 until FMX) {
       for (y <- 0 until FMY) {
-        val name = tilenames(observed(x + y * FMX))
+        val name = tilenames(wave(x + y * FMX).observed)
         result.append (name).append ("\n")
       }
     }

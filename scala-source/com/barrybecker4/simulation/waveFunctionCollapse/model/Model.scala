@@ -10,23 +10,17 @@ import scala.util.control.Breaks.{break, breakable}
 
 abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
-  type IntArray = Array[Int]
-  type DoubleArray = Array[Double]
   var dxFun: IntArray = Array[Int](-1, 0, 1, 0)
   var dyFun: IntArray = Array[Int](0, 1, 0, -1)
   private val opposite = Array[Int](2, 3, 0, 1)
-  var wave: Array[Array[Boolean]] = _
+
+  var wave: Array[WaveCell] = _
+  var hasObserved = false
   var propagator: Array[Array[IntArray]] = _
-  private var compatible: Array[Array[IntArray]] = _
-  var observed: IntArray = _
   private var stack: Array[(Int, Int)] = _
   private var random: Random = _
   var weights: DoubleArray = _
   private var weightLogWeights: DoubleArray = _
-  private var sumsOfOnes: IntArray = _
-  private var sumsOfWeights: DoubleArray = _
-  private var sumsOfWeightLogWeights: DoubleArray = _
-  private var entropies: DoubleArray = _
   private var sumOfWeights: Double = 0
   private var sumOfWeightLogWeights: Double = 0
   private var startingEntropy: Double = 0
@@ -39,15 +33,16 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
   private def init(): Unit = {
 
     wave = Array.fill(FMX * FMY)(null)
-    compatible = Array.fill(FMX * FMY)(null)
 
     for (i <- 0 until wave.length) {
-      wave(i) = Array.fill(tCounter)(false)
-      compatible(i) = Array.fill(tCounter)(null)
+      val waveCell = new WaveCell()
+      wave(i) = waveCell
+      waveCell.enabled = Array.fill(tCounter)(false)
+      waveCell.compatible = Array.fill(tCounter)(null)
 
       for (t <- 0 until tCounter) {
-        if (compatible(i) != null) {
-          compatible(i)(t) = Array.fill(4)(0)
+        if (waveCell.compatible != null) {
+          waveCell.compatible(t) = Array.fill(4)(0)
         }
       }
     }
@@ -64,15 +59,9 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
     startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights
 
-    sumsOfOnes = Array.fill(FMX * FMY)(0)
-    sumsOfWeights = Array.fill(FMX * FMY)(0)
-    sumsOfWeightLogWeights = Array.fill(FMX * FMY)(0)
-    entropies = Array.fill(FMX * FMY)(0)
-
     stack = Array.fill(wave.length * tCounter)(null)
     stackSize = 0
   }
-
 
   private def observe(): Option[Boolean] = {
     var min = 1E+3
@@ -80,10 +69,10 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
     for (i <- 0 until wave.length) {
       if (!onBoundary(i % FMX, i / FMX)) {
-        val amount = sumsOfOnes(i)
+        val amount = wave(i).sumOfOnes
         if (amount == 0) return Some(false)
 
-        val entropy = entropies(i)
+        val entropy = wave(i).entropy
         if (amount > 1 && entropy <= min) {
           val noise = 1E-6 * random.nextDouble()
           if (entropy + noise < min) {
@@ -95,14 +84,14 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
     }
 
     if (argMin == -1) {
-      observed = Array.fill(FMX * FMY)(0)
+      hasObserved = true
       for (i <- 0 until wave.length) {
         breakable {
+          val waveCell = wave(i)
           for (t <- 0 until tCounter) {
-            if (wave(i) != null && wave(i)(t)) {
-              assert(observed != null)
-              observed(i) = t
-              break
+            if (waveCell.enabled != null && waveCell.enabled(t)) {
+              waveCell.observed = t
+              break()
             }
           }
         }
@@ -112,13 +101,13 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
     val distribution = Array.fill(tCounter)(0.0)
     for (t <- 0 until tCounter) {
-      distribution(t) = if (wave(argMin) != null && wave(argMin)(t)) weights(t) else 0.0
+      distribution(t) = if (wave(argMin).enabled != null && wave(argMin).enabled(t)) weights(t) else 0.0
     }
     val r = Utils.randomFromArray(distribution, random.nextDouble())
 
-    val w = wave(argMin)
+    val waveCell = wave(argMin)
     for (t <- 0 until tCounter)
-      if (w != null && w(t) != (t == r)) ban(argMin, t)
+      if (waveCell.enabled != null && waveCell.enabled(t) != (t == r)) ban(argMin, t)
 
     None
   }
@@ -126,26 +115,19 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
   def onBoundary(x: Int, y: Int): Boolean
 
   def ban(i: Int, t: Int): Unit = {
-    if (wave(i) != null)
-        wave(i)(t) = false
+    val waveCell = wave(i)
+    if (waveCell.enabled != null)
+        waveCell.enabled(t) = false
 
-    if (compatible(i) != null) {
-      val comp = compatible(i)(t)
+    if (waveCell.compatible != null) {
+      val comp = waveCell.compatible(t)
       for (d <- 0 to 3) comp(d) = 0
     }
 
     stack(stackSize) = (i, t)
     stackSize += 1
 
-    var sum = sumsOfWeights(i)
-    entropies(i) += sumsOfWeightLogWeights(i) / sum - Math.log(sum)
-
-    sumsOfOnes(i) -= 1
-    sumsOfWeights(i) -= weights(t)
-    sumsOfWeightLogWeights(i) -= weightLogWeights(t)
-
-    sum = sumsOfWeights(i)
-    entropies(i) -= sumsOfWeightLogWeights(i) / sum - Math.log(sum)
+    waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
   protected def propagate(): Unit = {
@@ -170,7 +152,7 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
           val i2 = x2 + y2 * FMX
           val p = propagator(d)(e1._2) // check for null  propagator(d)?
-          val compat = compatible(i2)
+          val compat = wave(i2).compatible
 
           for (l <- 0 until (if (p == null) 0 else p.length)) {
             val t2 = if (p == null) 0 else p(l)
@@ -207,19 +189,19 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
   def clear(): Unit = {
     for (i <- 0 until wave.length) {
+      val waveCell = wave(i)
       for (t <- 0 until tCounter) {
-        if (wave(i) != null) {
-          wave(i)(t) = true
+        if (waveCell != null) {
+          waveCell.enabled(t) = true
           for (d <- 0 to 3)
-            //propagator(opposite(d))?.get(t)?.size?.let { compatible(i)?.get(t)?.set(d, it) }
-            compatible(i)(t)(d) = propagator(opposite(d))(t).length // not sure
+            waveCell.compatible(t)(d) = propagator(opposite(d))(t).length
         }
       }
 
-      sumsOfOnes(i) = weights.length
-      sumsOfWeights(i) = sumOfWeights
-      sumsOfWeightLogWeights(i) = sumOfWeightLogWeights
-      entropies(i) = startingEntropy
+      waveCell.sumOfOnes = weights.length
+      waveCell.sumOfWeights = sumOfWeights
+      waveCell.sumOfWeightLogWeights = sumOfWeightLogWeights
+      waveCell.entropy = startingEntropy
     }
   }
 
