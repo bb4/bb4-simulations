@@ -1,6 +1,4 @@
-/*
- * Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.google.gson.Gson
@@ -233,10 +231,10 @@ class SimpleTiledModel(
   def graphics(): BufferedImage = {
     val result = new BufferedImage(FMX * tilesize, FMY * tilesize, BufferedImage.TYPE_4BYTE_ABGR)
 
-    if (hasObserved) {
+    if (wave.hasObserved) {
       for (x <- 0 until FMX) {
         for (y <- 0 until FMY) {
-          val tile: Array[Color] = tiles(wave(x + y * FMX).observed)
+          val tile: Array[Color] = tiles(wave.get(x + y * FMX).observed)
           for (yt <- 0 until tilesize) {
             for (xt <- 0 until tilesize) {
               val c = tile(xt + yt * tilesize)
@@ -249,7 +247,7 @@ class SimpleTiledModel(
     else {
       for (x <- 0 until FMX) {
         for (y <- 0 until FMY) {
-          val waveCell = wave(x + y * FMX)
+          val waveCell = wave.get(x + y * FMX)
           val a = waveCell.enabled
 
           val amount = a.map(a => if (a) 1 else 0).sum
@@ -289,7 +287,7 @@ class SimpleTiledModel(
     val result = new StringBuilder()
     for (x <- 0 until FMX) {
       for (y <- 0 until FMY) {
-        val name = tilenames(wave(x + y * FMX).observed)
+        val name = tilenames(wave.get(x + y * FMX).observed)
         result.append (name).append ("\n")
       }
     }

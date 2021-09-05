@@ -1,3 +1,5 @@
+<!-- Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT -->
+
 <set size="48" unique="True">
 	<tiles>
 		<tile name="cliff" symmetry="T"/>

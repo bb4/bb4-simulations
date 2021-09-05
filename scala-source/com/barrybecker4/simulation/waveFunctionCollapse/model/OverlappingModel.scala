@@ -1,8 +1,7 @@
-/*
- * Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
- */
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
+import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.BASE_DIR
 
 import java.awt.Color
@@ -158,7 +157,7 @@ class OverlappingModel(val name: String,
     for (t <- 0 until tCounter) {
       val list = ListBuffer[Int]()
       for (t2 <- 0 until tCounter) {
-        if (agrees(patterns(t), patterns(t2), dxFun(d), dyFun(d)))
+        if (agrees(patterns(t), patterns(t2), DX(d), DY(d)))
           list.append(t2)
       }
 
@@ -174,19 +173,19 @@ class OverlappingModel(val name: String,
 
   override def graphics(): BufferedImage = {
     val result = new BufferedImage(FMX, FMY, BufferedImage.TYPE_4BYTE_ABGR)
-    if (hasObserved) {
+    if (wave.hasObserved) {
       for (y <- 0 until FMY) {
         val dy = if (y < FMY - N + 1) 0 else N - 1
         for (x <- 0 until FMX) {
           val dx = if (x < FMX - N + 1) 0 else N - 1
-          val isObserved = wave(x - dx + (y - dy) * FMX).observed
+          val isObserved = wave.get(x - dx + (y - dy) * FMX).observed
           val c = colors(patterns(isObserved)(dx + dy * N).toInt)
           result.setRGB(x, y, c.getRGB /* temp */)
         }
       }
     }
     else {
-      for (i <- 0 until wave.length) {
+      for (i <- 0 until wave.size()) {
         var contributors = 0
         var r = 0
         var g = 0
@@ -205,7 +204,7 @@ class OverlappingModel(val name: String,
             val s = sx + sy * FMX
             if (!onBoundary(sx, sy)){
               for (t <- 0 until tCounter) {
-                if (wave(s).enabled(t)) {
+                if (wave.get(s).enabled(t)) {
                   contributors += 1
                   val color = colors(patterns(t)(dx + dy * N).toInt)
                   r += color.getRed
@@ -213,10 +212,8 @@ class OverlappingModel(val name: String,
                   b += color.getBlue
                 }
               }
-              //val temp = (-0x1000000 or (r / contributors shl 16) or (g / contributors shl 8) or b / contributors).toBigInteger()
-              //val color = Color(temp.toInt())
               val c = new Color(r / contributors, g / contributors, b / contributors)
-              result.setRGB(x, y, c.getRGB /*color.rgb*/)
+              result.setRGB(x, y, c.getRGB)
             }
           }
         }
@@ -231,14 +228,12 @@ class OverlappingModel(val name: String,
     if (groundParam != 0) {
       for (x <- 0 until FMX) {
         for (t <- 0 until tCounter)
-          if (t != ground) ban(x + (FMY - 1) * FMX, t)
+          if (t != ground) wave.ban(x + (FMY - 1) * FMX, t, weights)
         for (y <- 0 until FMY - 1)
-          ban(x + y * FMX, ground)
+          wave.ban(x + y * FMX, ground, weights)
       }
 
-      this.propagate()
+      wave.propagate(onBoundary, weights, propagator)
     }
   }
 }
-
-
