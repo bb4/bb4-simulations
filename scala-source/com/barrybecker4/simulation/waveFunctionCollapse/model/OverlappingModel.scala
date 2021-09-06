@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.OverlappingImageExtractor
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.Overlapping
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagator
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.readImage
 
@@ -13,7 +14,7 @@ import scala.util.control.Breaks.{break, breakable}
 
 class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
-  periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends Model(name, width, height) {
+  periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends WfcModel(name, width, height) {
 
   private var patterns: Array[ByteArray] = _
   private var colors: Seq[Color] = Seq()
@@ -45,6 +46,18 @@ class OverlappingModel(val name: String,
 
   val c: Int = colors.size
   val w: Long = Math.pow(c.toDouble, (N * N).toDouble).toLong
+
+  def this(overlapping: Overlapping) = {
+    this(
+      overlapping.getName,
+      overlapping.getN,
+      overlapping.getWidth,
+      overlapping.getHeight,
+      overlapping.getPeriodicInput,
+      overlapping.getPeriodic,
+      overlapping.getSymmetry,
+      overlapping.getGround)
+  }
 
   def pattern(passedInFunc: (Int, Int) => Byte): ByteArray = {
     val result: ByteArray = new Array(N * N)

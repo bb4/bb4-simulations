@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.json
 
 import com.google.gson.annotations.SerializedName
 
-case class Simpletiled(
+case class SimpleTiled(
   @(SerializedName @scala.annotation.meta.field)("-height") height: String,
   @(SerializedName @scala.annotation.meta.field)("-black") black: String,
   @(SerializedName @scala.annotation.meta.field)("-limit") limit: String,
@@ -27,6 +27,7 @@ case class Simpletiled(
     val per = if (getPeriodic) "periodic" else ""
     val black = if (getBlack) "black" else ""
     val sub = if (subset == null) "" else subset.substring(0, Math.min(subset.length, 14))
-    s"$getName $per $black $sub"
+    val lim = if (getLimit > 0) "lim=" + limit else ""
+    s"$getName $per $black $sub $lim"
   }
 }

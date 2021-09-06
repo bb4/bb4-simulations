@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, OverlappingModel, SimpleTiledModel}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, Simpletiled}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{WfcModel, OverlappingModel, SimpleTiledModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, getSampleData, writeImage}
 import com.google.gson.Gson
 
@@ -24,37 +24,18 @@ object BatchRun extends App {
 
 
   def process(commonModel: CommonModel, counter: Int): Unit = {
-    var model: Model = null
     val limit = commonModel.getLimit
     val screenshots = commonModel.getScreenshots
-
-    commonModel match {
-      case overlapping: Overlapping =>
-        model = new OverlappingModel(
-          overlapping.getName,
-          overlapping.getN,
-          overlapping.getWidth,
-          overlapping.getHeight,
-          overlapping.getPeriodicInput,
-          overlapping.getPeriodic,
-          overlapping.getSymmetry,
-          overlapping.getGround)
-      case simpleTiled: Simpletiled =>
-
-        model = new SimpleTiledModel(
-          simpleTiled.getWidth,
-          simpleTiled.getHeight,
-          simpleTiled.getName,
-          simpleTiled.getSubset,
-          simpleTiled.getPeriodic,
-          simpleTiled.getBlack)
+    val model = commonModel match {
+      case overlapping: Overlapping => new OverlappingModel(overlapping)
+      case simpleTiled: SimpleTiled => new SimpleTiledModel(simpleTiled)
       case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
     }
 
     createScreenshots(model, limit, screenshots, counter)
   }
 
-  def createScreenshots(model: Model, limit: Int, screenshots: Int, counter: Int): Unit = {
+  def createScreenshots(model: WfcModel, limit: Int, screenshots: Int, counter: Int): Unit = {
     val name = model.getName
     println("Now processing " + name + "screenshots = " + screenshots)
     for (i <- 0 until screenshots) {

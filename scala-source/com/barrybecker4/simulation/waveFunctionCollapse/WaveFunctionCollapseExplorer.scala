@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
 
 import javax.swing._
 import java.awt._
@@ -19,14 +20,17 @@ object WaveFunctionCollapseExplorer {
 
 class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
-  //private var caveModel: CaveModel = _
+  private var wfcModel: WfcModel = _
   private var options: DynamicOptions = _
-  //private var handler: InteractionHandler = _
   commonInit()
 
   private def commonInit(): Unit = {
     //caveModel = new CaveModel
     initCommonUI()
+  }
+
+  def setModel(m: WfcModel): Unit = {
+    wfcModel = m
   }
 
   override protected def reset(): Unit = {
@@ -38,7 +42,7 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   override protected def getInitialTimeStep: Double = 1
 
   override def timeStep: Double = {
-    if (!isPaused) {
+    if (!isPaused && wfcModel != null) {
       //caveModel.setSize(this.getWidth, this.getHeight)
       //caveModel.timeStep(tStep)
     }
@@ -46,10 +50,10 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null) return
+    if (g == null || wfcModel == null || !wfcModel.isReady) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
-    //g.drawImage(caveModel.getImage, 0, 0, null)
+    g.drawImage(wfcModel.graphics(), 0, 0, null)
     Profiler.getInstance.stopRenderingTime()
   }
 

@@ -5,8 +5,12 @@ import javax.swing._
 import java.awt._
 import java.awt.event._
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.CommonModel
+import com.barrybecker4.simulation.waveFunctionCollapse.DynamicOptions.RND
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.getSampleData
+
+import scala.util.Random
 
 
 /**
@@ -16,6 +20,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.getSample
 object DynamicOptions {
   private val PREFERRED_WIDTH = 300
   private val SPACING = 28
+  private val RND = new Random()
 }
 
 class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCollapseExplorer)
@@ -69,7 +74,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     sampleCombo = new JComboBox[CommonModel](sampleModel)
     sampleCombo.setToolTipText("Select a sample (either overlapping or simpleTiled)")
 
-    sampleCombo.setSelectedItem(samples(0))
+    sampleCombo.setSelectedItem(samples.head)
+    selectModel(samples.head)
     sampleCombo.addItemListener(this)
     sampleComboPanel.add(label)
     sampleComboPanel.add(sampleCombo)
@@ -98,6 +104,18 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   override def itemStateChanged(e: ItemEvent): Unit = {
     val sample: CommonModel = sampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+    selectModel(sample)
+  }
+
+  def selectModel(sample: CommonModel): Unit = {
+    val model: WfcModel = sample match {
+      case overlapping: Overlapping => new OverlappingModel(overlapping)
+      case simpleTiled: SimpleTiled => new SimpleTiledModel(simpleTiled)
+      case _ => throw new IllegalArgumentException("Unexpected type for " + sample)
+    }
+    simulator.setModel(model)
+
+    model.run(RND.nextInt(), sample.getLimit)
     println("selected " + sample.getName)
   }
 

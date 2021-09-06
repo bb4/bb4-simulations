@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.data.SampleData
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTileImageExtractor
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagator
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, readImage}
 
@@ -15,7 +16,7 @@ import scala.collection.mutable
 class SimpleTiledModel(
   var width: Int, var height: Int,
   val name: String, subsetName: String,
-  var isPeriodic: Boolean, var black: Boolean) extends Model(name, width, height) {
+  var isPeriodic: Boolean, var black: Boolean) extends WfcModel(name, width, height) {
 
   private var tiles: Seq[Array[Color]] = _
   private var tilenames: Seq[String] = _
@@ -25,6 +26,16 @@ class SimpleTiledModel(
 
   this.periodic = isPeriodic
   processFile(s"samples/$name/data.json")
+
+  def this(simpleTiled: SimpleTiled) = {
+    this(
+      simpleTiled.getWidth,
+      simpleTiled.getHeight,
+      simpleTiled.getName,
+      simpleTiled.getSubset,
+      simpleTiled.getPeriodic,
+      simpleTiled.getBlack)
+  }
 
   def processFile(fname: String): Unit = {
 
