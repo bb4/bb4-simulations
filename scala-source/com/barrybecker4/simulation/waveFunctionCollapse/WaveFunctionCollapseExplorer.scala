@@ -1,16 +1,13 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.cave.model.CaveModel
-import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 
 import javax.swing._
-import java.awt._
 
 
 /**
-  * Interactively explores generating cave systems.
+  * Interactively explore Wave Function Collapse for selected image as it generates the scene.
   * @author Barry Becker.
   */
 object WaveFunctionCollapseExplorer {

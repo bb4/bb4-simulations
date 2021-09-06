@@ -299,10 +299,10 @@ appMap['complexmapping'] = [
                 'Riemann Zeta function to numbers in the complex plane.',
         deploy: false
 ]
-appMap['waveFunctoinCollapse'] = [
+appMap['waveFunctionCollapse'] = [
         title: 'Wave Function Collapse',
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer',
-        panel_class: 'com.barrybecker4.simulation.cave.waveFunctionCollapse',
+        panel_class: 'com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer',
         description: 'Allows you to create procedurally generated scenes based on seed.',
         longDescription: 'This program allows you generate random scenes based on seed image. ' +
                 'See ' +
