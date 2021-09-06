@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{Model, OverlappingModel, SimpleTiledModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, Simpletiled}
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, writeImage}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, getSampleData, writeImage}
 import com.google.gson.Gson
 
 import scala.util.control.Breaks.{break, breakable}
@@ -22,12 +22,6 @@ object BatchRun extends App {
   println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
 
 
-  private def getSampleData: SampleJson = {
-    val gson = new Gson()
-    val bufferedReader = getFileReader("samples.json")
-    val content = bufferedReader.lines().toArray().mkString("")
-    gson.fromJson(content, classOf[SampleJson])
-  }
 
   def process(commonModel: CommonModel, counter: Int): Unit = {
     var model: Model = null
@@ -74,7 +68,9 @@ object BatchRun extends App {
             writeImage(image, s"out/$counter $name $i.png")
             break()
           }
-          else println(s"$name didn't finish ${model.getName} for $i $k")
+          else {
+            println(s"$name didn't finish ${model.getName} for $i $k")
+          }
         }
       }
     }

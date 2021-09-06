@@ -1,13 +1,15 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
+import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.common.ui.Simulator
 
 import javax.swing._
+import java.awt._
 
 
 /**
-  * Interactively explore Wave Function Collapse for selected image as it generates the scene.
+  * Interactively explores generating Wave Function Collapse procedural modeling.
   * @author Barry Becker.
   */
 object WaveFunctionCollapseExplorer {
@@ -17,23 +19,46 @@ object WaveFunctionCollapseExplorer {
 
 class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
+  //private var caveModel: CaveModel = _
+  private var options: DynamicOptions = _
+  //private var handler: InteractionHandler = _
   commonInit()
 
-
   private def commonInit(): Unit = {
-    BatchRun.main(Array())
+    //caveModel = new CaveModel
+    initCommonUI()
   }
 
   override protected def reset(): Unit = {
+    if (options != null) options.reset()
     commonInit()
   }
 
-  override protected def getInitialTimeStep: Double = 0.0
+  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def getInitialTimeStep: Double = 1
 
-  override protected def createOptionsDialog: SimulatorOptionsDialog = new SimulatorOptionsDialog(null, null) {
-    /** For custom parameters that don't fall in other categories. */
-    override protected def createCustomParamPanel: JPanel = new JPanel()
+  override def timeStep: Double = {
+    if (!isPaused) {
+      //caveModel.setSize(this.getWidth, this.getHeight)
+      //caveModel.timeStep(tStep)
+    }
+    tStep
   }
 
-  override def timeStep: Double = 0.1
+  override def paint(g: Graphics): Unit = {
+    if (g == null) return
+    super.paint(g)
+    Profiler.getInstance.startRenderingTime()
+    //g.drawImage(caveModel.getImage, 0, 0, null)
+    Profiler.getInstance.stopRenderingTime()
+  }
+
+  override def setScale(scale: Double): Unit = {}
+  override def getScale = 0.01
+
+  override def createDynamicControls: JPanel = {
+    options = new DynamicOptions(this)
+    setPaused(false)
+    options
+  }
 }

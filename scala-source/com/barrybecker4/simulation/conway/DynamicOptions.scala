@@ -45,14 +45,14 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   val brushPanel: JPanel = createBrushControls
   val legend: ContinuousColorLegend = new ContinuousColorLegend (null, conwayModel.getColormap, true)
 
-  add (createIncrementPanel)
-  add (createButtons)
-  add (createRuleDropdown)
-  add (legend)
-  add (Box.createVerticalStrut (DynamicOptions.SPACING) )
-  add (generalPanel)
-  add (Box.createVerticalStrut (DynamicOptions.SPACING) )
-  add (brushPanel)
+  add(createIncrementPanel)
+  add(createButtons)
+  add(createRuleDropdown)
+  add(legend)
+  add(Box.createVerticalStrut (DynamicOptions.SPACING) )
+  add(generalPanel)
+  add(Box.createVerticalStrut (DynamicOptions.SPACING) )
+  add(brushPanel)
 
   val fill: JPanel = new JPanel
   fill.setPreferredSize (new Dimension (1, 1000) )

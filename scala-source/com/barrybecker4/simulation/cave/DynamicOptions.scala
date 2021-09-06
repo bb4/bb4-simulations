@@ -16,9 +16,8 @@ import com.barrybecker4.common.app.AppContext
 
 
 /**
-  * Dynamic controls for the RD simulation that will show on the right.
+  * Dynamic controls for the Cave simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  *
   * @author Barry Becker
   */
 object DynamicOptions {

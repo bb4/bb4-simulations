@@ -58,7 +58,8 @@ class OverlappingImageExtractor(
                   b += color.getBlue
                 }
               }
-              val c = new Color(r / contributors, g / contributors, b / contributors)
+              val c = if (contributors == 0) Color.BLACK
+                      else new Color(r / contributors, g / contributors, b / contributors)
               result.setRGB(x, y, c.getRGB)
             }
           }
