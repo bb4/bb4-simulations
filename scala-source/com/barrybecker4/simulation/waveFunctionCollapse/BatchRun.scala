@@ -22,7 +22,6 @@ object BatchRun extends App {
   println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
 
 
-
   def process(commonModel: CommonModel, counter: Int): Unit = {
     val limit = commonModel.getLimit
     val screenshots = commonModel.getScreenshots

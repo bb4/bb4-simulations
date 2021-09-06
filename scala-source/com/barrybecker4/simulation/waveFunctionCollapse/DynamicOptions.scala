@@ -115,8 +115,14 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     }
     simulator.setModel(model)
 
-    model.run(RND.nextInt(), sample.getLimit)
     println("selected " + sample.getName)
+    var success = false
+    val MAX_TRIES = 20
+    var ct = 1;
+    while (!success && ct < MAX_TRIES) {
+      success = model.run(RND.nextInt(), sample.getLimit)
+      ct += 1
+    }
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {

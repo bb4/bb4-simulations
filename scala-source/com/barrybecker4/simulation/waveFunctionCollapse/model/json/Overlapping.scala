@@ -22,7 +22,7 @@ case class Overlapping(
   def getWidth: Int = if (width == null) 48 else width.toInt
   override def getLimit: Int = if (limit == null) 0 else limit.toInt
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
-  def getPeriodicInput: Boolean = if (periodicInput == null) false else periodicInput.toBoolean
+  def getPeriodicInput: Boolean = if (periodicInput == null) true else periodicInput.toBoolean
   override def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt
   def getSymmetry: Int = if (symmetry == null) 8 else symmetry.toInt
   def getGround: Int = if (ground == null) 0 else ground.toInt

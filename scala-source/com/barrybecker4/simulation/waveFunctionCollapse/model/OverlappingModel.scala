@@ -92,7 +92,7 @@ class OverlappingModel(val name: String,
   def patternFromIndex(ind: Long): ByteArray = {
     var residue = ind
     var power: Long = w
-    val result: ByteArray = new Array[Byte](N * N)
+    val result: ByteArray = new ByteArray(N * N)
 
     for (i <- result.indices) {
       power /= c
@@ -125,7 +125,7 @@ class OverlappingModel(val name: String,
       for (k <- 0 until symmetry) {
         val ind: Long = index(ps(k))
         if (weightsMap.contains(ind)) {
-          weightsMap(ind) = weightsMap(ind) + 1
+          weightsMap(ind) += 1
         } else {
           weightsMap(ind) = 1
           ordering :+= ind
@@ -135,7 +135,7 @@ class OverlappingModel(val name: String,
   }
 
   tCounter = weightsMap.size
-  this.ground = (ground + tCounter) % tCounter
+  ground = (groundParam + tCounter) % tCounter
   patterns = Array.fill(tCounter)(null)
   this.weights = Array.fill(tCounter)(0)
 
@@ -156,7 +156,7 @@ class OverlappingModel(val name: String,
   override def clear(): Unit = {
     super.clear()
 
-    if (groundParam != 0) {
+    if (ground != 0) {
       for (x <- 0 until FMX) {
         for (t <- 0 until tCounter)
           if (t != ground) wave.ban(x + (FMY - 1) * FMX, t, weights)
