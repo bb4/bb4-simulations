@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.json
 
 import com.google.gson.annotations.SerializedName
 
+
 case class Overlapping(
   @(SerializedName @scala.annotation.meta.field)("-N") n: String,
   @(SerializedName @scala.annotation.meta.field)("-ground") ground: String,
@@ -15,14 +16,14 @@ case class Overlapping(
   @(SerializedName @scala.annotation.meta.field)("-symmetry") symmetry: String,
   @(SerializedName @scala.annotation.meta.field)("-width") width: String) extends CommonModel {
 
-  def getName: String = if (name == null) "" else name
+  override def getName: String = if (name == null) "" else name
   def getN: Int = if (n == null) 2 else n.toInt
   def getHeight: Int = if (height == null) 48 else height.toInt
   def getWidth: Int = if (width == null) 48 else width.toInt
-  def getLimit: Int = if (limit == null) 0 else limit.toInt
+  override def getLimit: Int = if (limit == null) 0 else limit.toInt
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
   def getPeriodicInput: Boolean = if (periodicInput == null) false else periodicInput.toBoolean
-  def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt
+  override def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt
   def getSymmetry: Int = if (symmetry == null) 8 else symmetry.toInt
   def getGround: Int = if (ground == null) 0 else ground.toInt
 }

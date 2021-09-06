@@ -6,9 +6,6 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel,
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, writeImage}
 import com.google.gson.Gson
 
-import java.io.{BufferedReader, File, FileReader}
-import javax.imageio.ImageIO
-import scala.util.Random
 import scala.util.control.Breaks.{break, breakable}
 
 
@@ -26,9 +23,9 @@ object BatchRun extends App {
 
 
   private def getSampleData: SampleJson = {
+    val gson = new Gson()
     val bufferedReader = getFileReader("samples.json")
     val content = bufferedReader.lines().toArray().mkString("")
-    val gson = new Gson()
     gson.fromJson(content, classOf[SampleJson])
   }
 
@@ -60,10 +57,10 @@ object BatchRun extends App {
       case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
     }
 
-    createScreenshots(model, limit, screenshots)
+    createScreenshots(model, limit, screenshots, counter)
   }
 
-  def createScreenshots(model: Model, limit: Int, screenshots: Int): Unit = {
+  def createScreenshots(model: Model, limit: Int, screenshots: Int, counter: Int): Unit = {
     val name = model.getName
     println("Now processing " + name + "screenshots = " + screenshots)
     for (i <- 0 until screenshots) {

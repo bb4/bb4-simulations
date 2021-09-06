@@ -2,8 +2,6 @@
 
 package com.barrybecker4.simulation.waveFunctionCollapse.utils
 
-import com.barrybecker4.simulation.waveFunctionCollapse.BatchRun.{counter, name}
-
 import java.awt.image.BufferedImage
 import java.io.{BufferedReader, File, FileReader, IOException}
 import javax.imageio.ImageIO

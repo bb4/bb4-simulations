@@ -21,7 +21,6 @@ abstract class Model(name: String, val FMX: Int, val FMY: Int) {
 
   def getName: String = name
 
-
   def onBoundary(x: Int, y: Int): Boolean
 
   def run(seed: Int, limit: Int): Boolean = {
