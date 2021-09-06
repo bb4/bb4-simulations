@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 
 case class Subset(
   @(SerializedName @scala.annotation.meta.field)("-name") name: String,
-  @(SerializedName @scala.annotation.meta.field)("tile") tile: Array[Tile]
+  @(SerializedName @scala.annotation.meta.field)("tiles") tiles: Array[Tile]
 )

@@ -24,26 +24,30 @@ class SimpleTiledPropagator(
       tempPropagator(d)(t) = Array.fill(tCounter)(false)
   }
 
-  for (neighbor <- neighbors) {
-    val left = neighbor.left.split(" ").filter(_.nonEmpty)
-    val right = neighbor.right.split(" ").filter(_.nonEmpty)
+  if (neighbors != null) {
+    for (neighbor <- neighbors) {
+      val left = neighbor.left.split(" ").filter(_.nonEmpty)
+      val right = neighbor.right.split(" ").filter(_.nonEmpty)
 
-    if (subset == null || (subset.contains(left(0)) && subset.contains(right(0)))) {
-      val leftPosition: Int = action(firstOccurrence(left(0)))(if (left.length == 1) 0 else left(1).toInt)
-      val downPosition: Int = action(leftPosition)(1)
-      val rightPosition: Int = action(firstOccurrence(right(0)))(if (right.length == 1) 0 else right(1).toInt)
-      val upPosition: Int = action(rightPosition)(1)
+      if (subset == null || (subset.contains(left(0)) && subset.contains(right(0)))) {
+        val leftPosition: Int = action(firstOccurrence(left(0)))(if (left.length == 1) 0 else left(1).toInt)
+        val downPosition: Int = action(leftPosition)(1)
+        val rightPosition: Int = action(firstOccurrence(right(0)))(if (right.length == 1) 0 else right(1).toInt)
+        val upPosition: Int = action(rightPosition)(1)
 
-      tempPropagator(0)(rightPosition)(leftPosition) = true
-      tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = true
-      tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = true
-      tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = true
+        tempPropagator(0)(rightPosition)(leftPosition) = true
+        tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = true
+        tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = true
+        tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = true
 
-      tempPropagator(1)(upPosition)(downPosition) = true
-      tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = true
-      tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = true
-      tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = true
+        tempPropagator(1)(upPosition)(downPosition) = true
+        tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = true
+        tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = true
+        tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = true
+      }
     }
+  } else {
+    println("no neighbors for this")
   }
 
   for (t2 <- 0 until tCounter) {

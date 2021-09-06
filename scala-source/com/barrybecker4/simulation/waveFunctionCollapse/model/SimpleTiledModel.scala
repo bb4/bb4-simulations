@@ -37,12 +37,12 @@ class SimpleTiledModel(
 
     var subset: Seq[String] = null
     if (subsetName != null) {
-      val xSubSet = dataset.subsets.subset(0).name
+      val xSubSet = dataset.subsets(0).name
       if (xSubSet == null) {
         println(s"ERROR SUBSET $subsetName not found")
       }
       else {
-        for (tile <- dataset.tiles.tile) {
+        for (tile <- dataset.tiles) {
           if (subset == null) {
             subset = Seq()
           }
@@ -73,7 +73,7 @@ class SimpleTiledModel(
 
     val firstOccurrence = new mutable.HashMap[String, Int]()
 
-    for (tile <- dataset.tiles.tile) {
+    for (tile <- dataset.tiles) {
       val tileName = tile.name
       if (!useSubset || subset.contains(tileName)) {
         var a: Int => Int = null
@@ -154,7 +154,7 @@ class SimpleTiledModel(
     tCounter = action.size
     weights = tempStationary.toArray
 
-    propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors.neighbor, firstOccurrence, subset)
+    propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors, firstOccurrence, subset)
     imageExtractor = new SimpleTileImageExtractor(FMX, FMY, tCounter, tilesize, tiles, weights, black)
   }
 
