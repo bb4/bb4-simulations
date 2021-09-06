@@ -15,13 +15,13 @@ class SimpleTiledPropagator(
   subset: Seq[String]
 ) extends Propagator {
 
-  private val tempPropagator: Array[Array[Array[Option[Boolean]]]] = Array.fill(4)(null)
+  private val tempPropagator: Array[Array[Array[Boolean]]] = Array.fill(4)(null)
 
   for (d <- 0 to 3) {
     tempPropagator(d) = Array.fill(tCounter)(null)
     propagator(d) = Array.fill(tCounter)(null)
     for (t <- 0 until tCounter)
-      tempPropagator(d)(t) = Array.fill(tCounter)(None)
+      tempPropagator(d)(t) = Array.fill(tCounter)(false)
   }
 
   for (neighbor <- neighbors) {
@@ -34,15 +34,15 @@ class SimpleTiledPropagator(
       val rightPosition: Int = action(firstOccurrence(right(0)))(if (right.length == 1) 0 else right(1).toInt)
       val upPosition: Int = action(rightPosition)(1)
 
-      tempPropagator(0)(rightPosition)(leftPosition) = Some(true)
-      tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = Some(true)
-      tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = Some(true)
-      tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = Some(true)
+      tempPropagator(0)(rightPosition)(leftPosition) = true
+      tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = true
+      tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = true
+      tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = true
 
-      tempPropagator(1)(upPosition)(downPosition) = Some(true)
-      tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = Some(true)
-      tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = Some(true)
-      tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = Some(true)
+      tempPropagator(1)(upPosition)(downPosition) = true
+      tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = true
+      tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = true
+      tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = true
     }
   }
 
@@ -63,7 +63,7 @@ class SimpleTiledPropagator(
       val sp: ListBuffer[Int] = sparsePropagator(d)(t1)
       val tp = tempPropagator(d)(t1)
       for (t2 <- 0 until tCounter)
-        if (tp(t2).getOrElse(false)) sp.append(t2)
+        if (tp(t2)) sp.append(t2)
 
       val size = sp.size
       propagator(d)(t1) = new IntArray(size)
