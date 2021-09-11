@@ -25,7 +25,6 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   commonInit()
 
   private def commonInit(): Unit = {
-    //caveModel = new CaveModel
     initCommonUI()
   }
 
@@ -36,6 +35,13 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   override protected def reset(): Unit = {
     if (options != null) options.reset()
     commonInit()
+  }
+
+  import java.awt.event.ComponentEvent
+
+  def componentResized(ce: ComponentEvent): Unit = {
+    println("resized so rerunning...")
+    options.runModel()
   }
 
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
@@ -51,6 +57,7 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
 
   override def paint(g: Graphics): Unit = {
     if (g == null || wfcModel == null || !wfcModel.isReady) return
+    options.setDimensions(this.getSize())
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(wfcModel.graphics(), 0, 0, null)

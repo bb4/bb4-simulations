@@ -3,12 +3,12 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.data.SampleData
-import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTileImageExtractor
+import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.{OverlappingImageExtractor, SimpleTiledImageExtractor}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagator
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, readImage}
 
-import java.awt.Color
+import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 import scala.collection.mutable
 
@@ -16,7 +16,8 @@ import scala.collection.mutable
 class SimpleTiledModel(
   var width: Int, var height: Int,
   val name: String, subsetName: String,
-  var isPeriodic: Boolean, var black: Boolean) extends WfcModel(name, width, height) {
+  var isPeriodic: Boolean, var black: Boolean, val limit: Int = 0
+) extends WfcModel(name, width, height, limit) {
 
   private var tiles: Seq[Array[Color]] = _
   private var tilenames: Seq[String] = _
@@ -34,7 +35,16 @@ class SimpleTiledModel(
       simpleTiled.getName,
       simpleTiled.getSubset,
       simpleTiled.getPeriodic,
-      simpleTiled.getBlack)
+      simpleTiled.getBlack,
+      simpleTiled.getLimit)
+  }
+
+  def getActualDimensions: Dimension = {
+    if (dimensions != null) {
+      new Dimension(dimensions.width / tilesize, dimensions.height / tilesize)
+    } else {
+      new Dimension(width, height)
+    }
   }
 
   def processFile(fname: String): Unit = {
@@ -166,11 +176,15 @@ class SimpleTiledModel(
     weights = tempStationary.toArray
 
     propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors, firstOccurrence, subset)
-    imageExtractor = new SimpleTileImageExtractor(FMX, FMY, tCounter, tilesize, tiles, weights, black)
   }
 
   def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x < 0 || y < 0 || x >= FMX || y >= FMY)
+  }
+
+  def graphics(): BufferedImage  = {
+    val imageExtractor = new SimpleTiledImageExtractor(getActualDimensions, tCounter, tilesize, tiles, weights, black)
+    imageExtractor.getImage(wave)
   }
 
   def textOutput(): String = {

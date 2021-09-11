@@ -4,12 +4,12 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors
 import com.barrybecker4.simulation.waveFunctionCollapse.model.DoubleArray
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave
 
-import java.awt.Color
+import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 
 
-class SimpleTileImageExtractor(
-  FMX: Int, FMY: Int,
+class SimpleTiledImageExtractor(
+  dims: Dimension,
   tCounter: Int,
   tilesize: Int,
   tiles: Seq[Array[Color]],
@@ -19,6 +19,8 @@ class SimpleTileImageExtractor(
 
 
   def getImage(wave: Wave): BufferedImage = {
+    val FMX = dims.width
+    val FMY = dims.height
     val result = new BufferedImage(FMX * tilesize, FMY * tilesize, BufferedImage.TYPE_4BYTE_ABGR)
 
     if (wave.hasObserved) {

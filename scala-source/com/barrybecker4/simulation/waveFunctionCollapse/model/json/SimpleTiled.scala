@@ -4,14 +4,14 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.json
 import com.google.gson.annotations.SerializedName
 
 case class SimpleTiled(
+  @(SerializedName @scala.annotation.meta.field)("-width") width: String,
   @(SerializedName @scala.annotation.meta.field)("-height") height: String,
   @(SerializedName @scala.annotation.meta.field)("-black") black: String,
   @(SerializedName @scala.annotation.meta.field)("-limit") limit: String,
   @(SerializedName @scala.annotation.meta.field)("-name") name: String,
   @(SerializedName @scala.annotation.meta.field)("-periodic") periodic: String,
   @(SerializedName @scala.annotation.meta.field)("-screenshots") screenshots: String,
-  @(SerializedName @scala.annotation.meta.field)("-subset") subset: String,
-  @(SerializedName @scala.annotation.meta.field)("-width") width: String
+  @(SerializedName @scala.annotation.meta.field)("-subset") subset: String
 ) extends CommonModel {
 
   override def getName: String = if (name == null) "" else name

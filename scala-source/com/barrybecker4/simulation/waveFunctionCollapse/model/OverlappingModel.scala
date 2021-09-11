@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.json.Overlapping
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagator
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.readImage
 
-import java.awt.Color
+import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 import scala.collection.mutable
 import scala.util.control.Breaks.{break, breakable}
@@ -14,7 +14,8 @@ import scala.util.control.Breaks.{break, breakable}
 
 class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
-  periodicOutput: Boolean, symmetry: Int, groundParam: Int) extends WfcModel(name, width, height) {
+  periodicOutput: Boolean, symmetry: Int, groundParam: Int, val limit: Int = 0
+) extends WfcModel(name, width, height, limit) {
 
   private var patterns: Array[ByteArray] = _
   private var colors: Seq[Color] = Seq()
@@ -56,7 +57,16 @@ class OverlappingModel(val name: String,
       overlapping.getPeriodicInput,
       overlapping.getPeriodic,
       overlapping.getSymmetry,
-      overlapping.getGround)
+      overlapping.getGround,
+      overlapping.getLimit)
+  }
+
+  def getActualDimensions: Dimension = {
+    if (dimensions != null) {
+      dimensions
+    } else {
+      new Dimension(width, height)
+    }
   }
 
   def pattern(passedInFunc: (Int, Int) => Byte): ByteArray = {
@@ -147,7 +157,6 @@ class OverlappingModel(val name: String,
   }
 
   propagator = new OverlappingPropagator(tCounter, patterns, N)
-  imageExtractor = new OverlappingImageExtractor(FMX, FMY, N, tCounter, patterns, colors, onBoundary)
 
   override def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x + N > FMX || y + N > FMY || x < 0 || y < 0)
@@ -166,5 +175,10 @@ class OverlappingModel(val name: String,
 
       wave.propagate(onBoundary, weights, propagator)
     }
+  }
+
+  def graphics(): BufferedImage  = {
+    val imageExtractor = new OverlappingImageExtractor(getActualDimensions, N, tCounter, patterns, colors, onBoundary)
+    imageExtractor.getImage(wave)
   }
 }

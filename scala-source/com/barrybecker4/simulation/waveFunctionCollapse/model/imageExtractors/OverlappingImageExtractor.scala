@@ -5,11 +5,11 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors
 import com.barrybecker4.simulation.waveFunctionCollapse.model.ByteArray
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave
 
-import java.awt.Color
+import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 
 class OverlappingImageExtractor(
-  FMX: Int, FMY: Int, N: Int,
+  dims: Dimension, N: Int,
   tCounter: Int,
   patterns: Array[ByteArray],
   colors: Seq[Color],
@@ -18,6 +18,8 @@ class OverlappingImageExtractor(
 
 
   override def getImage(wave: Wave): BufferedImage = {
+    val FMX = dims.width
+    val FMY = dims.height
     val result = new BufferedImage(FMX, FMY, BufferedImage.TYPE_4BYTE_ABGR)
     if (wave.hasObserved) {
       for (y <- 0 until FMY) {

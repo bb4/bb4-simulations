@@ -6,6 +6,8 @@ trait CommonModel {
   def getName: String
   def getLimit: Int
   def getScreenshots: Int
+  def getWidth: Int
+  def getHeight: Int
 
   override def toString: String = getName
 }

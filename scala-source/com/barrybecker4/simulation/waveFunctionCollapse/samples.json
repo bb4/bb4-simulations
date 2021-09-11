@@ -158,6 +158,12 @@
         "-periodic": "True"
       },
       {
+        "-name": "Cave",
+        "-N": "3",
+        "-symmetry": "2",
+        "-periodic": "True"
+      },
+      {
         "-name": "Skyline 2",
         "-N": "3",
         "-symmetry": "2",

@@ -34,16 +34,24 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   add(createSampleDropdown)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
   add(createButtons)
-  //add(Box.createVerticalStrut(DynamicOptions.SPACING))
-  //add(generalPanel)
-  //add(Box.createVerticalStrut(DynamicOptions.SPACING))
+  add(Box.createVerticalStrut(DynamicOptions.SPACING))
+  add(createCheckBoxes)
+  add(Box.createVerticalStrut(DynamicOptions.SPACING))
 
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
+
+  private var model: WfcModel = _
+  private var dimensions: Dimension = _
   private var sampleCombo: JComboBox[CommonModel] = _
+  private var fillPanelCB: JCheckBox = _
   private var nextButton: JButton = _
   private var resetButton: JButton = _
+
+  def setDimensions(dims: Dimension): Unit = {
+    dimensions = dims
+  }
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -83,6 +91,23 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
 
+  private def createCheckBoxes = {
+    val checkBoxes = new JPanel(new GridLayout(0, 1))
+
+    fillPanelCB = createCheckBox("Fill whole panel", "if checked, then the pattern will fill the whole window", false)
+    checkBoxes.add(fillPanelCB)
+    checkBoxes.setBorder(BorderFactory.createEtchedBorder)
+    checkBoxes
+  }
+
+
+  private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
+    val cb = new JCheckBox(label, initiallyChecked)
+    cb.setToolTipText(tooltip)
+    cb.addActionListener(this)
+    cb
+  }
+
   private def createButtons = {
     val buttonsPanel = new JPanel
     nextButton = new JButton("Next")
@@ -108,19 +133,25 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   def selectModel(sample: CommonModel): Unit = {
-    val model: WfcModel = sample match {
+    model = sample match {
       case overlapping: Overlapping => new OverlappingModel(overlapping)
       case simpleTiled: SimpleTiled => new SimpleTiledModel(simpleTiled)
       case _ => throw new IllegalArgumentException("Unexpected type for " + sample)
     }
+    runModel()
+  }
+
+  def runModel(): Unit = {
+
+    model.setDimensions(if (fillPanelCB != null && fillPanelCB.isSelected) dimensions else null)
     simulator.setModel(model)
 
-    println("selected " + sample.getName)
+    println("selected " + model.getName)
     var success = false
     val MAX_TRIES = 20
-    var ct = 1;
+    var ct = 1
     while (!success && ct < MAX_TRIES) {
-      success = model.run(RND.nextInt(), sample.getLimit)
+      success = model.run(RND.nextInt())
       ct += 1
     }
   }
@@ -131,6 +162,9 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     }
     else if (e.getSource == resetButton) {
       println("reset requested")
+    }
+    else if (e.getSource == fillPanelCB) {
+      // do nothing
     }
     else throw new IllegalStateException("Unexpected button " + e.getSource)
   }
