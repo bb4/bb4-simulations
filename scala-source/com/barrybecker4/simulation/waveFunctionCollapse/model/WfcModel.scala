@@ -23,11 +23,6 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
 
 
   def getName: String = name
-  def getActualDimensions: Dimension
-
-  def setDimensions(dims: Dimension): Unit = {
-    dimensions = dims
-  }
 
   def onBoundary(x: Int, y: Int): Boolean
 
@@ -36,8 +31,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
   def run(seed: Int): Boolean = {
     ready = false
     if (wave == null) {
-      val dims: Dimension = getActualDimensions
-      wave = new Wave(dims.width, dims.height)
+      wave = new Wave(dimensions.width, dimensions.height)
       wave.init(tCounter, weights)
     }
 

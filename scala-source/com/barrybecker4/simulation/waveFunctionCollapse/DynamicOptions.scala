@@ -26,6 +26,13 @@ object DynamicOptions {
 class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCollapseExplorer)
   extends JPanel with ItemListener with ActionListener {
 
+  private var sampleModel: CommonModel = _
+  private var dimensions: Dimension = new Dimension(100, 100)
+  private var sampleCombo: JComboBox[CommonModel] = _
+  private var fillPanelCB: JCheckBox = _
+  private var nextButton: JButton = _
+  private var resetButton: JButton = _
+
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
@@ -42,12 +49,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
 
-  private var model: WfcModel = _
-  private var dimensions: Dimension = _
-  private var sampleCombo: JComboBox[CommonModel] = _
-  private var fillPanelCB: JCheckBox = _
-  private var nextButton: JButton = _
-  private var resetButton: JButton = _
 
   def setDimensions(dims: Dimension): Unit = {
     dimensions = dims
@@ -90,16 +91,15 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     sampleComboPanel
   }
 
-
   private def createCheckBoxes = {
     val checkBoxes = new JPanel(new GridLayout(0, 1))
 
-    fillPanelCB = createCheckBox("Fill whole panel", "if checked, then the pattern will fill the whole window", false)
+    fillPanelCB = createCheckBox("Fill whole panel",
+      "if checked, then the pattern will fill the whole window", true)
     checkBoxes.add(fillPanelCB)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
     checkBoxes
   }
-
 
   private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
     val cb = new JCheckBox(label, initiallyChecked)
@@ -133,17 +133,54 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   def selectModel(sample: CommonModel): Unit = {
-    model = sample match {
-      case overlapping: Overlapping => new OverlappingModel(overlapping)
-      case simpleTiled: SimpleTiled => new SimpleTiledModel(simpleTiled)
-      case _ => throw new IllegalArgumentException("Unexpected type for " + sample)
+    sampleModel = sample
+
+    //set default values for UI controls
+    sampleModel match {
+      case overlapping: Overlapping =>
+//        overlapping.getName,
+//        overlapping.getN,
+//        overlapping.getPeriodicInput,
+//        overlapping.getPeriodic,
+//        overlapping.getSymmetry,
+//        overlapping.getGround,
+//        overlapping.getLimit
+      case simpleTiled: SimpleTiled =>
+//        simpleTiled.getName,
+//        simpleTiled.getSubset,
+//        simpleTiled.getPeriodic,
+//        simpleTiled.getBlack,
+//        simpleTiled.getLimit
+      case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
     }
+
     runModel()
   }
 
   def runModel(): Unit = {
+    //if (dimensions == null) return;
+    val model: WfcModel = sampleModel match {
+      case overlapping: Overlapping => new OverlappingModel(
+        overlapping.getName,
+        overlapping.getN,
+        dimensions.width,
+        dimensions.height,
+        overlapping.getPeriodicInput,
+        overlapping.getPeriodic,
+        overlapping.getSymmetry,
+        overlapping.getGround,
+        overlapping.getLimit)
+      case simpleTiled: SimpleTiled => new SimpleTiledModel(
+        dimensions.width,
+        dimensions.height,
+        simpleTiled.getName,
+        simpleTiled.getSubset,
+        simpleTiled.getPeriodic,
+        simpleTiled.getBlack,
+        simpleTiled.getLimit)
+      case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
+    }
 
-    model.setDimensions(if (fillPanelCB != null && fillPanelCB.isSelected) dimensions else null)
     simulator.setModel(model)
 
     println("selected " + model.getName)
@@ -159,9 +196,11 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == nextButton) {
       println("next step requested")
+      runModel()
     }
     else if (e.getSource == resetButton) {
       println("reset requested")
+      runModel()
     }
     else if (e.getSource == fillPanelCB) {
       // do nothing

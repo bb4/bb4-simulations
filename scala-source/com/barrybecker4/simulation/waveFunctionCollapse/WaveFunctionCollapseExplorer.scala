@@ -9,6 +9,7 @@ import javax.swing._
 import java.awt._
 
 
+
 /**
   * Interactively explores generating Wave Function Collapse procedural modeling.
   * @author Barry Becker.
@@ -18,7 +19,8 @@ object WaveFunctionCollapseExplorer {
   protected val DEFAULT_STEPS_PER_FRAME = 10
 }
 
-class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
+class WaveFunctionCollapseExplorer()
+  extends Simulator("Wave Function Collapse Explorer") {
 
   private var wfcModel: WfcModel = _
   private var options: DynamicOptions = _
@@ -26,6 +28,14 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
 
   private def commonInit(): Unit = {
     initCommonUI()
+//    val self = this
+//    this.addComponentListener(new ComponentAdapter {
+//      override def componentResized(ce: ComponentEvent): Unit = {
+//        println("resized so rerunning...")
+//        options.setDimensions(self.getSize())
+//        //options.runModel()
+//      }
+//    })
   }
 
   def setModel(m: WfcModel): Unit = {
@@ -35,13 +45,6 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   override protected def reset(): Unit = {
     if (options != null) options.reset()
     commonInit()
-  }
-
-  import java.awt.event.ComponentEvent
-
-  def componentResized(ce: ComponentEvent): Unit = {
-    println("resized so rerunning...")
-    options.runModel()
   }
 
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
@@ -56,8 +59,8 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null || wfcModel == null || !wfcModel.isReady) return
     options.setDimensions(this.getSize())
+    if (g == null || wfcModel == null || !wfcModel.isReady) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(wfcModel.graphics(), 0, 0, null)

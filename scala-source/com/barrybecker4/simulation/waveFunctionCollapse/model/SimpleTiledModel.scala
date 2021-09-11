@@ -39,14 +39,6 @@ class SimpleTiledModel(
       simpleTiled.getLimit)
   }
 
-  def getActualDimensions: Dimension = {
-    if (dimensions != null) {
-      new Dimension(dimensions.width / tilesize, dimensions.height / tilesize)
-    } else {
-      new Dimension(width, height)
-    }
-  }
-
   def processFile(fname: String): Unit = {
 
     val bufferedReader = getFileReader(fname)
@@ -55,12 +47,13 @@ class SimpleTiledModel(
     val dataset = data.set
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
     val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
+    dimensions = new Dimension(width / tilesize, height / tilesize)
 
     var subset: Seq[String] = null
     if (subsetName != null) {
       val xSubSet = dataset.subsets(0).name
       if (xSubSet == null) {
-        println(s"ERROR SUBSET $subsetName not found")
+        println(s"ERROR SUBSET $subsetName not found among " + dataset.subsets.mkString(", "))
       }
       else {
         for (tile <- dataset.tiles) {
@@ -183,7 +176,7 @@ class SimpleTiledModel(
   }
 
   def graphics(): BufferedImage  = {
-    val imageExtractor = new SimpleTiledImageExtractor(getActualDimensions, tCounter, tilesize, tiles, weights, black)
+    val imageExtractor = new SimpleTiledImageExtractor(dimensions, tCounter, tilesize, tiles, weights, black)
     imageExtractor.getImage(wave)
   }
 
