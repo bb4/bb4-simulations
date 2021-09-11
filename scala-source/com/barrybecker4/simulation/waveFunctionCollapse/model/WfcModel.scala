@@ -48,7 +48,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
       }
       wave.propagate(onBoundary, weights, propagator)
       ct += 1
-      print(s"$ct, ")
+      if (ct % 100 == 0) print(s"$ct, ")
     } while (ct < limit || limit == 0)
 
     val elapsed = (System.currentTimeMillis() - start)/1000.0

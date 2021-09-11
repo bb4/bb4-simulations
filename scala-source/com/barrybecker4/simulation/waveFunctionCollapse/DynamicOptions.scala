@@ -77,7 +77,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     label.setPreferredSize(new Dimension(50, 20))
 
     val sampleModel = new DefaultComboBoxModel[CommonModel]()
-    val samples = getSampleData.samples.all()
+    val samples = getSampleData("menu-samples.json").samples.all()
     samples.foreach(s => sampleModel.addElement(s))
 
     sampleCombo = new JComboBox[CommonModel](sampleModel)
@@ -187,8 +187,9 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     var success = false
     val MAX_TRIES = 20
     var ct = 1
-    while (!success && ct < MAX_TRIES) {
+    while (!success && ct <= MAX_TRIES) {
       success = model.run(RND.nextInt())
+      if (!success) println(s"\nfailed to create image on try $ct out of $MAX_TRIES")
       ct += 1
     }
   }

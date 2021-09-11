@@ -14,7 +14,7 @@ object BatchRun extends App {
   val startTime = System.currentTimeMillis()
   var counter = 1
 
-  for (commonModel: CommonModel <- getSampleData.samples.all()) {
+  for (commonModel: CommonModel <- getSampleData("samples.json").samples.all()) {
     process(commonModel, counter)
     counter += 1
   }

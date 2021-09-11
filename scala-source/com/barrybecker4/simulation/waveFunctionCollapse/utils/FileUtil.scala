@@ -31,9 +31,9 @@ object FileUtil {
     new BufferedReader(new FileReader(file))
   }
 
-  def getSampleData: SampleJson = {
+  def getSampleData(filename: String = "samples.json"): SampleJson = {
     val gson = new Gson()
-    val bufferedReader = getFileReader("samples.json")
+    val bufferedReader = getFileReader(filename)
     val content = bufferedReader.lines().toArray().mkString("")
     gson.fromJson(content, classOf[SampleJson])
   }
