@@ -47,7 +47,7 @@ class SimpleTiledModel(
     val dataset = data.set
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
     val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
-    dimensions = new Dimension(width / tilesize, height / tilesize)
+    dimensions = new Dimension(Math.max(1, width / tilesize), Math.max(1, height / tilesize))
 
     var subset: Seq[String] = null
     if (subsetName != null) {

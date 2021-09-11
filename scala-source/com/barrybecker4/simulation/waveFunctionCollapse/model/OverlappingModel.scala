@@ -29,7 +29,6 @@ class OverlappingModel(val name: String,
   val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
   dimensions = new Dimension(width, height)
 
-  println("calc sample")
   val start1 = System.currentTimeMillis()
   for (y <- 0 until smy) {
     for (x <- 0 until smx) {

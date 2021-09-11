@@ -36,7 +36,7 @@ object BatchRun extends App {
 
   def createScreenshots(model: WfcModel, limit: Int, screenshots: Int, counter: Int): Unit = {
     val name = model.getName
-    println("Now processing " + name + "screenshots = " + screenshots)
+    println("Now processing " + name + " screenshots = " + screenshots)
     for (i <- 0 until screenshots) {
       breakable {
         for (k <- 0 until 10) {

@@ -15,8 +15,8 @@ case class SimpleTiled(
 ) extends CommonModel {
 
   override def getName: String = if (name == null) "" else name
-  def getHeight: Int = if (height == null) 10 else height.toInt
-  def getWidth: Int = if (width == null) 10 else width.toInt
+  def getHeight: Int = if (height == null) 400 else height.toInt
+  def getWidth: Int = if (width == null) 400 else width.toInt
   override def getLimit: Int = if (limit == null) 0 else limit.toInt
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
   override def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt

@@ -39,6 +39,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
     random = new Random(seed)
 
     var ct = 0
+    val start = System.currentTimeMillis()
     do {
       val result = wave.observe(tCounter, weights, onBoundary, random)
       if (result.isDefined) {
@@ -47,7 +48,12 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
       }
       wave.propagate(onBoundary, weights, propagator)
       ct += 1
+      print(s"$ct, ")
     } while (ct < limit || limit == 0)
+
+    val elapsed = (System.currentTimeMillis() - start)/1000.0
+    if (ct == limit) println(s"could not find result in #elapsed")
+    else println(s"found result in $elapsed")
 
     ready = true
     true

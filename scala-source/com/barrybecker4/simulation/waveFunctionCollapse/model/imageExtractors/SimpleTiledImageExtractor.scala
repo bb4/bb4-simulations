@@ -21,6 +21,7 @@ class SimpleTiledImageExtractor(
   def getImage(wave: Wave): BufferedImage = {
     val FMX = dims.width
     val FMY = dims.height
+    assert(FMX > 0 && FMY > 0 && tilesize > 0, s"FMX=$FMX FMY=$FMY tilesize=$tilesize")
     val result = new BufferedImage(FMX * tilesize, FMY * tilesize, BufferedImage.TYPE_4BYTE_ABGR)
 
     if (wave.hasObserved) {
