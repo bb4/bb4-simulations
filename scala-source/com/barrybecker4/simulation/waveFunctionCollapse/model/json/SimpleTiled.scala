@@ -19,7 +19,7 @@ case class SimpleTiled(
   def getWidth: Int = if (width == null) 400 else width.toInt
   override def getLimit: Int = if (limit == null) 0 else limit.toInt
   def getPeriodic: Boolean = if (periodic == null) true else periodic.toBoolean
-  override def getScreenshots: Int = if (screenshots == null) 2 else screenshots.toInt
+  override def getScreenshots: Int = if (screenshots == null) 1 else screenshots.toInt
   def getBlack: Boolean = if (black == null) false else black.toBoolean
   def getSubset: String = subset
 

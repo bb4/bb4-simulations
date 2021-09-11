@@ -7,7 +7,7 @@ import java.awt.event._
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.waveFunctionCollapse.DynamicOptions.RND
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SimpleTiled}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.getSampleData
 
 import scala.util.Random
@@ -28,27 +28,54 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   private var sampleModel: CommonModel = _
   private var dimensions: Dimension = new Dimension(100, 100)
-  private var sampleCombo: JComboBox[CommonModel] = _
+
+  private var tabbedPanel: JTabbedPane = _
+  private var overlappingSampleCombo: JComboBox[CommonModel] = _
+  private var tiledSampleCombo: JComboBox[CommonModel] = _
   private var fillPanelCB: JCheckBox = _
   private var nextButton: JButton = _
   private var resetButton: JButton = _
+  private val samples: Samples = getSampleData("menu-samples.json").samples;
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
-  //val generalPanel: JPanel = createGeneralControls
+  createDialogContent()
 
-  add(createSampleDropdown)
-  add(Box.createVerticalStrut(DynamicOptions.SPACING))
-  add(createButtons)
-  add(Box.createVerticalStrut(DynamicOptions.SPACING))
-  add(createCheckBoxes)
-  add(Box.createVerticalStrut(DynamicOptions.SPACING))
 
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
-  add(fill)
+  protected def createDialogContent(): Unit = {
+    setLayout(new BorderLayout)
 
+    tabbedPanel = new JTabbedPane
+    tabbedPanel.add("Overlapping", createOverlappingOptionsPanel())
+    tabbedPanel.setToolTipTextAt(0, "Parameters for Overlapping Model")
+    tabbedPanel.add("Tiled", createTiledOptionsPanel())
+    tabbedPanel.setToolTipTextAt(0, "Parameters for SimpleTiled model")
+
+    add(tabbedPanel, BorderLayout.CENTER)
+    add(createButtons, BorderLayout.SOUTH)
+  }
+
+  private def createOverlappingOptionsPanel(): JPanel = {
+    val panel: JPanel = new JPanel()
+
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
+    setBorder(BorderFactory.createEtchedBorder)
+    setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
+
+    overlappingSampleCombo = createSampleDropdown(samples.overlapping.toIndexedSeq)
+    panel.add(createSampleDropdownPanel(overlappingSampleCombo))
+    panel
+  }
+
+  private def createTiledOptionsPanel(): JPanel = {
+    val panel: JPanel = new JPanel()
+
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
+    setBorder(BorderFactory.createEtchedBorder)
+    setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
+
+    tiledSampleCombo = createSampleDropdown(samples.simpletiled.toIndexedSeq)
+    panel.add(createSampleDropdownPanel(tiledSampleCombo))
+    panel
+  }
 
   def setDimensions(dims: Dimension): Unit = {
     dimensions = dims
@@ -71,25 +98,31 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     * The dropdown menu at the top for selecting the sample to use (either overlapping or simple tiled).
     * @return a dropdown/down component.
     */
-  private def createSampleDropdown = {
+  private def createSampleDropdownPanel(dropdown: JComboBox[CommonModel]): JPanel = {
     val sampleComboPanel = new JPanel
     val label = new JLabel("Sample: ")
     label.setPreferredSize(new Dimension(50, 20))
 
-    val sampleModel = new DefaultComboBoxModel[CommonModel]()
-    val samples = getSampleData("menu-samples.json").samples.all()
-    samples.foreach(s => sampleModel.addElement(s))
-
-    sampleCombo = new JComboBox[CommonModel](sampleModel)
-    sampleCombo.setToolTipText("Select a sample (either overlapping or simpleTiled)")
-
-    sampleCombo.setSelectedItem(samples.head)
-    selectModel(samples.head)
-    sampleCombo.addItemListener(this)
     sampleComboPanel.add(label)
-    sampleComboPanel.add(sampleCombo)
+    sampleComboPanel.add(dropdown)
     sampleComboPanel
   }
+
+  private def createSampleDropdown(elements: Seq[CommonModel]): JComboBox[CommonModel] = {
+    val sampleComboPanel = new JPanel
+
+    val sampleModel = new DefaultComboBoxModel[CommonModel]()
+    elements.foreach(s => sampleModel.addElement(s))
+
+    val sampleCombo = new JComboBox[CommonModel](sampleModel)
+    sampleCombo.setToolTipText("Select a sample (either overlapping or simpleTiled)")
+
+    sampleCombo.setSelectedItem(elements.head)
+    //selectModel(samples.head)
+    sampleCombo.addItemListener(this)
+    sampleCombo
+  }
+
 
   private def createCheckBoxes = {
     val checkBoxes = new JPanel(new GridLayout(0, 1))
@@ -128,7 +161,12 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    val sample: CommonModel = sampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+    var sample: CommonModel = null
+
+    if (e.getSource == overlappingSampleCombo)
+      sample = overlappingSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+    else if (e.getSource == tiledSampleCombo)
+      sample = tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
     selectModel(sample)
   }
 
@@ -183,7 +221,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
     simulator.setModel(model)
 
-    println("selected " + model.getName)
+    println("selected " + model.getName + " screenshots:" + sampleModel.getScreenshots )
     var success = false
     val MAX_TRIES = 20
     var ct = 1
