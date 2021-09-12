@@ -136,34 +136,40 @@ class Wave(val FMX: Int, val FMY: Int) {
     while (stackSize > 0) {
       val e1 = stack(stackSize - 1)
       stackSize -= 1
+      doPropagation(e1, onBoundary, weights, propagator)
+    }
+  }
 
-      val i1 = e1._1
-      val x1 = i1 % FMX
-      val y1 = i1 / FMX
+  private def doPropagation(
+    e1: (Int, Int), onBoundary: (Int, Int) => Boolean,
+    weights: DoubleArray, propagator: Propagator): Unit = {
 
-      for (d <- 0 to 3) {
-        val dx = DX(d)
-        val dy = DY(d)
-        var x2 = x1 + dx
-        var y2 = y1 + dy
-        if (!onBoundary(x2, y2)) {
-          if (x2 < 0) x2 += FMX
-          else if (x2 >= FMX) x2 -= FMX
-          if (y2 < 0) y2 += FMY
-          else if (y2 >= FMY) y2 -= FMY
+    val i1 = e1._1
+    val x1 = i1 % FMX
+    val y1 = i1 / FMX
 
-          val i2 = x2 + y2 * FMX
-          val p = propagator.get(d, e1._2)
-          val compat = waveCells(i2).compatible
+    for (d <- 0 to 3) {
+      val dx = DX(d)
+      val dy = DY(d)
+      var x2 = x1 + dx
+      var y2 = y1 + dy
+      if (!onBoundary(x2, y2)) {
+        if (x2 < 0) x2 += FMX
+        else if (x2 >= FMX) x2 -= FMX
+        if (y2 < 0) y2 += FMY
+        else if (y2 >= FMY) y2 -= FMY
 
-          for (l <- 0 until (if (p == null) 0 else p.length)) {
-            val t2 = if (p == null) 0 else p(l)
-            val comp = if (compat == null) null else compat(t2)
+        val i2 = x2 + y2 * FMX
+        val p = propagator.get(d, e1._2)
+        val compat = waveCells(i2).compatible
 
-            if (comp != null) {
-              comp(d) -= 1
-              if (comp(d) == 0) ban(i2, t2, weights)
-            }
+        for (l <- 0 until (if (p == null) 0 else p.length)) {
+          val t2 = if (p == null) 0 else p(l)
+          val comp = if (compat == null) null else compat(t2)
+
+          if (comp != null) {
+            comp(d) -= 1
+            if (comp(d) == 0) ban(i2, t2, weights)
           }
         }
       }
