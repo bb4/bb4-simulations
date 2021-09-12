@@ -19,7 +19,6 @@ import scala.util.Random
   */
 object DynamicOptions {
   private val PREFERRED_WIDTH = 300
-  private val SPACING = 28
   private val RND = new Random()
 }
 
@@ -28,20 +27,37 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   private var sampleModel: CommonModel = _
   private var dimensions: Dimension = new Dimension(100, 100)
+  private val samples: Samples = getSampleData("menu-samples.json").samples;
 
   private var tabbedPanel: JTabbedPane = _
   private var overlappingSampleCombo: JComboBox[CommonModel] = _
   private var tiledSampleCombo: JComboBox[CommonModel] = _
-  private var fillPanelCB: JCheckBox = _
+
+
+  // overlapping params
+  private var nCombo: JComboBox[Int] = _
+  private var periodicInputCB: JCheckBox = _
+  private var overlappingPeriodicOutputCB: JCheckBox = _
+  private var symmetryCombo: JComboBox[Int] = _
+  private var groundCombo: JComboBox[Int] = _ // 0, -1, 02, -3, -4
+  private var limitCombo: JComboBox[Int] = _ // 0, 1, 10, 50
+
+  // tiled params
+  private var subsetCombo: JComboBox[String] = _
+  private var tiledPeriodicOutputCB: JCheckBox = _
+  private var blackCB: JCheckBox = _
+
   private var nextButton: JButton = _
   private var resetButton: JButton = _
-  private val samples: Samples = getSampleData("menu-samples.json").samples;
 
   createDialogContent()
 
 
   protected def createDialogContent(): Unit = {
-    setLayout(new BorderLayout)
+    setLayout (new BoxLayout (this, BoxLayout.Y_AXIS) )
+    setBorder (BorderFactory.createEtchedBorder)
+    setPreferredSize (new Dimension (DynamicOptions.PREFERRED_WIDTH, 900) )
+    setAlignmentX(Component.LEFT_ALIGNMENT)
 
     tabbedPanel = new JTabbedPane
     tabbedPanel.add("Overlapping", createOverlappingOptionsPanel())
@@ -54,38 +70,59 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   private def createOverlappingOptionsPanel(): JPanel = {
+    val rootPanel: JPanel = new JPanel(new BorderLayout())
+
     val panel: JPanel = new JPanel()
+    panel.setLayout(new BoxLayout (panel, BoxLayout.Y_AXIS) )
+    panel.setBorder(BorderFactory.createEtchedBorder)
 
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-    setBorder(BorderFactory.createEtchedBorder)
-    setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
-
+    nCombo = createCombo(IndexedSeq(2, 3))
     overlappingSampleCombo = createSampleDropdown(samples.overlapping.toIndexedSeq)
-    panel.add(createSampleDropdownPanel(overlappingSampleCombo))
-    panel
+    symmetryCombo = createCombo(IndexedSeq(1, 2, 4, 8))
+    periodicInputCB = createCheckBox("Periodic Input",
+      "if checked, then the input pattern repeats", initiallyChecked = false)
+    overlappingPeriodicOutputCB = createCheckBox("Periodic Output",
+      "if checked, then output pattern repeats", initiallyChecked = true)
+    groundCombo = createCombo(IndexedSeq(0, -1, -2, -3, -4))
+    limitCombo = createCombo(IndexedSeq(0, 1, 10, 50))
+
+    panel.add(createComboPanel("Sample", overlappingSampleCombo))
+    panel.add(createComboPanel("N", nCombo))
+    panel.add(createComboPanel("Symmetry", symmetryCombo ))
+    panel.add(createLeftAlignedPanel(overlappingPeriodicOutputCB))
+    panel.add(createLeftAlignedPanel(periodicInputCB))
+    panel.add(createComboPanel("Ground", groundCombo))
+    panel.add(createComboPanel("limit", limitCombo))
+
+    rootPanel.add(panel, BorderLayout.NORTH)
+    rootPanel
   }
 
   private def createTiledOptionsPanel(): JPanel = {
-    val panel: JPanel = new JPanel()
+    val rootPanel: JPanel = new JPanel(new BorderLayout())
 
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-    setBorder(BorderFactory.createEtchedBorder)
-    setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
+    val panel: JPanel = new JPanel()
+    panel.setLayout(new BoxLayout (panel, BoxLayout.Y_AXIS) )
+    panel.setBorder(BorderFactory.createEtchedBorder)
+    //panel.setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
 
     tiledSampleCombo = createSampleDropdown(samples.simpletiled.toIndexedSeq)
-    panel.add(createSampleDropdownPanel(tiledSampleCombo))
-    panel
+    tiledPeriodicOutputCB = createCheckBox("Periodic Output",
+      "if checked, then output pattern repeats", initiallyChecked = true)
+    subsetCombo = createCombo(IndexedSeq("a", "b"))
+    blackCB = createCheckBox("Black",
+      "uses only color black?", initiallyChecked = false)
+
+    panel.add(createComboPanel("Sample", tiledSampleCombo))
+    panel.add(createLeftAlignedPanel(tiledPeriodicOutputCB))
+    panel.add(createLeftAlignedPanel(blackCB))
+
+    rootPanel.add(panel, BorderLayout.NORTH)
+    rootPanel
   }
 
   def setDimensions(dims: Dimension): Unit = {
     dimensions = dims
-  }
-
-  private def createGeneralControls = {
-    val panel = new JPanel(new BorderLayout)
-    panel.setBorder(createTitledBorder("General parameters"))
-    //panel.add(createSampleDropdown, BorderLayout.CENTER)
-    panel
   }
 
   private def createTitledBorder(title: String) =
@@ -94,23 +131,25 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
       BorderFactory.createEmptyBorder(5, 5, 5, 5)
     )
 
-  /**
-    * The dropdown menu at the top for selecting the sample to use (either overlapping or simple tiled).
-    * @return a dropdown/down component.
-    */
-  private def createSampleDropdownPanel(dropdown: JComboBox[CommonModel]): JPanel = {
-    val sampleComboPanel = new JPanel
-    val label = new JLabel("Sample: ")
-    label.setPreferredSize(new Dimension(50, 20))
+  private def createComboPanel(labelText: String, combo: Component): JPanel =  {
+    val comboPanel = new JPanel(new FlowLayout(FlowLayout.LEADING))
+    val label = new JLabel(labelText + ":")
+    label.setPreferredSize(new Dimension(70, 20))
+    comboPanel.add(label)
+    comboPanel.add(combo)
+    comboPanel
+  }
 
-    sampleComboPanel.add(label)
-    sampleComboPanel.add(dropdown)
-    sampleComboPanel
+  private def createCombo[A](elements: IndexedSeq[A]): JComboBox[A] = {
+    val intModel = new DefaultComboBoxModel[A]()
+    elements.foreach(s => intModel.addElement(s))
+    val intCombo: JComboBox[A] = new JComboBox(intModel)
+    intCombo.setSelectedItem(elements.head)
+    intCombo.addItemListener(this)
+    intCombo
   }
 
   private def createSampleDropdown(elements: Seq[CommonModel]): JComboBox[CommonModel] = {
-    val sampleComboPanel = new JPanel
-
     val sampleModel = new DefaultComboBoxModel[CommonModel]()
     elements.foreach(s => sampleModel.addElement(s))
 
@@ -123,22 +162,18 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     sampleCombo
   }
 
-
-  private def createCheckBoxes = {
-    val checkBoxes = new JPanel(new GridLayout(0, 1))
-
-    fillPanelCB = createCheckBox("Fill whole panel",
-      "if checked, then the pattern will fill the whole window", true)
-    checkBoxes.add(fillPanelCB)
-    checkBoxes.setBorder(BorderFactory.createEtchedBorder)
-    checkBoxes
-  }
-
   private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
     val cb = new JCheckBox(label, initiallyChecked)
+    cb.setAlignmentX(Component.RIGHT_ALIGNMENT)
     cb.setToolTipText(tooltip)
     cb.addActionListener(this)
     cb
+  }
+
+  private def createLeftAlignedPanel(comp: Component): JPanel = {
+    val panel = new JPanel(new FlowLayout(FlowLayout.LEADING))
+    panel.add(comp)
+    panel
   }
 
   private def createButtons = {
@@ -241,7 +276,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
       println("reset requested")
       runModel()
     }
-    else if (e.getSource == fillPanelCB) {
+    else if (e.getSource == overlappingPeriodicOutputCB) {
       // do nothing
     }
     else throw new IllegalStateException("Unexpected button " + e.getSource)

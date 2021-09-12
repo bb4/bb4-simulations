@@ -28,9 +28,9 @@ case class Overlapping(
   def getGround: Int = if (ground == null) 0 else ground.toInt
 
   override def toString: String = {
-    val per = if (getPeriodic) "per" else ""
-    val perInput = if (getPeriodicInput) "perInput" else ""
-    val grnd = if (getGround > 0) "grnd=" + getGround else ""
-    s"$getName N=$getN $per $perInput $grnd"
+    //val per = if (getPeriodic) "per" else ""
+    //val perInput = if (getPeriodicInput) "perInput" else ""
+    //val grnd = if (getGround > 0) "grnd=" + getGround else ""
+    s"$getName N=$getN"
   }
 }

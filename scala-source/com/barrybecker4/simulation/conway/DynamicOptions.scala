@@ -112,7 +112,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   /** @return checkbox options. */
   private def createCheckboxPanel: JPanel = {
     val panel: JPanel = new JPanel
-    panel.setLayout (new BoxLayout (panel, BoxLayout.Y_AXIS) )
+    panel.setLayout(new BoxLayout (panel, BoxLayout.Y_AXIS) )
     useParallelComputation = createCheckbox("Parallel computation", ConwayProcessor.DEFAULT_USE_PARALLEL,
       "When checked, computation is don in parallel, using all available processors.")
     showShadowsCheckbox = createCheckbox ("Show shadows", ConwayModel.DEFAULT_SHOW_SHADOWS,
@@ -129,7 +129,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     val cb: JCheckBox = new JCheckBox(labelText)
     cb.setToolTipText(tooltip)
     cb.setSelected (defaultValue)
-    cb.addActionListener (this)
+    cb.addActionListener(this)
     cb
   }
 
