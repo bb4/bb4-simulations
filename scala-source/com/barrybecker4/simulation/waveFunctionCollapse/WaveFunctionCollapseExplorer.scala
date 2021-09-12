@@ -3,12 +3,12 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer.DEFAULT_STEPS_PER_FRAME
 import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
 
 import javax.swing._
 import java.awt._
 import java.awt.event.{ComponentAdapter, ComponentEvent}
-
 
 
 /**
@@ -17,7 +17,7 @@ import java.awt.event.{ComponentAdapter, ComponentEvent}
   */
 object WaveFunctionCollapseExplorer {
   protected val INITIAL_TIME_STEP = 10.0
-  protected val DEFAULT_STEPS_PER_FRAME = 10
+  protected val DEFAULT_STEPS_PER_FRAME = 100
 }
 
 class WaveFunctionCollapseExplorer()
@@ -34,7 +34,6 @@ class WaveFunctionCollapseExplorer()
       override def componentResized(ce: ComponentEvent): Unit = {
         println("resized so rerunning...")
         options.setDimensions(self.getSize())
-        //options.runModel()
       }
     })
   }
@@ -53,14 +52,12 @@ class WaveFunctionCollapseExplorer()
 
   override def timeStep: Double = {
     if (!isPaused && wfcModel != null) {
-      //caveModel.setSize(this.getWidth, this.getHeight)
-      //caveModel.timeStep(tStep)
+      wfcModel.advance(DEFAULT_STEPS_PER_FRAME)
     }
     tStep
   }
 
   override def paint(g: Graphics): Unit = {
-    //options.setDimensions(this.getSize())
     if (g == null || wfcModel == null || !wfcModel.isReady) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()

@@ -20,6 +20,7 @@ class OverlappingImageExtractor(
   override def getImage(wave: Wave): BufferedImage = {
     val FMX = dims.width
     val FMY = dims.height
+    val start = System.currentTimeMillis()
     val result = new BufferedImage(FMX, FMY, BufferedImage.TYPE_4BYTE_ABGR)
     if (wave.hasObserved) {
       for (y <- 0 until FMY) {
@@ -68,6 +69,7 @@ class OverlappingImageExtractor(
         }
       }
     }
+    println("overlap image extracted in " + (System.currentTimeMillis() - start) / 1000.0)
     result
   }
 }

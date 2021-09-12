@@ -13,13 +13,14 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
 
   protected var wave: Wave = _
   protected var propagator: Propagator = _
-  //protected var imageExtractor: ImageExtractor = _
   protected var weights: DoubleArray = _
   protected var periodic: Boolean = false
   protected var tCounter: Int = 0
   protected var dimensions: Dimension = _
   private var random: Random = _
   private var ready: Boolean = false
+  private var iterationCt = 0
+  private var result: Option[Boolean] = None
 
 
   def getName: String = name
@@ -28,7 +29,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
 
   def isReady: Boolean = ready
 
-  def run(seed: Int): Boolean = {
+  def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
     ready = false
     if (wave == null) {
       wave = new Wave(dimensions.width, dimensions.height)
@@ -37,28 +38,36 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
 
     clear()
     random = new Random(seed)
+    iterationCt = 0
+    val steps = if (limit == 0) 10000000 else limit
+    advance(steps)
+    ready = true
+    true
+  }
 
-    var ct = 0
-    val start = System.currentTimeMillis()
-    do {
-      val result = wave.observe(tCounter, weights, onBoundary, random)
+  def startRun(seed: Int): Boolean = {
+    runWithLimit(seed, 1)
+  }
+
+  def advance(steps: Int): Unit = {
+    if (random == null || result.getOrElse(false)) {
+      println("no advance. Result found")
+      return
+    }
+
+    for (i <- 0 until steps) {
+      result = wave.observe(tCounter, weights, onBoundary, random)
       if (result.isDefined) {
         ready = true
         return result.get
       }
       wave.propagate(onBoundary, weights, propagator)
-      ct += 1
-      if (ct % 100 == 0) print(s"$ct, ")
-    } while (ct < limit || limit == 0)
-
-    val elapsed = (System.currentTimeMillis() - start)/1000.0
-    if (ct == limit) println(s"could not find result in $elapsed")
-    else println(s"found result in $elapsed")
-
-    ready = true
-    true
+      iterationCt += 1
+      if (iterationCt % 100 == 0) print(s"$iterationCt, ")
+    }
+    println(s"iteration=$iterationCt")
   }
 
   def clear(): Unit = wave.clear(tCounter, weights, propagator)
-  def graphics(): BufferedImage // = imageExtractor.getImage(wave: Wave)
+  def graphics(): BufferedImage
 }

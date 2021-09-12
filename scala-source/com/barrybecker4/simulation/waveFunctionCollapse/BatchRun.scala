@@ -23,7 +23,6 @@ object BatchRun extends App {
 
 
   def process(commonModel: CommonModel, counter: Int): Unit = {
-    val limit = commonModel.getLimit
     val screenshots = commonModel.getScreenshots
     val model = commonModel match {
       case overlapping: Overlapping => new OverlappingModel(overlapping)
@@ -31,17 +30,17 @@ object BatchRun extends App {
       case _ => throw new IllegalArgumentException("Unexpected type for " + commonModel)
     }
 
-    createScreenshots(model, limit, screenshots, counter)
+    createScreenshots(model, screenshots, counter)
   }
 
-  def createScreenshots(model: WfcModel, limit: Int, screenshots: Int, counter: Int): Unit = {
+  def createScreenshots(model: WfcModel, screenshots: Int, counter: Int): Unit = {
     val name = model.getName
     println("Now processing " + name + " screenshots = " + screenshots)
     for (i <- 0 until screenshots) {
       breakable {
         for (k <- 0 until 10) {
           val seed = i * 10 + k
-          val finished = model.run(seed)
+          val finished = model.runWithLimit(seed)
           if (finished) {
             println(s"> DONE - $name")
             val image = model.graphics()

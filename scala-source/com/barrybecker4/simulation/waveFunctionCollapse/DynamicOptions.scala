@@ -28,6 +28,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   private var dimensions: Dimension = new Dimension(100, 100)
   private val samples: Samples = getSampleData("menu-samples.json").samples;
+  private var model: WfcModel = _
 
   private var tabbedPane: JTabbedPane = _
   private var overlappingSampleCombo: JComboBox[CommonModel] = _
@@ -39,13 +40,11 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private var overlappingPeriodicOutputCB: JCheckBox = _
   private var symmetryCombo: JComboBox[Int] = _
   private var groundCombo: JComboBox[Int] = _
-  private var overlappingLimitCombo: JComboBox[Int] = _
 
   // tiled params
   private var subsetCombo: JComboBox[String] = _
   private var subsetComboPanel: JPanel = _
   private var tiledPeriodicOutputCB: JCheckBox = _
-  private var tiledLimitCombo: JComboBox[Int] = _
   private var blackCB: JCheckBox = _
 
   private var nextButton: JButton = _
@@ -61,10 +60,10 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     setAlignmentX(Component.LEFT_ALIGNMENT)
 
     tabbedPane = new JTabbedPane
-    tabbedPane.add("Overlapping", createOverlappingOptionsPanel())
-    tabbedPane.setToolTipTextAt(0, "Parameters for Overlapping Model")
     tabbedPane.add("Tiled", createTiledOptionsPanel())
     tabbedPane.setToolTipTextAt(0, "Parameters for SimpleTiled model")
+    tabbedPane.add("Overlapping", createOverlappingOptionsPanel())
+    tabbedPane.setToolTipTextAt(0, "Parameters for Overlapping Model")
     tabbedPane.addChangeListener(this)
 
     add(tabbedPane, BorderLayout.CENTER)
@@ -78,7 +77,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     overlappingSampleCombo = createSampleDropdown(samples.overlapping.toIndexedSeq)
     symmetryCombo = createCombo(IndexedSeq(1, 2, 4, 8))
     groundCombo = createCombo(IndexedSeq(0, -1, -2, -3, -4))
-    overlappingLimitCombo = createCombo(IndexedSeq(0, 1, 10, 50, 1000))
     periodicInputCB = createCheckBox("Periodic Input",
       "if checked, then the input pattern repeats", initiallyChecked = false)
     overlappingPeriodicOutputCB = createCheckBox("Periodic Output",
@@ -88,7 +86,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     panel.add(createComboPanel("N", nCombo))
     panel.add(createComboPanel("Symmetry", symmetryCombo ))
     panel.add(createComboPanel("Ground", groundCombo))
-    panel.add(createComboPanel("limit", overlappingLimitCombo))
     panel.add(createLeftAlignedPanel(overlappingPeriodicOutputCB))
     panel.add(createLeftAlignedPanel(periodicInputCB))
 
@@ -104,7 +101,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     subsetComboPanel = createComboPanel("Subset", subsetCombo)
     updateSubsetCombo(tiledSamples.head)
 
-    tiledLimitCombo = createCombo(IndexedSeq(0, 1, 10, 50, 1000))
     tiledPeriodicOutputCB = createCheckBox("Periodic Output",
       "if checked, then output pattern repeats", initiallyChecked = true)
     blackCB = createCheckBox("Black",
@@ -112,7 +108,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
     panel.add(createComboPanel("Sample", tiledSampleCombo))
     panel.add(subsetComboPanel)
-    panel.add(createComboPanel("Limit", tiledLimitCombo))
     panel.add(createLeftAlignedPanel(tiledPeriodicOutputCB))
     panel.add(createLeftAlignedPanel(blackCB))
 
@@ -192,21 +187,11 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   def reset(): Unit = {
-  }
-
-  override def itemStateChanged(e: ItemEvent): Unit = {
-    if (e.getSource == tiledSampleCombo) {
-      val sample: SimpleTiled = tiledSampleCombo.getSelectedItem.asInstanceOf[SimpleTiled]
-      updateSubsetCombo(sample)
-    }
-
     runModel()
   }
 
   private def updateSubsetCombo(sample: SimpleTiled): Unit = {
     val sampleTiledData = getSampleTiledData(sample.getName)
-    //val subset = sample.getSubset
-    //println("SUBSET ============== " + subset)
 
     if (sampleTiledData.set.subsets == null || sampleTiledData.set.subsets.isEmpty) {
       subsetCombo = new JComboBox[String]()
@@ -225,8 +210,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private def getModel: WfcModel = {
 
     val sampleModel: CommonModel =
-      if (tabbedPane.getSelectedIndex == 0) overlappingSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
-      else tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+      if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+      else overlappingSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
 
     val wfcModel: WfcModel = sampleModel match {
       case overlapping: Overlapping => new OverlappingModel(
@@ -238,7 +223,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
         overlappingPeriodicOutputCB.isSelected,
         symmetryCombo.getSelectedItem.asInstanceOf[Int],
         groundCombo.getSelectedItem.asInstanceOf[Int],
-        overlappingLimitCombo.getSelectedItem.asInstanceOf[Int])
+        100)
       case simpleTiled: SimpleTiled => new SimpleTiledModel(
         dimensions.width,
         dimensions.height,
@@ -246,7 +231,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
         subsetCombo.getSelectedItem.asInstanceOf[String],
         tiledPeriodicOutputCB.isSelected,
         blackCB.isSelected,
-        tiledLimitCombo.getSelectedItem.asInstanceOf[Int])
+        100)
       case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
     }
 
@@ -256,22 +241,29 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   def runModel(): Unit = {
-    val model: WfcModel = getModel
+    model = getModel
 
     simulator.setModel(model)
     println("selected " + model.getName  )
-    var success = false
-    val MAX_TRIES = 20
-    var ct = 1
-    while (!success && ct <= MAX_TRIES) {
-      success = model.run(RND.nextInt())
-      if (!success) println(s"\nfailed to create image on try $ct out of $MAX_TRIES")
-      ct += 1
+    model.startRun(RND.nextInt())
+  }
+
+  def advanceModel(steps: Int): Unit = {
+    model.advance(steps)
+  }
+
+  override def itemStateChanged(e: ItemEvent): Unit = {
+    if (e.getSource == tiledSampleCombo) {
+      val sample: SimpleTiled = tiledSampleCombo.getSelectedItem.asInstanceOf[SimpleTiled]
+      updateSubsetCombo(sample)
     }
+    runModel()
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    runModel()
+    if (e.getSource == nextButton)
+      advanceModel(100)
+    else runModel()
   }
 
   override def stateChanged(e: ChangeEvent): Unit = {

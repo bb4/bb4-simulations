@@ -44,9 +44,7 @@ class MainTestSuite extends AnyFunSuite {
     }
     src.close()
 
-    if (expectedHexes.keys.size != actualHexes.keys.size) {
-      fail("Different map size")
-    }
+    assertResult(expectedHexes.keys.size) { actualHexes.keys.size }
 
     for (h <- expectedHexes.keys) {
       assertResult(expectedHexes(h), "did not match for " + h) { actualHexes(h) }
@@ -62,12 +60,13 @@ class MainTestSuite extends AnyFunSuite {
       periodicInput = true,
       periodicOutput = true,
       width = 48,
-      height = 48
+      height = 48,
+      limit = 0
     )
 
     for (i <- 0 until 2) {
       for (k <- 0 until 10) {
-        val finished = model.run(SEED, 0)
+        val finished = model.runWithLimit(SEED)
         if (finished) {
           return model.graphics()
         }
@@ -100,8 +99,9 @@ class MainTestSuite extends AnyFunSuite {
     }
     src.close()
 
-    if (expectedHexes.keys.size != actualHexes.keys.size) {
-      fail("Different map size")
+    assertResult(expectedHexes.keys.size,
+      s"Unexpected number of keys. The keys(${actualHexes.keys}) - should have been (${expectedHexes.keys})") {
+      actualHexes.keys.size
     }
 
     for (h <- expectedHexes.keys) {
@@ -116,12 +116,13 @@ class MainTestSuite extends AnyFunSuite {
       height = 24,
       subsetName = "Dense Fabric",
       isPeriodic = true,
-      black = false
+      black = false,
+      limit = 0
     )
 
     for (i <- 0 until 2) {
       for (k <- 0 until 10) {
-        val finished = model.run(SEED, 0)
+        val finished = model.runWithLimit(SEED)
         if (finished) {
           return model.graphics()
         }

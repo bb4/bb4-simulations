@@ -176,6 +176,7 @@ class OverlappingModel(val name: String,
   }
 
   def graphics(): BufferedImage  = {
+    assert(this.isReady)
     val imageExtractor = new OverlappingImageExtractor(dimensions, N, tCounter, patterns, colors, onBoundary)
     imageExtractor.getImage(wave)
   }

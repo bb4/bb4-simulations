@@ -173,6 +173,7 @@ class SimpleTiledModel(
   }
 
   def graphics(): BufferedImage  = {
+    assert(this.isReady)
     val imageExtractor = new SimpleTiledImageExtractor(dimensions, tCounter, tilesize, tiles, weights, black)
     imageExtractor.getImage(wave)
   }
