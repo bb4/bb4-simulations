@@ -7,6 +7,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
 
 import javax.swing._
 import java.awt._
+import java.awt.event.{ComponentAdapter, ComponentEvent}
 
 
 
@@ -28,14 +29,14 @@ class WaveFunctionCollapseExplorer()
 
   private def commonInit(): Unit = {
     initCommonUI()
-//    val self = this
-//    this.addComponentListener(new ComponentAdapter {
-//      override def componentResized(ce: ComponentEvent): Unit = {
-//        println("resized so rerunning...")
-//        options.setDimensions(self.getSize())
-//        //options.runModel()
-//      }
-//    })
+    val self = this
+    this.addComponentListener(new ComponentAdapter {
+      override def componentResized(ce: ComponentEvent): Unit = {
+        println("resized so rerunning...")
+        options.setDimensions(self.getSize())
+        //options.runModel()
+      }
+    })
   }
 
   def setModel(m: WfcModel): Unit = {
@@ -59,7 +60,7 @@ class WaveFunctionCollapseExplorer()
   }
 
   override def paint(g: Graphics): Unit = {
-    options.setDimensions(this.getSize())
+    //options.setDimensions(this.getSize())
     if (g == null || wfcModel == null || !wfcModel.isReady) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
@@ -72,6 +73,7 @@ class WaveFunctionCollapseExplorer()
 
   override def createDynamicControls: JPanel = {
     options = new DynamicOptions(this)
+    options.setDimensions(this.getSize())
     setPaused(false)
     options
   }

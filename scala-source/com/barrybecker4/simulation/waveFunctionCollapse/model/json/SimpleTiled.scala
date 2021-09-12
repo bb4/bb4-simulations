@@ -22,12 +22,4 @@ case class SimpleTiled(
   override def getScreenshots: Int = if (screenshots == null) 1 else screenshots.toInt
   def getBlack: Boolean = if (black == null) false else black.toBoolean
   def getSubset: String = subset
-
-  override def toString: String = {
-    //val per = if (getPeriodic) "periodic" else ""
-    //val black = if (getBlack) "black" else ""
-    val sub = if (subset == null) "" else subset.substring(0, Math.min(subset.length, 14))
-    //val lim = if (getLimit > 0) "lim=" + limit else ""
-    s"$getName $sub"
-  }
 }

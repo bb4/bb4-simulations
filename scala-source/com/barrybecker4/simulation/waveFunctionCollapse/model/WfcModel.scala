@@ -52,7 +52,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
     } while (ct < limit || limit == 0)
 
     val elapsed = (System.currentTimeMillis() - start)/1000.0
-    if (ct == limit) println(s"could not find result in #elapsed")
+    if (ct == limit) println(s"could not find result in $elapsed")
     else println(s"found result in $elapsed")
 
     ready = true

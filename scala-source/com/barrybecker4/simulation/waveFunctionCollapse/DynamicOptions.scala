@@ -129,6 +129,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   def setDimensions(dims: Dimension): Unit = {
     dimensions = dims
+    runModel()
   }
 
   private def createComboPanel(labelText: String, combo: Component): JPanel =  {
@@ -204,15 +205,21 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   private def updateSubsetCombo(sample: SimpleTiled): Unit = {
     val sampleTiledData = getSampleTiledData(sample.getName)
-    val subset = sample.subset
-    if (subset == null) {
+    //val subset = sample.getSubset
+    //println("SUBSET ============== " + subset)
+
+    if (sampleTiledData.set.subsets == null || sampleTiledData.set.subsets.isEmpty) {
       subsetCombo = new JComboBox[String]()
     } else {
-      subsetCombo = createCombo(sampleTiledData.set.subsets.map(s => s.name))
-      subsetCombo.setSelectedItem(subset)
+      val values = sampleTiledData.set.subsets.map(s => s.name)
+      println("SUBSET VALUES ======= " + values.mkString(", "))
+      subsetCombo = createCombo(values)
+      subsetCombo.setSelectedItem(values.head)
     }
     subsetComboPanel.remove(1)
     subsetComboPanel.add(subsetCombo)
+    subsetComboPanel.invalidate()
+    subsetComboPanel.revalidate()
   }
 
   private def getModel: WfcModel = {
@@ -242,6 +249,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
         tiledLimitCombo.getSelectedItem.asInstanceOf[Int])
       case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
     }
+
+    println("now running " + wfcModel)
 
     wfcModel
   }

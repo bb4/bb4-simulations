@@ -179,4 +179,10 @@ class OverlappingModel(val name: String,
     val imageExtractor = new OverlappingImageExtractor(dimensions, N, tCounter, patterns, colors, onBoundary)
     imageExtractor.getImage(wave)
   }
+
+  override def toString: String = {
+    // val N: Int, width: Int, height: Int, periodicInput: Boolean,
+    // periodicOutput: Boolean, symmetry: Int, groundParam: Int, val limit: Int = 0
+    s"OverlappingModel($getName N=$N periodicOutput=$periodicOutput periodicInput=$periodicInput symmetry=$symmetry ground=$groundParam limit=$limit)"
+  }
 }

@@ -26,11 +26,4 @@ case class Overlapping(
   override def getScreenshots: Int = if (screenshots == null) 1 else screenshots.toInt
   def getSymmetry: Int = if (symmetry == null) 8 else symmetry.toInt
   def getGround: Int = if (ground == null) 0 else ground.toInt
-
-  override def toString: String = {
-    //val per = if (getPeriodic) "per" else ""
-    //val perInput = if (getPeriodicInput) "perInput" else ""
-    //val grnd = if (getGround > 0) "grnd=" + getGround else ""
-    s"$getName N=$getN"
-  }
 }
