@@ -2,11 +2,11 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.google.gson.Gson
-import com.barrybecker4.simulation.waveFunctionCollapse.model.data.SampleData
-import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.{OverlappingImageExtractor, SimpleTiledImageExtractor}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.SampleTiledData
+import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagator
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, readImage}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, getSampleTiledData, readImage}
 
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
@@ -26,7 +26,7 @@ class SimpleTiledModel(
   val gson = new Gson()
 
   this.periodic = isPeriodic
-  processFile(s"samples/$name/data.json")
+  processFile(getSampleTiledData(name))
 
   def this(simpleTiled: SimpleTiled) = {
     this(
@@ -39,10 +39,7 @@ class SimpleTiledModel(
       simpleTiled.getLimit)
   }
 
-  def processFile(fname: String): Unit = {
-
-    val bufferedReader = getFileReader(fname)
-    val data: SampleData = gson.fromJson(bufferedReader, classOf[SampleData])
+  def processFile(data: SampleTiledData): Unit = {
 
     val dataset = data.set
     tilesize = if (dataset.size != null) dataset.size.toInt else 16

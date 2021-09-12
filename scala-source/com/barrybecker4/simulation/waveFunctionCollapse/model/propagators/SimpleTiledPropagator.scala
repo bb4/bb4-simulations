@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model.propagators
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.IntArray
-import com.barrybecker4.simulation.waveFunctionCollapse.model.data.Neighbor
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.Neighbor
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer

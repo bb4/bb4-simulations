@@ -3,6 +3,7 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.utils
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SampleJson
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.SampleTiledData
 import com.google.gson.Gson
 
 import java.awt.image.BufferedImage
@@ -13,6 +14,7 @@ object FileUtil {
   val CURRENT_DIR: String = System.getProperty("user.dir").replace("\\", "/") + "/"
   private val RELATIVE_DIR = "scala-source/com/barrybecker4/simulation/waveFunctionCollapse/"
   val BASE_DIR: String = CURRENT_DIR + RELATIVE_DIR
+  val GSON: Gson = new Gson()
 
   def readImage(fileName: String): BufferedImage = {
     ImageIO.read(new File(BASE_DIR + fileName))
@@ -32,9 +34,15 @@ object FileUtil {
   }
 
   def getSampleData(filename: String = "samples.json"): SampleJson = {
-    val gson = new Gson()
     val bufferedReader = getFileReader(filename)
     val content = bufferedReader.lines().toArray().mkString("")
-    gson.fromJson(content, classOf[SampleJson])
+    GSON.fromJson(content, classOf[SampleJson])
   }
+
+
+  def getSampleTiledData(name: String): SampleTiledData = {
+    val bufferedReader = getFileReader(s"samples/$name/data.json")
+    GSON.fromJson(bufferedReader, classOf[SampleTiledData])
+  }
+
 }
