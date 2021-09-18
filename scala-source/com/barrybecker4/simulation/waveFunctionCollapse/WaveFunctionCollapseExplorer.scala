@@ -54,8 +54,8 @@ class WaveFunctionCollapseExplorer()
   override def timeStep: Double = {
     if (!isPaused && wfcModel != null) {
       def result = wfcModel.advance(DEFAULT_STEPS_PER_FRAME)
+      this.invalidate()
       if (result.isDefined) {
-        this.invalidate()
         this.repaint()
         this.setPaused(true)
       }
