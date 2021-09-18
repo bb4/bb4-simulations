@@ -40,6 +40,7 @@ class WaveFunctionCollapseExplorer()
 
   def setModel(m: WfcModel): Unit = {
     wfcModel = m
+    this.setPaused(false)
   }
 
   override protected def reset(): Unit = {
@@ -52,7 +53,12 @@ class WaveFunctionCollapseExplorer()
 
   override def timeStep: Double = {
     if (!isPaused && wfcModel != null) {
-      wfcModel.advance(DEFAULT_STEPS_PER_FRAME)
+      def result = wfcModel.advance(DEFAULT_STEPS_PER_FRAME)
+      if (result.isDefined) {
+        this.invalidate()
+        this.repaint()
+        this.setPaused(true)
+      }
     }
     tStep
   }

@@ -248,7 +248,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     model.startRun(RND.nextInt())
   }
 
-  def advanceModel(steps: Int): Unit = {
+  /** Return None if not done, else true/false when done successful/failed */
+  def advanceModel(steps: Int): Option[Boolean] = {
     model.advance(steps)
   }
 

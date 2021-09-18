@@ -49,23 +49,25 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
     runWithLimit(seed, 1)
   }
 
-  def advance(steps: Int): Unit = {
+  /** return None if not done computing, return true if done successfully; flase if done unsuccessfully */
+  def advance(steps: Int): Option[Boolean] = {
     if (random == null || result.getOrElse(false)) {
       println("no advance. Result found")
-      return
+      return None
     }
 
     for (i <- 0 until steps) {
       result = wave.observe(tCounter, weights, onBoundary, random)
       if (result.isDefined) {
         ready = true
-        return result.get
+        return result
       }
       wave.propagate(onBoundary, weights, propagator)
       iterationCt += 1
       if (iterationCt % 100 == 0) print(s"$iterationCt, ")
     }
     println(s"iteration=$iterationCt")
+    None
   }
 
   def clear(): Unit = wave.clear(tCounter, weights, propagator)
