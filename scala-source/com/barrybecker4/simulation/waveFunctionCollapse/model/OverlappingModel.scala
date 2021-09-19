@@ -29,7 +29,7 @@ class OverlappingModel(val name: String,
   val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
   dimensions = new Dimension(width, height)
 
-  val start1 = System.currentTimeMillis()
+  private val start1 = System.currentTimeMillis()
   for (y <- 0 until smy) {
     for (x <- 0 until smx) {
       val color = new Color(bitmap.getRGB(x, y))
@@ -116,7 +116,7 @@ class OverlappingModel(val name: String,
   var ordering: Seq[Long] = Seq()
 
   println("sym = " + symmetry)
-  val start = System.currentTimeMillis()
+  private val start = System.currentTimeMillis()
   for (y <- 0 until (if (periodicInput) smy else smy - N + 1)) {
     for (x <- 0 until (if (periodicInput) smx else smx - N + 1)) {
       val ps: Array[ByteArray] = Array.fill(8)(null)

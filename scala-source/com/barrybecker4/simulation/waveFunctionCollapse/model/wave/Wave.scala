@@ -2,17 +2,22 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.Propagator
-import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY, OPPOSITE}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY, INITIAL_ENTROPY, UNSET, DEFAULT_NOISE_SCALE, OPPOSITE}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, IntArray}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
 
 import scala.util.Random
 import scala.util.control.Breaks.{break, breakable}
 
+
 object Wave {
   val OPPOSITE: IntArray = Array[Int](2, 3, 0, 1)
   val DX: IntArray = Array[Int](-1, 0, 1, 0)
   val DY: IntArray = Array[Int](0, 1, 0, -1)
+
+  private val INITIAL_ENTROPY: Double = 1E+3
+  private val UNSET: Int = -1
+  private val DEFAULT_NOISE_SCALE = 1E-6  // was 1E-6
 }
 
 
@@ -69,8 +74,8 @@ class Wave(val FMX: Int, val FMY: Int) {
     onBoundary: (Int, Int) => Boolean,
     random: Random): Option[Boolean] = {
 
-    var min = 1E+3
-    var argMin = -1
+    var min = INITIAL_ENTROPY
+    var argMin = UNSET
 
     for (i <- 0 until size()) {
       if (!onBoundary(i % FMX, i / FMX)) {
@@ -79,7 +84,7 @@ class Wave(val FMX: Int, val FMY: Int) {
 
         val entropy = waveCells(i).entropy
         if (amount > 1 && entropy <= min) {
-          val noise = 1E-6 * random.nextDouble()
+          val noise = DEFAULT_NOISE_SCALE * random.nextDouble()
           if (entropy + noise < min) {
             min = entropy + noise
             argMin = i
@@ -88,7 +93,7 @@ class Wave(val FMX: Int, val FMY: Int) {
       }
     }
 
-    if (argMin == -1) {
+    if (argMin == UNSET) {
       hasObserved = true
       for (i <- 0 until size()) {
         breakable {

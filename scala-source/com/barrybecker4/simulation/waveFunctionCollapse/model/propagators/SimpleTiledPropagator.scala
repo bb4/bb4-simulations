@@ -13,7 +13,7 @@ class SimpleTiledPropagator(
   action: Seq[IntArray],
   neighbors: Array[Neighbor],
   firstOccurrence: mutable.Map[String, Int],
-  subset: Seq[String]
+  subsets: Seq[String]
 ) extends Propagator {
 
   private val tempPropagator: Array[Array[Array[Boolean]]] = Array.fill(4)(null)
@@ -42,7 +42,7 @@ class SimpleTiledPropagator(
         val left = neighbor.left.split(" ").filter(_.nonEmpty)
         val right = neighbor.right.split(" ").filter(_.nonEmpty)
 
-        if (subset == null || (subset.contains(left(0)) && subset.contains(right(0)))) {
+        if (subsets == null || (subsets.contains(left(0)) && subsets.contains(right(0)))) {
           val leftPosition: Int = action(firstOccurrence(left(0)))(if (left.length == 1) 0 else left(1).toInt)
           val downPosition: Int = action(leftPosition)(1)
           val rightPosition: Int = action(firstOccurrence(right(0)))(if (right.length == 1) 0 else right(1).toInt)

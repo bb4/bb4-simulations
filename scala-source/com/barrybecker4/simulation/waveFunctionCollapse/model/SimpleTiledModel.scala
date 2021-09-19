@@ -2,11 +2,11 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.google.gson.Gson
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.SampleTiledData
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagator
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, getSampleTiledData, readImage}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleTiledData, readImage}
 
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
@@ -43,10 +43,14 @@ class SimpleTiledModel(
 
     val dataset = data.set
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
-    val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
     dimensions = new Dimension(Math.max(1, width / tilesize), Math.max(1, height / tilesize))
 
-    var subset: Seq[String] = null
+    val subsets: Seq[String] = getSubsets(subsetName, dataset)
+    processTiles(dataset, subsets)
+  }
+
+  private def getSubsets(subsetName: String, dataset: SampleSet): Seq[String] = {
+    var subsets: Seq[String] = null
     if (subsetName != null) {
       val xSubSet = dataset.subsets(0).name
       if (xSubSet == null) {
@@ -54,31 +58,35 @@ class SimpleTiledModel(
       }
       else {
         for (tile <- dataset.tiles) {
-          if (subset == null) {
-            subset = Seq()
+          if (subsets == null) {
+            subsets = Seq()
           }
-          subset :+= tile.name
+          subsets :+= tile.name
         }
       }
     }
+    subsets
+  }
 
-    def tileFun(passedInFunc: (Int, Int) => Color): Array[Color] = {
-      val result: Array[Color] = Array.fill(tilesize * tilesize)(null)
-      for (y <- 0 until tilesize)
-        for (x <- 0 until tilesize)
-          result(x + y * tilesize) = passedInFunc(x, y)
-      result
-    }
+  private def tileFun(passedInFunc: (Int, Int) => Color): Array[Color] = {
+    val result: Array[Color] = Array.fill(tilesize * tilesize)(null)
+    for (y <- 0 until tilesize)
+      for (x <- 0 until tilesize)
+        result(x + y * tilesize) = passedInFunc(x, y)
+    result
+  }
 
-    def rotateFun(array: Array[Color]): Array[Color] = {
-      tileFun((x: Int, y: Int) => {
-        val idx = tilesize - 1 - y + x * tilesize
-        if (array(idx) != null) array(idx) else Color.BLACK
-      })
-    }
+  private def rotateFun(array: Array[Color]): Array[Color] = {
+    tileFun((x: Int, y: Int) => {
+      val idx = tilesize - 1 - y + x * tilesize
+      if (array(idx) != null) array(idx) else Color.BLACK
+    })
+  }
 
+  private def processTiles(dataset: SampleSet, subsets: Seq[String]): Unit = {
     tiles = Seq()
     tilenames = Seq()
+    val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
     var tempStationary: Seq[Double] = Seq()
     var action: Seq[IntArray] = Seq()
 
@@ -86,7 +94,7 @@ class SimpleTiledModel(
 
     for (tile <- dataset.tiles) {
       val tileName = tile.name
-      if (!useSubset || subset.contains(tileName)) {
+      if (!useSubset || subsets.contains(tileName)) {
         var a: Int => Int = null
         var b: Int => Int = null
         var cardinality: Int = 0
@@ -165,7 +173,7 @@ class SimpleTiledModel(
     tCounter = action.size
     weights = tempStationary.toArray
 
-    propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors, firstOccurrence, subset)
+    propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors, firstOccurrence, subsets)
   }
 
   def onBoundary(x: Int, y: Int): Boolean = {

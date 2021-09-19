@@ -24,9 +24,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
 
 
   def getName: String = name
-
   def onBoundary(x: Int, y: Int): Boolean
-
   def isReady: Boolean = ready
 
   def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
