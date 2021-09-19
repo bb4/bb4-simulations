@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.propagators
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.IntArray
 
+
 trait Propagator {
 
   val propagator: Array[Array[IntArray]] = Array.fill(4)(null)

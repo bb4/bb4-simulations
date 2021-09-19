@@ -6,20 +6,25 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY}
 
 import scala.collection.mutable.ListBuffer
 
+
 class OverlappingPropagator(tCounter: Int, patterns: Array[ByteArray], N: Int) extends Propagator {
 
-  for (d <- 0 until 4) {
-    propagator(d) = Array.fill(tCounter)(null)
-    for (t <- 0 until tCounter) {
-      val list = ListBuffer[Int]()
-      for (t2 <- 0 until tCounter) {
-        if (agrees(patterns(t), patterns(t2), DX(d), DY(d)))
-          list.append(t2)
-      }
+  init()
 
-      propagator(d)(t) = new IntArray(list.size)
-      for (i <- list.indices)
-        propagator(d)(t)(i) = list(i)
+  private def init(): Unit = {
+    for (d <- 0 until 4) {
+      propagator(d) = Array.fill(tCounter)(null)
+      for (t <- 0 until tCounter) {
+        val list = ListBuffer[Int]()
+        for (t2 <- 0 until tCounter) {
+          if (agrees(patterns(t), patterns(t2), DX(d), DY(d)))
+            list.append(t2)
+        }
+
+        propagator(d)(t) = new IntArray(list.size)
+        for (i <- list.indices)
+          propagator(d)(t)(i) = list(i)
+      }
     }
   }
 
