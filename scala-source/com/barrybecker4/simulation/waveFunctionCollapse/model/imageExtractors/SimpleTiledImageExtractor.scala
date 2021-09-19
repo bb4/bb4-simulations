@@ -17,7 +17,6 @@ class SimpleTiledImageExtractor(
   black: Boolean
 ) extends ImageExtractor {
 
-
   def getImage(wave: Wave): BufferedImage = {
     val FMX = dims.width
     val FMY = dims.height
