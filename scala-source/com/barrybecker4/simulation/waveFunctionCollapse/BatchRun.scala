@@ -11,18 +11,21 @@ import scala.util.control.Breaks.{break, breakable}
 
 object BatchRun extends App {
 
-  val startTime = System.currentTimeMillis()
-  var counter = 1
+  doBatchRun()
 
-  for (commonModel: CommonModel <- getSampleData("samples.json").samples.all()) {
-    process(commonModel, counter)
-    counter += 1
+  private def doBatchRun(): Unit = {
+    val startTime = System.currentTimeMillis()
+    var counter = 1
+
+    for (commonModel: CommonModel <- getSampleData("samples.json").samples.all()) {
+      process(commonModel, counter)
+      counter += 1
+    }
+
+    println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
   }
 
-  println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
-
-
-  def process(commonModel: CommonModel, counter: Int): Unit = {
+  private def process(commonModel: CommonModel, counter: Int): Unit = {
     val screenshots = commonModel.getScreenshots
     val model = commonModel match {
       case overlapping: Overlapping => new OverlappingModel(overlapping)
@@ -33,13 +36,13 @@ object BatchRun extends App {
     createScreenshots(model, screenshots, counter)
   }
 
-  def createScreenshots(model: WfcModel, screenshots: Int, counter: Int): Unit = {
+  private def createScreenshots(model: WfcModel, screenshots: Int, counter: Int): Unit = {
     val name = model.getName
     println("Now processing " + name + " screenshots = " + screenshots)
     for (i <- 0 until screenshots) {
       breakable {
         for (k <- 0 until 10) {
-          val seed = i * 10 + k
+          val seed = counter * 100 + i * 10 + k
           val finished = model.runWithLimit(seed)
           if (finished) {
             println(s"> DONE - $name")

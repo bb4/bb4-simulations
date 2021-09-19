@@ -49,9 +49,9 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
     runWithLimit(seed, 1)
   }
 
-  /** return None if not done computing, return true if done successfully; flase if done unsuccessfully */
+  /** return None if not done computing, return true if done successfully; flale if done unsuccessfully */
   def advance(steps: Int): Option[Boolean] = {
-    if (random == null || result.getOrElse(false)) {
+    if (random == null) {
       println("no advance. Result found")
       return None
     }

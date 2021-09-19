@@ -58,6 +58,7 @@ class Wave(val FMX: Int, val FMY: Int) {
     startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights
 
     stack = Array.fill(waveCells.length * tCounter)(null)
+    //println("Wave.init stack total size = " + (waveCells.length * tCounter))
     stackSize = 0
   }
 
@@ -135,6 +136,7 @@ class Wave(val FMX: Int, val FMY: Int) {
   def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propagator: Propagator): Unit = {
     while (stackSize > 0) {
       val e1 = stack(stackSize - 1)
+      assert(e1 != null, s"e1 was null at position ${stackSize -1} of total = ${stack.length}")
       stackSize -= 1
       doPropagation(e1, onBoundary, weights, propagator)
     }
@@ -180,11 +182,9 @@ class Wave(val FMX: Int, val FMY: Int) {
     for (i <- 0 until size()) {
       val waveCell = waveCells(i)
       for (t <- 0 until tCounter) {
-        if (waveCell != null) {
-          waveCell.enabled(t) = true
-          for (d <- 0 to 3)
-            waveCell.compatible(t)(d) = propagator.get(OPPOSITE(d), t).length
-        }
+        waveCell.enabled(t) = true
+        for (d <- 0 to 3)
+          waveCell.compatible(t)(d) = propagator.get(OPPOSITE(d), t).length
       }
 
       waveCell.sumOfOnes = weights.length
