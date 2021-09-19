@@ -5,10 +5,11 @@ import javax.swing._
 import java.awt._
 import java.awt.event._
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.waveFunctionCollapse.DynamicOptions.RND
+import com.barrybecker4.simulation.waveFunctionCollapse.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData}
+import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.util.Random
@@ -21,14 +22,21 @@ import scala.util.Random
 object DynamicOptions {
   private val PREFERRED_WIDTH = 300
   private val RND = new Random()
+
+  private val DEFAULT_NUM_STEPS_PER_FRAME = 100
+  private val STEPS_PER_FRAME_SLIDER = "Num steps per frame"
+  private val SLIDER_PROPS = Array(
+    new SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 500, DEFAULT_NUM_STEPS_PER_FRAME, 1.0)
+  )
 }
 
 class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCollapseExplorer)
-  extends JPanel with ItemListener with ActionListener with ChangeListener {
+  extends JPanel with ItemListener with ActionListener with ChangeListener with SliderGroupChangeListener  {
 
   private var dimensions: Dimension = new Dimension(100, 100)
   private val samples: Samples = getSampleData("menu-samples.json").samples;
   private var model: WfcModel = _
+  private var stepsPerFrame: Int = DEFAULT_NUM_STEPS_PER_FRAME
 
   private var tabbedPane: JTabbedPane = _
   private var overlappingSampleCombo: JComboBox[CommonModel] = _
@@ -67,7 +75,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     tabbedPane.addChangeListener(this)
 
     add(tabbedPane, BorderLayout.CENTER)
-    add(createButtons, BorderLayout.SOUTH)
+    add(createCommonOptions(), BorderLayout.SOUTH)
   }
 
   private def createOverlappingOptionsPanel(): JPanel = {
@@ -171,7 +179,17 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     panel
   }
 
-  private def createButtons = {
+  private def createCommonOptions() = {
+    val panel = new JPanel(new BorderLayout())
+    val subPanel = new JPanel()
+    subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.Y_AXIS))
+    subPanel.add(createButtons())
+    subPanel.add(createSliders())
+    panel.add(subPanel, BorderLayout.NORTH)
+    panel
+  }
+
+  private def createButtons() = {
     val buttonsPanel = new JPanel
     nextButton = new JButton("Next")
     nextButton.setToolTipText("Advance the simulation by one time step")
@@ -184,6 +202,16 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     buttonsPanel.add(nextButton)
     buttonsPanel.add(resetButton)
     buttonsPanel
+  }
+
+  private def createSliders(): JPanel = {
+    val panel = new JPanel()
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
+
+    val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
+    sliderGroup.addSliderChangeListener(this)
+    panel.add(sliderGroup)
+    panel
   }
 
   def reset(): Unit = {
@@ -249,8 +277,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   /** Return None if not done, else true/false when done successful/failed */
-  def advanceModel(steps: Int): Option[Boolean] = {
-    model.advance(steps)
+  def advanceModel(): Option[Boolean] = {
+    model.advance(stepsPerFrame)
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
@@ -263,11 +291,18 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == nextButton)
-      advanceModel(100)
+      advanceModel()
     else runModel()
   }
 
   override def stateChanged(e: ChangeEvent): Unit = {
     runModel()
+  }
+
+  /** One of the sliders was moved. */
+  override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
+    if (sliderName == DynamicOptions.STEPS_PER_FRAME_SLIDER) {
+      stepsPerFrame = value.toInt
+    }
   }
 }
