@@ -158,7 +158,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     elements.foreach(s => sampleModel.addElement(s))
 
     val sampleCombo = new JComboBox[CommonModel](sampleModel)
-    sampleCombo.setToolTipText("Select a sample (either overlapping or simpleTiled)")
+    sampleCombo.setToolTipText("Select a sample")
 
     sampleCombo.setSelectedItem(elements.head)
     sampleCombo.addItemListener(this)
@@ -295,6 +295,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     else runModel()
   }
 
+  // Tab changed
   override def stateChanged(e: ChangeEvent): Unit = {
     runModel()
   }

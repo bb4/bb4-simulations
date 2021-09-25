@@ -74,8 +74,6 @@ class WaveFunctionCollapseExplorer()
 
   override def createDynamicControls: JPanel = {
     options = new DynamicOptions(this)
-    options.setDimensions(this.getSize())
-    setPaused(false)
     options
   }
 }

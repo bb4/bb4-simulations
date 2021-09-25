@@ -27,7 +27,7 @@ import com.barrybecker4.common.concurrency.ThreadUtil
 object DynamicOptions {
   private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame"
   private val SCALE_SLIDER = "Scale"
-  private val PREFERRED_WIDTH = 300
+  private val PREFERRED_WIDTH = 240
   private val SPACING = 14
   private val GENERAL_SLIDER_PROPS = Array(
     new SliderProperties(NUM_STEPS_PER_FRAME_SLIDER, 1, 20, ConwayModel.DEFAULT_NUM_STEPS_PER_FRAME),
@@ -40,7 +40,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
 
   setLayout (new BoxLayout (this, BoxLayout.Y_AXIS) )
   setBorder (BorderFactory.createEtchedBorder)
-  setPreferredSize (new Dimension (DynamicOptions.PREFERRED_WIDTH, 900) )
+  setPreferredSize (new Dimension (DynamicOptions.PREFERRED_WIDTH, 800) )
   val generalPanel: JPanel = createGeneralControls
   val brushPanel: JPanel = createBrushControls
   val legend: ContinuousColorLegend = new ContinuousColorLegend (null, conwayModel.getColormap, true)
