@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
+import com.barrybecker4.simulation.waveFunctionCollapse.ui.{DynamicOptions, OptionsDialog}
 
 import javax.swing._
 import java.awt._

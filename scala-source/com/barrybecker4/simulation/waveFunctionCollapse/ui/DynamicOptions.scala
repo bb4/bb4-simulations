@@ -1,16 +1,17 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.waveFunctionCollapse
+package com.barrybecker4.simulation.waveFunctionCollapse.ui
 
-import javax.swing._
-import java.awt._
-import java.awt.event._
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.waveFunctionCollapse.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData}
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
+import java.awt._
+import java.awt.event._
+import javax.swing._
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.util.Random
 
@@ -34,7 +35,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   extends JPanel with ItemListener with ActionListener with ChangeListener with SliderGroupChangeListener  {
 
   private var dimensions: Dimension = new Dimension(100, 100)
-  private val samples: Samples = getSampleData("menu-samples.json").samples;
+  private val samples: Samples = getSampleData("ui/menu-samples.json").samples;
   private var model: WfcModel = _
   private var stepsPerFrame: Int = DEFAULT_NUM_STEPS_PER_FRAME
 
@@ -160,7 +161,11 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     elements.foreach(s => sampleModel.addElement(s))
 
     val sampleCombo = new JComboBox[CommonModel](sampleModel)
+    sampleCombo.setPreferredSize(new Dimension(180, 20))
+    sampleCombo.setMaximumSize(new Dimension(180, 20))
+
     sampleCombo.setToolTipText("Select a sample")
+    sampleCombo.addPopupMenuListener(new BoundsPopupMenuListener(800))
 
     sampleCombo.setSelectedItem(elements.head)
     sampleCombo.addItemListener(this)
@@ -228,7 +233,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     } else {
       val values = sampleTiledData.set.subsets.map(s => s.name)
       println("SUBSET VALUES ======= " + values.mkString(", "))
-      subsetCombo = createCombo(values)
+      subsetCombo = createCombo(values.toIndexedSeq)
       subsetCombo.setSelectedItem(values.head)
     }
     subsetComboPanel.remove(1)
