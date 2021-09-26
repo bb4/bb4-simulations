@@ -50,7 +50,7 @@ class WaveFunctionCollapseExplorer()
   override protected def getInitialTimeStep: Double = 1
 
   override def timeStep: Double = {
-    if (!isPaused && wfcModel != null) {
+    if (!isPaused && wfcModel != null && options != null) {
       def result = options.advanceModel()
       this.invalidate()
       if (result.isDefined) {

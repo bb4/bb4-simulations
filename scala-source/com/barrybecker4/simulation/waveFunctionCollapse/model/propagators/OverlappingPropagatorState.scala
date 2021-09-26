@@ -7,23 +7,24 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY}
 import scala.collection.mutable.ListBuffer
 
 
-class OverlappingPropagator(tCounter: Int, patterns: Array[ByteArray], N: Int) extends Propagator {
+class OverlappingPropagatorState(tCounter: Int, patterns: Array[ByteArray], N: Int) extends PropagatorState {
 
   init()
 
   private def init(): Unit = {
+    val list = ListBuffer[Int]()
     for (d <- 0 until 4) {
-      propagator(d) = Array.fill(tCounter)(null)
+      state(d) = Array.fill(tCounter)(null)
       for (t <- 0 until tCounter) {
-        val list = ListBuffer[Int]()
+        list.clear()
         for (t2 <- 0 until tCounter) {
           if (agrees(patterns(t), patterns(t2), DX(d), DY(d)))
             list.append(t2)
         }
 
-        propagator(d)(t) = new IntArray(list.size)
+        state(d)(t) = new IntArray(list.size)
         for (i <- list.indices)
-          propagator(d)(t)(i) = list(i)
+          state(d)(t)(i) = list(i)
       }
     }
   }

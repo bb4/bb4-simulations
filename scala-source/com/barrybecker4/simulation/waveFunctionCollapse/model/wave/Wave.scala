@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.Propagator
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.PropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DX, DY, INITIAL_ENTROPY, UNSET, DEFAULT_NOISE_SCALE, OPPOSITE}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, IntArray}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
@@ -63,7 +63,7 @@ class Wave(val FMX: Int, val FMY: Int) {
     startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights
 
     stack = Array.fill(waveCells.length * tCounter)(null)
-    //println("Wave.init stack total size = " + (waveCells.length * tCounter))
+    println("Wave.init stack total size = " + (waveCells.length * tCounter))
     stackSize = 0
   }
 
@@ -138,18 +138,23 @@ class Wave(val FMX: Int, val FMY: Int) {
     waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
-  def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propagator: Propagator): Unit = {
+  def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propState: PropagatorState): Unit = {
     while (stackSize > 0) {
       val e1 = stack(stackSize - 1)
-      assert(e1 != null, s"e1 was null at position ${stackSize -1} of total = ${stack.length}")
       stackSize -= 1
-      doPropagation(e1, onBoundary, weights, propagator)
+      if (e1 == null) {
+        println(s"WARNING: e1 was null at position ${stackSize} of total = ${stack.length}. ")
+        //throw new IllegalStateException(s"e1 was null at position ${stackSize - 1} of total = ${stack.length}. ")
+      }
+      else {
+        doPropagation(e1, onBoundary, weights, propState)
+      }
     }
   }
 
   private def doPropagation(
     e1: (Int, Int), onBoundary: (Int, Int) => Boolean,
-    weights: DoubleArray, propagator: Propagator): Unit = {
+    weights: DoubleArray, propState: PropagatorState): Unit = {
 
     val i1 = e1._1
     val x1 = i1 % FMX
@@ -167,7 +172,7 @@ class Wave(val FMX: Int, val FMY: Int) {
         else if (y2 >= FMY) y2 -= FMY
 
         val i2 = x2 + y2 * FMX
-        val p = propagator.get(d, e1._2)
+        val p = propState.get(d, e1._2)
         val compat = waveCells(i2).compatible
 
         for (l <- 0 until (if (p == null) 0 else p.length)) {
@@ -183,7 +188,7 @@ class Wave(val FMX: Int, val FMY: Int) {
     }
   }
 
-  def clear(tCounter: Int, weights: DoubleArray, propagator: Propagator): Unit = {
+  def clear(tCounter: Int, weights: DoubleArray, propagator: PropagatorState): Unit = {
     for (i <- 0 until size()) {
       val waveCell = waveCells(i)
       for (t <- 0 until tCounter) {

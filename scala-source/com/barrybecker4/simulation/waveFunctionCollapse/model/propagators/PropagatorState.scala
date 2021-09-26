@@ -4,10 +4,10 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.propagators
 import com.barrybecker4.simulation.waveFunctionCollapse.model.IntArray
 
 
-trait Propagator {
+trait PropagatorState {
 
-  val propagator: Array[Array[IntArray]] = Array.fill(4)(null)
+  val state: Array[Array[IntArray]] = Array.fill(4)(null)
 
-  def get(x: Int, y: Int): IntArray = propagator(x)(y)
+  def get(x: Int, y: Int): IntArray = state(x)(y)
 
 }

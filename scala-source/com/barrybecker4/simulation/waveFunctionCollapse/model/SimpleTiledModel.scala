@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagator
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleTiledData, readImage}
 
 import java.awt.{Color, Dimension}
@@ -173,7 +173,7 @@ class SimpleTiledModel(
     tCounter = action.size
     weights = tempStationary.toArray
 
-    propagator = new SimpleTiledPropagator(tCounter, action, dataset.neighbors, firstOccurrence, subsets)
+    propagator = new SimpleTiledPropagatorState(tCounter, action, dataset.neighbors, firstOccurrence, subsets)
   }
 
   def onBoundary(x: Int, y: Int): Boolean = {

@@ -8,13 +8,13 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 
-class SimpleTiledPropagator(
+class SimpleTiledPropagatorState(
   tCounter: Int,
   action: Seq[IntArray],
   neighbors: Array[Neighbor],
   firstOccurrence: mutable.Map[String, Int],
   subsets: Seq[String]
-) extends Propagator {
+) extends PropagatorState {
 
   private val tempPropagator: Array[Array[Array[Boolean]]] = Array.fill(4)(null)
   private val sparsePropagator: Array[Array[ListBuffer[Int]]] = Array.fill(4)(null)
@@ -30,7 +30,7 @@ class SimpleTiledPropagator(
   private def initTempPropagator(): Unit = {
     for (d <- 0 to 3) {
       tempPropagator(d) = Array.fill(tCounter)(null)
-      propagator(d) = Array.fill(tCounter)(null)
+      state(d) = Array.fill(tCounter)(null)
       for (t <- 0 until tCounter)
         tempPropagator(d)(t) = Array.fill(tCounter)(false)
     }
@@ -81,9 +81,9 @@ class SimpleTiledPropagator(
           if (tp(t2)) sp.append(t2)
 
         val size = sp.size
-        propagator(d)(t1) = new IntArray(size)
+        state(d)(t1) = new IntArray(size)
         for (st <- 0 until size)
-          propagator(d)(t1)(st) = sp(st)
+          state(d)(t1)(st) = sp(st)
       }
     }
   }
