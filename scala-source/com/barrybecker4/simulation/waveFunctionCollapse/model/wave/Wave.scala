@@ -73,53 +73,55 @@ class Wave(val FMX: Int, val FMY: Int) {
     tCounter: Int, weights: DoubleArray,
     onBoundary: (Int, Int) => Boolean,
     random: Random): Option[Boolean] = {
+    synchronized {
+      //println("observe thread = " + Thread.currentThread().getName)
+      var min = INITIAL_ENTROPY
+      var argMin = UNSET
 
-    var min = INITIAL_ENTROPY
-    var argMin = UNSET
-
-    for (i <- 0 until size()) {
-      if (!onBoundary(i % FMX, i / FMX)) {
-        val amount = waveCells(i).sumOfOnes
-        if (amount == 0) return Some(false)
-
-        val entropy = waveCells(i).entropy
-        if (amount > 1 && entropy <= min) {
-          val noise = DEFAULT_NOISE_SCALE * random.nextDouble()
-          if (entropy + noise < min) {
-            min = entropy + noise
-            argMin = i
-          }
-        }
-      }
-    }
-
-    if (argMin == UNSET) {
-      hasObserved = true
       for (i <- 0 until size()) {
-        breakable {
-          val waveCell = waveCells(i)
-          for (t <- 0 until tCounter) {
-            if (waveCell.enabled != null && waveCell.enabled(t)) {
-              waveCell.observed = t
-              break()
+        if (!onBoundary(i % FMX, i / FMX)) {
+          val amount = waveCells(i).sumOfOnes
+          if (amount == 0) return Some(false)
+
+          val entropy = waveCells(i).entropy
+          if (amount > 1 && entropy <= min) {
+            val noise = DEFAULT_NOISE_SCALE * random.nextDouble()
+            if (entropy + noise < min) {
+              min = entropy + noise
+              argMin = i
             }
           }
         }
       }
-      return Some(true)
+
+      if (argMin == UNSET) {
+        hasObserved = true
+        for (i <- 0 until size()) {
+          breakable {
+            val waveCell = waveCells(i)
+            for (t <- 0 until tCounter) {
+              if (waveCell.enabled != null && waveCell.enabled(t)) {
+                waveCell.observed = t
+                break()
+              }
+            }
+          }
+        }
+        return Some(true)
+      }
+
+      val distribution = Array.fill(tCounter)(0.0)
+      for (t <- 0 until tCounter) {
+        distribution(t) = if (waveCells(argMin).enabled != null && waveCells(argMin).enabled(t)) weights(t) else 0.0
+      }
+      val r = Utils.randomFromArray(distribution, random.nextDouble())
+
+      val waveCell = waveCells(argMin)
+      for (t <- 0 until tCounter)
+        if (waveCell.enabled != null && waveCell.enabled(t) != (t == r)) ban(argMin, t, weights)
+
+      None
     }
-
-    val distribution = Array.fill(tCounter)(0.0)
-    for (t <- 0 until tCounter) {
-      distribution(t) = if (waveCells(argMin).enabled != null && waveCells(argMin).enabled(t)) weights(t) else 0.0
-    }
-    val r = Utils.randomFromArray(distribution, random.nextDouble())
-
-    val waveCell = waveCells(argMin)
-    for (t <- 0 until tCounter)
-      if (waveCell.enabled != null && waveCell.enabled(t) != (t == r)) ban(argMin, t, weights)
-
-    None
   }
 
   def ban(i: Int, t: Int, weights: DoubleArray): Unit = {
@@ -135,20 +137,28 @@ class Wave(val FMX: Int, val FMY: Int) {
     stack(stackSize) = (i, t)
     stackSize += 1
 
+    // getting called by "Thread-0" and "AWT-EventQueue-0"
+
+    // whenever we add an element to the stack verify that none of the ones before it are null
+    //val nullIndices = getStackNullIndices
+    //assert(nullIndices.isEmpty, s"Indices where null (len=${stack.length} cur=${stackSize - 1} v=${(i,t)}) $stack ${Thread.currentThread().getName} are\n${nullIndices.mkString(", ")}")
+
     waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
+  private def getStackNullIndices: Seq[Int] =
+    stack.zipWithIndex.take(stackSize).filter({ case (value, _) => value == null }).map(v => v._2)
+
   def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propState: PropagatorState): Unit = {
     while (stackSize > 0) {
-      val e1 = stack(stackSize - 1)
       stackSize -= 1
+      val e1 = stack(stackSize)
+
       if (e1 == null) {
         println(s"WARNING: e1 was null at position ${stackSize} of total = ${stack.length}. ")
         //throw new IllegalStateException(s"e1 was null at position ${stackSize - 1} of total = ${stack.length}. ")
       }
-      else {
-        doPropagation(e1, onBoundary, weights, propState)
-      }
+      else doPropagation(e1, onBoundary, weights, propState)
     }
   }
 

@@ -75,7 +75,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     tabbedPane.add("Overlapping", createOverlappingOptionsPanel())
     tabbedPane.setToolTipTextAt(0, "Parameters for Overlapping Model")
     tabbedPane.addChangeListener(this)
-    tabbedPane.setSelectedIndex(1)
+    tabbedPane.setSelectedIndex(0)
 
     add(tabbedPane, BorderLayout.CENTER)
     add(createCommonOptions(), BorderLayout.SOUTH)

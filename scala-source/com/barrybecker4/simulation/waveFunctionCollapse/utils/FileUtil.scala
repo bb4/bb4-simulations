@@ -17,7 +17,7 @@ object FileUtil {
   val GSON: Gson = new Gson()
 
   def readImage(fileName: String): BufferedImage = {
-    println("now reading " + fileName)
+    //println("now reading " + fileName)
     ImageIO.read(new File(BASE_DIR + fileName))
   }
 
