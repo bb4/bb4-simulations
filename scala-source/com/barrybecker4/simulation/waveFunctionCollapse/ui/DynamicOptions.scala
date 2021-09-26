@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExpl
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData, readImage}
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
 import java.awt._
@@ -40,7 +40,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private var stepsPerFrame: Int = DEFAULT_NUM_STEPS_PER_FRAME
 
   private var tabbedPane: JTabbedPane = _
-  private var overlappingSampleCombo: JComboBox[CommonModel] = _
+  private var overlappingSampleCombo: JComboBox[Integer] = _
   private var tiledSampleCombo: JComboBox[CommonModel] = _
 
   // overlapping params
@@ -106,7 +106,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     val panel: JPanel = new JPanel()
 
     val tiledSamples = samples.simpletiled.toIndexedSeq
-    tiledSampleCombo = createSampleDropdown(tiledSamples)
+    tiledSampleCombo = createTiledSampleDropdown(tiledSamples)
     subsetCombo = createCombo(IndexedSeq("-"))
     subsetComboPanel = createComboPanel("Subset", "ruleset to apply to images", subsetCombo)
     updateSubsetCombo(tiledSamples.head)
@@ -156,7 +156,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     intCombo
   }
 
-  private def createSampleDropdown(elements: Seq[CommonModel]): JComboBox[CommonModel] = {
+  private def createTiledSampleDropdown(elements: Seq[CommonModel]): JComboBox[CommonModel] = {
     val sampleModel = new DefaultComboBoxModel[CommonModel]()
     elements.foreach(s => sampleModel.addElement(s))
 
@@ -171,6 +171,46 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     sampleCombo.addItemListener(this)
     sampleCombo
   }
+
+  private def createSampleDropdown(elements: Seq[CommonModel]): JComboBox[Integer] = {
+
+    val images: Array[ImageIcon] = Array.ofDim(elements.length)
+    //val modelArray: Array[CommonModel] = Array.ofDim(elements.length)
+    val intArray: Array[Integer] = Array.ofDim(elements.length)
+    val labels: Array[String] = Array.ofDim(elements.length)
+    var i: Int = 0
+    while (i < elements.length) {
+      //modelArray(i) = elements(i)
+      intArray(i) = i
+      labels(i) = elements(i).getName
+      images(i) = new ImageIcon(readImage(s"samples/${elements(i).getName}.png"))
+      if (images(i) != null) images(i).setDescription(elements(i).getName)
+      i += 1
+    }
+
+    val sampleCombo = new JComboBox(intArray)
+    val renderer: ComboBoxRenderer = new ComboBoxRenderer(images.toIndexedSeq, labels.toIndexedSeq)
+    renderer.setPreferredSize(new Dimension(200, 130))
+    sampleCombo.setRenderer(renderer)
+    //petList.setMaximumRowCount(3)
+
+
+
+    //val sampleModel = new DefaultComboBoxModel[CommonModel]()
+    //elements.foreach(s => sampleModel.addElement(s))
+
+    //val sampleCombo = new JComboBox[CommonModel](sampleModel)
+    sampleCombo.setPreferredSize(new Dimension(180, 20))
+    sampleCombo.setMaximumSize(new Dimension(180, 20))
+
+    sampleCombo.setToolTipText("Select a sample")
+    sampleCombo.addPopupMenuListener(new BoundsPopupMenuListener(800))
+
+    sampleCombo.setSelectedItem(elements.head)
+    sampleCombo.addItemListener(this)
+    sampleCombo
+  }
+
 
   private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
     val cb = new JCheckBox(label, initiallyChecked)
@@ -246,7 +286,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
     val sampleModel: CommonModel =
       if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
-      else overlappingSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+      else samples.overlapping(overlappingSampleCombo.getSelectedItem.asInstanceOf[Int])
 
     val wfcModel: WfcModel = sampleModel match {
       case overlapping: Overlapping => new OverlappingModel(
