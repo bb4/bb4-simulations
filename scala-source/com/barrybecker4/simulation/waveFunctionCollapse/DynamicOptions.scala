@@ -91,10 +91,10 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     overlappingPeriodicOutputCB = createCheckBox("Periodic Output",
       "if checked, then output pattern repeats", initiallyChecked = true)
 
-    panel.add(createComboPanel("Sample", overlappingSampleCombo))
-    panel.add(createComboPanel("N", nCombo))
-    panel.add(createComboPanel("Symmetry", symmetryCombo ))
-    panel.add(createComboPanel("Ground", groundCombo))
+    panel.add(createComboPanel("Sample", "image to use as basis for pattern", overlappingSampleCombo))
+    panel.add(createComboPanel("N", "radius of effect", nCombo))
+    panel.add(createComboPanel("Symmetry", "n-fold symmetry (typically 8)", symmetryCombo ))
+    panel.add(createComboPanel("Ground", "0 if no ground", groundCombo))
     panel.add(createLeftAlignedPanel(overlappingPeriodicOutputCB))
     panel.add(createLeftAlignedPanel(periodicInputCB))
 
@@ -107,7 +107,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     val tiledSamples = samples.simpletiled.toIndexedSeq
     tiledSampleCombo = createSampleDropdown(tiledSamples)
     subsetCombo = createCombo(IndexedSeq("-"))
-    subsetComboPanel = createComboPanel("Subset", subsetCombo)
+    subsetComboPanel = createComboPanel("Subset", "ruleset to apply to images", subsetCombo)
     updateSubsetCombo(tiledSamples.head)
 
     tiledPeriodicOutputCB = createCheckBox("Periodic Output",
@@ -115,7 +115,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     blackCB = createCheckBox("Black",
       "Uses black for uncollapsed regions", initiallyChecked = false)
 
-    panel.add(createComboPanel("Sample", tiledSampleCombo))
+    panel.add(createComboPanel("Sample", "set of tiles to forn the bases for the pattern", tiledSampleCombo))
     panel.add(subsetComboPanel)
     panel.add(createLeftAlignedPanel(tiledPeriodicOutputCB))
     panel.add(createLeftAlignedPanel(blackCB))
@@ -136,9 +136,10 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     runModel()
   }
 
-  private def createComboPanel(labelText: String, combo: Component): JPanel =  {
+  private def createComboPanel(labelText: String, ttip: String, combo: Component): JPanel =  {
     val comboPanel = new JPanel(new FlowLayout(FlowLayout.LEADING))
     val label = new JLabel(labelText + ":")
+    label.setToolTipText(ttip)
     label.setPreferredSize(new Dimension(70, 20))
     comboPanel.add(label)
     comboPanel.add(combo)
