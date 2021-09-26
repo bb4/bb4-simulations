@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.waveFunctionCollapse.ui
+package com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown
 
-import javax.swing.{ImageIcon, JLabel, JList, ListCellRenderer, SwingConstants}
 import java.awt.{Component, Dimension, Font}
+import javax.swing._
 
 class ComboBoxRenderer(images: IndexedSeq[ImageIcon], labels: IndexedSeq[String])
   extends JLabel with ListCellRenderer[Integer] {

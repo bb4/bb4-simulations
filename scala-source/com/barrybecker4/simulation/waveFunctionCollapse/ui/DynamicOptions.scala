@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExpl
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
+import com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown.{BoundsPopupMenuListener, ComboBoxRenderer}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData, readImage}
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
@@ -175,12 +176,10 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private def createSampleDropdown(elements: Seq[CommonModel]): JComboBox[Integer] = {
 
     val images: Array[ImageIcon] = Array.ofDim(elements.length)
-    //val modelArray: Array[CommonModel] = Array.ofDim(elements.length)
     val intArray: Array[Integer] = Array.ofDim(elements.length)
     val labels: Array[String] = Array.ofDim(elements.length)
     var i: Int = 0
     while (i < elements.length) {
-      //modelArray(i) = elements(i)
       intArray(i) = i
       labels(i) = elements(i).getName
       images(i) = new ImageIcon(readImage(s"samples/${elements(i).getName}.png"))
@@ -192,19 +191,12 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     val renderer: ComboBoxRenderer = new ComboBoxRenderer(images.toIndexedSeq, labels.toIndexedSeq)
     renderer.setPreferredSize(new Dimension(200, 130))
     sampleCombo.setRenderer(renderer)
-    //petList.setMaximumRowCount(3)
 
-
-
-    //val sampleModel = new DefaultComboBoxModel[CommonModel]()
-    //elements.foreach(s => sampleModel.addElement(s))
-
-    //val sampleCombo = new JComboBox[CommonModel](sampleModel)
-    sampleCombo.setPreferredSize(new Dimension(180, 20))
-    sampleCombo.setMaximumSize(new Dimension(180, 20))
+    sampleCombo.setPreferredSize(new Dimension(200, 20))
+    sampleCombo.setMaximumSize(new Dimension(200, 20))
 
     sampleCombo.setToolTipText("Select a sample")
-    sampleCombo.addPopupMenuListener(new BoundsPopupMenuListener(800))
+    sampleCombo.addPopupMenuListener(new BoundsPopupMenuListener(600))
 
     sampleCombo.setSelectedItem(elements.head)
     sampleCombo.addItemListener(this)

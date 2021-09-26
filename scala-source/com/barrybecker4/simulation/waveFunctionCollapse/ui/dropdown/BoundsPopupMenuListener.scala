@@ -1,11 +1,12 @@
-// Ported https://itqna.net/questions/31256/how-make-list-combobox-items-bigger-combo-itself to scala
-package com.barrybecker4.simulation.waveFunctionCollapse.ui
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
-import javax.swing.{JComboBox, JScrollBar, JScrollPane, ScrollPaneConstants, SwingUtilities}
-import javax.swing.event.PopupMenuEvent
-import javax.swing.event.PopupMenuListener
-import javax.swing.plaf.basic.BasicComboPopup
+// Ported https://itqna.net/questions/31256/how-make-list-combobox-items-bigger-combo-itself to scala
+package com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown
+
 import java.awt.Adjustable
+import javax.swing.event.{PopupMenuEvent, PopupMenuListener}
+import javax.swing.plaf.basic.BasicComboPopup
+import javax.swing._
 
 
 /**
