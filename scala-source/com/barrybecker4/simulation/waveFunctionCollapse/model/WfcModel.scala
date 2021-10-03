@@ -22,7 +22,6 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
   private var iterationCt = 0
   private var result: Option[Boolean] = None
 
-
   def getName: String = name
   def onBoundary(x: Int, y: Int): Boolean
   def isReady: Boolean = ready
@@ -47,7 +46,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
     runWithLimit(seed, 1)
   }
 
-  /** return None if not done computing, return true if done successfully; flale if done unsuccessfully */
+  /** return None if not done computing, return true if done successfully; false if done unsuccessfully */
   def advance(steps: Int): Option[Boolean] = {
     synchronized {
       if (random == null) {
@@ -59,6 +58,9 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
         result = wave.observe(tCounter, weights, onBoundary, random)
         if (result.isDefined) {
           ready = true
+          if (!result.get) {
+            println("*** Inconsistent state. No solution found!")
+          }
           return result
         }
         wave.propagate(onBoundary, weights, propagator)

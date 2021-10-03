@@ -9,4 +9,5 @@ import java.awt.image.BufferedImage
 trait ImageExtractor {
 
   def getImage(wave: Wave): BufferedImage
+
 }

@@ -176,7 +176,8 @@ class OverlappingModel(val name: String,
       if (ground != 0) {
         for (x <- 0 until FMX) {
           for (t <- 0 until tCounter)
-            if (t != ground) wave.ban(x + (FMY - 1) * FMX, t, weights)
+            if (t != ground)
+              wave.ban(x + (FMY - 1) * FMX, t, weights)
           for (y <- 0 until FMY - 1)
             wave.ban(x + y * FMX, ground, weights)
         }

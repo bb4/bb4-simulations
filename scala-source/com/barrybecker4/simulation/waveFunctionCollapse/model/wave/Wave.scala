@@ -68,7 +68,10 @@ class Wave(val FMX: Int, val FMY: Int) {
   }
 
 
-  /** @return true if in observed state. i.e complete. */
+  /**
+    * @return true if in observed state (i.e. complete),
+    *         false if done but inconsistent,
+    *         None if not done yet  */
   def observe(
     tCounter: Int, weights: DoubleArray,
     onBoundary: (Int, Int) => Boolean,
@@ -81,7 +84,8 @@ class Wave(val FMX: Int, val FMY: Int) {
       for (i <- 0 until size()) {
         if (!onBoundary(i % FMX, i / FMX)) {
           val amount = waveCells(i).sumOfOnes
-          if (amount == 0) return Some(false)
+          if (amount == 0)
+            return Some(false) // inconsistent state
 
           val entropy = waveCells(i).entropy
           if (amount > 1 && entropy <= min) {
@@ -118,7 +122,8 @@ class Wave(val FMX: Int, val FMY: Int) {
 
       val waveCell = waveCells(argMin)
       for (t <- 0 until tCounter)
-        if (waveCell.enabled != null && waveCell.enabled(t) != (t == r)) ban(argMin, t, weights)
+        if (waveCell.enabled != null && waveCell.enabled(t) != (t == r))
+          ban(argMin, t, weights)
 
       None
     }
@@ -138,11 +143,6 @@ class Wave(val FMX: Int, val FMY: Int) {
     stackSize += 1
 
     // getting called by "Thread-0" and "AWT-EventQueue-0"
-
-    // whenever we add an element to the stack verify that none of the ones before it are null
-    //val nullIndices = getStackNullIndices
-    //assert(nullIndices.isEmpty, s"Indices where null (len=${stack.length} cur=${stackSize - 1} v=${(i,t)}) $stack ${Thread.currentThread().getName} are\n${nullIndices.mkString(", ")}")
-
     waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
@@ -155,7 +155,7 @@ class Wave(val FMX: Int, val FMY: Int) {
       val e1 = stack(stackSize)
 
       if (e1 == null) {
-        println(s"WARNING: e1 was null at position ${stackSize} of total = ${stack.length}. ")
+        println(s"WARNING: e1 was null at position $stackSize of total = ${stack.length}. ")
         //throw new IllegalStateException(s"e1 was null at position ${stackSize - 1} of total = ${stack.length}. ")
       }
       else doPropagation(e1, onBoundary, weights, propState)
