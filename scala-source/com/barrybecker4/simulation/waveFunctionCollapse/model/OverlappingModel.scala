@@ -14,13 +14,11 @@ import scala.util.control.Breaks.{break, breakable}
 
 class OverlappingModel(val name: String,
   val N: Int, width: Int, height: Int, periodicInput: Boolean,
-  periodicOutput: Boolean, symmetry: Int, groundParam: Int, val limit: Int = 0
+  periodicOutput: Boolean, symmetry: Int, groundParam: Int, val limit: Int = 0, val scale: Int =2
 ) extends WfcModel(name, width, height, limit) {
 
   private var patterns: Array[ByteArray] = _
   private var ground: Int = 0
-  // Used to make the pixels bigger
-  private val scale = 2
 
   periodic = periodicOutput
   val bitmap: BufferedImage = readImage(s"samples/$name.png")

@@ -61,7 +61,8 @@ class MainTestSuite extends AnyFunSuite {
       periodicOutput = true,
       width = 48,
       height = 48,
-      limit = 0
+      limit = 0,
+      scale = 1
     )
 
     for (i <- 0 until 2) {
