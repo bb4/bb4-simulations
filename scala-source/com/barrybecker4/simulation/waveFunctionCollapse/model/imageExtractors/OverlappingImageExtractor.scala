@@ -17,13 +17,14 @@ class OverlappingImageExtractor(
   tCounter: Int,
   patterns: Array[ByteArray],
   colors: Seq[Color],
+  scale: Int,
   onBoundary: (Int, Int) => Boolean
 ) extends ImageExtractor {
 
   override def getImage(wave: Wave): BufferedImage = {
 
     val start = System.currentTimeMillis()
-    val result = new BufferedImage(dims.width, dims.height, BufferedImage.TYPE_4BYTE_ABGR)
+    val result = new BufferedImage(dims.width * scale, dims.height * scale, BufferedImage.TYPE_4BYTE_ABGR)
 
     if (wave.hasObserved) populateObservedImage(wave, result)
     else populateUnobservedImage(wave, result)
@@ -41,7 +42,7 @@ class OverlappingImageExtractor(
         val dx = if (x < FMX - N + 1) 0 else N - 1
         val isObserved = wave.get(x - dx + (y - dy) * FMX).observed
         val c = colors(patterns(isObserved)(dx + dy * N).toInt)
-        result.setRGB(x, y, c.getRGB)
+        setPixel(x, y, c, result)
       }
     }
   }
@@ -86,9 +87,15 @@ class OverlappingImageExtractor(
           }
           val c = if (contributors == 0) FILL_COLOR
           else new Color(r / contributors, g / contributors, b / contributors)
-          result.setRGB(x, y, c.getRGB)
+          setPixel(x, y, c, result)
         }
       }
     }
+  }
+
+  private def setPixel(x: Int, y: Int, c: Color, result: BufferedImage): Unit = {
+    for (i <- 0 until scale)
+      for (j <- 0 until scale)
+        result.setRGB(scale * x + i, scale * y + j, c.getRGB)
   }
 }

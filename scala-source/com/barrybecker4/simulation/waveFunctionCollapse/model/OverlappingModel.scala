@@ -19,6 +19,8 @@ class OverlappingModel(val name: String,
 
   private var patterns: Array[ByteArray] = _
   private var ground: Int = 0
+  // Used to make the pixels bigger
+  private val scale = 2
 
   periodic = periodicOutput
   val bitmap: BufferedImage = readImage(s"samples/$name.png")
@@ -26,7 +28,7 @@ class OverlappingModel(val name: String,
   val smx: Int = bitmap.getWidth
   val smy: Int = bitmap.getHeight
   val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
-  dimensions = new Dimension(width, height)
+  dimensions = new Dimension(width / scale, height / scale)
 
   private val colors: Seq[Color] = preProcessSample(bitmap)
   val numColors: Int = colors.size
@@ -189,7 +191,7 @@ class OverlappingModel(val name: String,
 
   def graphics(): BufferedImage  = {
     assert(this.isReady)
-    val imageExtractor = new OverlappingImageExtractor(dimensions, N, tCounter, patterns, colors, onBoundary)
+    val imageExtractor = new OverlappingImageExtractor(dimensions, N, tCounter, patterns, colors, scale, onBoundary)
     imageExtractor.getImage(wave)
   }
 
