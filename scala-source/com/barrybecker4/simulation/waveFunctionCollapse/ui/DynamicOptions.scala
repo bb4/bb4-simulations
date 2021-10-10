@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.ui
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, OverlappingModel, SimpleTiledModel, WfcModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown.{BoundsPopupMenuListener, ComboBoxRenderer}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData, readImage}
@@ -36,7 +36,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   extends JPanel with ItemListener with ActionListener with ChangeListener with SliderGroupChangeListener  {
 
   private var dimensions: Dimension = new Dimension(100, 100)
-  private val samples: Samples = getSampleData("ui/menu-samples.json").samples;
+  private val samples: Samples = getSampleData("ui/menu-samples.json").samples
   private var model: WfcModel = _
   private var stepsPerFrame: Int = DEFAULT_NUM_STEPS_PER_FRAME
 
@@ -283,13 +283,15 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     val wfcModel: WfcModel = sampleModel match {
       case overlapping: Overlapping => new OverlappingModel(
         overlapping.getName,
-        nCombo.getSelectedItem.asInstanceOf[Int],
         dimensions.width,
         dimensions.height,
-        periodicInputCB.isSelected,
         overlappingPeriodicOutputCB.isSelected,
-        symmetryCombo.getSelectedItem.asInstanceOf[Int],
-        groundCombo.getSelectedItem.asInstanceOf[Int],
+        OverlappingImageParams(
+          nCombo.getSelectedItem.asInstanceOf[Int],
+          symmetryCombo.getSelectedItem.asInstanceOf[Int],
+          periodicInputCB.isSelected,
+          groundCombo.getSelectedItem.asInstanceOf[Int]
+        ),
         100)
       case simpleTiled: SimpleTiled => new SimpleTiledModel(
         dimensions.width,

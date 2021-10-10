@@ -4,7 +4,7 @@
 package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.waveFunctionCollapse.MainTestSuite.SEED
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, OverlappingModel, SimpleTiledModel}
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.awt.Color
@@ -54,13 +54,10 @@ class MainTestSuite extends AnyFunSuite {
   private def generateOverlappingImage(): BufferedImage = {
     val model = new OverlappingModel(
       name = "Skyline",
-      N = 3,
-      symmetry = 2,
-      groundParam = -1,
-      periodicInput = true,
       periodicOutput = true,
       width = 48,
       height = 48,
+      imageParams = OverlappingImageParams(3, 2, periodicInput = true, -1),
       limit = 0,
       scale = 1
     )
