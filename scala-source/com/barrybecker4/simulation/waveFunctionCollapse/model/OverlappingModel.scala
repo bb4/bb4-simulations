@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.OverlappingImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.Overlapping
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.patterns.PatternExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.readImage
 
 import java.awt.Dimension
@@ -21,7 +22,10 @@ class OverlappingModel(val name: String, width: Int, height: Int,
   dimensions = new Dimension(width / scale, height / scale)
   private val N = imageParams.N
 
-  initialize()
+  tCounter = patternExtractor.tCounter
+  ground = patternExtractor.ground
+  weights = patternExtractor.weights
+  propagator = new OverlappingPropagatorState(tCounter, patternExtractor.patterns, N)
 
   def this(overlapping: Overlapping) = {
     this(
@@ -32,13 +36,6 @@ class OverlappingModel(val name: String, width: Int, height: Int,
       overlapping.getImageParams,
       overlapping.getLimit,
       1)
-  }
-
-  private def initialize(): Unit = {
-    tCounter = patternExtractor.tCounter
-    ground = patternExtractor.ground
-    weights = patternExtractor.weights
-    propagator = new OverlappingPropagatorState(tCounter, patternExtractor.patterns, N)
   }
 
   override def onBoundary(x: Int, y: Int): Boolean = {
