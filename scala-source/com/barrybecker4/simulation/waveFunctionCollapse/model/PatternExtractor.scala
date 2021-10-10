@@ -13,15 +13,16 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
   var weights: DoubleArray = _
   var ground: Int = 0
   var tCounter: Int = 0
-  val smx: Int = bitmap.getWidth
-  val smy: Int = bitmap.getHeight
+
+  private val smx: Int = bitmap.getWidth
+  private val smy: Int = bitmap.getHeight
 
   private val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
   val colors: Seq[Color] = preProcessSample(bitmap)
 
-  val numColors: Int = colors.size
+  private val numColors: Int = colors.size
   private val N = imageParams.N
-  val w: Long = Math.pow(numColors.toDouble, (N * N).toDouble).toLong
+  private val w: Long = Math.pow(numColors.toDouble, (N * N).toDouble).toLong
 
   initialize()
 
@@ -70,7 +71,7 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
     }
   }
 
-  def index(p: ByteArray): Long = {
+  private def index(p: ByteArray): Long = {
     var result: Long = 0
     var power: Long = 1
     for (i <- p.indices) {
@@ -101,7 +102,7 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
   }
 
 
-  def pattern(passedInFunc: (Int, Int) => Byte): ByteArray = {
+  private def pattern(passedInFunc: (Int, Int) => Byte): ByteArray = {
     val result: ByteArray = new Array(N * N)
     for (y <- 0 until N)
       for (x <- 0 until N)
@@ -109,20 +110,19 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
     result
   }
 
-  def rotate(p: ByteArray): ByteArray = {
+  private def rotate(p: ByteArray): ByteArray = {
     pattern((x, y) => p(N - 1 - y + x * N))
   }
 
-  def reflect(p: ByteArray): ByteArray = {
+  private def reflect(p: ByteArray): ByteArray = {
     pattern( (x, y) => p(N - 1 - x + y * N))
   }
 
-  def patternFromSample(x: Int, y: Int): ByteArray = {
+  private def patternFromSample(x: Int, y: Int): ByteArray = {
     pattern((dx, dy) => sample((x + dx) % smx)((y + dy) % smy))
   }
 
-
-  def patternFromIndex(ind: Long): ByteArray = {
+  private def patternFromIndex(ind: Long): ByteArray = {
     var residue = ind
     var power: Long = w
     val result: ByteArray = new ByteArray(N * N)

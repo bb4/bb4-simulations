@@ -1,10 +1,10 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{WfcModel, OverlappingModel, SimpleTiledModel}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SampleJson, SimpleTiled}
-import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getFileReader, getSampleData, writeImage}
-import com.google.gson.Gson
+package com.barrybecker4.simulation.waveFunctionCollapse.batch
+
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, SimpleTiled}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, writeImage}
 
 import scala.util.control.Breaks.{break, breakable}
 
@@ -17,12 +17,12 @@ object BatchRun extends App {
     val startTime = System.currentTimeMillis()
     var counter = 1
 
-    for (commonModel: CommonModel <- getSampleData("samples.json").samples.all()) {
+    for (commonModel: CommonModel <- getSampleData("batch/samples.json").samples.all()) {
       process(commonModel, counter)
       counter += 1
     }
 
-    println(s"Total time = ${(System.currentTimeMillis() - startTime)/1000.0} seconds")
+    println(s"Total time = ${(System.currentTimeMillis() - startTime) / 1000.0} seconds")
   }
 
   private def process(commonModel: CommonModel, counter: Int): Unit = {

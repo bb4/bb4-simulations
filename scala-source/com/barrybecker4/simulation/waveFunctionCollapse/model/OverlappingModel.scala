@@ -30,7 +30,8 @@ class OverlappingModel(val name: String, width: Int, height: Int,
       overlapping.getHeight,
       overlapping.getPeriodic,
       overlapping.getImageParams,
-      overlapping.getLimit)
+      overlapping.getLimit,
+      1)
   }
 
   private def initialize(): Unit = {
