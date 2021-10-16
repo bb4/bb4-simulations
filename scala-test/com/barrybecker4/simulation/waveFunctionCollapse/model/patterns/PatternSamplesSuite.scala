@@ -22,4 +22,37 @@ class PatternSamplesSuite extends AnyFunSuite {
 
     assertResult(124) { patternSamples.colors.length}
   }
+
+  test("getPatternSymmetries") {
+    val bitmap = FileUtil.readImage("samples/Angular.png")
+    val patternSamples = PatternSamples(bitmap, 3)
+
+    assertResult(
+      Array(
+        Array(0, 0, 0, 0, 0, 0, 1, 1, 1),
+        Array(0, 0, 0, 0, 0, 0, 1, 1, 1),
+        Array(0, 0, 1, 0, 0, 1, 0, 0, 1),
+        Array(1, 0, 0, 1, 0, 0, 1, 0, 0),
+        Array(1, 1, 1, 0, 0, 0, 0, 0, 0),
+        Array(1, 1, 1, 0, 0, 0, 0, 0, 0),
+        Array(1, 0, 0, 1, 0, 0, 1, 0, 0),
+        Array(0, 0, 1, 0, 0, 1, 0, 0, 1)
+      ), "pos 2, 3") {
+      patternSamples.getPatternSymmetries(2, 3)
+    }
+
+    assertResult(
+      Array(
+        Array(0, 0, 0, 1, 1, 1, 2, 2, 1),
+        Array(0, 0, 0, 1, 1, 1, 1, 2, 2),
+        Array(0, 1, 1, 0, 1, 2, 0, 1, 2),
+        Array(1, 1, 0, 2, 1, 0, 2, 1, 0),
+        Array(1, 2, 2, 1, 1, 1, 0, 0, 0),
+        Array(2, 2, 1, 1, 1, 1, 0, 0, 0),
+        Array(2, 1, 0, 2, 1, 0, 1, 1, 0),
+        Array(0, 1, 2, 0, 1, 2, 0, 1, 1)
+      ), "pos 7, 11") {
+      patternSamples.getPatternSymmetries(7, 11)
+    }
+  }
 }
