@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.Si
 import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.SimpleTiledPropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.SimpleTiledPropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleTiledData, readImage}
 
 import java.awt.{Color, Dimension}

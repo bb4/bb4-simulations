@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.OverlappingImageExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.Overlapping
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.OverlappingPropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.OverlappingPropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.patterns.PatternExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.readImage
 

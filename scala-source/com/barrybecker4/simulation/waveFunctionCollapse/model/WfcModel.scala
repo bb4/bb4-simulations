@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.PropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.PropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave
 
 import java.awt.Dimension

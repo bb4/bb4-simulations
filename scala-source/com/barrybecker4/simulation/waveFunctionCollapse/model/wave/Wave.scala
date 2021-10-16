@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagators.PropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.PropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DEFAULT_NOISE_SCALE, DX, DY, INCONSISTENT, INITIAL_ENTROPY, OPPOSITE, UNSET}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, IntArray}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
