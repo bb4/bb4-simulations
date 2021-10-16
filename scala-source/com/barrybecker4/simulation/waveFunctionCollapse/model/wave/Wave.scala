@@ -63,6 +63,7 @@ class Wave(val FMX: Int, val FMY: Int) {
 
     startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights
 
+    println(s"creating stack of size ${waveCells.length} * $tCounter" )
     stack = Array.fill(waveCells.length * tCounter)(null)
     println("Wave.init stack total size = " + (waveCells.length * tCounter))
     stackSize = 0

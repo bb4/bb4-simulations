@@ -44,6 +44,12 @@
         "-screenshots": "2"
       },
       {
+        "-name": "Eye",
+        "-N": "2",
+        "-periodic": "True",
+        "-screenshots": "2"
+      },
+      {
         "-name": "Knot",
         "-N": "3",
         "-periodic": "True",

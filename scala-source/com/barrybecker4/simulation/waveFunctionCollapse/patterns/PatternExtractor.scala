@@ -59,7 +59,8 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
 
     var counter = 0
     for (orderItem <- ordering) {
-      this.patterns(counter) = patternColorSamples.patternFromIndex(orderItem)
+      val pattern = patternColorSamples.patternFromIndex(orderItem)
+      this.patterns(counter) = pattern
       this.weights(counter) = weightsMap.getOrElse(orderItem, 0).toDouble
       counter += 1
     }
