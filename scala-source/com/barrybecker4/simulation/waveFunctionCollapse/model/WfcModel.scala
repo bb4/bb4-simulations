@@ -78,7 +78,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
         }
         wave.propagate(onBoundary, weights, propagator)
         iterationCt += 1
-        if (iterationCt % 100 == 0) print(s"$iterationCt, ")
+        if (iterationCt % 100 == 0) println(s"$iterationCt, ")
       }
       println(s"iteration=$iterationCt")
       None

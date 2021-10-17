@@ -21,7 +21,9 @@ object Wave {
   private val DEFAULT_NOISE_SCALE = 1E-6  // was 1E-6
 }
 
-
+/**
+  * The state of the solver
+  */
 class Wave(val FMX: Int, val FMY: Int) {
 
   private val waveCells: Array[WaveCell] = Array.fill(FMX * FMY)(null)
@@ -116,10 +118,10 @@ class Wave(val FMX: Int, val FMY: Int) {
 
       val distribution = Array.fill(tCounter)(0.0)
       for (t <- 0 until tCounter)
-        distribution(t) = if (waveCells(minEntropy).enabled != null && waveCells(minEntropy).enabled(t)) weights(t) else 0.0
+        distribution(t) =
+          if (waveCells(minEntropy).enabled != null && waveCells(minEntropy).enabled(t)) weights(t) else 0.0
 
       val r = Utils.randomFromArray(distribution, random.nextDouble())
-
       val waveCell = waveCells(minEntropy)
       for (t <- 0 until tCounter)
         if (waveCell.enabled != null && waveCell.enabled(t) != (t == r))
@@ -160,8 +162,16 @@ class Wave(val FMX: Int, val FMY: Int) {
     argMin
   }
 
+  /** remove patterns from the domains of the cells */
   def ban(i: Int, t: Int, weights: DoubleArray): Unit = {
     val waveCell = waveCells(i)
+
+    // if only one options left, don't ban it - so we avoid an inconsistent state
+    if (waveCells(i).sumOfOnes == 1) {
+      println("INCONSISTENCY FOUND, but continuing")
+      return
+    };
+
     if (waveCell.enabled != null)
       waveCell.enabled(t) = false
 
