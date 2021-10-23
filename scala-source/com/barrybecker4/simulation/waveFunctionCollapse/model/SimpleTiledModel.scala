@@ -16,7 +16,8 @@ import scala.collection.mutable
 class SimpleTiledModel(
   var width: Int, var height: Int,
   val name: String, subsetName: String,
-  var isPeriodic: Boolean, var black: Boolean, val limit: Int = 0
+  var isPeriodic: Boolean, var black: Boolean,
+  val limit: Int = 0, val allowInconsistencies: Boolean
 ) extends WfcModel(name, width, height, limit) {
 
   private var tiles: Seq[Array[Color]] = _
@@ -36,7 +37,8 @@ class SimpleTiledModel(
       simpleTiled.getSubset,
       simpleTiled.getPeriodic,
       simpleTiled.getBlack,
-      simpleTiled.getLimit)
+      simpleTiled.getLimit,
+      true)
   }
 
   def processFile(data: SampleTiledData): Unit = {

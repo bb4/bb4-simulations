@@ -24,7 +24,7 @@ object Wave {
 /**
   * The state of the solver
   */
-class Wave(val FMX: Int, val FMY: Int) {
+class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
 
   private val waveCells: Array[WaveCell] = Array.fill(FMX * FMY)(null)
 
@@ -164,14 +164,14 @@ class Wave(val FMX: Int, val FMY: Int) {
 
   /** remove patterns from the domains of the cells */
   def ban(i: Int, t: Int, weights: DoubleArray): Unit = {
-    if (i >= waveCells.length) return;
+    if (i >= waveCells.length) return
     val waveCell = waveCells(i)
 
     // if only one options left, don't ban it - so we avoid an inconsistent state
-    if (waveCells(i).sumOfOnes == 1) {
+    if (allowInconsistencies && waveCells(i).sumOfOnes == 1) {
       println("INCONSISTENCY FOUND, but continuing")
       return
-    };
+    }
 
     if (waveCell.enabled != null)
       waveCell.enabled(t) = false

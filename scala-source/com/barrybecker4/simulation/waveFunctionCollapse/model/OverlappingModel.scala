@@ -12,8 +12,9 @@ import java.awt.image.BufferedImage
 
 
 class OverlappingModel(val name: String, width: Int, height: Int,
-  periodicOutput: Boolean, imageParams: OverlappingImageParams, val limit: Int = 0, val scale: Int =2
-) extends WfcModel(name, width, height, limit) {
+  periodicOutput: Boolean, imageParams: OverlappingImageParams,
+  val limit: Int = 0, val allowInconsistencies: Boolean = true, val scale: Int = 2
+) extends WfcModel(name, width, height, limit, allowInconsistencies) {
 
   periodic = periodicOutput
   private var ground: Int = 0
@@ -35,6 +36,7 @@ class OverlappingModel(val name: String, width: Int, height: Int,
       overlapping.getPeriodic,
       overlapping.getImageParams,
       overlapping.getLimit,
+      allowInconsistencies = false,
       1)
   }
 

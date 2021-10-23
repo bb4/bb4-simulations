@@ -12,7 +12,9 @@ import scala.util.Random
   * For a good explanation of the algorithm. See
   * https://escholarship.org/content/qt1fb9k44q/qt1fb9k44q_noSplash_1c5dcf5090d4595f7605b2653c89b245.pdf?t=qwpcsb
   */
-abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
+abstract class WfcModel(name: String,
+                        val FMX: Int, val FMY: Int,
+                        limit: Int, allowInconsistencies: Boolean = true) {
 
   protected var wave: Wave = _
   protected var propagator: PropagatorState = _
@@ -32,7 +34,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
   def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
     ready = false
     if (wave == null) {
-      wave = new Wave(dimensions.width, dimensions.height)
+      wave = new Wave(dimensions.width, dimensions.height, allowInconsistencies)
       wave.init(tCounter, weights)
     }
 

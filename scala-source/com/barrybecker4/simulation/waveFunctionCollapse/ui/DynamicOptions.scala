@@ -57,6 +57,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private var tiledPeriodicOutputCB: JCheckBox = _
   private var blackCB: JCheckBox = _
 
+  private var allowInconsistenciesCB: JCheckBox = _
+
   private var nextButton: JButton = _
   private var resetButton: JButton = _
 
@@ -221,8 +223,14 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   private def createCommonOptions() = {
     val panel = new JPanel(new BorderLayout())
     val subPanel = new JPanel()
+
+    allowInconsistenciesCB = createCheckBox("Allow inconsistencies",
+      "if checked, then performance is much better and it won't fail, but there may be flaws in the result",
+      initiallyChecked = true)
+
     subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.Y_AXIS))
     subPanel.add(createButtons())
+    subPanel.add(allowInconsistenciesCB)
     subPanel.add(createSliders())
     panel.add(subPanel, BorderLayout.NORTH)
     panel
@@ -292,7 +300,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
           periodicInputCB.isSelected,
           groundCombo.getSelectedItem.asInstanceOf[Int]
         ),
-        100)
+        100,
+        allowInconsistenciesCB.isSelected)
       case simpleTiled: SimpleTiled => new SimpleTiledModel(
         dimensions.width,
         dimensions.height,
@@ -300,7 +309,9 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
         subsetCombo.getSelectedItem.asInstanceOf[String],
         tiledPeriodicOutputCB.isSelected,
         blackCB.isSelected,
-        100)
+        100,
+        allowInconsistenciesCB.isSelected
+      )
       case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
     }
 
