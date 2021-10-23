@@ -301,10 +301,13 @@ appMap['complexmapping'] = [
 ]
 appMap['waveFunctionCollapse'] = [
         title: 'Wave Function Collapse',
+        imageName: "waveFunctionCollapse.png",
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer',
         panel_class: 'com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer',
-        description: 'Allows you to create procedurally generated scenes based on seed.',
-        longDescription: 'This program allows you generate random scenes based on seed image. ' +
+        description: 'Allows you to create procedurally generated scenes based on seed image or tiles.',
+        longDescription: 'This program allows you generate random scenes based the ' +
+                'wave function collapse algorithm inspired by quantum mechanics. ' +
+                'It takes as input a small image (OverlappingModel) or set it tiles (SimpleTiledModel). ' +
                 'See ' +
                 '<a href="https://github.com/mxgmn/WaveFunctionCollapse">original source</a>.'
 ]
