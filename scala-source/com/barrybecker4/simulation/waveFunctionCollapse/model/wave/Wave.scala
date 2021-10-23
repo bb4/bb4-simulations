@@ -164,6 +164,7 @@ class Wave(val FMX: Int, val FMY: Int) {
 
   /** remove patterns from the domains of the cells */
   def ban(i: Int, t: Int, weights: DoubleArray): Unit = {
+    if (i >= waveCells.length) return;
     val waveCell = waveCells(i)
 
     // if only one options left, don't ban it - so we avoid an inconsistent state

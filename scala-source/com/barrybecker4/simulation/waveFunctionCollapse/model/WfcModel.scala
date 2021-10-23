@@ -63,6 +63,7 @@ abstract class WfcModel(name: String, val FMX: Int, val FMY: Int, limit: Int) {
   def advance(steps: Int): Option[Boolean] = {
     synchronized {
       if (random == null) {
+        Thread.sleep(100)
         println("no advance. Result found")
         return None
       }

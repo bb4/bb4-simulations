@@ -12,10 +12,6 @@
         "-ground": "-1"
       },
       {
-        "-name": "Eye",
-        "-N": "2"
-      },
-      {
         "-name": "Flowers",
         "-N": "3",
         "-symmetry": "2",
@@ -204,6 +200,10 @@
         "-name": "3Bricks",
         "-N": "3",
         "-symmetry": "1"
+      },
+      {
+        "-name": "Eye",
+        "-N": "2"
       },
       {
         "-name": "Village",

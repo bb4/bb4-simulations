@@ -31,8 +31,11 @@ class WaveFunctionCollapseExplorer()
     val self = this
     this.addComponentListener(new ComponentAdapter {
       override def componentResized(ce: ComponentEvent): Unit = {
-        println("resized so rerunning...")
-        options.setDimensions(self.getSize())
+        val size: Dimension = self.getSize
+        if (size.width != options.getWidth || size.height != options.getHeight) {
+          println("resized so rerunning...")
+          options.setDimensions(size)
+        }
       }
     })
   }
