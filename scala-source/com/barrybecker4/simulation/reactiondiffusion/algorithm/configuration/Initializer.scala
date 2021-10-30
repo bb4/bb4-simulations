@@ -18,7 +18,7 @@ object Initializer {
   */
 abstract class Initializer(name: String, initialU: Double = INITIAL_U, initialV: Double = INITIAL_V) {
 
-  def initialize(grid: InitializableGrid, width: Int, height: Int)
+  def initialize(grid: InitializableGrid, width: Int, height: Int): Unit
 
   override def toString: String = name
 

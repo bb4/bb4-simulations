@@ -29,7 +29,7 @@ class WaterSimulator() extends Simulator("Water") {
   private var oldDimensions = new Dimension(0, 0)
   commonInit()
 
-  private def commonInit() {
+  private def commonInit(): Unit = {
     initCommonUI()
     env.reset()
     envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
@@ -49,8 +49,8 @@ class WaterSimulator() extends Simulator("Water") {
   override def getBackground: Color = WaterSimulator.BG_COLOR
   override protected def getInitialTimeStep: Double = WaterSimulator.INITIAL_TIME_STEP
 
-  def setViscosity(v: Double) {env.setViscosity(v)}
-  def setShowVelocityVectors(show: Boolean) { envRenderer.getOptions.setShowVelocities(show)}
+  def setViscosity(v: Double): Unit = {env.setViscosity(v)}
+  def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.setShowVelocities(show)}
   def getShowVelocityVectors: Boolean = envRenderer.getOptions.getShowVelocities
 
   override def setPaused(bPaused: Boolean): Unit = {

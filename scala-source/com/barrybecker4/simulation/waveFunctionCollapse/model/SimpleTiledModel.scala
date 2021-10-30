@@ -17,7 +17,8 @@ class SimpleTiledModel(
   var width: Int, var height: Int,
   val name: String, subsetName: String,
   var isPeriodic: Boolean, var black: Boolean,
-  val limit: Int = 0, val allowInconsistencies: Boolean
+  val limit: Int = 0,
+  val allowInconsistencies: Boolean = false
 ) extends WfcModel(name, width, height, limit) {
 
   private var tiles: Seq[Array[Color]] = _

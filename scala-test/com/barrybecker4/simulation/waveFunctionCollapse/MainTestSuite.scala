@@ -3,7 +3,7 @@
  */
 package com.barrybecker4.simulation.waveFunctionCollapse
 
-import com.barrybecker4.simulation.waveFunctionCollapse.MainTestSuite.SEED
+import com.barrybecker4.simulation.waveFunctionCollapse.MainTestSuite.{RESOURCE_PATH, SEED}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, OverlappingModel, SimpleTiledModel}
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -16,6 +16,7 @@ import scala.io.Source
 
 object MainTestSuite {
   val SEED = 1236548748
+  val RESOURCE_PATH = "com/barrybecker4/simulation/waveFunctionCollapse/"
 }
 
 
@@ -37,7 +38,9 @@ class MainTestSuite extends AnyFunSuite {
     }
 
     val expectedHexes = new mutable.HashMap[String, Int]()
-    val file: File = new File(this.getClass.getClassLoader.getResource("overlapping_hex.txt").getFile)
+    val resource = this.getClass.getClassLoader.getResource(RESOURCE_PATH + "overlapping_hex.txt")
+    println("resource = " + resource)
+    val file: File = new File(resource.getFile)
     val src = Source.fromFile(file)
     for (hex <- src.getLines()) {
       expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
@@ -90,7 +93,7 @@ class MainTestSuite extends AnyFunSuite {
     }
 
     val expectedHexes = new mutable.HashMap[String, Int]()
-    val file = new File(this.getClass.getClassLoader.getResource("simple.txt").getFile)
+    val file = new File(this.getClass.getClassLoader.getResource(RESOURCE_PATH + "simple.txt").getFile)
     val src = Source.fromFile(file)
     for (hex <- src.getLines()) {
       expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
@@ -115,7 +118,8 @@ class MainTestSuite extends AnyFunSuite {
       subsetName = "Dense Fabric",
       isPeriodic = true,
       black = false,
-      limit = 0
+      limit = 0,
+      allowInconsistencies = false
     )
 
     for (i <- 0 until 2) {

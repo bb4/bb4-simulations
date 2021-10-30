@@ -65,8 +65,8 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     rabbits.setPopulation(rabbits.getPopulation * rabbits.birthRate -
       foxes.getPopulation * rabbits.deathRate * rabbits.getPopulation)
     //                    - lions.getPopulation() * rabbits.deathRate * rabbits.getPopulation());
-    rabbitFunction.addValue(iteration, rabbits.getPopulation)
-    foxFunction.addValue(iteration, foxes.getPopulation)
+    rabbitFunction.addValue(iteration.toDouble, rabbits.getPopulation.toDouble)
+    foxFunction.addValue(iteration.toDouble, foxes.getPopulation.toDouble)
     options.update()
     tStep
   }

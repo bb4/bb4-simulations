@@ -4,9 +4,10 @@ buildscript {
     repositories {
         // retrieve the shared gradle build scripts from here
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
+        maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
     dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.6-SNAPSHOT'
+        classpath 'com.barrybecker4:bb4-gradle:1.6.4'
     }
 }
 

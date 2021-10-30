@@ -62,7 +62,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   private def updateFunctions(iteration: Long): Unit = {
     for (pop <- this) {
       val func = functionMap(pop)
-      func.addValue(iteration, pop.getSize.toDouble)
+      func.addValue(iteration.toDouble, pop.getSize.toDouble)
     }
   }
 

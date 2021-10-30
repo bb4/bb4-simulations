@@ -25,5 +25,5 @@ class HeadSegment(width1: Double, width2: Double, length: Double, val pos: Point
   edges(1) = new Edge(particles(1), particles(2)) // front
 
   /** There are no muscles to contract in the head since there is no segment in front. */
-  override def contractMuscles(params: LocomotionParameters, time: Double) {}
+  override def contractMuscles(params: LocomotionParameters, time: Double): Unit = {}
 }

@@ -20,7 +20,7 @@ class PatternSamplesSuite extends AnyFunSuite {
     val bitmap = FileUtil.readImage("samples/Eye.png")
     val patternSamples = PatternSamples(bitmap, 2)
 
-    assertResult(124) { patternSamples.colors.length}
+    assertResult(64) { patternSamples.colors.length}
   }
 
   test("getPatternSymmetries") {

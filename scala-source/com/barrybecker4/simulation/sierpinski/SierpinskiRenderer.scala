@@ -15,7 +15,7 @@ object SierpinskiRenderer {
   * @author Barry Becker
   */
 class SierpinskiRenderer() {
-  private var styler: GraphicsStyler = new GraphicsStyler(SierpinskiRenderer.DEFAULT_LINE_WIDTH)
+  private var styler: GraphicsStyler = new GraphicsStyler(SierpinskiRenderer.DEFAULT_LINE_WIDTH.toFloat)
   private var triangleRenderer = new TriangleRenderer(styler)
   private var width = 0
   private var height = 0

@@ -33,7 +33,7 @@ class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(creat
   //commonInit(createSliderProperties)
 
 
-  def update() { this.setSliderValue(0, creaturePop.getPopulation) }
+  def update(): Unit = { this.setSliderValue(0, creaturePop.getPopulation) }
 
   /**
     * One of the sliders was potentially moved.
