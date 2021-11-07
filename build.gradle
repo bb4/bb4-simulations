@@ -2,22 +2,22 @@
 
 buildscript {
     repositories {
-        // retrieve the shared gradle build scripts from here
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
     dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.6.5'
+        classpath 'com.barrybecker4:bb4-gradle:1.7-SNAPSHOT'
     }
 }
 
 plugins {
-    id "com.github.maiflai.scalatest" version "0.25" // needed to run scala tests
+    id "com.github.maiflai.scalatest" version "0.31" // needed to run scala tests
 }
+
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '1.6.1'
+version = '1.7-SNAPSHOT'
 ext {
     archivesBaseName = 'bb4-simulation'
     mainClass = "com.barrybecker4.simulation.dice.DiceSimulator"
@@ -27,14 +27,13 @@ apply from: project.buildscript.classLoader.getResource('bb4.gradle').toURI()
 
 dependencies {
     def javaHome = System.properties.'java.home'
-    compile fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
+    implementation fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
-    // compile -> implementation
-    compile 'org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2'
-    compile 'com.google.code.gson:gson:2.8.5'
-    compile 'com.barrybecker4:bb4-expression:1.6'
-    compile 'com.barrybecker4:bb4-sound:1.6'
-    compile 'com.barrybecker4:bb4-optimization:1.6'
+    implementation 'org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.barrybecker4:bb4-expression:1.6'
+    implementation 'com.barrybecker4:bb4-sound:1.6'
+    implementation 'com.barrybecker4:bb4-optimization:1.6'
 }
 
 
@@ -351,6 +350,7 @@ jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
 jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
 jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
 jarMap['water'] =    [include:['com/barrybecker4/simulation/water/**']]
+jarMap['waveFunctonCollapse'] =    [include:['com/barrybecker4/simulation/waveFunctionCollapse/**']]
 
 
 // add extra execution scripts
