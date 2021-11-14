@@ -35,7 +35,7 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     val snakeParamPanel = new JPanel
     snakeParamPanel.setLayout(new BoxLayout(snakeParamPanel, BoxLayout.Y_AXIS))
     snakeParamPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Snake Parameters"))
-    val snakeModel = new DefaultComboBoxModel[String](SnakeType.VALUES.map(_.name))
+    val snakeModel = new DefaultComboBoxModel[String](SnakeType.values.map(_.name))
     snakeCombo = new JComboBox[String](snakeModel)
     snakeCombo.setToolTipText("Select a type of snake to show.")
     val waveModel = new DefaultComboBoxModel[WaveType]()
@@ -82,7 +82,7 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     params.springK = springKField.getValue
     params.springDamping = springDampingField.getValue
     params.waveType = waveTypeCombo.getSelectedItem.asInstanceOf[WaveType]
-    val snakeData = SnakeType.VALUES(snakeCombo.getSelectedIndex).snakeData
+    val snakeData = SnakeType.fromOrdinal(snakeCombo.getSelectedIndex).snakeData
     simulator.setSnakeData(snakeData)
   }
 }

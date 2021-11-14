@@ -13,7 +13,7 @@ class SnakeRenderer(val params: RenderingParameters) {
   private var segmentRenderer = new SegmentRenderer(params)
 
   /** render each segment of the snake */
-  def render(snake: Snake, g: Graphics2D) {
+  def render(snake: Snake, g: Graphics2D): Unit = {
     g.setColor(Color.black)
     for (i <- 0 until snake.getNumSegments) {
       segmentRenderer.render(snake.getSegment(i), g)

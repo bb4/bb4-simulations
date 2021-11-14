@@ -14,7 +14,7 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, Me
 
 object ComplexMappingExplorer {
   val DEFAULT_ORIG_GRID_BOUNDS: Box = Box(new Point2d(-1.0, 1.5), new Point2d(2, -2))
-  val DEFAULT_FUNCTION: FunctionType.Val = FunctionType.ZETA_ANALYTIC_EXTENSION
+  val DEFAULT_FUNCTION: FunctionType = FunctionType.ZETA_ANALYTIC_EXTENSION
   val DEFAULT_N: Int = 2
   val DEFAULT_INTERPOLATION_VAL: Double = 1.0
   val DEFAULT_MESH_DETAIL: Double = 0.1

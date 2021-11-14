@@ -7,7 +7,7 @@ import com.barrybecker4.simulation.cave.model.kernal.Kernel
 import com.barrybecker4.simulation.cave.model.kernal.RadialKernel
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField
 import CaveProcessor._
-import CaveProcessor.KernelType.KernelType
+import CaveProcessor.KernelType
 import scala.collection.parallel.CollectionConverters._
 
 /**
@@ -33,12 +33,11 @@ object CaveProcessor {
   /** Cells are born if more than this many neighbors */
   val DEFAULT_EFFECT_FACTOR = 0.2
 
-  object KernelType extends Enumeration {
-    type KernelType = Value
-    val BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11, RADIAL13, RADIAL15, RADIAL17, RADIAL19 = Value
-  }
+  enum KernelType:
+    case BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11, RADIAL13, RADIAL15, RADIAL17, RADIAL19
+  
 
-  val DEFAULT_KERNEL_TYPE: KernelType.KernelType = KernelType.RADIAL9
+  val DEFAULT_KERNEL_TYPE: KernelType = KernelType.RADIAL9
 
   def main(args: Array[String]): Unit = {
     val cave = new CaveProcessor(32, 32, 0.25, 0.8, 3, 2, KernelType.BASIC, DEFAULT_USE_PARALLEL)

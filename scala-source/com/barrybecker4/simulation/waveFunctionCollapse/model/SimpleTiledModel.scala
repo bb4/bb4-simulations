@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{Sample
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.SimpleTiledPropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleTiledData, readImage}
-
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 import scala.collection.mutable
@@ -15,10 +14,10 @@ import scala.collection.mutable
 
 class SimpleTiledModel(
   var width: Int, var height: Int,
-  val name: String, subsetName: String,
+  name: String, subsetName: String,
   var isPeriodic: Boolean, var black: Boolean,
-  val limit: Int = 0,
-  val allowInconsistencies: Boolean = false
+  limit: Int = 0,
+  allowInconsistencies: Boolean = false
 ) extends WfcModel(name, width, height, limit) {
 
   private var tiles: Seq[Array[Color]] = _
@@ -27,7 +26,7 @@ class SimpleTiledModel(
   private val useSubset = subsetName != null
   val gson = new Gson()
 
-  this.periodic = isPeriodic
+
   processFile(getSampleTiledData(name))
 
   def this(simpleTiled: SimpleTiled) = {
@@ -43,8 +42,8 @@ class SimpleTiledModel(
   }
 
   def processFile(data: SampleTiledData): Unit = {
-
     val dataset = data.set
+    this.periodic = isPeriodic
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
     dimensions = new Dimension(Math.max(1, width / tilesize), Math.max(1, height / tilesize))
 

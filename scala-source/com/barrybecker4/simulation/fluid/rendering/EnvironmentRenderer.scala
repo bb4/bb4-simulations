@@ -42,7 +42,7 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
   }
 
   /** If the render options say to use parallelism, then we will render the pressures concurrently. */
-  private def concurrentRenderPressures(g2: Graphics2D) = {
+  private def concurrentRenderPressures(g2: Graphics2D): Boolean = {
     val height = env.getHeight
     modelImage.setUseLinearInterpolation(options.getUseLinearInterpolation)
     val numProcs = Runtime.getRuntime.availableProcessors()

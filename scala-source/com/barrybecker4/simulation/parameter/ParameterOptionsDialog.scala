@@ -30,7 +30,7 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
     paramSim = getSimulator.asInstanceOf[ParameterSimulator]
     parameterChoiceField = new JComboBox[String]()
     parameterChoiceField.setModel(
-      new DefaultComboBoxModel[String](ParameterDistributionType.VALUES.map(_.name))
+      new DefaultComboBoxModel[String](ParameterDistributionType.values.map(_.name))
     )
     showRedistribution = new JCheckBox("Show Redistribution")
     showRedistribution.setSelected(paramSim.showRedistribution)
@@ -46,7 +46,7 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[ParameterSimulator]
-    simulator.setParameter(ParameterDistributionType.VALUES(parameterChoiceField.getSelectedIndex).param)
+    simulator.setParameter(ParameterDistributionType.fromOrdinal(parameterChoiceField.getSelectedIndex).param)
     simulator.showRedistribution = showRedistribution.isSelected
   }
 }

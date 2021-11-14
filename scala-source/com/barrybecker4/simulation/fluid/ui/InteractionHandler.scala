@@ -12,8 +12,8 @@ import java.awt.event.MouseMotionListener
   * @author Barry Becker
   */
 object InteractionHandler {
-  private[ui] val DEFAULT_FORCE = 2.0f
-  private[ui] val DEFAULT_SOURCE_DENSITY = 1.0f
+  private[ui] val DEFAULT_FORCE = 2.0
+  private[ui] val DEFAULT_SOURCE_DENSITY = 1.0
 }
 
 class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Double,

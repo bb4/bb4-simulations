@@ -10,6 +10,6 @@ class RenderingOptions() {
 
   private var showVelocities = false
 
-  def setShowVelocities(show: Boolean) { showVelocities = show}
+  def setShowVelocities(show: Boolean): Unit = { showVelocities = show}
   def getShowVelocities: Boolean = showVelocities
 }

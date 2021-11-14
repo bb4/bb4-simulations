@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.fluid.model
 
 import com.barrybecker4.simulation.fluid.model
-import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
-import model.CellProperty._
+import com.barrybecker4.simulation.fluid.model.CellProperty
+import com.barrybecker4.simulation.fluid.model.CellProperty._
 
 
 /**

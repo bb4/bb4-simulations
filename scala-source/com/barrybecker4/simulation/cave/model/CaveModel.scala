@@ -137,7 +137,7 @@ class CaveModel() {
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
 
-  def setKernelType(`type`: KernelType.KernelType): Unit = {
+  def setKernelType(`type`: KernelType): Unit = {
     cave.setKernelType(`type`)
     this.kernelType = `type`
   }
@@ -152,7 +152,7 @@ class CaveModel() {
       renderer = new CaveRenderer(width, height, cave, cmap)
       restartRequested = true
     } catch {
-      case e: IllegalArgumentException => JOptionPane.showMessageDialog(null, e.getMessage)
+      case e: IllegalArgumentException => javax.swing.JOptionPane.showMessageDialog(null, e.getMessage)
     }
   }
 

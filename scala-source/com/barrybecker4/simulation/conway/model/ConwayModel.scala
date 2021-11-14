@@ -69,7 +69,7 @@ class ConwayModel() {
   def setNumStepsPerFrame(steps: Int): Unit = { this.numStepsPerFrame = steps }
   def getColormap: ColorMap = colorMap
 
-  def setRuleType(ruleType: RuleType.RuleType): Unit = {
+  def setRuleType(ruleType: RuleType): Unit = {
     processor.setRuleType(ruleType)
   }
 

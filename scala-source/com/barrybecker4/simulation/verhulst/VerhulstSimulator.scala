@@ -32,7 +32,7 @@ class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
   private var rabbitFunction: CountFunction = _
   private var options: DynamicOptions = _
 
-  def getCreatures: Seq[Population] = Array[Population](rabbits)
+  def getCreatures: Seq[Population] = IndexedSeq[Population](rabbits)
 
   override protected def reset(): Unit = {
     initGraph()

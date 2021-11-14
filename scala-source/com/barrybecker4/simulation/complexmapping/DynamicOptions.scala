@@ -71,10 +71,10 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   private def createFunctionDropdown: JComboBox[String] = {
     functionChoice = new JComboBox[String]()
     functionChoice.addActionListener(this)
-    for (func <- FunctionType.VALUES) {
+    for (func <- FunctionType.values) {
       functionChoice.addItem(func.name)
     }
-    functionChoice.setSelectedIndex(FunctionType.VALUES.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
+    functionChoice.setSelectedIndex(FunctionType.values.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
     functionChoice
   }
 
@@ -102,7 +102,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == functionChoice) {
-      simulator.setFunction(FunctionType.VALUES(functionChoice.getSelectedIndex).function)
+      simulator.setFunction(FunctionType.fromOrdinal(functionChoice.getSelectedIndex).function)
     } else simulator.redraw()
   }
 

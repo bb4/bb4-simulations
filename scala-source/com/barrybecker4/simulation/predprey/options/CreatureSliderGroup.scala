@@ -29,10 +29,8 @@ object CreatureSliderGroup {
   }
 }
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
-  //commonInit(createSliderProperties)
-
-
+class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
+  
   def update(): Unit = { this.setSliderValue(0, creaturePop.getPopulation) }
 
   /**

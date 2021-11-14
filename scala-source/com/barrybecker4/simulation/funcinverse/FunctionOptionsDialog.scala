@@ -39,7 +39,7 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
     funcInverseSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
     functionChoiceField = new JComboBox[String]()
     functionChoiceField.setModel(
-      new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
+      new DefaultComboBoxModel[String](FunctionType.values.map(_.name))
     )
 
     interpolationChoiceField = new JComboBox[String]()
@@ -66,7 +66,7 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[FunctionInverseSimulator]
-    simulator.setFunction(FunctionType.VALUES(functionChoiceField.getSelectedIndex))
+    simulator.setFunction(FunctionType.fromOrdinal(functionChoiceField.getSelectedIndex))
     simulator.setInterpolationMethod(INTERP_METHODS(interpolationChoiceField.getSelectedIndex)._2)
   }
 }

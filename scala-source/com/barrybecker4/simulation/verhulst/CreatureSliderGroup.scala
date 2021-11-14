@@ -22,8 +22,7 @@ object CreatureSliderGroup {
 }
 
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
-  //commonInit(createSliderProperties)
+class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
 
   /** One of the sliders was potentially moved. Check for match based on name. */
   def checkSliderChanged(sliderName: String, value: Double): Unit = {

@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 import org.scalatest.funsuite.AnyFunSuite
 import com.barrybecker4.common.testsupport.strip
+import com.barrybecker4.expression.TreeNode
 
 class LExpressionParserSuite extends AnyFunSuite {
 
@@ -23,11 +24,11 @@ class LExpressionParserSuite extends AnyFunSuite {
   // some negative tests
   test("InvalidExp") {
     val caught = intercept[IllegalArgumentException] {verifyParse("XXX", "")}
-    assert(strip(caught.getMessage) === "[1.1] failure: end of input expected\n\nXXX\n^")
+    assert(strip(caught.getMessage) === "[1.1] failure: '-' expected but 'X' found\n\nXXX\n^")
   }
   test("Mismatched parens") {
     val caught = intercept[IllegalArgumentException] {verifyParse("F)-F", "") }
-    assert(strip(caught.getMessage) === "[1.2] failure: end of input expected\n\nF)-F\n ^")
+    assert(strip(caught.getMessage) === "[1.2] failure: '-' expected but ')' found\n\nF)-F\n ^")
   }
 
   /**  @param exp the expression to parse */
@@ -38,9 +39,9 @@ class LExpressionParserSuite extends AnyFunSuite {
     val root = parser.parseToTree(expression)
     //println("expression = " + root)
 
-    if (expSerializedStr.isEmpty)
-      assertResult(None) {root}
-    // val serialized = serializer.serialize(root)
+    if (expSerializedStr.isEmpty) {
+      assertResult(TreeNode()) { root }
+    }
     else {
       println("serialized = "  + serializer.serialize(root))
       assertResult(expSerializedStr) { serializer.serialize(root) }

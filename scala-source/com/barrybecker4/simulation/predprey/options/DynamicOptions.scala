@@ -14,7 +14,7 @@ import scala.collection.mutable.ArrayBuffer
   * They change the behavior of the simulation while it is running.
   * @author Barry Becker
   */
-class DynamicOptions(val simulator: PredPreySimulator) extends JPanel with SliderGroupChangeListener {
+class DynamicOptions(simulator: PredPreySimulator) extends JPanel with SliderGroupChangeListener {
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)

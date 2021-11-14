@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.conway.model
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.conway.model.rules._
-import ConwayProcessor.RuleType.RuleType
+import ConwayProcessor.RuleType
 import ConwayProcessor.RuleType.{SwarmB356S23, TraditionalB3S23, AmoebaB34S456, HighlifeB36S23}
 import ConwayProcessor._
 
@@ -16,10 +16,9 @@ object ConwayProcessor {
 
   val DEFAULT_USE_PARALLEL = false
 
-  object RuleType extends Enumeration {
-    type RuleType = Value
-    val TraditionalB3S23, AmoebaB34S456, HighlifeB36S23, SwarmB356S23 = Value
-  }
+  enum RuleType :
+    case TraditionalB3S23, AmoebaB34S456, HighlifeB36S23, SwarmB356S23
+  
 
   val DEFAULT_RULE_TYPE: RuleType= RuleType.TraditionalB3S23
 

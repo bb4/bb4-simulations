@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
 import com.barrybecker4.simulation.habitat.creatures.Population
@@ -21,13 +21,12 @@ object CreatureSliderGroup {
   private val MIN_FACTOR = 0.2
   private val MAX_FACTOR = 6
 
-  private def createSliderProperties(creaturePop: Population) = {
+  private final def createSliderProperties(creaturePop: Population): Array[SliderProperties] = {
     val ctype = creaturePop.creatureType
     val normSpeed = ctype.normalSpeed
     val props = if (normSpeed == 0) new Array[SliderProperties](4)
     else new Array[SliderProperties](6)
     val creatureName = ctype.name
-    //setBackground(ctype.color)
 
     val size = ctype.size
     props(0) = new SliderProperties(creatureName + CreatureSliderGroup.SIZE_LABEL,
@@ -56,9 +55,7 @@ object CreatureSliderGroup {
   }
 }
 
-class CreatureSliderGroup(var creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
-  //commonInit(createSliderProperties)
-
+class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSliderProperties(creaturePop)) {
 
   /**
     * One of the sliders was potentially moved.

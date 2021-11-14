@@ -8,8 +8,6 @@ import java.awt._
 
 
 object SierpinskiApplet {
-
-  //------ Main method --------------------------------------------------------
   def main(args: Array[String]): Unit = {
     val simulator = new SierpinskiApplet
     GUIUtil.showApplet(simulator)

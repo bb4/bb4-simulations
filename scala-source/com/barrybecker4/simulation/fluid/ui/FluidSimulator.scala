@@ -44,7 +44,7 @@ class FluidSimulator() extends Simulator("Fluid") {
     envRenderer = new EnvironmentRenderer(environment, renderOptions)
     setNumStepsPerFrame(FluidSimulator.DEFAULT_STEPS_PER_FRAME)
 
-    val force = if (handler != null) handler.force else InteractionHandler.DEFAULT_FORCE
+    val force: Double = if (handler != null) handler.force else InteractionHandler.DEFAULT_FORCE
     handler = new InteractionHandler(environment, scale, force)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
@@ -90,7 +90,7 @@ class FluidSimulator() extends Simulator("Fluid") {
     val optimizer =  new Optimizer(this)
     //, Some(FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt"))
     val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params, 5, new Random(1))
+    val paramArray = new NumericParameterArray(params.toIndexedSeq, 5, new Random(1))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
   }

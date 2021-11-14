@@ -28,7 +28,7 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
   private val gaussFunc = new ErrorFunction()
   setEnvironment(env)
 
-  def setEnvironment(env: Environment) {
+  def setEnvironment(env: Environment): Unit = {
     this.env = env
   }
 
@@ -47,10 +47,10 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent) {}
+  override def mouseClicked(e: MouseEvent): Unit = {}
 
   /** Remember the mouse button that is pressed. */
-  override def mousePressed(e: MouseEvent) {
+  override def mousePressed(e: MouseEvent): Unit = {
     env.pause()
     mouse1Drag = true
     ground = currentY > env.floor(currentX)
@@ -75,9 +75,6 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
     for (i <- s1 to s2) {
       val xdiff = Math.abs(i - xpos)
       val heightDelta = 0.3 * absYDiff * (1.0 - gaussFunc.getValue(0.5 * xdiff / absYDiff))
-      //      if (i == xpos) {
-      //        println(s"heightDelta = $heightDelta  floor($i) = ${env.floor(i)} absYDiff = $absYDiff" )
-      //      }
       if (ground) {
         if (ydiff > 0) {
           if (i == xpos) println("floor before = " + env.floor(i))
@@ -101,6 +98,6 @@ class InteractionHandler private[ui](var env: Environment) extends MouseListener
     mouse1Drag = false
   }
 
-  override def mouseEntered(e: MouseEvent) {}
-  override def mouseExited(e: MouseEvent) {}
+  override def mouseEntered(e: MouseEvent): Unit = {}
+  override def mouseExited(e: MouseEvent): Unit = {}
 }

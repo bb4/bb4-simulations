@@ -29,18 +29,22 @@ dependencies {
     def javaHome = System.properties.'java.home'
     implementation fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
 
-    implementation 'org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.barrybecker4:bb4-expression:1.6'
-    implementation 'com.barrybecker4:bb4-sound:1.6'
-    implementation 'com.barrybecker4:bb4-optimization:1.6'
-}
+    implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
+    implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.barrybecker4:bb4-expression:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-sound:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-optimization:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-ui:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-math:1.7-SNAPSHOT'
 
+}
 
 task runFractExpLocalized(type: JavaExec) {
     group = 'application'
-    main = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
-    args = ["-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"]
+    main 'com.barrybecker4.simulation.common.ui.SimulatorApp'
+    args "-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-ea"]
 }
@@ -314,7 +318,7 @@ appMap['waveFunctionCollapse'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = propMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApplet"
+    def mainClass = propMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApp"
 
     def argsList = []
     if (propMap.containsKey('panel_class'))
@@ -322,8 +326,8 @@ appMap.each { appId, propMap ->
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'
-        main = "${mainClass}"
-        args = argsList
+        main "${mainClass}"
+        args argsList
         classpath = sourceSets.main.runtimeClasspath
         jvmArgs = ["-ea"]
     }
@@ -358,7 +362,7 @@ jarMap['waveFunctonCollapse'] =    [include:['com/barrybecker4/simulation/waveFu
 // Additional script to run text version.
 // It can take parameters like "panel_class com.barrybecker4.simulation.dice.DiceSimulator"
 task createSimulatorApp(type: CreateStartScripts) {
-    mainClassName = "com.barrybecker4.simulation.common.ui.SimulatorApplet"
+    mainClassName('com.barrybecker4.simulation.common.ui.SimulatorApp')
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-simulator'
@@ -366,14 +370,14 @@ task createSimulatorApp(type: CreateStartScripts) {
 }
 
 task createSierpinskiApp(type: CreateStartScripts) {
-    mainClassName = "com.barrybecker4.simulation.sierpinski.SierpinskiApplet"
+    mainClassName('com.barrybecker4.simulation.sierpinski.SierpinskiApplet')
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-sierpinski'
 }
 
 task createSpirographApp(type: CreateStartScripts) {
-    mainClassName = "com.barrybecker4.simulation.spirograph.Spirograph"
+    mainClassName('com.barrybecker4.simulation.spirograph.Spirograph')
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-spirograph'

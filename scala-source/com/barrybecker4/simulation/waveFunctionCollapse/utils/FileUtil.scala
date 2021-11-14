@@ -7,18 +7,21 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.SampleT
 import com.google.gson.Gson
 
 import java.awt.image.BufferedImage
-import java.io.{BufferedReader, File, FileReader, IOException}
+import java.io.{BufferedReader, File, InputStream, InputStreamReader}
+import java.nio.charset.StandardCharsets
 import javax.imageio.ImageIO
 
+
+
 object FileUtil {
-  val CURRENT_DIR: String = System.getProperty("user.dir").replace("\\", "/") + "/"
-  private val RELATIVE_DIR = "scala-source/com/barrybecker4/simulation/waveFunctionCollapse/"
+  val CURRENT_DIR: String = System.getProperty("user.dir").replace("\\", "/") + "/scala-source/"
+  private val RELATIVE_DIR = "com/barrybecker4/simulation/waveFunctionCollapse/"
   val BASE_DIR: String = CURRENT_DIR + RELATIVE_DIR
   val GSON: Gson = new Gson()
 
   def readImage(fileName: String): BufferedImage = {
-    //println("now reading " + fileName)
-    ImageIO.read(new File(BASE_DIR + fileName))
+    val is: InputStream = getClass.getClassLoader.getResourceAsStream(RELATIVE_DIR + fileName)
+    ImageIO.read(is)
   }
 
   def writeImage(image: BufferedImage, fileName: String): Unit = {
@@ -26,24 +29,21 @@ object FileUtil {
     ImageIO.write(image, "png", outputFile)
   }
 
-  def getFileReader(fileName: String): BufferedReader = {
-    val file = new File(BASE_DIR + fileName)
-    if (!file.exists()) {
-      throw new IOException("File not found: " + file.getAbsoluteFile)
-    }
-    new BufferedReader(new FileReader(file))
-  }
-
   def getSampleData(filename: String = "samples.json"): SampleJson = {
-    val bufferedReader = getFileReader(filename)
+    val bufferedReader = getReader(filename)
     val content = bufferedReader.lines().toArray().mkString("")
     GSON.fromJson(content, classOf[SampleJson])
   }
 
-
   def getSampleTiledData(name: String): SampleTiledData = {
-    val bufferedReader = getFileReader(s"samples/$name/data.json")
+    val bufferedReader = getReader(s"samples/$name/data.json")
     GSON.fromJson(bufferedReader, classOf[SampleTiledData])
   }
 
+  private def getReader(resourceName: String): BufferedReader = {
+    // reading as a resource instead of file allows it to work from deployed version
+    println("reading from " + RELATIVE_DIR + resourceName)
+    val is: InputStream = getClass.getClassLoader.getResourceAsStream(RELATIVE_DIR + resourceName)
+    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+  }
 }

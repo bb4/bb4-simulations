@@ -145,7 +145,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     for (ruleType <- ConwayProcessor.RuleType.values) {
       ruleChoice.addItem(ruleType.toString) // .name
     }
-    ruleChoice.setSelectedIndex(ConwayProcessor.DEFAULT_RULE_TYPE.id)
+    ruleChoice.setSelectedIndex(ConwayProcessor.DEFAULT_RULE_TYPE.ordinal)
     ruleChoice.addItemListener(this)
     ruleChoicePanel.add(label)
     ruleChoicePanel.add(ruleChoice)
@@ -173,8 +173,8 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   }
 
   override def itemStateChanged (e: ItemEvent): Unit = {
-    val ruleType: ConwayProcessor.RuleType.RuleType =
-      ConwayProcessor.RuleType.withName(ruleChoice.getSelectedItem.toString)
+    val ruleType: ConwayProcessor.RuleType =
+      ConwayProcessor.RuleType.valueOf(ruleChoice.getSelectedItem.toString)
     conwayModel.setRuleType (ruleType)
   }
 

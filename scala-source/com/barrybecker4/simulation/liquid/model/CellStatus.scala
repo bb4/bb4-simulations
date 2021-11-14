@@ -5,11 +5,10 @@ package com.barrybecker4.simulation.liquid.model
   * Possible status of the cell. determined by what's in it.
   * @author Barry Becker
   */
-object CellStatus extends Enumeration {
-  type CellStatus = Value
-  val EMPTY: Value = Value(".")
-  val SURFACE: Value = Value("S")
-  val FULL: Value  = Value("F")
-  val OBSTACLE: Value  = Value("o")
-  val ISOLATED: Value  = Value("I")
+enum CellStatus(value: String) {
+  case EMPTY extends CellStatus(".")
+  case SURFACE extends CellStatus("S")
+  case FULL extends CellStatus("F")
+  case OBSTACLE extends CellStatus("o")
+  case ISOLATED extends CellStatus("I")
 }

@@ -59,22 +59,22 @@ class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
     */
   override def sliderChanged(src: Int, sliderName: String, sliderValue: Double): Unit = {
     // I know that all the sliders are integer based.
-    val value = sliderValue.toInt
+    val value = sliderValue.toFloat
     if (src == ControlSliderGroup.RADIUS1) {
-      var n = getSliderValueAsInt(ControlSliderGroup.RADIUS2)
+      var n: Float = getSliderValueAsInt(ControlSliderGroup.RADIUS2).toFloat
       if (n < 2 - value) {
         n = 1 - value
         setSliderValue(ControlSliderGroup.RADIUS2, n)
-        state.setR2(n)
+        state.setR2(n.toFloat)
       }
       setSliderMinimum(ControlSliderGroup.RADIUS2, 2 - value)
-      state.setR1(value)
+      state.setR1(value.toFloat)
     }
     else if (src == ControlSliderGroup.RADIUS2) state.setR2(value)
     else if (src == ControlSliderGroup.POSITION) state.setPos(value)
-    else if (src == ControlSliderGroup.VELOCITY) state.setVelocity(value)
-    else if (src == ControlSliderGroup.LINE_WIDTH) state.width = value
-    else if (src == ControlSliderGroup.SEGMENTS) state.numSegmentsPerRev = value
+    else if (src == ControlSliderGroup.VELOCITY) state.setVelocity(value.toInt)
+    else if (src == ControlSliderGroup.LINE_WIDTH) state.width = value.toInt
+    else if (src == ControlSliderGroup.SEGMENTS) state.numSegmentsPerRev = value.toInt
     else throw new IllegalArgumentException("Unexpected slider index=" + src)
     autoUpdate()
   }

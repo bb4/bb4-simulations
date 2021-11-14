@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.liquid.model
 
 import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
-import com.barrybecker4.simulation.liquid.model.CellStatus.CellStatus
+import com.barrybecker4.simulation.liquid.model.CellStatus
 
 
 /**

@@ -1,4 +1,4 @@
-/* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT*/
+/* Copyright by Barry G. Becker, 2019 - 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT*/
 package com.barrybecker4.simulation.complexmapping.algorithm
 
 import com.barrybecker4.simulation.complexmapping.algorithm.functions._
@@ -8,20 +8,14 @@ import com.barrybecker4.simulation.complexmapping.algorithm.functions._
   * Some functions that we can use to map complex numbers to new locations.
   * @author Barry Becker
   */
-object FunctionType extends Enumeration {
+enum FunctionType(val name: String, val function: ComplexFunction):
 
-  case class Val(name: String, function: ComplexFunction) extends super.Val
-  implicit def valueToFunctionTypeVal(x: Value): Val = x.asInstanceOf[Val]
+  case IDENTITY extends FunctionType("Identity", IdentityFunction())
+  case INT_POWER extends FunctionType("s ^ n, n is int; s is complex", IntPowerFunction())
+  case POWER extends FunctionType("n ^ s, n is int; s is complex", PowerFunction())
+  case GAMMA extends FunctionType("Gamma", GammaFunction())
+  case RIEMANN_ZETA extends FunctionType("Riemann Zeta", RiemannZetaFunction())
+  case DIRICHLET_ETA  extends FunctionType("Dirichlet Eta", DirichletEtaFunction())
+  case ZETA_ANALYTIC_EXTENSION extends FunctionType("Analytic extension of Zeta", ZetaAnalyticExtensionFunction())
 
-  val IDENTITY = Val("Identity", IdentityFunction())
-  val INT_POWER = Val("s ^ n, n is int; s is complex", IntPowerFunction())
-  val POWER = Val("n ^ s, n is int; s is complex", PowerFunction())
-  val GAMMA = Val("Gamma", GammaFunction())
-  val RIEMANN_ZETA = Val("Riemann Zeta", RiemannZetaFunction())
-  val DIRICHLET_ETA = Val("Dirichlet Eta", DirichletEtaFunction())
-  val ZETA_ANALYTIC_EXTENSION = Val("Analytic extension of Zeta", ZetaAnalyticExtensionFunction())
-
-  val VALUES: Array[Val] = Array(
-    IDENTITY, INT_POWER, POWER, GAMMA, RIEMANN_ZETA, DIRICHLET_ETA, ZETA_ANALYTIC_EXTENSION
-  )
-}
+end FunctionType

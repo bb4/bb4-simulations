@@ -31,10 +31,10 @@ class PressureUpdater(var grid: Grid, var b0: Double) {
     * @return the maximum divergence of any of the cells in the grid.
     */
   def updatePressure(timeStep: Double): Double = {
-    var maxDivergence = .0
+    var maxDivergence = 1.0
     var divergence = .0
     val conserver = new MassConserver(b0, timeStep)
-    do { // adjust tilde velocities to satisfy mass conservation
+    while (maxDivergence > PressureUpdater.EPSILON) { // adjust tilde velocities to satisfy mass conservation
       maxDivergence = 0
       for (j <- 1 until grid.getYDimension - 1) {
         for (i <- 1 until grid.getXDimension - 1) {
@@ -43,7 +43,7 @@ class PressureUpdater(var grid: Grid, var b0: Double) {
         }
       }
       iterationCount += 1
-    } while (maxDivergence > PressureUpdater.EPSILON)
+    }
     maxDivergence
   }
 }

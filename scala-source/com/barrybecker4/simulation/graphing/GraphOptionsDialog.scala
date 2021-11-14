@@ -26,7 +26,7 @@ class GraphOptionsDialog(parent: Component, simulator: Simulator)
     paramPanel.setLayout(new BorderLayout)
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
-    val model = new DefaultComboBoxModel[String](FunctionType.VALUES.map(_.name))
+    val model = new DefaultComboBoxModel[String](FunctionType.values.map(_.name))
     functionCombo = new JComboBox[String](model)
     innerPanel.add(functionCombo)
     val cboxModel = new DefaultComboBoxModel[InterpolationMethod]()
@@ -44,7 +44,7 @@ class GraphOptionsDialog(parent: Component, simulator: Simulator)
   override protected def ok(): Unit = {
     super.ok()
     val simulator = getSimulator.asInstanceOf[GraphSimulator]
-    var func: com.barrybecker4.math.function.Function = FunctionType.VALUES(functionCombo.getSelectedIndex).function
+    var func: com.barrybecker4.math.function.Function = FunctionType.fromOrdinal(functionCombo.getSelectedIndex).function
     func match {
       case function: ArrayFunction =>
         val method: InterpolationMethod = interpolationTypeCombo.getSelectedItem.asInstanceOf[InterpolationMethod]

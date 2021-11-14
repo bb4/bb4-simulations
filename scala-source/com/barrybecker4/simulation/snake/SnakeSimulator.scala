@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake
 
 import com.barrybecker4.common.concurrency.ThreadUtil
@@ -28,7 +28,7 @@ object SnakeSimulator {
   /** the amount to advance the animation in time for each frame in seconds. */
   protected val NUM_STEPS_PER_FRAME = 200
 
-  private val PARAMS = Array[Parameter](
+  private val PARAMS = IndexedSeq[Parameter](
     new DoubleParameter(LocomotionParameters.WAVE_SPEED, 0.0001, 0.02, "wave speed"),
     new DoubleParameter(LocomotionParameters.WAVE_AMPLITUDE, 0.001, 0.2, "wave amplitude"),
     new DoubleParameter(LocomotionParameters.WAVE_PERIOD, 0.5, 9.0, "wave period")
@@ -47,9 +47,8 @@ object SnakeSimulator {
   private val GRID_COLOR = new Color(0, 0, 60, 100)
 }
 
-class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
+class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake") {
 
-  private val snake: Snake = new Snake(snakeData)
   private val updater: SnakeUpdater = new SnakeUpdater()
   /** change in center of the snake between time steps */
   private var oldCenter: Point2d = _
@@ -60,15 +59,18 @@ class SnakeSimulator(snakeData: SnakeData) extends NewtonianSimulator("Snake") {
   private val gridColor = SnakeSimulator.GRID_COLOR
   private val renderParams = new RenderingParameters
   private var renderer: SnakeRenderer = _
+  private var snake: Snake = Snake(snakeData)
   commonInit()
 
-  def this() = { this(SnakeType.LONG_SNAKE.snakeData) }
+  def this() = {
+    this(SnakeType.LONG_SNAKE.snakeData)
+  }
 
   override protected def reset(): Unit = { snake.reset()}
   override protected def getInitialTimeStep: Double = SnakeSimulator.INITIAL_TIME_STEP
 
   def setSnakeData(snakeData: SnakeData): Unit = {
-    snake.setData(snakeData)
+    snake = Snake(snakeData)
     commonInit()
   }
 

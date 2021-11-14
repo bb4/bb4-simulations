@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.fluid.model
 
 import com.barrybecker4.simulation.common.{Profiler, RectangularModel}
-import com.barrybecker4.simulation.fluid.model.CellProperty.CellProperty
-import com.barrybecker4.simulation.fluid.model.Boundary.Boundary
+import com.barrybecker4.simulation.fluid.model.CellProperty
+import com.barrybecker4.simulation.fluid.model.Boundary
 
 
 object FluidEnvironment {

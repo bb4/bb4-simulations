@@ -26,7 +26,7 @@ object ParameterSimulator {
 class ParameterSimulator() extends DistributionSimulator("Parameter Histogram") {
 
   /** initialize with some default */
-  private var parameter = ParameterDistributionType.VALUES(0).param
+  private var parameter = ParameterDistributionType.fromOrdinal(0).param
   private[parameter] var showRedistribution = true
   initHistogram()
 

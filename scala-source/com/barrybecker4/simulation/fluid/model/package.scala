@@ -6,17 +6,12 @@ package object model {
   type TwoDArray = Array[Array[Double]]
 
   /** Cell boundaries are one of 3 types */
-  object Boundary extends Enumeration {
-    type Boundary = Value
-
+  enum Boundary:
     /** negates on neither, the vertical, or horizontal boundary */
-    val NEITHER, HORIZONTAL, VERTICAL = Value
-  }
+    case NEITHER, HORIZONTAL, VERTICAL
 
   /**  The fields of a cell */
-  object CellProperty extends Enumeration {
-    type CellProperty = Value
-    val U, V, DENSITY = Value
-  }
+  enum CellProperty:
+    case U, V, DENSITY
 
 }

@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.cave
 
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.simulation.cave.model.CaveProcessor
+import com.barrybecker4.simulation.cave.CaveExplorer
 import com.barrybecker4.simulation.cave.model.CaveModel
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
@@ -134,7 +135,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     for (kernelType <- CaveProcessor.KernelType.values) {
       kernelChoice.addItem(kernelType.toString) //name)
     }
-    kernelChoice.setSelectedItem(CaveProcessor.DEFAULT_KERNEL_TYPE.id)
+    kernelChoice.setSelectedItem(CaveProcessor.DEFAULT_KERNEL_TYPE.ordinal)
     kernelChoice.addItemListener(this)
     kernelChoicePanel.add(label)
     kernelChoicePanel.add(kernelChoice)
@@ -224,7 +225,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    val kType = CaveProcessor.KernelType.withName(kernelChoice.getSelectedItem.toString)
+    val kType = CaveProcessor.KernelType.valueOf(kernelChoice.getSelectedItem.toString)
     caveModel.setKernelType(kType)
   }
 

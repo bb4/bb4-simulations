@@ -28,17 +28,11 @@ import javax.vecmath.Vector2d
   * @param snakeData defines the snake geometry
   * @author Barry Becker
   */
-class Snake(var snakeData: SnakeData) {
+case class Snake(snakeData: SnakeData) {
 
   /** the array of segments which make up the snake */
   private var segment: Array[Segment] = _
-  setData(snakeData)
-
-  /** @param snakeData the data defining the snakes geometrical shape. */
-  def setData(snakeData: SnakeData): Unit = {
-    this.snakeData = snakeData
-    initFromData()
-  }
+  initFromData()
 
   def reset(): Unit = { resetFromData() }
   def getNumSegments: Int = snakeData.numSegments
