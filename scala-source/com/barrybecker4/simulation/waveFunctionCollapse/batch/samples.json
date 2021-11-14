@@ -2,491 +2,491 @@
   "samples": {
     "overlapping": [
       {
-        "-name": "Chess",
-        "-N": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Chess",
+        "n": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Chess",
-        "-N": "2",
-        "-width": "47",
-        "-height": "47",
-        "-periodic": "True",
-        "-screenshots": "1"
+        "name": "Chess",
+        "n": "2",
+        "width": "47",
+        "height": "47",
+        "periodic": "True",
+        "screenshots": "1"
       },
       {
-        "-name": "Skyline",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-1",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Skyline",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-1",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Flowers",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-4",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Flowers",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-4",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Hogs",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Hogs",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Hogs",
-        "-N": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Hogs",
+        "n": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Eye",
-        "-N": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Eye",
+        "n": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Knot",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Knot",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Less Rooms",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Less Rooms",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Mountains",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Mountains",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Office",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Office",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Paths",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Paths",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Platformer",
-        "-N": "2",
-        "-symmetry": "2",
-        "-ground": "-1",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Platformer",
+        "n": "2",
+        "symmetry": "2",
+        "ground": "-1",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Platformer",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-1",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Platformer",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-1",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Red Maze",
-        "-N": "2",
-        "-screenshots": "2"
+        "name": "Red Maze",
+        "n": "2",
+        "screenshots": "2"
       },
       {
-        "-name": "Rooms",
-        "-N": "3",
-        "-screenshots": "3",
-        "-periodic": "True"
+        "name": "Rooms",
+        "n": "3",
+        "screenshots": "3",
+        "periodic": "True"
       },
       {
-        "-name": "Rule 126",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodicInput": "False",
-        "-periodic": "False",
-        "-screenshots": "2"
+        "name": "Rule 126",
+        "n": "3",
+        "symmetry": "2",
+        "periodicInput": "False",
+        "periodic": "False",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Knot",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Simple Knot",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Maze",
-        "-N": "2",
-        "-screenshots": "2"
+        "name": "Simple Maze",
+        "n": "2",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Simple Wall",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Simple Wall",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "2",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Simple Wall",
+        "n": "2",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Simple Wall",
+        "n": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Trick Knot",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Trick Knot",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Village",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Village",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Water",
-        "-N": "3",
-        "-symmetry": "1",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Water",
+        "n": "3",
+        "symmetry": "1",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Cat",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-width": "80",
-        "-height": "80",
-        "-screenshots": "2"
+        "name": "Cat",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "width": "80",
+        "height": "80",
+        "screenshots": "2"
       },
       {
-        "-name": "Cats",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Cats",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Cave",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Cave",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Skyline 2",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodic": "True",
-        "-ground": "-1",
-        "-screenshots": "2"
+        "name": "Skyline 2",
+        "n": "3",
+        "symmetry": "2",
+        "periodic": "True",
+        "ground": "-1",
+        "screenshots": "2"
       },
       {
-        "-name": "Angular",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Angular",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "City",
-        "-N": "3",
-        "-periodic": "True",
-        "-width": "80",
-        "-height": "80",
-        "-screenshots": "2"
+        "name": "City",
+        "n": "3",
+        "periodic": "True",
+        "width": "80",
+        "height": "80",
+        "screenshots": "2"
       },
       {
-        "-name": "Colored City",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Colored City",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Dungeon",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Dungeon",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Lake",
-        "-N": "3",
-        "-periodic": "True",
-        "-width": "60",
-        "-height": "60",
-        "-screenshots": "2"
+        "name": "Lake",
+        "n": "3",
+        "periodic": "True",
+        "width": "60",
+        "height": "60",
+        "screenshots": "2"
       },
       {
-        "-name": "Link",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Link",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Link 2",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Link 2",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Mazelike",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Mazelike",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Nested",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Nested",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Magic Office",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Magic Office",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Office 2",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Office 2",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Qud",
-        "-N": "3",
-        "-periodic": "True",
-        "-width": "80",
-        "-height": "80",
-        "-screenshots": "2"
+        "name": "Qud",
+        "n": "3",
+        "periodic": "True",
+        "width": "80",
+        "height": "80",
+        "screenshots": "2"
       },
       {
-        "-name": "Red Dot",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Red Dot",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Scaled Maze",
-        "-N": "2",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Scaled Maze",
+        "n": "2",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Sewers",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Sewers",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Skew 1",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Skew 1",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Skew 2",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Skew 2",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Smile City",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Smile City",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Spirals",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Spirals",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Town",
-        "-N": "3",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Town",
+        "n": "3",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "3Bricks",
-        "-N": "3",
-        "-symmetry": "1",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "3Bricks",
+        "n": "3",
+        "symmetry": "1",
+        "periodic": "True",
+        "screenshots": "2"
       },
       {
-        "-name": "Village",
-        "-N": "3",
-        "-symmetry": "2",
-        "-limit": "50",
-        "-periodic": "True",
-        "-screenshots": "2"
+        "name": "Village",
+        "n": "3",
+        "symmetry": "2",
+        "limit": "50",
+        "periodic": "True",
+        "screenshots": "2"
       }
     ],
     "simpletiled": [
       {
-        "-name": "Summer",
-        "-width": "300",
-        "-height": "300"
+        "name": "Summer",
+        "width": "300",
+        "height": "300"
       },
       {
-        "-name": "Castle",
-        "-width": "200",
-        "-height": "200"
+        "name": "Castle",
+        "width": "200",
+        "height": "200"
       },
       {
-        "-name": "Circuit",
-        "-subset": "Turnless",
-        "-width": "340",
-        "-height": "340",
-        "-periodic": "True",
-        "-screenshots": "3"
+        "name": "Circuit",
+        "subset": "Turnless",
+        "width": "340",
+        "height": "340",
+        "periodic": "True",
+        "screenshots": "3"
       },
       {
-        "-name": "Knots",
-        "-subset": "Standard",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "Standard",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Knots",
-        "-subset": "Dense",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "Dense",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Knots",
-        "-subset": "Crossless",
-        "-width": "240",
-        "-height": "240"
+        "name": "Knots",
+        "subset": "Crossless",
+        "width": "240",
+        "height": "240"
       },
       {
-        "-name": "Knots",
-        "-subset": "TE",
-        "-width": "240",
-        "-height": "240"
+        "name": "Knots",
+        "subset": "TE",
+        "width": "240",
+        "height": "240"
       },
       {
-        "-name": "Knots",
-        "-subset": "T",
-        "-width": "240",
-        "-height": "240"
+        "name": "Knots",
+        "subset": "T",
+        "width": "240",
+        "height": "240"
       },
       {
-        "-name": "Knots",
-        "-subset": "CL",
-        "-width": "240",
-        "-height": "240"
+        "name": "Knots",
+        "subset": "CL",
+        "width": "240",
+        "height": "240"
       },
       {
-        "-name": "Knots",
-        "-subset": "CE",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "CE",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Knots",
-        "-subset": "C",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "C",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Knots",
-        "-subset": "Fabric",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "Fabric",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Knots",
-        "-subset": "Dense Fabric",
-        "-width": "240",
-        "-height": "240",
-        "-periodic": "True"
+        "name": "Knots",
+        "subset": "Dense Fabric",
+        "width": "240",
+        "height": "240",
+        "periodic": "True"
       },
       {
-        "-name": "Rooms",
-        "-width": "300",
-        "-height": "300"
+        "name": "Rooms",
+        "width": "300",
+        "height": "300"
       },
       {
-        "-name": "Circles",
-        "-width": "240",
-        "-height": "240"
+        "name": "Circles",
+        "width": "240",
+        "height": "240"
       },
       {
-        "-name": "Circles",
-        "-subset": "Large Circles",
-        "-width": "340",
-        "-height": "340"
+        "name": "Circles",
+        "subset": "Large Circles",
+        "width": "340",
+        "height": "340"
       },
       {
-        "-name": "Circles",
-        "-subset": "Large Circles and Solid",
-        "-width": "340",
-        "-height": "340"
+        "name": "Circles",
+        "subset": "Large Circles and Solid",
+        "width": "340",
+        "height": "340"
       },
       {
-        "-name": "Circles",
-        "-subset": "No Solid",
-        "-width": "340",
-        "-height": "340"
+        "name": "Circles",
+        "subset": "No Solid",
+        "width": "340",
+        "height": "340"
       },
       {
-        "-name": "Summer",
-        "-width": "400",
-        "-height": "400",
-        "-periodic": "False",
-        "-limit": "15"
+        "name": "Summer",
+        "width": "400",
+        "height": "400",
+        "periodic": "False",
+        "limit": "15"
       },
       {
-        "-name": "Knots",
-        "-subset": "Standard",
-        "-width": "200",
-        "-height": "200",
-        "-periodic": "True",
-        "-textOutput": "True"
+        "name": "Knots",
+        "subset": "Standard",
+        "width": "200",
+        "height": "200",
+        "periodic": "True",
+        "textOutput": "True"
       },
       {
-        "-name": "Summer",
-        "-width": "300",
-        "-height": "300",
-        "-periodic": "False",
-        "-textOutput": "True"
+        "name": "Summer",
+        "width": "300",
+        "height": "300",
+        "periodic": "False",
+        "textOutput": "True"
       },
       {
-        "-name": "Circuit",
-        "-subset": "Turnless",
-        "-width": "300",
-        "-height": "300",
-        "-periodic": "True",
-        "-textOutput": "True"
+        "name": "Circuit",
+        "subset": "Turnless",
+        "width": "300",
+        "height": "300",
+        "periodic": "True",
+        "textOutput": "True"
       }
     ]
   }

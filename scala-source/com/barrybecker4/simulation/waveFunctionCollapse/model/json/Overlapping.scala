@@ -2,20 +2,19 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model.json
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.OverlappingImageParams
-import com.google.gson.annotations.SerializedName
 
 
 case class Overlapping(
-  @(SerializedName @scala.annotation.meta.field)("-N") n: String,
-  @(SerializedName @scala.annotation.meta.field)("-ground") ground: String,
-  @(SerializedName @scala.annotation.meta.field)("-height") height: String,
-  @(SerializedName @scala.annotation.meta.field)("-limit") limit: String,
-  @(SerializedName @scala.annotation.meta.field)("-name") name: String,
-  @(SerializedName @scala.annotation.meta.field)("-periodic") periodic: String,
-  @(SerializedName @scala.annotation.meta.field)("-periodicInput") periodicInput: String,
-  @(SerializedName @scala.annotation.meta.field)("-screenshots") screenshots: String,
-  @(SerializedName @scala.annotation.meta.field)("-symmetry") symmetry: String,
-  @(SerializedName @scala.annotation.meta.field)("-width") width: String) extends CommonModel {
+  n: String,
+  ground: String,
+  height: String,
+  limit: String,
+  name: String,
+  periodic: String,
+  periodicInput: String,
+  screenshots: String,
+  symmetry: String,
+  width: String) extends CommonModel {
 
   override def getName: String = if (name == null) "" else name
   def getHeight: Int = if (height == null) 48 else height.toInt

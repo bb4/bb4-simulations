@@ -288,6 +288,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
       if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
       else samples.overlapping(overlappingSampleCombo.getSelectedItem.asInstanceOf[Int])
 
+    println("getModel dims = " + dimensions)
+
     val wfcModel: WfcModel = sampleModel match {
       case overlapping: Overlapping => new OverlappingModel(
         overlapping.getName,

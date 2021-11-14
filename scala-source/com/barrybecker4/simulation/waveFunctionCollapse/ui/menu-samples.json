@@ -2,222 +2,222 @@
   "samples": {
     "overlapping": [
       {
-        "-name": "Chess",
-        "-N": "2"
+        "name": "Chess",
+        "n": "2"
       },
       {
-        "-name": "Skyline",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-1"
+        "name": "Skyline",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-1"
       },
       {
-        "-name": "Flowers",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-4"
+        "name": "Flowers",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-4"
       },
       {
-        "-name": "Hogs",
-        "-N": "2"
+        "name": "Hogs",
+        "n": "2"
       },
       {
-        "-name": "Knot",
-        "-N": "3"
+        "name": "Knot",
+        "n": "3"
       },
       {
-        "-name": "Less Rooms",
-        "-N": "3"
+        "name": "Less Rooms",
+        "n": "3"
       },
       {
-        "-name": "Mountains",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Mountains",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Office",
-        "-N": "3"
+        "name": "Office",
+        "n": "3"
       },
       {
-        "-name": "Paths",
-        "-N": "3"
+        "name": "Paths",
+        "n": "3"
       },
       {
-        "-name": "Platformer",
-        "-N": "2",
-        "-symmetry": "2",
-        "-ground": "-1"
+        "name": "Platformer",
+        "n": "2",
+        "symmetry": "2",
+        "ground": "-1"
       },
       {
-        "-name": "Red Maze",
-        "-N": "2"
+        "name": "Red Maze",
+        "n": "2"
       },
       {
-        "-name": "Rooms",
-        "-N": "3"
+        "name": "Rooms",
+        "n": "3"
       },
       {
-        "-name": "Rule 126",
-        "-N": "3",
-        "-symmetry": "2",
-        "-periodicInput": "False",
-        "-periodic": "False"
+        "name": "Rule 126",
+        "n": "3",
+        "symmetry": "2",
+        "periodicInput": "False",
+        "periodic": "False"
       },
       {
-        "-name": "Simple Knot",
-        "-N": "3"
+        "name": "Simple Knot",
+        "n": "3"
       },
       {
-        "-name": "Simple Maze",
-        "-N": "2"
+        "name": "Simple Maze",
+        "n": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Simple Wall",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Simple Wall",
-        "-N": "2"
+        "name": "Simple Wall",
+        "n": "2"
       },
       {
-        "-name": "Trick Knot",
-        "-N": "3"
+        "name": "Trick Knot",
+        "n": "3"
       },
       {
-        "-name": "Village",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Village",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Water",
-        "-N": "3",
-        "-symmetry": "1"
+        "name": "Water",
+        "n": "3",
+        "symmetry": "1"
       },
       {
-        "-name": "Cat",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Cat",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Cats",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Cats",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Cave",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Cave",
+        "n": "3",
+        "symmetry": "2"
       },
       {
-        "-name": "Skyline 2",
-        "-N": "3",
-        "-symmetry": "2",
-        "-ground": "-1"
+        "name": "Skyline 2",
+        "n": "3",
+        "symmetry": "2",
+        "ground": "-1"
       },
       {
-        "-name": "Angular",
-        "-N": "3"
+        "name": "Angular",
+        "n": "3"
       },
       {
-        "-name": "City",
-        "-N": "3"
+        "name": "City",
+        "n": "3"
       },
       {
-        "-name": "Colored City",
-        "-N": "3"
+        "name": "Colored City",
+        "n": "3"
       },
       {
-        "-name": "Dungeon",
-        "-N": "3"
+        "name": "Dungeon",
+        "n": "3"
       },
       {
-        "-name": "Lake",
-        "-N": "3",
-        "-periodic": "True"
+        "name": "Lake",
+        "n": "3",
+        "periodic": "True"
       },
       {
-        "-name": "Link",
-        "-N": "3"
+        "name": "Link",
+        "n": "3"
       },
       {
-        "-name": "Link 2",
-        "-N": "3"
+        "name": "Link 2",
+        "n": "3"
       },
       {
-        "-name": "Mazelike",
-        "-N": "3"
+        "name": "Mazelike",
+        "n": "3"
       },
       {
-        "-name": "Nested",
-        "-N": "3"
+        "name": "Nested",
+        "n": "3"
       },
       {
-        "-name": "Magic Office",
-        "-N": "3"
+        "name": "Magic Office",
+        "n": "3"
       },
       {
-        "-name": "Office 2",
-        "-N": "3"
+        "name": "Office 2",
+        "n": "3"
       },
       {
-        "-name": "Qud",
-        "-N": "3"
+        "name": "Qud",
+        "n": "3"
       },
       {
-        "-name": "Red Dot",
-        "-N": "3"
+        "name": "Red Dot",
+        "n": "3"
       },
       {
-        "-name": "Scaled Maze",
-        "-N": "2"
+        "name": "Scaled Maze",
+        "n": "2"
       },
       {
-        "-name": "Sewers",
-        "-N": "3"
+        "name": "Sewers",
+        "n": "3"
       },
       {
-        "-name": "Skew 1",
-        "-N": "3"
+        "name": "Skew 1",
+        "n": "3"
       },
       {
-        "-name": "Skew 2",
-        "-N": "3"
+        "name": "Skew 2",
+        "n": "3"
       },
       {
-        "-name": "Smile City",
-        "-N": "3"
+        "name": "Smile City",
+        "n": "3"
       },
       {
-        "-name": "Spirals",
-        "-N": "3"
+        "name": "Spirals",
+        "n": "3"
       },
       {
-        "-name": "Town",
-        "-N": "3"
+        "name": "Town",
+        "n": "3"
       },
       {
-        "-name": "3Bricks",
-        "-N": "3",
-        "-symmetry": "1"
+        "name": "3Bricks",
+        "n": "3",
+        "symmetry": "1"
       },
       {
-        "-name": "Eye",
-        "-N": "2"
+        "name": "Eye",
+        "n": "2"
       },
       {
-        "-name": "Village",
-        "-N": "3",
-        "-symmetry": "2"
+        "name": "Village",
+        "n": "3",
+        "symmetry": "2"
       }
     ],
     "simpletiled": [
-      {"-name": "Summer"},
-      {"-name": "Castle"},
-      {"-name": "Circuit"},
-      {"-name": "Knots"},
-      {"-name": "Rooms"},
-      {"-name": "Circles"}
+      {"name": "Summer"},
+      {"name": "Castle"},
+      {"name": "Circuit"},
+      {"name": "Knots"},
+      {"name": "Rooms"},
+      {"name": "Circles"}
     ]
   }
 }

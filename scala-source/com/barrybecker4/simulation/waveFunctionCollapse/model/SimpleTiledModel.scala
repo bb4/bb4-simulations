@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
-import com.google.gson.Gson
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.SimpleTiledPropagatorState
@@ -13,18 +12,17 @@ import scala.collection.mutable
 
 
 class SimpleTiledModel(
-  var width: Int, var height: Int,
-  name: String, subsetName: String,
+  val width: Int, val height: Int,
+  val name: String, val subsetName: String,
   var isPeriodic: Boolean, var black: Boolean,
-  limit: Int = 0,
-  allowInconsistencies: Boolean = false
+  val limit: Int = 0,
+  val allowInconsistencies: Boolean = false
 ) extends WfcModel(name, width, height, limit) {
 
   private var tiles: Seq[Array[Color]] = _
   private var tilenames: Seq[String] = _
   private var tilesize: Int = 0
   private val useSubset = subsetName != null
-  val gson = new Gson()
 
 
   processFile(getSampleTiledData(name))
