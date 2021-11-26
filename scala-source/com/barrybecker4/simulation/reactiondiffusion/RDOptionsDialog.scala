@@ -18,6 +18,8 @@ class RDOptionsDialog private[reactiondiffusion](parent: Component, simulator: S
   private var showProfilingCheckbox: JCheckBox = _
   private var useParallelRenderingCheckbox: JCheckBox = _
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val panel = new JPanel
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))

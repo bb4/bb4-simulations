@@ -80,4 +80,9 @@ class WaveFunctionCollapseExplorer()
     options = new DynamicOptions(this)
     options
   }
+
+  override def createTopControls: JPanel = {
+    val controls = new JPanel
+    controls
+  }
 }

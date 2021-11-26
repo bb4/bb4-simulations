@@ -51,11 +51,18 @@ abstract class SimulatorOptionsDialog(parent: Component,
     }
     tabbedPanel.add("Custom", customParamPanel)
     tabbedPanel.setToolTipTextAt(tabbedPanel.getTabCount - 1, "Change the custom options for the simulation")
-    tabbedPanel.setSelectedComponent(customParamPanel)
+    
+    if (showCustomTabByDefault)
+      tabbedPanel.setSelectedComponent(customParamPanel)
+    else  
+      tabbedPanel.setSelectedComponent(renderingParamPanel)
+    
     mainPanel.add(tabbedPanel, BorderLayout.CENTER)
     mainPanel.add(buttonsPanel, BorderLayout.SOUTH)
     mainPanel
   }
+  
+  protected def showCustomTabByDefault: Boolean = false
 
   protected def createCheckBox(label: String, ttip: String, initialValue: Boolean): JCheckBox = {
     val cb = new JCheckBox(label, initialValue)

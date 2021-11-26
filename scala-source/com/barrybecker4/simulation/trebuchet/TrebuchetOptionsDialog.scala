@@ -24,6 +24,8 @@ class TrebuchetOptionsDialog private[trebuchet](parent: Component, simulator: Tr
   private var counterWeightMassField: NumberInput = _
   private var slingReleaseAngleField: NumberInput = _
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val customParamPanel = new JPanel
     customParamPanel.setLayout(new BorderLayout)

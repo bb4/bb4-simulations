@@ -21,6 +21,8 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
 
   override protected def createRenderingParamPanel = new JPanel
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     setResizable(true)
     val mainPanel = new JPanel(new BorderLayout)

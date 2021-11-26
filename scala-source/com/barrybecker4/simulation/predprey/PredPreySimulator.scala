@@ -4,32 +4,20 @@ package com.barrybecker4.simulation.predprey
 import com.barrybecker4.math.function.CountFunction
 import com.barrybecker4.math.function.Function
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.graphing.GraphOptionsDialog
 import com.barrybecker4.simulation.predprey.creatures.Foxes
 import com.barrybecker4.simulation.predprey.creatures.Population
 import com.barrybecker4.simulation.predprey.creatures.Rabbits
 import com.barrybecker4.simulation.predprey.options.DynamicOptions
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
+import com.barrybecker4.simulation.predprey.options.PredPreyOptionsDialog
 import com.barrybecker4.ui.util.GUIUtil
+
 import javax.swing.JPanel
 import java.awt.Color
 import java.awt.Graphics
 import java.util
 
-
-/**
-  * Simulates foxes (predators) and rabbits (prey) in the wild.
-  *
-  * @author Barry Becker
-  */
-object PredPreySimulator {
-  def main(args: Array[String]): Unit = {
-    val sim = new PredPreySimulator
-    sim.setPaused(true)
-    GUIUtil.showApplet(new SimulatorApplet(sim))
-  }
-}
 
 class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
 
@@ -89,7 +77,7 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     options
   }
 
-  override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
+  override protected def createOptionsDialog = new PredPreyOptionsDialog(frame, this)
 
   override def paint(g: Graphics): Unit = {
     graph.setSize(getWidth, getHeight)

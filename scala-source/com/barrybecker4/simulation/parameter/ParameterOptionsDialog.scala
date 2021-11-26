@@ -21,6 +21,8 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
 
   override def getTitle = "Parameter Simulation Configuration"
 
+  override def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val paramPanel = new JPanel
     paramPanel.setLayout(new BorderLayout)

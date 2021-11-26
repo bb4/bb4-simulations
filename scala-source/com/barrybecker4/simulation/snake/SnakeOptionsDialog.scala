@@ -29,6 +29,8 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
   private var springKField: NumberInput = _
   private var springDampingField: NumberInput = _
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val customParamPanel = new JPanel
     customParamPanel.setLayout(new BorderLayout)

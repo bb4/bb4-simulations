@@ -6,20 +6,12 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.renderers.{AbstractFunctionRenderer, SingleFunctionRenderer}
 import FunctionType.DIAGONAL
-import java.awt._
+
+import java.awt.*
+import javax.swing.JPanel
 
 
-/**
-  * Simulates graphing a function
-  * @author Barry Becker
-  */
-object GraphSimulator extends App {
-  val sim = new GraphSimulator
-  sim.setPaused(true)
-  new AnimationFrame(sim)
-}
-
-class GraphSimulator private() extends Simulator("Graph") {
+class GraphSimulator extends Simulator("Graph") {
 
   private var graph: AbstractFunctionRenderer = _
   private var function: Function = _
@@ -39,6 +31,12 @@ class GraphSimulator private() extends Simulator("Graph") {
     if (function == null)
       function = DIAGONAL.function
     graph = new SingleFunctionRenderer(function)
+  }
+
+  override def createTopControls: JPanel = {
+    val controls = new JPanel
+    controls.add(createOptionsButton)
+    controls
   }
 
   override def paint(g: Graphics): Unit = {

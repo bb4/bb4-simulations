@@ -34,6 +34,13 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
     this.addMouseMotionListener(handler)
   }
 
+  override def createTopControls: JPanel = {
+    val controls = new JPanel
+    controls.add(createResetButton)
+    controls.add(createOptionsButton)
+    controls
+  }
+
   override protected def reset(): Unit = {
     setNumStepsPerFrame(CaveExplorer.DEFAULT_STEPS_PER_FRAME)
     // remove handlers to void memory leak

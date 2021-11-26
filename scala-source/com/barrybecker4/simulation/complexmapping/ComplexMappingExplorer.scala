@@ -55,6 +55,12 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
     redraw()
   }
 
+  override def createTopControls: JPanel = {
+    val controls = new JPanel
+    controls.add(createResetButton)
+    controls
+  }
+
   def setFunction(func: ComplexFunction): Unit = {
     function = func
     redraw()

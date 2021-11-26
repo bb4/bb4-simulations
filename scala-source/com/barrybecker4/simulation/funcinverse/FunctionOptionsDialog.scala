@@ -31,6 +31,8 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
 
   override def getTitle = "Function Inverse Configuration"
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val funcPanel = new JPanel(new BorderLayout)
     val innerPanel = new JPanel

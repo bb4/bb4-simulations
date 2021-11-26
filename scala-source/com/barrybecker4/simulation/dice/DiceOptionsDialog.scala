@@ -20,6 +20,8 @@ class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
 
   override def getTitle = "Dice Simulation Configuration"
 
+  override protected def showCustomTabByDefault: Boolean = true
+
   override protected def createCustomParamPanel: JPanel = {
     val paramPanel = new JPanel
     paramPanel.setLayout(new BorderLayout)

@@ -12,17 +12,6 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
 
 
-/**
-  * Simulates foxes (predators) and rabbits (prey) in the wild.
-  * @author Barry Becker
-  */
-object VerhulstSimulator {
-  def main(args: Array[String]): Unit = {
-    val sim = new VerhulstSimulator
-    sim.setPaused(true)
-    new AnimationFrame(sim)
-  }
-}
 
 class VerhulstSimulator() extends Simulator("Verhulst Simulation") {
   private var rabbits = new Rabbits
