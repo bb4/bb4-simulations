@@ -6,7 +6,7 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/releases" }
     }
     dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.7-SNAPSHOT'
+        classpath 'com.barrybecker4:bb4-gradle:1.7'
     }
 }
 
@@ -17,7 +17,7 @@ plugins {
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '1.7-SNAPSHOT'
+version = '1.7'
 ext {
     archivesBaseName = 'bb4-simulation'
     mainClass = "com.barrybecker4.simulation.dice.DiceSimulator"
@@ -32,12 +32,12 @@ dependencies {
     implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.barrybecker4:bb4-expression:1.7-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-sound:1.7-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-optimization:1.7-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-ui:1.7-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-common:1.7-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-math:1.7-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-expression:1.7'
+    implementation 'com.barrybecker4:bb4-sound:1.7'
+    implementation 'com.barrybecker4:bb4-optimization:1.7'
+    implementation 'com.barrybecker4:bb4-ui:1.7'
+    implementation 'com.barrybecker4:bb4-common:1.7'
+    implementation 'com.barrybecker4:bb4-math:1.7'
 
 }
 
