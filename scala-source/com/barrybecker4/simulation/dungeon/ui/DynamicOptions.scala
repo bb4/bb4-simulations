@@ -1,20 +1,19 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon
+package com.barrybecker4.simulation.dungeon.ui
 
+import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.simulation.cave.model.CaveProcessor
 import com.barrybecker4.simulation.cave.CaveExplorer
-import com.barrybecker4.simulation.cave.model.CaveModel
+import com.barrybecker4.simulation.cave.model.{CaveModel, CaveProcessor}
+import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
+import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
+import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
 import com.barrybecker4.ui.legend.ContinuousColorLegend
-import com.barrybecker4.ui.sliders.SliderGroup
-import com.barrybecker4.ui.sliders.SliderGroupChangeListener
-import com.barrybecker4.ui.sliders.SliderProperties
+import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
-import javax.swing.*
 import java.awt.*
 import java.awt.event.*
-import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
+import javax.swing.*
 
 
 
@@ -45,7 +44,7 @@ object DynamicOptions {
   )
 }
 
-class DynamicOptions private[dungeon](listener: DungeonOptionsChangedListener)
+class DynamicOptions (listener: DungeonOptionsChangedListener)
   extends JPanel with SliderGroupChangeListener with ActionListener {
 
   var oldDungeonOptions: DungeonOptions = DungeonOptions()

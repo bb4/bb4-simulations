@@ -6,15 +6,16 @@ import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.simulation.dungeon.generator.DungeonGenerator
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer
+import com.barrybecker4.simulation.dungeon.ui.{DungeonOptionsChangedListener, DynamicOptions}
+import com.barrybecker4.simulation.dungeon.DungeonExplorer
 
-import java.awt.{Dimension, Graphics}
 import java.awt.event.{ComponentAdapter, ComponentEvent}
+import java.awt.{Dimension, Graphics}
 import javax.swing.JPanel
 
 
 /**
   * Interactively generates a dungeon level.
-  *
   * @author Barry Becker.
   */
 object DungeonExplorer {
@@ -29,10 +30,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   private val generator: DungeonGenerator = new DungeonGenerator()
   private var options: DynamicOptions = _
   private val dungeonRenderer: DungeonRenderer = new DungeonRenderer()
-
-
   commonInit()
-
 
   private def commonInit(): Unit = {
 
@@ -67,12 +65,12 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   def optionsChanged(options: DungeonOptions): Unit = {
     dungeonOptions = oldDungeonOptions.setDimension(this.getSize)
-
   }
 
   override def timeStep: Double = {
     if (!isPaused && dungeonOptions != oldDungeonOptions) {
       dungeonModel = generator.generateDungeon(dungeonOptions)
+      dungeonRenderer.render(dungeonModel)
       //dungeonModel.timeStep(tStep)
       oldDungeonOptions = dungeonOptions
     }
@@ -84,7 +82,8 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
       super.paint(g)
     Profiler.getInstance.startRenderingTime()
 
-    dungeonRenderer.render(g, dungeonModel)
+    g.drawImage(dungeonRenderer.getImage, 0, 0, null)
+    //dungeonRenderer.render(g, dungeonModel)
 
     Profiler.getInstance.stopRenderingTime()
   }

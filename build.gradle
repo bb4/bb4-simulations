@@ -35,10 +35,9 @@ dependencies {
     implementation 'com.barrybecker4:bb4-expression:1.7'
     implementation 'com.barrybecker4:bb4-sound:1.7'
     implementation 'com.barrybecker4:bb4-optimization:1.7'
-    implementation 'com.barrybecker4:bb4-ui:1.7'
+    implementation 'com.barrybecker4:bb4-ui:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-common:1.7'
     implementation 'com.barrybecker4:bb4-math:1.7'
-
 }
 
 task runFractExpLocalized(type: JavaExec) {

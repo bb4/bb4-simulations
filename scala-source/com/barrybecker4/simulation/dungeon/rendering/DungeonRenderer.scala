@@ -2,17 +2,34 @@
 package com.barrybecker4.simulation.dungeon.rendering
 
 import com.barrybecker4.simulation.dungeon.model.DungeonModel
+import com.barrybecker4.ui.renderers.OfflineGraphics
 
-import java.awt.{Color, Graphics}
+import java.awt.image.BufferedImage
+import java.awt.{Color, Dimension, Graphics}
 
 
-class DungeonRenderer {
+class DungeonRenderer() {
 
-  def render(g: Graphics, dungeonModel: DungeonModel): Unit = {
-    
-    g.setColor(Color.BLUE)
+  private var offlineGraphics: OfflineGraphics = new OfflineGraphics(new Dimension(100, 100), Color.BLUE)
+
+  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
+
+  def render(dungeonModel: DungeonModel): Unit = synchronized {
+    val graphics = getOfflineGraphics(dungeonModel.options.dimension)
+    graphics.clear()
+    graphics.setColor(Color.BLUE)
     val dim = dungeonModel.options.dimension
-    g.drawRect(20, 20, dim.width - 40, dim.height - 40)
+    println("w = " + dim.width + " w2=" + graphics.dim.width)
+    graphics.drawRect(20, 20, dim.width - 40, dim.height - 40)
+    graphics.setColor(Color.CYAN)
+    graphics.fillRect(40, 40, dim.width - 80, dim.height - 80)
   }
-  
+
+  private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {
+    if (offlineGraphics.dim != dim) {
+      offlineGraphics = new OfflineGraphics(dim, Color.LIGHT_GRAY)
+    }
+    offlineGraphics
+  }
+
 }
