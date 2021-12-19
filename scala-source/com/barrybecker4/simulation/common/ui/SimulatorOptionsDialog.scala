@@ -19,7 +19,7 @@ object SimulatorOptionsDialog {
   * The options get set directly on the simulator object that is passed in
   * @author Barry Becker
   */
-abstract class SimulatorOptionsDialog(parent: Component,
+class SimulatorOptionsDialog(parent: Component,
                                       simulator: Simulator) extends OptionsDialog(parent) {
   // rendering option controls
   private var antialiasingCheckbox: JCheckBox = _
@@ -130,7 +130,11 @@ abstract class SimulatorOptionsDialog(parent: Component,
   protected def createGlobalPhysicalParamPanel: JPanel = null
 
   /** For custom parameters that don't fall in other categories. */
-  protected def createCustomParamPanel: JPanel
+  protected def createCustomParamPanel: JPanel = {
+    val panel = new JPanel
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
+    panel
+  }
 
   protected def ok(): Unit = { // set the common rendering and global options
     simulator.setAntialiasing(antialiasingCheckbox.isSelected)

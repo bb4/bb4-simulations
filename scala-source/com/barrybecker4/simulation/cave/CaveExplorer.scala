@@ -3,9 +3,10 @@ package com.barrybecker4.simulation.cave
 
 import com.barrybecker4.simulation.cave.model.CaveModel
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
-import javax.swing._
-import java.awt._
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
+
+import javax.swing.*
+import java.awt.*
 
 
 /**
@@ -50,7 +51,7 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
     commonInit()
   }
 
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = CaveExplorer.INITIAL_TIME_STEP
 
   override def timeStep: Double = {

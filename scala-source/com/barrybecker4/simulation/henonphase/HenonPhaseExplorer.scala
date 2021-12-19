@@ -3,10 +3,11 @@ package com.barrybecker4.simulation.henonphase
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm
-import javax.swing._
-import java.awt._
+
+import javax.swing.*
+import java.awt.*
 
 
 /**
@@ -45,7 +46,7 @@ class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
   }
 
   def getUseFixedSize: Boolean = useFixedSize
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = HenonPhaseExplorer.INITIAL_TIME_STEP
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01

@@ -1,10 +1,11 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
-
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon
 
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
+import com.barrybecker4.simulation.dungeon.generator.DungeonGenerator
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
+import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer
 
 import java.awt.{Dimension, Graphics}
 import java.awt.event.{ComponentAdapter, ComponentEvent}
@@ -61,7 +62,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
     commonInit()
   }
 
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = DungeonExplorer.INITIAL_TIME_STEP
 
   def optionsChanged(options: DungeonOptions): Unit = {

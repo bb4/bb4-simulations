@@ -2,12 +2,12 @@
 package com.barrybecker4.simulation.waveFunctionCollapse
 
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
-import com.barrybecker4.simulation.waveFunctionCollapse.ui.{DynamicOptions, OptionsDialog}
+import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions
 
-import javax.swing._
-import java.awt._
+import javax.swing.*
+import java.awt.*
 import java.awt.event.{ComponentAdapter, ComponentEvent}
 
 
@@ -50,7 +50,7 @@ class WaveFunctionCollapseExplorer()
     commonInit()
   }
 
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = 1
 
   override def timeStep: Double = {

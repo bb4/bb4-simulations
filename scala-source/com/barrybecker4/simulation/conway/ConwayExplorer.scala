@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.conway
 import com.barrybecker4.simulation.conway.model.ConwayModel
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
 
@@ -37,7 +38,7 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
   }
 
   private[conway] def getInteractionHandler = handler
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep = 1
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01

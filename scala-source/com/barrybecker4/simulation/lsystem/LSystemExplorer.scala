@@ -2,8 +2,9 @@
 package com.barrybecker4.simulation.lsystem
 
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.simulation.lsystem.model.LSystemModel
+
 import javax.swing.JPanel
 import java.awt.Graphics
 
@@ -53,7 +54,7 @@ class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
   }
 
   private[lsystem] def getUseFixedSize = useFixedSize
-  override protected def createOptionsDialog = new OptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = LSystemExplorer.INITIAL_TIME_STEP
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
