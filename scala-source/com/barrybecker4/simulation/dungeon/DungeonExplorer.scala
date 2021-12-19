@@ -78,8 +78,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null)
-      return
+    if (g == null) return
     //super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(dungeonRenderer.getImage, 0, 0, null)
