@@ -26,7 +26,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   private var oldDungeonOptions: DungeonOptions = new DungeonOptions()
   private var dungeonOptions: DungeonOptions = _
-  private var dungeonModel: DungeonModel = new DungeonModel(oldDungeonOptions)
+  private var dungeonModel: DungeonModel = _
   private val generator: DungeonGenerator = new DungeonGenerator()
   private var options: DynamicOptions = _
   private val dungeonRenderer: DungeonRenderer = new DungeonRenderer()
@@ -70,7 +70,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   override def timeStep: Double = {
     if (!isPaused && dungeonOptions != oldDungeonOptions) {
       dungeonModel = generator.generateDungeon(dungeonOptions)
-      dungeonRenderer.render(dungeonModel)
+      dungeonRenderer.render(dungeonOptions, dungeonModel)
       //dungeonModel.timeStep(tStep)
       oldDungeonOptions = dungeonOptions
     }
@@ -78,13 +78,11 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null) return
-      super.paint(g)
+    if (g == null)
+      return
+    //super.paint(g)
     Profiler.getInstance.startRenderingTime()
-
     g.drawImage(dungeonRenderer.getImage, 0, 0, null)
-    //dungeonRenderer.render(g, dungeonModel)
-
     Profiler.getInstance.stopRenderingTime()
   }
 

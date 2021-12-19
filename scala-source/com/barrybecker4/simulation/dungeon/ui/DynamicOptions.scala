@@ -16,7 +16,6 @@ import java.awt.event.*
 import javax.swing.*
 
 
-
 /**
   * Dynamic controls for the Dungeon generator that will show on the right.
   * They change the behavior of the simulation while it is running.
@@ -32,6 +31,7 @@ object DynamicOptions {
   private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
   private val PERCENT_FILLED_SLIDER = "Percent Filled"
   private val WALL_BORDER_WIDTH_SLIDER = "Wall Border Thickness"
+  private val CELL_SIZE_SLIDER = "Cell Size"
   
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
@@ -41,6 +41,7 @@ object DynamicOptions {
     new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, MIN_HEIGHT, 20.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
     new SliderProperties(WALL_BORDER_WIDTH_SLIDER, 0, 4, DungeonOptions.DEFAULT_BORDER_WIDTH, 1),
+    new SliderProperties(CELL_SIZE_SLIDER, 1, 20, DungeonOptions.DEFAULT_CELL_SIZE, 1),
   )
 }
 
@@ -101,6 +102,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => oldDungeonOptions.setMaxRoomHeight(value.toInt)
       case DynamicOptions.PERCENT_FILLED_SLIDER => oldDungeonOptions.setPercentFilled(value.toInt)
       case DynamicOptions.WALL_BORDER_WIDTH_SLIDER => oldDungeonOptions.setWallBorderWidth(value.toInt)
+      case DynamicOptions.CELL_SIZE_SLIDER => oldDungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
     }
     oldDungeonOptions = dungeonOptions
