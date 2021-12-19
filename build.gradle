@@ -3,7 +3,7 @@
 buildscript {
     repositories {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
-        maven { url "https://oss.sonatype.org/content/repositories/releases" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
     dependencies {
         classpath 'com.barrybecker4:bb4-gradle:1.7'
@@ -17,7 +17,7 @@ plugins {
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '1.7'
+version = '1.8-SNAPSHOT'
 ext {
     archivesBaseName = 'bb4-simulation'
     mainClass = "com.barrybecker4.simulation.dice.DiceSimulator"
@@ -99,6 +99,13 @@ appMap['cave'] = [
         longDescription: 'This program allows you generate random caves that might be used in a game or for other purposes. ' +
                 'The technique is described in this ' +
                 '<a href="https://gamedevelopment.tutsplus.com/tutorials/generate-random-cave-levels-using-cellular-automata--gamedev-9664">article</a>.'
+]
+appMap['dungeon'] = [
+        title: 'Dungeon Generator',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.dungeon.DungeonExplorer',
+        panel_class: 'com.barrybecker4.simulation.dungeon.DungeonExplorer',
+        description: 'Allows you to procedurally generate dungeon levels',
+        longDescription: 'Procedural content generation for game levels'
 ]
 appMap['conway'] = [
         title: "Conway's Game of Life",
@@ -343,6 +350,7 @@ jarMap['fractalexplorer'] = [include:['com/barrybecker4/simulation/fractalexplor
 jarMap['habitat'] =    [include:['com/barrybecker4/simulation/habitat/**']]
 jarMap['cave'] =  [include:['com/barrybecker4/simulation/cave/**']]
 jarMap['conway'] =  [include:['com/barrybecker4/simulation/conway/**']]
+jarMap['dungeon'] =  [include:['com/barrybecker4/simulation/dungeon/**']]
 jarMap['liquid'] =      [include:['com/barrybecker4/simulation/liquid/**']]
 jarMap['lsystem'] =     [include:['com/barrybecker4/simulation/lsystem/**']]
 jarMap['predprey'] =    [include:['com/barrybecker4/simulation/predprey/**']]
