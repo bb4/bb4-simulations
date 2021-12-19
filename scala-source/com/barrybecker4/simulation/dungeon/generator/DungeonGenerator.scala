@@ -10,14 +10,11 @@ import java.awt.{Color, Dimension}
 
 class DungeonGenerator {
 
+  private val roomGenerator = RoomGenerator()
+
   def generateDungeon(options: DungeonOptions):DungeonModel = {
-    val rooms: Set[Room] = HashSet(
-      Room(IntLocation(10, 20), Dimension(10, 12), Color.GREEN),
-      Room(IntLocation(40, 21), Dimension(9, 7), Color.GREEN),
-      Room(IntLocation(30, 31), Dimension(5, 10), Color.CYAN)
-    )
 
-
-    new DungeonModel(options.dimension, rooms)
+    val rooms = roomGenerator.generateRooms(options)
+    new DungeonModel(rooms)
   }
 }

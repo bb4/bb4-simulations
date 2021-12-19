@@ -10,4 +10,4 @@ import java.awt.Dimension
   * The options determine how to generate the dungeon.
   * Once created, the dungeon can be rendered or operated on in other ways
   */
-case class DungeonModel(dimension: Dimension, rooms: Set[Room]) 
+case class DungeonModel(rooms: Set[Room]) 
