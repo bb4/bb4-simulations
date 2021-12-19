@@ -30,18 +30,18 @@ object DynamicOptions {
   private val MAX_ROOM_WIDTH_SLIDER = "Max Width"
   private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
   private val PERCENT_FILLED_SLIDER = "Percent Filled"
-  private val WALL_BORDER_WIDTH_SLIDER = "Wall Border Thickness"
+  private val ROOM_PADDING_SLIDER = "Wall Border Thickness"
   private val CELL_SIZE_SLIDER = "Cell Size"
   
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
 
   private val GENERAL_SLIDER_PROPS = Array(
-    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, MIN_WIDTH, 30, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
-    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, MIN_HEIGHT, 20.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
+    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, MIN_WIDTH, 40, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
+    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, MIN_HEIGHT, 40.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
-    new SliderProperties(WALL_BORDER_WIDTH_SLIDER, 0, 4, DungeonOptions.DEFAULT_BORDER_WIDTH, 1),
-    new SliderProperties(CELL_SIZE_SLIDER, 1, 20, DungeonOptions.DEFAULT_CELL_SIZE, 1),
+    new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
+    new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
   )
 }
 
@@ -101,7 +101,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => oldDungeonOptions.setMaxRoomWidth(value.toInt)
       case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => oldDungeonOptions.setMaxRoomHeight(value.toInt)
       case DynamicOptions.PERCENT_FILLED_SLIDER => oldDungeonOptions.setPercentFilled(value.toInt)
-      case DynamicOptions.WALL_BORDER_WIDTH_SLIDER => oldDungeonOptions.setWallBorderWidth(value.toInt)
+      case DynamicOptions.ROOM_PADDING_SLIDER => oldDungeonOptions.setRoomPadding(value.toInt)
       case DynamicOptions.CELL_SIZE_SLIDER => oldDungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
     }

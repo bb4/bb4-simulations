@@ -10,11 +10,9 @@ import java.awt.{Color, Dimension}
 
 class DungeonGenerator {
 
-  private val roomGenerator = RoomGenerator()
-
   def generateDungeon(options: DungeonOptions):DungeonModel = {
-
-    val rooms = roomGenerator.generateRooms(options)
+    val roomGenerator = RoomGenerator(options)
+    val rooms = roomGenerator.generateRooms()
     new DungeonModel(rooms)
   }
 }

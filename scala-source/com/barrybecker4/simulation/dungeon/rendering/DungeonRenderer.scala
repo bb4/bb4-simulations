@@ -10,7 +10,7 @@ import java.awt.{Color, Dimension, Graphics}
 
 class DungeonRenderer() {
 
-  private var offlineGraphics: OfflineGraphics = new OfflineGraphics(new Dimension(100, 100), Color.BLUE)
+  private var offlineGraphics: OfflineGraphics = new OfflineGraphics(new Dimension(10, 10), Color.BLUE)
 
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
@@ -18,20 +18,17 @@ class DungeonRenderer() {
     val graphics = getOfflineGraphics(dungeonOptions.dimension)
     graphics.clear()
     val dim = dungeonOptions.dimension
-    println("dim = " + dim.toString)
 
-    val size: Int = dungeonOptions.cellSize
+    val cellSize: Int = dungeonOptions.cellSize
     for (room <- dungeonModel.rooms) {
       graphics.setColor(room.color)
-      val xpos = room.location.getX * size
-      val ypos = room.location.getY * size
-      val width = room.dims.width * size
-      val height = room.dims.height * size
+      val xpos = room.location.getX * cellSize
+      val ypos = room.location.getY * cellSize
+      val width = room.dims.width * cellSize
+      val height = room.dims.height * cellSize
       graphics.drawRect(xpos, ypos, width, height)
-      val border = dungeonOptions.wallBorderWidth * size
-      graphics.fillRect(xpos + border, ypos + border, width - 2 * border, height - 2 * border)
+      graphics.fillRect(xpos + cellSize, ypos + cellSize, width - 2 * cellSize, height - 2 * cellSize)
     }
-
   }
 
   private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {

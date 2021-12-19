@@ -64,7 +64,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   override protected def getInitialTimeStep: Double = DungeonExplorer.INITIAL_TIME_STEP
 
   def optionsChanged(options: DungeonOptions): Unit = {
-    dungeonOptions = oldDungeonOptions.setDimension(this.getSize)
+    dungeonOptions = options.setDimension(this.getSize())
   }
 
   override def timeStep: Double = {
