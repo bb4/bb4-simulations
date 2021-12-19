@@ -35,7 +35,7 @@ case class BoxSplitter(marginWidth: Int, marginHeight: Int, minDimension: Int, r
 
   // try using gaussian here
   private def findSplit(low: Int, high: Int, margin: Int): Int = {
-    assert (high - low >= minDimension)
+    assert (high - low >= 2 * minDimension)
     var diff = high - margin - (low + margin)
     var padding = margin
     if (diff < 0) {
