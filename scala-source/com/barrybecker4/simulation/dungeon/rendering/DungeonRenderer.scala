@@ -27,7 +27,7 @@ class DungeonRenderer() {
       val width = room.dims.width * cellSize
       val height = room.dims.height * cellSize
       graphics.drawRect(xpos, ypos, width, height)
-      graphics.fillRect(xpos + cellSize, ypos + cellSize, width - 2 * cellSize, height - 2 * cellSize)
+      graphics.fillRect(xpos + cellSize/2, ypos + cellSize/2, width - cellSize, height - cellSize)
     }
   }
 

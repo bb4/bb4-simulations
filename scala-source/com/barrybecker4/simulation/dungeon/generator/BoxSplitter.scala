@@ -9,7 +9,7 @@ object BoxSplitter {
   val RND = Random(0)
 }
 
-case class BoxSplitter(marginWidth: Int, marginHeight: Int, rnd: Random = RND) {
+case class BoxSplitter(marginWidth: Int, marginHeight: Int, minDimension: Int, rnd: Random = RND) {
 
   def splitHorizontally(box: Box): (Box, Box) = {
     val leftX = box.getTopLeftCorner.getX
@@ -35,10 +35,15 @@ case class BoxSplitter(marginWidth: Int, marginHeight: Int, rnd: Random = RND) {
 
   // try using gaussian here
   private def findSplit(low: Int, high: Int, margin: Int): Int = {
+    assert (high - low >= minDimension)
     var diff = high - margin - (low + margin)
-    if (diff <= 0) {
-      diff = high - margin / 2 - (low + margin / 2)
+    var padding = margin
+    if (diff < 0) {
+      diff = high - minDimension - (low + minDimension)
+      padding = minDimension
     }
-    low + margin + rnd.nextInt(diff + 1)
+    val middle = low + padding + rnd.nextInt(diff + 1)
+    assert(middle != low && middle != high, s"The middle=$middle was unexpectedly the same as low=$low or high=$high")
+    middle
   }
 }

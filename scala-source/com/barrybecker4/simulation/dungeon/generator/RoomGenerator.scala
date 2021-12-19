@@ -19,7 +19,7 @@ object RoomGenerator {
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
   val widthToHeightRatio: Float = options.dimension.width.toFloat / options.dimension.height.toFloat
-  val boxSplitter = BoxSplitter(options.maxRoomWidth, options.maxRoomHeight)
+  val boxSplitter = BoxSplitter(options.maxRoomWidth, options.maxRoomHeight, options.minRoomDim)
 
   def generateRooms(): Set[Room] = {
     getRoomsForBox(Box(0, 0, options.dimension.height, options.dimension.width))
