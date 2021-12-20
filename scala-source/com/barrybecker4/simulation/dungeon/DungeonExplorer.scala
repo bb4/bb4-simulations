@@ -14,19 +14,19 @@ import java.awt.{Dimension, Graphics}
 import javax.swing.JPanel
 
 
-/**
-  * Interactively generates a dungeon level.
-  * @author Barry Becker.
-  */
+
 object DungeonExplorer {
   val INITIAL_TIME_STEP: Float = 0.01
 }
 
+/**
+ * Interactively generates a dungeon level.
+ * @author Barry Becker.
+ */
 class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptionsChangedListener {
 
-  private var oldDungeonOptions: DungeonOptions = new DungeonOptions()
-  private var dungeonOptions: DungeonOptions = _
-  private var dungeonModel: DungeonModel = _
+  private var dungeonOptions: DungeonOptions = new DungeonOptions()
+  private var oldDungeonOptions: DungeonOptions = dungeonOptions
   private val generator: DungeonGenerator = new DungeonGenerator()
   private var options: DynamicOptions = _
   private val dungeonRenderer: DungeonRenderer = new DungeonRenderer()
@@ -39,11 +39,8 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
     val self = this
     this.addComponentListener(new ComponentAdapter {
       override def componentResized(ce: ComponentEvent): Unit = {
-        val size: Dimension = self.getSize
-        if (size.width != options.getWidth || size.height != options.getHeight) {
-          println("resized so rerunning...")
-          dungeonOptions = oldDungeonOptions.setDimension(size)
-        }
+        println("resized so rerunning...")
+        dungeonOptions = oldDungeonOptions.setDimension(getDimensionsInCells)
       }
     })
   }
@@ -64,12 +61,16 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   override protected def getInitialTimeStep: Double = DungeonExplorer.INITIAL_TIME_STEP
 
   def optionsChanged(options: DungeonOptions): Unit = {
-    dungeonOptions = options.setDimension(this.getSize())
+    dungeonOptions = options.setDimension(this.getDimensionsInCells)
+  }
+
+  private def getDimensionsInCells = {
+    new Dimension(this.getWidth / dungeonOptions.cellSize, this.getHeight /dungeonOptions.cellSize)
   }
 
   override def timeStep: Double = {
     if (!isPaused && dungeonOptions != oldDungeonOptions) {
-      dungeonModel = generator.generateDungeon(dungeonOptions)
+      val dungeonModel = generator.generateDungeon(dungeonOptions)
       dungeonRenderer.render(dungeonOptions, dungeonModel)
       //dungeonModel.timeStep(tStep)
       oldDungeonOptions = dungeonOptions
@@ -84,9 +85,6 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
     g.drawImage(dungeonRenderer.getImage, 0, 0, null)
     Profiler.getInstance.stopRenderingTime()
   }
-
-  override def setScale(scale: Double): Unit = {}
-  override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
     options = new DynamicOptions(this)

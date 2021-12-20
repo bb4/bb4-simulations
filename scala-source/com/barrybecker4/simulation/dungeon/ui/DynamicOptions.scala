@@ -24,21 +24,19 @@ import javax.swing.*
 object DynamicOptions {
 
   val HALLWAY_WIDTH: Int = 1
-  val MIN_WIDTH: Int = 3
-  val MIN_HEIGHT: Int = 3
-  
+
   private val MAX_ROOM_WIDTH_SLIDER = "Max Width"
   private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
   private val PERCENT_FILLED_SLIDER = "Percent Filled"
   private val ROOM_PADDING_SLIDER = "Wall Border Thickness"
   private val CELL_SIZE_SLIDER = "Cell Size"
-  
+
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
 
   private val GENERAL_SLIDER_PROPS = Array(
-    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, MIN_WIDTH, 40, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
-    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, MIN_HEIGHT, 40.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
+    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 40, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
+    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 40.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
     new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
     new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
@@ -53,12 +51,12 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
   val generalPanel: JPanel = createGeneralControls
-  
+
   add(createButtons)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
   add(generalPanel)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
- 
+
 
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
@@ -75,7 +73,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     panel.add(generalSliderGroup, BorderLayout.CENTER)
     panel
   }
-  
+
   private def createTitledBorder(title: String) =
     BorderFactory.createCompoundBorder(
       BorderFactory.createTitledBorder(title),
@@ -109,7 +107,6 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
 
     listener.optionsChanged(dungeonOptions)
   }
-  
 
   override def actionPerformed(e: ActionEvent): Unit = {
     //if (e.getSource == resetButton) simulator.requestRestart()

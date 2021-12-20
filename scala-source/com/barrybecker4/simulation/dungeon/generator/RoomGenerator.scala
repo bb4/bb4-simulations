@@ -11,45 +11,59 @@ import scala.util.Random
 
 
 object RoomGenerator {
-  val ROOM_DECORATION = RoomDecoration(new Color(110, 20, 210), new Color(100, 10, 200, 100))
-  val DEBUG_ROOM_DECORATION = RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 30))
-  val RND = Random(0)
+  val ROOM_DECORATION: RoomDecoration =
+    RoomDecoration(new Color(110, 20, 210), new Color(100, 10, 200, 100))
+  val DEBUG_ROOM_DECORATION: RoomDecoration =
+    RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 30))
+  val RND: Random = Random(0)
   val DEBUG = true
 }
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  val widthToHeightRatio: Float = options.dimension.width.toFloat / options.dimension.height.toFloat
-  val boxSplitter = BoxSplitter(options.maxRoomWidth, options.maxRoomHeight, options.minRoomDim)
+  private val widthToHeightRatio: Float =
+    options.dimension.width.toFloat / options.dimension.height.toFloat
+
+  private val boxSplitter =
+    BoxSplitter(options.maxRoomWidth, options.maxRoomHeight, options.minRoomDim)
 
   def generateRooms(): Set[Room] = {
     getRoomsForBox(Box(0, 0, options.dimension.height, options.dimension.width))
   }
 
   private def getRoomsForBox(box: Box): Set[Room] = {
-    // base case if box small enough for a room, then return the room
-    val border = options.roomPadding
-    val cellSize = options.cellSize
-    if (box.getWidth <= options.maxRoomWidth * cellSize && box.getHeight <= options.maxRoomHeight * cellSize) {
-      val xpos = box.getTopLeftCorner.getX / cellSize + border
-      val ypos = box.getTopLeftCorner.getY / cellSize + border
-      val dim = Dimension(box.getWidth / cellSize - 2 * border, box.getHeight / cellSize  - 2 * border)
 
-      val bigEnough = dim.width >= options.minRoomDim && dim.height >= options.minRoomDim
+    val border = options.roomPadding
+    val border2 = 2 * border
+    val cellSize = options.cellSize
+    val minDim = options.minRoomDim
+
+    val boxSmallEnough =
+      (box.getWidth <= options.maxRoomWidth + border2 && box.getHeight <= options.maxRoomHeight + border2)
+
+    if (boxSmallEnough) {        // base case of recursion
+      val xpos = box.getTopLeftCorner.getX + border
+      val ypos = box.getTopLeftCorner.getY + border
+      val boxDim = Dimension(box.getWidth - border2, box.getHeight - border2)
+
+      val bigEnough = boxDim.width >= minDim && boxDim.height >= minDim
+
       if (rnd.nextInt(100) < options.percentFilled && bigEnough)
-        HashSet(Room(IntLocation(ypos, xpos), dim, ROOM_DECORATION))
+        HashSet(Room(IntLocation(ypos, xpos), boxDim, ROOM_DECORATION))
       else if (DEBUG)
         HashSet(Room(IntLocation(ypos - border, xpos - border),
-                Dimension(box.getWidth / cellSize, box.getHeight / cellSize),
+                Dimension(box.getWidth, box.getHeight),
                 DEBUG_ROOM_DECORATION)
         )
       else HashSet()
     }
     else if (box.getWidth * widthToHeightRatio > box.getHeight) {
+      assert(box.getWidth >= 2 * minDim, "box dim = " + box.getWidth + ", " + box.getHeight + " "+ options)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
       getRoomsForBox(leftBox).union(getRoomsForBox(rightBox))
     }
     else {
+      assert(box.getHeight >= 2 * minDim, "box dim = " + box.getWidth + ", " + box.getHeight)
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
       getRoomsForBox(bottomBox).union(getRoomsForBox(topBox))
     }
