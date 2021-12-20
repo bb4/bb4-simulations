@@ -28,10 +28,11 @@ class DungeonRenderer() {
     val cellSize: Int = dungeonOptions.cellSize
     for (room <- dungeonModel.rooms) {
       graphics.setColor(Color.WHITE)
-      val xpos = room.location.getX * cellSize
-      val ypos = room.location.getY * cellSize
-      val width = room.dims.width * cellSize
-      val height = room.dims.height * cellSize
+      val point = room.box.getTopLeftCorner
+      val xpos = point.getX * cellSize
+      val ypos = point.getY * cellSize
+      val width = room.box.getWidth * cellSize
+      val height = room.box.getHeight * cellSize
 
       graphics.fillRect(xpos, ypos, width, height)
       graphics.setColor(room.decoration.wallColor)
