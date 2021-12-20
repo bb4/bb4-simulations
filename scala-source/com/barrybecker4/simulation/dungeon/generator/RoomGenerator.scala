@@ -24,28 +24,27 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val widthToHeightRatio: Float =
     options.dimension.width.toFloat / options.dimension.height.toFloat
 
+  private val padding = options.roomPadding
   private val boxSplitter =
-    BoxSplitter(options.maxRoomWidth, options.maxRoomHeight, options.minRoomDim)
+    BoxSplitter(options.maxRoomWidth + padding, options.maxRoomHeight + padding, options.minRoomDim + padding)
 
   def generateRooms(): Set[Room] = {
     val dim = options.dimension
-    val padding = options.roomPadding
     getRoomsForBox(Box(0, 0, dim.height - padding, dim.width - padding))
   }
 
   private def getRoomsForBox(box: Box): Set[Room] = {
-
-    val border = options.roomPadding
-    val border2 = 2 * border
+    
+    val padding2 = 2 * padding
     val cellSize = options.cellSize
     val minDim = options.minRoomDim
 
     val boxSmallEnough =
-      (box.getWidth <= options.maxRoomWidth + border2 && box.getHeight <= options.maxRoomHeight + border2)
+      (box.getWidth <= options.maxRoomWidth + padding2 && box.getHeight <= options.maxRoomHeight + padding2)
 
     if (boxSmallEnough) {        // base case of recursion
-      val upperLeft = IntLocation(box.getTopLeftCorner.getY + border, box.getTopLeftCorner.getX + border)
-      val bottomRight = IntLocation(upperLeft.getY + box.getHeight - border, upperLeft.getX + box.getWidth - border)
+      val upperLeft = IntLocation(box.getTopLeftCorner.getY + padding, box.getTopLeftCorner.getX + padding)
+      val bottomRight = IntLocation(upperLeft.getY + box.getHeight - padding, upperLeft.getX + box.getWidth - padding)
       val roomBox = new Box(upperLeft, bottomRight)
 
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
