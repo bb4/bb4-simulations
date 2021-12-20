@@ -46,7 +46,7 @@ object DynamicOptions {
 class DynamicOptions (listener: DungeonOptionsChangedListener)
   extends JPanel with SliderGroupChangeListener with ActionListener {
 
-  var oldDungeonOptions: DungeonOptions = DungeonOptions()
+  var dungeonOptions: DungeonOptions = DungeonOptions()
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
@@ -61,9 +61,9 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
-  private var kernelChoice: JComboBox[String] = _
   private var resetButton: JButton = _
   private var generalSliderGroup: SliderGroup = _
+  private var showGrid: JCheckBox = _
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -71,6 +71,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     generalSliderGroup = new SliderGroup(DynamicOptions.GENERAL_SLIDER_PROPS)
     generalSliderGroup.addSliderChangeListener(this)
     panel.add(generalSliderGroup, BorderLayout.CENTER)
+    panel.add(createCheckboxPanel, BorderLayout.SOUTH)
     panel
   }
 
@@ -91,25 +92,44 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     buttonsPanel
   }
 
+  private def createCheckboxPanel = {
+    val panel = new JPanel
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
+
+    val showGridPanel = new JPanel
+    showGridPanel.setToolTipText("When checked, a grid shows on the background. ")
+    val showGridLabel = new JLabel("Show a grid if checked ")
+    showGrid = new JCheckBox
+    showGrid.setSelected(dungeonOptions.showGrid)
+    showGrid.addActionListener(this)
+
+    showGridPanel.add(showGridLabel)
+    showGridPanel.add(showGrid)
+
+    panel.add(showGridPanel)
+    panel.add(Box.createHorizontalGlue)
+    panel
+  }
+
   def reset(): Unit = generalSliderGroup.reset()
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    val dungeonOptions = sliderName match {
-      case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => oldDungeonOptions.setMaxRoomWidth(value.toInt)
-      case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => oldDungeonOptions.setMaxRoomHeight(value.toInt)
-      case DynamicOptions.PERCENT_FILLED_SLIDER => oldDungeonOptions.setPercentFilled(value.toInt)
-      case DynamicOptions.ROOM_PADDING_SLIDER => oldDungeonOptions.setRoomPadding(value.toInt)
-      case DynamicOptions.CELL_SIZE_SLIDER => oldDungeonOptions.setCellSize(value.toInt)
+    dungeonOptions = sliderName match {
+      case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => dungeonOptions.setMaxRoomWidth(value.toInt)
+      case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => dungeonOptions.setMaxRoomHeight(value.toInt)
+      case DynamicOptions.PERCENT_FILLED_SLIDER => dungeonOptions.setPercentFilled(value.toInt)
+      case DynamicOptions.ROOM_PADDING_SLIDER => dungeonOptions.setRoomPadding(value.toInt)
+      case DynamicOptions.CELL_SIZE_SLIDER => dungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
     }
-    oldDungeonOptions = dungeonOptions
-
     listener.optionsChanged(dungeonOptions)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    //if (e.getSource == resetButton) simulator.requestRestart()
-    //else throw new IllegalStateException("Unexpected button " + e.getSource)
+    if (e.getSource == showGrid) {
+      dungeonOptions = dungeonOptions.setShowGrid(showGrid.isSelected)
+      listener.optionsChanged(dungeonOptions)
+    }
   }
 }

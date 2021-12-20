@@ -65,7 +65,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
   }
 
   private def getDimensionsInCells = {
-    new Dimension(this.getWidth / dungeonOptions.cellSize, this.getHeight /dungeonOptions.cellSize)
+    new Dimension(getWidth / dungeonOptions.cellSize, getHeight /dungeonOptions.cellSize)
   }
 
   override def timeStep: Double = {

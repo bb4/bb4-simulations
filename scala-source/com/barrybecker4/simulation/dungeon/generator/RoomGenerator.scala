@@ -12,9 +12,9 @@ import scala.util.Random
 
 object RoomGenerator {
   val ROOM_DECORATION: RoomDecoration =
-    RoomDecoration(new Color(110, 20, 210), new Color(100, 10, 200, 100))
+    RoomDecoration(new Color(120, 0, 240), new Color(130, 30, 230, 50))
   val DEBUG_ROOM_DECORATION: RoomDecoration =
-    RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 30))
+    RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 40))
   val RND: Random = Random(0)
   val DEBUG = true
 }
@@ -28,7 +28,9 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     BoxSplitter(options.maxRoomWidth, options.maxRoomHeight, options.minRoomDim)
 
   def generateRooms(): Set[Room] = {
-    getRoomsForBox(Box(0, 0, options.dimension.height, options.dimension.width))
+    val dim = options.dimension
+    val padding = options.roomPadding
+    getRoomsForBox(Box(0, 0, dim.height - padding, dim.width - padding))
   }
 
   private def getRoomsForBox(box: Box): Set[Room] = {
