@@ -13,6 +13,7 @@ object DungeonOptions {
   val DEFAULT_PERCENT_FILLED = 100
   val DEFAULT_ROOM_PADDING = 1
   val DEFAULT_CELL_SIZE = 10
+  val DEFAULT_HALF_PADDED = false
   val DEFAULT_SHOW_GRID = false
 }
 
@@ -27,24 +28,27 @@ case class DungeonOptions(
   percentFilled: Int = DEFAULT_PERCENT_FILLED,
   roomPadding: Int = DEFAULT_ROOM_PADDING,
   cellSize: Int = DEFAULT_CELL_SIZE,
+  halfPadded: Boolean = DEFAULT_HALF_PADDED,
   showGrid: Boolean = DEFAULT_SHOW_GRID
 ) {
   private val doublePadding = roomPadding * 2
 
   def setDimension(d: Dimension): DungeonOptions =
-    DungeonOptions(d, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, showGrid)
+    DungeonOptions(d, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, halfPadded, showGrid)
   def setMaxRoomWidth(w: Int): DungeonOptions =
-    DungeonOptions(dimension, w, maxRoomHeight, percentFilled, roomPadding, cellSize, showGrid)
+    DungeonOptions(dimension, w, maxRoomHeight, percentFilled, roomPadding, cellSize, halfPadded, showGrid)
   def setMaxRoomHeight(h: Int): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, h, percentFilled, roomPadding, cellSize, showGrid)
+    DungeonOptions(dimension, maxRoomWidth, h, percentFilled, roomPadding, cellSize, halfPadded, showGrid)
   def setPercentFilled(percent: Int): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percent, roomPadding, cellSize, showGrid)
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percent, roomPadding, cellSize, halfPadded, showGrid)
   def setRoomPadding(b: Int): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, b, cellSize, showGrid)
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, b, cellSize, halfPadded, showGrid)
   def setCellSize(s: Int): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, s, showGrid)
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, s, halfPadded, showGrid)
+  def setHalfPadded(h: Boolean): DungeonOptions =
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, h, showGrid)  
   def setShowGrid(g: Boolean): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, g)
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, halfPadded, g)
 
   def getMaxPaddedWidth: Int = maxRoomWidth + doublePadding
   def getMaxPaddedHeight: Int = maxRoomHeight + doublePadding

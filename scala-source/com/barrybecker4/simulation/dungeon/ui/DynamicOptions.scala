@@ -67,7 +67,8 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   add(fill)
   private var resetButton: JButton = _
   private var generalSliderGroup: SliderGroup = _
-  private var showGrid: JCheckBox = _
+  private val halfPaddedCB: JCheckBox = new JCheckBox()
+  private val showGridCB: JCheckBox = new JCheckBox()
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -100,19 +101,30 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     val panel = new JPanel
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
-    val showGridPanel = new JPanel
-    showGridPanel.setToolTipText("When checked, a grid shows on the background. ")
-    val showGridLabel = new JLabel("Show a grid if checked ")
-    showGrid = new JCheckBox
-    showGrid.setSelected(dungeonOptions.showGrid)
-    showGrid.addActionListener(this)
+    val halfPaddedPanel = createCheckBox("Use only half the padding ",
+      "If checked, padding only goes on on the top left instead of all around",
+      dungeonOptions.halfPadded, halfPaddedCB)
 
-    showGridPanel.add(showGridLabel)
-    showGridPanel.add(showGrid)
+    val showGridPanel = createCheckBox("Show a grid if checked ",
+      "When checked, a grid shows on the background",
+      dungeonOptions.showGrid, showGridCB)
 
+    panel.add(halfPaddedPanel)
     panel.add(showGridPanel)
     panel.add(Box.createHorizontalGlue)
     panel
+  }
+
+  private def createCheckBox(label: String, ttip: String, initialValue: Boolean, checkBox: JCheckBox): JPanel = {
+    val checkboxPanel = new JPanel
+    checkboxPanel.setToolTipText(ttip)
+    val cbLabel = new JLabel(label)
+    checkBox.setSelected(initialValue)
+    checkBox.addActionListener(this)
+
+    checkboxPanel.add(cbLabel)
+    checkboxPanel.add(checkBox)
+    checkboxPanel
   }
 
   def reset(): Unit = generalSliderGroup.reset()
@@ -129,7 +141,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     }
     listener.optionsChanged(dungeonOptions)
   }
-  
+
   private def updateOnPaddingChange(paddingValue: Int): DungeonOptions = {
     val minValue = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * paddingValue)
     generalSliderGroup.setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
@@ -148,9 +160,15 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    if (e.getSource == showGrid) {
-      dungeonOptions = dungeonOptions.setShowGrid(showGrid.isSelected)
-      listener.optionsChanged(dungeonOptions)
+    if (e.getSource == halfPaddedCB) {
+      dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCB.isSelected)
     }
+    else if (e.getSource == showGridCB) {
+      dungeonOptions = dungeonOptions.setShowGrid(showGridCB.isSelected)
+    }
+    else {
+      throw new IllegalArgumentException();
+    }
+    listener.optionsChanged(dungeonOptions)
   }
 }
