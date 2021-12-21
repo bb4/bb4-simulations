@@ -123,27 +123,28 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => dungeonOptions.setMaxRoomWidth(value.toInt)
       case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => dungeonOptions.setMaxRoomHeight(value.toInt)
       case DynamicOptions.PERCENT_FILLED_SLIDER => dungeonOptions.setPercentFilled(value.toInt)
-      case DynamicOptions.ROOM_PADDING_SLIDER => {
-        val minValue = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * value.toInt)
-        generalSliderGroup.setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
-        generalSliderGroup.setSliderMinimum(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
-        generalSliderGroup.setSliderListener(null)
-        var dopts = dungeonOptions
-        if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_WIDTH_SLIDER_IDX)) {
-          dopts = dopts.setMaxRoomWidth(minValue)
-          generalSliderGroup.setSliderValue(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
-        }
-        if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_HEIGHT_SLIDER_IDX)) {
-          dopts = dopts.setMaxRoomHeight(minValue)
-          generalSliderGroup.setSliderValue(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
-        }
-        generalSliderGroup.setSliderListener(this)
-        dopts.setRoomPadding(value.toInt)
-      }
+      case DynamicOptions.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt)
       case DynamicOptions.CELL_SIZE_SLIDER => dungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
     }
     listener.optionsChanged(dungeonOptions)
+  }
+  
+  private def updateOnPaddingChange(paddingValue: Int): DungeonOptions = {
+    val minValue = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * paddingValue)
+    generalSliderGroup.setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
+    generalSliderGroup.setSliderMinimum(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
+    generalSliderGroup.setSliderListener(null)
+    if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_WIDTH_SLIDER_IDX)) {
+      dungeonOptions = dungeonOptions.setMaxRoomWidth(minValue)
+      generalSliderGroup.setSliderValue(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
+    }
+    if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_HEIGHT_SLIDER_IDX)) {
+      dungeonOptions = dungeonOptions.setMaxRoomHeight(minValue)
+      generalSliderGroup.setSliderValue(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
+    }
+    generalSliderGroup.setSliderListener(this)
+    dungeonOptions.setRoomPadding(paddingValue)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {

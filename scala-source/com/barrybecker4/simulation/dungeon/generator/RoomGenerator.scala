@@ -52,7 +52,6 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       else HashSet()
     }
     else if (ratio > widthToHeightRatio) {
-      println(s"rat=$ratio wToHeightRat=$widthToHeightRatio  w=${box.getWidth} h=${box.getHeight}")
       verifyDim(box.getWidth, box)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
       getRoomsForBox(leftBox).union(getRoomsForBox(rightBox))
