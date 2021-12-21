@@ -37,11 +37,9 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     val padding2 = 2 * padding
     val cellSize = options.cellSize
     val minDim = options.minRoomDim
+    val ratio = (box.getWidth + padding2).toFloat / (box.getHeight + padding2)
 
-    val boxSmallEnough =
-      box.getWidth <= options.getMaxPaddedWidth && box.getHeight <= options.getMaxPaddedHeight
-
-    if (boxSmallEnough) {        // base case of recursion
+    if (smallEnough(box)) {        // base case of recursion
       val upperLeft = IntLocation(box.getTopLeftCorner.getY + padding, box.getTopLeftCorner.getX + padding)
       val bottomRight = IntLocation(upperLeft.getY + box.getHeight - padding, upperLeft.getX + box.getWidth - padding)
       val roomBox = new Box(upperLeft, bottomRight)
@@ -53,15 +51,27 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       else if (DEBUG) HashSet(Room(box, DEBUG_ROOM_DECORATION))
       else HashSet()
     }
-    else if ((box.getWidth + padding2) * widthToHeightRatio > box.getHeight + padding2) {
-      assert(box.getWidth >= 2 * minDim, "box dim = " + box.getWidth + ", " + box.getHeight + " "+ options)
+    else if (ratio > widthToHeightRatio) {
+      println(s"rat=$ratio wToHeightRat=$widthToHeightRatio  w=${box.getWidth} h=${box.getHeight}")
+      verifyDim(box.getWidth, box)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
       getRoomsForBox(leftBox).union(getRoomsForBox(rightBox))
     }
     else {
-      assert(box.getHeight >= 2 * minDim, "box dim = " + box.getWidth + ", " + box.getHeight)
+      verifyDim(box.getHeight, box)
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
       getRoomsForBox(bottomBox).union(getRoomsForBox(topBox))
     }
   }
+
+  private def verifyDim(boxDim: Int, box: Box): Unit = {
+    assert(boxDim >= 2 * options.getMinPaddedDim,
+      "box dim = " + boxDim + " < " + 2 * options.getMinPaddedDim + "\n " + box + " " + options
+      + "\n widthToHeightRat=" + widthToHeightRatio)
+  }
+
+  private def smallEnough(box: Box): Boolean = {
+    box.getWidth <= options.getMaxPaddedWidth && box.getHeight <= options.getMaxPaddedHeight
+  }
+
 }

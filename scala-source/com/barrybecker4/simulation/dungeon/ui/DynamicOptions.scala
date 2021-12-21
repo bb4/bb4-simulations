@@ -8,6 +8,7 @@ import com.barrybecker4.simulation.cave.model.{CaveModel, CaveProcessor}
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
+import com.barrybecker4.simulation.dungeon.ui.DynamicOptions.{MAX_ROOM_HEIGHT_SLIDER_IDX, MAX_ROOM_WIDTH_SLIDER_IDX}
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
@@ -34,13 +35,16 @@ object DynamicOptions {
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
 
+  private val minDim = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * DungeonOptions.DEFAULT_ROOM_PADDING)
   private val GENERAL_SLIDER_PROPS = Array(
-    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 60, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
-    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 60.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
+    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
+    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
     new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
     new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
   )
+  private val MAX_ROOM_WIDTH_SLIDER_IDX = 0
+  private val MAX_ROOM_HEIGHT_SLIDER_IDX = 1
 }
 
 class DynamicOptions (listener: DungeonOptionsChangedListener)
@@ -119,7 +123,23 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => dungeonOptions.setMaxRoomWidth(value.toInt)
       case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => dungeonOptions.setMaxRoomHeight(value.toInt)
       case DynamicOptions.PERCENT_FILLED_SLIDER => dungeonOptions.setPercentFilled(value.toInt)
-      case DynamicOptions.ROOM_PADDING_SLIDER => dungeonOptions.setRoomPadding(value.toInt)
+      case DynamicOptions.ROOM_PADDING_SLIDER => {
+        val minValue = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * value.toInt)
+        generalSliderGroup.setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
+        generalSliderGroup.setSliderMinimum(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
+        generalSliderGroup.setSliderListener(null)
+        var dopts = dungeonOptions
+        if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_WIDTH_SLIDER_IDX)) {
+          dopts = dopts.setMaxRoomWidth(minValue)
+          generalSliderGroup.setSliderValue(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
+        }
+        if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_HEIGHT_SLIDER_IDX)) {
+          dopts = dopts.setMaxRoomHeight(minValue)
+          generalSliderGroup.setSliderValue(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
+        }
+        generalSliderGroup.setSliderListener(this)
+        dopts.setRoomPadding(value.toInt)
+      }
       case DynamicOptions.CELL_SIZE_SLIDER => dungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
     }

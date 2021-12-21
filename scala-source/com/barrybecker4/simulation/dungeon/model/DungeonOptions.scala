@@ -30,7 +30,7 @@ case class DungeonOptions(
   showGrid: Boolean = DEFAULT_SHOW_GRID
 ) {
   private val doublePadding = roomPadding * 2
-  
+
   def setDimension(d: Dimension): DungeonOptions =
     DungeonOptions(d, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, showGrid)
   def setMaxRoomWidth(w: Int): DungeonOptions =
@@ -45,7 +45,7 @@ case class DungeonOptions(
     DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, s, showGrid)
   def setShowGrid(g: Boolean): DungeonOptions =
     DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, g)
-    
+
   def getMaxPaddedWidth: Int = maxRoomWidth + doublePadding
   def getMaxPaddedHeight: Int = maxRoomHeight + doublePadding
   def getMinPaddedDim: Int = minRoomDim + doublePadding
@@ -54,4 +54,7 @@ case class DungeonOptions(
 
   def getScreenDimension: Dimension =
     new Dimension(dimension.width * cellSize + 1, dimension.height * cellSize + 1)
+
+  override def toString: String =
+    s"DungeonOptions[maxRoom=[$maxRoomWidth, $maxRoomHeight] padding=$roomPadding minPaddedDim=$getMinPaddedDim]"
 }

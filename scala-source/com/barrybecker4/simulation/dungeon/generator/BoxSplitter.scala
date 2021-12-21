@@ -49,7 +49,8 @@ case class BoxSplitter(marginWidth: Int, marginHeight: Int, minDimension: Int, r
     }
     val randomOffset = rnd.nextInt(diff + 1)
     val middle = low + padding + randomOffset
-    assert(middle != low && middle != high, s"The middle=$middle was unexpectedly the same as low=$low or high=$high")
+    assert(middle != low && middle != high,
+      s"The middle=$middle was unexpectedly the same as low=$low or high=$high")
     assert(middle - low >= minDimension, "middle - low = " + (middle - low))
     assert(high - middle >= minDimension, "high - middle = " + (high - middle))
     middle
