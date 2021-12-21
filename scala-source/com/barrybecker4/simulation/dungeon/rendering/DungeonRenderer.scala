@@ -11,7 +11,7 @@ import java.awt.{BasicStroke, Color, Dimension, Graphics}
 
 object DungeonRenderer {
   val STROKE = new BasicStroke(1.0)
-  val GRID_COLOR = new Color(10,110, 180, 180)
+  val GRID_COLOR = new Color(10, 110, 180, 80)
   val GRID_STROKE = new BasicStroke(1.0)
 }
 

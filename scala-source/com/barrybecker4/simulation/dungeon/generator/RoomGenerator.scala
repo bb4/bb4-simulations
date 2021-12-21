@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.RoomGenerator.*
+import com.barrybecker4.simulation.dungeon.generator.bsp.BoxSplitter
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
 
 import java.awt.{Color, Dimension}
@@ -12,9 +13,9 @@ import scala.util.Random
 
 object RoomGenerator {
   private val ROOM_DECORATION: RoomDecoration =
-    RoomDecoration(new Color(120, 0, 240), new Color(130, 30, 230, 50))
+    RoomDecoration(new Color(100, 0, 230), new Color(130, 30, 230, 60))
   private val DEBUG_ROOM_DECORATION: RoomDecoration =
-    RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 40))
+    RoomDecoration(new Color(90, 90, 110, 80), new Color(90, 80, 90, 10))
   private val RND: Random = Random(0)
   private val DEBUG = true
 }

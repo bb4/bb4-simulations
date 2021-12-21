@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.dungeon.generator.bsp.BoxSplitter
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random
