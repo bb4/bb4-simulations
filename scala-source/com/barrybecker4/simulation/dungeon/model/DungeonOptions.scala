@@ -8,7 +8,7 @@ import java.awt.Dimension
 object DungeonOptions {
   val DEFAULT_DIMENSIONS = new Dimension(50, 50)
   val DEFAULT_MAX_ROOM_WIDTH = 20
-  val DEFAULT_MAX_ROOM_HEIGHT = 15
+  val DEFAULT_MAX_ROOM_HEIGHT = 20
   val MIN_ROOM_DIM = 3
   val DEFAULT_PERCENT_FILLED = 100
   val DEFAULT_ROOM_PADDING = 1
@@ -29,6 +29,8 @@ case class DungeonOptions(
   cellSize: Int = DEFAULT_CELL_SIZE,
   showGrid: Boolean = DEFAULT_SHOW_GRID
 ) {
+  private val doublePadding = roomPadding * 2
+  
   def setDimension(d: Dimension): DungeonOptions =
     DungeonOptions(d, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, showGrid)
   def setMaxRoomWidth(w: Int): DungeonOptions =
@@ -42,7 +44,11 @@ case class DungeonOptions(
   def setCellSize(s: Int): DungeonOptions =
     DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, s, showGrid)
   def setShowGrid(g: Boolean): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, g)  
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, g)
+    
+  def getMaxPaddedWidth: Int = maxRoomWidth + doublePadding
+  def getMaxPaddedHeight: Int = maxRoomHeight + doublePadding
+  def getMinPaddedDim: Int = minRoomDim + doublePadding
 
   def minRoomDim: Int = MIN_ROOM_DIM
 

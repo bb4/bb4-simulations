@@ -11,22 +11,21 @@ import scala.util.Random
 
 
 object RoomGenerator {
-  val ROOM_DECORATION: RoomDecoration =
+  private val ROOM_DECORATION: RoomDecoration =
     RoomDecoration(new Color(120, 0, 240), new Color(130, 30, 230, 50))
-  val DEBUG_ROOM_DECORATION: RoomDecoration =
+  private val DEBUG_ROOM_DECORATION: RoomDecoration =
     RoomDecoration(new Color(90, 90, 110, 220), new Color(90, 80, 90, 40))
-  val RND: Random = Random(0)
-  val DEBUG = true
+  private val RND: Random = Random(0)
+  private val DEBUG = true
 }
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  private val widthToHeightRatio: Float =
-    options.dimension.width.toFloat / options.dimension.height.toFloat
-
   private val padding = options.roomPadding
+  private val widthToHeightRatio: Float = options.getMaxPaddedWidth.toFloat / options.getMaxPaddedHeight
+
   private val boxSplitter =
-    BoxSplitter(options.maxRoomWidth + padding, options.maxRoomHeight + padding, options.minRoomDim + padding)
+    BoxSplitter(options.getMaxPaddedWidth, options.getMaxPaddedHeight, options.getMinPaddedDim)
 
   def generateRooms(): Set[Room] = {
     val dim = options.dimension
@@ -34,13 +33,13 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   }
 
   private def getRoomsForBox(box: Box): Set[Room] = {
-    
+
     val padding2 = 2 * padding
     val cellSize = options.cellSize
     val minDim = options.minRoomDim
 
     val boxSmallEnough =
-      (box.getWidth <= options.maxRoomWidth + padding2 && box.getHeight <= options.maxRoomHeight + padding2)
+      box.getWidth <= options.getMaxPaddedWidth && box.getHeight <= options.getMaxPaddedHeight
 
     if (boxSmallEnough) {        // base case of recursion
       val upperLeft = IntLocation(box.getTopLeftCorner.getY + padding, box.getTopLeftCorner.getX + padding)
@@ -54,7 +53,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       else if (DEBUG) HashSet(Room(box, DEBUG_ROOM_DECORATION))
       else HashSet()
     }
-    else if (box.getWidth * widthToHeightRatio > box.getHeight) {
+    else if ((box.getWidth + padding2) * widthToHeightRatio > box.getHeight + padding2) {
       assert(box.getWidth >= 2 * minDim, "box dim = " + box.getWidth + ", " + box.getHeight + " "+ options)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
       getRoomsForBox(leftBox).union(getRoomsForBox(rightBox))

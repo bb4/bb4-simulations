@@ -5,8 +5,9 @@ import com.barrybecker4.common.geometry.Box
 
 import scala.util.Random
 
+
 object BoxSplitter {
-  val RND = Random(0)
+  private val RND: Random = Random(0)
 }
 
 case class BoxSplitter(marginWidth: Int, marginHeight: Int, minDimension: Int, rnd: Random = RND) {

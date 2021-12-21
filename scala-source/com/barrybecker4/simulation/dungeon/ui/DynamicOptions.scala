@@ -35,8 +35,8 @@ object DynamicOptions {
   private val SPACING = 14
 
   private val GENERAL_SLIDER_PROPS = Array(
-    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 40, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
-    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 40.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
+    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 60, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
+    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, 2 * DungeonOptions.MIN_ROOM_DIM, 60.0, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
     new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
     new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
