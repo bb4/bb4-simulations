@@ -4,6 +4,11 @@ package com.barrybecker4.simulation.dungeon.model
 import java.awt.Dimension
 import com.barrybecker4.simulation.dungeon.generator.bsp.BspTree
 
+
+object DungeonModel {
+  def getCorridors(rooms: Set[Room]): Set[Corridor] = rooms.flatMap(r => r.corridors)
+}
+
 /**
   * Represents the dungeon level as a graph.
   * It will have rooms - which are the nodes, and corridors - which are the edges connecting rooms.

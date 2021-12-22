@@ -1,7 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.rendering
 
-import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions, Room}
+import com.barrybecker4.common.geometry.{Box, IntLocation}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonModel, DungeonOptions, Room, RoomDecoration}
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
@@ -10,7 +11,8 @@ import java.awt.{BasicStroke, Color, Dimension, Graphics}
 
 
 object DungeonRenderer {
-  val STROKE = new BasicStroke(1.0)
+  val ROOM_STROKE = new BasicStroke(1.0)
+  val CORRIDOR_STROKE = new BasicStroke(1.0)
   val GRID_COLOR = new Color(10, 110, 180, 80)
   val GRID_STROKE = new BasicStroke(1.0)
 }
@@ -30,7 +32,9 @@ class DungeonRenderer() {
       showGrid(graphics, dungeonOptions)
     }
 
-    drawRooms(graphics, dungeonOptions, dungeonModel.getRooms)
+    val rooms = dungeonModel.getRooms
+    drawRooms(graphics, dungeonOptions, rooms)
+    drawCorridors(graphics, dungeonOptions, DungeonModel.getCorridors(rooms))
   }
 
   private def showGrid(g: OfflineGraphics, options: DungeonOptions): Unit = {
@@ -43,7 +47,7 @@ class DungeonRenderer() {
     g.setStroke(GRID_STROKE)
 
     for (j <- 0 to dim.height) { //  -----
-      val ypos = (j * scale)
+      val ypos = j * scale
       g.drawLine(0, ypos, width, ypos)
     }
     for (i <- 0 to dim.width) { //  ||||
@@ -55,7 +59,6 @@ class DungeonRenderer() {
 
   private def drawRooms(g: OfflineGraphics, options: DungeonOptions, rooms: Set[Room]): Unit = {
     val cellSize: Int = options.cellSize
-    val dim = options.dimension
 
     for (room <- rooms) {
       val scaledBox = room.box.scaleBy(cellSize)
@@ -64,9 +67,33 @@ class DungeonRenderer() {
       g.fillBox(scaledBox)
 
       g.setColor(room.decoration.wallColor)
-      g.setStroke(STROKE)
+      g.setStroke(ROOM_STROKE)
       g.drawBox(scaledBox)
     }
+  }
+
+  private def drawCorridors(g: OfflineGraphics, options: DungeonOptions, corridors: Set[Corridor]): Unit = {
+    val cellSize: Int = options.cellSize
+
+    for (corridor <- corridors) {
+      var previousLocation = corridor.path.head
+
+      // todo: add ability to draw polygon to offline renderer
+      for (location <- corridor.path.tail) {
+        val box = new Box(IntLocation(previousLocation.getY, previousLocation.getX), IntLocation(location.getY + 1, location.getX + 1))
+        drawCorridorSegment(g, box.scaleBy(cellSize), corridor.decoration)
+        previousLocation = location
+      }
+    }
+  }
+
+  private def drawCorridorSegment(g: OfflineGraphics, box: Box, decoration: RoomDecoration): Unit = {
+    g.setColor(decoration.floorColor)
+    g.fillBox(box)
+
+    g.setColor(decoration.wallColor)
+    g.setStroke(ROOM_STROKE)
+    g.drawBox(box)
   }
 
   private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {
