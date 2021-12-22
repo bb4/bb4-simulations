@@ -12,7 +12,11 @@ class DungeonGenerator {
 
   def generateDungeon(options: DungeonOptions):DungeonModel = {
     val roomGenerator = RoomGenerator(options)
+    val corridorGenerator = CorridorGenerator(options)
+
     val bspTree = roomGenerator.generateRooms()
-    new DungeonModel(bspTree)
+    val roomsToCorridors = corridorGenerator.generateCorridors(bspTree)
+
+    DungeonModel(bspTree, roomsToCorridors)
   }
 }

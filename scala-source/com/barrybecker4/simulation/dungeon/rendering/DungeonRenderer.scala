@@ -30,9 +30,8 @@ class DungeonRenderer() {
       showGrid(graphics, dungeonOptions)
     }
 
-    val rooms = dungeonModel.getRooms
-    drawRooms(graphics, dungeonOptions, rooms)
-    drawCorridors(graphics, dungeonOptions, DungeonModel.getCorridors(rooms))
+    drawRooms(graphics, dungeonOptions, dungeonModel.getRooms)
+    drawCorridors(graphics, dungeonOptions, dungeonModel.getCorridors)
   }
 
   private def showGrid(g: OfflineGraphics, options: DungeonOptions): Unit = {
