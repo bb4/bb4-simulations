@@ -11,8 +11,6 @@ import java.awt.{BasicStroke, Color, Dimension, Graphics}
 
 
 object DungeonRenderer {
-  val ROOM_STROKE = new BasicStroke(1.0)
-  val CORRIDOR_STROKE = new BasicStroke(1.0)
   val GRID_COLOR = new Color(10, 110, 180, 80)
   val GRID_STROKE = new BasicStroke(1.0)
 }
@@ -62,12 +60,13 @@ class DungeonRenderer() {
 
     for (room <- rooms) {
       val scaledBox = room.box.scaleBy(cellSize)
+      val decoration = room.decoration
 
-      g.setColor(room.decoration.floorColor)
+      g.setColor(decoration.floorColor)
       g.fillBox(scaledBox)
 
-      g.setColor(room.decoration.wallColor)
-      g.setStroke(ROOM_STROKE)
+      g.setColor(decoration.wallColor)
+      g.setStroke(decoration.wallStroke)
       g.drawBox(scaledBox)
     }
   }
@@ -92,7 +91,7 @@ class DungeonRenderer() {
     g.fillBox(box)
 
     g.setColor(decoration.wallColor)
-    g.setStroke(ROOM_STROKE)
+    g.setStroke(decoration.wallStroke)
     g.drawBox(box)
   }
 

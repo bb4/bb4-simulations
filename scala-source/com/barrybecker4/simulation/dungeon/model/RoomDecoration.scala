@@ -1,7 +1,10 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.model
 
-import java.awt.Color
+import java.awt.{BasicStroke, Stroke, Color}
 
 
-case class RoomDecoration(wallColor: Color, floorColor: Color, wallThickness: Int = 1) 
+case class RoomDecoration(
+  wallColor: Color,
+  floorColor: Color,
+  wallStroke: Stroke = new BasicStroke(1.0))
