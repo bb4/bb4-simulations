@@ -30,7 +30,7 @@ class DungeonRenderer() {
       showGrid(graphics, dungeonOptions)
     }
 
-    drawRooms(graphics, dungeonOptions, dungeonModel.rooms)
+    drawRooms(graphics, dungeonOptions, dungeonModel.getRooms)
   }
 
   private def showGrid(g: OfflineGraphics, options: DungeonOptions): Unit = {

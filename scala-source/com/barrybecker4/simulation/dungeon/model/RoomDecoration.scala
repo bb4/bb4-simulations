@@ -4,4 +4,4 @@ package com.barrybecker4.simulation.dungeon.model
 import java.awt.Color
 
 
-case class RoomDecoration(wallColor: Color, floorColor: Color, wallThckness: Int = 1) 
+case class RoomDecoration(wallColor: Color, floorColor: Color, wallThickness: Int = 1) 

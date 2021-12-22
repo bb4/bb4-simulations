@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.RoomGenerator.*
-import com.barrybecker4.simulation.dungeon.generator.bsp.BoxSplitter
+import com.barrybecker4.simulation.dungeon.generator.bsp.{PartitionDirection, BoxSplitter, BspTree, BspNode}
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
 
 import java.awt.{Color, Dimension}
@@ -28,12 +28,12 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val boxSplitter =
     BoxSplitter(options.getMaxPaddedWidth, options.getMaxPaddedHeight, options.getMinPaddedDim)
 
-  def generateRooms(): Set[Room] = {
+  def generateRooms(): BspTree[Room] = {
     val dim = options.dimension
-    getRoomsForBox(Box(0, 0, dim.height, dim.width))
+    BspTree[Room](getRoomsForBox(Box(0, 0, dim.height, dim.width)))
   }
 
-  private def getRoomsForBox(box: Box): Set[Room] = {
+  private def getRoomsForBox(box: Box): BspNode[Room] = {
 
     val padding2 = 2 * padding
     val cellSize = options.cellSize
@@ -50,20 +50,24 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
 
-      if (rnd.nextInt(100) < options.percentFilled && bigEnough)
-        HashSet(Room(roomBox, ROOM_DECORATION))
-      else if (DEBUG) HashSet(Room(box, DEBUG_ROOM_DECORATION))
-      else HashSet()
+      val room = if (rnd.nextInt(100) < options.percentFilled && bigEnough)
+        Some(Room(roomBox, ROOM_DECORATION))
+      else if (DEBUG) Some(Room(box, DEBUG_ROOM_DECORATION))
+      else None
+
+      BspNode[Room](None, None, None, None, room)
     }
     else if (ratio > widthToHeightRatio) {
       verifyDim(box.getWidth, box)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
-      getRoomsForBox(leftBox).union(getRoomsForBox(rightBox))
+      new BspNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
+        getRoomsForBox(leftBox), getRoomsForBox(rightBox))
     }
     else {
       verifyDim(box.getHeight, box)
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
-      getRoomsForBox(bottomBox).union(getRoomsForBox(topBox))
+      new BspNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
+        getRoomsForBox(topBox), getRoomsForBox(bottomBox))
     }
   }
 
@@ -73,8 +77,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       + "\n widthToHeightRat=" + widthToHeightRatio)
   }
 
-  private def smallEnough(box: Box): Boolean = {
+  private def smallEnough(box: Box): Boolean =
     box.getWidth <= options.getMaxPaddedWidth && box.getHeight <= options.getMaxPaddedHeight
-  }
 
 }

@@ -110,6 +110,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       "When checked, a grid shows on the background",
       dungeonOptions.showGrid, showGridCHeckBox)
 
+    panel.add(Box.createVerticalStrut(10))
     panel.add(halfPaddedPanel)
     panel.add(showGridPanel)
     panel.add(Box.createHorizontalGlue)
@@ -117,14 +118,15 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   }
 
   private def createCheckBox(label: String, ttip: String, initialValue: Boolean, checkBox: JCheckBox): JPanel = {
-    val checkboxPanel = new JPanel
+    val checkboxPanel = new JPanel(new BorderLayout())
+
     checkboxPanel.setToolTipText(ttip)
     val cbLabel = new JLabel(label)
     checkBox.setSelected(initialValue)
     checkBox.addActionListener(this)
 
-    checkboxPanel.add(cbLabel)
-    checkboxPanel.add(checkBox)
+    checkboxPanel.add(cbLabel, BorderLayout.CENTER)
+    checkboxPanel.add(checkBox, BorderLayout.EAST)
     checkboxPanel
   }
 
