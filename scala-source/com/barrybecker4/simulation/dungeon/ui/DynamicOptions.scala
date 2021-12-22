@@ -61,14 +61,13 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   add(generalPanel)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
 
-
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
   private var resetButton: JButton = _
   private var generalSliderGroup: SliderGroup = _
-  private val halfPaddedCB: JCheckBox = new JCheckBox()
-  private val showGridCB: JCheckBox = new JCheckBox()
+  private var halfPaddedCheckBox: JCheckBox = _
+  private var showGridCHeckBox: JCheckBox = _
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -101,13 +100,15 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     val panel = new JPanel
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
+    halfPaddedCheckBox = new JCheckBox()
     val halfPaddedPanel = createCheckBox("Use only half the padding ",
       "If checked, padding only goes on on the top left instead of all around",
-      dungeonOptions.halfPadded, halfPaddedCB)
+      dungeonOptions.halfPadded, halfPaddedCheckBox)
 
+    showGridCHeckBox = new JCheckBox()
     val showGridPanel = createCheckBox("Show a grid if checked ",
       "When checked, a grid shows on the background",
-      dungeonOptions.showGrid, showGridCB)
+      dungeonOptions.showGrid, showGridCHeckBox)
 
     panel.add(halfPaddedPanel)
     panel.add(showGridPanel)
@@ -160,11 +161,11 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    if (e.getSource == halfPaddedCB) {
-      dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCB.isSelected)
+    if (e.getSource == halfPaddedCheckBox) {
+      dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCheckBox.isSelected)
     }
-    else if (e.getSource == showGridCB) {
-      dungeonOptions = dungeonOptions.setShowGrid(showGridCB.isSelected)
+    else if (e.getSource == showGridCHeckBox) {
+      dungeonOptions = dungeonOptions.setShowGrid(showGridCHeckBox.isSelected)
     }
     else {
       throw new IllegalArgumentException();

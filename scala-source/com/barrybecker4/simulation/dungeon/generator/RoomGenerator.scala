@@ -43,7 +43,9 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     if (smallEnough(box)) {        // base case of recursion
       val pos = box.getTopLeftCorner
       val upperLeft = IntLocation(pos.getY + padding, pos.getX + padding)
-      val bottomRight = IntLocation(pos.getY + box.getHeight - padding, pos.getX + box.getWidth - padding)
+      val bottomRight =
+        if (options.halfPadded) IntLocation(pos.getY + box.getHeight, pos.getX + box.getWidth)
+        else IntLocation(pos.getY + box.getHeight - padding, pos.getX + box.getWidth - padding)
       val roomBox = new Box(upperLeft, bottomRight)
 
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim

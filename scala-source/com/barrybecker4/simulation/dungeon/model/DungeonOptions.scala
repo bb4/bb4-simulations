@@ -46,7 +46,7 @@ case class DungeonOptions(
   def setCellSize(s: Int): DungeonOptions =
     DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, s, halfPadded, showGrid)
   def setHalfPadded(h: Boolean): DungeonOptions =
-    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, h, showGrid)  
+    DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, h, showGrid)
   def setShowGrid(g: Boolean): DungeonOptions =
     DungeonOptions(dimension, maxRoomWidth, maxRoomHeight, percentFilled, roomPadding, cellSize, halfPadded, g)
 
