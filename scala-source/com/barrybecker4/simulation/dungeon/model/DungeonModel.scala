@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.dungeon.model
 
 import java.awt.Dimension
-import com.barrybecker4.simulation.dungeon.generator.bsp.BspTree
+import com.barrybecker4.simulation.dungeon.generator.bsp.BspNode
 
 
 /**
@@ -11,9 +11,9 @@ import com.barrybecker4.simulation.dungeon.generator.bsp.BspTree
   * The DungeonOptions determine how to generate the dungeon.
   * Once created, the dungeon can be rendered or operated on in other ways
   */
-case class DungeonModel(bspTree: BspTree[Room], roomsToCorridors: Map[Room, Set[Corridor]]) {
+case class DungeonModel(bspTree: BspNode[Room], roomsToCorridors: Map[Room, Set[Corridor]]) {
 
-  def getRooms: Set[Room] = bspTree.root.getChildren
+  def getRooms: Set[Room] = bspTree.getChildren
 
   def getCorridors: Set[Corridor] = roomsToCorridors.values.flatten.toSet
 

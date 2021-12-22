@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.RoomGenerator.*
-import com.barrybecker4.simulation.dungeon.generator.bsp.{PartitionDirection, BoxSplitter, BspTree, BspNode}
+import com.barrybecker4.simulation.dungeon.generator.bsp.{PartitionDirection, BoxSplitter, BspNode}
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
 
 import java.awt.{Color, Dimension}
@@ -28,9 +28,9 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val boxSplitter =
     BoxSplitter(options.getMaxPaddedWidth, options.getMaxPaddedHeight, options.getMinPaddedDim)
 
-  def generateRooms(): BspTree[Room] = {
+  def generateRooms(): BspNode[Room] = {
     val dim = options.dimension
-    BspTree[Room](getRoomsForBox(Box(0, 0, dim.height, dim.width)))
+    getRoomsForBox(Box(0, 0, dim.height, dim.width))
   }
 
   private def getRoomsForBox(box: Box): BspNode[Room] = {

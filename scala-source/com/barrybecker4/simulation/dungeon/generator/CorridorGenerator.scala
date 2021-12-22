@@ -1,20 +1,20 @@
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.generator.bsp.{BspNode, BspTree, PartitionDirection}
+import com.barrybecker4.simulation.dungeon.generator.bsp.{BspNode, PartitionDirection}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room}
 
 import scala.collection.immutable.HashMap
-
 
 
 case class CorridorGenerator(options: DungeonOptions) {
 
   private var roomsToCorridors: Map[Room, Set[Corridor]] = _
 
-  def generateCorridors(bspTree: BspTree[Room]): Map[Room, Set[Corridor]] = {
+  def generateCorridors(bspTree: BspNode[Room]): Map[Room, Set[Corridor]] = {
     roomsToCorridors = HashMap()
-    addCorridorsToMap(bspTree.root)
+    addCorridorsToMap(bspTree)
     // consider adding corridors for all nearby rooms if connectivity above some threshold
     roomsToCorridors
   }
