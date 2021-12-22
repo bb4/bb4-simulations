@@ -29,6 +29,7 @@ object DynamicOptions {
   private val MAX_ROOM_WIDTH_SLIDER = "Max Width"
   private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
   private val PERCENT_FILLED_SLIDER = "Percent Filled"
+  private val CONNECTIVITY_SLIDER = "Room connectivity"
   private val ROOM_PADDING_SLIDER = "Wall Border Thickness"
   private val CELL_SIZE_SLIDER = "Cell Size"
 
@@ -40,6 +41,7 @@ object DynamicOptions {
     new SliderProperties(MAX_ROOM_WIDTH_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
     new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
+    new SliderProperties(CONNECTIVITY_SLIDER, 0.1, 1.0, DungeonOptions.DEFAULT_CONNECTIVITY, 10),
     new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
     new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
   )
@@ -138,6 +140,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => dungeonOptions.setMaxRoomWidth(value.toInt)
       case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => dungeonOptions.setMaxRoomHeight(value.toInt)
       case DynamicOptions.PERCENT_FILLED_SLIDER => dungeonOptions.setPercentFilled(value.toInt)
+      case DynamicOptions.CONNECTIVITY_SLIDER => dungeonOptions.setConnectivity(value.toFloat)
       case DynamicOptions.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt)
       case DynamicOptions.CELL_SIZE_SLIDER => dungeonOptions.setCellSize(value.toInt)
       case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
