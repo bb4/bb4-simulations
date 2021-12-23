@@ -58,7 +58,7 @@ class RoomCorridorCreator {
     }
     else {
       val midX = box.getTopLeftCorner.getX + box.getWidth / 2
-      path = Seq(IntLocation(box.getTopLeftCorner.getY, midX), IntLocation(box.getBottomRightCorner.getX, midX))
+      path = Seq(IntLocation(box.getTopLeftCorner.getY, midX), IntLocation(box.getBottomRightCorner.getY, midX))
     }
 
     Corridor(path, CORRIDOR_DECORATION)

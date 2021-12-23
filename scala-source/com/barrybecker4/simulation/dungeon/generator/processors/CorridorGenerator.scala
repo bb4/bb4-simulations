@@ -1,3 +1,4 @@
+// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.processors
 
 import com.barrybecker4.common.geometry.Box
@@ -43,8 +44,7 @@ case class CorridorGenerator(options: DungeonOptions) {
     val leftRooms = roomFinder.filterByBox(rightEdgeBox, leftNode)
     val leftEdgeBox = Box(0, splitPos, options.dimension.height, splitPos + options.getMinPaddedDim)
     val rightRooms = roomFinder.filterByBox(leftEdgeBox, rightNode)
-
-    // add the connections between left and right rooms
+    
     addCorridors(PartitionDirection.Horizontal, leftRooms, rightRooms)
   }
 
@@ -53,13 +53,15 @@ case class CorridorGenerator(options: DungeonOptions) {
     val topRooms = roomFinder.filterByBox(bottomEdgeBox, topNode)
     val topEdgeBox = Box(splitPos, 0, splitPos + options.getMinPaddedDim, options.dimension.width)
     val bottomRooms = roomFinder.filterByBox(topEdgeBox, bottomNode)
-    // add the connections between top and bottom rooms
+    
     addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
   }
 
+  /**
+   * For each room in room1, look for a room on rooms2 that overlaps in y by at least 3 cells
+   * add a corridor in the middle of the overlap
+   */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-    // for each room in room1, look for a room on rooms2 that overlaps in y by at least 3 cells
-    // add a corridor in the middle of the overlap
     for (room1 <- rooms1)
       for (room2 <- rooms2) {
         val corridor = corridorCreator.createCorridorBetweenRooms(direction, room1, room2)
