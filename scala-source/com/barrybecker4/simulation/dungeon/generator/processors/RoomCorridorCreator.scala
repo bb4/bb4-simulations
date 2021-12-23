@@ -34,12 +34,12 @@ class RoomCorridorCreator {
     val topY2 = room2.box.getTopLeftCorner.getY
     val bottomY2 = room2.box.getBottomRightCorner.getY
 
-    val overlapInX = leftX1 < leftX2 && rightX1 > leftX2
-      || leftX1 < rightX2 && rightX1 > rightX2
-      || leftX1 > leftX2 && rightX1 < rightX2
-    val overlapInY = topY1 < topY2 && bottomY1 > topY2
-      || topY1 < bottomY2 && bottomY1 > bottomY2
-      || topY1 > topY2 && bottomY1 < bottomY2
+    val overlapInX = leftX1 <= leftX2 && rightX1 >= leftX2
+      || leftX1 <= rightX2 && rightX1 >= rightX2
+      || leftX1 >= leftX2 && rightX1 <= rightX2
+    val overlapInY = topY1 <= topY2 && bottomY1 >= topY2
+      || topY1 <= bottomY2 && bottomY1 >= bottomY2
+      || topY1 >= topY2 && bottomY1 <= bottomY2
 
     if (overlapInX || overlapInY) {
       val sortedX = Seq(leftX1, rightX1, leftX2, rightX2).sorted

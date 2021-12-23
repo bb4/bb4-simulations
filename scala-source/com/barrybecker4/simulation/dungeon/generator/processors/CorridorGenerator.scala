@@ -44,7 +44,7 @@ case class CorridorGenerator(options: DungeonOptions) {
     val leftRooms = roomFinder.filterByBox(rightEdgeBox, leftNode)
     val leftEdgeBox = Box(0, splitPos, options.dimension.height, splitPos + options.getMinPaddedDim)
     val rightRooms = roomFinder.filterByBox(leftEdgeBox, rightNode)
-    
+
     addCorridors(PartitionDirection.Horizontal, leftRooms, rightRooms)
   }
 
@@ -53,7 +53,7 @@ case class CorridorGenerator(options: DungeonOptions) {
     val topRooms = roomFinder.filterByBox(bottomEdgeBox, topNode)
     val topEdgeBox = Box(splitPos, 0, splitPos + options.getMinPaddedDim, options.dimension.width)
     val bottomRooms = roomFinder.filterByBox(topEdgeBox, bottomNode)
-    
+
     addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
   }
 
@@ -62,13 +62,21 @@ case class CorridorGenerator(options: DungeonOptions) {
    * add a corridor in the middle of the overlap
    */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-    for (room1 <- rooms1)
+//    println("\nAdding corridors between - " + direction)
+//    println(rooms1.mkString("\n"))
+//    println( "and ")
+//    println(rooms2.mkString("\n"))
+    var count = 0
+    for (room1 <- rooms1) {
       for (room2 <- rooms2) {
         val corridor = corridorCreator.createCorridorBetweenRooms(direction, room1, room2)
         if (corridor.nonEmpty) {
+          count += 1
           roomToCorridors.addCorridorToMap(room1, corridor.get)
           roomToCorridors.addCorridorToMap(room2, corridor.get)
         }
       }
+    }
+    println(s"num corridors = $count between ${rooms1.size}, ${rooms2.size} rooms")
   }
 }
