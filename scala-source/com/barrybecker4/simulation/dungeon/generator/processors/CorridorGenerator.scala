@@ -1,13 +1,9 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator
+package com.barrybecker4.simulation.dungeon.generator.processors
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.CorridorGenerator.*
-import com.barrybecker4.simulation.dungeon.generator.bsp.{BspBranchNode, BspNode, PartitionDirection, RoomFinder}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room, RoomDecoration}
-
-import java.awt.Color
-import scala.collection.immutable.{HashMap, HashSet}
+import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.dungeon.generator.bsp.*
+import com.barrybecker4.simulation.dungeon.generator.processors.{RoomCorridorCreator, RoomToCorridorsMap}
+import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
 
 case class CorridorGenerator(options: DungeonOptions) {
@@ -67,7 +63,7 @@ case class CorridorGenerator(options: DungeonOptions) {
     for (room1 <- rooms1)
       for (room2 <- rooms2) {
         val corridor = corridorCreator.createCorridorBetweenRooms(direction, room1, room2)
-        if (corridor.nonEmpty)  {
+        if (corridor.nonEmpty) {
           roomToCorridors.addCorridorToMap(room1, corridor.get)
           roomToCorridors.addCorridorToMap(room2, corridor.get)
         }

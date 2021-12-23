@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.IntLocation
+import com.barrybecker4.simulation.dungeon.generator.processors.{CorridorGenerator, RoomGenerator}
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions, Room}
 
 import scala.collection.immutable.HashSet

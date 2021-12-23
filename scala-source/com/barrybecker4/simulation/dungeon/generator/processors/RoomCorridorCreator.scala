@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator
+package com.barrybecker4.simulation.dungeon.generator.processors
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.RoomCorridorCreator.{CORRIDOR_DECORATION, MIN_OVERLAP}
+import com.barrybecker4.simulation.dungeon.generator.processors.RoomCorridorCreator.{CORRIDOR_DECORATION, MIN_OVERLAP}
 import com.barrybecker4.simulation.dungeon.generator.bsp.PartitionDirection
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Room, RoomDecoration}
 
