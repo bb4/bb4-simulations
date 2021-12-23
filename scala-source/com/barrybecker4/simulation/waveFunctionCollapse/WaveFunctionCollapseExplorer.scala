@@ -19,8 +19,7 @@ object WaveFunctionCollapseExplorer {
   protected val INITIAL_TIME_STEP = 10.0
 }
 
-class WaveFunctionCollapseExplorer()
-  extends Simulator("Wave Function Collapse Explorer") {
+class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
   private var wfcModel: WfcModel = _
   private var options: DynamicOptions = _
@@ -82,7 +81,6 @@ class WaveFunctionCollapseExplorer()
   }
 
   override def createTopControls: JPanel = {
-    val controls = new JPanel
-    controls
+    new JPanel
   }
 }

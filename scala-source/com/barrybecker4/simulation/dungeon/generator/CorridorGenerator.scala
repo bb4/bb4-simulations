@@ -9,9 +9,6 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room
 import java.awt.Color
 import scala.collection.immutable.{HashMap, HashSet}
 
-object CorridorGenerator {
-
-}
 
 case class CorridorGenerator(options: DungeonOptions) {
 

@@ -45,12 +45,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
     })
   }
 
-  override def createTopControls: JPanel = {
-    val controls = new JPanel
-    controls.add(createResetButton)
-    controls.add(createOptionsButton)
-    controls
-  }
+  override def createTopControls: JPanel = new JPanel
 
   override protected def reset(): Unit = {
     if (options != null) options.reset()
