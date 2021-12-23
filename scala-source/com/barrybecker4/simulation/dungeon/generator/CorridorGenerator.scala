@@ -12,24 +12,24 @@ import scala.collection.immutable.{HashMap, HashSet}
 
 case class CorridorGenerator(options: DungeonOptions) {
 
-  // todo: create separate map class with methods like addCorridorToMap
-  private var roomsToCorridors: Map[Room, Set[Corridor]] = _
+  private var roomToCorridors: RoomToCorridorsMap = _
   private val roomFinder = RoomFinder()
   private val corridorCreator = RoomCorridorCreator()
 
-  def generateCorridors(bspTree: BspNode[Room]): Map[Room, Set[Corridor]] = {
-    roomsToCorridors = HashMap()
+  def generateCorridors(bspTree: BspNode[Room]): RoomToCorridorsMap = {
+    roomToCorridors = RoomToCorridorsMap()
     addCorridorsToMap(bspTree)
     // consider adding corridors for all nearby rooms if connectivity above some threshold
-    roomsToCorridors
+    roomToCorridors
   }
 
   private def addCorridorsToMap(node: BspNode[Room]): Unit = {
     node match {
-      case BspBranchNode(direction, splitPos, partition1, partition2) => 
+      case BspBranchNode(direction, splitPos, partition1, partition2) =>
         addCorridorsToMap(partition1)
         addCorridorsToMap(partition2)
         addCorridorsBetween(direction, splitPos, partition1, partition2)
+      case _ => // intentionally do nothing
     }
   }
 
@@ -68,13 +68,9 @@ case class CorridorGenerator(options: DungeonOptions) {
       for (room2 <- rooms2) {
         val corridor = corridorCreator.createCorridorBetweenRooms(direction, room1, room2)
         if (corridor.nonEmpty)  {
-          addCorridorToMap(room1, corridor.get)
-          addCorridorToMap(room2, corridor.get)
+          roomToCorridors.addCorridorToMap(room1, corridor.get)
+          roomToCorridors.addCorridorToMap(room2, corridor.get)
         }
       }
   }
-
-  private def addCorridorToMap(room: Room, corridor: Corridor): Unit =
-    roomsToCorridors += room -> (roomsToCorridors.getOrElse(room, Set()) ++ HashSet(corridor))
-
 }

@@ -83,7 +83,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
       dungeonOptions.halfPadded, halfPaddedCheckBox)
 
     showGridCHeckBox = new JCheckBox()
-    val showGridPanel = createCheckBox("Show a grid if checked ",
+    val showGridPanel = createCheckBox("Show grid",
       "When checked, a grid shows on the background",
       dungeonOptions.showGrid, showGridCHeckBox)
 
