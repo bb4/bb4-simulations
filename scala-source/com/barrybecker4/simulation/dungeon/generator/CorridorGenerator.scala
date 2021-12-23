@@ -26,12 +26,10 @@ case class CorridorGenerator(options: DungeonOptions) {
 
   private def addCorridorsToMap(node: BspNode[Room]): Unit = {
     node match {
-      case BspBranchNode(direction, splitPos, partition1, partition2) => {
+      case BspBranchNode(direction, splitPos, partition1, partition2) => 
         addCorridorsToMap(partition1)
         addCorridorsToMap(partition2)
         addCorridorsBetween(direction, splitPos, partition1, partition2)
-      }
-      case _ =>
     }
   }
 

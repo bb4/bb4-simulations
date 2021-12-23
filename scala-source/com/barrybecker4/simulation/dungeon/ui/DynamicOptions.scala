@@ -2,13 +2,9 @@
 package com.barrybecker4.simulation.dungeon.ui
 
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.simulation.cave.CaveExplorer
-import com.barrybecker4.simulation.cave.model.{CaveModel, CaveProcessor}
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
-import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
 import java.awt.*
@@ -17,17 +13,17 @@ import javax.swing.*
 
 
 /**
-  * Dynamic controls for the Dungeon generator that will show on the right.
-  * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
-  */
+ * Dynamic controls for the Dungeon generator that will show on the right.
+ * They change the behavior of the simulation while it is running.
+ * @author Barry Becker
+ */
 object DynamicOptions {
   private val HALLWAY_WIDTH: Int = 1
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
 }
 
-class DynamicOptions (listener: DungeonOptionsChangedListener)
+class DynamicOptions(listener: DungeonOptionsChangedListener)
   extends JPanel with SliderGroupChangeListener with ActionListener {
 
   var dungeonOptions: DungeonOptions = DungeonOptions()
@@ -120,15 +116,11 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    if (e.getSource == halfPaddedCheckBox) {
+    if (e.getSource == halfPaddedCheckBox)
       dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCheckBox.isSelected)
-    }
-    else if (e.getSource == showGridCHeckBox) {
+    else if (e.getSource == showGridCHeckBox)
       dungeonOptions = dungeonOptions.setShowGrid(showGridCHeckBox.isSelected)
-    }
-    else {
-      throw new IllegalArgumentException()
-    }
+    else throw new IllegalArgumentException()
     listener.optionsChanged(dungeonOptions)
   }
 }

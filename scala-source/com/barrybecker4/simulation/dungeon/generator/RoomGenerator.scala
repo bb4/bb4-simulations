@@ -58,23 +58,15 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       BspLeafNode[Room](room)
     }
     else if (ratio > widthToHeightRatio) {
-      verifyDim(box.getWidth, box)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
-      new BspBranchNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
+      BspBranchNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
         getRoomsForBox(leftBox), getRoomsForBox(rightBox))
     }
     else {
-      verifyDim(box.getHeight, box)
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
-      new BspBranchNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
+      BspBranchNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
         getRoomsForBox(topBox), getRoomsForBox(bottomBox))
     }
-  }
-
-  private def verifyDim(boxDim: Int, box: Box): Unit = {
-    assert(boxDim >= 2 * options.getMinPaddedDim,
-      "box dim = " + boxDim + " < " + 2 * options.getMinPaddedDim + "\n " + box + " " + options
-      + "\n widthToHeightRat=" + widthToHeightRatio)
   }
 
   private def smallEnough(box: Box): Boolean =
