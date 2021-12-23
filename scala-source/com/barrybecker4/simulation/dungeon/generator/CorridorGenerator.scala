@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.CorridorGenerator.*
-import com.barrybecker4.simulation.dungeon.generator.bsp.{BspNode, PartitionDirection, RoomFinder}
+import com.barrybecker4.simulation.dungeon.generator.bsp.{BspBranchNode, BspNode, PartitionDirection, RoomFinder}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room, RoomDecoration}
 
 import java.awt.Color
@@ -25,12 +25,13 @@ case class CorridorGenerator(options: DungeonOptions) {
   }
 
   private def addCorridorsToMap(node: BspNode[Room]): Unit = {
-    if (node.data.isEmpty) {
-      val partition1 = node.partition1.get
-      val partition2 = node.partition2.get
-      addCorridorsToMap(partition1)
-      addCorridorsToMap(partition2)
-      addCorridorsBetween(node.direction.get, node.splitPosition.get, partition1, partition2)
+    node match {
+      case BspBranchNode(direction, splitPos, partition1, partition2) => {
+        addCorridorsToMap(partition1)
+        addCorridorsToMap(partition2)
+        addCorridorsBetween(direction, splitPos, partition1, partition2)
+      }
+      case _ =>
     }
   }
 

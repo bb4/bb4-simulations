@@ -8,7 +8,6 @@ import com.barrybecker4.simulation.cave.model.{CaveModel, CaveProcessor}
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
-import com.barrybecker4.simulation.dungeon.ui.DynamicOptions.{MAX_ROOM_HEIGHT_SLIDER_IDX, MAX_ROOM_WIDTH_SLIDER_IDX}
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
@@ -23,30 +22,9 @@ import javax.swing.*
   * @author Barry Becker
   */
 object DynamicOptions {
-
-  val HALLWAY_WIDTH: Int = 1
-
-  private val MAX_ROOM_WIDTH_SLIDER = "Max Width"
-  private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
-  private val PERCENT_FILLED_SLIDER = "Percent Filled"
-  private val CONNECTIVITY_SLIDER = "Room connectivity"
-  private val ROOM_PADDING_SLIDER = "Wall Border Thickness"
-  private val CELL_SIZE_SLIDER = "Cell Size"
-
+  private val HALLWAY_WIDTH: Int = 1
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
-
-  private val minDim = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * DungeonOptions.DEFAULT_ROOM_PADDING)
-  private val GENERAL_SLIDER_PROPS = Array(
-    new SliderProperties(MAX_ROOM_WIDTH_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_WIDTH, 1),
-    new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, minDim, 60, DungeonOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
-    new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, DungeonOptions.DEFAULT_PERCENT_FILLED, 1),
-    new SliderProperties(CONNECTIVITY_SLIDER, 0.1, 1.0, DungeonOptions.DEFAULT_CONNECTIVITY, 10),
-    new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, DungeonOptions.DEFAULT_ROOM_PADDING, 1),
-    new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
-  )
-  private val MAX_ROOM_WIDTH_SLIDER_IDX = 0
-  private val MAX_ROOM_HEIGHT_SLIDER_IDX = 1
 }
 
 class DynamicOptions (listener: DungeonOptionsChangedListener)
@@ -67,16 +45,17 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
   private var resetButton: JButton = _
-  private var generalSliderGroup: SliderGroup = _
+  private var parameterSliders: ParameterSliders = _
   private var halfPaddedCheckBox: JCheckBox = _
   private var showGridCHeckBox: JCheckBox = _
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("General parameters"))
-    generalSliderGroup = new SliderGroup(DynamicOptions.GENERAL_SLIDER_PROPS)
-    generalSliderGroup.addSliderChangeListener(this)
-    panel.add(generalSliderGroup, BorderLayout.CENTER)
+
+    parameterSliders = ParameterSliders()
+    parameterSliders.addSliderChangeListener(this)
+    panel.add(parameterSliders, BorderLayout.CENTER)
     panel.add(createCheckboxPanel, BorderLayout.SOUTH)
     panel
   }
@@ -132,37 +111,12 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
     checkboxPanel
   }
 
-  def reset(): Unit = generalSliderGroup.reset()
+  def reset(): Unit = parameterSliders.reset()
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    dungeonOptions = sliderName match {
-      case DynamicOptions.MAX_ROOM_WIDTH_SLIDER => dungeonOptions.setMaxRoomWidth(value.toInt)
-      case DynamicOptions.MAX_ROOM_HEIGHT_SLIDER => dungeonOptions.setMaxRoomHeight(value.toInt)
-      case DynamicOptions.PERCENT_FILLED_SLIDER => dungeonOptions.setPercentFilled(value.toInt)
-      case DynamicOptions.CONNECTIVITY_SLIDER => dungeonOptions.setConnectivity(value.toFloat)
-      case DynamicOptions.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt)
-      case DynamicOptions.CELL_SIZE_SLIDER => dungeonOptions.setCellSize(value.toInt)
-      case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
-    }
+    dungeonOptions = parameterSliders.onSliderChanged(sliderIndex, sliderName, value, dungeonOptions, this)
     listener.optionsChanged(dungeonOptions)
-  }
-
-  private def updateOnPaddingChange(paddingValue: Int): DungeonOptions = {
-    val minValue = 2 * (DungeonOptions.MIN_ROOM_DIM + 2 * paddingValue)
-    generalSliderGroup.setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
-    generalSliderGroup.setSliderMinimum(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
-    generalSliderGroup.setSliderListener(null)
-    if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_WIDTH_SLIDER_IDX)) {
-      dungeonOptions = dungeonOptions.setMaxRoomWidth(minValue)
-      generalSliderGroup.setSliderValue(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
-    }
-    if (minValue > generalSliderGroup.getSliderValueAsInt(MAX_ROOM_HEIGHT_SLIDER_IDX)) {
-      dungeonOptions = dungeonOptions.setMaxRoomHeight(minValue)
-      generalSliderGroup.setSliderValue(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
-    }
-    generalSliderGroup.setSliderListener(this)
-    dungeonOptions.setRoomPadding(paddingValue)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
@@ -173,7 +127,7 @@ class DynamicOptions (listener: DungeonOptionsChangedListener)
       dungeonOptions = dungeonOptions.setShowGrid(showGridCHeckBox.isSelected)
     }
     else {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException()
     }
     listener.optionsChanged(dungeonOptions)
   }

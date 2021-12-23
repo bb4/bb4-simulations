@@ -11,26 +11,28 @@ import PartitionDirection.*
 class RoomFinder {
 
   def filterByBox(boxFilter: Box, bspNode: BspNode[Room]): Set[Room] = {
-    var rooms: Set[Room] = Set()
-    bspNode.direction match {
-      case Some(Horizontal) => {
-        if (boxFilter.getTopLeftCorner.getX < bspNode.splitPosition.get) {
-          rooms ++= filterByBox(boxFilter, bspNode.partition1.get)
+
+    bspNode match {
+      case BspBranchNode(direction, splitPos, partition1, partition2) => {
+        var rooms: Set[Room] = Set()
+        if (direction == PartitionDirection.Horizontal) {
+          if (boxFilter.getTopLeftCorner.getX < splitPos) {
+            rooms ++= filterByBox(boxFilter, partition1)
+          }
+          if (boxFilter.getBottomRightCorner.getX > splitPos) {
+            rooms ++= filterByBox(boxFilter, partition2)
+          }
+        } else {
+          if (boxFilter.getTopLeftCorner.getY < splitPos) {
+            rooms ++= filterByBox(boxFilter, partition1)
+          }
+          if (boxFilter.getBottomRightCorner.getY > splitPos) {
+            rooms ++= filterByBox(boxFilter, partition2)
+          }
         }
-        if (boxFilter.getBottomRightCorner.getX > bspNode.splitPosition.get) {
-          rooms ++= filterByBox(boxFilter, bspNode.partition2.get)
-        }
+        rooms
       }
-      case Some(Vertical) => {
-        if (boxFilter.getTopLeftCorner.getY < bspNode.splitPosition.get) {
-          rooms ++= filterByBox(boxFilter, bspNode.partition1.get)
-        }
-        if (boxFilter.getBottomRightCorner.getY > bspNode.splitPosition.get) {
-          rooms ++= filterByBox(boxFilter, bspNode.partition2.get)
-        }
-      }
-      case None => rooms = HashSet(bspNode.data.get)
+      case BspLeafNode(room) => room.toSet
     }
-    rooms
   }
 }

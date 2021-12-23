@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.RoomGenerator.*
-import com.barrybecker4.simulation.dungeon.generator.bsp.{PartitionDirection, BoxSplitter, BspNode}
+import com.barrybecker4.simulation.dungeon.generator.bsp.{BoxSplitter, BspBranchNode, BspLeafNode, BspNode, PartitionDirection}
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
 
 import java.awt.{Color, Dimension}
@@ -55,18 +55,18 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       else if (DEBUG) Some(Room(box, DEBUG_ROOM_DECORATION))
       else None
 
-      BspNode[Room](None, None, None, None, room)
+      BspLeafNode[Room](room)
     }
     else if (ratio > widthToHeightRatio) {
       verifyDim(box.getWidth, box)
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
-      new BspNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
+      new BspBranchNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
         getRoomsForBox(leftBox), getRoomsForBox(rightBox))
     }
     else {
       verifyDim(box.getHeight, box)
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
-      new BspNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
+      new BspBranchNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
         getRoomsForBox(topBox), getRoomsForBox(bottomBox))
     }
   }

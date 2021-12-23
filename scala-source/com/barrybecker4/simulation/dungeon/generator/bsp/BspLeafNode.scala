@@ -3,9 +3,10 @@ package com.barrybecker4.simulation.dungeon.generator.bsp
 
 import com.barrybecker4.simulation.dungeon.model.Room
 
+
 // todo: split into BspInternalNode, BspLeafNode
-abstract class BspNode[T]  {
-  
-  def getChildren: Set[T]
-  
+case class BspLeafNode[T](data: Option[T]) extends BspNode[T] {
+
+  def getChildren: Set[T] = data.toSet
+
 }
