@@ -37,7 +37,7 @@ class RoomCorridorCreator {
     val overlapX = findLinearOverlap(leftX1, rightX1, leftX2, rightX2)
     val overlapY = findLinearOverlap(topY1, bottomY1, topY2, bottomY2)
 
-    if (overlapX > MIN_OVERLAP || overlapY > MIN_OVERLAP) {
+    if (overlapX >= MIN_OVERLAP || overlapY >= MIN_OVERLAP) {
       val sortedX = Seq(leftX1, rightX1, leftX2, rightX2).sorted
       val sortedY = Seq(topY1, bottomY1, topY2, bottomY2).sorted
       Some(Box(sortedY(1), sortedX(1), sortedY(2), sortedX(2)))

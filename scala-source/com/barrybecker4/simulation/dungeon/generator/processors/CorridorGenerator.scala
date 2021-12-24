@@ -3,9 +3,14 @@ package com.barrybecker4.simulation.dungeon.generator.processors
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.bsp.*
+import com.barrybecker4.simulation.dungeon.generator.processors.CorridorGenerator.CONNECTIVITY_SCALE
 import com.barrybecker4.simulation.dungeon.generator.processors.{RoomCorridorCreator, RoomToCorridorsMap}
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
+
+object CorridorGenerator {
+  private val CONNECTIVITY_SCALE = 12
+}
 
 case class CorridorGenerator(options: DungeonOptions) {
 
@@ -63,13 +68,16 @@ case class CorridorGenerator(options: DungeonOptions) {
    */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
     var count = 0
+    val connectivityThresh = options.connectivity * CONNECTIVITY_SCALE
     for (room1 <- rooms1) {
       for (room2 <- rooms2) {
         val corridor = corridorCreator.createCorridorBetweenRooms(direction, room1, room2)
         if (corridor.nonEmpty) {
           count += 1
-          roomToCorridors.addCorridorToMap(room1, corridor.get)
-          roomToCorridors.addCorridorToMap(room2, corridor.get)
+          if (count <= connectivityThresh) {
+            roomToCorridors.addCorridorToMap(room1, corridor.get)
+            roomToCorridors.addCorridorToMap(room2, corridor.get)
+          }
         }
       }
     }
