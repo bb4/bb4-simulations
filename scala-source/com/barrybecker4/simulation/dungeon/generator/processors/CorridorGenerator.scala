@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.dungeon.generator.bsp.*
 import com.barrybecker4.simulation.dungeon.generator.processors.CorridorGenerator.CONNECTIVITY_SCALE
 import com.barrybecker4.simulation.dungeon.generator.processors.{RoomCorridorCreator, RoomToCorridorsMap}
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
+import java.awt.Dimension
 
 
 object CorridorGenerator {
@@ -49,36 +50,46 @@ case class CorridorGenerator(options: DungeonOptions) {
   }
 
   private def addVerticalConnections(splitPos: Int, topNode: BspNode[Room], bottomNode: BspNode[Room]): Unit = {
-    val bottomEdgeBox = Box(splitPos - options.getMinPaddedDim, 0, splitPos, options.dimension.width)
-    val topRooms = roomFinder.filterByBox(bottomEdgeBox, topNode)
-
-    val topEdgeBox = Box(splitPos, 0, splitPos + options.getMinPaddedDim, options.dimension.width)
-    val bottomRooms = roomFinder.filterByBox(topEdgeBox, bottomNode)
-
+    val topRooms = getTopRooms(splitPos, topNode)
+    val bottomRooms = getBottomRooms(splitPos, bottomNode)
     addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
   }
 
-  private def getLeftRooms(splitPos: Int, leftNode: BspNode[Room]): Set[Room] = {
-    var leftRooms: Set[Room] = Set()
+  private def getLeftRooms(splitPos: Int, leftNode: BspNode[Room]): Set[Room] =
+    getRoomsNearEdge(splitPos, leftNode, -1, rightEdgeBoxCreator)
+
+  private def getRightRooms(splitPos: Int, rightNode: BspNode[Room]): Set[Room] =
+    getRoomsNearEdge(splitPos, rightNode, 1, leftEdgeBoxCreator)
+
+  private def getTopRooms(splitPos: Int, topNode: BspNode[Room]): Set[Room] =
+    getRoomsNearEdge(splitPos, topNode, -1, bottomEdgeBoxCreator)
+
+  private def getBottomRooms(splitPos: Int, bottomNode: BspNode[Room]): Set[Room] =
+    getRoomsNearEdge(splitPos, bottomNode, 1, topEdgeBoxCreator)
+
+  private def getRoomsNearEdge(splitPos: Int, node: BspNode[Room], sign: Int,
+                               boxCreator: (Int, Int, Dimension) => Box): Set[Room] = {
+    var edgeRooms: Set[Room] = Set()
     var split = splitPos
-    while (leftRooms.isEmpty) {
-      val rightEdgeBox = Box(0, split - options.getMinPaddedDim, options.dimension.height, split)
-      leftRooms = roomFinder.filterByBox(rightEdgeBox, leftNode)
-      split -= options.getMinPaddedDim
+    while (edgeRooms.isEmpty) {
+      val edgeBox = boxCreator(split, options.getMinPaddedDim, options.dimension)
+      edgeRooms = roomFinder.filterByBox(edgeBox, node)
+      split = split + sign * options.getMinPaddedDim
     }
-    leftRooms
+    edgeRooms
   }
 
-  private def getRightRooms(splitPos: Int, rightNode: BspNode[Room]): Set[Room] = {
-    var rightRooms: Set[Room] = Set()
-    var split = splitPos
-    while (rightRooms.isEmpty) {
-      val leftEdgeBox = Box(0, split, options.dimension.height, split + options.getMinPaddedDim)
-      rightRooms = roomFinder.filterByBox(leftEdgeBox, rightNode)
-      split += options.getMinPaddedDim
-    }
-    rightRooms
-  }
+  private def rightEdgeBoxCreator(split: Int, margin: Int, dim: Dimension): Box =
+    Box(0, split - margin, dim.height, split)
+
+  private def leftEdgeBoxCreator(split: Int, margin: Int, dim: Dimension): Box =
+    Box(0, split, dim.height, split + margin)
+
+  private def bottomEdgeBoxCreator(split: Int, margin: Int, dim: Dimension): Box =
+    Box(split - margin, 0, split, dim.width)
+
+  private def topEdgeBoxCreator(split: Int, margin: Int, dim: Dimension): Box =
+    Box(split, 0, split + margin, dim.width)
 
   /**
    * For each room in room1, look for a room on rooms2 that overlaps in y by at least 3 cells
