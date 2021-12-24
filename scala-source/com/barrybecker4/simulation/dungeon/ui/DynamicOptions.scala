@@ -120,6 +120,9 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
       dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCheckBox.isSelected)
     else if (e.getSource == showGridCHeckBox)
       dungeonOptions = dungeonOptions.setShowGrid(showGridCHeckBox.isSelected)
+    else if (e.getSource == resetButton) {
+      // todo, reset ui to original state
+    }
     else throw new IllegalArgumentException()
     listener.optionsChanged(dungeonOptions)
   }

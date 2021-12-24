@@ -12,5 +12,5 @@ case class BspBranchNode[T](
 
   def getChildren: Set[T] =
     partition1.getChildren ++ partition2.getChildren
-
+  
 }

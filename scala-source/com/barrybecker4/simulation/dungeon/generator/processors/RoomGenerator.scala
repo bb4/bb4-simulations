@@ -18,7 +18,6 @@ object RoomGenerator {
   private val DEBUG_ROOM_DECORATION: RoomDecoration =
     RoomDecoration(new Color(90, 90, 110, 80), new Color(90, 80, 90, 10))
   private val RND: Random = Random(0)
-  private val DEBUG = true
 }
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
@@ -31,10 +30,10 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
   def generateRooms(): BspNode[Room] = {
     val dim = options.dimension
-    getRoomsForBox(Box(0, 0, dim.height, dim.width))
+    getRoomsForBox(Box(0, 0, dim.height, dim.width)).get
   }
 
-  private def getRoomsForBox(box: Box): BspNode[Room] = {
+  private def getRoomsForBox(box: Box): Option[BspNode[Room]] = {
 
     val padding2 = 2 * padding
     val cellSize = options.cellSize
@@ -51,23 +50,32 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
 
-      val room = if (rnd.nextInt(100) < options.percentFilled && bigEnough)
-        Some(Room(roomBox, ROOM_DECORATION))
-      else if (DEBUG) Some(Room(box, DEBUG_ROOM_DECORATION))
+      if (rnd.nextInt(100) < options.percentFilled && bigEnough)
+        Some(BspLeafNode(Room(roomBox, ROOM_DECORATION)))
       else None
-
-      BspLeafNode[Room](room)
     }
     else if (ratio > widthToHeightRatio) {
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
-      BspBranchNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX,
-        getRoomsForBox(leftBox), getRoomsForBox(rightBox))
+      val leftNode = getRoomsForBox(leftBox)
+      val rightNode = getRoomsForBox(rightBox)
+      createNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX, leftNode, rightNode)
     }
     else {
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
-      BspBranchNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY,
-        getRoomsForBox(topBox), getRoomsForBox(bottomBox))
+      val topNode = getRoomsForBox(topBox)
+      val bottomNode = getRoomsForBox(bottomBox)
+      createNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY, topNode, bottomNode)
     }
+  }
+
+  /** If neither child has a room, then add an empty leaf instead of a branch node (pruned) */
+  private def createNode(direction: PartitionDirection, split: Int,
+                     node1: Option[BspNode[Room]], node2: Option[BspNode[Room]]): Option[BspNode[Room]] = {
+    if (node1.nonEmpty && node2.nonEmpty)
+      Some(BspBranchNode(direction, split, node1.get, node2.get))
+    else if (node1.nonEmpty) node1
+    else if (node2.nonEmpty) node2
+    else None // pruned
   }
 
   private def smallEnough(box: Box): Boolean =

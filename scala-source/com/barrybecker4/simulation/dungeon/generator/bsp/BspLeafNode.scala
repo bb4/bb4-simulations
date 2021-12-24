@@ -2,11 +2,11 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp
 
 import com.barrybecker4.simulation.dungeon.model.Room
+import scala.collection.immutable.HashSet
 
 
-// todo: split into BspInternalNode, BspLeafNode
-case class BspLeafNode[T](data: Option[T]) extends BspNode[T] {
+case class BspLeafNode[T](data: T) extends BspNode[T] {
 
-  def getChildren: Set[T] = data.toSet
+  def getChildren: Set[T] = HashSet(data)
 
 }

@@ -17,21 +17,21 @@ class RoomFinder {
   def filterByBox(boxFilter: Box, bspNode: BspNode[Room]): Set[Room] = {
 
     bspNode match {
-      case BspBranchNode(direction, splitPos, partition1, partition2) => 
+      case BspBranchNode(direction, splitPos, partition1, partition2) =>
         var rooms: Set[Room] = Set()
         if (direction == PartitionDirection.Horizontal) {
-          if (boxFilter.getTopLeftCorner.getX < splitPos) 
+          if (boxFilter.getTopLeftCorner.getX < splitPos)
             rooms ++= filterByBox(boxFilter, partition1)
-          if (boxFilter.getBottomRightCorner.getX > splitPos) 
+          if (boxFilter.getBottomRightCorner.getX > splitPos)
             rooms ++= filterByBox(boxFilter, partition2)
         } else {
-          if (boxFilter.getTopLeftCorner.getY < splitPos) 
+          if (boxFilter.getTopLeftCorner.getY < splitPos)
             rooms ++= filterByBox(boxFilter, partition1)
-          if (boxFilter.getBottomRightCorner.getY > splitPos) 
+          if (boxFilter.getBottomRightCorner.getY > splitPos)
             rooms ++= filterByBox(boxFilter, partition2)
         }
         rooms
-      case BspLeafNode(room) => room.toSet
+      case BspLeafNode(room) => HashSet(room)
     }
   }
 }

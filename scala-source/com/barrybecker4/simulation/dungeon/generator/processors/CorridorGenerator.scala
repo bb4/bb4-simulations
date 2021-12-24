@@ -21,7 +21,6 @@ case class CorridorGenerator(options: DungeonOptions) {
   def generateCorridors(bspTree: BspNode[Room]): RoomToCorridorsMap = {
     roomToCorridors = RoomToCorridorsMap()
     addCorridorsToMap(bspTree)
-    // consider adding corridors for all nearby rooms if connectivity above some threshold
     roomToCorridors
   }
 
@@ -31,7 +30,7 @@ case class CorridorGenerator(options: DungeonOptions) {
         addCorridorsToMap(partition1)
         addCorridorsToMap(partition2)
         addCorridorsBetween(direction, splitPos, partition1, partition2)
-      case _ => // intentionally do nothing
+      case _ => // base case of recursion. Intentionally do nothing
     }
   }
 
@@ -44,22 +43,41 @@ case class CorridorGenerator(options: DungeonOptions) {
   }
 
   private def addHorizontalConnections(splitPos: Int, leftNode: BspNode[Room], rightNode: BspNode[Room]): Unit = {
-    // Might need to broaden the range searched for until wer find at least one room
-    val rightEdgeBox = Box(0, splitPos - options.getMinPaddedDim, options.dimension.height, splitPos)
-    val leftRooms = roomFinder.filterByBox(rightEdgeBox, leftNode)
-    val leftEdgeBox = Box(0, splitPos, options.dimension.height, splitPos + options.getMinPaddedDim)
-    val rightRooms = roomFinder.filterByBox(leftEdgeBox, rightNode)
-
+    val leftRooms = getLeftRooms(splitPos, leftNode)
+    val rightRooms = getRightRooms(splitPos, rightNode)
     addCorridors(PartitionDirection.Horizontal, leftRooms, rightRooms)
   }
 
   private def addVerticalConnections(splitPos: Int, topNode: BspNode[Room], bottomNode: BspNode[Room]): Unit = {
     val bottomEdgeBox = Box(splitPos - options.getMinPaddedDim, 0, splitPos, options.dimension.width)
     val topRooms = roomFinder.filterByBox(bottomEdgeBox, topNode)
+
     val topEdgeBox = Box(splitPos, 0, splitPos + options.getMinPaddedDim, options.dimension.width)
     val bottomRooms = roomFinder.filterByBox(topEdgeBox, bottomNode)
 
     addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
+  }
+
+  private def getLeftRooms(splitPos: Int, leftNode: BspNode[Room]): Set[Room] = {
+    var leftRooms: Set[Room] = Set()
+    var split = splitPos
+    while (leftRooms.isEmpty) {
+      val rightEdgeBox = Box(0, split - options.getMinPaddedDim, options.dimension.height, split)
+      leftRooms = roomFinder.filterByBox(rightEdgeBox, leftNode)
+      split -= options.getMinPaddedDim
+    }
+    leftRooms
+  }
+
+  private def getRightRooms(splitPos: Int, rightNode: BspNode[Room]): Set[Room] = {
+    var rightRooms: Set[Room] = Set()
+    var split = splitPos
+    while (rightRooms.isEmpty) {
+      val leftEdgeBox = Box(0, split, options.dimension.height, split + options.getMinPaddedDim)
+      rightRooms = roomFinder.filterByBox(leftEdgeBox, rightNode)
+      split += options.getMinPaddedDim
+    }
+    rightRooms
   }
 
   /**
