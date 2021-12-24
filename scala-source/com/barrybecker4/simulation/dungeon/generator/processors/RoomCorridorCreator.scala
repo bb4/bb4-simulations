@@ -11,7 +11,7 @@ import java.awt.Color
 
 object RoomCorridorCreator {
   private val MIN_OVERLAP: Int = 3
-  private val CORRIDOR_DECORATION = RoomDecoration(new Color(100, 0, 80), new Color(180, 90, 210, 70))
+  private val CORRIDOR_DECORATION = RoomDecoration(new Color(100, 0, 80), new Color(230, 190, 255))
 }
 
 class RoomCorridorCreator {

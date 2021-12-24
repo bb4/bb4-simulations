@@ -7,4 +7,4 @@ import java.awt.{BasicStroke, Stroke, Color}
 case class RoomDecoration(
   wallColor: Color,
   floorColor: Color,
-  wallStroke: Stroke = new BasicStroke(1.0))
+  wallStroke: BasicStroke = new BasicStroke(1.0))

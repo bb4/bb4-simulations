@@ -71,6 +71,7 @@ case class CorridorGenerator(options: DungeonOptions) {
                                boxCreator: (Int, Int, Dimension) => Box): Set[Room] = {
     var edgeRooms: Set[Room] = Set()
     var split = splitPos
+    // Keep moving the search box away from the edge until we find at least one room
     while (edgeRooms.isEmpty) {
       val edgeBox = boxCreator(split, options.getMinPaddedDim, options.dimension)
       edgeRooms = roomFinder.filterByBox(edgeBox, node)
@@ -92,8 +93,8 @@ case class CorridorGenerator(options: DungeonOptions) {
     Box(split, 0, split + margin, dim.width)
 
   /**
-   * For each room in room1, look for a room on rooms2 that overlaps in y by at least 3 cells
-   * add a corridor in the middle of the overlap
+   * For each room in rooms1, look for a room on rooms2 that overlaps in y by at least 3 cells.
+   * Add a corridor in the middle of the overlap.
    */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
     var count = 0
