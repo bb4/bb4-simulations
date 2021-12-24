@@ -1,11 +1,12 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.processors
+package com.barrybecker4.simulation.dungeon.generator.corridor
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.bsp.*
-import com.barrybecker4.simulation.dungeon.generator.processors.CorridorGenerator.CONNECTIVITY_SCALE
-import com.barrybecker4.simulation.dungeon.generator.processors.{RoomCorridorCreator, RoomToCorridorsMap}
+import com.barrybecker4.simulation.dungeon.generator.corridor.CorridorGenerator.CONNECTIVITY_SCALE
+import com.barrybecker4.simulation.dungeon.generator.room.RoomToCorridorsMap
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
+
 import java.awt.Dimension
 
 
@@ -17,7 +18,7 @@ case class CorridorGenerator(options: DungeonOptions) {
 
   private var roomToCorridors: RoomToCorridorsMap = _
   private val roomFinder = RoomFinder()
-  private val corridorCreator = RoomCorridorCreator()
+  private val corridorCreator = CorridorCreator()
 
   def generateCorridors(bspTree: BspNode[Room]): RoomToCorridorsMap = {
     roomToCorridors = RoomToCorridorsMap()

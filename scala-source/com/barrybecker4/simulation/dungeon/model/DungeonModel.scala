@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.model
 
 import java.awt.Dimension
 import com.barrybecker4.simulation.dungeon.generator.bsp.BspNode
-import com.barrybecker4.simulation.dungeon.generator.processors.RoomToCorridorsMap
+import com.barrybecker4.simulation.dungeon.generator.room.RoomToCorridorsMap
 
 
 /**

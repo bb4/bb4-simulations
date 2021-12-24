@@ -38,10 +38,8 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
     val self = this
     this.addComponentListener(new ComponentAdapter {
-      override def componentResized(ce: ComponentEvent): Unit = {
-        println("resized so rerunning...")
+      override def componentResized(ce: ComponentEvent): Unit = 
         dungeonOptions = oldDungeonOptions.setDimension(getDimensionsInCells)
-      }
     })
   }
 

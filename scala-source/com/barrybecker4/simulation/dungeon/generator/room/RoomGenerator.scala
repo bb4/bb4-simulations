@@ -1,10 +1,9 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.processors
+package com.barrybecker4.simulation.dungeon.generator.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.processors.RoomGenerator.*
 import com.barrybecker4.simulation.dungeon.generator.bsp.{BspBranchNode, BspLeafNode, BspNode, PartitionDirection}
-import com.barrybecker4.simulation.dungeon.generator.processors.BoxSplitter
+import com.barrybecker4.simulation.dungeon.generator.room.RoomGenerator.*
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
 
 import java.awt.{Color, Dimension}
