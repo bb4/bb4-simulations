@@ -62,10 +62,6 @@ case class CorridorGenerator(options: DungeonOptions) {
    * add a corridor in the middle of the overlap
    */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-//    println("\nAdding corridors between - " + direction)
-//    println(rooms1.mkString("\n"))
-//    println( "and ")
-//    println(rooms2.mkString("\n"))
     var count = 0
     for (room1 <- rooms1) {
       for (room2 <- rooms2) {
@@ -77,6 +73,6 @@ case class CorridorGenerator(options: DungeonOptions) {
         }
       }
     }
-    println(s"num corridors = $count between ${rooms1.size}, ${rooms2.size} rooms")
+    // println(s"num corridors = $count between ${rooms1.size}, ${rooms2.size} rooms")
   }
 }

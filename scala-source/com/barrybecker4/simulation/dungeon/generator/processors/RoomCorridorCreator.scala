@@ -34,19 +34,21 @@ class RoomCorridorCreator {
     val topY2 = room2.box.getTopLeftCorner.getY
     val bottomY2 = room2.box.getBottomRightCorner.getY
 
-    val overlapInX = leftX1 <= leftX2 && rightX1 >= leftX2
-      || leftX1 <= rightX2 && rightX1 >= rightX2
-      || leftX1 >= leftX2 && rightX1 <= rightX2
-    val overlapInY = topY1 <= topY2 && bottomY1 >= topY2
-      || topY1 <= bottomY2 && bottomY1 >= bottomY2
-      || topY1 >= topY2 && bottomY1 <= bottomY2
+    val overlapX = findLinearOverlap(leftX1, rightX1, leftX2, rightX2)
+    val overlapY = findLinearOverlap(topY1, bottomY1, topY2, bottomY2)
 
-    if (overlapInX || overlapInY) {
+    if (overlapX > MIN_OVERLAP || overlapY > MIN_OVERLAP) {
       val sortedX = Seq(leftX1, rightX1, leftX2, rightX2).sorted
       val sortedY = Seq(topY1, bottomY1, topY2, bottomY2).sorted
       Some(Box(sortedY(1), sortedX(1), sortedY(2), sortedX(2)))
     }
     else None
+  }
+
+  private def findLinearOverlap(a1: Int, a2: Int, b1: Int, b2: Int): Int = {
+    val left = Math.max(a1, b1)
+    val right = Math.min(a2, b2)
+    if (left < right) right - left else 0
   }
 
   private def findCorridorForOverlap(box: Box, direction: PartitionDirection,
