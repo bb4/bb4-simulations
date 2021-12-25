@@ -1,20 +1,20 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.corridor
+package com.barrybecker4.simulation.dungeon.generator.corridor.creation
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.bsp.PartitionDirection
-import com.barrybecker4.simulation.dungeon.generator.corridor.CorridorCreator.{CORRIDOR_DECORATION, MIN_OVERLAP}
+import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreator
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Room, RoomDecoration}
-
+import com.barrybecker4.simulation.dungeon.generator.corridor.creation.StraightCorridorCreator.*
 import java.awt.Color
 
 
-object CorridorCreator {
+object StraightCorridorCreator {
   private val MIN_OVERLAP: Int = 3
   private val CORRIDOR_DECORATION = RoomDecoration(new Color(100, 0, 80), new Color(230, 190, 255))
 }
 
-class CorridorCreator {
+class StraightCorridorCreator extends CorridorCreator {
 
   def createCorridorBetweenRooms(direction: PartitionDirection,
                                  room1: Room, room2: Room): Option[Corridor] = {
