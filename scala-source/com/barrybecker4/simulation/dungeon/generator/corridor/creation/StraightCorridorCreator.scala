@@ -5,14 +5,10 @@ import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.bsp.PartitionDirection
 import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreator
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Room, RoomDecoration}
-import com.barrybecker4.simulation.dungeon.generator.corridor.creation.StraightCorridorCreator.*
+import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreator.*
 import java.awt.Color
 
 
-object StraightCorridorCreator {
-  private val MIN_OVERLAP: Int = 3
-  private val CORRIDOR_DECORATION = RoomDecoration(new Color(100, 0, 80), new Color(230, 190, 255))
-}
 
 class StraightCorridorCreator extends CorridorCreator {
 
