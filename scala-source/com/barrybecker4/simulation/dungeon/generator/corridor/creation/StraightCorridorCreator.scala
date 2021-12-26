@@ -3,14 +3,13 @@ package com.barrybecker4.simulation.dungeon.generator.corridor.creation
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.bsp.PartitionDirection
-import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreator
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Room, RoomDecoration}
-import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreator.*
+import com.barrybecker4.simulation.dungeon.generator.corridor.creation.CorridorCreatorConsts.*
 import java.awt.Color
 
 
 
-class StraightCorridorCreator extends CorridorCreator {
+class StraightCorridorCreator {
 
   def createCorridorBetweenRooms(direction: PartitionDirection,
                                  room1: Room, room2: Room): Option[Corridor] = {
