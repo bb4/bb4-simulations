@@ -14,7 +14,7 @@ class RoomFinder {
    * Recursively filter by the specified box
    * @return rooms that are at least partially in the box
    */
-  def filterByBox(boxFilter: Box, bspNode: BspNode[Room]): Set[Room] = {
+  def filterByBox(boxFilter: Box, bspNode: BspNode): Set[Room] = {
 
     bspNode match {
       case BspBranchNode(direction, splitPos, partition1, partition2) =>

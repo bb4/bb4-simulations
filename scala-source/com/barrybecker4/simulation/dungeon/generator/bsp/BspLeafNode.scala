@@ -5,8 +5,8 @@ import com.barrybecker4.simulation.dungeon.model.Room
 import scala.collection.immutable.HashSet
 
 
-case class BspLeafNode[T](data: T) extends BspNode[T] {
+case class BspLeafNode(room: Room) extends BspNode {
 
-  def getChildren: Set[T] = HashSet(data)
+  def getRooms: Set[Room] = HashSet(room)
 
 }

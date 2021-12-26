@@ -25,12 +25,12 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val boxSplitter =
     BoxSplitter(options.getMaxPaddedWidth, options.getMaxPaddedHeight, options.getMinPaddedDim)
 
-  def generateRooms(): BspNode[Room] = {
+  def generateRooms(): BspNode = {
     val dim = options.dimension
     getRoomsForBox(Box(0, 0, dim.height, dim.width)).get
   }
 
-  private def getRoomsForBox(box: Box): Option[BspNode[Room]] = {
+  private def getRoomsForBox(box: Box): Option[BspNode] = {
 
     val padding2 = 2 * padding
     val cellSize = options.cellSize
@@ -67,7 +67,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
   /** If neither child has a room, then add an empty leaf instead of a branch node (pruned) */
   private def createNode(direction: PartitionDirection, split: Int,
-                     node1: Option[BspNode[Room]], node2: Option[BspNode[Room]]): Option[BspNode[Room]] = {
+                     node1: Option[BspNode], node2: Option[BspNode]): Option[BspNode] = {
     if (node1.nonEmpty && node2.nonEmpty)
       Some(BspBranchNode(direction, split, node1.get, node2.get))
     else if (node1.nonEmpty) node1

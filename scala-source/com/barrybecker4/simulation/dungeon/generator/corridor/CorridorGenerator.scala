@@ -22,13 +22,13 @@ case class CorridorGenerator(options: DungeonOptions) {
   private val straightCorridorCreator = StraightCorridorCreator()
   private val connectivityThresh = options.connectivity * CONNECTIVITY_SCALE
 
-  def generateCorridors(bspTree: BspNode[Room]): RoomToCorridorsMap = {
+  def generateCorridors(bspTree: BspNode): RoomToCorridorsMap = {
     roomToCorridors = RoomToCorridorsMap()
     addCorridorsToMap(bspTree)
     roomToCorridors
   }
 
-  private def addCorridorsToMap(node: BspNode[Room]): Unit = {
+  private def addCorridorsToMap(node: BspNode): Unit = {
     node match {
       case BspBranchNode(direction, splitPos, partition1, partition2) =>
         addCorridorsToMap(partition1)
@@ -39,38 +39,38 @@ case class CorridorGenerator(options: DungeonOptions) {
   }
 
   private def addCorridorsBetween(direction: PartitionDirection, splitPos: Int,
-                                  node1: BspNode[Room], node2: BspNode[Room]): Unit = {
+                                  node1: BspNode, node2: BspNode): Unit = {
     if (direction == PartitionDirection.Horizontal)
       addHorizontalConnections(splitPos, node1, node2)
     else
       addVerticalConnections(splitPos, node1, node2)
   }
 
-  private def addHorizontalConnections(splitPos: Int, leftNode: BspNode[Room], rightNode: BspNode[Room]): Unit = {
+  private def addHorizontalConnections(splitPos: Int, leftNode: BspNode, rightNode: BspNode): Unit = {
     val leftRooms = getLeftRooms(splitPos, leftNode)
     val rightRooms = getRightRooms(splitPos, rightNode)
     addCorridors(PartitionDirection.Horizontal, leftRooms, rightRooms)
   }
 
-  private def addVerticalConnections(splitPos: Int, topNode: BspNode[Room], bottomNode: BspNode[Room]): Unit = {
+  private def addVerticalConnections(splitPos: Int, topNode: BspNode, bottomNode: BspNode): Unit = {
     val topRooms = getTopRooms(splitPos, topNode)
     val bottomRooms = getBottomRooms(splitPos, bottomNode)
     addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
   }
 
-  private def getLeftRooms(splitPos: Int, leftNode: BspNode[Room]): Set[Room] =
+  private def getLeftRooms(splitPos: Int, leftNode: BspNode): Set[Room] =
     getRoomsNearEdge(splitPos, leftNode, -1, rightEdgeBoxCreator)
 
-  private def getRightRooms(splitPos: Int, rightNode: BspNode[Room]): Set[Room] =
+  private def getRightRooms(splitPos: Int, rightNode: BspNode): Set[Room] =
     getRoomsNearEdge(splitPos, rightNode, 1, leftEdgeBoxCreator)
 
-  private def getTopRooms(splitPos: Int, topNode: BspNode[Room]): Set[Room] =
+  private def getTopRooms(splitPos: Int, topNode: BspNode): Set[Room] =
     getRoomsNearEdge(splitPos, topNode, -1, bottomEdgeBoxCreator)
 
-  private def getBottomRooms(splitPos: Int, bottomNode: BspNode[Room]): Set[Room] =
+  private def getBottomRooms(splitPos: Int, bottomNode: BspNode): Set[Room] =
     getRoomsNearEdge(splitPos, bottomNode, 1, topEdgeBoxCreator)
 
-  private def getRoomsNearEdge(splitPos: Int, node: BspNode[Room], sign: Int,
+  private def getRoomsNearEdge(splitPos: Int, node: BspNode, sign: Int,
                                boxCreator: (Int, Int, Dimension) => Box): Set[Room] = {
     var edgeRooms: Set[Room] = Set()
     var split = splitPos

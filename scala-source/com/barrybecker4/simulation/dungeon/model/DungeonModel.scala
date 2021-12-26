@@ -12,9 +12,9 @@ import com.barrybecker4.simulation.dungeon.generator.room.RoomToCorridorsMap
   * The DungeonOptions determine how to generate the dungeon.
   * Once created, the dungeon can be rendered or operated on in other ways
   */
-case class DungeonModel(bspTree: BspNode[Room], roomsToCorridors: RoomToCorridorsMap) {
+case class DungeonModel(bspTree: BspNode, roomsToCorridors: RoomToCorridorsMap) {
 
-  def getRooms: Set[Room] = bspTree.getChildren
+  def getRooms: Set[Room] = bspTree.getRooms
 
   def getCorridors: Set[Corridor] = roomsToCorridors.getAllCorridors
 

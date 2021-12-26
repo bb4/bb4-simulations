@@ -4,13 +4,13 @@ package com.barrybecker4.simulation.dungeon.generator.bsp
 import com.barrybecker4.simulation.dungeon.model.Room
 
 
-case class BspBranchNode[T](
+case class BspBranchNode(
      direction: PartitionDirection,
      splitPosition: Int,
-     partition1: BspNode[T],
-     partition2: BspNode[T]) extends BspNode[T] {
+     partition1: BspNode,
+     partition2: BspNode) extends BspNode {
 
-  def getChildren: Set[T] =
-    partition1.getChildren ++ partition2.getChildren
+  def getRooms: Set[Room] =
+    partition1.getRooms ++ partition2.getRooms
   
 }
