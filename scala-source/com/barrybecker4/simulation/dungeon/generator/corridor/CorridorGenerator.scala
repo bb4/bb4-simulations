@@ -138,8 +138,6 @@ case class CorridorGenerator(options: DungeonOptions) {
   private def addAngledCorridors(direction: PartitionDirection,
                                  unmatchedRooms: (Set[Room], Set[Room]),
                                  rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-    //println(s"unmatched rooms1 = ${unmatchedRooms._1.size}")
-    //println(s"unmatched rooms2 = ${unmatchedRooms._2.size}")
 
     for (room1 <- unmatchedRooms._1) {
       val room2 = findClosestRoom(direction, room1, rooms2)
