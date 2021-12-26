@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.rendering
+package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.simulation.dungeon.model.DungeonOptions
-import com.barrybecker4.simulation.dungeon.rendering.GridRenderer.{GRID_COLOR, GRID_STROKE}
+import com.barrybecker4.simulation.dungeon.rendering.helpers.GridRenderer.{GRID_COLOR, GRID_STROKE}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.{BasicStroke, Color}
@@ -13,9 +13,9 @@ object GridRenderer {
   private val GRID_STROKE = new BasicStroke(1.0)
 }
 
-class GridRenderer {
+case class GridRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
-  def renderGrid(g: OfflineGraphics, options: DungeonOptions): Unit = {
+  def renderGrid(): Unit = {
     val dim = options.dimension
     val scale = options.cellSize
     val width = dim.width * scale

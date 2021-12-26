@@ -1,12 +1,12 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.rendering
+package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
-class RoomRenderer {
+case class RoomRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
-  def renderRooms(g: OfflineGraphics, options: DungeonOptions, rooms: Set[Room]): Unit = {
+  def renderRooms(rooms: Set[Room]): Unit = {
     val cellSize: Int = options.cellSize
 
     for (room <- rooms) {

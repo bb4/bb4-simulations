@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.dungeon.rendering
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonModel, DungeonOptions, Room, RoomDecoration}
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer.BACKGROUND_COLOR
+import com.barrybecker4.simulation.dungeon.rendering.helpers.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.image.BufferedImage
@@ -16,25 +17,26 @@ object DungeonRenderer {
 
 class DungeonRenderer {
 
-  private val roomRenderer = RoomRenderer()
-  private val corridorRenderer = CorridorRenderer(BACKGROUND_COLOR)
-  private val gridRenderer = GridRenderer()
-
   private var offlineGraphics: OfflineGraphics =
     new OfflineGraphics(new Dimension(10, 10), BACKGROUND_COLOR)
 
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
   def render(dungeonOptions: DungeonOptions, dungeonModel: DungeonModel): Unit = synchronized {
-    val graphics = getOfflineGraphics(dungeonOptions.getScreenDimension)
-    graphics.clear()
+
+    val g = getOfflineGraphics(dungeonOptions.getScreenDimension)
+    g.clear()
+
+    val roomRenderer = RoomRenderer(g, dungeonOptions)
+    val corridorRenderer = CorridorRenderer(g, dungeonOptions)
+    val gridRenderer = GridRenderer(g, dungeonOptions)
 
     if (dungeonOptions.showGrid) {
-      gridRenderer.renderGrid(graphics, dungeonOptions)
+      gridRenderer.renderGrid()
     }
 
-    roomRenderer.renderRooms(graphics, dungeonOptions, dungeonModel.getRooms)
-    corridorRenderer.renderCorridors(graphics, dungeonOptions, dungeonModel.getCorridors)
+    roomRenderer.renderRooms(dungeonModel.getRooms)
+    corridorRenderer.renderCorridors(dungeonModel.getCorridors)
   }
 
   private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {
