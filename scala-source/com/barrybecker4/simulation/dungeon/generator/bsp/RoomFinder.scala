@@ -8,17 +8,6 @@ import scala.collection.immutable.HashSet
 import PartitionDirection.*
 
 
-object RoomFinder {
-  def filterByBox(boxFilter: Box, rooms: Set[Room]): Set[Room] = {
-
-    // todo: add box.intersects(box)
-    rooms.filter(room => 
-      boxFilter.contains(room.box.getTopLeftCorner) || 
-      boxFilter.contains(room.box.getBottomRightCorner)
-    )
-  }
-}
-
 class RoomFinder {
 
   /**

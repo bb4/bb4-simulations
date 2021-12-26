@@ -12,7 +12,7 @@ import java.awt.Dimension
 
 
 object CorridorGenerator {
-  private val CONNECTIVITY_SCALE = 14
+  private val CONNECTIVITY_SCALE = 12
 }
 
 case class CorridorGenerator(options: DungeonOptions) {
@@ -20,9 +20,7 @@ case class CorridorGenerator(options: DungeonOptions) {
   private var roomToCorridors: RoomToCorridorsMap = _
   private val roomFinder = RoomFinder()
   private val straightCorridorCreator = StraightCorridorCreator()
-  private val angledCorridorCreator = AngledCorridorCreator()
   private val connectivityThresh = options.connectivity * CONNECTIVITY_SCALE
-  private var count = 0
 
   def generateCorridors(bspTree: BspNode[Room]): RoomToCorridorsMap = {
     roomToCorridors = RoomToCorridorsMap()
@@ -102,22 +100,7 @@ case class CorridorGenerator(options: DungeonOptions) {
    * In some rare cases, we may need angled corridors
    */
   private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-    count = 0
-    val unmatchedRooms = addStraightCorridors(direction, rooms1, rooms2)
-
-    if (count < connectivityThresh)
-      addAngledCorridors(direction, unmatchedRooms, rooms1, rooms2)
-  }
-
-  /**
-   * For each room in rooms1, look for a room on rooms2 that overlaps in y by at least 3 cells.
-   * Add a corridor in the middle of the overlap.
-   */
-  private def addStraightCorridors(direction: PartitionDirection,
-                                   rooms1: Set[Room], rooms2: Set[Room]): (Set[Room], Set[Room]) = {
-    var matchedRooms1: Set[Room] = Set()
-    var matchedRooms2: Set[Room] = Set()
-
+    var count = 0
     for (room1 <- rooms1) {
       for (room2 <- rooms2) {
         val corridor = straightCorridorCreator.createCorridorBetweenRooms(direction, room1, room2)
@@ -125,86 +108,10 @@ case class CorridorGenerator(options: DungeonOptions) {
           count += 1
           if (count <= connectivityThresh) {
             addCorridorToMap(room1, room2, corridor.get)
-            matchedRooms1 += room1
-            matchedRooms2 += room2
           }
         }
       }
     }
-    (rooms1.diff(matchedRooms1), rooms2.diff(matchedRooms2))
-  }
-
-  // for the unmatched rooms, we need corridors with turns
-  private def addAngledCorridors(direction: PartitionDirection,
-                                 unmatchedRooms: (Set[Room], Set[Room]),
-                                 rooms1: Set[Room], rooms2: Set[Room]): Unit = {
-
-    for (room1 <- unmatchedRooms._1) {
-      val room2 = findClosestRoom(direction, room1, rooms2)
-      val room1HasFreeSpace = hasFreeSpace(direction, room1, unmatchedRooms._1, room2)
-      val room2HasFreeSpace = hasFreeSpace(direction, room2, rooms2, room1)
-      addAngledCorridorIfPossible(direction, room1, room1HasFreeSpace, room2, room2HasFreeSpace)
-    }
-    for (room2 <- unmatchedRooms._2) {
-      val room1 = findClosestRoom(direction, room2, rooms1)
-      val room1HasFreeSpace = hasFreeSpace(direction, room1, rooms1, room2)
-      val room2HasFreeSpace = hasFreeSpace(direction, room2, unmatchedRooms._2, room1)
-      addAngledCorridorIfPossible(direction, room2, room2HasFreeSpace, room1, room1HasFreeSpace)
-    }
-  }
-
-  /**
-   * @return if there is free space in the direction perpendicular to the partition direction
-   *         towards other room.
-   */
-  private def hasFreeSpace(direction: PartitionDirection, room: Room, rooms: Set[Room],
-                           otherRoom: Room): Boolean = {
-    val otherBox = otherRoom.box
-
-    val box = direction match
-      case PartitionDirection.Horizontal => Box(
-          Math.min(otherBox.getTopLeftCorner.getY, room.box.getBottomRightCorner.getY), room.box.getTopLeftCorner.getX,
-          Math.max(otherBox.getBottomRightCorner.getY, room.box.getTopLeftCorner.getY), room.box.getBottomRightCorner.getX
-        )
-      case PartitionDirection.Vertical => Box(
-          room.box.getTopLeftCorner.getY, Math.min(otherBox.getTopLeftCorner.getX, room.box.getBottomRightCorner.getX),
-          room.box.getBottomRightCorner.getY, Math.max(otherBox.getBottomRightCorner.getX, room.box.getTopLeftCorner.getX)
-        )
-
-      RoomFinder.filterByBox(box, rooms).nonEmpty
-  }
-
-  private def addAngledCorridorIfPossible(direction: PartitionDirection,
-               room1: Room, room1HasFreeSpace: Boolean,
-               room2: Room, room2HasFreeSpace: Boolean): Unit = {
-    count += 1
-    if (count < connectivityThresh)
-      addAngledCorridor(direction, room1, room1HasFreeSpace, room2, room2HasFreeSpace)
-  }
-
-  private def findClosestRoom(direction: PartitionDirection, room: Room, rooms: Set[Room]): Room = {
-    val centerFun: Room => Int =
-      if (direction == PartitionDirection.Horizontal)
-        room => room.box.getMinCol + room.box.getWidth / 2
-      else
-        room => room.box.getMinRow + room.box.getHeight / 2
-
-    val centerPos = centerFun(room)
-    val distanceFun = Math.abs(centerPos - centerFun(room))
-    val roomsWithDistance = rooms.map(room => (distanceFun, room))
-
-    roomsWithDistance.minBy(_._1)._2
-  }
-
-  private def addAngledCorridor(direction: PartitionDirection,
-                                room1: Room, room1HasFreeSpace: Boolean,
-                                room2: Room, room2HasFreeSpace: Boolean): Unit = {
-    val corridor =
-      angledCorridorCreator.createCorridorBetweenRooms(direction,
-                                                       room1, room1HasFreeSpace,
-                                                       room2, room2HasFreeSpace)
-    if (corridor.nonEmpty)
-      addCorridorToMap(room1, room2, corridor.get)
   }
 
   private def addCorridorToMap(room1: Room, room2: Room, corridor: Corridor): Unit = {
