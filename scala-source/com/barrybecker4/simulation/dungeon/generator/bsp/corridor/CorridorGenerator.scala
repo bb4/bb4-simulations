@@ -1,12 +1,13 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.corridor
+package com.barrybecker4.simulation.dungeon.generator.bsp.corridor
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.generator.bsp.*
-import com.barrybecker4.simulation.dungeon.generator.corridor.CorridorGenerator.CONNECTIVITY_SCALE
-import com.barrybecker4.simulation.dungeon.generator.corridor.creation.*
-import com.barrybecker4.simulation.dungeon.generator.room.RoomToCorridorsMap
-import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, Corridor}
+import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspNode, PartitionDirection}
+import CorridorGenerator.CONNECTIVITY_SCALE
+import com.barrybecker4.simulation.dungeon.generator.bsp.room.RoomToCorridorsMap
+import com.barrybecker4.simulation.dungeon.generator.bsp.corridor.CorridorGenerator.*
+import com.barrybecker4.simulation.dungeon.generator.bsp.tree.RoomFinder
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room}
 
 import java.awt.Dimension
 

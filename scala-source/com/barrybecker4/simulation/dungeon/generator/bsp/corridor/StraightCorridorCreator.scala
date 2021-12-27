@@ -1,10 +1,11 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.corridor
+package com.barrybecker4.simulation.dungeon.generator.bsp.corridor
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.bsp.PartitionDirection
-import com.barrybecker4.simulation.dungeon.generator.corridor.StraightCorridorCreator.*
+import com.barrybecker4.simulation.dungeon.generator.bsp.tree.PartitionDirection
+import StraightCorridorCreator.*
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Room, RoomDecoration}
+
 import java.awt.Color
 
 

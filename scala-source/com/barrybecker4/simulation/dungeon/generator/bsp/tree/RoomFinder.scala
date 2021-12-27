@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.bsp
+package com.barrybecker4.simulation.dungeon.generator.bsp.tree
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.model.Room
