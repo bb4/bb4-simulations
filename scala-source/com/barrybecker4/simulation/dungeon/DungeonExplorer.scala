@@ -3,11 +3,11 @@ package com.barrybecker4.simulation.dungeon
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
-import com.barrybecker4.simulation.dungeon.generator.DungeonGenerator
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer
 import com.barrybecker4.simulation.dungeon.ui.{DungeonOptionsChangedListener, DynamicOptions}
 import com.barrybecker4.simulation.dungeon.DungeonExplorer
+import com.barrybecker4.simulation.dungeon.generator.bsp.BspDungeonGenerator
 
 import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.{Dimension, Graphics}
@@ -27,9 +27,9 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   private var dungeonOptions: DungeonOptions = new DungeonOptions()
   private var oldDungeonOptions: DungeonOptions = dungeonOptions
-  private val generator: DungeonGenerator = new DungeonGenerator()
+  private val generator: BspDungeonGenerator = BspDungeonGenerator()
   private var options: DynamicOptions = _
-  private val dungeonRenderer: DungeonRenderer = new DungeonRenderer()
+  private val dungeonRenderer: DungeonRenderer = DungeonRenderer()
   commonInit()
 
   private def commonInit(): Unit = {
@@ -38,7 +38,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
     val self = this
     this.addComponentListener(new ComponentAdapter {
-      override def componentResized(ce: ComponentEvent): Unit = 
+      override def componentResized(ce: ComponentEvent): Unit =
         dungeonOptions = oldDungeonOptions.setDimension(getDimensionsInCells)
     })
   }

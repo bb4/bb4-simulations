@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.generator.room
+package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.generator.room.BoxSplitter
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random
