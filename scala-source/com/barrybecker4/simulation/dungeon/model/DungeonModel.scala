@@ -13,9 +13,7 @@ import java.awt.Dimension
   * The DungeonOptions determine how to generate the dungeon.
   * Once created, the dungeon can be rendered or operated on in other ways
   */
-case class DungeonModel(bspTree: BspNode, roomsToCorridors: RoomToCorridorsMap) {
-
-  def getRooms: Set[Room] = bspTree.getRooms
+case class DungeonModel(rooms: Set[Room], roomsToCorridors: RoomToCorridorsMap) {
 
   def getCorridors: Set[Corridor] = roomsToCorridors.getAllCorridors
 

@@ -35,7 +35,7 @@ class DungeonRenderer {
       gridRenderer.renderGrid()
     }
 
-    roomRenderer.renderRooms(dungeonModel.getRooms)
+    roomRenderer.renderRooms(dungeonModel.rooms)
     corridorRenderer.renderCorridors(dungeonModel.getCorridors)
   }
 

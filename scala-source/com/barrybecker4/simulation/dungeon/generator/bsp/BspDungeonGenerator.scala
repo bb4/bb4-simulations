@@ -13,13 +13,13 @@ import scala.collection.immutable.HashSet
 
 class BspDungeonGenerator extends DungeonGeneratorStrategy {
 
-  def generateDungeon(options: DungeonOptions):DungeonModel = {
+  def generateDungeon(options: DungeonOptions): DungeonModel = {
     val roomGenerator = RoomGenerator(options)
     val corridorGenerator = CorridorGenerator(options)
 
     val bspTree = roomGenerator.generateRooms()
     val roomsToCorridors = corridorGenerator.generateCorridors(bspTree)
 
-    DungeonModel(bspTree, roomsToCorridors)
+    DungeonModel(bspTree.getRooms, roomsToCorridors)
   }
 }
