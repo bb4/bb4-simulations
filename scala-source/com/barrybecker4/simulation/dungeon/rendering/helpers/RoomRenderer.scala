@@ -3,6 +3,8 @@ package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 import com.barrybecker4.ui.renderers.OfflineGraphics
+import com.barrybecker4.simulation.dungeon.model.DungeonOptions.DECORATION
+
 
 case class RoomRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
@@ -11,13 +13,12 @@ case class RoomRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
     for (room <- rooms) {
       val scaledBox = room.box.scaleBy(cellSize)
-      val decoration = room.decoration
-
-      g.setColor(decoration.floorColor)
+   
+      g.setColor(DECORATION.floorColor)
       g.fillBox(scaledBox)
 
-      g.setColor(decoration.wallColor)
-      g.setStroke(decoration.wallStroke)
+      g.setColor(DECORATION.wallColor)
+      g.setStroke(DECORATION.wallStroke)
       g.drawBox(scaledBox)
     }
   }

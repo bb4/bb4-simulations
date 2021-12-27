@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.dungeon.generator.bsp.room
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspLeafNode, BspNode, PartitionDirection}
 import RoomGenerator.*
-import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room, RoomDecoration}
+import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
 import java.awt.{Color, Dimension}
 import scala.collection.immutable.HashSet
@@ -12,8 +12,6 @@ import scala.util.Random
 
 
 object RoomGenerator {
-  private val ROOM_DECORATION: RoomDecoration =
-    RoomDecoration(new Color(100, 0, 230), new Color(230, 190, 255))
   private val RND: Random = Random(0)
 }
 
@@ -48,7 +46,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
 
       if (rnd.nextInt(100) < options.percentFilled && bigEnough)
-        Some(BspLeafNode(Room(roomBox, ROOM_DECORATION)))
+        Some(BspLeafNode(Room(roomBox)))
       else None
     }
     else if (ratio > widthToHeightRatio) {

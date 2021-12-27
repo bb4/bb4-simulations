@@ -2,7 +2,8 @@
 package com.barrybecker4.simulation.dungeon.model
 
 import com.barrybecker4.simulation.dungeon.model.DungeonOptions.*
-import java.awt.Dimension
+
+import java.awt.{Color, Dimension}
 
 
 object DungeonOptions {
@@ -16,6 +17,7 @@ object DungeonOptions {
   val DEFAULT_CONNECTIVITY = 0.1f
   val DEFAULT_HALF_PADDED = false
   val DEFAULT_SHOW_GRID = false
+  val DECORATION: Decoration = Decoration(new Color(100, 0, 230), new Color(230, 190, 255))
 }
 
 /**

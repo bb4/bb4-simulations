@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.dungeon.rendering
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonModel, DungeonOptions, Room, RoomDecoration}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonModel, DungeonOptions, Room, Decoration}
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer.BACKGROUND_COLOR
 import com.barrybecker4.simulation.dungeon.rendering.helpers.*
 import com.barrybecker4.ui.renderers.OfflineGraphics

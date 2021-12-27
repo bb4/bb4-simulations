@@ -1,7 +1,8 @@
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, RoomDecoration}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Decoration}
+import com.barrybecker4.simulation.dungeon.model.DungeonOptions.DECORATION
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.Color
@@ -9,7 +10,7 @@ import java.awt.Color
 // todo: add ability to draw polygon to offline renderer
 case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
-  def drawCorridor(path: Seq[IntLocation], decoration: RoomDecoration): Unit = {
+  def drawCorridor(path: Seq[IntLocation]): Unit = {
     val loc1 = path.head
     val loc2 = path(1)
 
@@ -24,10 +25,10 @@ case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions)
       else
         new Box(IntLocation(py, px), IntLocation(y, x + 1))
 
-    drawCorridorSegment(box.scaleBy(options.cellSize), decoration)
+    drawCorridorSegment(box.scaleBy(options.cellSize), DECORATION)
   }
 
-  private def drawCorridorSegment(box: Box, decoration: RoomDecoration): Unit = {
+  private def drawCorridorSegment(box: Box, decoration: Decoration): Unit = {
     g.setColor(decoration.floorColor)
 
     val isHorizontal = box.getWidth > box.getHeight

@@ -8,7 +8,7 @@ import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer
 import com.barrybecker4.simulation.dungeon.ui.{DungeonOptionsChangedListener, DynamicOptions}
 import com.barrybecker4.simulation.dungeon.DungeonExplorer
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.RandomPartitionDungeonGenerator
+import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
 
 import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.{Dimension, Graphics}
@@ -28,7 +28,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   private var dungeonOptions: DungeonOptions = new DungeonOptions()
   private var oldDungeonOptions: DungeonOptions = dungeonOptions
-  private val generator: DungeonGeneratorStrategy = RandomPartitionDungeonGenerator()
+  private val generator: DungeonGeneratorStrategy = UnionGraphDungeonGenerator()
   private var options: DynamicOptions = _
   private val dungeonRenderer: DungeonRenderer = DungeonRenderer()
   commonInit()

@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.dungeon.model
 import java.awt.{BasicStroke, Stroke, Color}
 
 
-case class RoomDecoration(
+case class Decoration(
   wallColor: Color,
   floorColor: Color,
   wallStroke: BasicStroke = new BasicStroke(1.0))
