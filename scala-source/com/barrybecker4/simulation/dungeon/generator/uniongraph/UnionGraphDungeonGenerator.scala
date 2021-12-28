@@ -10,7 +10,7 @@ import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions, 
 import java.awt.{Color, Dimension}
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
-
+import com.barrybecker4.simulation.dungeon.model.DungeonMap
 
 /**
  * Place a random room, then divide the remainder into candidate regions that are placed on
@@ -23,7 +23,11 @@ class UnionGraphDungeonGenerator extends DungeonGeneratorStrategy {
     val corridorGenerator = CorridorGenerator(options)
 
     val rooms = roomGenerator.generateRooms()
+    
+    val dungeonMap = DungeonMap(rooms)
     val roomsToCorridors = corridorGenerator.generateCorridors(rooms)
+    
+    
 
     DungeonModel(rooms, roomsToCorridors)
   }
