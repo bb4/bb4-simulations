@@ -48,7 +48,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
     println("box = " + box)
     assert(box.contains(innerContainer.getTopLeftCorner) && box.contains(innerContainer.getBottomRightCorner))
 
-    if (box.getWidth == innerContainer.getWidth && box.getHeight == innerContainer.getHeight)
+    if (box == innerContainer)
       return HashSet[Box]()
 
     val divideHorizontally = box.getHeight == innerContainer.getHeight
