@@ -5,7 +5,6 @@ import com.barrybecker4.common.geometry.IntLocation
 
 class DungeonMap(rooms: Set[Room]) {
 
-
   private var cellToStructure: Map[IntLocation, Room | Corridor] = Map()
 
   initialize()
@@ -29,6 +28,11 @@ class DungeonMap(rooms: Set[Room]) {
         set(x, y, room)
       }
     }
+  }
+  
+  private def addCorridor(corridor: Corridor): Unit = {
+    val path = corridor.path
+    
   }
   
   def getCorridors: Set[Corridor] = Set()

@@ -52,14 +52,14 @@ class StraightCorridorCreator {
 
   private def findCorridorForOverlap(box: Box, direction: PartitionDirection,
                                      room1: Room, room2: Room): Corridor = {
-    var path: Seq[IntLocation] = Seq()
+    var path: Seq[(IntLocation, IntLocation)] = Seq()
     if (direction == PartitionDirection.Horizontal) {
       val midY = box.getTopLeftCorner.getY + box.getHeight / 2
-      path = Seq(IntLocation(midY, box.getTopLeftCorner.getX), IntLocation(midY, box.getBottomRightCorner.getX))
+      path = Seq((IntLocation(midY, box.getTopLeftCorner.getX), IntLocation(midY, box.getBottomRightCorner.getX)))
     }
     else {
       val midX = box.getTopLeftCorner.getX + box.getWidth / 2
-      path = Seq(IntLocation(box.getTopLeftCorner.getY, midX), IntLocation(box.getBottomRightCorner.getY, midX))
+      path = Seq((IntLocation(box.getTopLeftCorner.getY, midX), IntLocation(box.getBottomRightCorner.getY, midX)))
     }
 
     Corridor(path)
