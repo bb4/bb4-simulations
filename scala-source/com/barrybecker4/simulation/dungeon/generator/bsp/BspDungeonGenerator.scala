@@ -20,6 +20,6 @@ class BspDungeonGenerator extends DungeonGeneratorStrategy {
     val bspTree = roomGenerator.generateRooms()
     val roomsToCorridors = corridorGenerator.generateCorridors(bspTree)
 
-    DungeonModel(bspTree.getRooms, roomsToCorridors)
+    DungeonModel(bspTree.getRooms, roomsToCorridors.getAllCorridors)
   }
 }

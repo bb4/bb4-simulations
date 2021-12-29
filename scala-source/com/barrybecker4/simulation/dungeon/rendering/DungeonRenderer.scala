@@ -36,7 +36,7 @@ class DungeonRenderer {
     }
 
     roomRenderer.renderRooms(dungeonModel.rooms)
-    corridorRenderer.renderCorridors(dungeonModel.getCorridors)
+    corridorRenderer.renderCorridors(dungeonModel.corridors)
   }
 
   private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {

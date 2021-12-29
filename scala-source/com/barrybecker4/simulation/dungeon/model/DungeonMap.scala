@@ -5,14 +5,15 @@ import com.barrybecker4.common.geometry.IntLocation
 
 class DungeonMap(rooms: Set[Room]) {
 
-  private var cellToStructure: Map[IntLocation, Room] = Map()
+
+  private var cellToStructure: Map[IntLocation, Room | Corridor] = Map()
 
   initialize()
 
-  def set(x: Int, y: Int, room: Room): Unit =
+  def set(x: Int, y: Int, room: Room | Corridor): Unit =
     cellToStructure += IntLocation(y, x) -> room
 
-  def apply(x: Int, y: Int): Room = cellToStructure(IntLocation(y, x))
+  def apply(x: Int, y: Int): Room | Corridor = cellToStructure(IntLocation(y, x))
 
   private def initialize(): Unit = {
     for (room <- rooms) {
@@ -29,4 +30,6 @@ class DungeonMap(rooms: Set[Room]) {
       }
     }
   }
+  
+  def getCorridors: Set[Corridor] = Set()
 }

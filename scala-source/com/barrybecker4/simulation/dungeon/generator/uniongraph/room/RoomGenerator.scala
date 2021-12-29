@@ -1,9 +1,9 @@
-package com.barrybecker4.simulation.dungeon.generator.uniongraph
+package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.bsp.room.RoomGenerator.RND
+import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.BoxDecomposer
 import com.barrybecker4.simulation.dungeon.model.{Decoration, DungeonOptions, Room}
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.BoxDecomposer
 
 import java.awt.Color
 import scala.collection.mutable

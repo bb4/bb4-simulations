@@ -1,12 +1,11 @@
-package com.barrybecker4.simulation.dungeon.generator.uniongraph
+package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
+import com.barrybecker4.common.geometry.{Box, IntLocation}
+import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.BoxDecomposer.RND
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
-import scala.util.Random
-import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.BoxDecomposer.RND
-
 import scala.collection.immutable.HashSet
+import scala.util.Random
 
 
 object BoxDecomposer {
@@ -41,20 +40,19 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
     val room: Room = Room(roomBox, Set())
     assert(roomContainer.contains(roomBox.getTopLeftCorner) && roomContainer.contains(roomBox.getBottomRightCorner))
 
-    println("\n----inner = " + roomContainer)
+    //println("\n----inner = " + roomContainer)
     val areas = findUnoccupiedAreas(box, roomContainer)
     (room, areas)
   }
 
   private def findUnoccupiedAreas(box: Box, innerContainer: Box): Set[Box] = {
-    println("box = " + box)
     assert(box.contains(innerContainer.getTopLeftCorner) && box.contains(innerContainer.getBottomRightCorner))
 
     if (box == innerContainer)
       return HashSet[Box]()
 
     val divideHorizontally = box.getHeight == innerContainer.getHeight
-      || ((box.getWidth - innerContainer.getWidth).toFloat / (box.getHeight - innerContainer.getHeight) > RATIO)
+      || (getBoxRatio(box, innerContainer) > RATIO)
     val boxTopLeft = box.getTopLeftCorner
     val boxBottomRight = box.getBottomRightCorner
     val innerTopLeft = innerContainer.getTopLeftCorner
@@ -65,7 +63,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
                       else new Box(IntLocation(boxTopLeft.getY, innerBottomRight.getX), boxBottomRight)
       val newBox = if (leftWider) new Box(IntLocation(boxTopLeft.getY, innerTopLeft.getX), boxBottomRight)
                    else new Box(boxTopLeft, IntLocation(boxBottomRight.getY, innerBottomRight.getX))
-      println(s"leftWider=$leftWider newBox=${newBox.getArea} newWidth=${newBox.getWidth}")
+      //println(s"leftWider=$leftWider newBox=${newBox.getArea} newWidth=${newBox.getWidth}")
 
       assert(newBox.contains(innerContainer.getTopLeftCorner) && newBox.contains(innerContainer.getBottomRightCorner))
       findUnoccupiedAreas(newBox, innerContainer) + shavedBox
@@ -76,14 +74,15 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
                       else new Box(IntLocation(innerBottomRight.getY, boxTopLeft.getX), boxBottomRight)
       val newBox = if (topTaller) new Box(IntLocation(innerTopLeft.getY, boxTopLeft.getX), boxBottomRight)
                    else new Box(boxTopLeft, IntLocation(innerBottomRight.getY, boxBottomRight.getX))
-      println(s"topTaller=$topTaller newBox=${newBox.getArea} newht=${newBox.getHeight}")
-      assert(newBox.getHeight > 0, "newBox="+ newBox)
-      assert(box.getHeight > innerContainer.getHeight, s"inner ht (${innerContainer.getHeight}) was larger than ht (${box.getHeight})")
+      //println(s"topTaller=$topTaller newBox=${newBox.getArea} newht=${newBox.getHeight}")
 
       assert(newBox.contains(innerContainer.getTopLeftCorner) && newBox.contains(innerContainer.getBottomRightCorner))
       findUnoccupiedAreas(newBox, innerContainer) + shavedBox
     }
   }
+
+  private def getBoxRatio(box: Box, innerContainer: Box): Float =
+    (box.getWidth - innerContainer.getWidth).toFloat / (box.getHeight - innerContainer.getHeight)
 
   private def randomWidth(box: Box): Int =
     if (box.getWidth < maxPaddedWidth) box.getWidth - padding
