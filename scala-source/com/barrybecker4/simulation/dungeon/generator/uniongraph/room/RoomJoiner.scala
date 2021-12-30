@@ -1,6 +1,5 @@
 package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.nodeset.RoomSet
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
 
@@ -11,7 +10,9 @@ class RoomJoiner {
    * Add the first corridor that joins with a room or corridor in another roomSet.
    * If none exist, just add the corridor to the nearest object. If nothing intersects
    */
-  def doJoin(room: Room, dungeonMap: DungeonMap, roomsToRoomSet: Map[Room, RoomSet]): RoomSet = {
-    roomsToRoomSet.head._2
+  def doJoin(room: Room, dungeonMap: DungeonMap, roomsToRoomSet: RoomToRoomSetMap): RoomSet = {
+    //roomsToRoomSet.head._2
+    val allRooms = roomsToRoomSet.getAllRooms
+    RoomSet(allRooms, allRooms.head.box)
   }
 }
