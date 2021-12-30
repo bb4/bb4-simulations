@@ -18,7 +18,12 @@ case class RoomToRoomSetMap(map: Map[Room, RoomSet]) {
   }
 
   def getAllRooms: Set[Room] = map.keySet
+  
+  def apply(room: Room): RoomSet = map(room)
 
+  /**
+   * @return true if every rom can be reached from every other room
+   */
   def isConnected: Boolean = map.head._2.size() == map.size
 
   def getSmallestConnectedRoomSet: RoomSet = map.values.minBy(_.size())

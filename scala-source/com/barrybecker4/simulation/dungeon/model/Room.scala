@@ -5,4 +5,4 @@ import com.barrybecker4.common.geometry.Box
 import java.awt.Color
 
 
-case class Room(box: Box, corridors: Set[Corridor] = Set())
+case class Room(box: Box)

@@ -37,10 +37,9 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
 
     val roomBox = Box(yPos, xPos, yPos + height, xPos + width)
     val roomContainer = Box(yPos - frontPadding, xPos - frontPadding, yPos + height + roomPadding, xPos + width + roomPadding)
-    val room: Room = Room(roomBox, Set())
+    val room: Room = Room(roomBox)
     assert(roomContainer.contains(roomBox.getTopLeftCorner) && roomContainer.contains(roomBox.getBottomRightCorner))
-
-    //println("\n----inner = " + roomContainer)
+      
     val areas = findUnoccupiedAreas(box, roomContainer)
     (room, areas)
   }

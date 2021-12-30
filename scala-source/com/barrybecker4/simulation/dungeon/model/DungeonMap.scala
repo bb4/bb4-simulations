@@ -36,15 +36,13 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
 
   def apply(x: Int, y: Int): Room | Corridor = cellToStructure(IntLocation(y, x))
 
-  def update(rooms: Set[Room]): DungeonMap = {
-    var corridors: Set[Corridor] = Set()
+  def update(roomSet: RoomSet): DungeonMap = {
     var dmap: DungeonMap = this
 
-    for (room <- rooms) {
-      corridors ++= room.corridors
+    for (room <- roomSet.rooms) {
       dmap = addRoom(room)
     }
-    dmap
+    addCorridors(roomSet.corridors)
   }
 
   private def addRoom(room: Room): DungeonMap =

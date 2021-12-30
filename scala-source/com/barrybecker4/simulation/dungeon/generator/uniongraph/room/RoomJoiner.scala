@@ -11,8 +11,8 @@ class RoomJoiner {
    * If none exist, just add the corridor to the nearest object. If nothing intersects
    */
   def doJoin(room: Room, dungeonMap: DungeonMap, roomsToRoomSet: RoomToRoomSetMap): RoomSet = {
-    //roomsToRoomSet.head._2
+
     val allRooms = roomsToRoomSet.getAllRooms
-    RoomSet(allRooms, allRooms.head.box)
+    RoomSet(allRooms, roomsToRoomSet(allRooms.head).corridors, allRooms.head.box)
   }
 }
