@@ -5,7 +5,11 @@ import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
+import com.barrybecker4.simulation.dungeon.generator.bsp.BspDungeonGenerator
+import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
+import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType
+import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType._
 
 import java.awt.*
 import java.awt.event.*
@@ -24,7 +28,7 @@ object DynamicOptions {
 }
 
 class DynamicOptions(listener: DungeonOptionsChangedListener)
-  extends JPanel with SliderGroupChangeListener with ActionListener {
+  extends JPanel with SliderGroupChangeListener with ActionListener with ItemListener {
 
   var dungeonOptions: DungeonOptions = DungeonOptions()
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
@@ -44,6 +48,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   private var parameterSliders: ParameterSliders = _
   private var halfPaddedCheckBox: JCheckBox = _
   private var showGridCHeckBox: JCheckBox = _
+  private var generatorStrategyChoice: JComboBox[String] = _
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -51,6 +56,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
 
     parameterSliders = ParameterSliders()
     parameterSliders.addSliderChangeListener(this)
+    panel.add(createGeneratorStrategyDropdown(), BorderLayout.NORTH)
     panel.add(parameterSliders, BorderLayout.CENTER)
     panel.add(createCheckboxPanel, BorderLayout.SOUTH)
     panel
@@ -107,6 +113,23 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
     checkboxPanel
   }
 
+  private def createGeneratorStrategyDropdown() = {
+    val generatorChoicePanel = new JPanel
+    val label = new JLabel("Generator Strategy: ")
+    generatorChoicePanel.setPreferredSize(Dimension(250, 60))
+
+    generatorStrategyChoice = new JComboBox[String]
+    for (strategy <- GeneratorStrategyType.values) {
+      generatorStrategyChoice.addItem(strategy.toString)
+    }
+    generatorStrategyChoice.setSelectedItem(GeneratorStrategyType.BinarySpacePartition.ordinal)
+    generatorStrategyChoice.addItemListener(this)
+    generatorChoicePanel.add(label)
+    generatorChoicePanel.add(generatorStrategyChoice)
+    generatorChoicePanel
+  }
+
+
   def reset(): Unit = parameterSliders.reset()
 
   /** One of the sliders was moved. */
@@ -124,6 +147,19 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
       // todo, reset ui to original state
     }
     else throw new IllegalArgumentException()
+    listener.optionsChanged(dungeonOptions)
+  }
+
+  override def itemStateChanged(e: ItemEvent): Unit = {
+    val strategyType: GeneratorStrategyType =
+      GeneratorStrategyType.valueOf(generatorStrategyChoice.getSelectedItem.toString)
+
+    dungeonOptions = strategyType match {
+      case GeneratorStrategyType.BinarySpacePartition =>
+        dungeonOptions.setGenerator(BspDungeonGenerator())
+      case GeneratorStrategyType.UnionGraph =>
+        dungeonOptions.setGenerator(UnionGraphDungeonGenerator())
+    }
     listener.optionsChanged(dungeonOptions)
   }
 }

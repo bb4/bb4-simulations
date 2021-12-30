@@ -28,7 +28,6 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   private var dungeonOptions: DungeonOptions = DungeonOptions()
   private var oldDungeonOptions: DungeonOptions = dungeonOptions
-  private val generator: DungeonGeneratorStrategy = UnionGraphDungeonGenerator()
   private var options: DynamicOptions = _
   private val dungeonRenderer: DungeonRenderer = DungeonRenderer()
   commonInit()
@@ -64,7 +63,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   override def timeStep: Double = {
     if (!isPaused && dungeonOptions != oldDungeonOptions) {
-      val dungeonModel = generator.generateDungeon(dungeonOptions)
+      val dungeonModel = dungeonOptions.generator.generateDungeon(dungeonOptions)
       dungeonRenderer.render(dungeonOptions, dungeonModel)
       //dungeonModel.timeStep(tStep)
       oldDungeonOptions = dungeonOptions
