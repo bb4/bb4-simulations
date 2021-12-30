@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.dungeon.model.RoomOptions
 
 import scala.util.Random
 
@@ -10,7 +11,11 @@ object BoxSplitter {
   private val RND: Random = Random(0)
 }
 
-case class BoxSplitter(marginWidth: Int, marginHeight: Int, minDimension: Int, rnd: Random = RND) {
+case class BoxSplitter(roomOptions: RoomOptions, rnd: Random = RND) {
+
+  val marginWidth: Int = roomOptions.getMaxPaddedWidth
+  val marginHeight: Int = roomOptions.getMaxPaddedHeight
+  val minDimension: Int = roomOptions.getMinPaddedDim
 
   assert(marginWidth > minDimension)
   assert(marginHeight > minDimension)

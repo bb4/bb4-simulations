@@ -17,11 +17,12 @@ object RoomGenerator {
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  private val padding = options.roomPadding
-  private val widthToHeightRatio: Float = options.getMaxPaddedWidth.toFloat / options.getMaxPaddedHeight
+  private val padding = options.roomOptions.roomPadding
+  private val roomOptions = options.roomOptions
+  private val widthToHeightRatio: Float = 
+    roomOptions.getMaxPaddedWidth.toFloat / roomOptions.getMaxPaddedHeight
 
-  private val boxSplitter =
-    BoxSplitter(options.getMaxPaddedWidth, options.getMaxPaddedHeight, options.getMinPaddedDim)
+  private val boxSplitter = BoxSplitter(roomOptions)
 
   def generateRooms(): BspNode = {
     val dim = options.dimension
@@ -32,7 +33,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
     val padding2 = 2 * padding
     val cellSize = options.cellSize
-    val minDim = options.minRoomDim
+    val minDim = roomOptions.minRoomDim
     val ratio = (box.getWidth + padding2).toFloat / (box.getHeight + padding2)
 
     if (smallEnough(box)) {        // base case of recursion
@@ -45,7 +46,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
 
-      if (rnd.nextInt(100) < options.percentFilled && bigEnough)
+      if (rnd.nextInt(100) < roomOptions.percentFilled && bigEnough)
         Some(BspLeafNode(Room(roomBox)))
       else None
     }
@@ -74,6 +75,6 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   }
 
   private def smallEnough(box: Box): Boolean =
-    box.getWidth <= options.getMaxPaddedWidth && box.getHeight <= options.getMaxPaddedHeight
+    box.getWidth <= roomOptions.getMaxPaddedWidth && box.getHeight <= roomOptions.getMaxPaddedHeight
 
 }

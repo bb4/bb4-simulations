@@ -14,12 +14,13 @@ object BoxDecomposer {
 
 case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
 
-  private val roomPadding = options.roomPadding
+  private val roomOptions = options.roomOptions
+  private val roomPadding = roomOptions.roomPadding
   private val padding = if (options.halfPadded) roomPadding else 2 * roomPadding
   private val frontPadding = if (options.halfPadded) 0 else roomPadding
-  private val RATIO = options.getMaxPaddedWidth / options.getMaxPaddedHeight
-  private val maxPaddedWidth = options.getMaxPaddedWidth
-  private val maxPaddedHeight = options.getMaxPaddedHeight
+  private val RATIO = roomOptions.getMaxPaddedWidth / roomOptions.getMaxPaddedHeight
+  private val maxPaddedWidth = roomOptions.getMaxPaddedWidth
+  private val maxPaddedHeight = roomOptions.getMaxPaddedHeight
 
   /**
    * If half-padded, then the padding only goes at the bottom
@@ -39,7 +40,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
     val roomContainer = Box(yPos - frontPadding, xPos - frontPadding, yPos + height + roomPadding, xPos + width + roomPadding)
     val room: Room = Room(roomBox)
     assert(roomContainer.contains(roomBox.getTopLeftCorner) && roomContainer.contains(roomBox.getBottomRightCorner))
-      
+
     val areas = findUnoccupiedAreas(box, roomContainer)
     (room, areas)
   }
@@ -85,11 +86,12 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
 
   private def randomWidth(box: Box): Int =
     if (box.getWidth < maxPaddedWidth) box.getWidth - padding
-    else Math.min(box.getWidth - padding, randomDim(options.maxRoomWidth))
+    else Math.min(box.getWidth - padding, randomDim(roomOptions.maxRoomWidth))
 
   private def randomHeight(box: Box): Int =
     if (box.getHeight < maxPaddedHeight) box.getHeight - padding
-    else Math.min(box.getHeight - padding, randomDim(options.maxRoomHeight))
+    else Math.min(box.getHeight - padding, randomDim(roomOptions.maxRoomHeight))
 
-  private def randomDim(maxDim: Int): Int = options.minRoomDim + rnd.nextInt(maxDim - options.minRoomDim)
+  private def randomDim(maxDim: Int): Int =
+    roomOptions.minRoomDim + rnd.nextInt(maxDim - roomOptions.minRoomDim)
 }

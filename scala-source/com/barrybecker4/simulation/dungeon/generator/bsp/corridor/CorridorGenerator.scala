@@ -75,11 +75,12 @@ case class CorridorGenerator(options: DungeonOptions) {
                                boxCreator: (Int, Int, Dimension) => Box): Set[Room] = {
     var edgeRooms: Set[Room] = Set()
     var split = splitPos
+    val minPaddedDim = options.roomOptions.getMinPaddedDim
     // Keep moving the search box away from the edge until we find at least one room
     while (edgeRooms.isEmpty) {
-      val edgeBox = boxCreator(split, options.getMinPaddedDim, options.dimension)
+      val edgeBox = boxCreator(split, minPaddedDim, options.dimension)
       edgeRooms = roomFinder.filterByBox(edgeBox, node)
-      split = split + sign * options.getMinPaddedDim
+      split = split + sign * minPaddedDim
     }
     edgeRooms
   }

@@ -26,7 +26,7 @@ object DungeonExplorer {
  */
 class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptionsChangedListener {
 
-  private var dungeonOptions: DungeonOptions = new DungeonOptions()
+  private var dungeonOptions: DungeonOptions = DungeonOptions()
   private var oldDungeonOptions: DungeonOptions = dungeonOptions
   private val generator: DungeonGeneratorStrategy = UnionGraphDungeonGenerator()
   private var options: DynamicOptions = _

@@ -18,7 +18,8 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND){
 
   private val queue: mutable.PriorityQueue[Box] = mutable.PriorityQueue()(Ordering.by(_.getArea))
   private val boxDecomposer: BoxDecomposer = BoxDecomposer(options)
-  private val minDim = options.getMinPaddedDim
+  private val roomOptions = options.roomOptions
+  private val minDim = roomOptions.getMinPaddedDim
 
   def generateRooms(): Set[Room] = {
 
@@ -28,7 +29,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND){
     val totalArea = initialBox.getArea
     var usedArea = 0
 
-    while (queue.nonEmpty && (100 * usedArea.toFloat / totalArea) < options.percentFilled) {
+    while (queue.nonEmpty && (100 * usedArea.toFloat / totalArea) < roomOptions.percentFilled) {
       val box = queue.dequeue()
       if (box.getWidth > minDim && box.getHeight > minDim) {
         val (room, boxes) = boxDecomposer.createRoomInBox(box)
