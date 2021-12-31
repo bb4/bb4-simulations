@@ -17,7 +17,14 @@ case class RoomSet(rooms: Set[Room], corridors: Set[Corridor], boundingBox: Box)
     val newBBox = boundingBox.expandBy(otherBBox.getTopLeftCorner).expandBy(otherBBox.getBottomRightCorner)
     RoomSet(this.rooms ++ roomSet.rooms, this.corridors ++ roomSet.corridors, newBBox)
   }
-
+  
+  def addCorridor(corridor: Corridor): RoomSet = RoomSet(rooms, corridors + corridor, boundingBox)
+  
+  def removeCorridor(corridor: Corridor): RoomSet = {
+    assert(corridors.contains(corridor))
+    RoomSet(rooms, corridors - corridor, boundingBox)
+  }
+  
   def size(): Int = rooms.size
 
 }

@@ -34,12 +34,22 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     this(DungeonMap.initializeFromRooms(rooms))
   }
 
-  def apply(pos: IntLocation): Room | Corridor = cellToStructure(pos)
-  def apply(x: Int, y: Int): Room | Corridor = cellToStructure(IntLocation(y, x))
+  def apply(pos: IntLocation): Option[Room | Corridor] = cellToStructure.get(pos)
+  def apply(x: Int, y: Int): Option[Room | Corridor] = cellToStructure.get(IntLocation(y, x))
+
+  def isRoom(pos: IntLocation): Boolean = {
+    val item = cellToStructure.get(pos)
+    item.nonEmpty && item.get.isInstanceOf[Room]
+  }
+
+  def isCorridor(pos: IntLocation): Boolean = {
+    val item = cellToStructure.get(pos)
+    item.nonEmpty && item.get.isInstanceOf[Corridor]
+  }
 
   def update(roomSet: RoomSet): DungeonMap = {
     var dmap: DungeonMap = this
-
+    
     for (room <- roomSet.rooms) {
       dmap = addRoom(room)
     }
@@ -49,7 +59,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   private def addRoom(room: Room): DungeonMap =
     DungeonMap(DungeonMap.addRoom(room, cellToStructure))
 
-  private def addCorridors(corridors: Set[Corridor]): DungeonMap = {
+  def addCorridors(corridors: Set[Corridor]): DungeonMap = {
     var dmap: DungeonMap = this
     for (c <- corridors) {
       dmap = addCorridor(c)

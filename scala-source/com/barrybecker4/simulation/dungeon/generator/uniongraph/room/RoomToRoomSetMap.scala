@@ -14,11 +14,11 @@ case class RoomToRoomSetMap(map: Map[Room, RoomSet]) {
     for (room <- roomSet.rooms) {
       m = m + (room -> roomSet)
     }
-    RoomToRoomSetMap(map)
+    RoomToRoomSetMap(m)
   }
 
   def getAllRooms: Set[Room] = map.keySet
-  
+
   def apply(room: Room): RoomSet = map(room)
 
   /**

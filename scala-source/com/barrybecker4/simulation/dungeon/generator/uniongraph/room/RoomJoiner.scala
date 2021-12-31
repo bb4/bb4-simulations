@@ -31,7 +31,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
    *  If in same set and not already directly connected, add it if rnd < connectivityThresh
    *
    * Finally we may need to handle the case where there were no intersections with another roomset.
-   *
    * @return the updated dungeonMap and roomToRoomSetMap
    */
   def doJoin(room: Room, dungeonMap: DungeonMap,
@@ -39,9 +38,10 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
 
     dMap = dungeonMap
     roomToRoomSet = roomToRoomSetMap
+
     doJoinForHorizontalSides(room)
     doJoinForVerticalSides(room)
-    doJoinForVerticalSides(room)
+
     (dMap, roomToRoomSet)
   }
 
@@ -61,12 +61,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       while (!done && remainingStartingPoints.nonEmpty) {
         val startYPos = remainingStartingPoints.head
         remainingStartingPoints = remainingStartingPoints.tail
-        val thing: Option[(Corridor, Room | Corridor)] =
+        val newConnection: Option[(Corridor, Room | Corridor)] =
           checkForHit(IntLocation(startYPos, startXPos), room, direction, 0)
-        if (thing.nonEmpty) {
-          // if think is in other roomSet, definitely added it, otherwise maybe add it.
-          update(thing.get)
-          done = true // if reached something in another set
+        if (newConnection.nonEmpty) {
+          // if thing is in other roomSet, definitely added it, otherwise maybe add it.
+          done = update(room, newConnection.get)
         }
       }
     }
@@ -87,11 +86,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       while (!done && remainingStartingPoints.nonEmpty) {
         val startXPos = remainingStartingPoints.head
         remainingStartingPoints = remainingStartingPoints.tail
-        val thing: Option[(Corridor, Room | Corridor)] =
+        val newConnection: Option[(Corridor, Room | Corridor)] =
           checkForHit(IntLocation(startYPos, startXPos), room, 0, direction)
-        if (thing.nonEmpty) {
+        if (newConnection.nonEmpty) {
           // if think is in other roomSet, definitely added it, otherwise maybe add it.
-          done = update(thing.get)
+          done = update(room, newConnection.get)
         }
       }
     }
@@ -101,15 +100,9 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
    *  When a ray with width 3 is sent out, the cases are
    * 0. If 1st or third points intersect a room, but not the second, then abort this ray and try next
    * 1. If we reach a dungeon edge, abort and try next.
-   * 2. If the middle cell intersect a corridor -
-   *   - add the segment to the corridor
-   *   - replace the corridor in the roomSet that it belongs to
-   *   - if roomSets are different, merge the roomSets
-   *      - the one that we came from and the one that the corridor belongs to
-   * 2.If at least 2 of the 3 cells intersect a room, then create a corridor connection
-   *   - if the rooms are from different roomSets, merge them and add the corridor to the merged roomSet
-   *   - if same roomSet, then just add the corridor
-   * 3. If nothing intersect, abort and try next
+   * 2. the middle cell intersect a corridor
+   * 3. If at least 2 of the 3 cells intersect a room, then create a corridor connection
+   * 4. If nothing intersects, abort and try next
    * @return the intersected object if anything
    */
   private def checkForHit(startPos: IntLocation, room: Room,
@@ -124,20 +117,22 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         return None
       }
       val pos1 = IntLocation(startPos.getY, xPos)
-      val pos2 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 1) else  IntLocation(startPos.getY + 1, xPos)
-      val pos3 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 2) else  IntLocation(startPos.getY + 2, xPos)
+      val pos2 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 1) else IntLocation(startPos.getY + 1, xPos)
+      val pos3 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 2) else IntLocation(startPos.getY + 2, xPos)
 
       if (grazesRoom(pos1, pos2, pos3)) {
         return None
       }
-      val middleItem = dMap(pos2)
-      if (middleItem.isInstanceOf[Corridor]) {
-        val path = getPath(xDirection, yDirection, startPos, pos2)
-        return Some((Corridor(path, HashSet(room)), middleItem))
-      }
-      if (dMap(pos1).isInstanceOf[Room] || dMap(pos3).isInstanceOf[Room]) {
-        val path = getPath(xDirection, yDirection, startPos, pos2)
-        return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
+      if (dMap(pos2).isDefined) {
+        val middleItem = dMap(pos2).get
+        if (middleItem.isInstanceOf[Corridor]) {
+          val path = getPath(xDirection, yDirection, startPos, pos2)
+          return Some((Corridor(path, HashSet(room)), middleItem))
+        }
+        if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
+          val path = getPath(xDirection, yDirection, startPos, pos2)
+          return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
+        }
       }
     }
     None
@@ -151,23 +146,59 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     Seq((firstPos, pos2))
   }
 
-
   private def grazesRoom(pos1: IntLocation, pos2: IntLocation, pos3: IntLocation): Boolean =
-    (dMap(pos1).isInstanceOf[Room] || dMap(pos3).isInstanceOf[Room]) && !dMap(pos2).isInstanceOf[Room]
+    (dMap.isRoom(pos1) || dMap.isRoom(pos3)) && !dMap.isRoom(pos2)
 
   /**
-   * Update dungeonMap and roomsToRoomSetMap given the new connection
-   * @param thing corridor that reaches another room or corridor
-   * @return true if coonected with another set
+   * Update dungeonMap and roomsToRoomSetMap given the new connection.
+   *
+   *   If connection is to a Room:
+   *   - if the rooms are from different roomSets, merge them and add the corridor to the merged roomSet
+   *   - if same roomSet, then just add the corridor
+   *
+   *   If connection is to a Corridor:
+   *   - add the segment to the corridor
+   *   - replace the corridor in the roomSet that it belongs to
+   *   - if roomSets are different, merge the roomSets:
+   *       the one that we came from and the one that the corridor belongs to
+   *
+   * @param connection corridor that reaches another room or corridor
+   * @return true if connected with another set
    */
-  private def update(thing: (Corridor, Room | Corridor)): Boolean = {
-    true
+  private def update(room: Room, connection: (Corridor, Room | Corridor)): Boolean = {
+
+    val thisRoomSet = roomToRoomSet(room)
+    var otherRoomSet = connection._2 match {
+      case room1: Room => roomToRoomSet(room1)
+      case _ => roomToRoomSet(connection._2.asInstanceOf[Corridor].rooms.head)
+    }
+    val connectsOtherRoomSet = thisRoomSet != otherRoomSet
+
+    val corridorToAdd =
+      if (connection._2.isInstanceOf[Room]) connection._1
+      else {
+        val corridor = connection._2.asInstanceOf[Corridor]
+        // first remove the corridor from the roomSet to which it belongs
+        otherRoomSet = otherRoomSet.removeCorridor(corridor)
+        corridor.addSegment(connection._1)
+      }
+
+    val baseRoomSet =
+      if (connectsOtherRoomSet) thisRoomSet.mergeRoomSet(otherRoomSet)
+      else thisRoomSet
+    val updatedRoomSet = baseRoomSet.addCorridor(corridorToAdd)
+
+    assert(updatedRoomSet.rooms.size > 1)
+    roomToRoomSet = roomToRoomSet.update(updatedRoomSet)
+    dMap = dMap.addCorridors(updatedRoomSet.corridors)
+
+    connectsOtherRoomSet
   }
 
   private def getStartingPoints(startPos: Int, stopPos: Int): List[Int] = {
     var startingPoints: List[Int] = List()
 
-    for (i <- stopPos + 1 until stopPos by RAY_WIDTH) {
+    for (i <- startPos + 1 until stopPos by RAY_WIDTH) {
       startingPoints :+= i
     }
     rnd.shuffle(startingPoints)

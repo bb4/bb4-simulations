@@ -18,8 +18,8 @@ case class CorridorGenerator(options: DungeonOptions) {
     var roomToRoomSetMap: RoomToRoomSetMap = new RoomToRoomSetMap(rooms)
     var dungeonMap = new DungeonMap(rooms)
     val roomJoiner = RoomJoiner(options.connectivity, options.dimension)
-
-/*
+    assert(dungeonMap != null)
+    /*
     while (!roomToRoomSetMap.isConnected) {
       val roomSet = roomToRoomSetMap.getSmallestConnectedRoomSet
       for (room <- roomSet.rooms) {
@@ -31,5 +31,4 @@ case class CorridorGenerator(options: DungeonOptions) {
 
     dungeonMap
   }
-
 }
