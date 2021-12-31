@@ -49,7 +49,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
 
   def update(roomSet: RoomSet): DungeonMap = {
     var dmap: DungeonMap = this
-    
+
     for (room <- roomSet.rooms) {
       dmap = addRoom(room)
     }
@@ -90,6 +90,6 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     dmap
   }
 
-  // todo
-  def getCorridors: Set[Corridor] = Set()
+  def getCorridors: Set[Corridor] =
+    cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
 }

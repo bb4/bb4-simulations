@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.dungeon.model.RoomOptions
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random
@@ -13,7 +14,8 @@ class BoxSplitterSuite extends AnyFunSuite {
 
   test("Split horizontally") {
 
-    val splitter = BoxSplitter(15, 20, 3, rnd)
+    val roomOptions = RoomOptions(15, 20, 100, 3)
+    val splitter = BoxSplitter(roomOptions, rnd)
     val box = Box(2, 3, 20, 30)
     val (leftBox, rightBox) = splitter.splitHorizontally(box)
 
@@ -24,7 +26,8 @@ class BoxSplitterSuite extends AnyFunSuite {
 
   test("Split vertically") {
 
-    val splitter = BoxSplitter(15, 20, 3, rnd)
+    val roomOptions = RoomOptions(15, 20, 100, 3)
+    val splitter = BoxSplitter(roomOptions, rnd)
     val box = Box(2, 3, 20, 30)
     val (bottomBox, topBox) = splitter.splitVertically(box)
 
@@ -35,7 +38,8 @@ class BoxSplitterSuite extends AnyFunSuite {
 
   test("Split horizontally when narrow") {
 
-    val splitter = BoxSplitter(40, 50, 6, rnd)
+    val roomOptions = RoomOptions(40, 30, 100, 6)
+    val splitter = BoxSplitter(roomOptions, rnd)
     val box = Box(2, 3, 20, 30)
     val (leftBox, rightBox) = splitter.splitHorizontally(box)
 
@@ -46,7 +50,8 @@ class BoxSplitterSuite extends AnyFunSuite {
 
   test("Split vertically when squat") {
 
-    val splitter = BoxSplitter(40, 50, 6, rnd)
+    val roomOptions = RoomOptions(40, 50, 100, 6)
+    val splitter = BoxSplitter(roomOptions, rnd)
     val box = Box(2, 3, 20, 30)
     val (bottomBox, topBox) = splitter.splitVertically(box)
 

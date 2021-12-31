@@ -11,9 +11,8 @@ case class RoomToRoomSetMap(map: Map[Room, RoomSet]) {
 
   def update(roomSet: RoomSet): RoomToRoomSetMap = {
     var m: Map[Room, RoomSet] = map
-    for (room <- roomSet.rooms) {
-      m = m + (room -> roomSet)
-    }
+    for (room <- roomSet.rooms) 
+      m += (room -> roomSet)
     RoomToRoomSetMap(m)
   }
 
@@ -27,4 +26,6 @@ case class RoomToRoomSetMap(map: Map[Room, RoomSet]) {
   def isConnected: Boolean = map.head._2.size() == map.size
 
   def getSmallestConnectedRoomSet: RoomSet = map.values.minBy(_.size())
+  
+  def getNumDisjointSets: Int = map.values.toSet.size
 }

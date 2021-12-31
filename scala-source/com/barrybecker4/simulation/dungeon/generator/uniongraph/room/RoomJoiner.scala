@@ -116,7 +116,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       if (xPos == 0 || xPos == dungeonDim.width || yPos == 0 || yPos == dungeonDim.height) {
         return None
       }
-      val pos1 = IntLocation(startPos.getY, xPos)
+      val pos1 = if (xDirection == 0) IntLocation(yPos, startPos.getX) else IntLocation(startPos.getY, xPos)
       val pos2 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 1) else IntLocation(startPos.getY + 1, xPos)
       val pos3 = if (xDirection == 0) IntLocation(yPos, startPos.getX + 2) else IntLocation(startPos.getY + 2, xPos)
 
@@ -125,12 +125,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       }
       if (dMap(pos2).isDefined) {
         val middleItem = dMap(pos2).get
+        val path = getPath(xDirection, yDirection, startPos, pos2)
         if (middleItem.isInstanceOf[Corridor]) {
-          val path = getPath(xDirection, yDirection, startPos, pos2)
           return Some((Corridor(path, HashSet(room)), middleItem))
         }
         if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
-          val path = getPath(xDirection, yDirection, startPos, pos2)
           return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
         }
       }
