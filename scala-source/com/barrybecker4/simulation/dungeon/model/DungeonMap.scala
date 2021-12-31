@@ -34,6 +34,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     this(DungeonMap.initializeFromRooms(rooms))
   }
 
+  def apply(pos: IntLocation): Room | Corridor = cellToStructure(pos)
   def apply(x: Int, y: Int): Room | Corridor = cellToStructure(IntLocation(y, x))
 
   def update(roomSet: RoomSet): DungeonMap = {

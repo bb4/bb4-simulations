@@ -17,18 +17,17 @@ case class CorridorGenerator(options: DungeonOptions) {
 
     var roomToRoomSetMap: RoomToRoomSetMap = new RoomToRoomSetMap(rooms)
     var dungeonMap = new DungeonMap(rooms)
-    val roomJoiner = RoomJoiner()
+    val roomJoiner = RoomJoiner(options.connectivity, options.dimension)
 
 /*
     while (!roomToRoomSetMap.isConnected) {
       val roomSet = roomToRoomSetMap.getSmallestConnectedRoomSet
       for (room <- roomSet.rooms) {
-        val newRoomSet = roomJoiner.doJoin(room, dungeonMap, roomToRoomSetMap)
-        roomToRoomSetMap = roomToRoomSetMap.update(newRoomSet)
-        dungeonMap = dungeonMap.update(newRoomSet)
+        val result = roomJoiner.doJoin(room, dungeonMap, roomToRoomSetMap)
+        dungeonMap = result._1
+        roomToRoomSetMap = result._2
       }
-    }
-    */
+    }*/
 
     dungeonMap
   }
