@@ -5,26 +5,24 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, Room}
 
 import scala.collection.immutable.HashSet
 
-
-case class RoomSet(rooms: Set[Room], corridors: Set[Corridor], boundingBox: Box) {
+// todo: may not need the boundingBox at all
+case class RoomSet(rooms: Set[Room], corridors: Set[Corridor]) {
 
   def this(room: Room) = {
-    this(HashSet(room), Set(), room.box)
+    this(HashSet(room), Set())
   }
 
   def mergeRoomSet(roomSet: RoomSet): RoomSet = {
-    val otherBBox = roomSet.boundingBox
-    val newBBox = boundingBox.expandBy(otherBBox.getTopLeftCorner).expandBy(otherBBox.getBottomRightCorner)
-    RoomSet(this.rooms ++ roomSet.rooms, this.corridors ++ roomSet.corridors, newBBox)
+    RoomSet(this.rooms ++ roomSet.rooms, this.corridors ++ roomSet.corridors)
   }
-  
-  def addCorridor(corridor: Corridor): RoomSet = RoomSet(rooms, corridors + corridor, boundingBox)
-  
-  def removeCorridor(corridor: Corridor): RoomSet = {
-    assert(corridors.contains(corridor))
-    RoomSet(rooms, corridors - corridor, boundingBox)
-  }
-  
-  def size(): Int = rooms.size
 
+  // assuming that the coridor added does not connect any new rooms
+  def addCorridor(corridor: Corridor): RoomSet = RoomSet(rooms, corridors + corridor)
+
+  def removeCorridor(corridor: Corridor): RoomSet = {
+    assert(corridors.contains(corridor), "Did not find " + corridor + " among \n" + corridors)
+    RoomSet(rooms, corridors - corridor)
+  }
+
+  def size(): Int = rooms.size
 }

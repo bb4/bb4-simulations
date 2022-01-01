@@ -5,6 +5,6 @@ import com.barrybecker4.common.geometry.IntLocation
 
 case class Corridor(paths: Seq[(IntLocation, IntLocation)], rooms: Set[Room] = Set()) {
 
-  def addSegment(corridor: Corridor): Corridor = 
+  def addCorridor(corridor: Corridor): Corridor = 
     Corridor(paths ++ corridor.paths, rooms ++ corridor.rooms)
 }

@@ -33,7 +33,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   var dungeonOptions: DungeonOptions = DungeonOptions()
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 900))
+  setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 1000))
   val generalPanel: JPanel = createGeneralControls
 
   add(createButtons)
@@ -42,7 +42,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
 
   val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
+  fill.setPreferredSize(new Dimension(1, 500))
   add(fill)
   private var resetButton: JButton = _
   private var parameterSliders: ParameterSliders = _
@@ -116,7 +116,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   private def createGeneratorStrategyDropdown() = {
     val generatorChoicePanel = new JPanel
     val label = new JLabel("Generator Strategy: ")
-    generatorChoicePanel.setPreferredSize(Dimension(250, 60))
+    generatorChoicePanel.setPreferredSize(Dimension(250, 50))
 
     generatorStrategyChoice = new JComboBox[String]
     for (strategy <- GeneratorStrategyType.values) {

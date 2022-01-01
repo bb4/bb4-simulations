@@ -12,7 +12,7 @@ case class RoomToRoomSetMap(map: Map[Room, RoomSet]) {
   def update(roomSet: RoomSet): RoomToRoomSetMap = {
     var m: Map[Room, RoomSet] = map
     for (room <- roomSet.rooms) 
-      m += (room -> roomSet)
+      m += room -> roomSet
     RoomToRoomSetMap(m)
   }
 

@@ -35,8 +35,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   }
 
   def apply(pos: IntLocation): Option[Room | Corridor] = cellToStructure.get(pos)
-  def apply(x: Int, y: Int): Option[Room | Corridor] = cellToStructure.get(IntLocation(y, x))
-
+ 
   def isRoom(pos: IntLocation): Boolean = {
     val item = cellToStructure.get(pos)
     item.nonEmpty && item.get.isInstanceOf[Room]
@@ -61,9 +60,8 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
 
   def addCorridors(corridors: Set[Corridor]): DungeonMap = {
     var dmap: DungeonMap = this
-    for (c <- corridors) {
+    for (c <- corridors)
       dmap = addCorridor(c)
-    }
     dmap
   }
 
@@ -81,15 +79,25 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     val x2 = path._2.getX
     val y2 = path._2.getY
     if (y1 == y2) {
-      for (x <- x1 to x2)
-        dmap = DungeonMap(cellToStructure + (IntLocation(x, y1) -> corridor))
+      val step = if (x1 < x2) 1 else -1
+      for (x <- x1 until x2 by step)
+        dmap = dmap.setValue(IntLocation(y1, x), corridor)
     } else {
-      for (y <- y1 to y2)
-        dmap = DungeonMap(cellToStructure + (IntLocation(x1, y) -> corridor))
+      assert(x1 == x2)
+      val step = if (y1 < y2) 1 else -1
+      for (y <- y1 until y2 by step)
+        dmap = dmap.setValue(IntLocation(y, x1), corridor)
     }
     dmap
   }
 
-  def getCorridors: Set[Corridor] =
-    cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
+  def setValue(location: IntLocation, item: Room | Corridor): DungeonMap =
+    DungeonMap(cellToStructure + (location -> item))
+
+  def getCorridors: Set[Corridor] = {
+    val corridors =
+      cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
+    println("num corridors to render = " + corridors.size)
+    corridors
+  }
 }

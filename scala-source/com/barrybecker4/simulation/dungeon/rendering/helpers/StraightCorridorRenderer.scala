@@ -10,22 +10,24 @@ import java.awt.Color
 // todo: add ability to draw polygon to offline renderer
 case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
-  def drawCorridor(path: Seq[(IntLocation, IntLocation)]): Unit = {
-    val loc1 = path.head._1
-    val loc2 = path.head._2
+  def drawCorridor(paths: Seq[(IntLocation, IntLocation)]): Unit = {
 
-    val px = loc1.getX
-    val py = loc1.getY
-    val x = loc2.getX
-    val y = loc2.getY
+    for (segment <- paths) {
+      val loc1 = segment._1
+      val loc2 = segment._2
 
-    val box =
-      if (Math.abs(x - px) > Math.abs(y - py))
-        new Box(IntLocation(py, px), IntLocation(y + 1,x))
-      else
-        new Box(IntLocation(py, px), IntLocation(y, x + 1))
+      val px = loc1.getX
+      val py = loc1.getY
+      val x = loc2.getX
+      val y = loc2.getY
 
-    drawCorridorSegment(box.scaleBy(options.cellSize), DECORATION)
+      val isHorizontal = Math.abs(x - px) > Math.abs(y - py)
+      val box =
+        if (isHorizontal) new Box(IntLocation(py, px), IntLocation(y + 1, x))
+        else new Box(IntLocation(py, px), IntLocation(y, x + 1))
+
+      drawCorridorSegment(box.scaleBy(options.cellSize), DECORATION)
+    }
   }
 
   private def drawCorridorSegment(box: Box, decoration: Decoration): Unit = {

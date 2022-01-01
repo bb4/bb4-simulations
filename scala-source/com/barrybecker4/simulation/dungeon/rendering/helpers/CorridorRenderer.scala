@@ -14,8 +14,8 @@ case class CorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
     val cellSize: Int = options.cellSize
 
     for (corridor <- corridors) {
-      val path = corridor.paths
-      straightRenderer.drawCorridor(path)
+      val paths = corridor.paths
+      straightRenderer.drawCorridor(paths)
     }
   }
 }
