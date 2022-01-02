@@ -120,34 +120,19 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       if (grazesRoom(pos1, pos2, pos3))
         return None
 
-      if (firstPosition && isOverExistingCorridor(pos1, pos2, pos3)) {
-        println("firstPosition "+ pos2 + " was over existing corridor. From room " + room)
+      if (firstPosition && isOverExistingCorridor(pos1, pos2, pos3))
         return None
-      }
       firstPosition = false
 
       if (dMap(pos2).isDefined) {
         val middleItem = dMap(pos2).get
         val path = getPath(xDirection, yDirection, startPos, pos2)
-        if (middleItem.isInstanceOf[Corridor]) {
-          val c = middleItem.asInstanceOf[Corridor]
-          //println(path.toString() + " hit another corridor\n")
-          //println("The corridor that was hit was "+ middleItem + "\n")
-          //println("And it came from room:" + room + " belonging to roomSet.corridors:")
-          val rSet = roomToRoomSet(room)
-          if (rSet.corridors.contains(c)) {
-            val cs = rSet.corridors
-            println("room (" + cs.size + ")\n" + cs.mkString("\n"))
-          }
-          else {
-            val cs = roomToRoomSet(c.rooms.head).corridors
-            println("other (" + cs.size + ") \n" + cs.mkString("\n"))
-          }
-          return Some((Corridor(path, HashSet(room)), middleItem))
-        }
-        else if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
-          println("found connection from " + startPos + " middleItem=" + middleItem)
-          return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
+        middleItem match {
+          case c: Corridor =>
+            val rSet = roomToRoomSet(room)
+            return Some((Corridor(path, HashSet(room)), middleItem))
+          case _ => if (dMap.isRoom(pos1) || dMap.isRoom(pos3))
+            return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
         }
       }
     }
@@ -201,6 +186,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       case _ => roomToRoomSet(connection._2.asInstanceOf[Corridor].rooms.head)
     }
     val connectsOtherRoomSet = thisRoomSet != otherRoomSet
+
+    if (!connectsOtherRoomSet && rnd.nextFloat() > connectivity) {
+      // only add connection beyond what is minimally needed if connectivity requires it
+      return false
+    }
 
     val corridorToAdd =
       if (connection._2.isInstanceOf[Room]) connection._1

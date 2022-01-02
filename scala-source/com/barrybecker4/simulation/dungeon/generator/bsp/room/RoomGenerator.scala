@@ -7,7 +7,6 @@ import RoomGenerator.*
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
 import java.awt.{Color, Dimension}
-import scala.collection.immutable.HashSet
 import scala.util.Random
 
 
@@ -22,7 +21,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val widthToHeightRatio: Float = 
     roomOptions.getMaxPaddedWidth.toFloat / roomOptions.getMaxPaddedHeight
 
-  private val boxSplitter = BoxSplitter(roomOptions)
+  private val boxSplitter = BoxSplitter(roomOptions, rnd)
 
   def generateRooms(): BspNode = {
     val dim = options.dimension
