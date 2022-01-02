@@ -7,6 +7,7 @@ import java.util.PriorityQueue
 import scala.collection.mutable
 import scala.util.Random
 
+
 object CorridorGenerator {
   private val RND = Random(0)
 }
@@ -43,13 +44,13 @@ case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
         sameCount = 0
       numDisjointSets = numSets
     }
-    println("sameCount = " + sameCount + " isConnected = " + roomToRoomSetMap.isConnected)
+    //println("sameCount = " + sameCount + " isConnected = " + roomToRoomSetMap.isConnected)
 
     dungeonMap
   }
 
   private def joinRoomsInRooomSet(roomSet: RoomSet, roomJoiner: RoomJoiner): Unit = {
-    
+
     for (room <- roomSet.rooms) {
       val result = roomJoiner.doJoin(room, dungeonMap, roomToRoomSetMap)
       dungeonMap = result._1

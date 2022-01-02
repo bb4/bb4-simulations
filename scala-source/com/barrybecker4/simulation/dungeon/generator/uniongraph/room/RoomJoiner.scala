@@ -2,7 +2,8 @@ package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.RoomJoiner.RAY_WIDTH
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Room}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Orientation, Path, Room}
+import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
 import java.awt.Dimension
 import scala.collection.immutable.HashSet
@@ -148,12 +149,22 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
   }
 
   private def getPath(xDirection: Int, yDirection: Int,
-                      startPos: IntLocation, pos2: IntLocation): Seq[(IntLocation, IntLocation)] = {
+                      startPos: IntLocation, pos2: IntLocation): Seq[Path] = {
     val firstPos =
-      if (xDirection == 0) IntLocation(startPos.getY, pos2.getX)
-      else IntLocation(pos2.getY, startPos.getX)
-    val secondPos = IntLocation(pos2.getY + (if (yDirection == -1) 1 else 0), pos2.getX + (if (xDirection == -1) 1 else 0))
-    Seq((firstPos, secondPos))
+      if (xDirection == 0) IntLocation(Math.min(startPos.getY, pos2.getY) + (if (yDirection == -1) 1 else 0), pos2.getX)
+      else IntLocation(pos2.getY, Math.min(startPos.getX, pos2.getX) + (if (xDirection == -1) 1 else 0))
+
+    val secondPos = IntLocation(
+      Math.max(startPos.getY, pos2.getY),
+      Math.max(startPos.getX, pos2.getX)
+    )
+
+    val orientation = if (xDirection == 0) Vertical else Horizontal
+    val length =
+      if (orientation == Vertical) secondPos.getY - firstPos.getY
+      else secondPos.getX - firstPos.getX
+
+    Seq(Path(firstPos, orientation, length))
   }
 
   private def grazesRoom(pos1: IntLocation, pos2: IntLocation, pos3: IntLocation): Boolean =

@@ -31,21 +31,14 @@ object DungeonMap {
                           cellToStructure: Map[IntLocation, Room | Corridor]): Map[IntLocation, Room | Corridor] = {
     var map = cellToStructure
     for (path <- corridor.paths) {
-      val x1 = path._1.getX
-      val y1 = path._1.getY
-      val x2 = path._2.getX
-      val y2 = path._2.getY
-      if (y1 == y2) {
-        val start = if (x1 < x2) x1 else x2
-        val stop = if (x1 < x2) x2 else x1
+      val x1 = path.start.getX
+      val y1 = path.start.getY
 
-        for (x <- start until stop)
+      if (path.orientation == Orientation.Horizontal) {
+        for (x <- x1 until x1 + path.length)
           map += IntLocation(y1, x) -> corridor
       } else {
-        assert(x1 == x2)
-        val start = if (y1 < y2) y1 else y2
-        val stop = if (y1 < y2) y2 else y1
-        for (y <- start until stop)
+        for (y <- y1 until y1 + path.length)
           map += IntLocation(y, x1) -> corridor
       }
     }

@@ -1,44 +1,43 @@
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Decoration}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, Decoration, DungeonOptions, Orientation, Path}
+import com.barrybecker4.simulation.dungeon.model.Orientation.*
 import com.barrybecker4.simulation.dungeon.model.DungeonOptions.DECORATION
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.Color
+
 
 // todo: add ability to draw polygon to offline renderer
 case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
   def drawCorridor(corridor: Corridor): Unit = {
 
-    val paths: Seq[(IntLocation, IntLocation)] = corridor.paths
-    
-    for (segment <- paths) {
-      val loc1 = segment._1
-      val loc2 = segment._2
+    val paths: Seq[Path] = corridor.paths
 
-      val px = loc1.getX
-      val py = loc1.getY
-      val x = loc2.getX
-      val y = loc2.getY
+    for (path <- paths) {
+      val px = path.start.getX
+      val py = path.start.getY
 
-      val isHorizontal = Math.abs(x - px) > Math.abs(y - py)
-      val point2 = if (isHorizontal) IntLocation(y + 1, x) else IntLocation(y, x + 1)
+      val point2 =
+        path.orientation match {
+          case Horizontal => IntLocation(py + 1, px + path.length)
+          case Vertical => IntLocation(py + path.length, px + 1)
+        }
       val box = new Box(IntLocation(py, px), point2)
 
-      drawCorridorSegment(box.scaleBy(options.cellSize), DECORATION)
+      drawCorridorSegment(box.scaleBy(options.cellSize), path.orientation, DECORATION)
     }
   }
 
-  private def drawCorridorSegment(box: Box, decoration: Decoration): Unit = {
+  private def drawCorridorSegment(box: Box, orientation: Orientation, decoration: Decoration): Unit = {
     g.setColor(decoration.floorColor)
 
-    val isHorizontal = box.getWidth > box.getHeight
     val wallWidth = decoration.wallStroke.getLineWidth.toInt
     g.setColor(decoration.floorColor)
 
-    if (isHorizontal)
+    if (orientation == Horizontal)
       g.fillRect(box.getMinCol - wallWidth, box.getMinRow, box.getWidth + 2 * wallWidth, box.getHeight)
     else
       g.fillRect(box.getMinCol, box.getMinRow - wallWidth, box.getWidth, box.getHeight + 2 * wallWidth)
@@ -46,7 +45,7 @@ case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions)
     g.setColor(decoration.wallColor)
     g.setStroke(decoration.wallStroke)
 
-    if (isHorizontal) drawHorizontalLines(box)
+    if (orientation == Horizontal) drawHorizontalLines(box)
     else drawVerticalLines(box)
   }
 
