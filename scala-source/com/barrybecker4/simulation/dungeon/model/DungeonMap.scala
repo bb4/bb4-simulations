@@ -18,13 +18,38 @@ object DungeonMap {
                       cellToStructure: Map[IntLocation, Room | Corridor]): Map[IntLocation, Room | Corridor] = {
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
-    var m = cellToStructure
+    var map = cellToStructure
     for (x <- topLeft.getX until bottomRight.getX) {
       for (y <- topLeft.getY until bottomRight.getY) {
-        m += IntLocation(y, x) -> room
+        map += IntLocation(y, x) -> room
       }
     }
-    m
+    map
+  }
+
+  private def addCorridor(corridor: Corridor,
+                          cellToStructure: Map[IntLocation, Room | Corridor]): Map[IntLocation, Room | Corridor] = {
+    var map = cellToStructure
+    for (path <- corridor.paths) {
+      val x1 = path._1.getX
+      val y1 = path._1.getY
+      val x2 = path._2.getX
+      val y2 = path._2.getY
+      if (y1 == y2) {
+        val start = if (x1 < x2) x1 else x2
+        val stop = if (x1 < x2) x2 else x1
+
+        for (x <- start until stop)
+          map += IntLocation(y1, x) -> corridor
+      } else {
+        assert(x1 == x2)
+        val start = if (y1 < y2) y1 else y2
+        val stop = if (y1 < y2) y2 else y1
+        for (y <- start until stop)
+          map += IntLocation(y, x1) -> corridor
+      }
+    }
+    map
   }
 }
 
@@ -47,53 +72,25 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   }
 
   def update(roomSet: RoomSet): DungeonMap = {
-    var dmap: DungeonMap = this
+    var map: Map[IntLocation, Room | Corridor] = cellToStructure
 
     for (room <- roomSet.rooms) {
-      dmap = addRoom(room)
+      map = DungeonMap.addRoom(room, map)
     }
-    addCorridors(roomSet.corridors)
+    for (corridor <- roomSet.corridors) {
+      map = DungeonMap.addCorridor(corridor, map)
+    }
+    DungeonMap(map)
   }
 
   private def addRoom(room: Room): DungeonMap =
     DungeonMap(DungeonMap.addRoom(room, cellToStructure))
 
   def addCorridors(corridors: Set[Corridor]): DungeonMap = {
-    var dmap: DungeonMap = this
+    var map: Map[IntLocation, Room | Corridor] = cellToStructure
     for (c <- corridors)
-      dmap = addCorridor(c)
-    dmap
-  }
-
-  private def addCorridor(corridor: Corridor): DungeonMap = {
-    var dmap: DungeonMap = this
-    for (path <- corridor.paths)
-      dmap = addPath(path, corridor)
-    dmap
-  }
-
-  private def addPath(path: (IntLocation, IntLocation), corridor: Corridor): DungeonMap = {
-    var dmap: DungeonMap = this
-    //val corridorCellsBefore: Set[IntLocation] = dmap.getCorridorCells
-    val x1 = path._1.getX
-    val y1 = path._1.getY
-    val x2 = path._2.getX
-    val y2 = path._2.getY
-    if (y1 == y2) {
-      val start = if (x1 < x2) x1 else x2
-      val stop = if (x1 < x2) x2 else x1
-
-      for (x <- start until stop)
-        dmap = dmap.setValue(IntLocation(y1, x), corridor)
-    } else {
-      assert(x1 == x2)
-      val start = if (y1 < y2) y1 else y2
-      val stop = if (y1 < y2) y2 else y1
-      for (y <- start until stop)
-        dmap = dmap.setValue(IntLocation(y, x1), corridor)
-    }
-    //println("### Corridor cells added for " + path + "= \n" + (dmap.getCorridorCells.diff(corridorCellsBefore)))
-    dmap
+      map = DungeonMap.addCorridor(c, map)
+    DungeonMap(map)
   }
 
   def setValue(location: IntLocation, item: Room | Corridor): DungeonMap = {

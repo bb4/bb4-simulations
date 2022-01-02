@@ -40,14 +40,14 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     roomToRoomSet = roomToRoomSetMap
 
     val origCorridors = dMap.getCorridors
-    //println("numCorridors before doJoin: " + origCorridors.size + " corridor cells = \n" + dMap.getCorridorCells)
+    println("numCorridors before doJoin: " + origCorridors.size)
 
     val hConnectionsForRoom = doJoinForHorizontalSides(room)
     val vConnectionsForRoom = doJoinForVerticalSides(room)
 
     //println("connectionsForRoom h=" + hConnectionsForRoom + " v=" + vConnectionsForRoom)
-    //val newCorridors = dMap.getCorridors
-    //println("numCorridors after doJoin: " + newCorridors.size + " corridor cells = \n" + dMap.getCorridorCells)
+    val newCorridors = dMap.getCorridors
+    println("numCorridors after doJoin: " + newCorridors.size)
     //if (newCorridors.size - origCorridors.size != hConnectionsForRoom + vConnectionsForRoom)
     //  throw new IllegalStateException()
 
@@ -162,7 +162,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
           return None
         }
         else if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
-          //println("found connection from " + startPos + " middleItem=" + middleItem)
+          println("found connection from " + startPos + " middleItem=" + middleItem)
           return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
         }
       }
@@ -248,7 +248,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
   private def getStartingPoints(startPos: Int, stopPos: Int): List[Int] = {
     var startingPoints: List[Int] = List()
 
-    for (i <- startPos + 1 to stopPos - RAY_WIDTH by RAY_WIDTH) {
+    for (i <- startPos to stopPos - RAY_WIDTH by RAY_WIDTH) {
       startingPoints :+= i
     }
     rnd.shuffle(startingPoints)

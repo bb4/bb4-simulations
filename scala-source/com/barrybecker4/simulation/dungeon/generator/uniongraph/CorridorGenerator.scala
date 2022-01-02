@@ -29,13 +29,10 @@ case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
 
     var numDisjointSets = roomToRoomSetMap.getNumDisjointSets
     var sameCount = 0
-    //var lastProcessedRoomSet: RoomSet = null
 
     while (!roomToRoomSetMap.isConnected && sameCount < 3) {
 
       val roomSet = roomToRoomSetMap.getSmallestConnectedRoomSet
-      //assert(roomSet != lastProcessedRoomSet)
-      //lastProcessedRoomSet = roomSet
 
       joinRoomsInRooomSet(roomSet, roomJoiner)
 
@@ -52,9 +49,7 @@ case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
   }
 
   private def joinRoomsInRooomSet(roomSet: RoomSet, roomJoiner: RoomJoiner): Unit = {
-
-    // println("num rooms in smallest roomSet = " + roomSet.rooms.size + " nCorridors = " + roomSet.corridors.size)
-
+    
     for (room <- roomSet.rooms) {
       val result = roomJoiner.doJoin(room, dungeonMap, roomToRoomSetMap)
       dungeonMap = result._1
