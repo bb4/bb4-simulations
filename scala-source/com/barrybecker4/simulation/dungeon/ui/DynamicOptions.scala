@@ -58,7 +58,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
     panel.add(createCheckboxPanel)
 
     val fill = new JPanel
-    fill.setPreferredSize(new Dimension(1, 400))
+    fill.setPreferredSize(new Dimension(1, 1200))
     panel.add(fill)
 
     panel

@@ -39,27 +39,17 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     dMap = dungeonMap
     roomToRoomSet = roomToRoomSetMap
 
-    val origCorridors = dMap.getCorridors
-    println("numCorridors before doJoin: " + origCorridors.size)
-
-    val hConnectionsForRoom = doJoinForHorizontalSides(room)
-    val vConnectionsForRoom = doJoinForVerticalSides(room)
-
-    //println("connectionsForRoom h=" + hConnectionsForRoom + " v=" + vConnectionsForRoom)
-    val newCorridors = dMap.getCorridors
-    println("numCorridors after doJoin: " + newCorridors.size)
-    //if (newCorridors.size - origCorridors.size != hConnectionsForRoom + vConnectionsForRoom)
-    //  throw new IllegalStateException()
+    doJoinForHorizontalSides(room)
+    doJoinForVerticalSides(room)
 
     (dMap, roomToRoomSet)
   }
 
-  private def doJoinForHorizontalSides(room: Room): Int = {
+  private def doJoinForHorizontalSides(room: Room): Unit = {
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
 
     val startingPoints = getStartingPoints(topLeft.getY, bottomRight.getY)
-    var numConnections = 0
 
     for (direction <- Seq(1, -1)) {
       var done = false
@@ -73,20 +63,18 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         val newConnection: Option[(Corridor, Room | Corridor)] =
           checkForHit(IntLocation(startYPos, startXPos), room, direction, 0)
         if (newConnection.nonEmpty) {
-          numConnections += 1
-          done = update(room, newConnection.get)
+          update(room, newConnection.get)
+          done = true
         }
       }
     }
-    numConnections
   }
 
-  private def doJoinForVerticalSides(room: Room): Int = {
+  private def doJoinForVerticalSides(room: Room): Unit = {
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
 
     val startingPoints = getStartingPoints(topLeft.getX, bottomRight.getX)
-    var numConnections = 0;
 
     for (direction <- Seq(1, -1)) {
       var done = false
@@ -100,12 +88,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         val newConnection: Option[(Corridor, Room | Corridor)] =
           checkForHit(IntLocation(startYPos, startXPos), room, 0, direction)
         if (newConnection.nonEmpty) {
-          numConnections += 1
-          done = update(room, newConnection.get)
+          update(room, newConnection.get)
+          done = true
         }
       }
     }
-    numConnections
   }
 
   /**
@@ -143,11 +130,10 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         val middleItem = dMap(pos2).get
         val path = getPath(xDirection, yDirection, startPos, pos2)
         if (middleItem.isInstanceOf[Corridor]) {
-          /*
           val c = middleItem.asInstanceOf[Corridor]
-          println(path.toString() + " hit another corridor\n")
-          println("The corridor that was hit was "+ middleItem + "\n")
-          println("And it came from room:" + room + " belonging to roomSet.corridors:")
+          //println(path.toString() + " hit another corridor\n")
+          //println("The corridor that was hit was "+ middleItem + "\n")
+          //println("And it came from room:" + room + " belonging to roomSet.corridors:")
           val rSet = roomToRoomSet(room)
           if (rSet.corridors.contains(c)) {
             val cs = rSet.corridors
@@ -158,8 +144,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
             println("other (" + cs.size + ") \n" + cs.mkString("\n"))
           }
           return Some((Corridor(path, HashSet(room)), middleItem))
-          */
-          return None
         }
         else if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
           println("found connection from " + startPos + " middleItem=" + middleItem)
