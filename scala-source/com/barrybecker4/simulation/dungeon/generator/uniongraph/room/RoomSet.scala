@@ -12,11 +12,10 @@ case class RoomSet(rooms: Set[Room], corridors: Set[Corridor]) {
     this(HashSet(room), Set())
   }
 
-  def mergeRoomSet(roomSet: RoomSet): RoomSet = {
+  def mergeRoomSet(roomSet: RoomSet): RoomSet = 
     RoomSet(this.rooms ++ roomSet.rooms, this.corridors ++ roomSet.corridors)
-  }
 
-  // assuming that the coridor added does not connect any new rooms
+  // assuming that the corridor added does not connect any new rooms
   def addCorridor(corridor: Corridor): RoomSet = RoomSet(rooms, corridors + corridor)
 
   def removeCorridor(corridor: Corridor): RoomSet = {

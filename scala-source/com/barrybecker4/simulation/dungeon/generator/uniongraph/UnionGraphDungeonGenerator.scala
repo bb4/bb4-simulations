@@ -10,6 +10,8 @@ import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions, 
 import java.awt.{Color, Dimension}
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
+import scala.util.Random
+
 
 
 /**
@@ -19,12 +21,13 @@ import scala.collection.mutable
 class UnionGraphDungeonGenerator extends DungeonGeneratorStrategy {
 
   def generateDungeon(options: DungeonOptions): DungeonModel = {
-    val roomGenerator = RoomGenerator(options)
-    val corridorGenerator = CorridorGenerator(options)
+    val rnd: Random = Random(0)
+    val roomGenerator = RoomGenerator(options, rnd)
+    val corridorGenerator = CorridorGenerator(options, rnd)
 
     val rooms = roomGenerator.generateRooms()
     val dungeonMap = corridorGenerator.generateCorridors(rooms)
 
-    DungeonModel(rooms, dungeonMap.getCorridors)
+    DungeonModel(rooms, dungeonMap.getCorridors, None) //Some(dungeonMap))
   }
 }

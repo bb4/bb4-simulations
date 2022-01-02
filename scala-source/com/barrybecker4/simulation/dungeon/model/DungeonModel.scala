@@ -13,5 +13,5 @@ import java.awt.Dimension
   * The DungeonOptions determine how to generate the dungeon.
   * Once created, the dungeon can be rendered or operated on in other ways
   */
-case class DungeonModel(rooms: Set[Room], corridors: Set[Corridor])
+case class DungeonModel(rooms: Set[Room], corridors: Set[Corridor], dungeonMap: Option[DungeonMap] = None)
 

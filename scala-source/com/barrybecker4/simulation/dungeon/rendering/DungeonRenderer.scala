@@ -30,6 +30,7 @@ class DungeonRenderer {
     val roomRenderer = RoomRenderer(g, dungeonOptions)
     val corridorRenderer = CorridorRenderer(g, dungeonOptions)
     val gridRenderer = GridRenderer(g, dungeonOptions)
+    val dungeonMapRenderer = DungeonMapRenderer(g, dungeonOptions)
 
     if (dungeonOptions.showGrid) {
       gridRenderer.renderGrid()
@@ -37,6 +38,9 @@ class DungeonRenderer {
 
     roomRenderer.renderRooms(dungeonModel.rooms)
     corridorRenderer.renderCorridors(dungeonModel.corridors)
+
+    if (dungeonModel.dungeonMap.isDefined)
+      dungeonMapRenderer.render(dungeonModel.dungeonMap.get)
   }
 
   private def getOfflineGraphics(dim: Dimension): OfflineGraphics = {

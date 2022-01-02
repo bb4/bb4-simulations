@@ -30,7 +30,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
    *  If in different set, merge the 2 sets.
    *  If in same set and not already directly connected, add it if rnd < connectivityThresh
    *
-   * Finally we may need to handle the case where there were no intersections with another roomset.
+   * Finally we may need to handle the case where there were no intersections with another roomSet.
    * @return the updated dungeonMap and roomToRoomSetMap
    */
   def doJoin(room: Room, dungeonMap: DungeonMap,
@@ -39,10 +39,17 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     dMap = dungeonMap
     roomToRoomSet = roomToRoomSetMap
 
-    var connectionsForRoom = 0
-    connectionsForRoom += doJoinForHorizontalSides(room)
-    connectionsForRoom += doJoinForVerticalSides(room)
-    println("connectionsForRoom = " + connectionsForRoom)
+    val origCorridors = dMap.getCorridors
+    //println("numCorridors before doJoin: " + origCorridors.size + " corridor cells = \n" + dMap.getCorridorCells)
+
+    val hConnectionsForRoom = doJoinForHorizontalSides(room)
+    val vConnectionsForRoom = doJoinForVerticalSides(room)
+
+    //println("connectionsForRoom h=" + hConnectionsForRoom + " v=" + vConnectionsForRoom)
+    //val newCorridors = dMap.getCorridors
+    //println("numCorridors after doJoin: " + newCorridors.size + " corridor cells = \n" + dMap.getCorridorCells)
+    //if (newCorridors.size - origCorridors.size != hConnectionsForRoom + vConnectionsForRoom)
+    //  throw new IllegalStateException()
 
     (dMap, roomToRoomSet)
   }
@@ -127,7 +134,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         return None
 
       if (firstPosition && isOverExistingCorridor(pos1, pos2, pos3)) {
-        println("firstPosition "+ pos2 + " was over exiting corridor. From room " + room)
+        println("firstPosition "+ pos2 + " was over existing corridor. From room " + room)
         return None
       }
       firstPosition = false
@@ -155,6 +162,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
           return None
         }
         else if (dMap.isRoom(pos1) || dMap.isRoom(pos3)) {
+          //println("found connection from " + startPos + " middleItem=" + middleItem)
           return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
         }
       }
@@ -175,7 +183,8 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     val firstPos =
       if (xDirection == 0) IntLocation(startPos.getY, pos2.getX)
       else IntLocation(pos2.getY, startPos.getX)
-    Seq((firstPos, pos2)) // IntLocation(pos2.getY - yDirection, pos2.getX - xDirection)))
+    val secondPos = IntLocation(pos2.getY + (if (yDirection == -1) 1 else 0), pos2.getX + (if (xDirection == -1) 1 else 0))
+    Seq((firstPos, secondPos))
   }
 
   private def grazesRoom(pos1: IntLocation, pos2: IntLocation, pos3: IntLocation): Boolean =
@@ -233,7 +242,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     assert(updatedRoomSet.rooms.size > 1)
     roomToRoomSet = roomToRoomSet.update(updatedRoomSet)
     dMap = dMap.addCorridors(updatedRoomSet.corridors)
-
     connectsOtherRoomSet
   }
 

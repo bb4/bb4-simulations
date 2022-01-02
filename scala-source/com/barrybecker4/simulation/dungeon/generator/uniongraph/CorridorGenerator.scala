@@ -5,9 +5,13 @@ import com.barrybecker4.simulation.dungeon.model.{DungeonMap, DungeonOptions, Ro
 
 import java.util.PriorityQueue
 import scala.collection.mutable
+import scala.util.Random
 
+object CorridorGenerator {
+  private val RND = Random(0)
+}
 
-case class CorridorGenerator(options: DungeonOptions) {
+case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
 
   private var roomToRoomSetMap: RoomToRoomSetMap = _
   private var dungeonMap: DungeonMap = _
@@ -21,15 +25,18 @@ case class CorridorGenerator(options: DungeonOptions) {
     roomToRoomSetMap = new RoomToRoomSetMap(rooms)
     dungeonMap = new DungeonMap(rooms)
 
-    val roomJoiner = RoomJoiner(options.connectivity, options.dimension)
+    val roomJoiner = RoomJoiner(options.connectivity, options.dimension, rnd)
 
     var numDisjointSets = roomToRoomSetMap.getNumDisjointSets
     var sameCount = 0
+    //var lastProcessedRoomSet: RoomSet = null
 
-    while (!roomToRoomSetMap.isConnected && sameCount < 4) {
+    while (!roomToRoomSetMap.isConnected && sameCount < 3) {
 
       val roomSet = roomToRoomSetMap.getSmallestConnectedRoomSet
-      
+      //assert(roomSet != lastProcessedRoomSet)
+      //lastProcessedRoomSet = roomSet
+
       joinRoomsInRooomSet(roomSet, roomJoiner)
 
       val numSets = roomToRoomSetMap.getNumDisjointSets
@@ -45,8 +52,8 @@ case class CorridorGenerator(options: DungeonOptions) {
   }
 
   private def joinRoomsInRooomSet(roomSet: RoomSet, roomJoiner: RoomJoiner): Unit = {
-    
-    println("num rooms in smallest roomSet = " + roomSet.rooms.size + " nCorridors = " + roomSet.corridors.size)
+
+    // println("num rooms in smallest roomSet = " + roomSet.rooms.size + " nCorridors = " + roomSet.corridors.size)
 
     for (room <- roomSet.rooms) {
       val result = roomJoiner.doJoin(room, dungeonMap, roomToRoomSetMap)

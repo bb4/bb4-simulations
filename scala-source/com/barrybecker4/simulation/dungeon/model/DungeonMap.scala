@@ -19,8 +19,8 @@ object DungeonMap {
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
     var m = cellToStructure
-    for (x <- topLeft.getX to bottomRight.getX) {
-      for (y <- topLeft.getY to bottomRight.getY) {
+    for (x <- topLeft.getX until bottomRight.getX) {
+      for (y <- topLeft.getY until bottomRight.getY) {
         m += IntLocation(y, x) -> room
       }
     }
@@ -35,7 +35,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   }
 
   def apply(pos: IntLocation): Option[Room | Corridor] = cellToStructure.get(pos)
- 
+
   def isRoom(pos: IntLocation): Boolean = {
     val item = cellToStructure.get(pos)
     item.nonEmpty && item.get.isInstanceOf[Room]
@@ -74,30 +74,35 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
 
   private def addPath(path: (IntLocation, IntLocation), corridor: Corridor): DungeonMap = {
     var dmap: DungeonMap = this
+    //val corridorCellsBefore: Set[IntLocation] = dmap.getCorridorCells
     val x1 = path._1.getX
     val y1 = path._1.getY
     val x2 = path._2.getX
     val y2 = path._2.getY
     if (y1 == y2) {
-      val step = if (x1 < x2) 1 else -1
-      for (x <- x1 until x2 by step)
+      val start = if (x1 < x2) x1 else x2
+      val stop = if (x1 < x2) x2 else x1
+
+      for (x <- start until stop)
         dmap = dmap.setValue(IntLocation(y1, x), corridor)
     } else {
       assert(x1 == x2)
-      val step = if (y1 < y2) 1 else -1
-      for (y <- y1 until y2 by step)
+      val start = if (y1 < y2) y1 else y2
+      val stop = if (y1 < y2) y2 else y1
+      for (y <- start until stop)
         dmap = dmap.setValue(IntLocation(y, x1), corridor)
     }
+    //println("### Corridor cells added for " + path + "= \n" + (dmap.getCorridorCells.diff(corridorCellsBefore)))
     dmap
   }
 
-  def setValue(location: IntLocation, item: Room | Corridor): DungeonMap =
+  def setValue(location: IntLocation, item: Room | Corridor): DungeonMap = {
+    //println("at " + location + " set " + item)
     DungeonMap(cellToStructure + (location -> item))
-
-  def getCorridors: Set[Corridor] = {
-    val corridors =
-      cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
-    println("num corridors to render = " + corridors.size)
-    corridors
   }
+
+  val getCorridors: Set[Corridor] =
+    cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
+
+  def getCorridorCells: Set[IntLocation] = cellToStructure.keys.toSet.filter(key => isCorridor(key))
 }

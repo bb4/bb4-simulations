@@ -33,7 +33,6 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   var dungeonOptions: DungeonOptions = DungeonOptions()
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(DynamicOptions.PREFERRED_WIDTH, 1000))
   val generalPanel: JPanel = createGeneralControls
 
   add(createButtons)
@@ -41,9 +40,6 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   add(generalPanel)
   add(Box.createVerticalStrut(DynamicOptions.SPACING))
 
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 500))
-  add(fill)
   private var resetButton: JButton = _
   private var parameterSliders: ParameterSliders = _
   private var halfPaddedCheckBox: JCheckBox = _
@@ -51,14 +47,20 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   private var generatorStrategyChoice: JComboBox[String] = _
 
   private def createGeneralControls = {
-    val panel = new JPanel(new BorderLayout)
+    val panel = new JPanel()
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
     panel.setBorder(createTitledBorder("General parameters"))
 
     parameterSliders = ParameterSliders()
     parameterSliders.addSliderChangeListener(this)
-    panel.add(createGeneratorStrategyDropdown(), BorderLayout.NORTH)
-    panel.add(parameterSliders, BorderLayout.CENTER)
-    panel.add(createCheckboxPanel, BorderLayout.SOUTH)
+    panel.add(createGeneratorStrategyDropdown())
+    panel.add(parameterSliders)
+    panel.add(createCheckboxPanel)
+
+    val fill = new JPanel
+    fill.setPreferredSize(new Dimension(1, 400))
+    panel.add(fill)
+
     panel
   }
 
@@ -116,7 +118,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   private def createGeneratorStrategyDropdown() = {
     val generatorChoicePanel = new JPanel
     val label = new JLabel("Generator Strategy: ")
-    generatorChoicePanel.setPreferredSize(Dimension(250, 50))
+    generatorChoicePanel.setMinimumSize(Dimension(200, 50))
 
     generatorStrategyChoice = new JComboBox[String]
     for (strategy <- GeneratorStrategyType.values) {

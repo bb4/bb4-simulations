@@ -22,9 +22,8 @@ case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions)
       val y = loc2.getY
 
       val isHorizontal = Math.abs(x - px) > Math.abs(y - py)
-      val box =
-        if (isHorizontal) new Box(IntLocation(py, px), IntLocation(y + 1, x))
-        else new Box(IntLocation(py, px), IntLocation(y, x + 1))
+      val point2 = if (isHorizontal) IntLocation(y + 1, x) else IntLocation(y, x + 1)
+      val box = new Box(IntLocation(py, px), point2)
 
       drawCorridorSegment(box.scaleBy(options.cellSize), DECORATION)
     }
