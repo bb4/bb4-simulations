@@ -1,7 +1,6 @@
 package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.RoomJoiner.RAY_WIDTH
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Orientation, Path, Room}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
@@ -11,7 +10,6 @@ import scala.util.Random
 
 
 object RoomJoiner {
-  private val RAY_WIDTH = 3
   private val RND = Random(0)
 }
 
@@ -19,6 +17,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
 
   private var dMap: DungeonMap = _
   private var roomToRoomSet: RoomToRoomSetMap = _
+  private val startPointGenerator = StartPointGenerator(rnd)
 
   /**
    * Send corridor rays out from the specified room and join with other nearby rooms or intersecting corridors.
@@ -50,7 +49,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
 
-    val startingPoints = getStartingPoints(topLeft.getY, bottomRight.getY)
+    val startingPoints = startPointGenerator.getStartingPoints(topLeft.getY, bottomRight.getY)
 
     for (direction <- Seq(1, -1)) {
       var done = false
@@ -75,7 +74,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     val topLeft = room.box.getTopLeftCorner
     val bottomRight = room.box.getBottomRightCorner
 
-    val startingPoints = getStartingPoints(topLeft.getX, bottomRight.getX)
+    val startingPoints = startPointGenerator.getStartingPoints(topLeft.getX, bottomRight.getX)
 
     for (direction <- Seq(1, -1)) {
       var done = false
@@ -228,14 +227,5 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     roomToRoomSet = roomToRoomSet.update(updatedRoomSet)
     dMap = dMap.addCorridors(updatedRoomSet.corridors)
     connectsOtherRoomSet
-  }
-
-  private def getStartingPoints(startPos: Int, stopPos: Int): List[Int] = {
-    var startingPoints: List[Int] = List()
-
-    for (i <- startPos to stopPos - RAY_WIDTH by RAY_WIDTH) {
-      startingPoints :+= i
-    }
-    rnd.shuffle(startingPoints)
   }
 }
