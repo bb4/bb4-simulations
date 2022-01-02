@@ -44,7 +44,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   private var parameterSliders: ParameterSliders = _
   private var halfPaddedCheckBox: JCheckBox = _
   private var showGridCHeckBox: JCheckBox = _
-  private var generatorStrategyChoice: JComboBox[String] = _
+
 
   private def createGeneralControls = {
     val panel = new JPanel()
@@ -53,7 +53,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
 
     parameterSliders = ParameterSliders()
     parameterSliders.addSliderChangeListener(this)
-    panel.add(createGeneratorStrategyDropdown())
+    panel.add(GeneratorChoice(this))
     panel.add(parameterSliders)
     panel.add(createCheckboxPanel)
 
@@ -115,23 +115,6 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
     checkboxPanel
   }
 
-  private def createGeneratorStrategyDropdown() = {
-    val generatorChoicePanel = new JPanel
-    val label = new JLabel("Generator Strategy: ")
-    generatorChoicePanel.setMinimumSize(Dimension(200, 50))
-
-    generatorStrategyChoice = new JComboBox[String]
-    for (strategy <- GeneratorStrategyType.values) {
-      generatorStrategyChoice.addItem(strategy.toString)
-    }
-    generatorStrategyChoice.setSelectedItem(GeneratorStrategyType.BinarySpacePartition.ordinal)
-    generatorStrategyChoice.addItemListener(this)
-    generatorChoicePanel.add(label)
-    generatorChoicePanel.add(generatorStrategyChoice)
-    generatorChoicePanel
-  }
-
-
   def reset(): Unit = parameterSliders.reset()
 
   /** One of the sliders was moved. */
@@ -154,7 +137,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
 
   override def itemStateChanged(e: ItemEvent): Unit = {
     val strategyType: GeneratorStrategyType =
-      GeneratorStrategyType.valueOf(generatorStrategyChoice.getSelectedItem.toString)
+      GeneratorStrategyType.valueOf(e.getItem.toString) //generatorStrategyChoice.getSelectedItem.toString)
 
     dungeonOptions = strategyType match {
       case GeneratorStrategyType.BinarySpacePartition =>

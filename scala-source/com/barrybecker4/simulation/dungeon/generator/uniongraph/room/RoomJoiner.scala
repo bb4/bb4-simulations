@@ -22,16 +22,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
   /**
    * Send corridor rays out from the specified room and join with other nearby rooms or intersecting corridors.
    * Add any corridor that joins with a room or corridor in another roomSet.
-   * For other hits, add if rnd < connectivity.
-   * If none exist, just add the corridor to the nearest object.
-   *
-   * For each side, create set pf possible ray exit points and add to a set.
-   * Try all the rays to see if we can reach something in a different set.
-   *  If in different set, merge the 2 sets.
-   *  If in same set and not already directly connected, add it if rnd < connectivityThresh
-   *
-   * Finally we may need to handle the case where there were no intersections with another roomSet.
-   * @return the updated dungeonMap and roomToRoomSetMap
    */
   def doJoin(room: Room, dungeonMap: DungeonMap,
              roomToRoomSetMap: RoomToRoomSetMap): (DungeonMap, RoomToRoomSetMap) = {
@@ -60,12 +50,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       while (!done && remainingStartingPoints.nonEmpty) {
         val startYPos = remainingStartingPoints.head
         remainingStartingPoints = remainingStartingPoints.tail
-        val newConnection: Option[(Corridor, Room | Corridor)] =
-          checkForHit(IntLocation(startYPos, startXPos), room, direction, 0)
-        if (newConnection.nonEmpty) {
-          update(room, newConnection.get)
-          done = true
-        }
+        done = processForStartingPoint(IntLocation(startYPos, startXPos), room, direction, 0)
       }
     }
   }
@@ -85,25 +70,25 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
       while (!done && remainingStartingPoints.nonEmpty) {
         val startXPos = remainingStartingPoints.head
         remainingStartingPoints = remainingStartingPoints.tail
-        val newConnection: Option[(Corridor, Room | Corridor)] =
-          checkForHit(IntLocation(startYPos, startXPos), room, 0, direction)
-        if (newConnection.nonEmpty) {
-          update(room, newConnection.get)
-          done = true
-        }
+        done = processForStartingPoint(IntLocation(startYPos, startXPos), room, 0, direction)
       }
     }
   }
 
   /**
-   * When a ray with width 3 is sent out, the cases are
-   * 0. If 1st or third points intersect a room, but not the second, then abort this ray and try next
-   * 1. If we reach a dungeon edge, abort and try next.
-   * 2. the middle cell intersect a corridor
-   * 3. If at least 2 of the 3 cells intersect a room, then create a corridor connection
-   * 4. If nothing intersects, abort and try next
-   * @return the intersected object if anything
+   * @return true if a connection was made
    */
+  private def processForStartingPoint(startLocation: IntLocation, room: Room, 
+                                      xDirection: Int, yDirection: Int): Boolean = {
+    val newConnection: Option[(Corridor, Room | Corridor)] =
+      checkForHit(startLocation, room, xDirection, yDirection)
+    if (newConnection.nonEmpty) {
+      update(room, newConnection.get)
+      true
+    } else false
+  }
+
+  /** @return the intersected object if anything */
   private def checkForHit(startPos: IntLocation, room: Room,
                           xDirection: Int, yDirection: Int): Option[(Corridor, Room | Corridor)] = {
     var xPos = startPos.getX
@@ -174,17 +159,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
 
   /**
    * Update dungeonMap and roomsToRoomSetMap given the new connection.
-   *
-   *   If connection is to a Room:
-   *   - if the rooms are from different roomSets, merge them and add the corridor to the merged roomSet
-   *   - if same roomSet, then just add the corridor
-   *
-   *   If connection is to a Corridor:
-   *   - add the segment to the corridor
-   *   - replace the corridor in the roomSet that it belongs to
-   *   - if roomSets are different, merge the roomSets:
-   *       the one that we came from and the one that the corridor belongs to
-   *
    * @param connection corridor that reaches another room or corridor
    * @return true if connected with another set
    */
@@ -216,8 +190,6 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
 
     val baseRoomSet =
       if (connectsOtherRoomSet) {
-        // verify that we are merging disjoint roomSet
-        assert(thisRoomSet.rooms.intersect(otherRoomSet.rooms).isEmpty)
         thisRoomSet.mergeRoomSet(otherRoomSet)
       }
       else thisRoomSet
