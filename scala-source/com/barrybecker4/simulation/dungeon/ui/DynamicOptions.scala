@@ -1,4 +1,3 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.ui
 
 import com.barrybecker4.common.app.AppContext
@@ -16,17 +15,9 @@ import java.awt.event.*
 import javax.swing.*
 
 
-/**
- * Dynamic controls for the Dungeon generator that will show on the right.
+/** Dynamic controls for the Dungeon generator that will show on the right.
  * They change the behavior of the simulation while it is running.
- * @author Barry Becker
  */
-object DynamicOptions {
-  private val HALLWAY_WIDTH: Int = 1
-  private val PREFERRED_WIDTH = 300
-  private val SPACING = 14
-}
-
 class DynamicOptions(listener: DungeonOptionsChangedListener)
   extends JPanel with SliderGroupChangeListener with ActionListener with ItemListener {
 
@@ -34,17 +25,17 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   val generalPanel: JPanel = createGeneralControls
+  private val SPACING = 14
 
   add(createButtons)
-  add(Box.createVerticalStrut(DynamicOptions.SPACING))
+  add(Box.createVerticalStrut(SPACING))
   add(generalPanel)
-  add(Box.createVerticalStrut(DynamicOptions.SPACING))
+  add(Box.createVerticalStrut(SPACING))
 
   private var resetButton: JButton = _
   private var parameterSliders: ParameterSliders = _
   private var halfPaddedCheckBox: JCheckBox = _
   private var showGridCHeckBox: JCheckBox = _
-
 
   private def createGeneralControls = {
     val panel = new JPanel()
@@ -86,33 +77,20 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
     halfPaddedCheckBox = new JCheckBox()
-    val halfPaddedPanel = createCheckBox("Use only half the padding ",
+    val halfPaddedPanel = CheckBoxCreator.createCheckBox("Use only half the padding ",
       "If checked, padding only goes on on the top left instead of all around",
-      dungeonOptions.halfPadded, halfPaddedCheckBox)
+      dungeonOptions.halfPadded, halfPaddedCheckBox, this)
 
     showGridCHeckBox = new JCheckBox()
-    val showGridPanel = createCheckBox("Show grid",
+    val showGridPanel = CheckBoxCreator.createCheckBox("Show grid",
       "When checked, a grid shows on the background",
-      dungeonOptions.showGrid, showGridCHeckBox)
+      dungeonOptions.showGrid, showGridCHeckBox, this)
 
     panel.add(Box.createVerticalStrut(10))
     panel.add(halfPaddedPanel)
     panel.add(showGridPanel)
     panel.add(Box.createHorizontalGlue)
     panel
-  }
-
-  private def createCheckBox(label: String, ttip: String, initialValue: Boolean, checkBox: JCheckBox): JPanel = {
-    val checkboxPanel = new JPanel(new BorderLayout())
-
-    checkboxPanel.setToolTipText(ttip)
-    val cbLabel = new JLabel(label)
-    checkBox.setSelected(initialValue)
-    checkBox.addActionListener(this)
-
-    checkboxPanel.add(cbLabel, BorderLayout.CENTER)
-    checkboxPanel.add(checkBox, BorderLayout.EAST)
-    checkboxPanel
   }
 
   def reset(): Unit = parameterSliders.reset()
@@ -128,22 +106,18 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
       dungeonOptions = dungeonOptions.setHalfPadded(halfPaddedCheckBox.isSelected)
     else if (e.getSource == showGridCHeckBox)
       dungeonOptions = dungeonOptions.setShowGrid(showGridCHeckBox.isSelected)
-    else if (e.getSource == resetButton) {
-      // todo, reset ui to original state
-    }
+    else if (e.getSource == resetButton) reset()
     else throw new IllegalArgumentException()
     listener.optionsChanged(dungeonOptions)
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
     val strategyType: GeneratorStrategyType =
-      GeneratorStrategyType.valueOf(e.getItem.toString) //generatorStrategyChoice.getSelectedItem.toString)
+      GeneratorStrategyType.valueOf(e.getItem.toString)
 
     dungeonOptions = strategyType match {
-      case GeneratorStrategyType.BinarySpacePartition =>
-        dungeonOptions.setGenerator(BspDungeonGenerator())
-      case GeneratorStrategyType.UnionGraph =>
-        dungeonOptions.setGenerator(UnionGraphDungeonGenerator())
+      case GeneratorStrategyType.BinarySpacePartition => dungeonOptions.setGenerator(BspDungeonGenerator())
+      case GeneratorStrategyType.UnionGraph => dungeonOptions.setGenerator(UnionGraphDungeonGenerator())
     }
     listener.optionsChanged(dungeonOptions)
   }
