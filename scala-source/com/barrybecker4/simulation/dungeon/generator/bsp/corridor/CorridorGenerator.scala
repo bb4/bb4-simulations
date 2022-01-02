@@ -2,12 +2,12 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.corridor
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspNode, PartitionDirection}
+import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspNode}
 import CorridorGenerator.CONNECTIVITY_SCALE
 import com.barrybecker4.simulation.dungeon.generator.bsp.room.RoomToCorridorsMap
 import com.barrybecker4.simulation.dungeon.generator.bsp.corridor.CorridorGenerator.*
 import com.barrybecker4.simulation.dungeon.generator.bsp.tree.RoomFinder
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Room}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Orientation, Room}
 
 import java.awt.Dimension
 
@@ -39,9 +39,9 @@ case class CorridorGenerator(options: DungeonOptions) {
     }
   }
 
-  private def addCorridorsBetween(direction: PartitionDirection, splitPos: Int,
+  private def addCorridorsBetween(direction: Orientation, splitPos: Int,
                                   node1: BspNode, node2: BspNode): Unit = {
-    if (direction == PartitionDirection.Horizontal)
+    if (direction == Orientation.Horizontal)
       addHorizontalConnections(splitPos, node1, node2)
     else
       addVerticalConnections(splitPos, node1, node2)
@@ -50,13 +50,13 @@ case class CorridorGenerator(options: DungeonOptions) {
   private def addHorizontalConnections(splitPos: Int, leftNode: BspNode, rightNode: BspNode): Unit = {
     val leftRooms = getLeftRooms(splitPos, leftNode)
     val rightRooms = getRightRooms(splitPos, rightNode)
-    addCorridors(PartitionDirection.Horizontal, leftRooms, rightRooms)
+    addCorridors(Orientation.Horizontal, leftRooms, rightRooms)
   }
 
   private def addVerticalConnections(splitPos: Int, topNode: BspNode, bottomNode: BspNode): Unit = {
     val topRooms = getTopRooms(splitPos, topNode)
     val bottomRooms = getBottomRooms(splitPos, bottomNode)
-    addCorridors(PartitionDirection.Vertical, topRooms, bottomRooms)
+    addCorridors(Orientation.Vertical, topRooms, bottomRooms)
   }
 
   private def getLeftRooms(splitPos: Int, leftNode: BspNode): Set[Room] =
@@ -101,7 +101,7 @@ case class CorridorGenerator(options: DungeonOptions) {
    * Add corridors between rooms in the 2 partitions.
    * In some rare cases, we may need angled corridors
    */
-  private def addCorridors(direction: PartitionDirection, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
+  private def addCorridors(direction: Orientation, rooms1: Set[Room], rooms2: Set[Room]): Unit = {
     var count = 0
     for (room1 <- rooms1) {
       for (room2 <- rooms2) {

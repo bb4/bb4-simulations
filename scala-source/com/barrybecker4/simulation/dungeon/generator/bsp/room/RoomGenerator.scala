@@ -2,9 +2,9 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspLeafNode, BspNode, PartitionDirection}
+import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspLeafNode, BspNode}
 import RoomGenerator.*
-import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
+import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Orientation, Room}
 
 import java.awt.{Color, Dimension}
 import scala.util.Random
@@ -53,19 +53,19 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       val (leftBox, rightBox) = boxSplitter.splitHorizontally(box)
       val leftNode = getRoomsForBox(leftBox)
       val rightNode = getRoomsForBox(rightBox)
-      createNode(PartitionDirection.Horizontal, leftBox.getBottomRightCorner.getX, leftNode, rightNode)
+      createNode(Orientation.Horizontal, leftBox.getBottomRightCorner.getX, leftNode, rightNode)
     }
     else {
       val (bottomBox, topBox) = boxSplitter.splitVertically(box)
       val topNode = getRoomsForBox(topBox)
       val bottomNode = getRoomsForBox(bottomBox)
-      createNode(PartitionDirection.Vertical, topBox.getBottomRightCorner.getY, topNode, bottomNode)
+      createNode(Orientation.Vertical, topBox.getBottomRightCorner.getY, topNode, bottomNode)
     }
   }
 
   /** If neither child has a room, then add an empty leaf instead of a branch node (pruned) */
-  private def createNode(direction: PartitionDirection, split: Int,
-                     node1: Option[BspNode], node2: Option[BspNode]): Option[BspNode] = {
+  private def createNode(direction: Orientation, split: Int,
+                         node1: Option[BspNode], node2: Option[BspNode]): Option[BspNode] = {
     if (node1.nonEmpty && node2.nonEmpty)
       Some(BspBranchNode(direction, split, node1.get, node2.get))
     else if (node1.nonEmpty) node1

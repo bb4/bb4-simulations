@@ -5,7 +5,7 @@ import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.model.Room
 
 import scala.collection.immutable.HashSet
-import PartitionDirection.*
+import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
 
 class RoomFinder {
@@ -19,7 +19,7 @@ class RoomFinder {
     bspNode match {
       case BspBranchNode(direction, splitPos, partition1, partition2) =>
         var rooms: Set[Room] = Set()
-        if (direction == PartitionDirection.Horizontal) {
+        if (direction == Horizontal) {
           if (boxFilter.getTopLeftCorner.getX < splitPos)
             rooms ++= filterByBox(boxFilter, partition1)
           if (boxFilter.getBottomRightCorner.getX > splitPos)

@@ -2,9 +2,8 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.corridor
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.bsp.tree.PartitionDirection
 import StraightCorridorCreator.*
-import com.barrybecker4.simulation.dungeon.model.{Corridor, Room}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, Orientation, Room}
 
 import java.awt.Color
 
@@ -15,7 +14,7 @@ object StraightCorridorCreator {
 
 class StraightCorridorCreator {
 
-  def createCorridorBetweenRooms(direction: PartitionDirection,
+  def createCorridorBetweenRooms(direction: Orientation,
                                  room1: Room, room2: Room): Option[Corridor] = {
     val overlap: Option[Box] = findOverlap(room1, room2, MIN_OVERLAP)
     if (overlap.isEmpty) None
@@ -50,10 +49,10 @@ class StraightCorridorCreator {
     if (left < right) right - left else 0
   }
 
-  private def findCorridorForOverlap(box: Box, direction: PartitionDirection,
+  private def findCorridorForOverlap(box: Box, direction: Orientation,
                                      room1: Room, room2: Room): Corridor = {
     var path: Seq[(IntLocation, IntLocation)] = Seq()
-    if (direction == PartitionDirection.Horizontal) {
+    if (direction == Orientation.Horizontal) {
       val midY = box.getTopLeftCorner.getY + box.getHeight / 2
       path = Seq((IntLocation(midY, box.getTopLeftCorner.getX), IntLocation(midY, box.getBottomRightCorner.getX)))
     }
