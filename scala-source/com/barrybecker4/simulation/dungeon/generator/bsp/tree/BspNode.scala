@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.dungeon.generator.bsp.tree
 import com.barrybecker4.simulation.dungeon.model.Room
 
 
-abstract class BspNode  {
+abstract class BspNode {
 
   def getRooms: Set[Room]
 

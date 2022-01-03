@@ -78,7 +78,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
   /**
    * @return true if a connection was made
    */
-  private def processForStartingPoint(startLocation: IntLocation, room: Room, 
+  private def processForStartingPoint(startLocation: IntLocation, room: Room,
                                       xDirection: Int, yDirection: Int): Boolean = {
     val newConnection: Option[(Corridor, Room | Corridor)] =
       checkForHit(startLocation, room, xDirection, yDirection)
@@ -165,16 +165,12 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
   private def update(room: Room, connection: (Corridor, Room | Corridor)): Boolean = {
 
     var thisRoomSet = roomToRoomSet(room)
-    var otherRoomSet = connection._2 match {
-      case room1: Room => roomToRoomSet(room1)
-      case _ => roomToRoomSet(connection._2.asInstanceOf[Corridor].rooms.head)
-    }
+    var otherRoomSet = getOtherRoomsSet(connection._2)
     val connectsOtherRoomSet = thisRoomSet != otherRoomSet
 
-    if (!connectsOtherRoomSet && rnd.nextFloat() > connectivity) {
-      // only add connection beyond what is minimally needed if connectivity requires it
+    // only add connection beyond what is minimally needed if connectivity requires it
+    if (!connectsOtherRoomSet && rnd.nextFloat() > connectivity)
       return false
-    }
 
     val corridorToAdd =
       if (connection._2.isInstanceOf[Room]) connection._1
@@ -188,10 +184,11 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
         corridor.addCorridor(connection._1)
       }
 
+    if (isAlreadyDirectlyConnected(corridorToAdd, thisRoomSet))
+      return false
+
     val baseRoomSet =
-      if (connectsOtherRoomSet) {
-        thisRoomSet.mergeRoomSet(otherRoomSet)
-      }
+      if (connectsOtherRoomSet) thisRoomSet.mergeRoomSet(otherRoomSet)
       else thisRoomSet
     val updatedRoomSet = baseRoomSet.addCorridor(corridorToAdd)
 
@@ -200,4 +197,14 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     dMap = dMap.addCorridors(updatedRoomSet.corridors)
     connectsOtherRoomSet
   }
+
+  private def getOtherRoomsSet(thingConnected: Room | Corridor): RoomSet =
+    thingConnected match {
+      case room: Room => roomToRoomSet(room)
+      case corridor: Corridor => roomToRoomSet(corridor.rooms.head)
+    }
+
+  // avoid multiple corridors to same room by checking that we don't already have a direct connection
+  private def isAlreadyDirectlyConnected(corridor: Corridor, roomSet: RoomSet): Boolean =
+    roomSet.corridors.exists(c => c.rooms.intersect(corridor.rooms).size == 2)
 }

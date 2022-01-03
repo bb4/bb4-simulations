@@ -44,8 +44,7 @@ case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
         sameCount = 0
       numDisjointSets = numSets
     }
-    //println("sameCount = " + sameCount + " isConnected = " + roomToRoomSetMap.isConnected)
-
+ 
     dungeonMap
   }
 

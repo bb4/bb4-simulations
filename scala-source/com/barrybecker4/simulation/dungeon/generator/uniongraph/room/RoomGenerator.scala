@@ -23,7 +23,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND){
 
   def generateRooms(): Set[Room] = {
 
-    val initialBox = Box(0, 0, options.dimension.height, options.dimension.width)
+    val initialBox = Box(1, 1, options.dimension.height, options.dimension.width)
     queue.enqueue(initialBox)
     var rooms: Set[Room] = Set()
 

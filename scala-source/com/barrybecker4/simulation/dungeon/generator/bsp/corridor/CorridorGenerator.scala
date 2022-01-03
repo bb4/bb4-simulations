@@ -41,10 +41,8 @@ case class CorridorGenerator(options: DungeonOptions) {
 
   private def addCorridorsBetween(direction: Orientation, splitPos: Int,
                                   node1: BspNode, node2: BspNode): Unit = {
-    if (direction == Orientation.Horizontal)
-      addHorizontalConnections(splitPos, node1, node2)
-    else
-      addVerticalConnections(splitPos, node1, node2)
+    if (direction == Orientation.Horizontal) addHorizontalConnections(splitPos, node1, node2)
+    else addVerticalConnections(splitPos, node1, node2)
   }
 
   private def addHorizontalConnections(splitPos: Int, leftNode: BspNode, rightNode: BspNode): Unit = {
@@ -97,8 +95,7 @@ case class CorridorGenerator(options: DungeonOptions) {
   private def topEdgeBoxCreator(split: Int, margin: Int, dim: Dimension): Box =
     Box(split, 0, split + margin, dim.width)
 
-  /**
-   * Add corridors between rooms in the 2 partitions.
+  /** Add corridors between rooms in the 2 partitions.
    * In some rare cases, we may need angled corridors
    */
   private def addCorridors(direction: Orientation, rooms1: Set[Room], rooms2: Set[Room]): Unit = {

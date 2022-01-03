@@ -18,29 +18,31 @@ object DungeonMapRenderer {
 /** Mostly used for debugging */
 case class DungeonMapRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
+  private val scale = options.cellSize
+  
   def render(dungeonMap: DungeonMap): Unit = {
     val dim = options.dimension
-    val scale = options.cellSize
-    val width = dim.width * scale
-    val height = dim.height * scale
 
     for (j <- 0 to dim.height) {
       for (i <- 0 to dim.width) {
-        val x = i * scale
-        val y = j * scale
-        dungeonMap(IntLocation(j, i)) match {
-          case Some(room: Room) => {
-            g.setColor(ROOM_COLOR)
-            g.fillRect(x, y, scale, scale)
-          }
-          case Some(corridor: Corridor) => {
-            g.setColor(CORRIDOR_COLOR)
-            g.fillRect(x, y, scale, scale)
-          }
-          case None => {}
-        }
+        drawCell(g, i, j, dungeonMap)
       }
     }
-
+  }
+  
+  private def drawCell(g: OfflineGraphics, i: Int, j: Int, dungeonMap: DungeonMap): Unit = {
+    val x = i * scale
+    val y = j * scale
+    dungeonMap(IntLocation(j, i)) match {
+      case Some(room: Room) => {
+        g.setColor(ROOM_COLOR)
+        g.fillRect(x, y, scale, scale)
+      }
+      case Some(corridor: Corridor) => {
+        g.setColor(CORRIDOR_COLOR)
+        g.fillRect(x, y, scale, scale)
+      }
+      case None => {}
+    }
   }
 }

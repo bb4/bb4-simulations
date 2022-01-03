@@ -15,7 +15,8 @@ import java.awt.event.*
 import javax.swing.*
 
 
-/** Dynamic controls for the Dungeon generator that will show on the right.
+/** 
+ * Dynamic controls for the Dungeon generator that will show on the right.
  * They change the behavior of the simulation while it is running.
  */
 class DynamicOptions(listener: DungeonOptionsChangedListener)

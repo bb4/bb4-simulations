@@ -25,7 +25,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
   /**
    * If half-padded, then the padding only goes at the bottom
    * @param box the box to find a room in
-   * @return the room and a set of boxes that repesentt the area outside the box
+   * @return the room and a set of boxes that represents the area outside the box
    */
   def createRoomInBox(box: Box): (Room, Set[Box]) = {
     val width = randomWidth(box)
@@ -63,7 +63,6 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
                       else new Box(IntLocation(boxTopLeft.getY, innerBottomRight.getX), boxBottomRight)
       val newBox = if (leftWider) new Box(IntLocation(boxTopLeft.getY, innerTopLeft.getX), boxBottomRight)
                    else new Box(boxTopLeft, IntLocation(boxBottomRight.getY, innerBottomRight.getX))
-      //println(s"leftWider=$leftWider newBox=${newBox.getArea} newWidth=${newBox.getWidth}")
 
       assert(newBox.contains(innerContainer.getTopLeftCorner) && newBox.contains(innerContainer.getBottomRightCorner))
       findUnoccupiedAreas(newBox, innerContainer) + shavedBox
@@ -74,7 +73,6 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
                       else new Box(IntLocation(innerBottomRight.getY, boxTopLeft.getX), boxBottomRight)
       val newBox = if (topTaller) new Box(IntLocation(innerTopLeft.getY, boxTopLeft.getX), boxBottomRight)
                    else new Box(boxTopLeft, IntLocation(innerBottomRight.getY, boxBottomRight.getX))
-      //println(s"topTaller=$topTaller newBox=${newBox.getArea} newht=${newBox.getHeight}")
 
       assert(newBox.contains(innerContainer.getTopLeftCorner) && newBox.contains(innerContainer.getBottomRightCorner))
       findUnoccupiedAreas(newBox, innerContainer) + shavedBox

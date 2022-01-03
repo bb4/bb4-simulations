@@ -28,6 +28,7 @@ class UnionGraphDungeonGenerator extends DungeonGeneratorStrategy {
     val rooms = roomGenerator.generateRooms()
     val dungeonMap = corridorGenerator.generateCorridors(rooms)
 
-    DungeonModel(rooms, dungeonMap.getCorridors, None) //Some(dungeonMap))
+    // Last param can be Some(dungeonMap)) if debugging
+    DungeonModel(rooms, dungeonMap.getCorridors, None)
   }
 }
