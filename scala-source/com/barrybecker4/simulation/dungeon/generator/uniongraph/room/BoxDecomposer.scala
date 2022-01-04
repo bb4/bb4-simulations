@@ -1,6 +1,7 @@
 package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
+import com.barrybecker4.simulation.common.util.SkewedRandom
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.BoxDecomposer.RND
 import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
 
@@ -21,6 +22,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
   private val RATIO = roomOptions.getMaxPaddedWidth / roomOptions.getMaxPaddedHeight
   private val maxPaddedWidth = roomOptions.getMaxPaddedWidth
   private val maxPaddedHeight = roomOptions.getMaxPaddedHeight
+  private val skewedRandom: SkewedRandom = SkewedRandom(rnd)
 
   /**
    * If half-padded, then the padding only goes at the bottom
@@ -91,5 +93,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
     else Math.min(box.getHeight - padding, randomDim(roomOptions.maxRoomHeight))
 
   private def randomDim(maxDim: Int): Int =
-    roomOptions.minRoomDim + rnd.nextInt(maxDim - roomOptions.minRoomDim)
+    skewedRandom.nextSkewedGaussian(roomOptions.minRoomDim, maxDim - roomOptions.minRoomDim, 1, 0).toInt
+    //roomOptions.minRoomDim + rnd.nextInt(maxDim - roomOptions.minRoomDim + 1)
+
 }

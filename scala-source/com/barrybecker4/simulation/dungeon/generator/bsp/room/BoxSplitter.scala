@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.common.util.SkewedRandom
 import com.barrybecker4.simulation.dungeon.model.RoomOptions
 
 import scala.util.Random
@@ -16,6 +17,7 @@ case class BoxSplitter(roomOptions: RoomOptions, rnd: Random = RND) {
   val marginWidth: Int = roomOptions.getMaxPaddedWidth
   val marginHeight: Int = roomOptions.getMaxPaddedHeight
   val minDimension: Int = roomOptions.getMinPaddedDim
+  val skewedRnd: SkewedRandom = SkewedRandom(rnd)
 
   assert(marginWidth > minDimension)
   assert(marginHeight > minDimension)
@@ -44,14 +46,16 @@ case class BoxSplitter(roomOptions: RoomOptions, rnd: Random = RND) {
 
   // try using gaussian here
   private def findSplit(low: Int, high: Int, margin: Int): Int = {
-    
+
     var diff = high - margin - (low + margin)
     var padding = margin
     if (diff < 0) {
       diff = high - minDimension - (low + minDimension)
       padding = minDimension
     }
-    val randomOffset = rnd.nextInt(diff + 1)
+    //val randomOffset = rnd.nextInt(diff + 1)
+    val randomOffset = (skewedRnd.nextSkewedGaussian(0, diff, 0.4,0)).toInt
+
     val middle = low + padding + randomOffset
     assert(middle != low && middle != high,
       s"The middle=$middle was unexpectedly the same as low=$low or high=$high")
