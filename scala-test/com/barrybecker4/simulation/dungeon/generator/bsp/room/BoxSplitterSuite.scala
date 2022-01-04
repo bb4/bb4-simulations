@@ -2,7 +2,8 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.model.{Room, RoomOptions}
+import com.barrybecker4.simulation.dungeon.model.Room
+import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.util.Random

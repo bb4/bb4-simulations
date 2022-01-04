@@ -3,12 +3,13 @@ package com.barrybecker4.simulation.dungeon
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
-import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
+import com.barrybecker4.simulation.dungeon.model.DungeonModel
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer
 import com.barrybecker4.simulation.dungeon.ui.{DungeonOptionsChangedListener, DynamicOptions}
 import com.barrybecker4.simulation.dungeon.DungeonExplorer
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 
 import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.{Dimension, Graphics}

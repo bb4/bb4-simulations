@@ -1,10 +1,12 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.dungeon.model
+package com.barrybecker4.simulation.dungeon.model.options
 
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
-import com.barrybecker4.simulation.dungeon.model.DungeonOptions.*
-import com.barrybecker4.simulation.dungeon.model.RoomOptions
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
+import com.barrybecker4.simulation.dungeon.model.options.{DungeonOptions, RoomOptions}
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions.*
+import com.barrybecker4.simulation.dungeon.model.Decoration
+
 import java.awt.{Color, Dimension}
 
 
@@ -39,6 +41,10 @@ case class DungeonOptions(
     DungeonOptions(dimension, roomOptions.setMaxRoomWidth(w), cellSize, connectivity, halfPadded, showGrid, generator)
   def setMaxRoomHeight(h: Int): DungeonOptions =
     DungeonOptions(dimension, roomOptions.setMaxRoomHeight(h), cellSize, connectivity, halfPadded, showGrid, generator)
+  def setRandomSkew(skew: Double): DungeonOptions =
+    DungeonOptions(dimension, roomOptions.setRandomSkew(skew), cellSize, connectivity, halfPadded, showGrid, generator)
+  def setRandomBias(bias: Double): DungeonOptions =
+    DungeonOptions(dimension, roomOptions.setRandomBias(bias), cellSize, connectivity, halfPadded, showGrid, generator)
   def setPercentFilled(percent: Int): DungeonOptions =
     DungeonOptions(dimension, roomOptions.setPercentFilled(percent), cellSize, connectivity, halfPadded, showGrid, generator)
   def setRoomPadding(b: Int): DungeonOptions =

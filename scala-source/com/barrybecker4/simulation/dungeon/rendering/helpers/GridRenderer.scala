@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
-import com.barrybecker4.simulation.dungeon.model.DungeonOptions
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.rendering.helpers.GridRenderer.{GRID_COLOR, GRID_STROKE}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 

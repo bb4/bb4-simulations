@@ -1,9 +1,10 @@
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, Decoration, DungeonOptions, Orientation, Path}
+import com.barrybecker4.simulation.dungeon.model.{Corridor, Decoration, Orientation, Path}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
-import com.barrybecker4.simulation.dungeon.model.DungeonOptions.DECORATION
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions.DECORATION
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.Color

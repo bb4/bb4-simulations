@@ -7,7 +7,8 @@ import CorridorGenerator.CONNECTIVITY_SCALE
 import com.barrybecker4.simulation.dungeon.generator.bsp.room.RoomToCorridorsMap
 import com.barrybecker4.simulation.dungeon.generator.bsp.corridor.CorridorGenerator.*
 import com.barrybecker4.simulation.dungeon.generator.bsp.tree.RoomFinder
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonOptions, Orientation, Room}
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
+import com.barrybecker4.simulation.dungeon.model.{Corridor, Orientation, Room}
 
 import java.awt.Dimension
 

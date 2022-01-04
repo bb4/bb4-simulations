@@ -2,7 +2,7 @@
 
 package com.barrybecker4.simulation.dungeon.ui
 
-import com.barrybecker4.simulation.dungeon.model.DungeonOptions
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 
 trait DungeonOptionsChangedListener {
   def optionsChanged(options: DungeonOptions): Unit

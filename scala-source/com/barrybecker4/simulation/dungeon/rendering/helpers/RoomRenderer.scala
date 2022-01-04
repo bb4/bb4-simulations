@@ -1,9 +1,10 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
-import com.barrybecker4.simulation.dungeon.model.{DungeonOptions, Room}
+import com.barrybecker4.simulation.dungeon.model.Room
 import com.barrybecker4.ui.renderers.OfflineGraphics
-import com.barrybecker4.simulation.dungeon.model.DungeonOptions.DECORATION
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions.DECORATION
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 
 
 case class RoomRenderer(g: OfflineGraphics, options: DungeonOptions) {

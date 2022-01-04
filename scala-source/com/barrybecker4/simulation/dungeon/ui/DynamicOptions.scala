@@ -2,13 +2,14 @@ package com.barrybecker4.simulation.dungeon.ui
 
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
-import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions}
+import com.barrybecker4.simulation.dungeon.model.DungeonModel
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
 import com.barrybecker4.simulation.dungeon.generator.bsp.BspDungeonGenerator
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType
-import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType._
+import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType.*
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 
 import java.awt.*
 import java.awt.event.*

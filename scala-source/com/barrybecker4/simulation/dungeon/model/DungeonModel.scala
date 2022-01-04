@@ -10,8 +10,12 @@ import java.awt.Dimension
 /**
   * Represents the dungeon level as a graph.
   * It will have rooms - which are the nodes, and corridors - which are the edges connecting rooms.
-  * The DungeonOptions determine how to generate the dungeon.
-  * Once created, the dungeon can be rendered or operated on in other ways
+  * Once created, the dungeon can be rendered or operated on in other ways/
+  * If the dungeonMap is speified it can be rendered for help with debugging.
   */
-case class DungeonModel(rooms: Set[Room], corridors: Set[Corridor], dungeonMap: Option[DungeonMap] = None)
+case class DungeonModel(
+  rooms: Set[Room], 
+  corridors: Set[Corridor], 
+  dungeonMap: Option[DungeonMap] = None
+)
 

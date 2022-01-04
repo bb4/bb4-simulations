@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.common.util.SkewedRandom
-import com.barrybecker4.simulation.dungeon.model.RoomOptions
+import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 
 import scala.util.Random
 
@@ -18,6 +18,9 @@ case class BoxSplitter(roomOptions: RoomOptions, rnd: Random = RND) {
   val marginHeight: Int = roomOptions.getMaxPaddedHeight
   val minDimension: Int = roomOptions.getMinPaddedDim
   val skewedRnd: SkewedRandom = SkewedRandom(rnd)
+
+  private val skew = roomOptions.randomSkew
+  private val bias = roomOptions.randomBias
 
   assert(marginWidth > minDimension)
   assert(marginHeight > minDimension)
@@ -54,7 +57,7 @@ case class BoxSplitter(roomOptions: RoomOptions, rnd: Random = RND) {
       padding = minDimension
     }
     //val randomOffset = rnd.nextInt(diff + 1)
-    val randomOffset = (skewedRnd.nextSkewedGaussian(0, diff, 0.4,0)).toInt
+    val randomOffset = (skewedRnd.nextSkewedGaussian(0, diff, skew,bias)).toInt
 
     val middle = low + padding + randomOffset
     assert(middle != low && middle != high,

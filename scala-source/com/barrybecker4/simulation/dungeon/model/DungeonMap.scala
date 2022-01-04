@@ -86,11 +86,6 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     DungeonMap(map)
   }
 
-  def setValue(location: IntLocation, item: Room | Corridor): DungeonMap = {
-    //println("at " + location + " set " + item)
-    DungeonMap(cellToStructure + (location -> item))
-  }
-
   val getCorridors: Set[Corridor] =
     cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
 

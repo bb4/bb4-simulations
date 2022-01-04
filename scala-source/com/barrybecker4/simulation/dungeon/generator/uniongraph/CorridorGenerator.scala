@@ -1,7 +1,8 @@
 package com.barrybecker4.simulation.dungeon.generator.uniongraph
 
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.{RoomJoiner, RoomSet, RoomToRoomSetMap}
-import com.barrybecker4.simulation.dungeon.model.{DungeonMap, DungeonOptions, Room}
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
+import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
 import java.util.PriorityQueue
 import scala.collection.mutable

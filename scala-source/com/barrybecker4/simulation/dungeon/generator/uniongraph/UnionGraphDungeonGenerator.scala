@@ -5,7 +5,8 @@ import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.CorridorGenerator
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.RoomGenerator
-import com.barrybecker4.simulation.dungeon.model.{DungeonModel, DungeonOptions, Room}
+import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
+import com.barrybecker4.simulation.dungeon.model.{DungeonModel, Room}
 
 import java.awt.{Color, Dimension}
 import scala.collection.immutable.HashSet
