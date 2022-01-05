@@ -4,19 +4,16 @@ import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
 import com.barrybecker4.simulation.dungeon.model.DungeonModel
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
-import com.barrybecker4.simulation.dungeon.generator.bsp.BspDungeonGenerator
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
-import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType
-import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy.GeneratorStrategyType.*
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
+import com.barrybecker4.simulation.dungeon.generator.GeneratorStrategyEnum
 
 import java.awt.*
 import java.awt.event.*
 import javax.swing.*
 
 
-/** 
+/**
  * Dynamic controls for the Dungeon generator that will show on the right.
  * They change the behavior of the simulation while it is running.
  */
@@ -114,13 +111,8 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    val strategyType: GeneratorStrategyType =
-      GeneratorStrategyType.valueOf(e.getItem.toString)
-
-    dungeonOptions = strategyType match {
-      case GeneratorStrategyType.BinarySpacePartition => dungeonOptions.setGenerator(BspDungeonGenerator())
-      case GeneratorStrategyType.UnionGraph => dungeonOptions.setGenerator(UnionGraphDungeonGenerator())
-    }
+    val strategy: GeneratorStrategyEnum = GeneratorStrategyEnum.valueOf(e.getItem.toString)
+    dungeonOptions = dungeonOptions.setGenerator(strategy.generator)
     listener.optionsChanged(dungeonOptions)
   }
 }

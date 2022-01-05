@@ -86,6 +86,9 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     DungeonMap(map)
   }
 
+  val getRooms: Set[Room] =
+    cellToStructure.values.filter(_.isInstanceOf[Room]).map(_.asInstanceOf[Room]).toSet
+
   val getCorridors: Set[Corridor] =
     cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
 
