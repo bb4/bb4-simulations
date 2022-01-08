@@ -2,6 +2,7 @@ package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.organic.room.RoomGenerator.RND
+import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{SproutLocation, SproutLocationFinder}
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
@@ -27,6 +28,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     val sproutFinder = SproutLocationFinder(bounds)
     val randomRoomCreator = RandomRoomCreator(roomOptions, bounds, rnd)
     val initialRoom = randomRoomCreator.createRoom()
+
     val sproutLocations: Set[SproutLocation] = sproutFinder.findLocations(initialRoom)
     queue = queue.enqueueAll(sproutLocations)
     var dungeonMap = new DungeonMap(Set(initialRoom))
@@ -37,7 +39,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       queue = result._2
 
       val possibleRoomAndCorridor: Option[RoomAndCorridor] =
-        randomRoomCreator.createRoomFromSproutLocation(sproutLocation)
+        randomRoomCreator.createRoomFromSproutLocation(sproutLocation, dungeonMap)
 
       if (possibleRoomAndCorridor.isDefined) {
         val room = possibleRoomAndCorridor.get.room

@@ -1,6 +1,6 @@
 package com.barrybecker4.simulation.dungeon.model
 
-import com.barrybecker4.common.geometry.IntLocation
+import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.RoomSet
 
 
@@ -85,9 +85,24 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
       map = DungeonMap.addCorridor(c, map)
     DungeonMap(map)
   }
-  
-  def addCorridor(corridor: Corridor): DungeonMap = 
+
+  def addCorridor(corridor: Corridor): DungeonMap =
     DungeonMap(DungeonMap.addCorridor(corridor, cellToStructure))
+
+  def isEmptyRegion(box: Box): Boolean = {
+    val topLeft = box.getTopLeftCorner
+    val bottomRight = box.getBottomRightCorner
+
+    for (x <- topLeft.getX to bottomRight.getX) {
+      for (y <- topLeft.getY to bottomRight.getY) {
+        val item = this(IntLocation(y, x))
+        if (item.nonEmpty) {
+          return false
+        }
+      }
+    }
+    true
+  }
 
   val getRooms: Set[Room] =
     cellToStructure.values.filter(_.isInstanceOf[Room]).map(_.asInstanceOf[Room]).toSet

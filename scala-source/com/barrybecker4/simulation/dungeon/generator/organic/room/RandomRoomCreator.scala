@@ -1,10 +1,13 @@
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.model.Room
+import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.SproutLocation
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Room}
 import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
+import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
 import scala.util.Random
+
 
 object RandomRoomCreator {
   private val RND = Random(0)
@@ -12,6 +15,9 @@ object RandomRoomCreator {
 
 case class RandomRoomCreator(roomOptions: RoomOptions,
                              bounds: Box, rnd: Random = RND) {
+
+  private val minMargin = roomOptions.minRoomDim / 2
+  private val minDim = roomOptions.minRoomDim + 1
 
   def createRoom(): Room = {
     val minDim = roomOptions.minRoomDim
@@ -31,7 +37,47 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     Room(Box(yPos, xPos, Math.min(maxYPos, yPos + height), Math.min(maxXPos, xPos + width)))
   }
 
-  def createRoomFromSproutLocation(sproutLocation: SproutLocation): Option[RoomAndCorridor] = {
+  /**
+   * The DungeonMap will allow us to see how far we can grow the
+   * room without overlapping other features.
+   * @return a room and attaching corridor (if possible to create one)
+   *         from specified sproutLocation
+   */
+  def createRoomFromSproutLocation(sproutLocation: SproutLocation,
+                                   dungeonMap: DungeonMap): Option[RoomAndCorridor] = {
+    val candidateRoom = createMinSizedRoomFromSprout(sproutLocation, dungeonMap)
+    if (candidateRoom.isDefined) {
+      val path = Path(sproutLocation.position, sproutLocation.orientation, 1)
+      val corridor = Corridor(Seq(path), Set(sproutLocation.room, candidateRoom.get))
+      return Some(RoomAndCorridor(candidateRoom.get, corridor))
+    }
     None
+  }
+
+  private def createMinSizedRoomFromSprout(location: SproutLocation,
+                                           dungeonMap: DungeonMap): Option[Room] = {
+    val boxes: (Box, Box) = location match {
+      case SproutLocation(_, position, Horizontal, -1) =>
+        (Box(position.getY - minMargin - 1, position.getX - minDim - 1, position.getY + minMargin + 2, position.getX),
+        Box(position.getY - minMargin, position.getX - minDim + 1, position.getY + minMargin + 1, position.getX))
+      case SproutLocation(_, position, Horizontal, 1) =>
+        (Box(position.getY - minMargin - 1, position.getX + 1, position.getY + minMargin + 2, position.getX + minDim + 2),
+          Box(position.getY - minMargin, position.getX + 1, position.getY + minMargin + 1, position.getX + minDim))
+      case SproutLocation(_, position, Vertical, -1) =>
+        (Box(position.getY - minDim - 1, position.getX - minMargin - 1, position.getY, position.getX + minMargin + 2),
+          Box(position.getY - minDim + 1, position.getX - minMargin, position.getY, position.getX + minMargin + 1))
+      case SproutLocation(_, position, Vertical, 1) =>
+        (Box(position.getY + 1, position.getX - minMargin -1, position.getY + minDim + 2, position.getX + minMargin + 2),
+          Box(position.getY + 1, position.getX - minMargin, position.getY + minDim, position.getX + minMargin + 1))
+      case _ => throw IllegalStateException()
+    }
+    if (boxContains(bounds, boxes._1) && dungeonMap.isEmptyRegion(boxes._1)) {
+      return Some(Room(boxes._2))
+    }
+    None
+  }
+
+  private def boxContains(box1: Box, box2: Box): Boolean = {
+     box1.contains(box2.getTopLeftCorner) && box1.contains(box2.getBottomRightCorner)
   }
 }
