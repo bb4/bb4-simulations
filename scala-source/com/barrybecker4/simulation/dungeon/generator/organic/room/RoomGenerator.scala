@@ -2,10 +2,10 @@ package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.organic.room.RoomGenerator.RND
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.BoxDecomposer
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
+import scala.collection.immutable.Queue
 import scala.collection.mutable
 import scala.util.Random
 
@@ -16,31 +16,39 @@ object RoomGenerator {
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  private val queue: mutable.PriorityQueue[Box] = mutable.PriorityQueue()(Ordering.by(_.getArea))
-  private val boxDecomposer: BoxDecomposer = BoxDecomposer(options, rnd)
+  private var queue: Queue[SproutLocation] = Queue()
   private val roomOptions = options.roomOptions
-  private val minDim = roomOptions.getMinPaddedDim
+  private val minPaddedDim = roomOptions.getMinPaddedDim
+
 
   def generateRooms(): DungeonMap = {
 
-    val initialBox = Box(1, 1, options.dimension.height, options.dimension.width)
-    queue.enqueue(initialBox)
-    var rooms: Set[Room] = Set()
+    val bounds = Box(1, 1, options.dimension.height, options.dimension.width)
+    val sproutFinder = SproutLocationFinder(bounds)
+    val randomRoomCreator = RandomRoomCreator(roomOptions, bounds, rnd)
+    val initialRoom = randomRoomCreator.createRoom()
+    val sproutLocations: Set[SproutLocation] = sproutFinder.findLocations(initialRoom)
+    queue = queue.enqueueAll(sproutLocations)
+    var dungeonMap = new DungeonMap(Set(initialRoom))
 
-    // about 10% will never be used because of space between rooms
-    val availableArea = 0.8 * initialBox.getArea
-    var usedArea = 0
+    while (queue.nonEmpty) {
+      val result = queue.dequeue
+      val sproutLocation = result._1
+      queue = result._2
 
-    while (queue.nonEmpty && (100 * usedArea.toFloat / availableArea) < roomOptions.percentFilled) {
-      val box = queue.dequeue()
-      if (box.getWidth > minDim && box.getHeight > minDim) {
-        val (room, boxes) = boxDecomposer.createRoomInBox(box)
-        rooms += room
-        usedArea += room.box.getArea
-        queue ++= boxes
+      val possibleRoomAndCorridor: Option[RoomAndCorridor] =
+        randomRoomCreator.createRoomFromSproutLocation(sproutLocation)
+
+      if (possibleRoomAndCorridor.isDefined) {
+        val room = possibleRoomAndCorridor.get.room
+        val corridor = possibleRoomAndCorridor.get.corridor
+        dungeonMap = dungeonMap.addRoom(room)
+        dungeonMap = dungeonMap.addCorridor(corridor)
+
+        queue = queue.enqueueAll(sproutFinder.findLocations(room))
       }
     }
-
-    new DungeonMap(rooms)
+    dungeonMap
   }
+
 }

@@ -76,7 +76,7 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     DungeonMap(map)
   }
 
-  private def addRoom(room: Room): DungeonMap =
+  def addRoom(room: Room): DungeonMap =
     DungeonMap(DungeonMap.addRoom(room, cellToStructure))
 
   def addCorridors(corridors: Set[Corridor]): DungeonMap = {
@@ -85,6 +85,9 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
       map = DungeonMap.addCorridor(c, map)
     DungeonMap(map)
   }
+  
+  def addCorridor(corridor: Corridor): DungeonMap = 
+    DungeonMap(DungeonMap.addCorridor(corridor, cellToStructure))
 
   val getRooms: Set[Room] =
     cellToStructure.values.filter(_.isInstanceOf[Room]).map(_.asInstanceOf[Room]).toSet
