@@ -1,7 +1,7 @@
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.SproutLocation
+import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{RoomAndCorridor, SproutLocation}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Room}
 import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
@@ -49,7 +49,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     if (candidateRoom.isDefined) {
       val path = Path(sproutLocation.position, sproutLocation.orientation, 1)
       val corridor = Corridor(Seq(path), Set(sproutLocation.room, candidateRoom.get))
-      return Some(RoomAndCorridor(candidateRoom.get, corridor))
+      return Some(sprout.RoomAndCorridor(candidateRoom.get, corridor))
     }
     None
   }

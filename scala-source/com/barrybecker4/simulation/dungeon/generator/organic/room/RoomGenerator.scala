@@ -2,7 +2,7 @@ package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
 import com.barrybecker4.simulation.dungeon.generator.organic.room.RoomGenerator.RND
-import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{SproutLocation, SproutLocationFinder}
+import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{RoomAndCorridor, SproutLocation, SproutLocationFinder}
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
