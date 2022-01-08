@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Ro
 import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
+import java.awt.Dimension
 import scala.util.Random
 
 
@@ -47,10 +48,44 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
                                    dungeonMap: DungeonMap): Option[RoomAndCorridor] = {
     val candidateRoom = createMinSizedRoomFromSprout(sproutLocation, dungeonMap)
     if (candidateRoom.isDefined) {
+      val room = expand(candidateRoom.get, getRandomDim, sproutLocation)
       val path = Path(sproutLocation.position, sproutLocation.orientation, 1)
-      val corridor = Corridor(Seq(path), Set(sproutLocation.room, candidateRoom.get))
-      return Some(sprout.RoomAndCorridor(candidateRoom.get, corridor))
+      val corridor = Corridor(Seq(path), Set(sproutLocation.room, room))
+      return Some(sprout.RoomAndCorridor(room, corridor))
     }
+    None
+  }
+
+  /**
+   * Incrementally expand the room until it cannot be expanded more,
+   * then back up two cells to leave room for buffer between rooms
+   * @return a version of the room that has been expanded to as close to its desired size as we can get
+   */
+  private def expand(room: Room, preferredDim: Dimension, sproutLocation: SproutLocation): Room = {
+    var stillExpanding = true
+    var expandedRoom: Room = room
+
+    while (stillExpanding) {
+      var newRoom = attemptToExpandHorizontally(expandedRoom, preferredDim, sproutLocation)
+      if (newRoom.isDefined) {
+        expandedRoom = newRoom.get
+        newRoom = attemptToExpandVertically(expandedRoom, preferredDim, sproutLocation)
+        if (newRoom.isDefined)
+          expandedRoom = newRoom.get
+        else
+          stillExpanding = false
+      } else {
+        stillExpanding = false
+      }
+    }
+    expandedRoom
+  }
+
+  private def attemptToExpandHorizontally(room: Room, dimension: Dimension, location: SproutLocation): Option[Room] = {
+    None
+  }
+
+  private def attemptToExpandVertically(room: Room, dimension: Dimension, location: SproutLocation): Option[Room] = {
     None
   }
 
@@ -80,4 +115,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
   private def boxContains(box1: Box, box2: Box): Boolean = {
      box1.contains(box2.getTopLeftCorner) && box1.contains(box2.getBottomRightCorner)
   }
+
+  private def getRandomDim: Dimension =
+     Dimension(minDim + rnd.nextInt(roomOptions.maxRoomWidth - minDim), minDim + rnd.nextInt(roomOptions.maxRoomHeight))
 }
