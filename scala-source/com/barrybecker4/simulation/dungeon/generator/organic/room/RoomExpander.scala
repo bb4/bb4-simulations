@@ -50,11 +50,23 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
     if (box.getWidth + 1 >= preferredWidth)
       return None
 
-    val attemptRight =
-      if (sprout.orientation == Horizontal) sprout.direction == 1
-      else (rnd.nextDouble() < 0.5)
+    if (sprout.orientation == Horizontal)
+      return if (sprout.direction == 1) attemptToExpandRight(box) else attemptToExpandLeft(box)
 
-    if (attemptRight) attemptToExpandRight(box) else attemptToExpandLeft(box)
+    val attemptRightFirst = (rnd.nextDouble() < 0.5)
+    if (attemptRightFirst) {
+      val possibleRoom = attemptToExpandRight(box)
+      if (possibleRoom.isEmpty) {
+        return attemptToExpandLeft(box)
+      }
+      else return possibleRoom
+    } else {
+      val possibleRoom = attemptToExpandLeft(box)
+      if (possibleRoom.isEmpty) {
+        return attemptToExpandRight(box)
+      }
+      else return possibleRoom
+    }
   }
 
   private def attemptToExpandRight(box: Box): Option[Room] = {
@@ -80,11 +92,23 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
     if (box.getHeight + 1 >= preferredHeight)
       return None
 
-    val attemptBottom =
-      if (sprout.orientation == Vertical) sprout.direction == 1
-      else (rnd.nextDouble() < 0.5)
+    if (sprout.orientation == Vertical)
+      return if (sprout.direction == 1) attemptToExpandBottom(box) else attemptToExpandTop(box)
 
-    if (attemptBottom) attemptToExpandBottom(box) else attemptToExpandTop(box)
+    val attemptBottomFirst = (rnd.nextDouble() < 0.5)
+    if (attemptBottomFirst) {
+      val possibleRoom = attemptToExpandBottom(box)
+      if (possibleRoom.isEmpty) {
+        return attemptToExpandTop(box)
+      }
+      else return possibleRoom
+    } else {
+      val possibleRoom = attemptToExpandTop(box)
+      if (possibleRoom.isEmpty) {
+        return attemptToExpandBottom(box)
+      }
+      else return possibleRoom
+    }
   }
 
   private def attemptToExpandBottom(box: Box): Option[Room] = {
@@ -123,6 +147,6 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
   private def exceedsMaxAspectRatio(box: Box): Boolean = {
     val width = box.getWidth
     val height = box.getHeight
-    ((width / height).toFloat >= maxAspectRation || ((height / width).toFloat >= maxAspectRation))
+    ((width / height).toFloat > maxAspectRation || ((height / width).toFloat > maxAspectRation))
   }
 }
