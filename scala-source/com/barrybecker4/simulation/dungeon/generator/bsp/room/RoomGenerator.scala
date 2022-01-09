@@ -21,6 +21,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val roomOptions = options.roomOptions
   private val widthToHeightRatio: Float = 
     roomOptions.getMaxPaddedWidth.toFloat / roomOptions.getMaxPaddedHeight
+  private val maxAspectRatio = roomOptions.maxAspectRatio
 
   private val boxSplitter = BoxSplitter(roomOptions, rnd)
 
@@ -37,13 +38,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     val ratio = (box.getWidth + padding2).toFloat / (box.getHeight + padding2)
 
     if (smallEnough(box)) {        // base case of recursion
-      val pos = box.getTopLeftCorner
-      val upperLeft = IntLocation(pos.getY + padding, pos.getX + padding)
-      val bottomRight =
-        if (options.halfPadded) IntLocation(pos.getY + box.getHeight, pos.getX + box.getWidth)
-        else IntLocation(pos.getY + box.getHeight - padding, pos.getX + box.getWidth - padding)
-      val roomBox = new Box(upperLeft, bottomRight)
-
+      val roomBox = createRoomBox(box)
       val bigEnough = roomBox.getWidth >= minDim && roomBox.getHeight >= minDim
 
       if (rnd.nextInt(100) < roomOptions.percentFilled && bigEnough)
@@ -64,6 +59,24 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     }
   }
 
+  private def createRoomBox(box: Box): Box = {
+    val pos = box.getTopLeftCorner
+    val upperLeft = IntLocation(pos.getY + padding, pos.getX + padding)
+
+    var width = box.getWidth
+    var height = box.getHeight
+    if (width / height > maxAspectRatio) {
+      width = (height * maxAspectRatio).toInt
+    }
+    else if (box.getHeight / box.getWidth > maxAspectRatio) {
+      height = (width * maxAspectRatio).toInt
+    }
+
+    val bottomRight =
+      if (options.halfPadded) IntLocation(pos.getY + height, pos.getX + width)
+      else IntLocation(pos.getY + height - padding, pos.getX + width - padding)
+    new Box(upperLeft, bottomRight)
+  }
   /** If neither child has a room, then add an empty leaf instead of a branch node (pruned) */
   private def createNode(direction: Orientation, split: Int,
                          node1: Option[BspNode], node2: Option[BspNode]): Option[BspNode] = {

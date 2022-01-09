@@ -12,6 +12,7 @@ import java.awt.{Color, Dimension}
 object RoomOptions {
   val DEFAULT_MAX_ROOM_WIDTH = 20
   val DEFAULT_MAX_ROOM_HEIGHT = 20
+  val DEFAULT_MAX_ASPECT_RATIO = 2.0f
   // SKEW of 0.6 is roughly a uniform distribution
   val DEFAULT_RANDOM_SKEW = 0.6
   val DEFAULT_RANDOM_BIAS = 0.0
@@ -23,6 +24,7 @@ object RoomOptions {
 case class RoomOptions(
       maxRoomWidth: Int = DEFAULT_MAX_ROOM_WIDTH,
       maxRoomHeight: Int = DEFAULT_MAX_ROOM_HEIGHT,
+      maxAspectRatio: Float = DEFAULT_MAX_ASPECT_RATIO,
       randomSkew: Double = DEFAULT_RANDOM_SKEW,
       randomBias: Double = DEFAULT_RANDOM_BIAS,
       percentFilled: Int = DEFAULT_PERCENT_FILLED,
@@ -30,12 +32,13 @@ case class RoomOptions(
 
   private val doublePadding = roomPadding * 2
 
-  def setMaxRoomWidth(w: Int): RoomOptions = RoomOptions(w, maxRoomHeight, randomSkew, randomBias, percentFilled, roomPadding)
-  def setMaxRoomHeight(h: Int): RoomOptions = RoomOptions(maxRoomWidth, h, randomSkew, randomBias, percentFilled, roomPadding)
-  def setRandomSkew(rndSkew: Double): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, rndSkew, randomBias, percentFilled, roomPadding)
-  def setRandomBias(rndBias: Double): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, randomSkew, rndBias, percentFilled, roomPadding)
-  def setPercentFilled(percent: Int): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, randomSkew, randomBias, percent, roomPadding)
-  def setRoomPadding(b: Int): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, randomSkew, randomBias, percentFilled, b)
+  def setMaxRoomWidth(w: Int): RoomOptions = RoomOptions(w, maxRoomHeight, maxAspectRatio, randomSkew, randomBias, percentFilled, roomPadding)
+  def setMaxRoomHeight(h: Int): RoomOptions = RoomOptions(maxRoomWidth, h, maxAspectRatio, randomSkew, randomBias, percentFilled, roomPadding)
+  def setMaxAspectRatio(maxAspect: Float): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, maxAspect, randomSkew, randomBias, percentFilled, roomPadding)
+  def setRandomSkew(rndSkew: Double): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, maxAspectRatio, rndSkew, randomBias, percentFilled, roomPadding)
+  def setRandomBias(rndBias: Double): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, maxAspectRatio, randomSkew, rndBias, percentFilled, roomPadding)
+  def setPercentFilled(percent: Int): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, maxAspectRatio, randomSkew, randomBias, percent, roomPadding)
+  def setRoomPadding(b: Int): RoomOptions = RoomOptions(maxRoomWidth, maxRoomHeight, maxAspectRatio, randomSkew, randomBias, percentFilled, b)
 
   def getMaxPaddedWidth: Int = maxRoomWidth + doublePadding
   def getMaxPaddedHeight: Int = maxRoomHeight + doublePadding

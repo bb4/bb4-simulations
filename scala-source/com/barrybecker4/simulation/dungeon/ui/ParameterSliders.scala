@@ -12,6 +12,7 @@ object ParameterSliders {
   private val MAX_ROOM_HEIGHT_SLIDER = "Max Height"
   private val PERCENT_FILLED_SLIDER = "Percent Filled"
   private val CONNECTIVITY_SLIDER = "Room connectivity"
+  private val MAX_ASPECT_RATIO_SLIDER = "Max y/x and y/y aspect ratio"
   private val ROOM_PADDING_SLIDER = "Wall Border Thickness"
   private val CELL_SIZE_SLIDER = "Cell Size"
   private val RANDOM_SKEW_SLIDER = "Random Gaussian Skew"
@@ -23,6 +24,7 @@ object ParameterSliders {
     new SliderProperties(MAX_ROOM_HEIGHT_SLIDER, minDim, 60, RoomOptions.DEFAULT_MAX_ROOM_HEIGHT, 1),
     new SliderProperties(PERCENT_FILLED_SLIDER, 10, 100, RoomOptions.DEFAULT_PERCENT_FILLED, 1),
     new SliderProperties(CONNECTIVITY_SLIDER, 0.1, 1.0, DungeonOptions.DEFAULT_CONNECTIVITY, 100),
+    new SliderProperties(MAX_ASPECT_RATIO_SLIDER, 1.0, 5.0, RoomOptions.DEFAULT_MAX_ASPECT_RATIO, 100),
     new SliderProperties(ROOM_PADDING_SLIDER, 0, 4, RoomOptions.DEFAULT_ROOM_PADDING, 1),
     new SliderProperties(CELL_SIZE_SLIDER, 1, 30, DungeonOptions.DEFAULT_CELL_SIZE, 1),
     new SliderProperties(RANDOM_SKEW_SLIDER, 0.0, 2.0, RoomOptions.DEFAULT_RANDOM_SKEW, 100),
@@ -41,6 +43,7 @@ class ParameterSliders extends SliderGroup(GENERAL_SLIDER_PROPS) {
       case ParameterSliders.MAX_ROOM_HEIGHT_SLIDER => oldOptions.setMaxRoomHeight(value.toInt)
       case ParameterSliders.PERCENT_FILLED_SLIDER => oldOptions.setPercentFilled(value.toInt)
       case ParameterSliders.CONNECTIVITY_SLIDER => oldOptions.setConnectivity(value.toFloat)
+      case ParameterSliders.MAX_ASPECT_RATIO_SLIDER => oldOptions.setMaxAspectRatio(value.toFloat)
       case ParameterSliders.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt, oldOptions)
       case ParameterSliders.CELL_SIZE_SLIDER => oldOptions.setCellSize(value.toInt)
       case ParameterSliders.RANDOM_SKEW_SLIDER => oldOptions.setRandomSkew(value)

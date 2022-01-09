@@ -41,6 +41,8 @@ case class DungeonOptions(
     DungeonOptions(dimension, roomOptions.setMaxRoomWidth(w), cellSize, connectivity, halfPadded, showGrid, generator)
   def setMaxRoomHeight(h: Int): DungeonOptions =
     DungeonOptions(dimension, roomOptions.setMaxRoomHeight(h), cellSize, connectivity, halfPadded, showGrid, generator)
+  def setMaxAspectRatio(aspect: Float): DungeonOptions =
+    DungeonOptions(dimension, roomOptions.setMaxAspectRatio(aspect), cellSize, connectivity, halfPadded, showGrid, generator)  
   def setRandomSkew(skew: Double): DungeonOptions =
     DungeonOptions(dimension, roomOptions.setRandomSkew(skew), cellSize, connectivity, halfPadded, showGrid, generator)
   def setRandomBias(bias: Double): DungeonOptions =

@@ -83,5 +83,6 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
   }
 
   private def getRandomDim: Dimension =
+     //Dimension(roomOptions.maxRoomWidth, roomOptions.maxRoomHeight)
      Dimension(minDim + rnd.nextInt(roomOptions.maxRoomWidth - minDim), minDim + rnd.nextInt(roomOptions.maxRoomHeight))
 }
