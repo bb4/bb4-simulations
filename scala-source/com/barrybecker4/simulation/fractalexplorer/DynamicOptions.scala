@@ -34,7 +34,7 @@ class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
   private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
   val coordinates: JPanel = createCoordinatesView

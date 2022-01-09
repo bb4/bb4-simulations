@@ -58,8 +58,6 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     None
   }
 
- 
-
   private def createMinSizedRoomFromSprout(location: SproutLocation,
                                            dungeonMap: DungeonMap): Option[Room] = {
     val boxes: (Box, Box) = location match {
@@ -77,14 +75,10 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
           Box(position.getY + 1, position.getX - minMargin, position.getY + minDim, position.getX + minMargin + 1))
       case _ => throw IllegalStateException()
     }
-    if (boxContains(bounds, boxes._1) && dungeonMap.isEmptyRegion(boxes._1)) {
+    if (bounds.contains(boxes._1) && dungeonMap.isEmptyRegion(boxes._1)) {
       return Some(Room(boxes._2))
     }
     None
-  }
-
-  private def boxContains(box1: Box, box2: Box): Boolean = {
-     box1.contains(box2.getTopLeftCorner) && box1.contains(box2.getBottomRightCorner)
   }
 
   private def getRandomDim: Dimension =

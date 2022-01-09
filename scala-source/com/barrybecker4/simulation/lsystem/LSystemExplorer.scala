@@ -13,7 +13,6 @@ import java.awt.Graphics
   * Interactively explores LSystem generated trees based on a user supplied expression.
   * See http://en.wikipedia.org/wiki/L-system
   * Todo:
-  *  - add ability to pan with mouse
   *  - add dropdown for preset expressions (like F-F+F+FF-F-F+F)
   *
   * @author Barry Becker.

@@ -52,7 +52,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
 
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   val legend = new ContinuousColorLegend(null, this.algorithm.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
   add(sliderGroup)

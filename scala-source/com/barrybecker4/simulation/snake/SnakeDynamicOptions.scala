@@ -31,7 +31,7 @@ class SnakeDynamicOptions private[snake](var snakeSim: SnakeSimulator) extends J
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
   private var sliderGroup = new SliderGroup(createSliderProperties)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   add(sliderGroup)
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(10, 1000))

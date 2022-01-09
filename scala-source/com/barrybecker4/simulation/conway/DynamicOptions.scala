@@ -69,7 +69,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
     val panel: JPanel = new JPanel (new BorderLayout)
     panel.setBorder (createTitledBorder ("General parameters") )
     generalSliderGroup = new SliderGroup (DynamicOptions.GENERAL_SLIDER_PROPS)
-    generalSliderGroup.addSliderChangeListener (this)
+    generalSliderGroup.setSliderListener (this)
     panel.add (generalSliderGroup, BorderLayout.CENTER)
     panel
   }

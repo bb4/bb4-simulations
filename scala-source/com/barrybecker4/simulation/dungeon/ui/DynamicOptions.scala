@@ -42,7 +42,7 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
     panel.setBorder(createTitledBorder("General parameters"))
 
     parameterSliders = ParameterSliders()
-    parameterSliders.addSliderChangeListener(this)
+    parameterSliders.setSliderListener(this)
     panel.add(GeneratorChoice(this))
     panel.add(parameterSliders)
     panel.add(createCheckboxPanel)

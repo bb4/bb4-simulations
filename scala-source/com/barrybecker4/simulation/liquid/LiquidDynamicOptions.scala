@@ -30,7 +30,7 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
   private var sliderGroup = new SliderGroup(createSliderProperties)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   add(sliderGroup)
   private var advectionOnlyCheckBox = createCheckBox(
     "Do advection only", "If checked we will not apply the Navier Stokes solver", liquidSim.getAdvectionOnly)

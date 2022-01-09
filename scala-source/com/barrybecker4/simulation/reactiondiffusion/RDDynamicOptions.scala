@@ -71,7 +71,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     setPreferredSize(new Dimension(300, 300))
 
     sliderGroup = new SliderGroup(RDDynamicOptions.SLIDER_PROPS)
-    sliderGroup.addSliderChangeListener(this)
+    sliderGroup.setSliderListener(this)
 
     val checkBoxes: JPanel = createCheckBoxes
     val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
@@ -138,7 +138,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Brush Parameters (left: add U; right: add V)"))
     val brushSliderGroup = new SliderGroup(BRUSH_SLIDER_PROPS)
-    brushSliderGroup.addSliderChangeListener(this)
+    brushSliderGroup.setSliderListener(this)
     panel.add(brushSliderGroup, BorderLayout.CENTER)
     panel
   }

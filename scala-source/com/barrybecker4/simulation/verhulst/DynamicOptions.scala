@@ -19,7 +19,7 @@ class DynamicOptions(simulator: VerhulstSimulator) extends JPanel with SliderGro
 
   for (creaturePop <- simulator.getCreatures) {
     val group = new CreatureSliderGroup(creaturePop)
-    group.addSliderChangeListener(this)
+    group.setSliderListener(this)
     sliderGroups :+= group
     add(group)
   }

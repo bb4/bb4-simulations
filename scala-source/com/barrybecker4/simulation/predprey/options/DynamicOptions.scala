@@ -23,7 +23,7 @@ class DynamicOptions(simulator: PredPreySimulator) extends JPanel with SliderGro
 
   for (creaturePop <- simulator.getCreatures) {
     val group = new CreatureSliderGroup(creaturePop)
-    group.addSliderChangeListener(this)
+    group.setSliderListener(this)
     sliderGroups.append(group)
     add(group)
   }

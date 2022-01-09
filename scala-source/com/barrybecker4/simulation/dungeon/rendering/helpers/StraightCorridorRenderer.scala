@@ -10,7 +10,6 @@ import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt.Color
 
 
-// todo: add ability to draw polygon to offline renderer
 case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
   def drawCorridor(corridor: Corridor): Unit = {

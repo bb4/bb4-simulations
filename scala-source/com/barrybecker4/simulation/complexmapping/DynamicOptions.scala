@@ -41,7 +41,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   private def createUI(): Unit = {
     sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-    sliderGroup.addSliderChangeListener(this)
+    sliderGroup.setSliderListener(this)
     val legend: ContinuousColorLegend =
       new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
     val checkBoxes: JPanel = createCheckBoxes

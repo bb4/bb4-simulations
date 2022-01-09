@@ -22,7 +22,7 @@ class DynamicOptions(val simulator: HabitatSimulator) extends JPanel with Slider
 
   for (creaturePop <- simulator.getPopulations) {
     val group = new CreatureSliderGroup(creaturePop)
-    group.addSliderChangeListener(this)
+    group.setSliderListener(this)
     sliderGroups.append(group)
     add(group)
   }

@@ -50,7 +50,7 @@ class FluidDynamicOptions private[ui](var simulator: FluidSimulator) extends JPa
   controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS))
   this.add(controlsPanel, BorderLayout.CENTER)
   private var sliderGroup = new SliderGroup(FluidDynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   sliderGroup.setPreferredSize(new Dimension(300, 260))
   val checkBoxes: JPanel = createCheckBoxes
   val legend = new ContinuousColorLegend(null, this.simulator.getRenderer.getColorMap, true)

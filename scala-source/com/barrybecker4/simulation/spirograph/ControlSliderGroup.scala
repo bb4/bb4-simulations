@@ -49,7 +49,7 @@ object ControlSliderGroup { // slider indices
 class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
   extends SliderGroup(ControlSliderGroup.SLIDER_PROPS) with SliderGroupChangeListener {
 
-  addSliderChangeListener(this)
+  setSliderListener(this)
 
   def getRadius2Value: Double = getSliderValue(ControlSliderGroup.RADIUS2)
 

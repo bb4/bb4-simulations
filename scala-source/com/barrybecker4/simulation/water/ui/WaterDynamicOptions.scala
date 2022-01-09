@@ -37,7 +37,7 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
   controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS))
   this.add(controlsPanel, BorderLayout.CENTER)
   private var sliderGroup = new SliderGroup(WaterDynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   sliderGroup.setPreferredSize(new Dimension(300, 260))
   val checkBoxes: JPanel = createCheckBoxes
 

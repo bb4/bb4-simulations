@@ -47,7 +47,7 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
   private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-  sliderGroup.addSliderChangeListener(this)
+  sliderGroup.setSliderListener(this)
   val checkBoxes: JPanel = createCheckBoxes
   add(createExpressionInput)
   add(Box.createVerticalStrut(10))

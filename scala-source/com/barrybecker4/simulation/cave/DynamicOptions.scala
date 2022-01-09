@@ -95,7 +95,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("General parameters"))
     generalSliderGroup = new SliderGroup(DynamicOptions.GENERAL_SLIDER_PROPS)
-    generalSliderGroup.addSliderChangeListener(this)
+    generalSliderGroup.setSliderListener(this)
     panel.add(generalSliderGroup, BorderLayout.CENTER)
     panel
   }
@@ -104,7 +104,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Bump parameters"))
     bumpSliderGroup = new SliderGroup(DynamicOptions.BUMP_SLIDER_PROPS)
-    bumpSliderGroup.addSliderChangeListener(this)
+    bumpSliderGroup.setSliderListener(this)
     panel.add(bumpSliderGroup, BorderLayout.CENTER)
     panel
   }
@@ -119,7 +119,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Brush Parameters (left: raise; right: lower)"))
     val brushSliderGroup: SliderGroup= new SliderGroup(DynamicOptions.BRUSH_SLIDER_PROPS)
-    brushSliderGroup.addSliderChangeListener(this)
+    brushSliderGroup.setSliderListener(this)
     panel.add(brushSliderGroup, BorderLayout.CENTER)
     panel
   }

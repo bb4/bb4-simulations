@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2021 - 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.ui
 
 import com.barrybecker4.simulation.dungeon.ui.ParameterSliders.GENERAL_SLIDER_PROPS
@@ -41,7 +41,7 @@ class ParameterSliders extends SliderGroup(GENERAL_SLIDER_PROPS) {
       case ParameterSliders.MAX_ROOM_HEIGHT_SLIDER => oldOptions.setMaxRoomHeight(value.toInt)
       case ParameterSliders.PERCENT_FILLED_SLIDER => oldOptions.setPercentFilled(value.toInt)
       case ParameterSliders.CONNECTIVITY_SLIDER => oldOptions.setConnectivity(value.toFloat)
-      case ParameterSliders.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt, oldOptions, listener)
+      case ParameterSliders.ROOM_PADDING_SLIDER => updateOnPaddingChange(value.toInt, oldOptions)
       case ParameterSliders.CELL_SIZE_SLIDER => oldOptions.setCellSize(value.toInt)
       case ParameterSliders.RANDOM_SKEW_SLIDER => oldOptions.setRandomSkew(value)
       case ParameterSliders.RANDOM_BIAS_SLIDER => oldOptions.setRandomBias(value - 1.0)
@@ -49,16 +49,14 @@ class ParameterSliders extends SliderGroup(GENERAL_SLIDER_PROPS) {
     }
   }
 
-  private def updateOnPaddingChange(paddingValue: Int, oldOptions: DungeonOptions,
-                                    listener: SliderGroupChangeListener): DungeonOptions = {
+  private def updateOnPaddingChange(paddingValue: Int, oldOptions: DungeonOptions): DungeonOptions = {
     val minValue = 2 * (RoomOptions.MIN_ROOM_DIM + 2 * paddingValue)
     setSliderMinimum(MAX_ROOM_WIDTH_SLIDER_IDX, minValue)
     setSliderMinimum(MAX_ROOM_HEIGHT_SLIDER_IDX, minValue)
     var newOptions = oldOptions
-
-    // todo: fix this when I can modify SliderGroup and add getSliderListener. for now just pass it in
-    //val listener: SliderGroupChangeListener = this.sliderChangeListener
-    setSliderListener(null)
+    
+    val listener: SliderGroupChangeListener = this.getSliderListener().get
+    removeSliderListener()
 
     if (minValue > getSliderValueAsInt(MAX_ROOM_WIDTH_SLIDER_IDX)) {
       newOptions = oldOptions.setMaxRoomWidth(minValue)

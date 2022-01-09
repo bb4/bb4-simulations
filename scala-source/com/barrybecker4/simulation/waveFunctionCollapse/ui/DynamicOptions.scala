@@ -256,7 +256,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
     val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-    sliderGroup.addSliderChangeListener(this)
+    sliderGroup.setSliderListener(this)
     panel.add(sliderGroup)
     panel
   }

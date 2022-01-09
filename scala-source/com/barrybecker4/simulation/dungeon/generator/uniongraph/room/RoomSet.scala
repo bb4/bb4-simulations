@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, Room}
 
 import scala.collection.immutable.HashSet
 
-// todo: may not need the boundingBox at all
+
 case class RoomSet(rooms: Set[Room], corridors: Set[Corridor]) {
 
   def this(room: Room) = {
