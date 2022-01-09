@@ -25,7 +25,7 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   def generateRooms(): DungeonMap = {
 
     val bounds = Box(1, 1, options.dimension.height, options.dimension.width)
-    val sproutFinder = SproutLocationFinder(bounds)
+    val sproutFinder = SproutLocationFinder(bounds, rnd)
     val randomRoomCreator = RandomRoomCreator(roomOptions, bounds, rnd)
     val initialRoom = randomRoomCreator.createRoom()
 

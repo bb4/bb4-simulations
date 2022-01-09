@@ -47,7 +47,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
   def createRoomFromSproutLocation(sproutLocation: SproutLocation,
                                    dungeonMap: DungeonMap): Option[RoomAndCorridor] = {
     val candidateRoom = createMinSizedRoomFromSprout(sproutLocation, dungeonMap)
-    val roomExpander = RoomExpander(dungeonMap)
+    val roomExpander = RoomExpander(dungeonMap, bounds, rnd)
     
     if (candidateRoom.isDefined) {
       val room = roomExpander.expand(candidateRoom.get, getRandomDim, sproutLocation)

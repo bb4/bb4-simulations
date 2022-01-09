@@ -17,8 +17,8 @@ class SproutPointGenerator(rnd: Random = RND) {
       return List(startPos + len / 2)
     }
     var startingPoints: List[Int] = List()
-    var i = startPos
-    while (i < stopPos) {
+    var i = startPos + 1
+    while (i < stopPos - MIN_SEPARATION) {
       i += rnd.nextInt(MIN_SEPARATION)
       startingPoints :+= i
       i += MIN_SEPARATION

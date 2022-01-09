@@ -28,7 +28,7 @@ case class SproutLocationFinder(bounds: Box, rnd: Random = RND) {
 
   private def findHorizontalSproutLocations(room: Room): Set[SproutLocation] = {
     val box = room.box
-    val startYPos = box.getTopLeftCorner.getY
+    val startYPos = box.getTopLeftCorner.getY 
     val stopYPos = box.getBottomRightCorner.getY
     val verticalPoints = sproutPointGenerator.getSproutPoints(startYPos, stopYPos)
 
