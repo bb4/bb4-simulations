@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.simulation.dungeon.generator.organic.room.RandomRoomCreator.adjustToMaxAspect
 import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{RoomAndCorridor, SproutLocation}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Room}
 import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
@@ -13,6 +14,18 @@ import scala.util.Random
 
 object RandomRoomCreator {
   private val RND = Random(0)
+
+  def adjustToMaxAspect(width: Int, height: Int, maxAspectRatio: Float): Dimension = {
+    var adjWidth = width
+    var adjHeight = height
+
+    if ((width / height).toFloat > maxAspectRatio)
+      adjWidth = (height * maxAspectRatio).toInt
+    else if ((height / width).toFloat > maxAspectRatio)
+      adjHeight = (width * maxAspectRatio).toInt
+
+    Dimension(adjWidth, adjHeight)
+  }
 }
 
 case class RandomRoomCreator(roomOptions: RoomOptions,
@@ -20,6 +33,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
 
   private val minMargin = roomOptions.minRoomDim / 2
   private val minDim = roomOptions.minRoomDim + 1
+  private val maxAspectRatio = roomOptions.maxAspectRatio
 
   def createRoom(): Room = {
     val minDim = roomOptions.minRoomDim
@@ -82,7 +96,10 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     None
   }
 
-  private def getRandomDim: Dimension =
-     //Dimension(roomOptions.maxRoomWidth, roomOptions.maxRoomHeight)
-     Dimension(minDim + rnd.nextInt(roomOptions.maxRoomWidth - minDim), minDim + rnd.nextInt(roomOptions.maxRoomHeight))
+  private def getRandomDim: Dimension = {
+    val rWidth = minDim + rnd.nextInt(roomOptions.maxRoomWidth - minDim)
+    val rHeight = minDim + rnd.nextInt(roomOptions.maxRoomHeight - minDim)
+    adjustToMaxAspect(rWidth, rHeight, maxAspectRatio)
+  }
+
 }

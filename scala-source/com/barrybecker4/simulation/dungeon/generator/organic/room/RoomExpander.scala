@@ -17,6 +17,7 @@ object RoomExpander {
 case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds: Box, rnd: Random = RND) {
 
   private val minDim = roomOptions.minRoomDim
+  private val maxAspectRation = roomOptions.maxAspectRatio
 
   /**
    * Incrementally expand the room until it hits something or reaches size preference,
@@ -36,6 +37,9 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
       val newVerticalRoom = attemptToExpandVertically(expandedRoom, preferredDim.height, sproutLocation)
       if (newVerticalRoom.isDefined) {
         expandedRoom = newVerticalRoom.get
+      }
+      if (exceedsMaxAspectRatio(expandedRoom.box)) {
+        previousRoom = expandedRoom
       }
     }
     expandedRoom
@@ -114,5 +118,11 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
     val occupied = edgePoints.exists(pt => dungeonMap(pt).nonEmpty)
     val inBounds = bounds.contains(point1) && bounds.contains(point2)
     !occupied && inBounds
+  }
+
+  private def exceedsMaxAspectRatio(box: Box): Boolean = {
+    val width = box.getWidth
+    val height = box.getHeight
+    ((width / height).toFloat >= maxAspectRation || ((height / width).toFloat >= maxAspectRation))
   }
 }

@@ -24,6 +24,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
   private val RATIO = roomOptions.getMaxPaddedWidth / roomOptions.getMaxPaddedHeight
   private val maxPaddedWidth = roomOptions.getMaxPaddedWidth
   private val maxPaddedHeight = roomOptions.getMaxPaddedHeight
+  private val maxAspectRatio = roomOptions.maxAspectRatio
   private val skewedRandom: SkewedRandom = SkewedRandom(rnd)
   
   private val skew = options.roomOptions.randomSkew
@@ -35,8 +36,15 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
    * @return the room and a set of boxes that represents the area outside the box
    */
   def createRoomInBox(box: Box): (Room, Set[Box]) = {
-    val width = randomWidth(box)
-    val height = randomHeight(box)
+    var width = randomWidth(box)
+    var height = randomHeight(box)
+    
+    // todo: put this somewhere common
+    if ((width / height).toFloat > maxAspectRatio) 
+      width = (height * maxAspectRatio).toInt
+    else if ((height / width).toFloat > maxAspectRatio) 
+      height = (width * maxAspectRatio).toInt
+    
     val topLeft = box.getTopLeftCorner
     val rWidth = box.getWidth - width - padding
     val rHeight = box.getHeight - height - padding
