@@ -1,9 +1,11 @@
+// Copyright by Barry G. Becker, 2021 - 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.SproutLocation
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
+import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 
 import java.awt.Dimension
 import scala.util.Random
@@ -12,7 +14,9 @@ object RoomExpander {
   private val RND = Random(0)
 }
 
-case class RoomExpander(dungeonMap: DungeonMap, bounds: Box, rnd: Random = RND) {
+case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds: Box, rnd: Random = RND) {
+
+  private val minDim = roomOptions.minRoomDim
 
   /**
    * Incrementally expand the room until it hits something or reaches size preference,
@@ -20,28 +24,18 @@ case class RoomExpander(dungeonMap: DungeonMap, bounds: Box, rnd: Random = RND) 
    * @return a version of the room that has been expanded to as close to its desired size as we can get
    */
   def expand(room: Room, preferredDim: Dimension, sproutLocation: SproutLocation): Room = {
-    var stillExpandingHorizontally = true
-    var stillExpandingVertically = true
     var expandedRoom: Room = room
+    var previousRoom: Room = null
 
-    while (stillExpandingHorizontally || stillExpandingVertically) {
-
-      if (stillExpandingHorizontally) {
-        stillExpandingHorizontally = false
-        val newRoom = attemptToExpandHorizontally(expandedRoom, preferredDim.width, sproutLocation)
-        if (newRoom.isDefined) {
-          expandedRoom = newRoom.get
-          stillExpandingHorizontally = true
-        }
+    while (expandedRoom != previousRoom) {
+      previousRoom = expandedRoom
+      val newHorizontalRoom = attemptToExpandHorizontally(expandedRoom, preferredDim.width, sproutLocation)
+      if (newHorizontalRoom.isDefined) {
+        expandedRoom = newHorizontalRoom.get
       }
-
-      if (stillExpandingVertically) {
-        stillExpandingVertically = false
-        val newRoom = attemptToExpandVertically(expandedRoom, preferredDim.height, sproutLocation)
-        if (newRoom.isDefined) {
-          expandedRoom = newRoom.get
-          stillExpandingVertically = true
-        }
+      val newVerticalRoom = attemptToExpandVertically(expandedRoom, preferredDim.height, sproutLocation)
+      if (newVerticalRoom.isDefined) {
+        expandedRoom = newVerticalRoom.get
       }
     }
     expandedRoom
@@ -56,9 +50,7 @@ case class RoomExpander(dungeonMap: DungeonMap, bounds: Box, rnd: Random = RND) 
       if (sprout.orientation == Horizontal) sprout.direction == 1
       else (rnd.nextDouble() < 0.5)
 
-    val possibleRoom = if (attemptRight) attemptToExpandRight(box) else attemptToExpandLeft(box)
-
-    possibleRoom
+    if (attemptRight) attemptToExpandRight(box) else attemptToExpandLeft(box)
   }
 
   private def attemptToExpandRight(box: Box): Option[Room] = {
@@ -84,19 +76,43 @@ case class RoomExpander(dungeonMap: DungeonMap, bounds: Box, rnd: Random = RND) 
     if (box.getHeight + 1 >= preferredHeight)
       return None
 
-    if (sprout.orientation == Vertical) {
-      // look 2 cells to the top or bottom depending on direction. If clear, expand by 1
-      None
-    } else {
-      // Look 2 cells out in both vertical directions, if clear, exand by one in corresponding direction
-      None
-    }
+    val attemptBottom =
+      if (sprout.orientation == Vertical) sprout.direction == 1
+      else (rnd.nextDouble() < 0.5)
+
+    if (attemptBottom) attemptToExpandBottom(box) else attemptToExpandTop(box)
+  }
+
+  private def attemptToExpandBottom(box: Box): Option[Room] = {
+    val bottomY = box.getBottomRightCorner.getY
+    val leftExpandedPt = IntLocation(bottomY + 2, box.getTopLeftCorner.getX - 1)
+    val rightExpandedPt = IntLocation(bottomY + 2, box.getBottomRightCorner.getX + 1)
+    if (canExpand(leftExpandedPt, rightExpandedPt))
+      Some(Room(new Box(box.getTopLeftCorner, IntLocation(bottomY + 1, box.getBottomRightCorner.getX))))
+    else None
+  }
+
+  private def attemptToExpandTop(box: Box): Option[Room] = {
+    val topY = box.getTopLeftCorner.getY
+    val leftExpandedPt = IntLocation(topY - 2, box.getTopLeftCorner.getX - 1)
+    val rightExpandedPt = IntLocation(topY - 2, box.getBottomRightCorner.getX + 1)
+    if (canExpand(leftExpandedPt, rightExpandedPt))
+      Some(Room(new Box(IntLocation(topY - 1, box.getTopLeftCorner.getX), box.getBottomRightCorner)))
+    else None
   }
 
   private def canExpand(point1: IntLocation, point2: IntLocation): Boolean = {
-    val midPoint = IntLocation((point1.getY + point2.getY) / 2, (point1.getX + point2.getX) / 2)
-    val mapShowsFree = dungeonMap(point1).isEmpty && dungeonMap(midPoint).isEmpty && dungeonMap(point2).isEmpty
+    var edgePoints = List(point1, point2)
+    if (point1.getX == point2.getX) {
+      for (y <- point1.getY + minDim until point2.getY by minDim)
+        edgePoints :+= IntLocation(y, point1.getX)
+    } else {
+      for (x <- point1.getX + minDim until point2.getX by minDim)
+        edgePoints :+= IntLocation(point1.getY, x)
+    }
+
+    val occupied = edgePoints.exists(pt => dungeonMap(pt).nonEmpty)
     val inBounds = bounds.contains(point1) && bounds.contains(point2)
-    mapShowsFree && inBounds
+    !occupied && inBounds
   }
 }

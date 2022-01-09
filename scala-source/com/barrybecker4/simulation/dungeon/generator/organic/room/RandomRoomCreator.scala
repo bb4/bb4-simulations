@@ -1,3 +1,4 @@
+// Copyright by Barry G. Becker, 2021 - 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.Box
@@ -47,7 +48,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
   def createRoomFromSproutLocation(sproutLocation: SproutLocation,
                                    dungeonMap: DungeonMap): Option[RoomAndCorridor] = {
     val candidateRoom = createMinSizedRoomFromSprout(sproutLocation, dungeonMap)
-    val roomExpander = RoomExpander(dungeonMap, bounds, rnd)
+    val roomExpander = RoomExpander(dungeonMap, roomOptions, bounds, rnd)
     
     if (candidateRoom.isDefined) {
       val room = roomExpander.expand(candidateRoom.get, getRandomDim, sproutLocation)
