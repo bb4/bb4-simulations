@@ -18,7 +18,7 @@ object DungeonOptions {
   val DEFAULT_SHOW_GRID = false
   val DEFAULT_DUNGEON_GENERATOR: DungeonGeneratorStrategy = UnionGraphDungeonGenerator()
 
-  val DECORATION: Decoration = Decoration(new Color(100, 0, 230), new Color(230, 190, 255))
+  val DECORATION: Decoration = Decoration(wallColor = new Color(90, 0, 210), floorColor = new Color(230, 220, 255))
 }
 
 /**

@@ -34,6 +34,7 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
   private val minMargin = roomOptions.minRoomDim / 2
   private val minDim = roomOptions.minRoomDim + 1
   private val maxAspectRatio = roomOptions.maxAspectRatio
+  private val padding = roomOptions.roomPadding
 
   def createRoom(): Room = {
     val minDim = roomOptions.minRoomDim
@@ -77,23 +78,25 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
 
   private def createMinSizedRoomFromSprout(location: SproutLocation,
                                            dungeonMap: DungeonMap): Option[Room] = {
-    val boxes: (Box, Box) = location match {
-      case SproutLocation(_, position, Horizontal, -1) =>
-        (Box(position.getY - minMargin - 1, position.getX - minDim - 1, position.getY + minMargin + 2, position.getX),
+    case class Candidate(bounds: Box, room: Box)
+
+    val candidate: Candidate = location match {
+      case SproutLocation(_, position, Horizontal, -1) => Candidate(
+        Box(position.getY - minMargin - 1, position.getX - minDim - 1, position.getY + minMargin + 2, position.getX),
         Box(position.getY - minMargin, position.getX - minDim + 1, position.getY + minMargin + 1, position.getX))
-      case SproutLocation(_, position, Horizontal, 1) =>
-        (Box(position.getY - minMargin - 1, position.getX + 1, position.getY + minMargin + 2, position.getX + minDim + 2),
-          Box(position.getY - minMargin, position.getX + 1, position.getY + minMargin + 1, position.getX + minDim))
-      case SproutLocation(_, position, Vertical, -1) =>
-        (Box(position.getY - minDim - 1, position.getX - minMargin - 1, position.getY, position.getX + minMargin + 2),
-          Box(position.getY - minDim + 1, position.getX - minMargin, position.getY, position.getX + minMargin + 1))
-      case SproutLocation(_, position, Vertical, 1) =>
-        (Box(position.getY + 1, position.getX - minMargin -1, position.getY + minDim + 2, position.getX + minMargin + 2),
-          Box(position.getY + 1, position.getX - minMargin, position.getY + minDim, position.getX + minMargin + 1))
+      case SproutLocation(_, position, Horizontal, 1) => Candidate(
+        Box(position.getY - minMargin - 1, position.getX + 1, position.getY + minMargin + 2, position.getX + minDim + 2),
+        Box(position.getY - minMargin, position.getX + 1, position.getY + minMargin + 1, position.getX + minDim))
+      case SproutLocation(_, position, Vertical, -1) => Candidate(
+        Box(position.getY - minDim - 1, position.getX - minMargin - 1, position.getY, position.getX + minMargin + 2),
+    Box(position.getY - minDim + 1, position.getX - minMargin, position.getY, position.getX + minMargin + 1))
+      case SproutLocation(_, position, Vertical, 1) => Candidate(
+        Box(position.getY + 1, position.getX - minMargin -1, position.getY + minDim + 2, position.getX + minMargin + 2),
+        Box(position.getY + 1, position.getX - minMargin, position.getY + minDim, position.getX + minMargin + 1))
       case _ => throw IllegalStateException()
     }
-    if (bounds.contains(boxes._1) && dungeonMap.isEmptyRegion(boxes._1)) {
-      return Some(Room(boxes._2))
+    if (bounds.contains(candidate.bounds) && dungeonMap.isEmptyRegion(candidate.bounds)) {
+      return Some(Room(candidate.room))
     }
     None
   }
