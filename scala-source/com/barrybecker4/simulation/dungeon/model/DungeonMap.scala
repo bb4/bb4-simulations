@@ -104,6 +104,12 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
     }
     true
   }
+  
+  // this could be optimized by just considering corridors connected to room1
+  def isConnected(room1: Room, room2: Room): Boolean = {
+    val corridors = getCorridors
+    corridors.exists(c => c.rooms.contains(room1) && c.rooms.contains(room2))
+  }
 
   val getRooms: Set[Room] =
     cellToStructure.values.filter(_.isInstanceOf[Room]).map(_.asInstanceOf[Room]).toSet
