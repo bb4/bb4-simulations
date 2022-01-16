@@ -82,17 +82,17 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
 
     val candidate: Candidate = location match {
       case SproutLocation(_, position, Horizontal, -1) => Candidate(
-        Box(position.getY - minMargin - 1, position.getX - minDim - 1, position.getY + minMargin + 2, position.getX),
-        Box(position.getY - minMargin, position.getX - minDim + 1, position.getY + minMargin + 1, position.getX))
+        Box(position.getY - minMargin - padding, position.getX - minDim - 2 * padding, position.getY + minMargin + padding + 1, position.getX),
+        Box(position.getY - minMargin, position.getX - minDim - padding + 1, position.getY + minMargin + 1, position.getX - padding + 1))
       case SproutLocation(_, position, Horizontal, 1) => Candidate(
-        Box(position.getY - minMargin - 1, position.getX + 1, position.getY + minMargin + 2, position.getX + minDim + 2),
-        Box(position.getY - minMargin, position.getX + 1, position.getY + minMargin + 1, position.getX + minDim))
+        Box(position.getY - minMargin - padding, position.getX + 1, position.getY + minMargin + padding + 1, position.getX + minDim + 2 * padding),
+        Box(position.getY - minMargin, position.getX + padding, position.getY + minMargin + 1, position.getX + minDim + padding - 1))
       case SproutLocation(_, position, Vertical, -1) => Candidate(
-        Box(position.getY - minDim - 1, position.getX - minMargin - 1, position.getY, position.getX + minMargin + 2),
-    Box(position.getY - minDim + 1, position.getX - minMargin, position.getY, position.getX + minMargin + 1))
+        Box(position.getY - minDim - 2 * padding, position.getX - minMargin - padding, position.getY, position.getX + minMargin + padding + 1),
+        Box(position.getY - minDim - padding + 1, position.getX - minMargin, position.getY - padding + 1, position.getX + minMargin + 1))
       case SproutLocation(_, position, Vertical, 1) => Candidate(
-        Box(position.getY + 1, position.getX - minMargin -1, position.getY + minDim + 2, position.getX + minMargin + 2),
-        Box(position.getY + 1, position.getX - minMargin, position.getY + minDim, position.getX + minMargin + 1))
+        Box(position.getY + 1, position.getX - minMargin - padding, position.getY + minDim + 2 * padding + 1, position.getX + minMargin + padding + 1),
+        Box(position.getY + padding, position.getX - minMargin, position.getY + minDim + 2 * padding, position.getX + minMargin + 1))
       case _ => throw IllegalStateException()
     }
     if (bounds.contains(candidate.bounds) && dungeonMap.isEmptyRegion(candidate.bounds)) {
