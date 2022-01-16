@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021 - 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
-import com.barrybecker4.common.geometry.Box
+import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.organic.room.RandomRoomCreator.adjustToMaxAspect
 import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{RoomAndCorridor, SproutLocation}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Room}
@@ -69,11 +69,23 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     
     if (candidateRoom.isDefined) {
       val room = roomExpander.expand(candidateRoom.get, getRandomDim, sproutLocation)
-      val path = Path(sproutLocation.position, sproutLocation.orientation, 1)
+      val path = createPath(sproutLocation)
       val corridor = Corridor(Seq(path), Set(sproutLocation.room, room))
       return Some(sprout.RoomAndCorridor(room, corridor))
     }
     None
+  }
+
+  private def createPath(sproutLocation: SproutLocation): Path = {
+    val pos = sproutLocation.position
+
+    if (sproutLocation.direction == -1) {
+      sproutLocation.orientation match {
+        case Horizontal => Path(IntLocation(pos.getY, pos.getX - padding + 1), Horizontal, padding)
+        case Vertical => Path(IntLocation(pos.getY - padding + 1, pos.getX), Vertical, padding)
+      }
+    }
+    else Path(pos, sproutLocation.orientation, padding)
   }
 
   private def createMinSizedRoomFromSprout(location: SproutLocation,

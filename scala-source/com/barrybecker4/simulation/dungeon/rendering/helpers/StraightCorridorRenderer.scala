@@ -25,7 +25,7 @@ case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions)
           case Horizontal => IntLocation(py + 1, px + path.length)
           case Vertical => IntLocation(py + path.length, px + 1)
         }
-      val box = new Box(IntLocation(py, px), point2)
+      val box = new Box(path.start, point2)
 
       drawCorridorSegment(box.scaleBy(options.cellSize), path.orientation, DECORATION)
     }
