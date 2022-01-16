@@ -21,7 +21,7 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
   private val roomPadding = roomOptions.roomPadding
   private val padding = if (options.halfPadded) roomPadding else 2 * roomPadding
   private val frontPadding = if (options.halfPadded) 0 else roomPadding
-  private val RATIO = roomOptions.getMaxPaddedWidth / roomOptions.getMaxPaddedHeight
+  private val RATIO = roomOptions.getMaxPaddedWidth.toFloat / roomOptions.getMaxPaddedHeight
   private val maxPaddedWidth = roomOptions.getMaxPaddedWidth
   private val maxPaddedHeight = roomOptions.getMaxPaddedHeight
   private val maxAspectRatio = roomOptions.maxAspectRatio
@@ -38,13 +38,13 @@ case class BoxDecomposer(options: DungeonOptions, rnd: Random = RND) {
   def createRoomInBox(box: Box): (Room, Set[Box]) = {
     var width = randomWidth(box)
     var height = randomHeight(box)
-    
+
     // todo: put this somewhere common
-    if ((width / height).toFloat > maxAspectRatio) 
+    if ((width.toFloat / height) > maxAspectRatio)
       width = (height * maxAspectRatio).toInt
-    else if ((height / width).toFloat > maxAspectRatio) 
+    else if ((height.toFloat / width) > maxAspectRatio)
       height = (width * maxAspectRatio).toInt
-    
+
     val topLeft = box.getTopLeftCorner
     val rWidth = box.getWidth - width - padding
     val rHeight = box.getHeight - height - padding

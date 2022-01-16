@@ -65,9 +65,9 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
     var width = box.getWidth
     var height = box.getHeight
-    if ((width / height).toFloat > maxAspectRatio)
+    if ((width.toFloat / height) > maxAspectRatio)
       width = (height * maxAspectRatio).toInt
-    else if ((height / width).toFloat > maxAspectRatio)
+    else if ((height.toFloat / width) > maxAspectRatio)
       height = (width * maxAspectRatio).toInt
 
     val bottomRight =

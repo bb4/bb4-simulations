@@ -19,9 +19,9 @@ object RandomRoomCreator {
     var adjWidth = width
     var adjHeight = height
 
-    if ((width / height).toFloat > maxAspectRatio)
+    if ((width.toFloat / height) > maxAspectRatio)
       adjWidth = (height * maxAspectRatio).toInt
-    else if ((height / width).toFloat > maxAspectRatio)
+    else if ((height.toFloat / width) > maxAspectRatio)
       adjHeight = (width * maxAspectRatio).toInt
 
     Dimension(adjWidth, adjHeight)
@@ -50,7 +50,9 @@ case class RandomRoomCreator(roomOptions: RoomOptions,
     val yPos = minYPos + rnd.nextInt(Math.max(1, maxYPos - minYPos - minPaddedDim))
     val width = minDim + rnd.nextInt(roomOptions.maxRoomWidth - minDim)
     val height = minDim + rnd.nextInt(roomOptions.maxRoomHeight - minDim)
-    Room(Box(yPos, xPos, Math.min(maxYPos, yPos + height), Math.min(maxXPos, xPos + width)))
+    
+    val dim = adjustToMaxAspect(width, height, maxAspectRatio)
+    Room(Box(yPos, xPos, Math.min(maxYPos, yPos + dim.height), Math.min(maxXPos, xPos + dim.width)))
   }
 
   /**

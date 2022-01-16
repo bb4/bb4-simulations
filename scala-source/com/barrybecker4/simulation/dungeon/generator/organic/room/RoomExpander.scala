@@ -38,9 +38,8 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
       if (newVerticalRoom.isDefined) {
         expandedRoom = newVerticalRoom.get
       }
-      if (exceedsMaxAspectRatio(expandedRoom.box)) {
+      if (exceedsMaxAspectRatio(expandedRoom.box))
         previousRoom = expandedRoom
-      }
     }
     expandedRoom
   }
@@ -147,6 +146,6 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
   private def exceedsMaxAspectRatio(box: Box): Boolean = {
     val width = box.getWidth
     val height = box.getHeight
-    ((width / height).toFloat > maxAspectRation || ((height / width).toFloat > maxAspectRation))
+    ((width.toFloat / height) > maxAspectRation || ((height.toFloat / width) > maxAspectRation))
   }
 }
