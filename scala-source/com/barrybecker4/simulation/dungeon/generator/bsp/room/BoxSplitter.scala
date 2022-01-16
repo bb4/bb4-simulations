@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.Box
-import com.barrybecker4.simulation.common.util.SkewedRandom
+import com.barrybecker4.math.random.SkewedRandom
 import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 
 import scala.util.Random

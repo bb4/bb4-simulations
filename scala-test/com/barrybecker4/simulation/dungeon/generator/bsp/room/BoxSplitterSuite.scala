@@ -20,7 +20,7 @@ class BoxSplitterSuite extends AnyFunSuite {
     val box = Box(2, 3, 20, 30)
     val (leftBox, rightBox) = splitter.splitHorizontally(box)
 
-    assertResult((Box(2, 3, 20, 24), Box(2, 24, 20, 30))) {
+    assertResult((Box(2, 3, 20, 17), Box(2, 17, 20, 30))) {
       (leftBox, rightBox)
     }
   }
@@ -32,7 +32,7 @@ class BoxSplitterSuite extends AnyFunSuite {
     val box = Box(2, 3, 20, 30)
     val (bottomBox, topBox) = splitter.splitVertically(box)
 
-    assertResult((Box(14, 3, 20, 30), Box(2, 3, 14, 30))) {
+    assertResult((Box(10, 3, 20, 30), Box(2, 3, 10, 30))) {
       (bottomBox, topBox)
     }
   }
@@ -44,7 +44,7 @@ class BoxSplitterSuite extends AnyFunSuite {
     val box = Box(2, 3, 20, 30)
     val (leftBox, rightBox) = splitter.splitHorizontally(box)
 
-    assertResult((Box(2, 3, 20, 24), Box(2, 24, 20, 30))) {
+    assertResult((Box(2, 3, 20, 19), Box(2, 19, 20, 30))) {
       (leftBox, rightBox)
     }
   }
@@ -56,7 +56,7 @@ class BoxSplitterSuite extends AnyFunSuite {
     val box = Box(2, 3, 20, 30)
     val (bottomBox, topBox) = splitter.splitVertically(box)
 
-    assertResult((Box(14, 3, 20, 30), Box(2, 3, 14, 30))) {
+    assertResult((Box(11, 3, 20, 30), Box(2, 3, 11, 30))) {
       (bottomBox, topBox)
     }
   }
