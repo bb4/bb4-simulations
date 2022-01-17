@@ -79,12 +79,12 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
       return dungeonMap
 
     for (sprout <- unusedSprouts)
-      process(sprout)
+      considerAddingCorridor(sprout)
 
     dungeonMap
   }
 
-  private def process(sprout: SproutLocation): Unit = {
+  private def considerAddingCorridor(sprout: SproutLocation): Unit = {
     val xDirection = if (sprout.orientation == Horizontal) sprout.direction else 0
     val yDirection = if (sprout.orientation == Vertical) sprout.direction else 0
 
