@@ -14,9 +14,8 @@ import scala.util.Random
 
 class BspDungeonGenerator extends DungeonGeneratorStrategy {
 
-  def generateDungeon(options: DungeonOptions): DungeonModel = {
-    val rnd: Random = Random(0)
-    
+  override def doGeneration(options: DungeonOptions, rnd: Random): DungeonModel = {
+
     val roomGenerator = RoomGenerator(options, rnd)
     val corridorGenerator = CorridorGenerator(options)
 

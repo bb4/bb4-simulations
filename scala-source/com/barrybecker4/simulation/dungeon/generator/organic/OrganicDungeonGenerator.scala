@@ -11,11 +11,9 @@ import scala.util.Random
 
 class OrganicDungeonGenerator extends DungeonGeneratorStrategy {
 
-  def generateDungeon(options: DungeonOptions): DungeonModel = {
-    val rnd: Random = Random(0)
+  override def doGeneration(options: DungeonOptions, rnd: Random): DungeonModel = {
     
     val roomGenerator = RoomGenerator(options, rnd)
-    
     val dungeonMap = roomGenerator.generateRooms()
 
     // Last param can be Some(dungeonMap)) if debugging

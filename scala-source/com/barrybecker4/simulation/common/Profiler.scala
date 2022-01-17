@@ -43,6 +43,6 @@ class Profiler protected() extends com.barrybecker4.common.profile.Profiler {
 
   def startCalculationTime(): Unit = {start(Profiler.CALCULATION)}
   def stopCalculationTime(): Unit = {stop(Profiler.CALCULATION)}
-  def startRenderingTime(): Unit = {this.start(Profiler.RENDERING)}
-  def stopRenderingTime(): Unit = {this.stop(Profiler.RENDERING)}
+  def startRenderingTime(): Unit = {start(Profiler.RENDERING)}
+  def stopRenderingTime(): Unit = {stop(Profiler.RENDERING)}
 }

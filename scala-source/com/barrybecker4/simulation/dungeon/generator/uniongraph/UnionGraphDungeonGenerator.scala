@@ -14,15 +14,14 @@ import scala.collection.mutable
 import scala.util.Random
 
 
-
 /**
  * Place a random room, then divide the remainder into candidate regions that are placed on
  * the end of the queue. Pop next region off and repeat.
  */
 class UnionGraphDungeonGenerator extends DungeonGeneratorStrategy {
 
-  def generateDungeon(options: DungeonOptions): DungeonModel = {
-    val rnd: Random = Random(0)
+  override def doGeneration(options: DungeonOptions, rnd: Random): DungeonModel = {
+    
     val roomGenerator = RoomGenerator(options, rnd)
     val corridorGenerator = CorridorGenerator(options, rnd)
 
