@@ -31,11 +31,12 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
     val revs = state.getNumRevolutions
     val n = 1.0f + state.numSegmentsPerRev * Math.abs(p / r2)
 
-    while ( {
-      {
-        count += 1; count - 1
-      } < (n * revs + 0.5).toInt && !aborted
-    }) drawSegment(count, revs, n)
+    val limit = (n * revs + 0.5).toInt
+    println("limit = " + limit + " r2=" + r2)
+    while (count < limit && !aborted) {
+      drawSegment(count, revs, n)
+      count += 1
+    }
 
     state.setRendering(false)
   }
@@ -77,7 +78,12 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
       state.params.theta = 0.0f
     else
       state.params.theta = (2.0f * Math.PI * count / n).toFloat
+
     val theta = state.params.theta
+
+    if (r2 == 0) {
+      return
+    }
     state.params.phi = theta * (1.0f + r1 / r2)
     val phi = state.params.phi
     setPoint(p, phi)
@@ -85,7 +91,7 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
     val stroke = new BasicStroke(state.width.toFloat / GraphState.INITIAL_LINE_WIDTH.toFloat)
     getOfflineGraphics.setStroke(stroke)
     getOfflineGraphics.drawLine(state.oldParams.x.toInt, state.oldParams.y.toInt,
-                                state.params.x.toInt, state.params.y.toInt)
+      state.params.x.toInt, state.params.y.toInt)
     if (!state.isMaxVelocity) {
       graphPanel.repaint()
       doSmallDelay()
