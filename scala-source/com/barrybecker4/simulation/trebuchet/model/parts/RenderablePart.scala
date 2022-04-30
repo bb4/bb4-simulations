@@ -11,7 +11,7 @@ import java.awt.*
   * @author Barry Becker
   */
 object RenderablePart {
-  val BASE_Y = 450
+  val BASE_Y = 150
   val SCALE_FACTOR = 70
   val BASE_X = 80
   val STRUT_BASE_X = 300
@@ -28,5 +28,5 @@ object RenderablePart {
 }
 
 abstract class RenderablePart() {
-  def render(g2: Graphics2D, scale: Double): Unit
+  def render(g2: Graphics2D, scale: Double, height: Int): Unit
 }

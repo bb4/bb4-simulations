@@ -221,13 +221,13 @@ class Trebuchet() {
   /**
     * Render the Environment on the screen
     */
-  def render(g: Graphics2D): Unit = {
+  def render(g: Graphics2D, height: Int): Unit = {
 
     g.setColor(Color.black) // default
 
     // render each part
     for (i <- 0 until Trebuchet.NUM_PARTS) {
-      if (part(i) != null) part(i).render(g, getScale)
+      if (part(i) != null) part(i).render(g, getScale, height)
     }
   }
 }

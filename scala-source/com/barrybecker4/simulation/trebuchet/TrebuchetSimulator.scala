@@ -102,7 +102,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
                    else RenderingHints.VALUE_ANTIALIAS_OFF
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, aliasing)
     // draw the trebuchet in its current position
-    trebuchet.render(g2)
+    trebuchet.render(g2, dim.height)
   }
 
   override def setScale(scale: Double): Unit = {

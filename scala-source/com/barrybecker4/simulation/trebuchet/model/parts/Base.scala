@@ -18,15 +18,21 @@ object Base {
 }
 
 class Base() extends RenderablePart {
-  override def render(g2: Graphics2D, scale: Double): Unit = {
+  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(Base.BASE_STROKE)
     g2.setColor(Base.BASE_COLOR)
-    g2.draw3DRect((scale * BASE_X).toInt, BASE_Y, (scale * Base.BASE_WIDTH).toInt, (scale * 10.0).toInt, false)
-    g2.drawLine((scale * (STRUT_BASE_X - Base.STRUT_BASE_HALF_WIDTH)).toInt,
-      BASE_Y, (scale * STRUT_BASE_X).toInt,
-      (BASE_Y - scale * SCALE_FACTOR * height).toInt)
-    g2.drawLine((scale * (STRUT_BASE_X + Base.STRUT_BASE_HALF_WIDTH)).toInt, BASE_Y,
-      (scale * STRUT_BASE_X).toInt,
-      (BASE_Y - scale * SCALE_FACTOR * height).toInt)
+
+    val x = (scale * BASE_X).toInt
+    val y = height - BASE_Y
+    val width = (scale * Base.BASE_WIDTH).toInt
+    val baseHeight = (scale * 10.0).toInt
+    val strutBackX = (scale * (STRUT_BASE_X - Base.STRUT_BASE_HALF_WIDTH)).toInt
+    val strutMidX = (scale * STRUT_BASE_X).toInt
+    val strutFrontX = (scale * (STRUT_BASE_X + Base.STRUT_BASE_HALF_WIDTH)).toInt
+    val strutJoinY = (y - scale * SCALE_FACTOR * RenderablePart.height).toInt 
+
+    g2.draw3DRect(x, y, width, baseHeight, false)
+    g2.drawLine(strutBackX, y, strutMidX, strutJoinY)
+    g2.drawLine(strutFrontX, y, strutMidX, strutJoinY)
   }
 }

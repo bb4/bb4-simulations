@@ -26,40 +26,42 @@ class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
     this.mass = mass
   }
 
-  override def render(g2: Graphics2D, scale: Double): Unit = {
+  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(CounterWeight.STROKE)
     g2.setColor(CounterWeight.COLOR)
     val cwLeverLength = lever.getCounterWeightLeverLength
     val cos = SCALE_FACTOR * cwLeverLength * Math.cos(angle)
     val sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle)
-    val attachPt = new Vector2d(STRUT_BASE_X + sin, (-SCALE_FACTOR * height).toInt - cos)
+    val attachPt = new Vector2d(STRUT_BASE_X + sin, (-SCALE_FACTOR * RenderablePart.height).toInt - cos)
+    val y = height - BASE_Y
 
     g2.drawLine(
-      (scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt,
-      (scale * attachPt.x).toInt, (BASE_Y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt
+      (scale * attachPt.x).toInt, (y + scale * attachPt.y).toInt,
+      (scale * attachPt.x).toInt, (y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt
     )
     val radius = (SCALE_FACTOR * 0.05 * Math.cbrt(mass)).toInt
     g2.setColor(CounterWeight.COLOR)
     val diameter = (scale * 2.0 * radius).toInt
     val xOval = (scale * (attachPt.x - radius)).toInt
-    val yOval = (BASE_Y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt
+    val yOval = (y + scale * (attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH)).toInt
     g2.drawOval(xOval, yOval, diameter, diameter)
     g2.setColor(CounterWeight.FILL_COLOR)
     g2.fillOval(xOval, yOval, diameter, diameter)
     val bottomY = attachPt.y + CounterWeight.WEIGHT_HANG_LENGTH + diameter
+
     if (showVelocityVectors) {
       g2.setStroke(VELOCITY_VECTOR_STROKE)
       g2.setColor(VELOCITY_VECTOR_COLOR)
       val velocityMagnitude = lever.getCounterWeightLeverLength * angularVelocity * Math.sin(angle)
-      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + BASE_Y).toInt,
-        (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + BASE_Y).toInt)
+      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + y).toInt,
+        (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + y).toInt)
     }
     if (showForceVectors) {
       g2.setStroke(FORCE_VECTOR_STROKE)
       g2.setColor(FORCE_VECTOR_COLOR)
       g2.drawLine((scale * attachPt.x).toInt,
-        (scale * bottomY).toInt + BASE_Y, (scale * attachPt.x).toInt,
-        (scale * (bottomY + PhysicsConstants.GRAVITY * getMass)).toInt + BASE_Y)
+        (scale * bottomY).toInt + y, (scale * attachPt.x).toInt,
+        (scale * (bottomY + PhysicsConstants.GRAVITY * getMass)).toInt + y)
     }
   }
 }

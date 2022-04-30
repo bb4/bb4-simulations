@@ -76,23 +76,26 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     -theAngle
   }
 
-  override def render(g2: Graphics2D, scale: Double): Unit = {
+  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(Sling.STROKE)
     g2.setColor(Sling.COLOR)
+    
+    val y = height - BASE_Y
     val attachPt = getHookPosition
     val projectileAttachPt = getProjectileAttachPoint
-    g2.drawLine((scale * attachPt.x).toInt, (BASE_Y + scale * attachPt.y).toInt,
-      (scale * projectileAttachPt.x).toInt, (BASE_Y + scale * projectileAttachPt.y).toInt)
+    g2.drawLine((scale * attachPt.x).toInt, (y + scale * attachPt.y).toInt,
+      (scale * projectileAttachPt.x).toInt, (y + scale * projectileAttachPt.y).toInt)
     val startAngle = (getAngleWithHorz * 180.0 / PI).toInt
     val angle = (getAngleWithLever * 180.0 / PI).toInt
     val endAngle = startAngle + angle
     val diameter = (SCALE_FACTOR * 2 * length).toInt
     val rad = diameter >> 1
+    
     g2.setColor(Sling.ARC_COLOR)
-    g2.drawArc((scale * (attachPt.x - rad)).toInt, (BASE_Y + scale * (attachPt.y - rad)).toInt,
+    g2.drawArc((scale * (attachPt.x - rad)).toInt, (y + scale * (attachPt.y - rad)).toInt,
       (scale * diameter).toInt, (scale * diameter).toInt, startAngle, angle)
     //g2.drawString("start = "+ startAngle, (int)(attachPt.x + rad), (int)(attachPt.y));
     //g2.drawString("end   = "+ endAngle, (int)(attachPt.x + rad), (int)(attachPt.y + 15));
-    g2.drawString("angle = " + angle, (scale * (attachPt.x + rad)).toInt, (BASE_Y + scale * (attachPt.y + 30)).toInt)
+    g2.drawString("angle = " + angle, (scale * (attachPt.x + rad)).toInt, (y + scale * (attachPt.y + 30)).toInt)
   }
 }

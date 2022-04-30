@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, RenderablePart}
-
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
 import java.awt.*
 import javax.vecmath.Vector2d
 
@@ -43,7 +43,7 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double) 
 
   // @@ make constant to improve perf?
   private[model] def getFulcrumPosition =
-    new Vector2d(RenderablePart.STRUT_BASE_X, (-RenderablePart.SCALE_FACTOR * RenderablePart.height).toInt)
+    new Vector2d(STRUT_BASE_X, (-SCALE_FACTOR * height).toInt)
 
   /**
     * I = 1/3 * ML squared
@@ -56,15 +56,18 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double) 
     getMass / 3.0 * (sllSquared + cwlSquared)
   }
 
-  override def render(g2: Graphics2D, scale: Double): Unit = {
+  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(Lever.LEVER_STROKE)
     g2.setColor(Lever.LEVER_COLOR)
+
+    val y = height - BASE_Y
     val fulcrumPos = getFulcrumPosition
-    val cos = RenderablePart.SCALE_FACTOR * Math.cos(RenderablePart.angle)
-    val sin = RenderablePart.SCALE_FACTOR * Math.sin(RenderablePart.angle)
+    val cos = SCALE_FACTOR * Math.cos(angle)
+    val sin = SCALE_FACTOR * Math.sin(angle)
+
     g2.drawLine((scale * (fulcrumPos.x + sin * counterWeightLeverLength)).toInt,
-      (scale * (fulcrumPos.y - cos * counterWeightLeverLength) + RenderablePart.BASE_Y).toInt,
+      (scale * (fulcrumPos.y - cos * counterWeightLeverLength) + y).toInt,
       (scale * (fulcrumPos.x - sin * slingLeverLength)).toInt,
-      (scale * (fulcrumPos.y + cos * slingLeverLength)).toInt + RenderablePart.BASE_Y)
+      (scale * (fulcrumPos.y + cos * slingLeverLength)).toInt + y)
   }
 }
