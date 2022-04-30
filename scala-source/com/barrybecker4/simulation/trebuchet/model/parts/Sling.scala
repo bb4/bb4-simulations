@@ -1,11 +1,12 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.trebuchet.model.parts
 
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, Projectile, RenderablePart, Sling}
+
+import java.awt.*
+import java.lang.Math.{PI, atan}
 import javax.vecmath.Vector2d
-import java.awt._
-import java.lang.Math.PI
-import java.lang.Math.atan
-import RenderablePart._
 
 
 /**

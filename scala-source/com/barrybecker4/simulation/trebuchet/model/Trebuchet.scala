@@ -2,11 +2,19 @@
 package com.barrybecker4.simulation.trebuchet.model
 
 import com.barrybecker4.ui.util.Log
+
 import javax.vecmath.Vector2d
 import java.awt.Color
 import java.awt.Graphics2D
 import com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants._
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart
+import com.barrybecker4.simulation.trebuchet.model.parts.Lever
+import com.barrybecker4.simulation.trebuchet.model.parts.CounterWeight
+import com.barrybecker4.simulation.trebuchet.model.parts.Sling
+import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
+import com.barrybecker4.simulation.trebuchet.model.parts.Base
+
 import java.lang.Math.PI
 import java.lang.Math.asin
 import java.lang.Math.cos
@@ -27,7 +35,6 @@ object Trebuchet {
   private val GRAVITY_VEC = new Vector2d(0, GRAVITY)
   private val MAX_LEVER_ANGLE = PI - 0.1
   private val NUM_PARTS = 5
-  // the time since the start of the simulation
   private var logger = new Log
 }
 

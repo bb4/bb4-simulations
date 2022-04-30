@@ -1,10 +1,11 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.math.linear.LinearUtil
+import com.barrybecker4.simulation.trebuchet.model.parts.{Projectile, RenderablePart}
+
+import java.awt.*
 import javax.vecmath.Vector2d
-import java.awt._
-import RenderablePart._
 
 
 /**
@@ -60,7 +61,7 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
     val deltaVelocity = new Vector2d(acceleration)
     deltaVelocity.scale(timeStep)
     velocity.add(deltaVelocity)
-    position.set(position.x + SCALE_FACTOR * timeStep * velocity.x, position.y + SCALE_FACTOR * timeStep * velocity.y)
+    position.set(position.x + RenderablePart.SCALE_FACTOR * timeStep * velocity.x, position.y + RenderablePart.SCALE_FACTOR * timeStep * velocity.y)
     if (isOnRamp && position.y < -4) {
       isOnRamp = false
       println("*********** no longer on ramp!")
@@ -70,11 +71,11 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
   def getVelocity: Vector2d = velocity
 
   override def render(g2: Graphics2D, scale: Double): Unit = {
-    val radius = (SCALE_FACTOR * this.radius).toInt
+    val radius = (RenderablePart.SCALE_FACTOR * this.radius).toInt
     g2.setColor(Projectile.BORDER_COLOR)
     val diameter = (scale * 2.0 * radius).toInt
     val ovalX = (scale * (position.x - radius)).toInt
-    val ovalY = (scale * (position.y - radius) + BASE_Y).toInt
+    val ovalY = (scale * (position.y - radius) + RenderablePart.BASE_Y).toInt
     g2.drawOval(ovalX, ovalY, diameter, diameter)
     g2.setColor(Projectile.FILL_COLOR)
     g2.fillOval(ovalX, ovalY, diameter, diameter)
@@ -82,19 +83,19 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
       val d = (diameter + scale * 4.0).toInt
       g2.drawOval(ovalX, ovalY, d, d)
     }
-    if (showVelocityVectors) {
-      g2.setStroke(VELOCITY_VECTOR_STROKE)
-      g2.setColor(VELOCITY_VECTOR_COLOR)
+    if (RenderablePart.showVelocityVectors) {
+      g2.setStroke(RenderablePart.VELOCITY_VECTOR_STROKE)
+      g2.setColor(RenderablePart.VELOCITY_VECTOR_COLOR)
       g2.drawLine((scale * position.x).toInt,
-        (BASE_Y + scale * position.y).toInt, (scale * (position.x + velocity.x)).toInt,
-        (BASE_Y + scale * (position.y + velocity.y)).toInt)
+        (RenderablePart.BASE_Y + scale * position.y).toInt, (scale * (position.x + velocity.x)).toInt,
+        (RenderablePart.BASE_Y + scale * (position.y + velocity.y)).toInt)
     }
-    if (showForceVectors) {
-      g2.setStroke(FORCE_VECTOR_STROKE)
-      g2.setColor(FORCE_VECTOR_COLOR)
+    if (RenderablePart.showForceVectors) {
+      g2.setStroke(RenderablePart.FORCE_VECTOR_STROKE)
+      g2.setColor(RenderablePart.FORCE_VECTOR_COLOR)
       g2.drawLine((scale * position.x).toInt,
-        (BASE_Y + scale * position.y).toInt, (scale * (position.x + force.x)).toInt,
-        (BASE_Y + scale * (position.y + force.y)).toInt)
+        (RenderablePart.BASE_Y + scale * position.y).toInt, (scale * (position.x + force.x)).toInt,
+        (RenderablePart.BASE_Y + scale * (position.y + force.y)).toInt)
     }
   }
 }

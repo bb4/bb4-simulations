@@ -9,14 +9,14 @@ import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
-import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart
 import com.barrybecker4.ui.util.GUIUtil
-import javax.swing._
+
+import javax.swing.*
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
-import java.awt._
-
+import java.awt.*
 import scala.util.Random
 
 
@@ -155,9 +155,9 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     val improved = true
     val oldVelocity = 0.0
     var ct = 0
-    while ( {
-      stable && improved
-    }) { // let it run for a while
+
+    // let it run for a while
+    while (stable && improved) { 
       ThreadUtil.sleep(1000 + (3000 / (1.0 + 0.2 * ct)).toInt)
       ct += 1
       //stable = trebuchet_.isStable();

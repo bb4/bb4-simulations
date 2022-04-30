@@ -1,8 +1,9 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+package com.barrybecker4.simulation.trebuchet.model.parts
 
-import java.awt._
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
+
+import java.awt.*
 
 
 /**
@@ -27,7 +28,5 @@ object RenderablePart {
 }
 
 abstract class RenderablePart() {
-
-
   def render(g2: Graphics2D, scale: Double): Unit
 }

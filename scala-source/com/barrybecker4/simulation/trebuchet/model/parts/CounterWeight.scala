@@ -1,10 +1,12 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.common.PhysicsConstants
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+import com.barrybecker4.simulation.trebuchet.model.parts.{CounterWeight, Lever, RenderablePart}
+
+import java.awt.*
 import javax.vecmath.Vector2d
-import java.awt._
-import RenderablePart._
 
 
 /**

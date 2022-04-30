@@ -1,9 +1,10 @@
-// Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.trebuchet.model.parts
 
-import java.awt.Graphics2D
-import java.awt._
-import RenderablePart._
+import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+import com.barrybecker4.simulation.trebuchet.model.parts.{Base, RenderablePart}
+
+import java.awt.*
 
 
 /**
@@ -16,7 +17,7 @@ object Base {
   private val BASE_COLOR = new Color(10, 40, 160)
 }
 
-class Base private[model]() extends RenderablePart {
+class Base() extends RenderablePart {
   override def render(g2: Graphics2D, scale: Double): Unit = {
     g2.setStroke(Base.BASE_STROKE)
     g2.setColor(Base.BASE_COLOR)
