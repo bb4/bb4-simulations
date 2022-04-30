@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.math.linear.LinearUtil
-import com.barrybecker4.simulation.trebuchet.model.parts.Projectile.TRAIL_COLOR
+import com.barrybecker4.simulation.trebuchet.model.parts.Projectile.{TRAIL_COLOR, TRAIL_STROKE}
 import com.barrybecker4.simulation.trebuchet.model.parts.{Projectile, RenderablePart}
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
 
@@ -18,7 +18,8 @@ object Projectile {
   private val LEVER_STROKE = new BasicStroke(10.0f)
   private val BORDER_COLOR = new Color(140, 50, 110)
   private val FILL_COLOR = new Color(80, 150, 10)
-  private val TRAIL_COLOR = new Color(100, 0, 0, 190)
+  private val TRAIL_COLOR = new Color(100, 0, 0, 50)
+  private val TRAIL_STROKE = new BasicStroke(2.0f)
 }
 
 class Projectile(val projectileMass: Double) extends RenderablePart {
@@ -30,7 +31,7 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
   private val acceleration = new Vector2d(0, 0)
   private val velocity = new Vector2d(0, 0)
   private val force = new Vector2d(0, 0)
-  private var pastPositions = Seq[IntLocation]()
+  private var pastPositions = Seq[Vector2d]()
 
 
   def setX(x: Double): Unit = {
@@ -79,7 +80,7 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
 
   override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
 
-    val location = getOvalLocation(height, scale)
+    val location = getOvalLocation(position, height, scale)
 
     val radius = (SCALE_FACTOR * this.radius).toInt
     val diameter = (scale * 2.0 * radius).toInt
@@ -94,8 +95,8 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
       val d = (diameter + scale * 4.0).toInt
       g2.drawOval(location.getX, location.getY, d, d)
 
-      pastPositions :+= location
-      drawTrail(g2, diameter)
+      pastPositions :+= position
+      drawTrail(g2, diameter, height, scale)
     }
 
     val y = height - BASE_Y
@@ -113,14 +114,20 @@ class Projectile(val projectileMass: Double) extends RenderablePart {
     }
   }
 
-  private def drawTrail(g2: Graphics2D, diameter: Int): Unit = {
+  private def drawTrail(g2: Graphics2D, diameter: Int, height: Int, scale: Double): Unit = {
     g2.setColor(TRAIL_COLOR)
-    pastPositions.foreach(position => {
-      g2.drawOval(position.getX, position.getY, diameter, diameter)
-    })
+    g2.setStroke(TRAIL_STROKE)
+    if (pastPositions.nonEmpty) {
+      var lastLoc = getOvalLocation(pastPositions.head, height, scale)
+      for (pos <- pastPositions.tail) {
+        val newLoc = getOvalLocation(pos, height, scale)
+        g2.drawLine(lastLoc.getX, lastLoc.getY, newLoc.getX, newLoc.getY)
+        lastLoc = newLoc
+      }
+    }
   }
 
-  private def getOvalLocation(height: Int, scale: Double): IntLocation = {
+  private def getOvalLocation(position: Vector2d, height: Int, scale: Double): IntLocation = {
     val y = height - BASE_Y
     new IntLocation((scale * (position.y - radius) + y).toInt, (scale * (position.x - radius)).toInt)
   }
