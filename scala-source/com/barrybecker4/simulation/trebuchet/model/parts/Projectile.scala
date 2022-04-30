@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.math.linear.LinearUtil
+import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.Projectile.{TRAIL_COLOR, TRAIL_STROKE}
 import com.barrybecker4.simulation.trebuchet.model.parts.{Projectile, RenderablePart}
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
@@ -22,7 +23,7 @@ object Projectile {
   private val TRAIL_STROKE = new BasicStroke(2.0f)
 }
 
-class Projectile(val projectileMass: Double) extends RenderablePart {
+class Projectile(val projectileMass: Double, variables: Variables) extends RenderablePart {
   var mass: Double = projectileMass
   private var radius = 0.05 * Math.cbrt(mass)
   private var position = new Vector2d

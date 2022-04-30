@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.common.PhysicsConstants
+import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
 import com.barrybecker4.simulation.trebuchet.model.parts.{CounterWeight, Lever, RenderablePart}
 
@@ -19,7 +20,7 @@ object CounterWeight {
   private val FILL_COLOR = new Color(190, 180, 140)
 }
 
-class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
+class CounterWeight(var lever: Lever, var mass: Double, variables: Variables) extends RenderablePart {
   def getMass: Double = mass
 
   def setMass(mass: Double): Unit = {
@@ -30,9 +31,9 @@ class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
     g2.setStroke(CounterWeight.STROKE)
     g2.setColor(CounterWeight.COLOR)
     val cwLeverLength = lever.getCounterWeightLeverLength
-    val cos = SCALE_FACTOR * cwLeverLength * Math.cos(angle)
-    val sin = SCALE_FACTOR * cwLeverLength * Math.sin(angle)
-    val attachPt = new Vector2d(STRUT_BASE_X + sin, (-SCALE_FACTOR * RenderablePart.height).toInt - cos)
+    val cos = SCALE_FACTOR * cwLeverLength * Math.cos(variables.angle)
+    val sin = SCALE_FACTOR * cwLeverLength * Math.sin(variables.angle)
+    val attachPt = new Vector2d(STRUT_BASE_X + sin, (-SCALE_FACTOR * variables.height).toInt - cos)
     val y = height - BASE_Y
 
     g2.drawLine(
@@ -52,7 +53,7 @@ class CounterWeight(var lever: Lever, var mass: Double) extends RenderablePart {
     if (showVelocityVectors) {
       g2.setStroke(VELOCITY_VECTOR_STROKE)
       g2.setColor(VELOCITY_VECTOR_COLOR)
-      val velocityMagnitude = lever.getCounterWeightLeverLength * angularVelocity * Math.sin(angle)
+      val velocityMagnitude = lever.getCounterWeightLeverLength * variables.angularVelocity * Math.sin(variables.angle)
       g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + y).toInt,
         (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + y).toInt)
     }

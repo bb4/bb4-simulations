@@ -1,8 +1,10 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model.parts
 
+import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, RenderablePart}
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+
 import java.awt.*
 import javax.vecmath.Vector2d
 
@@ -21,7 +23,7 @@ object Lever { // amount of mass in kg per meter magnitude of the lever
   * @param counterWeightLeverLength
   * @param slingLeverLength
   */
-class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double) extends RenderablePart {
+class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double, variables: Variables) extends RenderablePart {
   private[model] def getSlingLeverLength = slingLeverLength
 
   private[model] def setSlingLeverLength(slingLeverLength: Double): Unit = {
@@ -43,7 +45,7 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double) 
 
   // @@ make constant to improve perf?
   private[model] def getFulcrumPosition =
-    new Vector2d(STRUT_BASE_X, (-SCALE_FACTOR * height).toInt)
+    new Vector2d(STRUT_BASE_X, (-SCALE_FACTOR * variables.height).toInt)
 
   /**
     * I = 1/3 * ML squared
@@ -62,8 +64,8 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double) 
 
     val y = height - BASE_Y
     val fulcrumPos = getFulcrumPosition
-    val cos = SCALE_FACTOR * Math.cos(angle)
-    val sin = SCALE_FACTOR * Math.sin(angle)
+    val cos = SCALE_FACTOR * Math.cos(variables.angle)
+    val sin = SCALE_FACTOR * Math.sin(variables.angle)
 
     g2.drawLine((scale * (fulcrumPos.x + sin * counterWeightLeverLength)).toInt,
       (scale * (fulcrumPos.y - cos * counterWeightLeverLength) + y).toInt,

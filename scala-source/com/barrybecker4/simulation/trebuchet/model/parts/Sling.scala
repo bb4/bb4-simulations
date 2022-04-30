@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model.parts
 
+import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
 import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, Projectile, RenderablePart, Sling}
 
@@ -18,7 +19,7 @@ object Sling {
   private val ARC_COLOR = new Color(60, 90, 70, 150)
 }
 
-class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var projectile: Projectile)
+class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var projectile: Projectile, variables: Variables)
   extends RenderablePart {
 
   val attachPt: Vector2d = getHookPosition
@@ -39,9 +40,9 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
 
   def getHookPosition: Vector2d = {
     val leverLength = lever.getSlingLeverLength
-    val cos = SCALE_FACTOR * leverLength * Math.cos(angle)
-    val sin = SCALE_FACTOR * leverLength * Math.sin(angle)
-    val attachPt = new Vector2d(STRUT_BASE_X - sin, (-SCALE_FACTOR * height).toInt + cos)
+    val cos = SCALE_FACTOR * leverLength * Math.cos(variables.angle)
+    val sin = SCALE_FACTOR * leverLength * Math.sin(variables.angle)
+    val attachPt = new Vector2d(STRUT_BASE_X - sin, (-SCALE_FACTOR * variables.height).toInt + cos)
     attachPt
   }
 
@@ -59,7 +60,7 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     * @return the angle of the sling with the lever.
     */
   def getAngleWithLever: Double = {
-    val leverAngleWithHorz = PI / 2.0 - angle
+    val leverAngleWithHorz = PI / 2.0 - variables.angle
     val slingAngleWithHorz = getAngleWithHorz
     //println("slingAngle = leverAngleWithHorz("+leverAngleWithHorz+") "
     // + "  slingAngleWithHorz("+ slingAngleWithHorz+") =  "+(leverAngleWithHorz + slingAngleWithHorz));
@@ -72,14 +73,14 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     val deltaX = projectile.getX - hookPos.x
     var theAngle = atan(deltaY / deltaX)
     //println("angle=  "+angle);
-    if (deltaX < 0 || angle > PI / 2) theAngle += PI
+    if (deltaX < 0 || variables.angle > PI / 2) theAngle += PI
     -theAngle
   }
 
   override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(Sling.STROKE)
     g2.setColor(Sling.COLOR)
-    
+
     val y = height - BASE_Y
     val attachPt = getHookPosition
     val projectileAttachPt = getProjectileAttachPoint
@@ -90,7 +91,7 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
     val endAngle = startAngle + angle
     val diameter = (SCALE_FACTOR * 2 * length).toInt
     val rad = diameter >> 1
-    
+
     g2.setColor(Sling.ARC_COLOR)
     g2.drawArc((scale * (attachPt.x - rad)).toInt, (y + scale * (attachPt.y - rad)).toInt,
       (scale * diameter).toInt, (scale * diameter).toInt, startAngle, angle)

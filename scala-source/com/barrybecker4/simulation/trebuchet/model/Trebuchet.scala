@@ -55,24 +55,26 @@ class Trebuchet() {
   private var showForceVectors = false
   // scales the geometry of the trebuchet
   private var scale = SCALE
+  private val variables: Variables = new Variables()
+  
   commonInit()
 
   def reset(): Unit = {
-    RenderablePart.angularVelocity = 0
+    variables.angularVelocity = 0
     commonInit()
   }
 
   private def commonInit(): Unit = {
     val angle = PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH)
-    RenderablePart.angle = angle
-    val base = new Base
+    variables.angle = angle
+    val base = new Base(variables)
     part(0) = base
-    lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
+    lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, variables)
     part(1) = lever
-    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
+    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS, variables)
     part(2) = counterWeight
-    projectile = new Projectile(DEFAULT_PROJECTILE_MASS)
-    sling = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile)
+    projectile = new Projectile(DEFAULT_PROJECTILE_MASS, variables)
+    sling = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile, variables)
     part(3) = sling
     part(4) = projectile
   }
@@ -84,8 +86,8 @@ class Trebuchet() {
     */
   def stepForward(timeStep: Double): Double = {
     //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
-    var angle = RenderablePart.angle
-    var angularVelocity = RenderablePart.angularVelocity
+    var angle = variables.angle
+    var angularVelocity = variables.angularVelocity
     val slingAngle = sling.getAngleWithLever
     val torque = calculateTorque(angle, slingAngle)
     val inertia = calculateInertia
@@ -100,8 +102,8 @@ class Trebuchet() {
       angularVelocity = 0
       angle = Trebuchet.MAX_LEVER_ANGLE
     }
-    RenderablePart.angle = angle
-    RenderablePart.angularVelocity = angularVelocity
+    variables.angle = angle
+    variables.angularVelocity = angularVelocity
     //println("angle="+angle+"  angularVelocity_="
     //  +angularVelocity +" angularAcceleration="+angularAcceleration);
     // calculate the forces acting on the projectile.

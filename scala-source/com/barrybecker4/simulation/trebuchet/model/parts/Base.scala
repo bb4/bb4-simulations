@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model.parts
 
+import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
 import com.barrybecker4.simulation.trebuchet.model.parts.{Base, RenderablePart}
 
@@ -17,7 +18,7 @@ object Base {
   private val BASE_COLOR = new Color(10, 40, 160)
 }
 
-class Base() extends RenderablePart {
+class Base(variables: Variables) extends RenderablePart {
   override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
     g2.setStroke(Base.BASE_STROKE)
     g2.setColor(Base.BASE_COLOR)
@@ -29,7 +30,7 @@ class Base() extends RenderablePart {
     val strutBackX = (scale * (STRUT_BASE_X - Base.STRUT_BASE_HALF_WIDTH)).toInt
     val strutMidX = (scale * STRUT_BASE_X).toInt
     val strutFrontX = (scale * (STRUT_BASE_X + Base.STRUT_BASE_HALF_WIDTH)).toInt
-    val strutJoinY = (y - scale * SCALE_FACTOR * RenderablePart.height).toInt 
+    val strutJoinY = (y - scale * SCALE_FACTOR * variables.height).toInt 
 
     g2.draw3DRect(x, y, width, baseHeight, false)
     g2.drawLine(strutBackX, y, strutMidX, strutJoinY)
