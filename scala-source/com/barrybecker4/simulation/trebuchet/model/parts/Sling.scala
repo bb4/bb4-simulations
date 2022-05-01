@@ -15,18 +15,6 @@ class Sling(val lever: Lever, projectile: Projectile, var length: Double, var re
   projectile.setX(attachPt.x + SCALE_FACTOR * length)
   projectile.setY(attachPt.y - SCALE_FACTOR * projectile.getRadius)
 
-  def getLength: Double = length
-
-  def setLength(length: Double): Unit = {
-    this.length = length
-  }
-
-  def getReleaseAngle: Double = releaseAngle
-
-  def setReleaseAngle(releaseAngle: Double): Unit = {
-    this.releaseAngle = releaseAngle
-  }
-
   def getHookPosition: Vector2d = {
     val leverLength = lever.getSlingLeverLength
     val cos = SCALE_FACTOR * leverLength * Math.cos(lever.getAngle)

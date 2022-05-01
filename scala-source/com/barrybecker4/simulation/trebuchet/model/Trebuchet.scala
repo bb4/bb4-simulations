@@ -55,26 +55,24 @@ class Trebuchet() {
   private var showForceVectors = false
   // scales the geometry of the trebuchet
   private var scale = SCALE
-  private val variables: Variables = new Variables()
   
   commonInit()
 
   def reset(): Unit = {
-    variables.angularVelocity = 0
+    lever.setAngularVelocity(0)
     commonInit()
   }
 
   private def commonInit(): Unit = {
-    val angle = PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH)
-    variables.angle = angle
-    val base = new Base(variables)
+    val base = Base()
     partRenderers(0) = new BaseRenderer(base)
-    lever = new Lever(base, DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, variables)
+    lever = Lever(base, DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
+    lever.setAngle(PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH))
     partRenderers(1) = new LeverRenderer(lever)
-    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS, variables)
+    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
     partRenderers(2) = new CounterWeightRenderer(counterWeight)
-    projectile = new Projectile(base, DEFAULT_PROJECTILE_MASS, variables)
-    sling = new Sling(base, DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile, variables)
+    projectile = new Projectile(base, DEFAULT_PROJECTILE_MASS)
+    sling = Sling(lever, projectile, DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE)
     partRenderers(3) = new SlingRenderer(sling)
     partRenderers(4) = new ProjectileRenderer(projectile)
   }
@@ -86,8 +84,8 @@ class Trebuchet() {
     */
   def stepForward(timeStep: Double): Double = {
     //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
-    var angle = variables.angle
-    var angularVelocity = variables.angularVelocity
+    var angle = lever.getAngle
+    var angularVelocity = lever.getAngularVelocity
     val slingAngle = sling.getAngleWithLever
     val torque = calculateTorque(angle, slingAngle)
     val inertia = calculateInertia
@@ -102,10 +100,9 @@ class Trebuchet() {
       angularVelocity = 0
       angle = Trebuchet.MAX_LEVER_ANGLE
     }
-    variables.angle = angle
-    variables.angularVelocity = angularVelocity
-    //println("angle="+angle+"  angularVelocity_="
-    //  +angularVelocity +" angularAcceleration="+angularAcceleration);
+    lever.setAngle(angle)
+    lever.setAngularVelocity(angularVelocity)
+
     // calculate the forces acting on the projectile.
     // the magnitude of the tangential force at the hook
     if (!projectile.isReleased) {
@@ -118,7 +115,7 @@ class Trebuchet() {
       val gravityForce = new Vector2d(Trebuchet.GRAVITY_VEC)
       gravityForce.scale(projectile.getMass)
       forceFromHook.add(gravityForce)
-      // also add a restoring force which is proportional to the distnace from the attachpoint on the sling
+      // also add a restoring force which is proportional to the distance from the attachPoint on the sling
       // if we have not yet been released.
       val restoreForce = sling.getProjectileAttachPoint
       restoreForce.sub(projectile.getPosition)
@@ -132,9 +129,9 @@ class Trebuchet() {
       projectile.setForce(gravityForce, timeStep)
     }
     // at the time when it is released, the only force acting on it will be gravity.
-    if (!projectile.isReleased && slingAngle >= (PI + sling.getReleaseAngle)) {
+    if (!projectile.isReleased && slingAngle >= (PI + sling.releaseAngle)) {
       println("##########################################################################")
-      println("released!  slingAngle = " + slingAngle + " sling release angle = " + sling.getReleaseAngle)
+      println("released!  slingAngle = " + slingAngle + " sling release angle = " + sling.releaseAngle)
       println("##########################################################################")
       projectile.isReleased = true
     }
@@ -159,10 +156,9 @@ class Trebuchet() {
   }
 
   /**
-    * Got this from a physics text
-    *
+    * Got this from a physics text:
     * I = LEVER_MASS / 3  (b^3 + c^3) + projectileMass/3 * r squared
-    * @return the calculated interia
+    * @return the calculated inertia
     */
   private def calculateInertia = lever.getInertia + projectile.getInertia(lever.getFulcrumPosition)
 
@@ -202,22 +198,20 @@ class Trebuchet() {
     this.counterWeight.setMass(counterWeightMass)
   }
 
-  def getSlingLength: Double = sling.getLength
+  def getSlingLength: Double = sling.length
 
   def setSlingLength(slingLength: Double): Unit = {
-    this.sling.setLength(slingLength)
+    this.sling.length = slingLength
   }
 
   def getProjectileMass: Double = projectile.getMass
-
   def setProjectileMass(projectileMass: Double): Unit = {
     this.projectile.mass = projectileMass
   }
 
-  def getSlingReleaseAngle: Double = sling.getReleaseAngle
-
+  def getSlingReleaseAngle: Double = sling.releaseAngle
   def setSlingReleaseAngle(slingReleaseAngle: Double): Unit = {
-    this.sling.setReleaseAngle(slingReleaseAngle)
+    this.sling.releaseAngle = slingReleaseAngle
   }
 
   /**

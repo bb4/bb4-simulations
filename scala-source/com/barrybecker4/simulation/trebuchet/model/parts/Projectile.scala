@@ -10,7 +10,6 @@ import java.awt.*
 import javax.vecmath.Vector2d
 
 
-
 class Projectile(base: Base, val projectileMass: Double) {
   var mass: Double = projectileMass
   private val radius = 0.05 * Math.cbrt(mass)
@@ -59,7 +58,9 @@ class Projectile(base: Base, val projectileMass: Double) {
     deltaVelocity.scale(timeStep)
     velocity.add(deltaVelocity)
 
-    setPosition(new Vector2d(position.x + SCALE_FACTOR * timeStep * velocity.x, position.y + SCALE_FACTOR * timeStep * velocity.y))
+    val newXPos = position.x + SCALE_FACTOR * timeStep * velocity.x
+    val newYPos = position.y + SCALE_FACTOR * timeStep * velocity.y
+    setPosition(new Vector2d(newXPos, newYPos))
     if (isOnRamp && position.y < -4) {
       isOnRamp = false
       println("*********** no longer on ramp!")

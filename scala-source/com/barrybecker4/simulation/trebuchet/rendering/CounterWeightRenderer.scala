@@ -25,8 +25,8 @@ class CounterWeightRenderer(counterWeight: CounterWeight) extends AbstractPartRe
     g2.setStroke(STROKE)
     g2.setColor(COLOR)
     val cwLeverLength = counterWeight.lever.getCounterWeightLeverLength
-    val cos = SCALE_FACTOR * cwLeverLength * Math.cos(counterWeight.getAngle)
-    val sin = SCALE_FACTOR * cwLeverLength * Math.sin(counterWeight.getAngle)
+    val cos = SCALE_FACTOR * cwLeverLength * Math.cos(counterWeight.getLeverAngle)
+    val sin = SCALE_FACTOR * cwLeverLength * Math.sin(counterWeight.getLeverAngle)
     val attachPt = new Vector2d(counterWeight.lever.getStrutBaseX + sin, (-SCALE_FACTOR * HEIGHT).toInt - cos)
     val y = viewHeight - counterWeight.lever.getBaseY
 
@@ -47,14 +47,14 @@ class CounterWeightRenderer(counterWeight: CounterWeight) extends AbstractPartRe
     if (showVelocityVectors) {
       g2.setStroke(VELOCITY_VECTOR_STROKE)
       g2.setColor(VELOCITY_VECTOR_COLOR)
-      val velocityMagnitude = counterWeight.lever.getCounterWeightLeverLength * counterWeight.getAngularVelocity * Math.sin(counterWeight.getAngle)
+      val velocityMagnitude = counterWeight.lever.getCounterWeightLeverLength * counterWeight.getLeverAngularVelocity * Math.sin(counterWeight.getLeverAngle)
       g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + y).toInt,
         (scale * attachPt.x).toInt, (scale * (bottomY + velocityMagnitude) + y).toInt)
     }
     if (showForceVectors) {
       g2.setStroke(FORCE_VECTOR_STROKE)
       g2.setColor(FORCE_VECTOR_COLOR)
-      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + y).toInt, 
+      g2.drawLine((scale * attachPt.x).toInt, (scale * bottomY + y).toInt,
         (scale * attachPt.x).toInt, (scale * (bottomY + PhysicsConstants.GRAVITY * counterWeight.getMass) + y).toInt)
     }
   }
