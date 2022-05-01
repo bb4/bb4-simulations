@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{HEIGHT, SCALE_FACTOR}
-import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, Projectile, Sling}
 
 import java.awt.*
@@ -10,8 +9,7 @@ import java.lang.Math.{PI, atan}
 import javax.vecmath.Vector2d
 
 
-class Sling(base: Base, var length: Double, var releaseAngle: Double, var lever: Lever,
-            var projectile: Projectile, variables: Variables) {
+class Sling(val lever: Lever, projectile: Projectile, var length: Double, var releaseAngle: Double) {
 
   val attachPt: Vector2d = getHookPosition
   projectile.setX(attachPt.x + SCALE_FACTOR * length)
@@ -31,9 +29,9 @@ class Sling(base: Base, var length: Double, var releaseAngle: Double, var lever:
 
   def getHookPosition: Vector2d = {
     val leverLength = lever.getSlingLeverLength
-    val cos = SCALE_FACTOR * leverLength * Math.cos(variables.angle)
-    val sin = SCALE_FACTOR * leverLength * Math.sin(variables.angle)
-    val attachPt = new Vector2d(base.getStrutBaseX - sin, (-SCALE_FACTOR * HEIGHT).toInt + cos)
+    val cos = SCALE_FACTOR * leverLength * Math.cos(lever.getAngle)
+    val sin = SCALE_FACTOR * leverLength * Math.sin(lever.getAngle)
+    val attachPt = new Vector2d(lever.getStrutBaseX - sin, (-SCALE_FACTOR * HEIGHT).toInt + cos)
     attachPt
   }
 
@@ -51,7 +49,7 @@ class Sling(base: Base, var length: Double, var releaseAngle: Double, var lever:
     * @return the angle of the sling with the lever.
     */
   def getAngleWithLever: Double = {
-    val leverAngleWithHorz = PI / 2.0 - variables.angle
+    val leverAngleWithHorz = PI / 2.0 - lever.getAngle
     val slingAngleWithHorz = getAngleWithHorz
     //println("slingAngle = leverAngleWithHorz("+leverAngleWithHorz+") "
     // + "  slingAngleWithHorz("+ slingAngleWithHorz+") =  "+(leverAngleWithHorz + slingAngleWithHorz));
@@ -63,7 +61,7 @@ class Sling(base: Base, var length: Double, var releaseAngle: Double, var lever:
     val deltaY = projectile.getY - hookPos.y
     val deltaX = projectile.getX - hookPos.x
     var theAngle = atan(deltaY / deltaX)
-    if (deltaX < 0 || variables.angle > PI / 2) theAngle += PI
+    if (deltaX < 0 || lever.getAngle > PI / 2) theAngle += PI
     -theAngle
   }
 }

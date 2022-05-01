@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, HEIGHT, SCALE_FACTOR}
-import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.Lever
 
 import java.awt.*
@@ -20,8 +19,11 @@ object Lever {
 /**
   * The angle of the level wrt horizontal (0 being horizontal)
   */
-class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLength: Double, variables: Variables) {
+class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLength: Double) {
 
+  private var angle: Double = 0.0
+  private var angularVelocity: Double = 0.0
+  
   def getSlingLeverLength:Double = slingLeverLength
   def setSlingLeverLength(slingLeverLength: Double): Unit = {
     this.slingLeverLength = slingLeverLength
@@ -38,7 +40,14 @@ class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLeng
   def getMass: Double = Lever.LEVER_MASS_PER_METER * getTotalLength
   def getStrutBaseX: Double = base.getStrutBaseX
   def getBaseY: Int = base.getBaseY
-  def getAngle: Double = variables.angle
+  def getAngle: Double = angle
+  def setAngle(angle: Double): Unit = {
+      this.angle = angle
+  }
+  def getAngularVelocity: Double = angularVelocity
+  def setAngularVelocity(angularVelocity: Double): Unit = {
+    this.angularVelocity = angularVelocity
+  }
 
   private def getTotalLength = counterWeightLeverLength + slingLeverLength
 

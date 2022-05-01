@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trebuchet.model.parts
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.math.linear.LinearUtil
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.SCALE_FACTOR
-import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
 
 import java.awt.*
@@ -12,7 +11,7 @@ import javax.vecmath.Vector2d
 
 
 
-class Projectile(base: Base, val projectileMass: Double, variables: Variables) {
+class Projectile(base: Base, val projectileMass: Double) {
   var mass: Double = projectileMass
   private val radius = 0.05 * Math.cbrt(mass)
   private var position = new Vector2d

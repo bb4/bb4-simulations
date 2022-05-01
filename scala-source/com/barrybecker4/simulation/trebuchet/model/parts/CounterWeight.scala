@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.simulation.common.PhysicsConstants
-import com.barrybecker4.simulation.trebuchet.model.Variables
 import com.barrybecker4.simulation.trebuchet.model.parts.CounterWeight.WEIGHT_HANG_LENGTH
 import com.barrybecker4.simulation.trebuchet.model.parts.{CounterWeight, Lever}
 import com.barrybecker4.simulation.trebuchet.rendering.RenderingConstants
@@ -18,7 +17,7 @@ object CounterWeight {
   private val WEIGHT_HANG_LENGTH = 20
 }
 
-class CounterWeight(var lever: Lever, var mass: Double, variables: Variables) {
+class CounterWeight(var lever: Lever, var mass: Double) {
 
   def getMass: Double = mass
 
@@ -26,7 +25,7 @@ class CounterWeight(var lever: Lever, var mass: Double, variables: Variables) {
     this.mass = mass
   }
 
-  def getAngle: Double = variables.angle
-  def getAngularVelocity: Double = variables.angularVelocity
   def getWeightHangLength: Int = WEIGHT_HANG_LENGTH
+  def getLeverAngle: Double = lever.getAngle
+  def getLeverAngularVelocity: Double = lever.getAngularVelocity
 }
