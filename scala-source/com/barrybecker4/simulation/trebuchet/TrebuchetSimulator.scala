@@ -64,7 +64,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     val zoomPanel = new JPanel
     zoomPanel.setLayout(new FlowLayout)
     val zoomLabel = new JLabel(" Zoom")
-    zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 15, 255, 200)
+    zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 19, 400, 200)
     zoomSlider.addChangeListener(this)
     zoomPanel.add(zoomLabel)
     zoomPanel.add(zoomSlider)
@@ -89,7 +89,19 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
 
   override def timeStep: Double = {
     if (!isPaused) tStep = trebuchet.stepForward(tStep)
+    keepProjectileInView()
+    if (trebuchet.hasProjectileLanded) {
+      setPaused(true)
+    }
     tStep
+  }
+
+  // Scale if need to keep the projectile in view
+  private def keepProjectileInView(): Unit = {
+    val projectileDistanceX = trebuchet.getProjectileDistanceX
+    if (projectileDistanceX > 100) {
+      zoomSlider.setValue(Math.min(zoomSlider.getValue, 300000.0 / (500 + projectileDistanceX)).toInt)
+    }
   }
 
   override def paint(g: Graphics): Unit = {

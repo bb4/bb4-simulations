@@ -29,7 +29,7 @@ class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: 
 
   // scales the geometry of the trebuchet
   private var scale = SCALE
-  
+
   private var lever: Lever = _
   private var counterWeight: CounterWeight = _
   private var sling: Sling = _
@@ -97,6 +97,14 @@ class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: 
   def getSlingReleaseAngle: Double = sling.releaseAngle
   def setSlingReleaseAngle(slingReleaseAngle: Double): Unit = {
     this.sling.releaseAngle = slingReleaseAngle
+  }
+
+  def getProjectileDistanceX: Double = {
+    projectile.getPosition.x - lever.getStrutBaseX
+  }
+
+  def hasProjectileLanded: Boolean = {
+    projectile.getPosition.y > lever.getBaseY
   }
 
   /**
