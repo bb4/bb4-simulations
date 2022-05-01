@@ -3,36 +3,24 @@ package com.barrybecker4.simulation.trebuchet.model.parts
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.math.linear.LinearUtil
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.SCALE_FACTOR
 import com.barrybecker4.simulation.trebuchet.model.Variables
-import com.barrybecker4.simulation.trebuchet.model.parts.Projectile.{TRAIL_COLOR, TRAIL_STROKE}
-import com.barrybecker4.simulation.trebuchet.model.parts.{Projectile, RenderablePart}
-import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
 
 import java.awt.*
 import javax.vecmath.Vector2d
 
 
-/**
-  * @author Barry Becker Date: Sep 25, 2005
-  */
-object Projectile {
-  private val LEVER_STROKE = new BasicStroke(10.0f)
-  private val BORDER_COLOR = new Color(140, 50, 110)
-  private val FILL_COLOR = new Color(80, 150, 10)
-  private val TRAIL_COLOR = new Color(100, 0, 0, 50)
-  private val TRAIL_STROKE = new BasicStroke(2.0f)
-}
 
-class Projectile(val projectileMass: Double, variables: Variables) extends RenderablePart {
+class Projectile(base: Base, val projectileMass: Double, variables: Variables) {
   var mass: Double = projectileMass
-  private var radius = 0.05 * Math.cbrt(mass)
+  private val radius = 0.05 * Math.cbrt(mass)
   private var position = new Vector2d
   var isOnRamp: Boolean = true
   var isReleased: Boolean = false
   private val acceleration = new Vector2d(0, 0)
   private val velocity = new Vector2d(0, 0)
   private val force = new Vector2d(0, 0)
-  private var pastPositions = Seq[Vector2d]()
 
 
   def setX(x: Double): Unit = {
@@ -41,6 +29,8 @@ class Projectile(val projectileMass: Double, variables: Variables) extends Rende
 
   def getX: Double = position.x
   def getPosition: Vector2d = position
+  def getForce: Vector2d = force
+  def getRadius: Double = radius
 
   def setY(y: Double): Unit = {
     position.y = y
@@ -53,8 +43,8 @@ class Projectile(val projectileMass: Double, variables: Variables) extends Rende
   }
 
   def getMass: Double = mass
-  def getRadius: Double = radius
   def getDistanceFrom(referencePoint: Vector2d): Double = LinearUtil.distance(referencePoint, position)
+  def getBaseY: Double = base.getBaseY
 
   def getInertia(referencePoint: Vector2d): Double = {
     val dist = getDistanceFrom(referencePoint)
@@ -78,58 +68,4 @@ class Projectile(val projectileMass: Double, variables: Variables) extends Rende
   }
 
   def getVelocity: Vector2d = velocity
-
-  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
-
-    val location = getOvalLocation(position, height, scale)
-
-    val radius = (SCALE_FACTOR * this.radius).toInt
-    val diameter = (scale * 2.0 * radius).toInt
-    g2.setColor(Projectile.BORDER_COLOR)
-
-    g2.drawOval(location.getX, location.getY, diameter, diameter)
-    g2.setColor(Projectile.FILL_COLOR)
-    g2.fillOval(location.getX, location.getY, diameter, diameter)
-
-    if (isReleased) {
-      // show a little larger once released
-      val d = (diameter + scale * 4.0).toInt
-      g2.drawOval(location.getX, location.getY, d, d)
-
-      pastPositions :+= position
-      drawTrail(g2, diameter, height, scale)
-    }
-
-    val y = height - BASE_Y
-    if (showVelocityVectors) {
-      g2.setStroke(VELOCITY_VECTOR_STROKE)
-      g2.setColor(VELOCITY_VECTOR_COLOR)
-      g2.drawLine((scale * position.x).toInt, (y + scale * position.y).toInt,
-        (scale * (position.x + velocity.x)).toInt, (y + scale * (position.y + velocity.y)).toInt)
-    }
-    if (showForceVectors) {
-      g2.setStroke(FORCE_VECTOR_STROKE)
-      g2.setColor(FORCE_VECTOR_COLOR)
-      g2.drawLine((scale * position.x).toInt, (y + scale * position.y).toInt,
-        (scale * (position.x + force.x)).toInt, (y + scale * (position.y + force.y)).toInt)
-    }
-  }
-
-  private def drawTrail(g2: Graphics2D, diameter: Int, height: Int, scale: Double): Unit = {
-    g2.setColor(TRAIL_COLOR)
-    g2.setStroke(TRAIL_STROKE)
-    if (pastPositions.nonEmpty) {
-      var lastLoc = getOvalLocation(pastPositions.head, height, scale)
-      for (pos <- pastPositions.tail) {
-        val newLoc = getOvalLocation(pos, height, scale)
-        g2.drawLine(lastLoc.getX, lastLoc.getY, newLoc.getX, newLoc.getY)
-        lastLoc = newLoc
-      }
-    }
-  }
-
-  private def getOvalLocation(position: Vector2d, height: Int, scale: Double): IntLocation = {
-    val y = height - BASE_Y
-    new IntLocation((scale * (position.y - radius) + y).toInt, (scale * (position.x - radius)).toInt)
-  }
 }

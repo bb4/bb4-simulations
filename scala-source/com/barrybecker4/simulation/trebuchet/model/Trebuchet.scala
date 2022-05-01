@@ -7,13 +7,13 @@ import javax.vecmath.Vector2d
 import java.awt.Color
 import java.awt.Graphics2D
 import com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY
-import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants._
-import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.*
 import com.barrybecker4.simulation.trebuchet.model.parts.Lever
 import com.barrybecker4.simulation.trebuchet.model.parts.CounterWeight
 import com.barrybecker4.simulation.trebuchet.model.parts.Sling
 import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
 import com.barrybecker4.simulation.trebuchet.model.parts.Base
+import com.barrybecker4.simulation.trebuchet.rendering.*
 
 import java.lang.Math.PI
 import java.lang.Math.asin
@@ -49,7 +49,7 @@ class Trebuchet() {
   private var sling: Sling = _
   private var projectile: Projectile = _
   private val forceFromHook = new Vector2d(0, 0)
-  private var part = new Array[RenderablePart](Trebuchet.NUM_PARTS)
+  private val partRenderers = new Array[AbstractPartRenderer](Trebuchet.NUM_PARTS)
   // tweakable rendering parameters
   private var showVelocityVectors = false
   private var showForceVectors = false
@@ -68,15 +68,15 @@ class Trebuchet() {
     val angle = PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH)
     variables.angle = angle
     val base = new Base(variables)
-    part(0) = base
-    lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, variables)
-    part(1) = lever
+    partRenderers(0) = new BaseRenderer(base)
+    lever = new Lever(base, DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, variables)
+    partRenderers(1) = new LeverRenderer(lever)
     counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS, variables)
-    part(2) = counterWeight
-    projectile = new Projectile(DEFAULT_PROJECTILE_MASS, variables)
-    sling = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile, variables)
-    part(3) = sling
-    part(4) = projectile
+    partRenderers(2) = new CounterWeightRenderer(counterWeight)
+    projectile = new Projectile(base, DEFAULT_PROJECTILE_MASS, variables)
+    sling = new Sling(base, DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile, variables)
+    partRenderers(3) = new SlingRenderer(sling)
+    partRenderers(4) = new ProjectileRenderer(projectile)
   }
 
   /**
@@ -223,13 +223,13 @@ class Trebuchet() {
   /**
     * Render the Environment on the screen
     */
-  def render(g: Graphics2D, height: Int): Unit = {
+  def render(g: Graphics2D, viewHeight: Int): Unit = {
 
     g.setColor(Color.black) // default
 
     // render each part
     for (i <- 0 until Trebuchet.NUM_PARTS) {
-      if (part(i) != null) part(i).render(g, getScale, height)
+      if (partRenderers(i) != null) partRenderers(i).render(g, getScale, viewHeight)
     }
   }
 }

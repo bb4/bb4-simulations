@@ -25,5 +25,6 @@ object TrebuchetConstants { // scales the size of the trebuchet's geometry
   val DEFAULT_SLING_RELEASE_ANGLE: Double = Math.PI / 8
   // debug level of 0 means no debug info, 3 is all debug info
   val DEBUG_LEVEL = 0
+  val SCALE_FACTOR = 70
 }
 

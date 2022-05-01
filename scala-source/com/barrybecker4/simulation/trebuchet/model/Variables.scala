@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
 
 
 class Variables(
-  var height: Double = HEIGHT,
   var angle: Double = 0.0,
   var angularVelocity: Double = 0.0,
 )

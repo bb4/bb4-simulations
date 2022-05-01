@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model.parts
 
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, HEIGHT, SCALE_FACTOR}
 import com.barrybecker4.simulation.trebuchet.model.Variables
-import com.barrybecker4.simulation.trebuchet.model.parts.{Lever, RenderablePart}
-import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart.*
+import com.barrybecker4.simulation.trebuchet.model.parts.Lever
 
 import java.awt.*
 import javax.vecmath.Vector2d
@@ -12,27 +12,23 @@ import javax.vecmath.Vector2d
 /**
   * @author Barry Becker Date: Sep 25, 2005
   */
-object Lever { // amount of mass in kg per meter magnitude of the lever
+object Lever {
+  // amount of mass in kg per meter magnitude of the lever
   private val LEVER_MASS_PER_METER = 2.0
-  private val LEVER_STROKE = new BasicStroke(10.0f)
-  private val LEVER_COLOR = new Color(80, 60, 180)
 }
 
 /**
   * The angle of the level wrt horizontal (0 being horizontal)
-  * @param counterWeightLeverLength
-  * @param slingLeverLength
   */
-class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double, variables: Variables) extends RenderablePart {
-  private[model] def getSlingLeverLength = slingLeverLength
+class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLength: Double, variables: Variables) {
 
-  private[model] def setSlingLeverLength(slingLeverLength: Double): Unit = {
+  def getSlingLeverLength:Double = slingLeverLength
+  def setSlingLeverLength(slingLeverLength: Double): Unit = {
     this.slingLeverLength = slingLeverLength
   }
 
-  private[model] def getCounterWeightLeverLength = counterWeightLeverLength
-
-  private[model] def setCounterWeightLeverLength(counterWeightLeverLength: Double): Unit = {
+  def getCounterWeightLeverLength: Double = counterWeightLeverLength
+  def setCounterWeightLeverLength(counterWeightLeverLength: Double): Unit = {
     this.counterWeightLeverLength = counterWeightLeverLength
   }
 
@@ -40,12 +36,15 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double, 
     * @return the mass in kilograms
     */
   def getMass: Double = Lever.LEVER_MASS_PER_METER * getTotalLength
+  def getStrutBaseX: Double = base.getStrutBaseX
+  def getBaseY: Int = base.getBaseY
+  def getAngle: Double = variables.angle
 
   private def getTotalLength = counterWeightLeverLength + slingLeverLength
 
   // @@ make constant to improve perf?
-  private[model] def getFulcrumPosition =
-    new Vector2d(STRUT_BASE_X, (-SCALE_FACTOR * variables.height).toInt)
+  def getFulcrumPosition =
+    new Vector2d(base.getStrutBaseX, (-SCALE_FACTOR * HEIGHT).toInt)
 
   /**
     * I = 1/3 * ML squared
@@ -58,18 +57,4 @@ class Lever(var counterWeightLeverLength: Double, var slingLeverLength: Double, 
     getMass / 3.0 * (sllSquared + cwlSquared)
   }
 
-  override def render(g2: Graphics2D, scale: Double, height: Int): Unit = {
-    g2.setStroke(Lever.LEVER_STROKE)
-    g2.setColor(Lever.LEVER_COLOR)
-
-    val y = height - BASE_Y
-    val fulcrumPos = getFulcrumPosition
-    val cos = SCALE_FACTOR * Math.cos(variables.angle)
-    val sin = SCALE_FACTOR * Math.sin(variables.angle)
-
-    g2.drawLine((scale * (fulcrumPos.x + sin * counterWeightLeverLength)).toInt,
-      (scale * (fulcrumPos.y - cos * counterWeightLeverLength) + y).toInt,
-      (scale * (fulcrumPos.x - sin * slingLeverLength)).toInt,
-      (scale * (fulcrumPos.y + cos * slingLeverLength)).toInt + y)
-  }
 }

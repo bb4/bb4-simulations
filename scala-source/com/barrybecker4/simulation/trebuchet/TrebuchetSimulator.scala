@@ -10,7 +10,7 @@ import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
-import com.barrybecker4.simulation.trebuchet.model.parts.RenderablePart
+import com.barrybecker4.simulation.trebuchet.rendering.RenderingConstants
 import com.barrybecker4.ui.util.GUIUtil
 
 import javax.swing.*
@@ -111,14 +111,14 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override def getScale: Double = trebuchet.getScale
 
   override def setShowVelocityVectors(show: Boolean): Unit = {
-    RenderablePart.showVelocityVectors = show
+    RenderingConstants.showVelocityVectors = show
   }
-  override def getShowVelocityVectors: Boolean = RenderablePart.showVelocityVectors
+  override def getShowVelocityVectors: Boolean = RenderingConstants.showVelocityVectors
 
   override def setShowForceVectors(show: Boolean): Unit = {
-    RenderablePart.showForceVectors = show
+    RenderingConstants.showForceVectors = show
   }
-  override def getShowForceVectors: Boolean = RenderablePart.showForceVectors
+  override def getShowForceVectors: Boolean = RenderingConstants.showForceVectors
 
   override def setDrawMesh(use: Boolean): Unit = {
     //trebuchet_.setDrawMesh(use);
