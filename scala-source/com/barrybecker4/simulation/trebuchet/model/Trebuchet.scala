@@ -13,7 +13,7 @@ import com.barrybecker4.simulation.trebuchet.model.parts.CounterWeight
 import com.barrybecker4.simulation.trebuchet.model.parts.Sling
 import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
 import com.barrybecker4.simulation.trebuchet.model.parts.Base
-import com.barrybecker4.simulation.trebuchet.rendering.*
+import com.barrybecker4.simulation.trebuchet.rendering.{AbstractPartRenderer, *}
 
 import java.lang.Math.PI
 import java.lang.Math.asin
@@ -22,7 +22,7 @@ import java.lang.Math.sin
 
 
 /**
-  * Data structure and methods for representing a single dynamic trebuchet (advanced form of a catapult)
+  * Data structure and methods for representing a dynamic trebuchet
   * The geometry of the trebuchet is defined by constants in TebuchetConstants.
   *
   * Performance Improvements:
@@ -31,30 +31,25 @@ import java.lang.Math.sin
   * @author Barry Becker
   */
 object Trebuchet {
-  protected val MIN_EDGE_ANGLE = 0.3
   private val GRAVITY_VEC = new Vector2d(0, GRAVITY)
   private val MAX_LEVER_ANGLE = PI - 0.1
-  private val NUM_PARTS = 5
-  private var logger = new Log
 }
 
 /**
   * Use a hard-coded static data interface to initialize
   * so it can be easily run in an applet without using resources.
   */
-class Trebuchet() {
+class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: Boolean = false) {
 
   private var lever: Lever = _
   private var counterWeight: CounterWeight = _
   private var sling: Sling = _
   private var projectile: Projectile = _
   private val forceFromHook = new Vector2d(0, 0)
-  private val partRenderers = new Array[AbstractPartRenderer](Trebuchet.NUM_PARTS)
-  // tweakable rendering parameters
-  private var showVelocityVectors = false
-  private var showForceVectors = false
+  private var partRenderers:Seq[AbstractPartRenderer] = Seq()
   // scales the geometry of the trebuchet
   private var scale = SCALE
+  private var trebuchetRenderer: TrebuchetRenderer = _
   
   commonInit()
 
@@ -65,16 +60,12 @@ class Trebuchet() {
 
   private def commonInit(): Unit = {
     val base = Base()
-    partRenderers(0) = new BaseRenderer(base)
     lever = Lever(base, DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
     lever.setAngle(PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH))
-    partRenderers(1) = new LeverRenderer(lever)
     counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
-    partRenderers(2) = new CounterWeightRenderer(counterWeight)
     projectile = new Projectile(base, DEFAULT_PROJECTILE_MASS)
     sling = Sling(lever, projectile, DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE)
-    partRenderers(3) = new SlingRenderer(sling)
-    partRenderers(4) = new ProjectileRenderer(projectile)
+    trebuchetRenderer = new TrebuchetRenderer(base, lever, counterWeight, sling, projectile)
   }
 
   /**
@@ -168,18 +159,6 @@ class Trebuchet() {
 
   def getScale: Double = scale
 
-  def setShowVelocityVectors(show: Boolean): Unit = {
-    showVelocityVectors = show
-  }
-
-  def getShowVelocityVectors: Boolean = showVelocityVectors
-
-  def setShowForceVectors(show: Boolean): Unit = {
-    showForceVectors = show
-  }
-
-  def getShowForceVectors: Boolean = showForceVectors
-
   def getCounterWeightLeverLength: Double = lever.getCounterWeightLeverLength
 
   def setCounterWeightLeverLength(counterWeightLeverLength: Double): Unit = {
@@ -218,12 +197,7 @@ class Trebuchet() {
     * Render the Environment on the screen
     */
   def render(g: Graphics2D, viewHeight: Int): Unit = {
-
-    g.setColor(Color.black) // default
-
-    // render each part
-    for (i <- 0 until Trebuchet.NUM_PARTS) {
-      if (partRenderers(i) != null) partRenderers(i).render(g, getScale, viewHeight)
-    }
+    g.setColor(Color.black)
+    trebuchetRenderer.render(g, getScale, viewHeight)
   }
 }
