@@ -17,24 +17,21 @@ object TrebuchetProcessor {
 
 class TrebuchetProcessor(lever: Lever, counterWeight: CounterWeight, sling: Sling, projectile: Projectile) {
 
-  private val forceFromHook = new Vector2d(0, 0)
-
   /**
     * steps the simulation forward in time
     * if the timestep is too big inaccuracy and instability may result.
     * @return the new timestep
     */
   def stepForward(timeStep: Double): Double = {
-    //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
     var angle = lever.getAngle
     var angularVelocity = lever.getAngularVelocity
     val slingAngle = sling.getAngleWithLever
     val torque = calculateTorque(angle, slingAngle)
     val inertia = calculateInertia
     var angularAcceleration: Double = 0
+
     if (angle < MAX_LEVER_ANGLE) {
       angularAcceleration = inertia / torque // in radians per second squared
-
       angularVelocity += timeStep * angularAcceleration
       angle += timeStep * angularVelocity
     }
@@ -45,31 +42,8 @@ class TrebuchetProcessor(lever: Lever, counterWeight: CounterWeight, sling: Slin
     lever.setAngle(angle)
     lever.setAngularVelocity(angularVelocity)
 
-    // calculate the forces acting on the projectile.
-    // the magnitude of the tangential force at the hook
-    if (!projectile.isReleased) {
-      val tangentialForceAtHook = torque / lever.getSlingLeverLength
-      //println("tangentialForceAtHook="+tangentialForceAtHook);
-      val slingAngleWithHorz = sling.getAngleWithHorz
-      forceFromHook.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz)) //sin(PI - angle), -cos(PI + angle));
+    projectile.setForce(calculateProjectileForce(torque), timeStep)
 
-      forceFromHook.scale(tangentialForceAtHook * sin(slingAngle))
-      val gravityForce = new Vector2d(GRAVITY_VEC)
-      gravityForce.scale(projectile.getMass)
-      forceFromHook.add(gravityForce)
-      // also add a restoring force which is proportional to the distance from the attachPoint on the sling
-      // if we have not yet been released.
-      val restoreForce = sling.getProjectileAttachPoint
-      restoreForce.sub(projectile.getPosition)
-      restoreForce.scale(100.0)
-      forceFromHook.add(restoreForce)
-      projectile.setForce(forceFromHook, timeStep)
-    }
-    else {
-      val gravityForce = new Vector2d(GRAVITY_VEC)
-      gravityForce.scale(projectile.getMass)
-      projectile.setForce(gravityForce, timeStep)
-    }
     // at the time when it is released, the only force acting on it will be gravity.
     if (!projectile.isReleased && slingAngle >= (PI + sling.releaseAngle)) {
       println("##########################################################################")
@@ -78,6 +52,37 @@ class TrebuchetProcessor(lever: Lever, counterWeight: CounterWeight, sling: Slin
       projectile.isReleased = true
     }
     timeStep
+  }
+
+  private def calculateProjectileForce(torque: Double): Vector2d = {
+    if (!projectile.isReleased) calculateProjectileForceBeforeRelease(torque)
+    else calculateProjectileForceAfterRelease()
+  }
+
+  private def calculateProjectileForceBeforeRelease(torque: Double): Vector2d = {
+    // clac the magnitude of the tangential force at the hook
+    val tangentialForceAtHook = torque / lever.getSlingLeverLength
+    //println("tangentialForceAtHook="+tangentialForceAtHook);
+    val slingAngleWithHorz = sling.getAngleWithHorz
+    val forceFromHook = new Vector2d(-cos(slingAngleWithHorz), sin(slingAngleWithHorz)) //sin(PI - angle), -cos(PI + angle));
+
+    forceFromHook.scale(tangentialForceAtHook * sin(sling.getAngleWithLever))
+    val gravityForce = new Vector2d(GRAVITY_VEC)
+    gravityForce.scale(projectile.getMass)
+    forceFromHook.add(gravityForce)
+    // also add a restoring force which is proportional to the distance from the attachPoint on the sling
+    // if we have not yet been released.
+    val restoreForce = sling.getProjectileAttachPoint
+    restoreForce.sub(projectile.getPosition)
+    restoreForce.scale(100.0)
+    forceFromHook.add(restoreForce)
+    forceFromHook
+  }
+
+  private def calculateProjectileForceAfterRelease(): Vector2d = {
+    val gravityForce = new Vector2d(GRAVITY_VEC)
+    gravityForce.scale(projectile.getMass)
+    gravityForce
   }
 
   private def calculateTorque(angle: Double, slingAngle: Double) = {
