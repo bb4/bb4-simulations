@@ -25,6 +25,7 @@ import scala.util.Random
   */
 object TrebuchetSimulator {
   private val DEFAULT_NUM_STEPS_PER_FRAME = 1
+  private val OPTIMIZED_NUM_STEPS_PER_FRAME = 10
   // the amount to advance the animation in time for each frame in seconds
   private val TIME_STEP = 0.002
   private val NUM_PARAMS = 3
@@ -46,7 +47,6 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     this.trebuchet = trebuchet
     this.sceneRenderer = new TrebuchetSceneRenderer(trebuchet)
     setNumStepsPerFrame(TrebuchetSimulator.DEFAULT_NUM_STEPS_PER_FRAME)
-    //this.setBackground(TrebuchetSimulator.BACKGROUND_COLOR)
     initCommonUI()
     this.render()
   }
@@ -60,6 +60,12 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
 
   override def createTopControls: JPanel = {
     val controls = super.createTopControls
+    val zoomPanel = createZoomPanel()
+    controls.add(zoomPanel)
+    controls
+  }
+
+  private def createZoomPanel(): JPanel = {
     val zoomPanel = new JPanel
     zoomPanel.setLayout(new FlowLayout)
     val zoomLabel = new JLabel(" Zoom")
@@ -67,15 +73,12 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     zoomSlider.addChangeListener(this)
     zoomPanel.add(zoomLabel)
     zoomPanel.add(zoomSlider)
-    this.add(zoomPanel)
-    controls.add(zoomLabel)
-    controls.add(zoomSlider)
-    controls
+    zoomPanel
   }
 
   override def doOptimization(): Unit = {
     val optimizer = new Optimizer(this)
-      //, Some(FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt"))
+    setNumStepsPerFrame(TrebuchetSimulator.OPTIMIZED_NUM_STEPS_PER_FRAME)
     val params = new Array[Parameter](TrebuchetSimulator.NUM_PARAMS).toIndexedSeq
     val paramArray = new NumericParameterArray(params, 5, new Random(1))
     setPaused(false)
@@ -98,7 +101,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   // Scale if need to keep the projectile in view
   private def keepProjectileInView(): Unit = {
     val projectileDistanceX = trebuchet.getProjectileDistanceX
-    if (projectileDistanceX > 100) {
+    if (zoomSlider != null && projectileDistanceX > 100) {
       zoomSlider.setValue(Math.min(zoomSlider.getValue, 300000.0 / (500 + projectileDistanceX)).toInt)
     }
   }
@@ -151,25 +154,16 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   /**
     * Evaluates the trebuchet's fitness.
     * This method is an implement the Optimizee interface.
-    * The measure is purely based on its velocity.
+    * The measure is purely based the distance that the projectile travels.
     * If the trebuchet becomes unstable, then 0.0 is returned.
     */
   override def evaluateFitness(params: ParameterArray): Double = {
-    val stable = true
-    val improved = true
-    val oldVelocity = 0.0
-    var ct = 0
+    this.reset()
+    this.setPaused(false)
 
-    // let it run for a while
-    while (stable && improved) { 
-      ThreadUtil.sleep(1000 + (3000 / (1.0 + 0.2 * ct)).toInt)
-      ct += 1
-      //stable = trebuchet_.isStable();
+    while (!trebuchet.hasProjectileLanded) {
+      ThreadUtil.sleep(1000)
     }
-    if (!stable) {
-      println("Trebuchet Sim unstable")
-      10000.0
-    }
-    else 1.0 / oldVelocity
+    trebuchet.getProjectileDistanceX
   }
 }
