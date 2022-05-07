@@ -9,9 +9,8 @@ import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
-import com.barrybecker4.simulation.trebuchet.TrebuchetSimulator.{TEXT_COLOR, TEXT_FONT}
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
-import com.barrybecker4.simulation.trebuchet.rendering.RenderingConstants
+import com.barrybecker4.simulation.trebuchet.rendering.{RenderingConstants, TrebuchetSceneRenderer}
 import com.barrybecker4.ui.util.GUIUtil
 
 import javax.swing.*
@@ -23,16 +22,11 @@ import scala.util.Random
 
 /**
   * Physically base dynamic simulation of a trebuchet firing.
-  * Try simulating using Breve.
-  * @author Barry Becker
   */
 object TrebuchetSimulator {
   private val DEFAULT_NUM_STEPS_PER_FRAME = 1
   // the amount to advance the animation in time for each frame in seconds
   private val TIME_STEP = 0.002
-  private val BACKGROUND_COLOR = new Color(253, 250, 253)
-  private val TEXT_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 24)
-  private val TEXT_COLOR = new Color(100, 100, 100);
   private val NUM_PARAMS = 3
 }
 
@@ -41,6 +35,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   this.setPreferredSize(new Dimension(800, 900))
   private var trebuchet: Trebuchet = _
   private var zoomSlider: JSlider = _
+  private var sceneRenderer: TrebuchetSceneRenderer = _
 
   def this(trebuchet: Trebuchet) = {
     this()
@@ -49,8 +44,9 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
 
   private def commonInit(trebuchet: Trebuchet): Unit = {
     this.trebuchet = trebuchet
+    this.sceneRenderer = new TrebuchetSceneRenderer(trebuchet)
     setNumStepsPerFrame(TrebuchetSimulator.DEFAULT_NUM_STEPS_PER_FRAME)
-    this.setBackground(TrebuchetSimulator.BACKGROUND_COLOR)
+    //this.setBackground(TrebuchetSimulator.BACKGROUND_COLOR)
     initCommonUI()
     this.render()
   }
@@ -60,7 +56,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     commonInit(trebuchet)
   }
 
-  override def getBackground: Color = TrebuchetSimulator.BACKGROUND_COLOR
+  //override def getBackground: Color = TrebuchetSimulator.BACKGROUND_COLOR
 
   override def createTopControls: JPanel = {
     val controls = super.createTopControls
@@ -110,20 +106,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override def paint(g: Graphics): Unit = {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
-    g2.setColor(TrebuchetSimulator.BACKGROUND_COLOR)
-    val dim = getSize()
-    g2.fillRect(0, 0, dim.width, dim.height)
-
-    val aliasing = if (getAntialiasing) RenderingHints.VALUE_ANTIALIAS_ON
-                   else RenderingHints.VALUE_ANTIALIAS_OFF
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, aliasing)
-    // draw the trebuchet in its current position
-    trebuchet.render(g2, dim.height)
-
-    g2.setFont(TEXT_FONT);
-    g2.setColor(TEXT_COLOR);
-    val distance = trebuchet.getProjectileDistanceX.toInt
-    g2.drawString("Distance: " + distance, dim.width - 240, dim.height - 50);
+    sceneRenderer.render(g2, getSize(), this.getAntialiasing);
   }
 
   override def setScale(scale: Double): Unit = {
