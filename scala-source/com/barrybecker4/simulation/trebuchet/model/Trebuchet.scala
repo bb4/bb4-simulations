@@ -24,6 +24,13 @@ import java.lang.Math.sin
 /**
   * Data structure and methods for representing a dynamic trebuchet
   * The geometry of the trebuchet is defined by constants in TebuchetConstants
+  *
+  * Some useful references
+  * [Trebuchet Physics](https://www.real-world-physics-problems.com/trebuchet-physics.html)
+  * [Principals of Motion](http://radlinski.org/trebuchet/2_motion.html)
+  * [What affects the range of a Trebuchet?](https://www.ucl.ac.uk/~zcapf71/Trebuchet%20coursework%20for%20website.pdf)
+  * [Moment of inertial cheat sheet](http://hyperphysics.phy-astr.gsu.edu/hbase/mi.html)
+  * [Super-sonic trebuchet](https://modphys.hosted.uark.edu/pdfs/CMwBang_Pdfs/CMwBang_PapersNTalks/Trebuchet_vs_Flinger.pdf)
   */
 class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: Boolean = false) {
 

@@ -60,7 +60,7 @@ class TrebuchetProcessor(lever: Lever, counterWeight: CounterWeight, sling: Slin
   }
 
   private def calculateProjectileForceBeforeRelease(torque: Double): Vector2d = {
-    // clac the magnitude of the tangential force at the hook
+    // calc the magnitude of the tangential force at the hook
     val tangentialForceAtHook = torque / lever.getSlingLeverLength
     //println("tangentialForceAtHook="+tangentialForceAtHook);
     val slingAngleWithHorz = sling.getAngleWithHorz
