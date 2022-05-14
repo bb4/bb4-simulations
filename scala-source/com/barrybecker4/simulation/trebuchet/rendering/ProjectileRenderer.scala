@@ -12,7 +12,6 @@ import java.awt.{BasicStroke, Color, Graphics2D}
 import javax.vecmath.Vector2d
 
 object ProjectileRenderer {
-  private val LEVER_STROKE = new BasicStroke(10.0f)
   private val BORDER_COLOR = new Color(140, 50, 110)
   private val FILL_COLOR = new Color(80, 150, 10)
   private val TRAIL_COLOR = new Color(100, 0, 0, 50)

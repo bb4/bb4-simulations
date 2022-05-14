@@ -2,13 +2,12 @@
 package com.barrybecker4.simulation.trebuchet.model
 
 /**
-  * @author Barry Becker
+  * All distances are in meters, mass in Kilograms
   */
 object TrebuchetConstants { // scales the size of the trebuchet's geometry
   val SCALE = 1.0
   // all distances are in meters, mass in Kilograms
   val HEIGHT = 2.0
-  val RAMP_HEIGHT = 0.0
   // coefficient of dynamic friction on the ramp
   val RAMP_FRICTION = 0.4
   // the allowable ranges for these things will be .2*<default> to 4*<default>

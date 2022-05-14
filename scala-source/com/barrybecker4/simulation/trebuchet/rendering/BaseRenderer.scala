@@ -19,9 +19,9 @@ class BaseRenderer(base: Base) extends AbstractPartRenderer {
     g2.setColor(BASE_COLOR)
 
     val x = (scale * base.getBaseX).toInt
+    val baseHeight = (scale * base.getHeight).toInt
     val y = viewHeight - base.getBaseY
     val width = (scale * base.getWidth).toInt
-    val baseHeight = (scale * 10.0).toInt
     val strutBackX = (scale * (base.getStrutBaseX - base.getStrutBaseHalfWidth)).toInt
     val strutMidX = (scale * base.getStrutBaseX).toInt
     val strutFrontX = (scale * (base.getStrutBaseX + base.getStrutBaseHalfWidth)).toInt

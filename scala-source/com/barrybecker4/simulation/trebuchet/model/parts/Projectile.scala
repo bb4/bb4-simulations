@@ -61,7 +61,7 @@ class Projectile(base: Base, val projectileMass: Double) {
     val newXPos = position.x + SCALE_FACTOR * timeStep * velocity.x
     val newYPos = position.y + SCALE_FACTOR * timeStep * velocity.y
     setPosition(new Vector2d(newXPos, newYPos))
-    if (isOnRamp && position.y < -4) {
+    if (isOnRamp && position.y < -base.getRampHeight) {
       isOnRamp = false
       println("*********** no longer on ramp!")
     }

@@ -20,6 +20,14 @@ The variables are:
 - leverArmRatio  (ratio of sling arm to counterWeight arm)
 - slingLength (L3)
 - counterWeightCableLength = L4 (should equal L1)
+- s - distance between payload end of beam and center of mass of the beam (G)
+- theta - angle between the vertical and the beam on the counterweight side. Always negative.
+- alpha - angle between the beam and the cable holding the payload. Always positive.
+- beta - angle between the beam and the counterweight cable. Always positive.
+- T - tension on the cable holding the payload
+- T2 - tension on the cable holding the counterweight
+- mb - mass of the beam
+- g - gravity. 9.8 m/s^2
 
 ![image](initial_state.png)
 ![image](after_release.png)
