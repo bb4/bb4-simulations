@@ -1,6 +1,6 @@
 # Calculation Notes
 
-See [tebuchet physics](https://www.real-world-physics-problems.com/trebuchet-physics.html).
+See [trebuchet physics](https://www.real-world-physics-problems.com/trebuchet-physics.html). 
 
 Optimal configuration based on his definition of "range efficiency" is such that:
 
@@ -9,3 +9,17 @@ Optimal configuration based on his definition of "range efficiency" is such that
 - The length of the sling is equal to the length of the long arm of the beam (on the payload side).
 - The counterweight has a mass 100x the payload (but it can be less and still get good results).
 
+The variables are:
+- counterWeightMass  (M)
+- projectileMass   (m, mass of payload)
+- leverAngle (theta, where theta < 0)
+- slingAngle (alpha, where alpha > 0 and alpha = theta + 90)
+- counterWeightLeverArmLength = L1
+- slingLevelArmLength = L2
+- leverLength = L1 + L2
+- leverArmRatio  (ratio of sling arm to counterWeight arm)
+- slingLength (L3)
+- counterWeightCableLength = L4 (should equal L1)
+
+![image](initial_state.png)
+![image](after_release.png)

@@ -8,3 +8,5 @@ bin/
 *.iml
 bb4-simulations.ipr
 bb4-simulations.iws
+
+scala-source/com/barrybecker4/simulation/trebuchet/doc
