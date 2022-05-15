@@ -14,18 +14,20 @@ import javax.vecmath.Vector2d
   * @author Barry Becker Date: Sep 25, 2005
   */
 object CounterWeight {
-  private val WEIGHT_HANG_LENGTH = 20
+  private val WEIGHT_HANG_LENGTH = 2.0
 }
 
 class CounterWeight(var lever: Lever, var mass: Double) {
 
+  private val radius = .35 * Math.cbrt(mass)
   def getMass: Double = mass
 
   def setMass(mass: Double): Unit = {
     this.mass = mass
   }
 
-  def getWeightHangLength: Int = WEIGHT_HANG_LENGTH
+  def getWeightHangLength: Double = WEIGHT_HANG_LENGTH
   def getLeverAngle: Double = lever.getAngle
   def getLeverAngularVelocity: Double = lever.getAngularVelocity
+  def getRadius: Double = radius
 }

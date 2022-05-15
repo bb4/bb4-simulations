@@ -107,6 +107,8 @@ class TrebuchetProcessor(lever: Lever, counterWeight: CounterWeight, sling: Slin
     * I = LEVER_MASS / 3  (b^3 + c^3) + projectileMass/3 * r squared
     * @return the calculated inertia
     */
-  private def calculateInertia = lever.getInertia + projectile.getInertia(lever.getFulcrumPosition)
+  private def calculateInertia = {
+    lever.getInertia + projectile.getInertia(lever.getFulcrumPosition)
+  }
 
 }

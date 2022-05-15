@@ -35,7 +35,7 @@ import java.lang.Math.sin
 class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: Boolean = false) {
 
   // scales the geometry of the trebuchet
-  private var scale = SCALE
+  private var scale = INITIAL_SCALE
 
   private var lever: Lever = _
   private var counterWeight: CounterWeight = _
@@ -55,11 +55,11 @@ class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: 
     val base = Base()
     lever = Lever(base, DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
     lever.setAngle(PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH))
-    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
-    projectile = new Projectile(base, DEFAULT_PROJECTILE_MASS)
+    counterWeight = CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
+    projectile = Projectile(base, DEFAULT_PROJECTILE_MASS)
     sling = Sling(lever, projectile, DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE)
-    trebuchetRenderer = new TrebuchetRenderer(base, lever, counterWeight, sling, projectile)
-    trebuchetProcessor = new TrebuchetProcessor(lever, counterWeight, sling, projectile)
+    trebuchetRenderer = TrebuchetRenderer(base, lever, counterWeight, sling, projectile)
+    trebuchetProcessor = TrebuchetProcessor(lever, counterWeight, sling, projectile)
   }
 
   def stepForward(timeStep: Double): Double = {
@@ -111,7 +111,10 @@ class Trebuchet(var showVelocityVectors: Boolean = false, var showForceVectors: 
   }
 
   def hasProjectileLanded: Boolean = {
-    projectile.getPosition.y > lever.getBaseY
+    val landed = projectile.getPosition.y > lever.getRampHeight
+    if (landed)
+        println("landed because " + projectile.getPosition.y + " > rampHt=" + lever.getRampHeight)
+    landed
   }
 
   /**

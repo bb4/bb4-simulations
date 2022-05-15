@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.trebuchet.rendering
 
 import com.barrybecker4.simulation.trebuchet.model.parts.Base
 import com.barrybecker4.simulation.trebuchet.rendering.BaseRenderer.{BASE_STROKE, BASE_COLOR}
-import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{HEIGHT, SCALE_FACTOR}
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
 import java.awt.{BasicStroke, Color, Graphics2D}
 
 
@@ -20,12 +20,12 @@ class BaseRenderer(base: Base) extends AbstractPartRenderer {
 
     val x = (scale * base.getBaseX).toInt
     val baseHeight = (scale * base.getHeight).toInt
-    val y = viewHeight - base.getBaseY
+    val y = (viewHeight - scale * base.getBaseY).toInt
     val width = (scale * base.getWidth).toInt
     val strutBackX = (scale * (base.getStrutBaseX - base.getStrutBaseHalfWidth)).toInt
     val strutMidX = (scale * base.getStrutBaseX).toInt
     val strutFrontX = (scale * (base.getStrutBaseX + base.getStrutBaseHalfWidth)).toInt
-    val strutJoinY = (y - scale * SCALE_FACTOR * HEIGHT).toInt
+    val strutJoinY = (y - scale * HEIGHT).toInt
 
     g2.draw3DRect(x, y, width, baseHeight, false)
     g2.drawLine(strutBackX, y, strutMidX, strutJoinY)

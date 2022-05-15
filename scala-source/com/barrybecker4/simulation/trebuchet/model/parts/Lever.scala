@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model.parts
 
-import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, HEIGHT, SCALE_FACTOR}
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH, HEIGHT}
 import com.barrybecker4.simulation.trebuchet.model.parts.Lever
 
 import java.awt.*
@@ -13,7 +13,7 @@ import javax.vecmath.Vector2d
   */
 object Lever {
   // amount of mass in kg per meter magnitude of the lever
-  private val LEVER_MASS_PER_METER = 2.0
+  private val LEVER_MASS_PER_METER = 0.2
 }
 
 /**
@@ -39,7 +39,7 @@ class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLeng
     */
   def getMass: Double = Lever.LEVER_MASS_PER_METER * getTotalLength
   def getStrutBaseX: Double = base.getStrutBaseX
-  def getBaseY: Int = base.getBaseY
+  def getBaseY: Double = base.getBaseY
   def getAngle: Double = angle
   def setAngle(angle: Double): Unit = {
       this.angle = angle
@@ -51,9 +51,8 @@ class Lever(base: Base, var counterWeightLeverLength: Double, var slingLeverLeng
 
   private def getTotalLength = counterWeightLeverLength + slingLeverLength
 
-  // @@ make constant to improve perf?
-  def getFulcrumPosition =
-    new Vector2d(base.getStrutBaseX, (-SCALE_FACTOR * HEIGHT).toInt)
+  def getFulcrumPosition = new Vector2d(base.getStrutBaseX, -HEIGHT.toInt)
+  def getRampHeight: Double = base.getRampHeight
 
   /**
     * I = 1/3 * ML squared

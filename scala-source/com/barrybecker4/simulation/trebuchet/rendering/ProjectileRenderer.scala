@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.trebuchet.rendering
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.simulation.trebuchet.model.parts.Projectile
-import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.{HEIGHT, SCALE_FACTOR}
+import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
 import com.barrybecker4.simulation.trebuchet.rendering.ProjectileRenderer.{BORDER_COLOR, FILL_COLOR, TRAIL_COLOR, TRAIL_STROKE}
 import com.barrybecker4.simulation.trebuchet.rendering.RenderingConstants.*
 
@@ -27,37 +27,37 @@ class ProjectileRenderer(projectile: Projectile)  extends AbstractPartRenderer {
     val position = projectile.getPosition
     val location = getOvalLocation(position, viewHeight, scale)
 
-    val radius = (SCALE_FACTOR * projectile.getRadius).toInt
+    val radius = projectile.getRadius
     val diameter = (scale * 2.0 * radius).toInt
-    g2.setColor(BORDER_COLOR)
 
+    g2.setColor(BORDER_COLOR)
     g2.drawOval(location.getX, location.getY, diameter, diameter)
     g2.setColor(FILL_COLOR)
     g2.fillOval(location.getX, location.getY, diameter, diameter)
 
     if (projectile.isReleased) {
       // show a little larger once released
-      val d = (diameter + scale * 4.0).toInt
+      val d = (1.1 * diameter).toInt
       g2.drawOval(location.getX, location.getY, d, d)
 
       pastPositions :+= position
       drawTrail(g2, diameter, viewHeight, scale)
     }
 
-    val y = viewHeight - projectile.getBaseY
+    val y = viewHeight - scale * projectile.getBaseY
     if (showVelocityVectors) {
       g2.setStroke(VELOCITY_VECTOR_STROKE)
       g2.setColor(VELOCITY_VECTOR_COLOR)
       def vel = projectile.getVelocity
       g2.drawLine((scale * position.x).toInt, (y + scale * position.y).toInt,
-        (scale * (position.x + vel.x)).toInt, (y + scale * (position.y + vel.y)).toInt)
+        (scale * position.x + vel.x).toInt, (y + scale * position.y + vel.y).toInt)
     }
     if (showForceVectors) {
       g2.setStroke(FORCE_VECTOR_STROKE)
       g2.setColor(FORCE_VECTOR_COLOR)
       def force = projectile.getForce
       g2.drawLine((scale * position.x).toInt, (y + scale * position.y).toInt,
-        (scale * (position.x + force.x)).toInt, (y + scale * (position.y + force.y)).toInt)
+        (scale * position.x + force.x).toInt, (y + scale * position.y + force.y).toInt)
     }
   }
 
@@ -75,8 +75,8 @@ class ProjectileRenderer(projectile: Projectile)  extends AbstractPartRenderer {
   }
 
   private def getOvalLocation(position: Vector2d, height: Int, scale: Double): IntLocation = {
-    val y = height - projectile.getBaseY
+    val y = height - scale * projectile.getBaseY
     val rad = projectile.getRadius
-    IntLocation((scale * (position.y - rad) + y).toInt, (scale * (position.x - rad)).toInt)
+    IntLocation((y + scale * (position.y - rad)).toInt, (scale * (position.x - rad)).toInt)
   }
 }

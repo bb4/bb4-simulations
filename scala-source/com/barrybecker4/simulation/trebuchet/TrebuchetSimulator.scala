@@ -9,7 +9,7 @@ import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
-import com.barrybecker4.simulation.trebuchet.model.Trebuchet
+import com.barrybecker4.simulation.trebuchet.model.{Trebuchet, TrebuchetConstants}
 import com.barrybecker4.simulation.trebuchet.rendering.{RenderingConstants, TrebuchetSceneRenderer}
 import com.barrybecker4.ui.util.GUIUtil
 
@@ -27,7 +27,7 @@ object TrebuchetSimulator {
   private val DEFAULT_NUM_STEPS_PER_FRAME = 1
   private val OPTIMIZED_NUM_STEPS_PER_FRAME = 10
   // the amount to advance the animation in time for each frame in seconds
-  private val TIME_STEP = 0.002
+  private val TIME_STEP = 0.005
   private val NUM_PARAMS = 3
 }
 
@@ -69,7 +69,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     val zoomPanel = new JPanel
     zoomPanel.setLayout(new FlowLayout)
     val zoomLabel = new JLabel(" Zoom")
-    zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 19, 400, 200)
+    zoomSlider = new JSlider(SwingConstants.HORIZONTAL, 1, 1000, 10 * TrebuchetConstants.INITIAL_SCALE.toInt)
     zoomSlider.addChangeListener(this)
     zoomPanel.add(zoomLabel)
     zoomPanel.add(zoomSlider)
@@ -102,7 +102,8 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   private def keepProjectileInView(): Unit = {
     val projectileDistanceX = trebuchet.getProjectileDistanceX
     if (zoomSlider != null && projectileDistanceX > 100) {
-      zoomSlider.setValue(Math.min(zoomSlider.getValue, 300000.0 / (500 + projectileDistanceX)).toInt)
+      val zoom = (15000.0 / (100 + projectileDistanceX)).toInt
+      zoomSlider.setValue(Math.min(zoomSlider.getValue, zoom))
     }
   }
 
@@ -145,7 +146,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
   override def stateChanged(event: ChangeEvent): Unit = {
     val src = event.getSource
     if (src eq zoomSlider) {
-      val v = zoomSlider.getValue.toDouble / 200.0
+      val v = zoomSlider.getValue.toDouble / 10.0
       trebuchet.setScale(v)
       this.repaint()
     }

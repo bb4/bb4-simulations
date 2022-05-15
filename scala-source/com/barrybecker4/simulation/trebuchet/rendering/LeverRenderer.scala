@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.trebuchet.rendering
 
 import com.barrybecker4.simulation.trebuchet.model.parts.Lever
 import com.barrybecker4.simulation.trebuchet.rendering.LeverRenderer.{LEVER_COLOR, LEVER_STROKE}
-import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.SCALE_FACTOR
 
 import java.awt.{BasicStroke, Color, Graphics2D}
 
@@ -19,10 +18,10 @@ class LeverRenderer(lever: Lever) extends AbstractPartRenderer {
     g2.setStroke(LEVER_STROKE)
     g2.setColor(LEVER_COLOR)
 
-    val y = viewHeight - lever.getBaseY
+    val y = (viewHeight - scale * lever.getBaseY).toInt
     val fulcrumPos = lever.getFulcrumPosition
-    val cos = SCALE_FACTOR * Math.cos(lever.getAngle)
-    val sin = SCALE_FACTOR * Math.sin(lever.getAngle)
+    val cos = Math.cos(lever.getAngle)
+    val sin = Math.sin(lever.getAngle)
 
     g2.drawLine((scale * (fulcrumPos.x + sin * lever.getCounterWeightLeverLength)).toInt,
       (scale * (fulcrumPos.y - cos * lever.getCounterWeightLeverLength)).toInt + y,

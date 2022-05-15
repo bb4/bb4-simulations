@@ -7,22 +7,22 @@ import java.awt.*
 
 
 object Base {
-  private val BASE_X = 80
+  private val BASE_X = 8.0
   // Y as measured from bottom
-  private val BASE_Y = 150
-  private val BASE_WIDTH = 400
-  private val BASE_HEIGHT = 10
-  private val BASE_RAMP_HEIGHT = 4
-  private val STRUT_BASE_HALF_WIDTH = 50
-  private val STRUT_BASE_X = 300
+  private val BASE_Y = 15.0
+  private val BASE_WIDTH = 40.0
+  private val BASE_HEIGHT = 1.0
+  private val BASE_RAMP_HEIGHT = 0.4
+  private val STRUT_BASE_HALF_WIDTH = 5.0
+  private val STRUT_BASE_X = 30.0
 }
 
 class Base()  {
-  def getBaseX: Int = BASE_X
-  def getBaseY: Int = BASE_Y
-  def getWidth: Int = BASE_WIDTH
-  def getHeight: Int = BASE_HEIGHT
-  def getRampHeight: Int = BASE_RAMP_HEIGHT
-  def getStrutBaseHalfWidth: Int = STRUT_BASE_HALF_WIDTH
-  def getStrutBaseX: Int = STRUT_BASE_X
+  def getBaseX: Double = BASE_X
+  def getBaseY: Double = BASE_Y
+  def getWidth: Double = BASE_WIDTH
+  def getHeight: Double = BASE_HEIGHT
+  def getRampHeight: Double = BASE_RAMP_HEIGHT
+  def getStrutBaseHalfWidth: Double = STRUT_BASE_HALF_WIDTH
+  def getStrutBaseX: Double = STRUT_BASE_X
 }
