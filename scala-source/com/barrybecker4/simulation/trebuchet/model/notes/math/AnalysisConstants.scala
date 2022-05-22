@@ -23,6 +23,7 @@ object AnalysisConstants {
   val L4 = 1.0 // counterweight cable length
   val s = 3.4 // distance between payload end of the beam and the beam COMass (point G)
   val STATIC_FRICTION = 0.1 // coefficient of static friction between the ring and finger
+  val SLING_RELEASE_ANGLE: Double = -4.0 * Math.PI / 6.0  // theta angle at which point the sling is released
   val GRAVITY = 9.8 // gravity. m/s^2
 
   val TIME_STEP = 0.001 // time increment in seconds when integrating
