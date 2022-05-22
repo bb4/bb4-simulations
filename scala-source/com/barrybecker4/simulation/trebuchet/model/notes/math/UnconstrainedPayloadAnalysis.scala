@@ -1,7 +1,8 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.trebuchet.model.notes
+package com.barrybecker4.simulation.trebuchet.model.notes.math
 
-import AnalysisConstants.*
+import com.barrybecker4.simulation.trebuchet.model.notes.math.AnalysisConstants.*
+
 import javax.vecmath.Vector2d
 
 object UnconstrainedPayloadAnalysis {
@@ -21,11 +22,10 @@ class UnconstrainedPayloadAnalysis {
 
     private var theta: Double = 0 // Angle between the vertical and the beam, on the counterweight side. Negative
     private var alpha: Double = 0 // Angle between the beam and the cable holding the payload. Positive
-    private var beta: Double = 0 // Angle between the beam and the cable holding the counterweight. Positive
 
-
+    // Ip = 1/12 Mb(L1 + L2)^2 + Mb(L2 - s)^2
     def getLeverArmMomentOfInertia: Double = {
-        1/12.0 * Math.pow(LEVER_MASS * (L1 + L2), 2.0) + Math.pow(LEVER_MASS * (L2 - s), 2.0)
+        1/12.0 * LEVER_MASS * Math.pow(L1 + L2, 2.0) + LEVER_MASS * Math.pow(L2 - s, 2.0)
     }
 
     def getProjectilePosition: Vector2d = {
@@ -46,6 +46,10 @@ class UnconstrainedPayloadAnalysis {
         10
     }
 
+    // alpha - PI/2 - atan(-1 / staticFriction )
+    private def getDelta: Double = {
+        alpha - Math.PI / 2.0 - Math.atan( -1.0 / STATIC_FRICTION)
+    }
 
 
 }
