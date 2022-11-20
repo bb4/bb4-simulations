@@ -15,8 +15,7 @@ import java.awt.*
   * @author Barry Becker.
   */
 object VoronoiExplorer {
-
-  protected val DEFAULT_STEPS_PER_FRAME = 10
+  protected val DEFAULT_STEPS_PER_FRAME = 1
 }
 
 class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
@@ -59,8 +58,8 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null) return
-      super.paint(g)
+    if (g == null) return 
+    super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(algorithm.getImage, 0, 0, null)
     Profiler.getInstance.stopRenderingTime()

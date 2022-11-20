@@ -28,9 +28,9 @@ class VoronoiAlgorithm() {
 
   private var model: VoronoiModel = _
   // should extract these into ModelParams class
-  private var maxPoints: Int = 0
-  private var maxIterations: Int = 0
-  private var numStepsPerFrame: Int = 0
+  private var maxPoints: Int = _
+  private var maxIterations: Int = _
+  private var numStepsPerFrame: Int = _
   private var poissonParams: PoissonParams = _
   private var usePoissonDistribution = true
   private var connectPoints = false
@@ -48,7 +48,7 @@ class VoronoiAlgorithm() {
 
   def reset(): Unit = {
     maxPoints = VoronoiAlgorithm.DEFAULT_MAX_POINTS
-    maxIterations = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
+    maxIterations = 1
     numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
     poissonParams = new PoissonParams()
     usePoissonDistribution = VoronoiAlgorithm.DEFAULT_USE_POISSON
@@ -58,7 +58,7 @@ class VoronoiAlgorithm() {
     model = new VoronoiModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
   }
 
-  def setTravelerParams(newParams: PoissonParams): Unit = {
+  def setPoissonParams(newParams: PoissonParams): Unit = {
     if (!(newParams == poissonParams)) {
       poissonParams = newParams
       requestRestart(model.getWidth, model.getHeight)
@@ -120,6 +120,7 @@ class VoronoiAlgorithm() {
     */
   def nextStep(): Boolean = {
     if (restartRequested) {
+      println("RESTARTING !!!!!!!!!!!!!!!")
       restartRequested = false
       finished = false
       iterations = 0

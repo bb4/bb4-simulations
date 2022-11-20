@@ -29,7 +29,7 @@ object DynamicOptions {
   private val STEPS_PER_FRAME_SLIDER = "Num steps per Frame"
   private val SLIDER_PROPS = Array(
     new SliderProperties(MAX_POINTS_SLIDER, 10, 10000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
-    new SliderProperties(RADIUS, 1, 5, PoissonParams.DEFAULT_RADIUS, 1000.0),
+    new SliderProperties(RADIUS, 1, 10, PoissonParams.DEFAULT_RADIUS, 1000.0),
     new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
     new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
     SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 20, 1)
@@ -92,11 +92,11 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     if (sliderName == DynamicOptions.RADIUS) {
       currentParams = new PoissonParams(value, currentParams.k)
-      algorithm.setTravelerParams(currentParams)
+      algorithm.setPoissonParams(currentParams)
     }
     else if (sliderName == DynamicOptions.K_SLIDER) {
-      currentParams = new PoissonParams(currentParams.radius, value)
-      algorithm.setTravelerParams(currentParams)
+      currentParams = new PoissonParams(currentParams.radius, value.toInt)
+      algorithm.setPoissonParams(currentParams)
     }
     else if (sliderName == DynamicOptions.ALPHA_SLIDER) algorithm.setAlpha(value.toInt)
     else if (sliderName == DynamicOptions.MAX_POINTS_SLIDER) algorithm.setNumSamplePoints(value.toInt)

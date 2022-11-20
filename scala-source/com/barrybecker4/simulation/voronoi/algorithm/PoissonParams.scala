@@ -12,7 +12,4 @@ object PoissonParams {
   val DEFAULT_K = 10
 }
 
-case class PoissonParams(radius: Double = DEFAULT_RADIUS, k: Double = DEFAULT_K) {
-
-  def isDefaultK: Boolean = this.k != PoissonParams.DEFAULT_K
-}
+case class PoissonParams(radius: Double = DEFAULT_RADIUS, k: Int = DEFAULT_K) 
