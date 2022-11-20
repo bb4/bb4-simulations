@@ -8,14 +8,16 @@ import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
-import javax.swing._
-import java.awt._
+
+import javax.swing.*
+import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import scala.collection.mutable
 
 
 /**
-  * Dynamic controls for the RD simulation that will show on the right.
+  * Dynamic controls for the Henon Explorer simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
   * @author Barry Becker
   */
@@ -94,7 +96,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   }
 
   private def updateFormulaText(): Unit = {
-    val text = new StringBuilder
+    val text = new mutable.StringBuilder()
     text.append("term = ")
     if (currentParams.isDefaultMultiplier)
       text.append(FormatUtil.formatNumber(currentParams.multiplier)).append(" * ")

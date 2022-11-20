@@ -1,28 +1,27 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.henonphase
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.voronoi
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
-import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm
+import com.barrybecker4.simulation.voronoi.DynamicOptions
+import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
 
 import javax.swing.*
 import java.awt.*
 
 
 /**
-  * Interactively explores Henon Phase attractors.
-  * See http://mathworld.wolfram.com/HenonMap.html
-  * See http://www.complexification.net/gallery/machines/henonPhaseDeep/
   * @author Barry Becker.
   */
-object HenonPhaseExplorer {
+object VoronoiExplorer {
+
   protected val DEFAULT_STEPS_PER_FRAME = 10
 }
 
-class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
+class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
 
-  private var algorithm: HenonAlgorithm = _
+  private var algorithm: VoronoiAlgorithm = _
   private var options: DynamicOptions = _
   private var useFixedSize = false
   commonInit()
@@ -33,35 +32,35 @@ class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
   }
 
   private def commonInit(): Unit = {
-    algorithm = new HenonAlgorithm
+    algorithm = new VoronoiAlgorithm
     initCommonUI()
     reset()
   }
 
   override protected def reset(): Unit = {
     algorithm.reset()
-    setNumStepsPerFrame(HenonPhaseExplorer.DEFAULT_STEPS_PER_FRAME)
+    setNumStepsPerFrame(VoronoiExplorer.DEFAULT_STEPS_PER_FRAME)
     if (options != null) options.reset()
   }
 
   def getUseFixedSize: Boolean = useFixedSize
   override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
-  override protected def getInitialTimeStep: Double = 1.0
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
   def getColorMap: ColorMap = algorithm.getColorMap
+  override def getInitialTimeStep = 1
 
   override def timeStep: Double = {
     if (!isPaused) {
       if (!useFixedSize) algorithm.setSize(this.getWidth, this.getHeight)
-      algorithm.timeStep()
+      algorithm.nextStep()
     }
-    1.0
+    tStep
   }
 
   override def paint(g: Graphics): Unit = {
     if (g == null) return
-    super.paint(g)
+      super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(algorithm.getImage, 0, 0, null)
     Profiler.getInstance.stopRenderingTime()

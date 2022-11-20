@@ -1,20 +1,21 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.henonphase.algorithm
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.voronoi.algorithm
 
-import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm.*
+import com.barrybecker4.ui.util.ColorMap
+
 import java.awt.image.BufferedImage
-import HenonAlgorithm._
+import VoronoiAlgorithm._
 
 
-object HenonAlgorithm {
-  val DEFAULT_MAX_ITERATIONS = 1000
-  val DEFAULT_FRAME_ITERATIONS = 10
-  val DEFAULT_NUM_TRAVELERS = 400
-  private val DEFAULT_SIZE = 300
+object VoronoiAlgorithm {
+  val DEFAULT_MAX_POINTS = 400
+  val DEFAULT_STEPS_PER_FRAME = 10
+  val DEFAULT_USE_POISSON = true
+  val DEFAULT_CONNECT_POINTS = false
+  private val DEFAULT_SIZE = 200
   private val DEFAULT_ALPHA = 200
-  private val DEFAULT_UNIFORM_SEEDS = true
-  private val DEFAULT_CONNECT_POINTS = false
 }
 
 /**
@@ -23,15 +24,15 @@ object HenonAlgorithm {
   * This will give good speedup on multi-core machines.
   * @author Barry Becker
   */
-class HenonAlgorithm() {
+class VoronoiAlgorithm() {
 
-  private var model: HenonModel = _
+  private var model: VoronoiModel = _
   // should extract these into ModelParams class
-  private var numTravelers: Int = 0
+  private var maxPoints: Int = 0
   private var maxIterations: Int = 0
   private var numStepsPerFrame: Int = 0
-  private var travelerParams: TravelerParams = _
-  private var useUniformSeeds = false
+  private var poissonParams: PoissonParams = _
+  private var usePoissonDistribution = true
   private var connectPoints = false
   private var alpha: Int = 0
   private var cmap: ColorMap = _
@@ -46,20 +47,20 @@ class HenonAlgorithm() {
   }
 
   def reset(): Unit = {
-    numTravelers = HenonAlgorithm.DEFAULT_NUM_TRAVELERS
-    maxIterations = HenonAlgorithm.DEFAULT_MAX_ITERATIONS
-    numStepsPerFrame = HenonAlgorithm.DEFAULT_FRAME_ITERATIONS
-    travelerParams = new TravelerParams
-    useUniformSeeds = HenonAlgorithm.DEFAULT_UNIFORM_SEEDS
-    connectPoints = HenonAlgorithm.DEFAULT_CONNECT_POINTS
-    alpha = HenonAlgorithm.DEFAULT_ALPHA
+    maxPoints = VoronoiAlgorithm.DEFAULT_MAX_POINTS
+    maxIterations = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
+    numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
+    poissonParams = new PoissonParams()
+    usePoissonDistribution = VoronoiAlgorithm.DEFAULT_USE_POISSON
+    connectPoints = VoronoiAlgorithm.DEFAULT_CONNECT_POINTS
+    alpha = VoronoiAlgorithm.DEFAULT_ALPHA
     cmap = new HenonColorMap(alpha)
-    model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
+    model = new VoronoiModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
   }
 
-  def setTravelerParams(newParams: TravelerParams): Unit = {
-    if (!(newParams == travelerParams)) {
-      travelerParams = newParams
+  def setTravelerParams(newParams: PoissonParams): Unit = {
+    if (!(newParams == poissonParams)) {
+      poissonParams = newParams
       requestRestart(model.getWidth, model.getHeight)
     }
   }
@@ -72,10 +73,10 @@ class HenonAlgorithm() {
     }
   }
 
-  def getUseUniformSeeds: Boolean = useUniformSeeds
+  def getUsePoissonDistribution: Boolean = usePoissonDistribution
 
-  def toggleUseUniformSeeds(): Unit = {
-    useUniformSeeds = !useUniformSeeds
+  def toggleUsePoissonDistribution(): Unit = {
+    usePoissonDistribution = !usePoissonDistribution
     requestRestart(model.getWidth, model.getHeight)
   }
 
@@ -88,9 +89,9 @@ class HenonAlgorithm() {
     requestRestart(model.getWidth, model.getHeight)
   }
 
-  def setNumTravelors(newNumTravelors: Int): Unit = {
-    if (newNumTravelors != numTravelers) {
-      numTravelers = newNumTravelors
+  def setNumSamplePoints(newNumTravelors: Int): Unit = {
+    if (newNumTravelors != maxPoints) {
+      maxPoints = newNumTravelors
       requestRestart(model.getWidth, model.getHeight)
     }
   }
@@ -110,14 +111,14 @@ class HenonAlgorithm() {
   }
 
   private def requestRestart(width: Int, height: Int): Unit = {
-    model = new HenonModel(width, height, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
+    model = new VoronoiModel(width, height, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
     restartRequested = true
   }
 
-  /** 
+  /**
     * @return true when done computing whole model.
     */
-  def timeStep(): Boolean = {
+  def nextStep(): Boolean = {
     if (restartRequested) {
       restartRequested = false
       finished = false

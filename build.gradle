@@ -186,6 +186,15 @@ appMap['verhulst'] = [
                 'like the one researched by Pierr Verhulst. ' +
                 ' See <a href="https://fractalfoundation.org/OFC/OFC-6-1.html">Rabbits and Coyotes</a>.'
 ]
+appMap['voronoiexplorer'] = [
+        title: 'Voronoi Explorer',
+        command: 'bb4-simulator -panel_class com.barrybecker4.simulation.voronoi.VoronoiExplorer',
+        panel_class: 'com.barrybecker4.simulation.voronoi.VoronoiExplorer',
+        description: 'Allows you to explorer the parameters of a Voronoi diagram',
+        longDescription: 'Explores 3 related things: <a href="https://www.jasondavies.com/poisson-disc/">Poisson disc sampling</a>,' +
+                ' <a href="https://en.wikipedia.org/wiki/Delaunay_triangulation">Delaunay triangulation</a>,' +
+                ' <a href="https://en.wikipedia.org/wiki/Voronoi_diagram#:~:text=In%20mathematics%2C%20a%20Voronoi%20diagram,%2C%20sites%2C%20or%20generators).">and Voronoi Diagrams</a>.'
+]
 appMap['predprey'] = [
         title: 'Predator Prey Simulation',
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.predprey.PredPreySimulator',
