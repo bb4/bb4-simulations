@@ -9,10 +9,10 @@ import com.barrybecker4.simulation.voronoi.algorithm.PoissonParams.*
   */
 object PoissonParams {
   val DEFAULT_RADIUS = 4.995
-  val DEFAULT_K = 0.0
+  val DEFAULT_K = 10
 }
 
 case class PoissonParams(radius: Double = DEFAULT_RADIUS, k: Double = DEFAULT_K) {
-  
+
   def isDefaultK: Boolean = this.k != PoissonParams.DEFAULT_K
 }

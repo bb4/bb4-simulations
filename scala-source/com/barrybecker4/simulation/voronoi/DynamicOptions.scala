@@ -28,10 +28,10 @@ object DynamicOptions {
   private val ALPHA_SLIDER = "Alpha"
   private val STEPS_PER_FRAME_SLIDER = "Num steps per Frame"
   private val SLIDER_PROPS = Array(
+    new SliderProperties(MAX_POINTS_SLIDER, 10, 10000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
     new SliderProperties(RADIUS, 1, 5, PoissonParams.DEFAULT_RADIUS, 1000.0),
-    new SliderProperties(K_SLIDER, -0.2, 0.2, PoissonParams.DEFAULT_K, 1000.0),
+    new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
     new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
-    new SliderProperties(MAX_POINTS_SLIDER, 1, 10000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
     SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 20, 1)
   )
 }

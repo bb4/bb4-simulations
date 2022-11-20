@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm
 
 import com.barrybecker4.ui.util.ColorMap
@@ -11,7 +11,7 @@ import java.awt.*
   * May be edited in the UI.
   * @author Barry Becker
   */
-object HenonColorMap {
+object VoronoiColorMap {
   private val MIN_VALUE = 0
   private val MAX_VALUE = 1.0
   private val RANGE = MAX_VALUE - MIN_VALUE
@@ -38,6 +38,6 @@ object HenonColorMap {
     Color.BLACK)
 }
 
-class HenonColorMap private[algorithm](val alpha: Int) extends ColorMap(HenonColorMap.VALUES, HenonColorMap.COLORS) {
+class VoronoiColorMap private[algorithm](val alpha: Int) extends ColorMap(VoronoiColorMap.VALUES, VoronoiColorMap.COLORS) {
   this.setGlobalAlpha(alpha)
 }

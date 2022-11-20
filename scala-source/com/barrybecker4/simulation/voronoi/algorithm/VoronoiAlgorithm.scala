@@ -54,7 +54,7 @@ class VoronoiAlgorithm() {
     usePoissonDistribution = VoronoiAlgorithm.DEFAULT_USE_POISSON
     connectPoints = VoronoiAlgorithm.DEFAULT_CONNECT_POINTS
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
-    cmap = new HenonColorMap(alpha)
+    cmap = new VoronoiColorMap(alpha)
     model = new VoronoiModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
   }
 
@@ -68,7 +68,7 @@ class VoronoiAlgorithm() {
   def setAlpha(newAlpha: Int): Unit = {
     if (newAlpha != alpha) {
       alpha = newAlpha
-      cmap = new HenonColorMap(newAlpha)
+      cmap = new VoronoiColorMap(newAlpha)
       requestRestart(model.getWidth, model.getHeight)
     }
   }
