@@ -8,7 +8,7 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.PointPlacementModel
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
+import com.barrybecker4.simulation.voronoi.rendering.{VoronoiColorMap, VoronoiRenderer}
 
 
 object VoronoiAlgorithm {
@@ -16,7 +16,7 @@ object VoronoiAlgorithm {
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
   val DEFAULT_APPLY_DELAUNAY_TRIANGULATION = false
-  val DEFAULT_CONNECT_POINTS = false
+  
   private val DEFAULT_SIZE = 200
   private val DEFAULT_ALPHA = 200
 }
@@ -32,13 +32,11 @@ class VoronoiAlgorithm() {
 
   private var pointModel: PointPlacementModel = _
   private var renderer: VoronoiRenderer = _
-  // should extract these into ModelParams class
+  
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
   private var poissonParams: PoissonParams = _
-  private var usePoissonDistribution: Boolean = _
   private var applyDelaunayTriangulation: Boolean = _
-  private var connectPoints: Boolean = _
   private var alpha: Int = _
   private var cmap: ColorMap = _
   private var restartRequested = false
@@ -50,17 +48,17 @@ class VoronoiAlgorithm() {
   def setSize(width: Int, height: Int): Unit = {
     if (width != pointModel.getWidth || height != pointModel.getHeight) requestRestart(width, height)
   }
+  
+  def getColorMap: ColorMap = cmap
 
   def reset(): Unit = {
     maxPoints = VoronoiAlgorithm.DEFAULT_MAX_POINTS
     numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
     poissonParams = new PoissonParams()
-    usePoissonDistribution = VoronoiAlgorithm.DEFAULT_USE_POISSON
     applyDelaunayTriangulation = VoronoiAlgorithm.DEFAULT_APPLY_DELAUNAY_TRIANGULATION
-    connectPoints = VoronoiAlgorithm.DEFAULT_CONNECT_POINTS
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
-    cmap = new VoronoiColorMap(alpha)
-    pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
+    cmap = VoronoiColorMap(alpha)
+    pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints)
     renderer = new VoronoiRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
   }
 
@@ -78,28 +76,16 @@ class VoronoiAlgorithm() {
       requestRestart(pointModel.getWidth, pointModel.getHeight)
     }
   }
-
-  def getUsePoissonDistribution: Boolean = usePoissonDistribution
+  
   def getApplyDelaunayTriangulation: Boolean = applyDelaunayTriangulation
-
-  def toggleUsePoissonDistribution(): Unit = {
-    usePoissonDistribution = !usePoissonDistribution
-    requestRestart(pointModel.getWidth, pointModel.getHeight)
-  }
 
   def toggleApplyDelaunayTriangulation(): Unit = {
     applyDelaunayTriangulation = !applyDelaunayTriangulation
     requestRestart(pointModel.getWidth, pointModel.getHeight)
   }
-
-  def getConnectPoints: Boolean = connectPoints
-  def getColorMap: ColorMap = cmap
+  
+  //def getColorMap: ColorMap = cmap
   def getImage: BufferedImage = renderer.getImage
-
-  def toggleConnectPoints(): Unit = {
-    connectPoints = !connectPoints
-    requestRestart(pointModel.getWidth, pointModel.getHeight)
-  }
 
   def setNumSamplePoints(newNumTravelors: Int): Unit = {
     if (newNumTravelors != maxPoints) {
@@ -116,7 +102,7 @@ class VoronoiAlgorithm() {
   }
 
   private def requestRestart(width: Int, height: Int): Unit = synchronized {
-    pointModel = new PointPlacementModel(width, height, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
+    pointModel = new PointPlacementModel(width, height, poissonParams, maxPoints)
     renderer = new VoronoiRenderer(width, height)
     restartRequested = true
   }
@@ -139,7 +125,7 @@ class VoronoiAlgorithm() {
       return true // we are done.
     }
     pointModel.increment(numStepsPerFrame)
-    renderer.render(pointModel.getSamples, connectPoints)
+    renderer.render(pointModel.getSamples)
     iterations += numStepsPerFrame
     false
   }

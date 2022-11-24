@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.voronoi.algorithm
+package com.barrybecker4.simulation.voronoi.rendering
 
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiColorMap
 import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.*
@@ -38,6 +39,6 @@ object VoronoiColorMap {
     Color.BLACK)
 }
 
-class VoronoiColorMap private[algorithm](val alpha: Int) extends ColorMap(VoronoiColorMap.VALUES, VoronoiColorMap.COLORS) {
+case class VoronoiColorMap(val alpha: Int) extends ColorMap(VoronoiColorMap.VALUES, VoronoiColorMap.COLORS) {
   this.setGlobalAlpha(alpha)
 }

@@ -22,7 +22,7 @@ class VoronoiRenderer(width: Int, height: Int) {
   final private var offlineGraphics = new OfflineGraphics(new Dimension(width, height), Color.BLACK)
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
-  def render(samples: IndexedSeq[Point2d], connectPoints: Boolean): Unit = {
+  def render(samples: IndexedSeq[Point2d]): Unit = {
     var lastPoint = samples(0)
     offlineGraphics.setStroke(STROKE)
     offlineGraphics.setColor(POINT_COLOR)
@@ -30,12 +30,12 @@ class VoronoiRenderer(width: Int, height: Int) {
     for (point <- samples) {
       val xpos = point.x.toInt
       val ypos = point.y.toInt
-      if (connectPoints) {
-        val xposLast = lastPoint.x.toInt
-        val yposLast = lastPoint.y.toInt
-        offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
-      }
-      else offlineGraphics.fillCircle(xpos, ypos, POINT_RADIUS) // RAD const
+//      if (connectPoints) {
+//        val xposLast = lastPoint.x.toInt
+//        val yposLast = lastPoint.y.toInt
+//        offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
+//      }
+      offlineGraphics.fillCircle(xpos, ypos, POINT_RADIUS) // RAD const
       lastPoint = point
     }
   }

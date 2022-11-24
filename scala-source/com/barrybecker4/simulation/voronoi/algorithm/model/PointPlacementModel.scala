@@ -17,10 +17,8 @@ object PointPlacementModel {
   * Everything we need to know to compute the Voronoi diagram.
   * @author Barry Becker
   */
-class PointPlacementModel private[algorithm](
-  val width: Int, val height: Int,
-  var params: PoissonParams, val usePoissonDistribution: Boolean, val connectPoints: Boolean,
-  var numPoints: Int, var cmap: ColorMap, rnd: Random = RND) {
+class PointPlacementModel private[algorithm](val width: Int, val height: Int,
+  var params: PoissonParams, var numPoints: Int, rnd: Random = RND) {
 
   private var placementModel: PlacementMethod = _
 
@@ -29,9 +27,7 @@ class PointPlacementModel private[algorithm](
 
   def reset(): Unit = synchronized {
     rnd.setSeed(0)
-    placementModel =
-      if (usePoissonDistribution) new PoissonPlacement(width, height, params, numPoints, cmap, rnd)
-      else new RandomPlacement(width, height, numPoints, cmap, rnd)
+    placementModel = new PoissonPlacement(width, height, params, numPoints, rnd)
   }
 
   def getSamples: IndexedSeq[Point2d] = placementModel.getSamples

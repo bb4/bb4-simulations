@@ -3,8 +3,8 @@ package com.barrybecker4.simulation.voronoi
 
 import com.barrybecker4.common.format.FormatUtil
 import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams
-import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
-import com.barrybecker4.simulation.voronoi.algorithm.PoissonParams
+import com.barrybecker4.simulation.voronoi.algorithm.{PoissonParams, VoronoiAlgorithm}
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiColorMap
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
@@ -40,17 +40,17 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
   private var useFixedSize: JCheckBox = _
-  private var usePoissonDistribution: JCheckBox = _
   private var applyDelaunayTriangulation: JCheckBox = _
   private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var currentParams = new PoissonParams()
+
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
 
   sliderGroup.setSliderListener(this)
-  val legend = new ContinuousColorLegend(null, this.algorithm.getColorMap, true)
+  val legend = new ContinuousColorLegend(null, algorithm.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
   add(sliderGroup)
   add(Box.createVerticalStrut(10))
@@ -65,15 +65,12 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   private def createCheckBoxes = {
     useFixedSize = new JCheckBox("Fixed Size", simulator.getUseFixedSize)
     useFixedSize.addActionListener(this)
-    usePoissonDistribution = new JCheckBox("Use Poisson distribution", algorithm.getUsePoissonDistribution)
-    usePoissonDistribution.addActionListener(this)
     applyDelaunayTriangulation = new JCheckBox("Apply Delaunay triangulation", algorithm.getApplyDelaunayTriangulation)
     applyDelaunayTriangulation.addActionListener(this)
-    
+
     val checkBoxes = new JPanel(new GridLayout(0, 1))
     //checkBoxes.add(useConcurrency);
     checkBoxes.add(useFixedSize)
-    checkBoxes.add(usePoissonDistribution)
     checkBoxes.add(applyDelaunayTriangulation)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
     checkBoxes
@@ -90,7 +87,6 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource eq useFixedSize) simulator.setUseFixedSize(useFixedSize.isSelected)
-    else if (e.getSource eq usePoissonDistribution) algorithm.toggleUsePoissonDistribution()
     else if (e.getSource eq applyDelaunayTriangulation) algorithm.toggleApplyDelaunayTriangulation()
   }
 

@@ -46,7 +46,6 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
   override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
-  def getColorMap: ColorMap = algorithm.getColorMap
   override def getInitialTimeStep = 1
 
   override def timeStep: Double = {
@@ -58,7 +57,7 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null) return 
+    if (g == null) return
     super.paint(g)
     Profiler.getInstance.startRenderingTime()
     g.drawImage(algorithm.getImage, 0, 0, null)

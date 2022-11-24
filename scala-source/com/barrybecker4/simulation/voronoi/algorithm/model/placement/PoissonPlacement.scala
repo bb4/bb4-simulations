@@ -16,7 +16,7 @@ import scala.util.Random
   */
 class PoissonPlacement(
     val width: Int, val height: Int,
-    var params: PoissonParams, var numPoints: Int, var cmap: ColorMap, rnd: Random) extends PlacementMethod {
+    var params: PoissonParams, var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private var grid: PoissonGrid = _
   private var activeList: ActiveList = _
