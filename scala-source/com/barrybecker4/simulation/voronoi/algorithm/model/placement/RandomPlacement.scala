@@ -14,8 +14,8 @@ import scala.util.Random
   *
   * @author Barry Becker
   */
-class RandomPlacementModel(val width: Int, val height: Int,
-                           var numPoints: Int, var cmap: ColorMap, rnd: Random) extends PlacementModel {
+class RandomPlacement(val width: Int, val height: Int,
+                           var numPoints: Int, var cmap: ColorMap, rnd: Random) extends PlacementMethod {
 
   private var randomPoints: IndexedSeq[Point2d] = _
   rnd.setSeed(0)

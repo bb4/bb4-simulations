@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.placement
 
 import javax.vecmath.Point2d
 
-trait PlacementModel {
+trait PlacementMethod {
 
   def increment(numPoints: Int): Unit
 

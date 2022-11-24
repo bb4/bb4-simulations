@@ -2,14 +2,14 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model
 
 import com.barrybecker4.simulation.voronoi.algorithm.PoissonParams
-import com.barrybecker4.simulation.voronoi.algorithm.model.placement.{PlacementModel, PoissonPlacementModel, RandomPlacementModel}
+import com.barrybecker4.simulation.voronoi.algorithm.model.placement.{PlacementMethod, PoissonPlacement, RandomPlacement}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 
 import javax.vecmath.Point2d
 import scala.util.Random
 
-object VoronoiModel {
+object PointPlacementModel {
   private val RND = new Random(0)
 }
 
@@ -17,12 +17,12 @@ object VoronoiModel {
   * Everything we need to know to compute the Voronoi diagram.
   * @author Barry Becker
   */
-class VoronoiModel private[algorithm](
+class PointPlacementModel private[algorithm](
   val width: Int, val height: Int,
   var params: PoissonParams, val usePoissonDistribution: Boolean, val connectPoints: Boolean,
   var numPoints: Int, var cmap: ColorMap, rnd: Random = RND) {
 
-  private var placementModel: PlacementModel = _
+  private var placementModel: PlacementMethod = _
 
   def getWidth: Int = width
   def getHeight: Int = height
@@ -30,8 +30,8 @@ class VoronoiModel private[algorithm](
   def reset(): Unit = synchronized {
     rnd.setSeed(0)
     placementModel =
-      if (usePoissonDistribution) new PoissonPlacementModel(width, height, params, numPoints, cmap, rnd)
-      else new RandomPlacementModel(width, height, numPoints, cmap, rnd)
+      if (usePoissonDistribution) new PoissonPlacement(width, height, params, numPoints, cmap, rnd)
+      else new RandomPlacement(width, height, numPoints, cmap, rnd)
   }
 
   def getSamples: IndexedSeq[Point2d] = placementModel.getSamples

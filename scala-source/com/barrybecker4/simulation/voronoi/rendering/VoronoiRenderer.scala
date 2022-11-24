@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.rendering
 
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.POINT_RADIUS
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.{POINT_COLOR, POINT_RADIUS, STROKE}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.Color
@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage
 
 object VoronoiRenderer {
   private val POINT_RADIUS = 1
+  private val POINT_COLOR = Color.YELLOW
+  private val STROKE = new BasicStroke(0.4)
 }
 
 class VoronoiRenderer(width: Int, height: Int) {
@@ -22,8 +24,10 @@ class VoronoiRenderer(width: Int, height: Int) {
 
   def render(samples: IndexedSeq[Point2d], connectPoints: Boolean): Unit = {
     var lastPoint = samples(0)
+    offlineGraphics.setStroke(STROKE)
+    offlineGraphics.setColor(POINT_COLOR)
+
     for (point <- samples) {
-      offlineGraphics.setColor(Color.WHITE)
       val xpos = point.x.toInt
       val ypos = point.y.toInt
       if (connectPoints) {

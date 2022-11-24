@@ -41,6 +41,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
 
   private var useFixedSize: JCheckBox = _
   private var usePoissonDistribution: JCheckBox = _
+  private var applyDelaunayTriangulation: JCheckBox = _
   private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var currentParams = new PoissonParams()
 
@@ -66,10 +67,14 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
     useFixedSize.addActionListener(this)
     usePoissonDistribution = new JCheckBox("Use Poisson distribution", algorithm.getUsePoissonDistribution)
     usePoissonDistribution.addActionListener(this)
+    applyDelaunayTriangulation = new JCheckBox("Apply Delaunay triangulation", algorithm.getApplyDelaunayTriangulation)
+    applyDelaunayTriangulation.addActionListener(this)
+    
     val checkBoxes = new JPanel(new GridLayout(0, 1))
     //checkBoxes.add(useConcurrency);
     checkBoxes.add(useFixedSize)
     checkBoxes.add(usePoissonDistribution)
+    checkBoxes.add(applyDelaunayTriangulation)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
     checkBoxes
   }
@@ -86,6 +91,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource eq useFixedSize) simulator.setUseFixedSize(useFixedSize.isSelected)
     else if (e.getSource eq usePoissonDistribution) algorithm.toggleUsePoissonDistribution()
+    else if (e.getSource eq applyDelaunayTriangulation) algorithm.toggleApplyDelaunayTriangulation()
   }
 
   /** One of the sliders was moved. */

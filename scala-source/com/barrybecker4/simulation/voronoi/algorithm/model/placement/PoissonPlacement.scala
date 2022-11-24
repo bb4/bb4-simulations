@@ -14,9 +14,9 @@ import scala.util.Random
   *
   * @author Barry Becker
   */
-class PoissonPlacementModel(
+class PoissonPlacement(
     val width: Int, val height: Int,
-    var params: PoissonParams, var numPoints: Int, var cmap: ColorMap, rnd: Random) extends PlacementModel {
+    var params: PoissonParams, var numPoints: Int, var cmap: ColorMap, rnd: Random) extends PlacementMethod {
 
   private var grid: PoissonGrid = _
   private var activeList: ActiveList = _
