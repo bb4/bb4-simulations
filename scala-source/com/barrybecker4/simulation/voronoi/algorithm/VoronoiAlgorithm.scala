@@ -6,7 +6,9 @@ import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm.*
 import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.image.BufferedImage
-import VoronoiAlgorithm._
+import VoronoiAlgorithm.*
+import com.barrybecker4.simulation.voronoi.algorithm.model.VoronoiModel
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 
 object VoronoiAlgorithm {
@@ -27,6 +29,7 @@ object VoronoiAlgorithm {
 class VoronoiAlgorithm() {
 
   private var model: VoronoiModel = _
+  private var renderer: VoronoiRenderer = _
   // should extract these into ModelParams class
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
@@ -54,6 +57,7 @@ class VoronoiAlgorithm() {
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
     cmap = new VoronoiColorMap(alpha)
     model = new VoronoiModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
+    renderer = new VoronoiRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
   }
 
   def setPoissonParams(newParams: PoissonParams): Unit = {
@@ -80,7 +84,7 @@ class VoronoiAlgorithm() {
 
   def getConnectPoints: Boolean = connectPoints
   def getColorMap: ColorMap = cmap
-  def getImage: BufferedImage = model.getImage
+  def getImage: BufferedImage = renderer.getImage
 
   def toggleConnectPoints(): Unit = {
     connectPoints = !connectPoints
@@ -101,15 +105,16 @@ class VoronoiAlgorithm() {
     }
   }
 
-  private def requestRestart(width: Int, height: Int): Unit = {
+  private def requestRestart(width: Int, height: Int): Unit = synchronized {
     model = new VoronoiModel(width, height, poissonParams, usePoissonDistribution, connectPoints, maxPoints, cmap)
+    renderer = new VoronoiRenderer(width, height)
     restartRequested = true
   }
 
   /**
     * @return true when done computing whole model.
     */
-  def nextStep(): Boolean = {
+  def nextStep(): Boolean = synchronized {
     if (restartRequested) {
       println("RESTARTING !!!!!!!!!!!!!!!")
       restartRequested = false
@@ -118,11 +123,12 @@ class VoronoiAlgorithm() {
       model.reset()
       Profiler.getInstance.startCalculationTime()
     }
-    if (iterations >= maxPoints - poissonParams.k) {
+    if (iterations >= maxPoints /* - poissonParams.k */) {
       showProfileInfo()
       return true // we are done.
     }
     model.increment(numStepsPerFrame)
+    renderer.render(model.getSamples, connectPoints)
     iterations += numStepsPerFrame
     false
   }

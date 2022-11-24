@@ -32,7 +32,7 @@ object DynamicOptions {
     new SliderProperties(RADIUS, 2, 100, PoissonParams.DEFAULT_RADIUS, 1000.0),
     new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
     new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
-    SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 100, 1)
+    SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 1000, 1)
   )
 }
 

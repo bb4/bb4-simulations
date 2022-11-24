@@ -1,9 +1,8 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.voronoi.algorithm
+package com.barrybecker4.simulation.voronoi.algorithm.model.placement
 
 import javax.vecmath.Point2d
 import scala.util.Random
-import PoissonGrid.RND
 
 object PoissonGrid {
   private val RND = new Random(0)
