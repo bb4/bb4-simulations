@@ -8,7 +8,7 @@ import com.barrybecker4.simulation.voronoi.algorithm.PoissonParams.*
   * @author Barry Becker
   */
 object PoissonParams {
-  val DEFAULT_RADIUS = 4.995
+  val DEFAULT_RADIUS = 10.0
   val DEFAULT_K = 10
 }
 

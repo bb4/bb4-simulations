@@ -10,7 +10,7 @@ import VoronoiAlgorithm._
 
 
 object VoronoiAlgorithm {
-  val DEFAULT_MAX_POINTS = 400
+  val DEFAULT_MAX_POINTS = 200
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
   val DEFAULT_CONNECT_POINTS = false
@@ -29,7 +29,6 @@ class VoronoiAlgorithm() {
   private var model: VoronoiModel = _
   // should extract these into ModelParams class
   private var maxPoints: Int = _
-  private var maxIterations: Int = _
   private var numStepsPerFrame: Int = _
   private var poissonParams: PoissonParams = _
   private var usePoissonDistribution = true
@@ -48,7 +47,6 @@ class VoronoiAlgorithm() {
 
   def reset(): Unit = {
     maxPoints = VoronoiAlgorithm.DEFAULT_MAX_POINTS
-    maxIterations = 1
     numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
     poissonParams = new PoissonParams()
     usePoissonDistribution = VoronoiAlgorithm.DEFAULT_USE_POISSON
@@ -96,13 +94,6 @@ class VoronoiAlgorithm() {
     }
   }
 
-  def setMaxIterations(value: Int): Unit = {
-    if (value != maxIterations) {
-      maxIterations = value
-      requestRestart(model.getWidth, model.getHeight)
-    }
-  }
-
   def setStepsPerFrame(numSteps: Int): Unit = {
     if (numSteps != numStepsPerFrame) {
       numStepsPerFrame = numSteps
@@ -127,7 +118,7 @@ class VoronoiAlgorithm() {
       model.reset()
       Profiler.getInstance.startCalculationTime()
     }
-    if (iterations > maxIterations) {
+    if (iterations >= maxPoints - poissonParams.k) {
       showProfileInfo()
       return true // we are done.
     }

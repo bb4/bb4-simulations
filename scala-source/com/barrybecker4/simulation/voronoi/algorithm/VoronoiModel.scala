@@ -17,11 +17,11 @@ object VoronoiModel {
   * Everything we need to know to compute the Voronoi diagram.
   * @author Barry Becker
   */
-class VoronoiModel private[algorithm](val width: Int, val height: Int,
-                                    var params: PoissonParams, val usePoissonDistribution: Boolean, val connectPoints: Boolean,
-                                    var numPoints: Int, var cmap: ColorMap, rnd: Random = RND) {
+class VoronoiModel private[algorithm](
+  val width: Int, val height: Int,
+  var params: PoissonParams, val usePoissonDistribution: Boolean, val connectPoints: Boolean,
+  var numPoints: Int, var cmap: ColorMap, rnd: Random = RND) {
 
-  private var points: Array[Point2d] = _
   private var grid: PoissonGrid = _
   private var activeList: ActiveList = _
   private var activePoint: Point2d = _
@@ -34,9 +34,9 @@ class VoronoiModel private[algorithm](val width: Int, val height: Int,
 
 
   def reset(): Unit = synchronized {
-    points = Array.ofDim[Point2d](numPoints)
     grid = PoissonGrid(width, height, params.radius)
-    activeList = ActiveList(numPoints)
+    //assert(numPoints > params.k, "numPoints " + numPoints + " must be larger than " + params.k)
+    activeList = ActiveList(numPoints + params.k)
     println("width = " + width + " height = " + height)
 
     // Select the initial x0 point.
@@ -47,34 +47,36 @@ class VoronoiModel private[algorithm](val width: Int, val height: Int,
 
   /** @param numSteps number of steps to increment each traveler */
   def increment(numSteps: Int): Unit = synchronized {
-    // do the following numSteps times
-    // while activeList is not empty,
 
     var count: Int = 0
-    assert(activeList != null)
-    while (!activeList.isEmpty && count < numPoints) {
+    if (activeList == null) {
+      println("Warning: activeList null")
+    }
+    while (!activeList.isEmpty && count < numSteps) {
       // get random index, generate k points around it, add one of the grid if possible, else delete it.
       val index = activeList.removeRandomElement()
       assert(index >= 0)
       val newIndex = grid.addNewElementIfPossible(index, params.k)
       if (newIndex >= 0) {
+        activeList.addElement(newIndex)
         activeList.addElement(index) // add it back
       }
       count += 1
     }
     println("inc count="+ count + " activeList size = " + activeList.getSize + " num samples = " + grid.getNumSamples)
 
-    var lastPoint = points(0)
+    // TODO: split out renderer
+    var lastPoint = grid.samples(0)
     for (point <- grid.samples) {
       offlineGraphics.setColor(Color.WHITE)
-      val xpos = (point.x).toInt
-      val ypos = (point.y).toInt
+      val xpos = point.x.toInt
+      val ypos = point.y.toInt
       if (connectPoints) {
-        val xposLast = (lastPoint.x).toInt
-        val yposLast = (lastPoint.y).toInt
+        val xposLast = lastPoint.x.toInt
+        val yposLast = lastPoint.y.toInt
         offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
       }
-      else offlineGraphics.fillCircle(xpos, ypos, 3)
+      else offlineGraphics.fillCircle(xpos, ypos, 2) // RAD const
       lastPoint = point
     }
 
