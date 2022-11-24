@@ -29,7 +29,6 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
     samples :+= point
     val xIdx = getIdx(point.x)
     val yIdx = getIdx(point.y)
-    //println("adding point to grid: " + point + " at position " + gridX + ", " + gridY)
     assert(grid(xIdx)(yIdx) == -1, "There is already a value at " + xIdx + " "  + yIdx)
     grid(xIdx)(yIdx) = samples.length - 1
     samples.length - 1
@@ -43,11 +42,11 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
       val nbrPoint = getRandomNeighborOf(point)
       val distantEnough = isDistantFromAllNeighbors(nbrPoint)
       if (distantEnough) {
-        println("found dist nbr " + nbrPoint + " after " + i + " tries")
+        //println("found dist nbr " + nbrPoint + " after " + i + " tries")
         return addSample(nbrPoint)
       }
     }
-    println("no nbr found")
+    //println("no nbr found")
     -1
   }
 
@@ -64,7 +63,7 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
       y = point.y + randomRadius * Math.sin(randomAngle)
       ct += 1
     }
-    if (ct > 1) println("Warning ct = " + ct)
+    if (ct > 3) println("Warning ct = " + ct)
     new Point2d(x, y)
   }
 

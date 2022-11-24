@@ -36,7 +36,6 @@ case class ActiveList(maxPoints: Int, rnd: Random = RND) {
     currentArrayLength += 1
   }
 
-  def isEmpty: Boolean = array.isEmpty
-
+  def isEmpty: Boolean = currentArrayLength == 0
   def getSize: Int = currentArrayLength
 }

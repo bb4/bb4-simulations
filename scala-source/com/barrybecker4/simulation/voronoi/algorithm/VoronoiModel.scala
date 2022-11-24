@@ -34,6 +34,7 @@ class VoronoiModel private[algorithm](
 
 
   def reset(): Unit = synchronized {
+    rnd.setSeed(0)
     grid = PoissonGrid(width, height, params.radius)
     //assert(numPoints > params.k, "numPoints " + numPoints + " must be larger than " + params.k)
     activeList = ActiveList(numPoints + params.k)
@@ -63,7 +64,7 @@ class VoronoiModel private[algorithm](
       }
       count += 1
     }
-    println("inc count="+ count + " activeList size = " + activeList.getSize + " num samples = " + grid.getNumSamples)
+    //println("inc count="+ count + " activeList size = " + activeList.getSize + " num samples = " + grid.getNumSamples)
 
     // TODO: split out renderer
     var lastPoint = grid.samples(0)
@@ -76,7 +77,7 @@ class VoronoiModel private[algorithm](
         val yposLast = lastPoint.y.toInt
         offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
       }
-      else offlineGraphics.fillCircle(xpos, ypos, 2) // RAD const
+      else offlineGraphics.fillCircle(xpos, ypos, 1) // RAD const
       lastPoint = point
     }
 
