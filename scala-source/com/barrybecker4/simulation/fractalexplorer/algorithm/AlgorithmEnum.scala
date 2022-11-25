@@ -13,10 +13,7 @@ case object JULIA extends AlgorithmEnum
 sealed trait AlgorithmEnum  {
 
   def getLabel: String = AppContext.getLabel(toString)
-
-  /**
-    * Create an instance of the algorithm given the controller and a refreshable.
-    */
+  
   def createInstance(): FractalAlgorithm = {
     this match {
       case MANDELBROT => new MandelbrotAlgorithm()

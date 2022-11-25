@@ -29,7 +29,7 @@ object DynamicOptions {
   private val STEPS_PER_FRAME_SLIDER = "Num steps per Frame"
   private val SLIDER_PROPS = Array(
     new SliderProperties(MAX_POINTS_SLIDER, 10, 100000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
-    new SliderProperties(RADIUS, 2, 100, PoissonParams.DEFAULT_RADIUS, 1000.0),
+    new SliderProperties(RADIUS, 3, 100, PoissonParams.DEFAULT_RADIUS, 1000.0),
     new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
     new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
     SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 1000, 1)
@@ -40,7 +40,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
   private var useFixedSize: JCheckBox = _
-  private var applyDelaunayTriangulation: JCheckBox = _
+  private var showVoronoiDiagram: JCheckBox = _
   private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var currentParams = new PoissonParams()
 
@@ -65,13 +65,13 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   private def createCheckBoxes = {
     useFixedSize = new JCheckBox("Fixed Size", simulator.getUseFixedSize)
     useFixedSize.addActionListener(this)
-    applyDelaunayTriangulation = new JCheckBox("Apply Delaunay triangulation", algorithm.getApplyDelaunayTriangulation)
-    applyDelaunayTriangulation.addActionListener(this)
+    showVoronoiDiagram = new JCheckBox("Show Voronoi diagram", algorithm.getShowVoronoiDiagram)
+    showVoronoiDiagram.addActionListener(this)
 
     val checkBoxes = new JPanel(new GridLayout(0, 1))
     //checkBoxes.add(useConcurrency);
     checkBoxes.add(useFixedSize)
-    checkBoxes.add(applyDelaunayTriangulation)
+    checkBoxes.add(showVoronoiDiagram)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
     checkBoxes
   }
@@ -87,7 +87,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource eq useFixedSize) simulator.setUseFixedSize(useFixedSize.isSelected)
-    else if (e.getSource eq applyDelaunayTriangulation) algorithm.toggleApplyDelaunayTriangulation()
+    else if (e.getSource eq showVoronoiDiagram) algorithm.toggleShowVoronoiDiagram()
   }
 
   /** One of the sliders was moved. */

@@ -18,7 +18,6 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
   private val yBins: Int = (height / cellSize + 1).toInt
   private val grid: Array[Array[Int]] = Array.fill(xBins, yBins)(-1)
   var samples: IndexedSeq[Point2d] = IndexedSeq()
-  println("created grid of size " + xBins + " " + yBins + " r=" + radius + " cellSize=" + cellSize)
 
   def getSampleIndex(x: Double, y:Double): Int = grid(getIdx(x))(getIdx(y))
   def getPoint(index: Int): Point2d = samples(index)

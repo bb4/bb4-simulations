@@ -15,7 +15,7 @@ object VoronoiAlgorithm {
   val DEFAULT_MAX_POINTS = 200
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
-  val DEFAULT_APPLY_DELAUNAY_TRIANGULATION = false
+  val DEFAULT_SHOW_VORONOI_DIAGRAM = false
   
   private val DEFAULT_SIZE = 200
   private val DEFAULT_ALPHA = 200
@@ -24,8 +24,7 @@ object VoronoiAlgorithm {
 /**
   * Builds a voronoi diagram with the following process:
   * - create a set of random points - either using poisson distribution, or uniform distribution
-  * - optionally apply delaunay triangulation to those points
-  * - optionally generate a Voronoi diagram based on the Delaunay triangulated points.
+  * - optionally generate a Voronoi diagram based on the poisson points.
   * @author Barry Becker
   */
 class VoronoiAlgorithm() {
@@ -36,7 +35,7 @@ class VoronoiAlgorithm() {
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
   private var poissonParams: PoissonParams = _
-  private var applyDelaunayTriangulation: Boolean = _
+  private var showVoronoiDiagram: Boolean = _
   private var alpha: Int = _
   private var cmap: ColorMap = _
   private var restartRequested = false
@@ -55,7 +54,7 @@ class VoronoiAlgorithm() {
     maxPoints = VoronoiAlgorithm.DEFAULT_MAX_POINTS
     numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
     poissonParams = new PoissonParams()
-    applyDelaunayTriangulation = VoronoiAlgorithm.DEFAULT_APPLY_DELAUNAY_TRIANGULATION
+    showVoronoiDiagram = VoronoiAlgorithm.DEFAULT_SHOW_VORONOI_DIAGRAM
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
     cmap = VoronoiColorMap(alpha)
     pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints)
@@ -77,10 +76,10 @@ class VoronoiAlgorithm() {
     }
   }
   
-  def getApplyDelaunayTriangulation: Boolean = applyDelaunayTriangulation
+  def getShowVoronoiDiagram: Boolean = showVoronoiDiagram
 
-  def toggleApplyDelaunayTriangulation(): Unit = {
-    applyDelaunayTriangulation = !applyDelaunayTriangulation
+  def toggleShowVoronoiDiagram(): Unit = {
+    showVoronoiDiagram = !showVoronoiDiagram
     requestRestart(pointModel.getWidth, pointModel.getHeight)
   }
   

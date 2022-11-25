@@ -30,12 +30,7 @@ class VoronoiRenderer(width: Int, height: Int) {
     for (point <- samples) {
       val xpos = point.x.toInt
       val ypos = point.y.toInt
-//      if (connectPoints) {
-//        val xposLast = lastPoint.x.toInt
-//        val yposLast = lastPoint.y.toInt
-//        offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
-//      }
-      offlineGraphics.fillCircle(xpos, ypos, POINT_RADIUS) // RAD const
+      offlineGraphics.fillCircle(xpos, ypos, POINT_RADIUS)
       lastPoint = point
     }
   }
