@@ -7,7 +7,7 @@ import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
-import com.barrybecker4.simulation.voronoi.algorithm.model.PointPlacementModel
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.{PointPlacementModel, PoissonParams}
 import com.barrybecker4.simulation.voronoi.rendering.{VoronoiColorMap, VoronoiRenderer}
 
 

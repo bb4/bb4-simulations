@@ -3,7 +3,8 @@ package com.barrybecker4.simulation.voronoi
 
 import com.barrybecker4.common.format.FormatUtil
 import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams
-import com.barrybecker4.simulation.voronoi.algorithm.{PoissonParams, VoronoiAlgorithm}
+import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiColorMap
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup

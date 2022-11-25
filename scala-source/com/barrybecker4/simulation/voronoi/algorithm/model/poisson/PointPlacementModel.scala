@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.voronoi.algorithm.model
+package com.barrybecker4.simulation.voronoi.algorithm.model.poisson
 
-import com.barrybecker4.simulation.voronoi.algorithm.PoissonParams
-import com.barrybecker4.simulation.voronoi.algorithm.model.placement.{PlacementMethod, PoissonPlacement, RandomPlacement}
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement.{PlacementMethod, PoissonPlacement, RandomPlacement}
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 
