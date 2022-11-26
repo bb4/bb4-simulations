@@ -8,7 +8,7 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.{PointPlacementModel, PoissonParams}
-import com.barrybecker4.simulation.voronoi.rendering.{VoronoiColorMap, VoronoiRenderer}
+import com.barrybecker4.simulation.voronoi.rendering.{VoronoiColorMap, PoissonPointRenderer}
 
 
 object VoronoiAlgorithm {
@@ -30,7 +30,7 @@ object VoronoiAlgorithm {
 class VoronoiAlgorithm() {
 
   private var pointModel: PointPlacementModel = _
-  private var renderer: VoronoiRenderer = _
+  private var renderer: PoissonPointRenderer = _
   
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
@@ -58,7 +58,7 @@ class VoronoiAlgorithm() {
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
     cmap = VoronoiColorMap(alpha)
     pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints)
-    renderer = new VoronoiRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
+    renderer = new PoissonPointRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
   }
 
   def setPoissonParams(newParams: PoissonParams): Unit = {
@@ -102,7 +102,7 @@ class VoronoiAlgorithm() {
 
   private def requestRestart(width: Int, height: Int): Unit = synchronized {
     pointModel = new PointPlacementModel(width, height, poissonParams, maxPoints)
-    renderer = new VoronoiRenderer(width, height)
+    renderer = new PoissonPointRenderer(width, height)
     restartRequested = true
   }
 
