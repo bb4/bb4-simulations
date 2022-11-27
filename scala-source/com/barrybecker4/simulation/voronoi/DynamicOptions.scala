@@ -5,7 +5,6 @@ import com.barrybecker4.common.format.FormatUtil
 import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiColorMap
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
@@ -32,7 +31,7 @@ object DynamicOptions {
     new SliderProperties(MAX_POINTS_SLIDER, 10, 100000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
     new SliderProperties(RADIUS, 3, 100, PoissonParams.DEFAULT_RADIUS, 1000.0),
     new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
-    new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
+    //new SliderProperties(ALPHA_SLIDER, 1, 255, 100),
     SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 1000, 1)
   )
 }
@@ -45,19 +44,18 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var currentParams = new PoissonParams()
 
-
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
 
   sliderGroup.setSliderListener(this)
-  val legend = new ContinuousColorLegend(null, algorithm.getColorMap, true)
+  //val legend = new ContinuousColorLegend(null, algorithm.getColorMap, true)
   val checkBoxes: JPanel = createCheckBoxes
   add(sliderGroup)
   add(Box.createVerticalStrut(10))
   add(checkBoxes)
   add(Box.createVerticalStrut(10))
-  add(legend)
+  //add(legend)
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
@@ -101,7 +99,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
       currentParams = new PoissonParams(currentParams.radius, value.toInt)
       algorithm.setPoissonParams(currentParams)
     }
-    else if (sliderName == DynamicOptions.ALPHA_SLIDER) algorithm.setAlpha(value.toInt)
+    //else if (sliderName == DynamicOptions.ALPHA_SLIDER) algorithm.setAlpha(value.toInt)
     else if (sliderName == DynamicOptions.MAX_POINTS_SLIDER) algorithm.setNumSamplePoints(value.toInt)
     else if (sliderName == DynamicOptions.STEPS_PER_FRAME_SLIDER) algorithm.setStepsPerFrame(value.toInt)
   }

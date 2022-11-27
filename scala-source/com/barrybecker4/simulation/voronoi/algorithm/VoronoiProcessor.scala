@@ -8,12 +8,12 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.BreakPoint
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.CircleEvent
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.SiteEvent
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.{Point, VoronoiEdge}
-import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 import java.util
 import java.util.Map.Entry
-import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer.MAX_DIM
-import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer.MIN_DIM
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MAX_DIM
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MIN_DIM
 
 import scala.collection.mutable
 

@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.voronoi.ui
 
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiProcessor
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 import javax.swing.JPanel
 import java.awt.Dimension

@@ -1,22 +1,16 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.voronoi.ui
+package com.barrybecker4.simulation.voronoi.rendering
 
-import com.barrybecker4.ui.renderers.OfflineGraphics
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Arc
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.ArcKey
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.BreakPoint
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.CircleEvent
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Parabola
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.VoronoiEdge
-
-import javax.swing.JPanel
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.image.BufferedImage
 import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
-import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer.{BACKGROUND_COLOR, BREAK_COLOR, LINE_COLOR, POINT_COLOR}
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.*
+import com.barrybecker4.ui.renderers.OfflineGraphics
 
+import java.awt.{BasicStroke, Color, Dimension}
+import java.awt.image.BufferedImage
+import javax.swing.JPanel
 import scala.collection.mutable
 
 
@@ -27,24 +21,21 @@ object VoronoiRenderer {
   val MAX_DIM: Double = 10
   val MIN_DIM: Double = -10
   val RADIUS: Double = 0.002
-  
+
   private val POINT_COLOR = Color.YELLOW
   private val LINE_COLOR = Color.WHITE
   private val BREAK_COLOR = Color.BLUE
   private val BACKGROUND_COLOR = Color.BLACK
+  private val STROKE: BasicStroke = new BasicStroke(1)
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   private val offlineGraphics = new OfflineGraphics(new Dimension(width + 2 * MARGIN, height + 2 * MARGIN), BACKGROUND_COLOR)
 
   def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = {
-    setColor(POINT_COLOR)
-
-    for (p <- sites) {
-      fillCircle(p, VoronoiRenderer.RADIUS)
-    }
+    drawPoints(sites)
     setColor(LINE_COLOR)
-
+    setStroke(STROKE)
     for (e <- edgeList) {
       if (e.p1 != null && e.p2 != null) {
         val topY = if (e.p1.y == Double.PositiveInfinity) VoronoiRenderer.MAX_DIM
@@ -53,6 +44,13 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
       }
     }
     show()
+  }
+
+  def drawPoints(samples: Seq[Point]): Unit = {
+    setColor(POINT_COLOR)
+    for (point <- samples) {
+      fillCircle(point, RADIUS)
+    }
   }
 
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
@@ -102,10 +100,10 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     }
   }
 
-  private def fillCircle(p: Point, radius: Double, color: Color): Unit = {
-    offlineGraphics.setColor(color)
-    fillCircle(p, radius)
-  }
+//  private def fillCircle(p: Point, radius: Double, color: Color): Unit = {
+//    offlineGraphics.setColor(color)
+//    fillCircle(p, radius)
+//  }
 
   private def fillCircle(p: Point, radius: Double): Unit = {
     val x: Int = MARGIN + (width * p.x).toInt
@@ -126,6 +124,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     fillCircle(p, VoronoiRenderer.RADIUS)
     drawLine(bp.edgeBegin.x, bp.edgeBegin.y, p.x, p.y)
     setColor(LINE_COLOR)
+    setStroke(STROKE)
     if (bp.isEdgeLeft && bp.getEdge.p2 != null) drawLine(bp.edgeBegin.x, bp.edgeBegin.y, bp.getEdge.p2.x, bp.getEdge.p2.y)
     else if (!bp.isEdgeLeft && bp.getEdge.p1 != null) drawLine(bp.edgeBegin.x, bp.edgeBegin.y, bp.getEdge.p1.x, bp.getEdge.p1.y)
   }
@@ -159,6 +158,10 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
 
   private def setColor(color: Color): Unit = {
     offlineGraphics.setColor(color)
+  }
+
+  private def setStroke(stroke: BasicStroke): Unit = {
+    offlineGraphics.setStroke(stroke)
   }
 
   private def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
