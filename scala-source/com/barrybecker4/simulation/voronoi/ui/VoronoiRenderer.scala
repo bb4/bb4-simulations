@@ -15,6 +15,7 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.image.BufferedImage
 import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
+import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer.{BACKGROUND_COLOR, BREAK_COLOR, LINE_COLOR, POINT_COLOR}
 
 import scala.collection.mutable
 
@@ -25,19 +26,24 @@ object VoronoiRenderer {
   // Ghetto but just for drawing stuff
   val MAX_DIM: Double = 10
   val MIN_DIM: Double = -10
-  val RADIUS: Double = 0.001
+  val RADIUS: Double = 0.002
+  
+  private val POINT_COLOR = Color.YELLOW
+  private val LINE_COLOR = Color.WHITE
+  private val BREAK_COLOR = Color.BLUE
+  private val BACKGROUND_COLOR = Color.BLACK
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
-  private val offlineGraphics = new OfflineGraphics(new Dimension(width + 2 * MARGIN, height + 2 * MARGIN), Color.WHITE)
+  private val offlineGraphics = new OfflineGraphics(new Dimension(width + 2 * MARGIN, height + 2 * MARGIN), BACKGROUND_COLOR)
 
   def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = {
-    setColor(Color.RED)
+    setColor(POINT_COLOR)
 
     for (p <- sites) {
       fillCircle(p, VoronoiRenderer.RADIUS)
     }
-    setColor(Color.BLACK)
+    setColor(LINE_COLOR)
 
     for (e <- edgeList) {
       if (e.p1 != null && e.p2 != null) {
@@ -54,7 +60,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   def draw(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge],
            breakPoints: mutable.Set[BreakPoint], arcs: mutable.TreeMap[ArcKey, CircleEvent], sweepLoc: Double): Unit = {
     clear()
-    setColor(Color.RED)
+    setColor(POINT_COLOR)
 
     for (p <- sites) {
       fillCircle(p, VoronoiRenderer.RADIUS)
@@ -62,7 +68,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     for (bp <- breakPoints) {
       drawBreakPoint(bp)
     }
-    setColor(Color.BLACK)
+    setColor(LINE_COLOR)
     for (a <- arcs.keySet) {
       drawArc(a.asInstanceOf[Arc])
     }
@@ -116,10 +122,10 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {
     val p = bp.getPoint
-    setColor(Color.BLUE)
+    setColor(BREAK_COLOR)
     fillCircle(p, VoronoiRenderer.RADIUS)
     drawLine(bp.edgeBegin.x, bp.edgeBegin.y, p.x, p.y)
-    setColor(Color.BLACK)
+    setColor(LINE_COLOR)
     if (bp.isEdgeLeft && bp.getEdge.p2 != null) drawLine(bp.edgeBegin.x, bp.edgeBegin.y, bp.getEdge.p2.x, bp.getEdge.p2.y)
     else if (!bp.isEdgeLeft && bp.getEdge.p1 != null) drawLine(bp.edgeBegin.x, bp.edgeBegin.y, bp.getEdge.p1.x, bp.getEdge.p1.y)
   }
