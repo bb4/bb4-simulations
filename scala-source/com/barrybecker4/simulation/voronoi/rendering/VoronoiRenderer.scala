@@ -21,7 +21,7 @@ object VoronoiRenderer {
 
   private val POINT_COLOR = Color.YELLOW
   private val LINE_COLOR = Color.WHITE
-  private val BREAK_COLOR = Color.BLUE
+  private val BREAK_COLOR = new Color(255, 110, 55)
   private val BACKGROUND_COLOR = Color.BLACK
   private val STROKE: BasicStroke = new BasicStroke(0.5)
 }
@@ -63,10 +63,11 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
     for (bp <- breakPoints) {
       drawBreakPoint(bp)
     }
-    setColor(LINE_COLOR)
+    setColor(BREAK_COLOR)
     for (a <- arcs.keySet) {
       drawArc(a.asInstanceOf[Arc])
     }
+    setColor(LINE_COLOR)
     for (e <- edgeList) {
       if (e.p1 != null && e.p2 != null) {
         val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
@@ -108,6 +109,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
     val xx = x.toInt
     val yy = y.toInt
     offlineGraphics.drawPoint(xx, yy)
+    //offlineGraphics.fillCircle(xx, yy, 1)
   }
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {
@@ -125,26 +127,19 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
     val l = arc.getLeft
     val r = arc.getRight
     val par = new Parabola(arc.site, arc.getSweepLoc)
-    val min = if (l.x == Double.NegativeInfinity) -INFINITY_MARGIN
-    else l.x
-    val max: Double = if (r.x == Double.PositiveInfinity) INFINITY_MARGIN
-    else r.x
+    val min = if (l.x == Double.NegativeInfinity) -INFINITY_MARGIN else l.x
+    val max: Double = if (r.x == Double.PositiveInfinity) INFINITY_MARGIN else r.x
     drawParabola(par, min, max)
   }
 
   private def drawParabola(par: Parabola, min: Double, max: Double): Unit = {
-    val mini = if (min > -(2)) min
-    else -2
-    val maxi = if (max < 2) max
-    else 2
+    val mini: Double = if (min > 0) min else 0
+    val maxi: Double = if (max < width) max else width
     var x = mini
-    while ( {
-      x < maxi
-    }) {
+    while (x < maxi) {
       val y = ((x - par.a) * (x - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
       drawPoint(x, y)
-
-      x += .001
+      x += 1
     }
   }
 

@@ -20,7 +20,7 @@ object VoronoiAlgorithm {
   val DEFAULT_MAX_POINTS = 200
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
-  val DEFAULT_SHOW_VORONOI_DIAGRAM = false
+  val DEFAULT_SHOW_VORONOI_DIAGRAM = true
   private val DEFAULT_SIZE = 200
 }
 
@@ -33,6 +33,7 @@ object VoronoiAlgorithm {
 class VoronoiAlgorithm() {
 
   private var pointModel: PointPlacementModel = _
+  private var voronoiProcessor: VoronoiProcessor = _
   private var voronoiRenderer: VoronoiRenderer = _
 
   private var maxPoints: Int = _
@@ -111,6 +112,7 @@ class VoronoiAlgorithm() {
       restartRequested = false
       finished = false
       iterations = 0
+      voronoiProcessor = null
       pointModel.reset()
       Profiler.getInstance.startCalculationTime()
     }
@@ -120,19 +122,28 @@ class VoronoiAlgorithm() {
       voronoiRenderer.clear()
       voronoiRenderer.drawPoints(points)
       iterations += numStepsPerFrame
-      false
     }
     else {
       // all the points generated, now show voronoi diagram based on them
-      if (showVoronoiDiagram && !finished) {
-        val points = pointModel.getSamples
-        val voronoiProcessor = new VoronoiProcessor(points, None)
-        voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
+      val points = pointModel.getSamples
+      if (showVoronoiDiagram & !finished) {
+        if (voronoiProcessor == null)
+          voronoiProcessor = new VoronoiProcessor(points, Some(voronoiRenderer))
+        finished = voronoiProcessor.processNext(numStepsPerFrame)
+        iterations += numStepsPerFrame
+        if (finished)
+          voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
+      }
+      else {
+        finished = true
       }
 
-      showProfileInfo()
-      return true // we are done.
+      if (finished) {
+        showProfileInfo()
+        return true // we are done.
+      }
     }
+    false
   }
 
   private def showProfileInfo(): Unit = {

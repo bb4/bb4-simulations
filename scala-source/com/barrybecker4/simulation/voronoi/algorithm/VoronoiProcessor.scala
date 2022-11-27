@@ -26,26 +26,44 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   private val breakPoints = new mutable.HashSet[BreakPoint]()
   private val arcs = new mutable.TreeMap[ArcKey, CircleEvent]
   private var sweepLoc: Double = INFINITY_MARGIN
-
+  
   addEventsForPoints(points)
-
-  while (events.nonEmpty) {
-    if (renderer.isDefined)
-      renderer.get.draw(points, edgeList, breakPoints, arcs, sweepLoc)
-    val cur = events.head
-    events = events.tail
-    sweepLoc = cur.p.y
-    cur.handleEvent(this)
-  }
-  this.sweepLoc = -INFINITY_MARGIN // hack to draw negative infinite points
-
-  for (bp <- breakPoints) {
-    bp.finish()
-  }
-
+  
+  
   def this(points: IndexedSeq[Point]) = {
     this(points, None)
   }
+  
+  // we can do all processing at once
+  def processAll(): Unit = {
+    processNext(100000000)
+  }
+  
+  // or some steps at a time
+  def processNext(numSteps: Int): Boolean = {
+
+    var ct = 0
+    while (events.nonEmpty && ct < numSteps) {
+      if (renderer.isDefined)
+        renderer.get.draw(points, edgeList, breakPoints, arcs, sweepLoc)
+      val cur = events.head
+      events = events.tail
+      sweepLoc = cur.p.y
+      cur.handleEvent(this)
+      ct += 1
+    }
+    
+    if (events.isEmpty) {
+      this.sweepLoc = -INFINITY_MARGIN // hack to draw negative infinite points
+
+      for (bp <- breakPoints) {
+        bp.finish()
+      }
+      return true
+    }
+    false
+  }
+  
 
   def getEdgeList: IndexedSeq[VoronoiEdge] = edgeList
   def getSweepLoc: Double = sweepLoc
