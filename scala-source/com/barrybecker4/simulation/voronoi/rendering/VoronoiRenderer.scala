@@ -15,11 +15,9 @@ import scala.collection.mutable
 
 
 object VoronoiRenderer {
-  val MIN_DRAW_DIM: Double = -5
-  val MAX_DRAW_DIM: Double = 5
 
   val INFINITY_MARGIN: Double = 10000.0
-  val RADIUS: Double = 2.0
+  val RADIUS: Double = 1.0
 
   private val POINT_COLOR = Color.YELLOW
   private val LINE_COLOR = Color.WHITE
@@ -28,8 +26,8 @@ object VoronoiRenderer {
   private val STROKE: BasicStroke = new BasicStroke(0.5)
 }
 
-class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
-  private val offlineGraphics = new OfflineGraphics(new Dimension(width + 2 * MARGIN, height + 2 * MARGIN), BACKGROUND_COLOR)
+class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extends IPointRenderer {
+  private val offlineGraphics = new OfflineGraphics(new Dimension(width, height), BACKGROUND_COLOR)
 
   def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = {
     drawPoints(sites)
@@ -100,15 +98,15 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   }
 
   private def fillCircle(p: Point, radius: Double): Unit = {
-    val x: Int = MARGIN + p.x.toInt
-    val y: Int = MARGIN + p.y.toInt
+    val x: Int = p.x.toInt
+    val y: Int = p.y.toInt
     val rad = radius.toInt
     offlineGraphics.fillCircle(x, y, rad)
   }
 
   private def drawPoint(x: Double, y: Double): Unit = {
-    val xx = MARGIN + x.toInt
-    val yy = MARGIN + y.toInt
+    val xx = x.toInt
+    val yy = y.toInt
     offlineGraphics.drawPoint(xx, yy)
   }
 
@@ -127,9 +125,9 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     val l = arc.getLeft
     val r = arc.getRight
     val par = new Parabola(arc.site, arc.getSweepLoc)
-    val min = if (l.x == Double.NegativeInfinity) VoronoiRenderer.MIN_DRAW_DIM
+    val min = if (l.x == Double.NegativeInfinity) -INFINITY_MARGIN
     else l.x
-    val max: Double = if (r.x == Double.PositiveInfinity) VoronoiRenderer.MAX_DRAW_DIM
+    val max: Double = if (r.x == Double.PositiveInfinity) INFINITY_MARGIN
     else r.x
     drawParabola(par, min, max)
   }
@@ -159,10 +157,10 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   }
 
   private def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
-    val xx1 = MARGIN + x1.toInt
-    val yy1 = MARGIN + y1.toInt
-    val xx2 = MARGIN + x2.toInt
-    val yy2 = MARGIN + y2.toInt
+    val xx1 = x1.toInt
+    val yy1 = y1.toInt
+    val xx2 = x2.toInt
+    val yy2 = y2.toInt
     offlineGraphics.drawLine(xx1, yy1, xx2, yy2)
   }
 }

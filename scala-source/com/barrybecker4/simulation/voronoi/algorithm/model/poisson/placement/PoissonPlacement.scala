@@ -15,7 +15,7 @@ import scala.util.Random
   * @author Barry Becker
   */
 class PoissonPlacement(
-    val width: Int, val height: Int,
+    val width: Int, val height: Int, margin: Int,
     var params: PoissonParams, var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private var grid: PoissonGrid = _
@@ -23,7 +23,7 @@ class PoissonPlacement(
   private var activePoint: Point2d = _
 
   rnd.setSeed(0)
-  grid = PoissonGrid(width, height, params.radius)
+  grid = PoissonGrid(width, height, margin, params.radius)
 
   //assert(numPoints > params.k, "numPoints " + numPoints + " must be larger than " + params.k)
   activeList = ActiveList(numPoints + params.k)
@@ -40,6 +40,7 @@ class PoissonPlacement(
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
     var count: Int = 0
+    
     while (!activeList.isEmpty && count < numPoints) {
       // get random index, generate k points around it, add one of the grid if possible, else delete it.
       val index = activeList.removeRandomElement()

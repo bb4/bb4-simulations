@@ -41,13 +41,14 @@ class VoronoiAlgorithm() {
   private var poissonParams: PoissonParams = _
   private var showVoronoiDiagram: Boolean = _
   private var restartRequested = false
-  private var finished = false
+  private var finished: Boolean = false
   private var iterations: Int = 0
   reset()
 
   /** if the size changes from what we have not, then request a restart */
   def setSize(width: Int, height: Int): Unit = {
-    if (width != pointModel.getWidth || height != pointModel.getHeight) requestRestart(width, height)
+    if (width != pointModel.getWidth || height != pointModel.getHeight )
+      requestRestart(width, height)
   }
 
   def reset(): Unit = {
@@ -57,6 +58,7 @@ class VoronoiAlgorithm() {
     showVoronoiDiagram = VoronoiAlgorithm.DEFAULT_SHOW_VORONOI_DIAGRAM
     pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints, distributionType)
     voronoiRenderer = new VoronoiRenderer(pointModel.width, pointModel.height, null)
+    finished = false
   }
 
   def setPoissonParams(newParams: PoissonParams): Unit = {
@@ -72,7 +74,7 @@ class VoronoiAlgorithm() {
     showVoronoiDiagram = !showVoronoiDiagram
     requestRestart(pointModel.getWidth, pointModel.getHeight)
   }
-  
+
   def setPointDistribution(distType: PointPlacementModel.DistributionType): Unit = {
     distributionType = distType
     requestRestart(pointModel.getWidth, pointModel.getHeight)
@@ -112,10 +114,10 @@ class VoronoiAlgorithm() {
       pointModel.reset()
       Profiler.getInstance.startCalculationTime()
     }
-    if (iterations >= maxPoints - poissonParams.k) {
+    if (iterations >= maxPoints ) {
 
       // all the poisson points generated, now show voronoi diagram based on them
-      if (showVoronoiDiagram) {
+      if (showVoronoiDiagram && !finished) {
         val points = convertPoints(pointModel.getSamples)
         val voronoiProcessor = new VoronoiProcessor(points, None)
         voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
@@ -124,11 +126,14 @@ class VoronoiAlgorithm() {
       showProfileInfo()
       return true // we are done.
     }
-    pointModel.increment(numStepsPerFrame)
-    val points = convertPoints(pointModel.getSamples)
-    voronoiRenderer.drawPoints(points)
-    iterations += numStepsPerFrame
-    false
+    else {
+      pointModel.increment(numStepsPerFrame)
+      val points = convertPoints(pointModel.getSamples)
+      voronoiRenderer.clear()
+      voronoiRenderer.drawPoints(points)
+      iterations += numStepsPerFrame
+      false
+    }
   }
 
   private def convertPoints(points: IndexedSeq[Point2d]): IndexedSeq[Point] = {

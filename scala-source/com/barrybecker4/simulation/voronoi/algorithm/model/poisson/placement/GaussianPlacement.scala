@@ -19,7 +19,7 @@ object GaussianPlacement {
   *
   * @author Barry Becker
   */
-class GaussianPlacement(val width: Int, val height: Int,
+class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
                        var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private var randomPoints: IndexedSeq[Point2d] = _
@@ -31,8 +31,10 @@ class GaussianPlacement(val width: Int, val height: Int,
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
     var count: Int = 0
+    val w = width - 2 * margin
+    val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints :+= new Point2d(width * getGaussianInBounds, height * getGaussianInBounds)
+      randomPoints :+= new Point2d(w * getGaussianInBounds + margin, h * getGaussianInBounds + margin)
       count += 1
     }
   }

@@ -12,7 +12,7 @@ object PoissonGrid {
   * The cell size of the Poison grid will be rad / sqrt(2). Two because its in 2 dimensions.
   * See https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
   */
-case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Random = RND) {
+case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Double, rnd: Random = RND) {
   private val cellSize: Double = radius / Math.sqrt(2)
   private val xBins: Int = (width / cellSize + 1).toInt
   private val yBins: Int = (height / cellSize + 1).toInt
@@ -52,7 +52,7 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
     var x: Double = -1
     var y: Double = -1
     var ct = 0
-    while (x < 0 || y < 0 || x > width - 1 || y > height - 1) {
+    while (x < margin || y < margin || x > width - margin || y > height - margin) {
       val randomRadius = radius + rnd.nextDouble() * radius
       val randomAngle = rnd.nextDouble() * Math.PI * 2
       x = point.x + randomRadius * Math.cos(randomAngle)

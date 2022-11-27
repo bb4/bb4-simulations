@@ -27,7 +27,7 @@ object DynamicOptions {
   private val K_SLIDER = "Num local samples (k)"
   private val STEPS_PER_FRAME_SLIDER = "Num steps per Frame"
   private val SLIDER_PROPS = Array(
-    new SliderProperties(MAX_POINTS_SLIDER, 10, 100000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
+    new SliderProperties(MAX_POINTS_SLIDER, 10, 10000, VoronoiAlgorithm.DEFAULT_MAX_POINTS),
     new SliderProperties(RADIUS, 3, 100, PoissonParams.DEFAULT_RADIUS, 1000.0),
     new SliderProperties(K_SLIDER, 1, 100, PoissonParams.DEFAULT_K),
     SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 1000, 1)

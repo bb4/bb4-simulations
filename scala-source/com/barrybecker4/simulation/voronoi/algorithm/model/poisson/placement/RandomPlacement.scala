@@ -14,7 +14,7 @@ import scala.util.Random
   *
   * @author Barry Becker
   */
-class RandomPlacement(val width: Int, val height: Int,
+class RandomPlacement(val width: Int, val height: Int, margin: Int,
                       var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private var randomPoints: IndexedSeq[Point2d] = _
@@ -26,8 +26,10 @@ class RandomPlacement(val width: Int, val height: Int,
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
     var count: Int = 0
+    val w = width - 2 * margin
+    val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints :+= new Point2d(width * rnd.nextDouble(), height * rnd.nextDouble())
+      randomPoints :+= new Point2d(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
       count += 1
     }
   }

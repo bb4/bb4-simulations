@@ -2,12 +2,12 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model.poisson
 
 import com.barrybecker4.simulation.cave.model.CaveProcessor
-import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PointPlacementModel.DistributionType
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PointPlacementModel.{DistributionType, MARGIN_PERCENT}
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement.{GaussianPlacement, PlacementMethod, PoissonPlacement, RandomPlacement}
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
-import PointPlacementModel.DistributionType._
+import PointPlacementModel.DistributionType.*
 
 import javax.vecmath.Point2d
 import scala.util.Random
@@ -18,6 +18,7 @@ object PointPlacementModel {
     case UNIFORM, GAUSSIAN, POISSON
     
   val DEFAULT_DISTRIBUTION_TYPE: DistributionType = DistributionType.POISSON
+  val MARGIN_PERCENT = 5.0
   private val RND = new Random(0)
 }
 
@@ -36,10 +37,11 @@ class PointPlacementModel private[algorithm](val width: Int, val height: Int,
 
   def reset(): Unit = synchronized {
     rnd.setSeed(0)
+    val margin = (MARGIN_PERCENT * (width + height) / 200.0).toInt
     placementMethod = distributionType match {
-      case UNIFORM => new RandomPlacement(width, height, numPoints, rnd)
-      case GAUSSIAN => new GaussianPlacement(width, height, numPoints, rnd)
-      case POISSON => new PoissonPlacement(width, height, params, numPoints, rnd)
+      case UNIFORM => new RandomPlacement(width, height, margin, numPoints, rnd)
+      case GAUSSIAN => new GaussianPlacement(width, height, margin, numPoints, rnd)
+      case POISSON => new PoissonPlacement(width, height, margin, params, numPoints, rnd)
     }
   }
 
