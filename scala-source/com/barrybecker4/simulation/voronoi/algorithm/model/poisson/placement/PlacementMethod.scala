@@ -2,12 +2,13 @@
 
 package com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement
 
-import javax.vecmath.Point2d
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
+
 
 trait PlacementMethod {
 
   def increment(numPoints: Int): Unit
 
-  def getSamples: IndexedSeq[Point2d]
+  def getSamples: IndexedSeq[Point]
 
 }

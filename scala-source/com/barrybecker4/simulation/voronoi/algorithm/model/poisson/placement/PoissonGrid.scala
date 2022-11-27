@@ -1,8 +1,10 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement
 
-import javax.vecmath.Point2d
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
+
 import scala.util.Random
+
 
 object PoissonGrid {
   private val RND = new Random(0)
@@ -17,13 +19,13 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
   private val xBins: Int = (width / cellSize + 1).toInt
   private val yBins: Int = (height / cellSize + 1).toInt
   private val grid: Array[Array[Int]] = Array.fill(xBins, yBins)(-1)
-  var samples: IndexedSeq[Point2d] = IndexedSeq()
+  var samples: IndexedSeq[Point] = IndexedSeq()
 
   def getSampleIndex(x: Double, y:Double): Int = grid(getIdx(x))(getIdx(y))
-  def getPoint(index: Int): Point2d = samples(index)
+  def getPoint(index: Int): Point = samples(index)
   def getNumSamples: Int = samples.length
 
-  def addSample(point: Point2d): Int = {
+  def addSample(point: Point): Int = {
     samples :+= point
     val xIdx = getIdx(point.x)
     val yIdx = getIdx(point.y)
@@ -48,7 +50,7 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
 
   private def getIdx(d: Double): Int = (d / cellSize).toInt
 
-  private def getRandomNeighborOf(point: Point2d): Point2d = {
+  private def getRandomNeighborOf(point: Point): Point = {
     var x: Double = -1
     var y: Double = -1
     var ct = 0
@@ -60,11 +62,11 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
       ct += 1
     }
     if (ct > 3) println("Warning ct = " + ct)
-    new Point2d(x, y)
+    new Point(x, y)
   }
 
   // Look in all neighboring grid cells to see if anything within rad distance
-  private def isDistantFromAllNeighbors(point: Point2d): Boolean = {
+  private def isDistantFromAllNeighbors(point: Point): Boolean = {
     val xIdx = getIdx(point.x)
     val yIdx = getIdx(point.y)
     val xMin = Math.max(xIdx - 2, 0)
@@ -80,7 +82,7 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
         else {
           if (sampleIndex >= 0) {
             val samplePoint = samples(sampleIndex)
-            if (point.distance(samplePoint) < radius) {
+            if (point.distanceTo(samplePoint) < radius) {
               return false
             }
           }

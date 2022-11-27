@@ -2,10 +2,10 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 
-import javax.vecmath.Point2d
 import scala.util.Random
 
 
@@ -17,11 +17,11 @@ import scala.util.Random
 class RandomPlacement(val width: Int, val height: Int, margin: Int,
                       var numPoints: Int, rnd: Random) extends PlacementMethod {
 
-  private var randomPoints: IndexedSeq[Point2d] = _
+  private var randomPoints: IndexedSeq[Point] = _
   rnd.setSeed(0)
   randomPoints = IndexedSeq()
 
-  def getSamples: IndexedSeq[Point2d] = randomPoints
+  def getSamples: IndexedSeq[Point] = randomPoints
 
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
@@ -29,7 +29,7 @@ class RandomPlacement(val width: Int, val height: Int, margin: Int,
     val w = width - 2 * margin
     val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints :+= new Point2d(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
+      randomPoints :+= new Point(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
       count += 1
     }
   }

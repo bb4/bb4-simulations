@@ -3,10 +3,10 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement.GaussianPlacement.SIZE
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 
-import javax.vecmath.Point2d
 import scala.util.Random
 
 
@@ -22,11 +22,11 @@ object GaussianPlacement {
 class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
                        var numPoints: Int, rnd: Random) extends PlacementMethod {
 
-  private var randomPoints: IndexedSeq[Point2d] = _
+  private var randomPoints: IndexedSeq[Point] = _
   rnd.setSeed(0)
   randomPoints = IndexedSeq()
 
-  def getSamples: IndexedSeq[Point2d] = randomPoints
+  def getSamples: IndexedSeq[Point] = randomPoints
 
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
@@ -34,7 +34,7 @@ class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
     val w = width - 2 * margin
     val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints :+= new Point2d(w * getGaussianInBounds + margin, h * getGaussianInBounds + margin)
+      randomPoints :+= new Point(w * getGaussianInBounds + margin, h * getGaussianInBounds + margin)
       count += 1
     }
   }
@@ -44,7 +44,7 @@ class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
     var r: Double = 0
     while (outOfBounds) {
       r = rnd.nextGaussian() + SIZE
-      outOfBounds = (r < 0 || r > 2 * SIZE)
+      outOfBounds = r < 0 || r > 2 * SIZE
     }
     0.5 * r / SIZE
   }

@@ -8,8 +8,8 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 import PointPlacementModel.DistributionType.*
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 
-import javax.vecmath.Point2d
 import scala.util.Random
 
 
@@ -45,7 +45,7 @@ class PointPlacementModel private[algorithm](val width: Int, val height: Int,
     }
   }
 
-  def getSamples: IndexedSeq[Point2d] = placementMethod.getSamples
+  def getSamples: IndexedSeq[Point] = placementMethod.getSamples
 
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {

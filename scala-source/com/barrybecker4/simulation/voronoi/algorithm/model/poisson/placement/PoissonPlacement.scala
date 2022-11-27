@@ -2,10 +2,10 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model.poisson.placement
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PoissonParams
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 
-import javax.vecmath.Point2d
 import scala.util.Random
 
 
@@ -20,7 +20,7 @@ class PoissonPlacement(
 
   private var grid: PoissonGrid = _
   private var activeList: ActiveList = _
-  private var activePoint: Point2d = _
+  private var activePoint: Point = _
 
   rnd.setSeed(0)
   grid = PoissonGrid(width, height, margin, params.radius)
@@ -30,12 +30,12 @@ class PoissonPlacement(
   println("width = " + width + " height = " + height)
 
   // Select the initial x0 point.
-  activePoint = new Point2d(width * rnd.nextDouble(), height * rnd.nextDouble())
+  activePoint = new Point(width * rnd.nextDouble(), height * rnd.nextDouble())
   private val activeIndex = grid.addSample(activePoint)
   activeList.addElement(activeIndex)
 
 
-  def getSamples: IndexedSeq[Point2d] = grid.samples
+  def getSamples: IndexedSeq[Point] = grid.samples
 
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {

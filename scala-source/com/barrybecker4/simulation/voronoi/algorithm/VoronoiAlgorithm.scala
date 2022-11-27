@@ -114,11 +114,18 @@ class VoronoiAlgorithm() {
       pointModel.reset()
       Profiler.getInstance.startCalculationTime()
     }
-    if (iterations >= maxPoints ) {
-
-      // all the poisson points generated, now show voronoi diagram based on them
+    if (iterations < maxPoints) {
+      pointModel.increment(numStepsPerFrame)
+      val points = pointModel.getSamples
+      voronoiRenderer.clear()
+      voronoiRenderer.drawPoints(points)
+      iterations += numStepsPerFrame
+      false
+    }
+    else {
+      // all the points generated, now show voronoi diagram based on them
       if (showVoronoiDiagram && !finished) {
-        val points = convertPoints(pointModel.getSamples)
+        val points = pointModel.getSamples
         val voronoiProcessor = new VoronoiProcessor(points, None)
         voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
       }
@@ -126,18 +133,6 @@ class VoronoiAlgorithm() {
       showProfileInfo()
       return true // we are done.
     }
-    else {
-      pointModel.increment(numStepsPerFrame)
-      val points = convertPoints(pointModel.getSamples)
-      voronoiRenderer.clear()
-      voronoiRenderer.drawPoints(points)
-      iterations += numStepsPerFrame
-      false
-    }
-  }
-
-  private def convertPoints(points: IndexedSeq[Point2d]): IndexedSeq[Point] = {
-    points.map(pt => new Point(pt.x, pt.y))
   }
 
   private def showProfileInfo(): Unit = {
