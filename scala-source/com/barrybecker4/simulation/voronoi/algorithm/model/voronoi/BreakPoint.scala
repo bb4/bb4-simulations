@@ -27,9 +27,9 @@ case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean,
   }
 
   def getPoint: Point = {
-    val seepLocation = v.getSweepLoc
-    if (seepLocation == cacheSweepLoc) return cachePoint
-    cacheSweepLoc = seepLocation
+    val sweepLoc = v.getSweepLoc
+    if (sweepLoc == cacheSweepLoc) return cachePoint
+    cacheSweepLoc = sweepLoc
     var x: Double = .0
     var y: Double = .0
     // Handle the vertical line case
@@ -37,23 +37,23 @@ case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean,
       x = (s1.x + s2.x) / 2.0 // x coordinate is between the two sites
 
       // comes from parabola focus-directrix definition:
-      y = (BreakPoint.sq(x - s1.x) + BreakPoint.sq(s1.y) - BreakPoint.sq(seepLocation)) / (2.0 * (s1.y - seepLocation))
+      y = (BreakPoint.sq(x - s1.x) + BreakPoint.sq(s1.y) - BreakPoint.sq(sweepLoc)) / (2.0 * (s1.y - sweepLoc))
     }
     else { // This method works by intersecting the line of the edge with the parabola of the higher point
       // I'm not sure why I chose the higher point, either should work
       val px = if (s1.y > s2.y) s1.x
       else s2.x
       val py = Math.max(s1.y, s2.y)
-      val m = e.m
-      val b = e.b
-      val d = 2 * (py - seepLocation)
+      val m: Double = e.m
+      val b: Double = e.b
+      val d: Double = 2.0 * (py - sweepLoc)
       // Straight up quadratic formula
-      val A = 1
-      val B = -2 * px - d * m
-      val C = BreakPoint.sq(px) + BreakPoint.sq(py) - BreakPoint.sq(seepLocation) - d * b
+      val A: Double = 1
+      val B: Double = -2 * px - d * m
+      val C: Double = BreakPoint.sq(px) + BreakPoint.sq(py) - BreakPoint.sq(sweepLoc) - d * b
       val sign = if (s1.y > s2.y) -1
       else 1
-      val det = BreakPoint.sq(B) - 4 * A * C
+      val det: Double = BreakPoint.sq(B) - 4 * A * C
       // When rounding leads to a very small negative determinant, fix it
       if (det <= 0) x = -B / (2 * A)
       else x = (-B + sign * Math.sqrt(det)) / (2 * A)

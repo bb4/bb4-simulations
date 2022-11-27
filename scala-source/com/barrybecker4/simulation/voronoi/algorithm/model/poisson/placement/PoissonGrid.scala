@@ -40,11 +40,9 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
       val nbrPoint = getRandomNeighborOf(point)
       val distantEnough = isDistantFromAllNeighbors(nbrPoint)
       if (distantEnough) {
-        //println("found dist nbr " + nbrPoint + " after " + i + " tries")
         return addSample(nbrPoint)
       }
     }
-    //println("no nbr found")
     -1
   }
 

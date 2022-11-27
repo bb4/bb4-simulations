@@ -10,7 +10,7 @@ import java.util.{ArrayList, List, Random}
 class PointGenerator {
   def generatePoints(N: Int): IndexedSeq[Point] = {
     var points: IndexedSeq[Point] = IndexedSeq()
-    val rnd = new Random
+    val rnd = new Random(0)
     for (i <- 0 until N) {
       points :+= new Point(rnd.nextDouble, rnd.nextDouble)
     }

@@ -5,7 +5,7 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiProcessor
 
 
-class SiteEvent(p: Point) extends Event(p) with Comparable[SiteEvent] {
+case class SiteEvent(p: Point) extends Event with Comparable[SiteEvent] {
 
   def handleEvent(v: VoronoiProcessor): Unit = {
     v.handleSiteEvent(this.p)

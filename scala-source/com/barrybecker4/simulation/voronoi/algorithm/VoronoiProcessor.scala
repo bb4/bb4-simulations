@@ -19,14 +19,17 @@ import scala.collection.mutable
 
 /**
   * This code and dependent classes were derived from https://github.com/ajwerner/fortune
+  * It is an implementation of Fortune's algorithm - https://en.wikipedia.org/wiki/Fortune%27s_algorithm.
   */
 class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[VoronoiRenderer]) {
   private var edgeList: IndexedSeq[VoronoiEdge] = IndexedSeq()
   private var events = new mutable.TreeSet[SiteEvent]
   private val breakPoints = new mutable.HashSet[BreakPoint]()
   private val arcs = new mutable.TreeMap[ArcKey, CircleEvent]
-  addEventsForPoints(points)
   private var sweepLoc: Double = MAX_DIM
+
+  addEventsForPoints(points)
+
   while (events.nonEmpty) {
     if (renderer.isDefined)
       renderer.get.draw(points, edgeList, breakPoints, arcs, sweepLoc)
@@ -46,27 +49,28 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   }
 
   def getEdgeList: IndexedSeq[VoronoiEdge] = edgeList
-
   def getSweepLoc: Double = sweepLoc
 
   private def addEventsForPoints(points: IndexedSeq[Point]): Unit = {
     for (site <- points) {
-      if ((site.x > MAX_DIM || site.x < MIN_DIM) || (site.y > MAX_DIM || site.y < MIN_DIM)) throw new RuntimeException(String.format("Invalid site in input, sites must be between %f and %f", MIN_DIM, MAX_DIM))
-      events.add(new SiteEvent(site))
+      if ((site.x > MAX_DIM || site.x < MIN_DIM) || (site.y > MAX_DIM || site.y < MIN_DIM))
+        throw new RuntimeException(String.format("Invalid site in input, sites must be between %f and %f", MIN_DIM, MAX_DIM))
+      events.add(SiteEvent(site))
     }
   }
 
-  def handleSiteEvent(point: Point): Unit = { // Deal with first point case
+  def handleSiteEvent(point: Point): Unit = {
+    // Deal with first point case
     if (arcs.isEmpty) {
       arcs.put(new Arc(point, this), null)
       return
     }
-    val arcEntryAbove: (ArcKey, CircleEvent) = findArcEntryAbove(point)
+    val arcEntryAbove: (ArcKey, CircleEvent) = findFloorEntry(point)
     val arcAbove: Arc = arcEntryAbove._1.asInstanceOf[Arc]
     // Deal with the degenerate case where the first two points are at the same y value
     if (arcs.isEmpty && arcAbove.site.y == point.y) {
       val newEdge = new VoronoiEdge(arcAbove.site, point)
-      newEdge.p1 = new Point((point.x + arcAbove.site.x) / 2, Double.PositiveInfinity)
+      newEdge.p1 = new Point((point.x + arcAbove.site.x) / 2.0, Double.PositiveInfinity)
       val newBreak = new BreakPoint(arcAbove.site, point, newEdge, false, this)
       breakPoints.add(newBreak)
       edgeList :+= newEdge
@@ -80,6 +84,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     // Remove the circle event associated with this arc if there is one
     val falseCE = arcEntryAbove._2
     if (falseCE != null) events.remove(falseCE)
+
     val breakL = arcAbove.left
     val breakR = arcAbove.right
     val newEdge = new VoronoiEdge(arcAbove.site, point)
@@ -102,10 +107,10 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     checkForCircleEvent(arcRight)
   }
 
-  private def findArcEntryAbove(point: Point): (ArcKey, CircleEvent) = {
+  private def findFloorEntry(point: Point): (ArcKey, CircleEvent) = {
     val arcToSearchFor = new ArcQuery(point)
-    val arcEntryAboveOpt: Option[(ArcKey, CircleEvent)] = arcs.maxBefore(arcToSearchFor)
-    if (arcEntryAboveOpt.isDefined) arcEntryAboveOpt.get else (arcs.find(p => arcToSearchFor.compareTo(p._1) == 0).get)
+    if (arcs.contains(arcToSearchFor)) arcs.find(p => p._1.compareTo(arcToSearchFor) == 0).get
+    else arcs.maxBefore(arcToSearchFor).get
   }
 
   def handleCircleEvent(point: Point, arc: Arc, vert: Point): Unit = {
@@ -176,14 +181,14 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     arcs.minAfter(arc).get
   }
 
-  private def checkForCircleEvent(a: Arc): Unit = {
-    val circleCenter = a.checkCircle
+  private def checkForCircleEvent(arc: Arc): Unit = {
+    val circleCenter = arc.checkCircle
     if (circleCenter != null) {
-      val radius = a.site.distanceTo(circleCenter)
+      val radius = arc.site.distanceTo(circleCenter)
       val circleEventPoint = new Point(circleCenter.x, circleCenter.y - radius)
-      val ce = new CircleEvent(a, circleEventPoint, circleCenter)
-      arcs.put(a, ce)
-      events.add(ce)
+      val circleEvent = new CircleEvent(arc, circleEventPoint, circleCenter)
+      arcs.put(arc, circleEvent)
+      events.add(circleEvent)
     }
   }
 }

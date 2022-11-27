@@ -7,4 +7,6 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 /**
   * Marker interface for Events
   */
-abstract class Event(val p: Point)
+abstract class Event() {
+  def p: Point;
+}
