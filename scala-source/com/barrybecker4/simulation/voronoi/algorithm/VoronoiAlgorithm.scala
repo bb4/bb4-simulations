@@ -132,9 +132,7 @@ class VoronoiAlgorithm() {
   }
 
   private def convertPoints(points: IndexedSeq[Point2d]): IndexedSeq[Point] = {
-    val w = pointModel.width + 2 * MARGIN
-    val h = pointModel.height + 2 * MARGIN
-    points.map(pt => new Point(pt.x / w, pt.y / h))
+    points.map(pt => new Point(pt.x, pt.y))
   }
 
   private def showProfileInfo(): Unit = {

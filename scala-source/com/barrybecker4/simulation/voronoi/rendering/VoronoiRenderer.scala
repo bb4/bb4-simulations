@@ -17,16 +17,15 @@ import scala.collection.mutable
 object VoronoiRenderer {
   val MIN_DRAW_DIM: Double = -5
   val MAX_DRAW_DIM: Double = 5
-  // Ghetto but just for drawing stuff
-  val MAX_DIM: Double = 10
-  val MIN_DIM: Double = -10
-  val RADIUS: Double = 0.002
+
+  val INFINITY_MARGIN: Double = 10000.0
+  val RADIUS: Double = 2.0
 
   private val POINT_COLOR = Color.YELLOW
   private val LINE_COLOR = Color.WHITE
   private val BREAK_COLOR = Color.BLUE
   private val BACKGROUND_COLOR = Color.BLACK
-  private val STROKE: BasicStroke = new BasicStroke(1)
+  private val STROKE: BasicStroke = new BasicStroke(0.5)
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
@@ -38,7 +37,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     setStroke(STROKE)
     for (e <- edgeList) {
       if (e.p1 != null && e.p2 != null) {
-        val topY = if (e.p1.y == Double.PositiveInfinity) VoronoiRenderer.MAX_DIM
+        val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
         else e.p1.y // HACK to draw from infinity
         drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
       }
@@ -72,12 +71,12 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     }
     for (e <- edgeList) {
       if (e.p1 != null && e.p2 != null) {
-        val topY = if (e.p1.y == Double.PositiveInfinity) VoronoiRenderer.MAX_DIM
+        val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
         else e.p1.y
         drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
       }
     }
-    drawLine(VoronoiRenderer.MIN_DIM, sweepLoc, VoronoiRenderer.MAX_DIM, sweepLoc)
+    drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
     show(1)
   }
 
@@ -100,21 +99,16 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
     }
   }
 
-//  private def fillCircle(p: Point, radius: Double, color: Color): Unit = {
-//    offlineGraphics.setColor(color)
-//    fillCircle(p, radius)
-//  }
-
   private def fillCircle(p: Point, radius: Double): Unit = {
-    val x: Int = MARGIN + (width * p.x).toInt
-    val y: Int = MARGIN + (height * p.y).toInt
-    val rad = (width * radius).toInt
+    val x: Int = MARGIN + p.x.toInt
+    val y: Int = MARGIN + p.y.toInt
+    val rad = radius.toInt
     offlineGraphics.fillCircle(x, y, rad)
   }
 
   private def drawPoint(x: Double, y: Double): Unit = {
-    val xx = MARGIN + (width * x).toInt
-    val yy = MARGIN + (height * y).toInt
+    val xx = MARGIN + x.toInt
+    val yy = MARGIN + y.toInt
     offlineGraphics.drawPoint(xx, yy)
   }
 
@@ -165,10 +159,10 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   }
 
   private def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
-    val xx1 = MARGIN + (width * x1).toInt
-    val yy1 = MARGIN + (height * y1).toInt
-    val xx2 = MARGIN + (width * x2).toInt
-    val yy2 = MARGIN + (height * y2).toInt
+    val xx1 = MARGIN + x1.toInt
+    val yy1 = MARGIN + y1.toInt
+    val xx2 = MARGIN + x2.toInt
+    val yy2 = MARGIN + y2.toInt
     offlineGraphics.drawLine(xx1, yy1, xx2, yy2)
   }
 }

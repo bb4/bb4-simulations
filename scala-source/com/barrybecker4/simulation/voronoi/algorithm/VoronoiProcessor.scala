@@ -12,10 +12,9 @@ import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 import java.util
 import java.util.Map.Entry
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MAX_DIM
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MIN_DIM
 
 import scala.collection.mutable
+import VoronoiRenderer.INFINITY_MARGIN
 
 /**
   * This code and dependent classes were derived from https://github.com/ajwerner/fortune
@@ -26,7 +25,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   private var events = new mutable.TreeSet[SiteEvent]
   private val breakPoints = new mutable.HashSet[BreakPoint]()
   private val arcs = new mutable.TreeMap[ArcKey, CircleEvent]
-  private var sweepLoc: Double = MAX_DIM
+  private var sweepLoc: Double = INFINITY_MARGIN
 
   addEventsForPoints(points)
 
@@ -38,7 +37,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     sweepLoc = cur.p.y
     cur.handleEvent(this)
   }
-  this.sweepLoc = MIN_DIM // hack to draw negative infinite points
+  this.sweepLoc = -INFINITY_MARGIN // hack to draw negative infinite points
 
   for (bp <- breakPoints) {
     bp.finish()
@@ -53,8 +52,8 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
 
   private def addEventsForPoints(points: IndexedSeq[Point]): Unit = {
     for (site <- points) {
-      if ((site.x > MAX_DIM || site.x < MIN_DIM) || (site.y > MAX_DIM || site.y < MIN_DIM))
-        throw new RuntimeException(String.format("Invalid site in input, sites must be between %f and %f", MIN_DIM, MAX_DIM))
+      if ((site.x < 0) || site.y < 0)
+        throw new RuntimeException(String.format("Invalid site in input, sites must be greater than 0"))
       events.add(SiteEvent(site))
     }
   }
