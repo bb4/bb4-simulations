@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+// Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams.*
@@ -8,7 +8,7 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.Pois
   * @author Barry Becker
   */
 object PoissonParams {
-  val DEFAULT_RADIUS = 20.0
+  val DEFAULT_RADIUS = 30.0
   val DEFAULT_K = 10
 }
 

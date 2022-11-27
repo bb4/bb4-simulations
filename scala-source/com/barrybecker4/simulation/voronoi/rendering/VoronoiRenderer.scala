@@ -25,6 +25,7 @@ object VoronoiRenderer {
   private val BACKGROUND_COLOR = Color.BLACK
   private val STROKE: BasicStroke = new BasicStroke(0.5)
   private val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
+  private val PARABOLA_INC = 2
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extends IPointRenderer {
@@ -111,7 +112,6 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
     val xx = x.toInt
     val yy = y.toInt
     offlineGraphics.drawPoint(xx, yy)
-    //offlineGraphics.fillCircle(xx, yy, 1)
   }
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {
@@ -137,14 +137,14 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
   private def drawParabola(par: Parabola, min: Double, max: Double): Unit = {
     var x = min
     var lastPoint: Point = null
-    while (x < max) {
+    while (x <= max) {
       val y = ((x - par.a) * (x - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
       val point = new Point(x, y)
       if (lastPoint != null) {
         drawLine(x, y, lastPoint.x, lastPoint.y)
       }
       lastPoint = point
-      x += 3
+      x += PARABOLA_INC
     }
   }
 

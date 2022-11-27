@@ -19,11 +19,12 @@ object VoronoiPanel {
 class VoronoiPanel(val numPoints: Int) extends JPanel {
   setPreferredSize(new Dimension(WIDTH + 2 * MARGIN, HEIGHT + 2 * MARGIN))
   private val renderer = new VoronoiRenderer(WIDTH, HEIGHT, this)
-  private val points = new PointGenerator().generatePoints(numPoints)
+  private val points = new PointGenerator().generatePoints(WIDTH, HEIGHT, numPoints)
 
 
   def start(): Unit = {
     val v = new VoronoiProcessor(points, Some(renderer))
+    v.processAll()
     val edgeList = v.getEdgeList
     renderer.show(points, edgeList)
   }

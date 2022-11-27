@@ -18,7 +18,7 @@ import javax.vecmath.Point2d
 
 
 object VoronoiAlgorithm {
-  val DEFAULT_MAX_POINTS = 200
+  val DEFAULT_MAX_POINTS = 100
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
   val DEFAULT_SHOW_VORONOI_DIAGRAM = true
