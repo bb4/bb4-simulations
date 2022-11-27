@@ -7,8 +7,9 @@ import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
-import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PointPlacementModel.DistributionType
-import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.{PointPlacementModel, PoissonParams}
+import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel.DistributionType
+import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel
+import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN

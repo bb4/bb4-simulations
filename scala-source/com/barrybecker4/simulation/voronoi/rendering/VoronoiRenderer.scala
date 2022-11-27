@@ -24,6 +24,7 @@ object VoronoiRenderer {
   private val BREAK_COLOR = new Color(255, 110, 55)
   private val BACKGROUND_COLOR = Color.BLACK
   private val STROKE: BasicStroke = new BasicStroke(0.5)
+  private val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extends IPointRenderer {
@@ -64,6 +65,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
       drawBreakPoint(bp)
     }
     setColor(BREAK_COLOR)
+    setStroke(BREAK_STROKE)
     for (a <- arcs.keySet) {
       drawArc(a.asInstanceOf[Arc])
     }
@@ -127,19 +129,22 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extend
     val l = arc.getLeft
     val r = arc.getRight
     val par = new Parabola(arc.site, arc.getSweepLoc)
-    val min = if (l.x == Double.NegativeInfinity) -INFINITY_MARGIN else l.x
-    val max: Double = if (r.x == Double.PositiveInfinity) INFINITY_MARGIN else r.x
+    val min = if (l.x == Double.NegativeInfinity) 0 else l.x
+    val max: Double = if (r.x == Double.PositiveInfinity) width else r.x
     drawParabola(par, min, max)
   }
 
   private def drawParabola(par: Parabola, min: Double, max: Double): Unit = {
-    val mini: Double = if (min > 0) min else 0
-    val maxi: Double = if (max < width) max else width
-    var x = mini
-    while (x < maxi) {
+    var x = min
+    var lastPoint: Point = null
+    while (x < max) {
       val y = ((x - par.a) * (x - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
-      drawPoint(x, y)
-      x += 1
+      val point = new Point(x, y)
+      if (lastPoint != null) {
+        drawLine(x, y, lastPoint.x, lastPoint.y)
+      }
+      lastPoint = point
+      x += 3
     }
   }
 
