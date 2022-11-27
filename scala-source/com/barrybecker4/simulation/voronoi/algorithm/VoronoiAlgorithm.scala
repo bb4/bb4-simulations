@@ -8,7 +8,9 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.{PointPlacementModel, PoissonParams}
-import com.barrybecker4.simulation.voronoi.rendering.{VoronoiColorMap, PoissonPointRenderer}
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
+import com.barrybecker4.simulation.voronoi.rendering.{PoissonPointRenderer, VoronoiColorMap}
+import com.barrybecker4.simulation.voronoi.ui.VoronoiRenderer
 
 
 object VoronoiAlgorithm {
@@ -16,7 +18,7 @@ object VoronoiAlgorithm {
   val DEFAULT_STEPS_PER_FRAME = 10
   val DEFAULT_USE_POISSON = true
   val DEFAULT_SHOW_VORONOI_DIAGRAM = false
-  
+
   private val DEFAULT_SIZE = 200
   private val DEFAULT_ALPHA = 200
 }
@@ -30,8 +32,9 @@ object VoronoiAlgorithm {
 class VoronoiAlgorithm() {
 
   private var pointModel: PointPlacementModel = _
-  private var renderer: PoissonPointRenderer = _
-  
+  private var poissonRenderer: PoissonPointRenderer = _
+  private var voronoiRenderer: VoronoiRenderer = _
+
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
   private var poissonParams: PoissonParams = _
@@ -47,7 +50,7 @@ class VoronoiAlgorithm() {
   def setSize(width: Int, height: Int): Unit = {
     if (width != pointModel.getWidth || height != pointModel.getHeight) requestRestart(width, height)
   }
-  
+
   def getColorMap: ColorMap = cmap
 
   def reset(): Unit = {
@@ -58,7 +61,7 @@ class VoronoiAlgorithm() {
     alpha = VoronoiAlgorithm.DEFAULT_ALPHA
     cmap = VoronoiColorMap(alpha)
     pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints)
-    renderer = new PoissonPointRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
+    poissonRenderer = new PoissonPointRenderer(DEFAULT_SIZE, DEFAULT_SIZE)
   }
 
   def setPoissonParams(newParams: PoissonParams): Unit = {
@@ -82,9 +85,9 @@ class VoronoiAlgorithm() {
     showVoronoiDiagram = !showVoronoiDiagram
     requestRestart(pointModel.getWidth, pointModel.getHeight)
   }
-  
-  //def getColorMap: ColorMap = cmap
-  def getImage: BufferedImage = renderer.getImage
+
+  def getImage: BufferedImage =
+    if (voronoiRenderer != null) voronoiRenderer.getImage else poissonRenderer.getImage
 
   def setNumSamplePoints(newNumTravelors: Int): Unit = {
     if (newNumTravelors != maxPoints) {
@@ -102,7 +105,7 @@ class VoronoiAlgorithm() {
 
   private def requestRestart(width: Int, height: Int): Unit = synchronized {
     pointModel = new PointPlacementModel(width, height, poissonParams, maxPoints)
-    renderer = new PoissonPointRenderer(width, height)
+    poissonRenderer = new PoissonPointRenderer(width, height)
     restartRequested = true
   }
 
@@ -111,20 +114,29 @@ class VoronoiAlgorithm() {
     */
   def nextStep(): Boolean = synchronized {
     if (restartRequested) {
-      println("RESTARTING !!!!!!!!!!!!!!!")
+      println("Restating!")
       restartRequested = false
       finished = false
       iterations = 0
       pointModel.reset()
+      voronoiRenderer = null
       Profiler.getInstance.startCalculationTime()
     }
     if (iterations >= maxPoints - poissonParams.k) {
+
+      // all the poisson points generated, now show voronoi diagram based on them
+      if (showVoronoiDiagram) {
+        voronoiRenderer = new VoronoiRenderer(pointModel.width, pointModel.height, null)
+        val points = pointModel.getSamples.map(pt => new Point(pt.x / pointModel.width, pt.y / pointModel.height))
+        val voronoiProcessor = new VoronoiProcessor(points, None)
+        voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
+      }
 
       showProfileInfo()
       return true // we are done.
     }
     pointModel.increment(numStepsPerFrame)
-    renderer.render(pointModel.getSamples)
+    poissonRenderer.render(pointModel.getSamples)
     iterations += numStepsPerFrame
     false
   }

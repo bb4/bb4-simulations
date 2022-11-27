@@ -19,14 +19,13 @@ import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
 import scala.collection.mutable
 
 
-
 object VoronoiRenderer {
   val MIN_DRAW_DIM: Double = -5
   val MAX_DRAW_DIM: Double = 5
   // Ghetto but just for drawing stuff
   val MAX_DIM: Double = 10
   val MIN_DIM: Double = -10
-  val RADIUS: Double = 0.01
+  val RADIUS: Double = 0.001
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
@@ -83,11 +82,13 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   }
 
   def show(): Unit = {
-    panel.repaint()
+    if (panel != null)
+        panel.repaint()
   }
 
   def show(value: Int): Unit = {
-    panel.repaint()
+    if (panel != null)
+        panel.repaint()
     try Thread.sleep(10)
     catch {
       case e: InterruptedException =>
@@ -103,7 +104,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) {
   private def fillCircle(p: Point, radius: Double): Unit = {
     val x: Int = MARGIN + (width * p.x).toInt
     val y: Int = MARGIN + (height * p.y).toInt
-    val rad = (0.5 * width * radius).toInt
+    val rad = (width * radius).toInt
     offlineGraphics.fillCircle(x, y, rad)
   }
 
