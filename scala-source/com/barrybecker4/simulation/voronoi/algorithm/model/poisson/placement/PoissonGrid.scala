@@ -52,7 +52,7 @@ case class PoissonGrid(width: Double, height: Double, radius: Double, rnd: Rando
     var x: Double = -1
     var y: Double = -1
     var ct = 0
-    while (x < 0 || y < 0 || x >= width - 1.0 || y >= height - 1.0) {
+    while (x < 0 || y < 0 || x > width - 1 || y > height - 1) {
       val randomRadius = radius + rnd.nextDouble() * radius
       val randomAngle = rnd.nextDouble() * Math.PI * 2
       x = point.x + randomRadius * Math.cos(randomAngle)

@@ -7,9 +7,13 @@ import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.image.BufferedImage
 import VoronoiAlgorithm.*
+import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.PointPlacementModel.DistributionType
 import com.barrybecker4.simulation.voronoi.algorithm.model.poisson.{PointPlacementModel, PoissonParams}
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
+import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
+
+import javax.vecmath.Point2d
 
 
 object VoronoiAlgorithm {
@@ -33,6 +37,7 @@ class VoronoiAlgorithm() {
 
   private var maxPoints: Int = _
   private var numStepsPerFrame: Int = _
+  private var distributionType: PointPlacementModel.DistributionType = PointPlacementModel.DEFAULT_DISTRIBUTION_TYPE
   private var poissonParams: PoissonParams = _
   private var showVoronoiDiagram: Boolean = _
   private var restartRequested = false
@@ -50,7 +55,7 @@ class VoronoiAlgorithm() {
     numStepsPerFrame = VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME
     poissonParams = new PoissonParams()
     showVoronoiDiagram = VoronoiAlgorithm.DEFAULT_SHOW_VORONOI_DIAGRAM
-    pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints)
+    pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints, distributionType)
     voronoiRenderer = new VoronoiRenderer(pointModel.width, pointModel.height, null)
   }
 
@@ -65,6 +70,11 @@ class VoronoiAlgorithm() {
 
   def toggleShowVoronoiDiagram(): Unit = {
     showVoronoiDiagram = !showVoronoiDiagram
+    requestRestart(pointModel.getWidth, pointModel.getHeight)
+  }
+  
+  def setPointDistribution(distType: PointPlacementModel.DistributionType): Unit = {
+    distributionType = distType
     requestRestart(pointModel.getWidth, pointModel.getHeight)
   }
 
@@ -85,7 +95,7 @@ class VoronoiAlgorithm() {
   }
 
   private def requestRestart(width: Int, height: Int): Unit = synchronized {
-    pointModel = new PointPlacementModel(width, height, poissonParams, maxPoints)
+    pointModel = new PointPlacementModel(width, height, poissonParams, maxPoints, distributionType)
     voronoiRenderer = new VoronoiRenderer(width, height, null)
     restartRequested = true
   }
@@ -106,7 +116,7 @@ class VoronoiAlgorithm() {
 
       // all the poisson points generated, now show voronoi diagram based on them
       if (showVoronoiDiagram) {
-        val points = pointModel.getSamples.map(pt => new Point(pt.x / pointModel.width, pt.y / pointModel.height))
+        val points = convertPoints(pointModel.getSamples)
         val voronoiProcessor = new VoronoiProcessor(points, None)
         voronoiRenderer.show(points, voronoiProcessor.getEdgeList)
       }
@@ -115,10 +125,16 @@ class VoronoiAlgorithm() {
       return true // we are done.
     }
     pointModel.increment(numStepsPerFrame)
-    val points = pointModel.getSamples.map(pt => new Point(pt.x / pointModel.width, pt.y / pointModel.height))
+    val points = convertPoints(pointModel.getSamples)
     voronoiRenderer.drawPoints(points)
     iterations += numStepsPerFrame
     false
+  }
+
+  private def convertPoints(points: IndexedSeq[Point2d]): IndexedSeq[Point] = {
+    val w = pointModel.width + 2 * MARGIN
+    val h = pointModel.height + 2 * MARGIN
+    points.map(pt => new Point(pt.x / w, pt.y / h))
   }
 
   private def showProfileInfo(): Unit = {

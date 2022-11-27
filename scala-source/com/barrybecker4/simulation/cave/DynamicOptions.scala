@@ -135,7 +135,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     for (kernelType <- CaveProcessor.KernelType.values) {
       kernelChoice.addItem(kernelType.toString) //name)
     }
-    kernelChoice.setSelectedItem(CaveProcessor.DEFAULT_KERNEL_TYPE.ordinal)
+    kernelChoice.setSelectedIndex(CaveProcessor.DEFAULT_KERNEL_TYPE.ordinal)
     kernelChoice.addItemListener(this)
     kernelChoicePanel.add(label)
     kernelChoicePanel.add(kernelChoice)
