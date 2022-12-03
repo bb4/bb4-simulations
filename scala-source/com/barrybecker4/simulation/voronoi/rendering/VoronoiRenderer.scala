@@ -79,7 +79,8 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
       }
     }
     drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
-    show(1)
+    // the original code passed a delay here to give interaction a chance to process, but I'm not sure that it is needed.
+    show() // pass 1?
   }
 
   def clear(): Unit = {
@@ -91,27 +92,11 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
         panel.repaint()
   }
 
-  def show(value: Int): Unit = {
-    if (panel != null)
-        panel.repaint()
-    try Thread.sleep(10)
-    catch {
-      case e: InterruptedException =>
-        throw new RuntimeException(e)
-    }
-  }
-
   private def fillCircle(p: Point, radius: Double): Unit = {
     val x: Int = p.x.toInt
     val y: Int = p.y.toInt
     val rad = radius.toInt
     offlineGraphics.fillCircle(x, y, rad)
-  }
-
-  private def drawPoint(x: Double, y: Double): Unit = {
-    val xx = x.toInt
-    val yy = y.toInt
-    offlineGraphics.drawPoint(xx, yy)
   }
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {
