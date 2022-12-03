@@ -54,24 +54,23 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
 
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
-  def draw(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge],
-           breakPoints: mutable.Set[BreakPoint], arcs: mutable.TreeMap[ArcKey, CircleEvent], sweepLoc: Double): Unit = {
+  def draw(sites: IndexedSeq[Point], geometry: VoronoiGeometry, sweepLoc: Double): Unit = {
     clear()
     setColor(POINT_COLOR)
 
     for (p <- sites) {
       fillCircle(p, VoronoiRenderer.RADIUS)
     }
-    for (bp <- breakPoints) {
+    for (bp <- geometry.getBreakPoints) {
       drawBreakPoint(bp)
     }
     setColor(BREAK_COLOR)
     setStroke(BREAK_STROKE)
-    for (a <- arcs.keySet) {
+    for (a <- geometry.getArcs.keySet) {
       drawArc(a.asInstanceOf[Arc])
     }
     setColor(LINE_COLOR)
-    for (e <- edgeList) {
+    for (e <- geometry.getEdgeList) {
       if (e.p1 != null && e.p2 != null) {
         val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
         else e.p1.y
