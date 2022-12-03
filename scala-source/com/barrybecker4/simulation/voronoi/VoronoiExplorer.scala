@@ -31,7 +31,7 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
   }
 
   private def commonInit(): Unit = {
-    algorithm = new VoronoiAlgorithm
+    algorithm = new VoronoiAlgorithm(this)
     initCommonUI()
     reset()
   }
@@ -49,7 +49,7 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
   override def getInitialTimeStep = 1
 
   override def timeStep: Double = {
-    if (!isPaused) {
+    if (!isPaused && this.getWidth > 0) {
       if (!useFixedSize) algorithm.setSize(this.getWidth, this.getHeight)
       algorithm.nextStep()
     }

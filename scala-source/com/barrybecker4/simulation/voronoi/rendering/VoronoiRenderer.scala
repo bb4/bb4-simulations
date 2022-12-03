@@ -10,7 +10,7 @@ import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.{BasicStroke, Color, Dimension}
 import java.awt.image.BufferedImage
-import javax.swing.JPanel
+import javax.swing.JComponent
 import scala.collection.mutable
 
 
@@ -28,7 +28,7 @@ object VoronoiRenderer {
   private val PARABOLA_INC = 2
 }
 
-class VoronoiRenderer(val width: Int, val height: Int, val panel: JPanel) extends IPointRenderer {
+class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) extends IPointRenderer {
   private val offlineGraphics = new OfflineGraphics(new Dimension(width, height), BACKGROUND_COLOR)
 
   def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = {

@@ -5,10 +5,11 @@ import com.barrybecker4.common.app.{AppContext, ClassLoaderSingleton, CommandLin
 import com.barrybecker4.ui.animation.AnimationPanel
 import com.barrybecker4.ui.application.ApplicationApplet
 import com.barrybecker4.ui.util.{GUIUtil, Log}
+
 import javax.swing.JPanel
 import java.awt.BorderLayout
 import com.barrybecker4.common.i18n.LocaleType
-import SimulatorApplet._
+import SimulatorApplet.*
 
 
 object SimulatorApplet {
@@ -75,11 +76,12 @@ class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationAppl
       className = if (className == null) DEFAULT_SIMULATOR else className
       simulator = SimulatorApplet.createSimulationFromClassName(className)
     }
+
+    simulator.setVisible(true)
     val animPanel = new AnimationPanel(simulator)
     animPanel.add(simulator.createTopControls, BorderLayout.NORTH)
     val dynamicControls = simulator.createDynamicControls
     if (dynamicControls != null) animPanel.add(dynamicControls, BorderLayout.EAST)
-    simulator.setVisible(true)
     animPanel
   }
 
