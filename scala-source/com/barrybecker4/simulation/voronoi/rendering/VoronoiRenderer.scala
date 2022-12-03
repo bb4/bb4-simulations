@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.voronoi.rendering
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.CircleEvent
-import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
@@ -16,6 +15,7 @@ import scala.collection.mutable
 
 object VoronoiRenderer {
 
+  val MARGIN: Int = 120
   val INFINITY_MARGIN: Double = 10000.0
   val RADIUS: Double = 1.0
 

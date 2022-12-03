@@ -13,7 +13,7 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacem
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
-import com.barrybecker4.simulation.voronoi.ui.VoronoiPanel.MARGIN
+import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MARGIN
 
 import javax.vecmath.Point2d
 
@@ -24,6 +24,7 @@ object VoronoiAlgorithm {
   val DEFAULT_USE_POISSON = true
   val DEFAULT_SHOW_VORONOI_DIAGRAM = true
   private val DEFAULT_SIZE = 200
+  
 }
 
 /**
