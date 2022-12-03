@@ -13,7 +13,7 @@ import VoronoiRenderer.INFINITY_MARGIN
 
 /**
   * This code and dependent classes were derived from https://github.com/ajwerner/fortune
-  * It is an implementation of Fortune's algorithm - https://en.wikipedia.org/wiki/Fortune%27s_algorithm.
+  * It is an implementation of Fortune's algorithm - https://en.wikipedia.org/wiki/Fortune%27s_algorithm
   */
 class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[VoronoiRenderer]) {
 
@@ -39,19 +39,18 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     while (events.nonEmpty && ct < numSteps) {
       if (renderer.isDefined)
         renderer.get.draw(points, geometry, sweepLoc)
-      val cur = events.head
+      val event = events.head
       events = events.tail
-      sweepLoc = cur.p.y
-      cur.handleEvent(this)
+      sweepLoc = event.p.y
+      event.handleEvent(this)
       ct += 1
     }
 
     if (events.isEmpty) {
       this.sweepLoc = -INFINITY_MARGIN // hack to draw negative infinite points
 
-      for (bp <- geometry.getBreakPoints) {
+      for (bp <- geometry.getBreakPoints)
         bp.finish()
-      }
       return true
     }
     false
@@ -79,22 +78,35 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     val arcAbove: Arc = arcEntryAbove._1.asInstanceOf[Arc]
     // Deal with the degenerate case where the first two points are at the same y value
     if (!geometry.hasArcs && arcAbove.site.y == point.y) {
-      val newEdge = new VoronoiEdge(arcAbove.site, point)
-      newEdge.p1 = new Point((point.x + arcAbove.site.x) / 2.0, Double.PositiveInfinity)
-      val newBreak = new BreakPoint(arcAbove.site, point, newEdge, false, this)
-      geometry.addBreakPoint(newBreak)
-      geometry.addEdge(newEdge)
-      val arcLeft = new Arc(null, newBreak, this)
-      val arcRight = new Arc(newBreak, null, this)
-      geometry.removeArc(arcAbove)
-      geometry.addArc(arcLeft)
-      geometry.addArc(arcRight)
+      updateGeometryWhenTwoPointsAtSameY(arcAbove, point)
       return
     }
     // Remove the circle event associated with this arc if there is one
     val falseCE = arcEntryAbove._2
     if (falseCE != null) events.remove(falseCE)
 
+    val arcs = updateGeometry(arcAbove, point)
+
+    // Perhaps we can add point param here?
+    // then use map<point, edges? later for drawing the cell edges around a site
+    checkForCircleEvent(arcs._1)
+    checkForCircleEvent(arcs._2)
+  }
+
+  private def updateGeometryWhenTwoPointsAtSameY(arcAbove: Arc, point: Point): Unit = {
+    val newEdge = new VoronoiEdge(arcAbove.site, point)
+    newEdge.p1 = new Point((point.x + arcAbove.site.x) / 2.0, Double.PositiveInfinity)
+    val newBreak = new BreakPoint(arcAbove.site, point, newEdge, false, this)
+    geometry.addBreakPoint(newBreak)
+    geometry.addEdge(newEdge)
+    val arcLeft = new Arc(null, newBreak, this)
+    val arcRight = new Arc(newBreak, null, this)
+    geometry.removeArc(arcAbove)
+    geometry.addArc(arcLeft)
+    geometry.addArc(arcRight)
+  }
+
+  private def updateGeometry(arcAbove: Arc, point: Point): (Arc, Arc) = {
     val breakL = arcAbove.left
     val breakR = arcAbove.right
     val newEdge = new VoronoiEdge(arcAbove.site, point)
@@ -110,11 +122,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     geometry.addArc(arcLeft)
     geometry.addArc(center)
     geometry.addArc(arcRight)
-
-    // Perhaps we can add point param here?
-    // then use map<point, edges? later for drawing the cell edges around a site
-    checkForCircleEvent(arcLeft)
-    checkForCircleEvent(arcRight)
+    (arcLeft, arcRight)
   }
 
   def handleCircleEvent(point: Point, arc: Arc, vert: Point): Unit = {
@@ -162,6 +170,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     geometry.addBreakPoint(newBP)
     arcRight.left = newBP
     arcLeft.right = newBP
+
     checkForCircleEvent(arcLeft)
     checkForCircleEvent(arcRight)
   }
