@@ -86,9 +86,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     if (falseCE != null) events.remove(falseCE)
 
     val arcs = updateGeometry(arcAbove, point)
-
-    // Perhaps we can add point param here?
-    // then use map<point, edges? later for drawing the cell edges around a site
+    
     checkForCircleEvent(arcs._1)
     checkForCircleEvent(arcs._2)
   }

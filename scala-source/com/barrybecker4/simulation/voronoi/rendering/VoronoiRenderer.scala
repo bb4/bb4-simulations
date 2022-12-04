@@ -7,7 +7,7 @@ import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
-import java.awt.{BasicStroke, Color, Dimension}
+import java.awt.{BasicStroke, Color, Dimension, Polygon}
 import java.awt.image.BufferedImage
 import javax.swing.JComponent
 import scala.collection.mutable
@@ -22,6 +22,8 @@ object VoronoiRenderer {
   private val POINT_COLOR = Color.YELLOW
   private val LINE_COLOR = Color.WHITE
   private val BREAK_COLOR = new Color(255, 110, 55)
+  private val POLYGON_FILL_COLOR = new Color(100, 70, 225, 50)
+  private val POLYGON_EDGE_COLOR = new Color(140, 90, 255, 210)
   private val BACKGROUND_COLOR = Color.BLACK
   private val STROKE: BasicStroke = new BasicStroke(0.5)
   private val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
@@ -78,6 +80,11 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
       }
     }
     drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
+
+    // finally draw the polygons representing the regions
+    for (poly <- geometry.getPolygonsForPoints)
+      drawPolygon(poly)
+
     // the original code passed a delay here to give interaction a chance to process, but I'm not sure that it is needed.
     show() // pass 1?
   }
@@ -88,7 +95,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
 
   def show(): Unit = {
     if (panel != null)
-        panel.repaint()
+      panel.repaint()
   }
 
   private def fillCircle(p: Point, radius: Double): Unit = {
@@ -96,6 +103,14 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
     val y: Int = p.y.toInt
     val rad = radius.toInt
     offlineGraphics.fillCircle(x, y, rad)
+  }
+
+  private def drawPolygon(points: Seq[Point]): Unit = {
+    def polygon: Polygon = new Polygon(points.map(_.x.toInt).toArray, points.map(_.y.toInt).toArray, points.length)
+    setColor(POLYGON_FILL_COLOR)
+    offlineGraphics.fillPolygon(polygon)
+    setColor(POLYGON_EDGE_COLOR)
+    offlineGraphics.drawPolygon(polygon)
   }
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {

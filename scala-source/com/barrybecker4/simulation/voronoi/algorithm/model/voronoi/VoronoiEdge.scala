@@ -8,6 +8,7 @@ class VoronoiEdge(val site1: Point, val site2: Point) {
   private val isVertical = site1.y == site2.y
   var p1: Point = _
   var p2: Point = _
+  val midpoint: Point = Point.midpoint(site1, site2)
 
   // parameters for line that the edge lies on
   var m = .0
@@ -19,10 +20,10 @@ class VoronoiEdge(val site1: Point, val site2: Point) {
   }
   else {
     m = -1.0 / ((site1.y - site2.y) / (site1.x - site2.x))
-    val midpoint = Point.midpoint(site1, site2)
     b = midpoint.y - m * midpoint.x
   }
   
+  def getMidpoint: Point = midpoint
 
   def intersection(that: VoronoiEdge): Point = {
     if (this.m == that.m && this.b != that.b && this.isVertical == that.isVertical) return null // no intersection
