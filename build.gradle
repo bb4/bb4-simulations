@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "com.github.maiflai.scalatest" version "0.31" // needed to run scala tests
+    id "com.github.maiflai.scalatest" version "0.32" // needed to run scala tests
 }
 
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
@@ -33,8 +33,8 @@ dependencies {
     implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.barrybecker4:bb4-expression:1.7'
-    implementation 'com.barrybecker4:bb4-sound:1.7'
-    implementation 'com.barrybecker4:bb4-optimization:1.7'
+    implementation 'com.barrybecker4:bb4-sound:1.8-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-optimization:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-ui:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-common:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-math:1.8-SNAPSHOT'
