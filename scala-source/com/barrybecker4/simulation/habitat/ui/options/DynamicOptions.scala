@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
 import com.barrybecker4.simulation.habitat.HabitatSimulator
@@ -15,20 +15,24 @@ import scala.collection.mutable.ArrayBuffer
   */
 class DynamicOptions(val simulator: HabitatSimulator) extends JPanel with SliderGroupChangeListener {
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
+  setLayout(new BorderLayout())
   setPreferredSize(new Dimension(300, 300))
-  private var sliderGroups = ArrayBuffer[CreatureSliderGroup]()
+  private val sliderGroups = ArrayBuffer[CreatureSliderGroup]()
+
+  val tabbedPane = new JTabbedPane()
 
   for (creaturePop <- simulator.getPopulations) {
     val group = new CreatureSliderGroup(creaturePop)
     group.setSliderListener(this)
     sliderGroups.append(group)
-    add(group)
+
+    val groupPanel = new JPanel(new BorderLayout())
+    groupPanel.add(group, BorderLayout.NORTH);
+
+    tabbedPane.add(creaturePop.creatureType.name, groupPanel)
   }
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
-  add(fill)
+
+  add(tabbedPane, BorderLayout.CENTER)
 
 
   def update(): Unit = {}
