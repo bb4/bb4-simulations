@@ -28,8 +28,9 @@ class DynamicOptions(val simulator: HabitatSimulator) extends JPanel with Slider
 
     val groupPanel = new JPanel(new BorderLayout())
     groupPanel.add(group, BorderLayout.NORTH);
-
-    tabbedPane.add(creaturePop.creatureType.name, groupPanel)
+    
+    val creatureType = creaturePop.creatureType
+    tabbedPane.add(s"<html>${creatureType.name} <font color='$color'>&${hexColor(creatureType.color)};</font></html>", groupPanel)
   }
 
   add(tabbedPane, BorderLayout.CENTER)
@@ -37,6 +38,9 @@ class DynamicOptions(val simulator: HabitatSimulator) extends JPanel with Slider
 
   def update(): Unit = {}
   def reset(): Unit = { for (group <- sliderGroups) group.reset() }
+
+  private def hexColor(color: Color): String =
+    "#" + Integer.toHexString(color.getRGB).substring(2)
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {

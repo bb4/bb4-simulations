@@ -4,10 +4,13 @@ package com.barrybecker4.simulation.habitat.model
 import javax.vecmath.Point2d
 
 
-/** Grid that contains all the creatures/ */
+/** Grid that contains all the creatures.
+  * Good performance is achieved by dividing the space up into a grid of cells 
+  * where there are a subset of creatures in each cell.
+  */
 class HabitatGrid(var xDim: Int, var yDim: Int) {
 
-  private var cells = Array.ofDim[Cell](xDim + 1, yDim + 1)
+  private val cells = Array.ofDim[Cell](xDim + 1, yDim + 1)
 
   for (i <- 0 to xDim)
     for (j <- 0 to yDim)

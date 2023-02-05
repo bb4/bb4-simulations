@@ -37,21 +37,13 @@ abstract class Populations extends ArrayBuffer[Population] {
   protected def addPopulations(): Unit
 
   def nextDay(): Unit = {
-    val startTime = System.currentTimeMillis
     for (population <- this) population.nextDay(grid)
-    val afterNextDayTime = System.currentTimeMillis
 
-    // remove any creatures that might have died by starvation or being eaten.
+    // remove any creatures that might have died by starvation or by being eaten.
     for (pop <- this) pop.removeDead()
-    val afterRemoveDeadTime = System.currentTimeMillis
 
     updateFunctions(dayCount)
-    val afterUpdateFunctionsTime = System.currentTimeMillis
-
-//    println("nextDay: " + (afterNextDayTime - startTime) + " ms, " +
-//      "removeDead: " + (afterRemoveDeadTime - afterNextDayTime) + " ms, " +
-//      "updateFunctions: " + (afterUpdateFunctionsTime - afterRemoveDeadTime) + " ms")
-
+    
     dayCount += 1
   }
 

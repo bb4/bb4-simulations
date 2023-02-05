@@ -14,17 +14,17 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
   */
 object CreatureType  {
 
-  val GRASS = new CreatureType("grass",   new Color(40, 255, 20),   2.0,   0.0,     0.0,    11,    42,     1)
-  val WILDEBEEST = new CreatureType("cow", new Color(70, 60, 100), 15.0,   0.002,   0.0001, 25,    94,    10)
-  val RAT = new CreatureType("rat",     new Color(140, 105, 20),    2.0,   0.005,   0.002,   8,    30,     1)
-  val CAT = new CreatureType("cat",     new Color(0, 195, 220),     5.0,   0.01,    0.004,  15,    58,     4)
-  val LION = new CreatureType("lion",   new Color(240, 200, 20),    9.0,   0.02,    0.008,  21,    83,     6)
+  val GRASS = new CreatureType("grass",   new Color(50, 210, 20),   2.0,   0.0,     0.0,    11,    42,     1)
+  val COW = new CreatureType("cow", new Color(140, 60, 170), 15.0,   0.002,   0.0001, 25,    94,    10)
+  val RAT = new CreatureType("rat",     new Color(150, 115, 40),    2.0,   0.005,   0.002,   8,    30,     1)
+  val CAT = new CreatureType("cat",     new Color(200, 105, 20),     5.0,   0.01,    0.004,  15,    58,     4)
+  val LION = new CreatureType("lion",   new Color(210, 210, 0),    9.0,   0.02,    0.008,  21,    83,     6)
 
-  val VALUES = Array(GRASS, WILDEBEEST, RAT, CAT, LION)
+  val VALUES = Array(GRASS, COW, RAT, CAT, LION)
 
   val predatorMap: Map[CreatureType, Set[CreatureType]] = Map(
-    GRASS -> Set(WILDEBEEST, RAT),
-    WILDEBEEST -> Set(LION),
+    GRASS -> Set(COW, RAT),
+    COW -> Set(LION),
     RAT -> Set(CAT, LION),
     CAT -> Set(LION),
     LION -> Set[CreatureType]()
@@ -41,11 +41,11 @@ object CreatureType  {
   }
 }
 
-class CreatureType(val name: String, val color: Color, 
+class CreatureType(val name: String, val color: Color,
                    var size: Double, var maxSpeed: Double, var normalSpeed: Double,
                    var gestationPeriod: Int, var starvationThreshold: Int, var nutritionalValue: Int,
                    var spawnRate: Int) {
-  
+
   def this(name: String, color: Color, size: Double, maxSpeed: Double, normalSpeed: Double,
            gestationPeriod: Int, starvationThreshold: Int, nutritionalValue: Int) = {
     this(name, color, size, maxSpeed, normalSpeed, gestationPeriod, starvationThreshold, nutritionalValue, 0)
