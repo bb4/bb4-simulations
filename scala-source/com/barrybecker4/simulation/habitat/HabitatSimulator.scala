@@ -54,7 +54,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     this.setPaused(false)
   }
 
-  override protected def getInitialTimeStep = 1.0
+  override protected def getInitialTimeStep = 0.1
 
   override def timeStep: Double = {
     options.update()

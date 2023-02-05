@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures
 
 import com.barrybecker4.math.MathUtil
@@ -43,9 +43,25 @@ class Population(var creatureType: CreatureType) {
     * @param grid the habitat grid
     */
   def nextDay(grid: HabitatGrid): Unit = {
+
+    val spawnLocations = creaturesLiveForTheDay(grid)
+
+    for (newLocation <- spawnLocations) {
+      val newCreature = new Creature(creatureType, newLocation)
+      creatures += newCreature
+      grid.getCellForPosition(newLocation).addCreature(newCreature)
+    }
+  }
+
+  /** Figure out if anything edible nearby.
+    * Eat prey if there are things that we eat nearby.
+    * Produce offspring at spawn locations
+    * @return offspring at spawn locations
+    */
+  private def creaturesLiveForTheDay(grid: HabitatGrid): List[Point2d] = {
+
     var spawnLocations = List[Point2d]()
-    // Figure out if anything edible nearby.
-    // Eat prey if there are things that we eat nearby.
+
     for (creature <- creatures) {
       val spawn = creature.nextDay(grid)
       if (spawn) {
@@ -56,15 +72,28 @@ class Population(var creatureType: CreatureType) {
       }
     }
 
-    for (newLocation <- spawnLocations) {
-      val newCrtr = new Creature(creatureType, newLocation)
-      creatures += newCrtr
-      grid.getCellForPosition(newLocation).addCreature(newCrtr)
+    val spawnRate = creatureType.spawnRate
+    if (spawnRate > 0) {
+      for (i <- 0 until spawnRate) {
+        val loc = new Point2d(
+          absMod(MathUtil.RANDOM.nextDouble() * grid.xDim),
+          absMod(MathUtil.RANDOM.nextDouble() * grid.yDim))
+        spawnLocations +:= loc
+      }
     }
+    else if (spawnRate < 0) {
+      val numToKill = -spawnRate
+      val numToRetain = Math.max(spawnLocations.size - numToKill, 0)
+      val numToStillKill = numToKill - (spawnLocations.size - numToRetain)
+      spawnLocations = spawnLocations.take(numToRetain)
+      creatures = creatures.drop(numToStillKill)
+    }
+
+    spawnLocations
   }
 
   /** Remove dead after next day is done. */
-  private[creatures] def removeDead(grid: HabitatGrid): Unit = creatures = creatures.filter(_.isAlive)
+  private[creatures] def removeDead(): Unit = creatures = creatures.filter(_.isAlive)
 
   def getSize: Int = creatures.size
   def getName: String = "Population of " + creatureType.name

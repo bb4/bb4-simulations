@@ -41,8 +41,16 @@ object CreatureType  {
   }
 }
 
-class CreatureType(val name: String, val color: Color, var size: Double, var maxSpeed: Double, var normalSpeed: Double,
-                   var gestationPeriod: Int, var starvationThreshold: Int, var nutritionalValue: Int) {
+class CreatureType(val name: String, val color: Color, 
+                   var size: Double, var maxSpeed: Double, var normalSpeed: Double,
+                   var gestationPeriod: Int, var starvationThreshold: Int, var nutritionalValue: Int,
+                   var spawnRate: Int) {
+  
+  def this(name: String, color: Color, size: Double, maxSpeed: Double, normalSpeed: Double,
+           gestationPeriod: Int, starvationThreshold: Int, nutritionalValue: Int) = {
+    this(name, color, size, maxSpeed, normalSpeed, gestationPeriod, starvationThreshold, nutritionalValue, 0)
+  }
+
   def getPredators: Set[CreatureType] = CreatureType.predatorMap(this)
   def getPreys: Set[CreatureType] = CreatureType.preyMap(this)
   override def toString: String = name

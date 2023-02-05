@@ -18,14 +18,15 @@ object CreatureSliderGroup {
   private val NUTRITION_LABEL = " nutritional value"
   private val NORM_SPEED_LABEL = " normal speed"
   private val MAX_SPEED_LABEL = " top speed"
+  private val SPAWN_RATE_LABEL = " spawn rate"
   private val MIN_FACTOR = 0.2
   private val MAX_FACTOR = 6
 
   private final def createSliderProperties(creaturePop: Population): Array[SliderProperties] = {
     val ctype = creaturePop.creatureType
     val normSpeed = ctype.normalSpeed
-    val props = if (normSpeed == 0) new Array[SliderProperties](4)
-    else new Array[SliderProperties](6)
+    val props = if (normSpeed == 0) new Array[SliderProperties](5)
+    else new Array[SliderProperties](7)
     val creatureName = ctype.name
 
     val size = ctype.size
@@ -44,13 +45,20 @@ object CreatureSliderGroup {
     props(3) = new SliderProperties(creatureName + CreatureSliderGroup.NUTRITION_LABEL, 1,
       CreatureSliderGroup.MAX_FACTOR * nutrition, nutrition)
 
+    val spawnRate = ctype.spawnRate
+    props(4) = new SliderProperties(creatureName + CreatureSliderGroup.SPAWN_RATE_LABEL, -10,
+      10, spawnRate)
+
     if (normSpeed > 0) {
-      props(4) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
+      props(5) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
         CreatureSliderGroup.MAX_FACTOR * normSpeed, normSpeed, 1000.0)
       val maxSpeed = ctype.maxSpeed
-      props(5) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_SPEED_LABEL, 0,
+      props(6) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_SPEED_LABEL, 0,
         CreatureSliderGroup.MAX_FACTOR * maxSpeed, maxSpeed, 1000.0)
     }
+
+
+
     props
   }
 }
@@ -76,6 +84,8 @@ class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSli
         creatureType.normalSpeed = value
       else if (sliderName.endsWith(CreatureSliderGroup.MAX_SPEED_LABEL))
         creatureType.maxSpeed = value
+      else if (sliderName.endsWith(CreatureSliderGroup.SPAWN_RATE_LABEL))
+        creatureType.spawnRate = value.toInt
       else throw new IllegalStateException("Unexpected sliderName:" + sliderName)
     }
   }

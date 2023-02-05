@@ -80,7 +80,8 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     pursuing = true
     speed = cType.maxSpeed
     val distance = nearestPrey.getLocation.distance(location)
-    if (distance < Creature.THRESHOLD_TO_PREY) { //println( this + " about to eat " + nearestPrey);
+    if (distance < Creature.THRESHOLD_TO_PREY) { 
+      // println( this + " about to eat " + nearestPrey);
       eat(nearestPrey)
       direction = randomDirection()
     }
