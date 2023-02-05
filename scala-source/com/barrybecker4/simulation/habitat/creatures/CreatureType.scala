@@ -41,7 +41,7 @@ object CreatureType  {
   }
 }
 
-class CreatureType(val name: String, val color: Color, var size: Double, var normalSpeed: Double, var maxSpeed: Double,
+class CreatureType(val name: String, val color: Color, var size: Double, var maxSpeed: Double, var normalSpeed: Double,
                    var gestationPeriod: Int, var starvationThreshold: Int, var nutritionalValue: Int) {
   def getPredators: Set[CreatureType] = CreatureType.predatorMap(this)
   def getPreys: Set[CreatureType] = CreatureType.preyMap(this)

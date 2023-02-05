@@ -5,9 +5,7 @@ import com.barrybecker4.simulation.habitat.model.HabitatGrid
 
 
 /**
-  * Everything we need to know about a creature.
-  * There are many different sorts of creatures, but they are all represented by instance of this class.
-  * @author Barry Becker
+  * Neigoring creatures.
   */
 object Neighbors {
   /** only pursue prey that is this close to us */
