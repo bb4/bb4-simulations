@@ -10,6 +10,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
+import java.net.URLDecoder
 import scala.collection.mutable
 import scala.io.Source
 
@@ -17,7 +18,6 @@ import scala.io.Source
 object MainTestSuite {
   val SEED = 1236548748
 }
-
 
 class MainTestSuite extends AnyFunSuite {
 
@@ -131,8 +131,8 @@ class MainTestSuite extends AnyFunSuite {
   }
 
   private def getResource(fileName: String): Source = {
-    val resource = getClass.getResource(fileName)
-    val file = new File(resource.getFile)
+    // The extra URLDecoder is needed for Jenkins because it puts %20 in the path instead of spaces.
+    val file = new File(URLDecoder.decode(getClass().getResource(fileName).getFile(), "UTF-8"))
     Source.fromFile(file)
   }
 }
