@@ -10,10 +10,10 @@ import com.barrybecker4.simulation.habitat.creatures.Populations
 import com.barrybecker4.simulation.habitat.creatures.SerengetiPopulations
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
-import javax.swing._
-import java.awt._
 
-import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, PopulationGraphPanel}
+import javax.swing.*
+import java.awt.*
+import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
 
 
 
@@ -32,17 +32,10 @@ object HabitatSimulator {
 
 class HabitatSimulator() extends Simulator("Habitat Simulation") {
   setBackground(Color.WHITE)
-  private var populations = new SerengetiPopulations
+  private val populations = new SerengetiPopulations
   private var options: DynamicOptions = _
-  val graphPanel = new PopulationGraphPanel(populations)
-  val habitatPanel = new HabitatPanel(populations)
-  val splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, habitatPanel, graphPanel)
-  //Provide minimum sizes for the two components in the split pane
-  override val minimumSize = new Dimension(100, 50)
-  habitatPanel.setMinimumSize(minimumSize)
-  graphPanel.setMinimumSize(minimumSize)
-  splitPane.setDividerLocation(350)
-  this.add(splitPane)
+  private val splitPanel = new HabitatSplitPanel(populations)
+  this.add(splitPanel)
 
   override protected def reset(): Unit = {
     this.setPaused(true)
@@ -64,10 +57,14 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   def getPopulations: Populations = populations
 
+  def setNumPixelsPerXPoint(numPixels: Int): Unit = {
+    splitPanel.setNumPixelsPerXPoint(numPixels)
+  }
+  
   /** Draw the population graph under the habitat. */
   override def paint(g: Graphics): Unit = {
-    splitPane.setSize(getSize)
-    splitPane.paint(g)
+    splitPanel.setSize(getSize)
+    splitPanel.paint(g)
   }
 
   override def createDynamicControls: JPanel = {

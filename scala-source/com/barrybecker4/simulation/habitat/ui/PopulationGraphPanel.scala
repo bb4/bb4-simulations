@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016 - 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui
 
 import java.awt._
@@ -14,8 +14,13 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
   */
 class PopulationGraphPanel private[habitat](val populations: Populations) extends JPanel {
 
-  private var graphRenderer: MultipleFunctionRenderer = populations.createFunctionRenderer
+  private val graphRenderer: MultipleFunctionRenderer = populations.createFunctionRenderer
+  graphRenderer.setNumPixelsPerXPoint(2)
 
+  def setNumPixelsPerXPoint(numPixels: Int): Unit = {
+    graphRenderer.setNumPixelsPerXPoint(numPixels)
+  }
+  
   override def paint(g: Graphics): Unit = {
     graphRenderer.setSize(getWidth, getHeight)
     graphRenderer.paint(g)

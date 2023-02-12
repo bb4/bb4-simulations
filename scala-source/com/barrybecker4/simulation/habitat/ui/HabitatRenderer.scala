@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui
 
-import java.awt._
-
+import java.awt.*
 import com.barrybecker4.simulation.habitat.creatures.{Creature, Populations}
+import com.barrybecker4.simulation.habitat.ui.HabitatRenderer.HEALTH_BAR_COLOR
 
 
 /**
@@ -12,6 +12,7 @@ import com.barrybecker4.simulation.habitat.creatures.{Creature, Populations}
   */
 object HabitatRenderer {
   private val SIZE_SCALE = 0.001
+  private val HEALTH_BAR_COLOR = new Color(0, 145, 0)
 }
 
 class HabitatRenderer private[habitat](var populations: Populations) {
@@ -29,7 +30,6 @@ class HabitatRenderer private[habitat](var populations: Populations) {
     val g2 = g.asInstanceOf[Graphics2D]
 
     for (pop <- populations) {
-      g2.setColor(pop.creatureType.color)
       for (creature <- pop.creatures) {
         drawCreature(creature, g2)
       }
@@ -37,6 +37,7 @@ class HabitatRenderer private[habitat](var populations: Populations) {
   }
 
   private def drawCreature(creature: Creature, g2: Graphics2D): Unit = {
+    g2.setColor(creature.cType.color)
     val w = (creature.getSize * width * HabitatRenderer.SIZE_SCALE + 1.0).toInt
     val h = (creature.getSize * height * HabitatRenderer.SIZE_SCALE + 1.0).toInt
     val centerX = (creature.getLocation.x * width).toInt
@@ -46,5 +47,18 @@ class HabitatRenderer private[habitat](var populations: Populations) {
     val vectorEndpointY = (centerY + creature.getVelocity.y * height).toInt
     g2.drawLine(centerX, centerY, vectorEndpointX, vectorEndpointY)
     if (creature.isPursuing) g2.drawOval(centerX - w, centerY - h, 2 * w, 2 * h)
+
+    // draw line to prey
+    if (creature.isPursuing) {
+      g2.setColor(Color.BLACK)
+      val prey = creature.getPrey.get
+      val preyX = (prey.getLocation.x * width).toInt
+      val preyY = (prey.getLocation.y * height).toInt
+      g2.drawLine(centerX, centerY, preyX, preyY)
+    }
+    // draw starvation bar
+    g2.setColor(HEALTH_BAR_COLOR)
+    val healthSize = creature.getHealth / 4
+    g2.drawLine(centerX - 8, centerY + 4, centerX + healthSize, centerY + 4)
   }
 }

@@ -23,7 +23,7 @@ class HabitatGrid(var xDim: Int, var yDim: Int) {
   }
 
   def getNeighborCells(cell: Cell): Array[Cell] = {
-    val nbrCells = new Array[Cell](8)
+    val nbrCells = new Array[Cell](9)
     val xm1 = getSafeX(cell.xIndex - 1)
     val xp1 = getSafeX(cell.xIndex + 1)
     val ym1 = getSafeY(cell.yIndex - 1)
@@ -36,9 +36,10 @@ class HabitatGrid(var xDim: Int, var yDim: Int) {
     nbrCells(5) = cells(xp1)(ym1)
     nbrCells(6) = cells(xp1)(cell.yIndex)
     nbrCells(7) = cells(xp1)(yp1)
+    nbrCells(8) = cell
     nbrCells
   }
 
-  private def getSafeX(xIndex: Int) = Math.abs(xIndex % xDim)
-  private def getSafeY(yIndex: Int) = Math.abs(yIndex % yDim)
+  private def getSafeX(xIndex: Int) = (xIndex + xDim) % xDim
+  private def getSafeY(yIndex: Int) = (yIndex + yDim) % yDim
 }

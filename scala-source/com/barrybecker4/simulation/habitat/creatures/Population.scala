@@ -33,7 +33,8 @@ class Population(var creatureType: CreatureType) {
   private def create(): Unit = {
     creatures = Set[Creature]()
     for (i <- 0 until initialSize)
-      creatures += new Creature(creatureType, new Point2d(MathUtil.RANDOM.nextDouble(), MathUtil.RANDOM.nextDouble()))
+      val pos = new Point2d(MathUtil.RANDOM.nextDouble(), MathUtil.RANDOM.nextDouble())
+      creatures += new Creature(creatureType, pos)
   }
 
   /**
@@ -55,29 +56,19 @@ class Population(var creatureType: CreatureType) {
 
   /** Figure out if anything edible nearby.
     * Eat prey if there are things that we eat nearby.
-    * Produce offspring at spawn locations
     * @return offspring at spawn locations
     */
   private def creaturesLiveForTheDay(grid: HabitatGrid): List[Point2d] = {
 
-    var spawnLocations = List[Point2d]()
-
-    for (creature <- creatures) {
-      val spawn = creature.nextDay(grid)
-      if (spawn) {
-        val loc = creature.getLocation
-        spawnLocations +:= new Point2d(
-          absMod(loc.x + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()),
-          absMod(loc.y + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()))
-      }
-    }
+    var spawnLocations = calculateNaturalSpawnLocations(grid)
 
     val spawnRate = creatureType.spawnRate
     if (spawnRate > 0) {
       for (i <- 0 until spawnRate) {
         val loc = new Point2d(
           absMod(MathUtil.RANDOM.nextDouble() * grid.xDim),
-          absMod(MathUtil.RANDOM.nextDouble() * grid.yDim))
+          absMod(MathUtil.RANDOM.nextDouble() * grid.yDim)
+        )
         spawnLocations +:= loc
       }
     }
@@ -92,10 +83,28 @@ class Population(var creatureType: CreatureType) {
     spawnLocations
   }
 
+  private def calculateNaturalSpawnLocations(grid: HabitatGrid): List[Point2d] = {
+    var spawnLocations = List[Point2d]()
+    for (creature <- creatures) {
+      val spawn = creature.nextDay(grid)
+      if (spawn) {
+        val loc = creature.getLocation
+        spawnLocations +:= new Point2d(
+          absMod(loc.x + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()),
+          absMod(loc.y + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble())
+        )
+      }
+    }
+    spawnLocations
+  }
+
   /** Remove dead after next day is done. */
-  private[creatures] def removeDead(): Unit = creatures = creatures.filter(_.isAlive)
+  private[creatures] def removeDead(): Unit =
+    val origAlive: Int = creatures.size
+    creatures = creatures.filter(_.isAlive)
+    if (creatures.size > origAlive)
+      println("starved: " + (origAlive - creatures.size) + " " + creatureType.name)
 
   def getSize: Int = creatures.size
   def getName: String = "Population of " + creatureType.name
-  private def absMod(value: Double) = Math.abs(value % 1.0)
 }
