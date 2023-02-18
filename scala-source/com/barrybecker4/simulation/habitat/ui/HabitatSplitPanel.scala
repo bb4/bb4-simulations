@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui
 
-import com.barrybecker4.simulation.habitat.creatures.Populations
-
+import com.barrybecker4.simulation.habitat.creatures.populations.Populations
 import java.awt.{BorderLayout, Dimension, Graphics}
 import javax.swing.{JPanel, JSplitPane}
 

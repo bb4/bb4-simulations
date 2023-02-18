@@ -1,8 +1,10 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.habitat.creatures
+package com.barrybecker4.simulation.habitat.creatures.populations
 
 import com.barrybecker4.math.MathUtil
+import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureType, absMod}
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
+
 import javax.vecmath.Point2d
 
 

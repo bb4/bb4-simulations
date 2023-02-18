@@ -2,7 +2,8 @@
 package com.barrybecker4.simulation.habitat.ui
 
 import java.awt.*
-import com.barrybecker4.simulation.habitat.creatures.{Creature, Populations}
+import com.barrybecker4.simulation.habitat.creatures.Creature
+import com.barrybecker4.simulation.habitat.creatures.populations.Populations
 import com.barrybecker4.simulation.habitat.ui.HabitatRenderer.HEALTH_BAR_COLOR
 
 

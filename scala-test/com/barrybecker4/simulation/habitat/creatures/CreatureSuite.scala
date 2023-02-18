@@ -19,8 +19,8 @@ class CreatureSuite extends AnyFunSuite {
   }
 
   test("absMod") {
-    assertResult(Seq(1.1999999999999993, 8.8, 2.1999999999999993, 7.8)) {
-      Seq(1.2, -1.2, 2.2, -2.2).map(v => absMod(v, 10))
+    assertResult(Seq(0.20000000000000018, -0.19999999999999996, 0.20000000000000018, -0.20000000000000018)) {
+      Seq(1.2, -1.2, 2.2, -2.2).map(v => absMod(v))
     }
   }
 

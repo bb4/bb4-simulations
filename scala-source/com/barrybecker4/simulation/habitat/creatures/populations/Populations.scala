@@ -1,11 +1,12 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.habitat.creatures
+// Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+package com.barrybecker4.simulation.habitat.creatures.populations
 
-import java.awt.Color
-import com.barrybecker4.math.function.CountFunction
-import com.barrybecker4.math.function.Function
+import com.barrybecker4.math.function.{CountFunction, Function}
+import com.barrybecker4.simulation.habitat.creatures.populations.Population
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
+
+import java.awt.Color
 import scala.collection.mutable.ArrayBuffer
 
 

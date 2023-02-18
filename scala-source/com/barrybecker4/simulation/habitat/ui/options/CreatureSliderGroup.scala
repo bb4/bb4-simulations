@@ -1,14 +1,15 @@
 // Copyright by Barry G. Becker, 2016-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
-import com.barrybecker4.simulation.habitat.creatures.Population
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
 import CreatureSliderGroup._
+import com.barrybecker4.simulation.habitat.creatures.populations.Population
 
 
 /**
   * Represents a set of sliders to associate with a creature population.
+ *
   * @author Barry Becker
   */
 object CreatureSliderGroup {
