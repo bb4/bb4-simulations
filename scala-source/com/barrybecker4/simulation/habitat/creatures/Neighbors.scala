@@ -12,26 +12,28 @@ import javax.vecmath.Point2d
   */
 object Neighbors {
   /** only pursue prey that is this close to us */
-  private val SMELL_NEIGHBOR_DISTANCE = 0.2
-  private val DOUBLE_SMELL_DISTANCE = 1.5 * SMELL_NEIGHBOR_DISTANCE
+  private val SMELL_NEIGHBOR_DISTANCE = 0.25
 
   def distanceTo(loc1: Point2d, loc2: Point2d): Double = {
-    val rawDist = getRawDist(loc1, loc2)
+    val rawDist = getRawVector(loc1, loc2)
     Math.sqrt(rawDist.x * rawDist.x + rawDist.y * rawDist.y)
   }
 
   def getDirectionTo(loc1: Point2d, loc2: Point2d): Double = {
-    val rawDist = getRawDist(loc1, loc2)
+    val rawDist = getRawVector(loc1, loc2)
     Math.atan2(rawDist.y, rawDist.x)
   }
 
-  private def getRawDist(loc1: Point2d, loc2: Point2d): Point2d = {
-    val rawXDist = Math.abs(loc1.x - loc2.x)
-    val rawYDist = Math.abs(loc1.y - loc2.y)
-    new Point2d(
-      if (rawXDist > DOUBLE_SMELL_DISTANCE) 1.0 - rawXDist else rawXDist,
-      if (rawYDist > DOUBLE_SMELL_DISTANCE) 1.0 - rawYDist else rawYDist
-    )
+  private def getRawVector(loc1: Point2d, loc2: Point2d): Point2d = {
+    val rawXDist = absMod(loc2.x) - absMod(loc1.x)
+    val rawYDist = absMod(loc2.y) - absMod(loc1.y)
+    new Point2d(modDist(rawXDist), modDist(rawYDist))
+  }
+
+  private def modDist(rawDist: Double): Double = {
+    if (Math.abs(rawDist) > 0.5)
+      if (rawDist > 0) 1.0 - rawDist else 1.0 + rawDist
+    else rawDist
   }
 }
 
@@ -50,11 +52,12 @@ class Neighbors private[creatures](var creature: Creature, var grid: HabitatGrid
     var nearestPreyDistance = Double.MaxValue
     var nearestFriendDistance = Double.MaxValue
     val cells = grid.getNeighborCells(grid.getCellForPosition(creature.getLocation))
+    val creatureLoc = creature.getLocation
 
     for (cell <- cells) {
       for (nearbyCreature <- cell.creatures) {
         if (nearbyCreature != creature) {
-          val dist = distanceTo(nearbyCreature.getLocation, creature.getLocation)
+          val dist = distanceTo(creatureLoc, nearbyCreature.getLocation)
           if (dist < Neighbors.SMELL_NEIGHBOR_DISTANCE) if (nearbyCreature.getType eq cType) {
             flockFriends +:= nearbyCreature
             if (dist < nearestFriendDistance) {
@@ -62,9 +65,11 @@ class Neighbors private[creatures](var creature: Creature, var grid: HabitatGrid
               nearestFriend = Some(nearbyCreature)
             }
           }
-          else if (cType.getPreys.contains(nearbyCreature.getType)) if (dist < nearestPreyDistance) {
-            nearestPreyDistance = dist
-            nearestPrey = Some(nearbyCreature)
+          else if (cType.getPreys.contains(nearbyCreature.getType)) {
+            if (dist < nearestPreyDistance) {
+              nearestPreyDistance = dist
+              nearestPrey = Some(nearbyCreature)
+            }
           }
         }
       }

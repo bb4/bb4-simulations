@@ -6,7 +6,7 @@ import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
-import com.barrybecker4.simulation.habitat.creatures.populations.{Populations, PredPreyPopulations}
+import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatPopulations, Populations, SerengetiPopulations}
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
 
@@ -31,7 +31,7 @@ object HabitatSimulator {
 
 class HabitatSimulator() extends Simulator("Habitat Simulation") {
   setBackground(Color.WHITE)
-  private val populations = new PredPreyPopulations
+  private val populations = new SerengetiPopulations
   private var options: DynamicOptions = _
   private val splitPanel = new HabitatSplitPanel(populations)
   this.add(splitPanel)

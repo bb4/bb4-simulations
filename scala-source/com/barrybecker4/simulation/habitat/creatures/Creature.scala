@@ -3,9 +3,12 @@ package com.barrybecker4.simulation.habitat.creatures
 
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.math.MathUtil
+import com.barrybecker4.simulation.habitat.creatures.Creature._
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
+
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
+
 
 
 /**
@@ -16,7 +19,15 @@ import javax.vecmath.Vector2d
   */
 object Creature {
   /** When this close we are considered on top ot the prey */
-  private val THRESHOLD_TO_PREY = 0.005
+  private val THRESHOLD_TO_PREY = 0.002
+
+  /** when more hungary than this, pregnancy gets aborted  */
+  private val PREGNANCY_HUNGER_THRESH = 0.8
+
+  /** If not at least this hungary, then won't chase prey */
+  private val HUNGRY_THRESH = 0.2
+
+  private val DEBUG = false
 }
 
 class Creature private[creatures](var cType: CreatureType, var location: Point2d) {
@@ -52,20 +63,28 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
   def nextDay(grid: HabitatGrid): Boolean = {
     var spawn = false
     age += 1
-    if (hunger < 0.5 * cType.starvationThreshold && age > cType.timeToMaturity)
+    if (age > cType.timeToMaturity)
       numDaysPregnant += 1
+    if (hunger > PREGNANCY_HUNGER_THRESH * cType.starvationThreshold) {
+      numDaysPregnant = 0 // stillborn
+    }
     hunger += 1
-    if (hunger >= cType.starvationThreshold) {
-      //println(" --- " + this.cType.name + " starved to death at age=" + age + " with starveThresh=" + cType.starvationThreshold)
+    if (hunger >= cType.starvationThreshold || age > cType.maxAge) {
+      if (DEBUG) {
+        if (age > cType.maxAge)
+          println(nameAndId + " died of old age at age=" + age + " with starveThresh=" + cType.starvationThreshold)
+        else
+          println(nameAndId + " starved to death at age=" + age + " with starveThresh=" + cType.starvationThreshold)
+      }
       alive = false
       false
     } else {
-      if (numDaysPregnant >= cType.gestationPeriod) { // if very hungary, abort the fetus
-        if (hunger > cType.starvationThreshold / 2) numDaysPregnant = 0
-        else { // spawn new child.
-          spawn = true
-          numDaysPregnant = 0
-        }
+      if (numDaysPregnant >= cType.gestationPeriod) {
+        // spawn new child.
+        spawn = true
+        numDaysPregnant = 0
+        if (DEBUG)
+          println(s"new ${nameAndId} born")
       }
       if (prey.isDefined) {
         moveTowardPreyAndEatIfPossible(prey.get)
@@ -73,7 +92,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
       }
       else if (speed > 0) {
         val nbrs = new Neighbors(this, grid)
-        if (hunger > cType.starvationThreshold / 5 && nbrs.nearestPrey.isDefined && nbrs.nearestPrey.get.isAlive)
+        if (hunger > HUNGRY_THRESH * cType.starvationThreshold && nbrs.nearestPrey.isDefined && nbrs.nearestPrey.get.isAlive)
           prey = nbrs.nearestPrey
           moveTowardPreyAndEatIfPossible(prey.get)
         else
@@ -85,19 +104,21 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
   }
 
   private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature): Unit = {
-    speed = if (numDaysPregnant > 0) cType.normalSpeed else cType.maxSpeed
+    // Can't run as fast when pregnant
+    speed = if (numDaysPregnant > cType.gestationPeriod / 2)
+      cType.normalSpeed else cType.maxSpeed
     val distance = Neighbors.distanceTo(getLocation, nearestPrey.getLocation)
-    // println(this.getName + " is pursuing " + nearestPrey.getName + " with speed=" + speed + " dist=" + distance)
 
-    if (distance < Creature.THRESHOLD_TO_PREY) {
+    if (distance < THRESHOLD_TO_PREY) {
       eatPrey(nearestPrey)
       direction = randomDirection()
     }
     else {
       direction = Neighbors.getDirectionTo(getLocation, nearestPrey.getLocation)
       if (distance < cType.maxSpeed) speed = distance
-      //println(s"pursuing from $getLocation to ${nearestPrey.getLocation} " +
-      //  s"\n  with vel=${getVelocity}")
+      if (DEBUG)
+        println(s"$nameAndId pursuing from $getLocation to ${nearestPrey.getLocation} " +
+          s"\n  with vel=${getVelocity}")
     }
   }
 
@@ -121,7 +142,6 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
       val flockDirection = (nearestFriend.get.direction + directionToCOM) / 2.0
       direction = cType.flockTendancy * flockDirection + (1.0 - cType.flockTendancy) * perturbedDirection
     }
-
   }
 
   private def moveToNewLocation(grid: HabitatGrid): Unit = {
@@ -138,12 +158,15 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     * @param creature the creature we will now eat.
     */
   private def eatPrey(creature: Creature): Unit = {
-    println(" *** " + this.cType.name + " ate " + creature.cType.name)
+    if (DEBUG)
+      println(" *** " + nameAndId + " ate " + creature.cType.name)
     hunger = Math.max(0, hunger - creature.cType.nutritionalValue)
     creature.kill()
     prey = None
     speed = cType.normalSpeed
   }
 
-  override def toString: String = getName + " hunger=" + hunger + " pregnant=" + numDaysPregnant + " alive=" + alive
+  private def nameAndId: String = s"$getName ${Integer.toHexString(hashCode())}"
+  override def toString: String =
+    s"$getName hunger=$hunger pregnant=$numDaysPregnant alive=$alive"
 }

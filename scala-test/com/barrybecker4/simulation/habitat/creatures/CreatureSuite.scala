@@ -12,7 +12,7 @@ class CreatureSuite extends AnyFunSuite {
   test("Creature serialization") {
 
     val creature = new Creature(CreatureType.CAT, new Point2d(2, 3))
-
+    
     assertResult("cat hunger=0 pregnant=0 alive=true") {
       creature.toString
     }

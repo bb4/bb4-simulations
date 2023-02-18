@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+// Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures.populations
 
 import com.barrybecker4.math.function.{CountFunction, Function}
@@ -30,7 +30,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   }
 
   def reset(): Unit = {
-    grid = new HabitatGrid(20, 15)
+    grid = new HabitatGrid(10, 6)
     for (pop <- this) pop.reset()
     updateGridCellCounts()
   }

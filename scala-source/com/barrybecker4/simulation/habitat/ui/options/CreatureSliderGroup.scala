@@ -16,6 +16,7 @@ object CreatureSliderGroup {
   private val SIZE_LABEL = " size"
   private val GESTATION_LABEL = " gestation period"
   private val STARVATION_LABEL = " starvation time"
+  private val MAX_AGE_LABEL = " max age"
   private val NUTRITION_LABEL = " nutritional value"
   private val NORM_SPEED_LABEL = " normal speed"
   private val MAX_SPEED_LABEL = " top speed"
@@ -26,8 +27,8 @@ object CreatureSliderGroup {
   private final def createSliderProperties(creaturePop: Population): Array[SliderProperties] = {
     val ctype = creaturePop.creatureType
     val normSpeed = ctype.normalSpeed
-    val props = if (normSpeed == 0) new Array[SliderProperties](5)
-    else new Array[SliderProperties](7)
+    val props = if (normSpeed == 0) new Array[SliderProperties](6)
+    else new Array[SliderProperties](8)
     val creatureName = ctype.name
 
     val size = ctype.size
@@ -42,23 +43,25 @@ object CreatureSliderGroup {
     props(2) = new SliderProperties(creatureName + CreatureSliderGroup.STARVATION_LABEL,
       (CreatureSliderGroup.MIN_FACTOR * starveTime).toInt, CreatureSliderGroup.MAX_FACTOR * starveTime, starveTime)
 
+    val maxAge = ctype.maxAge
+    props(3) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_AGE_LABEL,
+      (CreatureSliderGroup.MIN_FACTOR * maxAge).toInt, CreatureSliderGroup.MAX_FACTOR * maxAge, maxAge)
+
     val nutrition = ctype.nutritionalValue
-    props(3) = new SliderProperties(creatureName + CreatureSliderGroup.NUTRITION_LABEL, 1,
+    props(4) = new SliderProperties(creatureName + CreatureSliderGroup.NUTRITION_LABEL, 1,
       CreatureSliderGroup.MAX_FACTOR * nutrition, nutrition)
 
     val spawnRate = ctype.spawnRate
-    props(4) = new SliderProperties(creatureName + CreatureSliderGroup.SPAWN_RATE_LABEL, -10,
+    props(5) = new SliderProperties(creatureName + CreatureSliderGroup.SPAWN_RATE_LABEL, -10,
       10, spawnRate)
 
     if (normSpeed > 0) {
-      props(5) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
+      props(6) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
         CreatureSliderGroup.MAX_FACTOR * normSpeed, normSpeed, 1000.0)
       val maxSpeed = ctype.maxSpeed
-      props(6) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_SPEED_LABEL, 0,
+      props(7) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_SPEED_LABEL, 0,
         CreatureSliderGroup.MAX_FACTOR * maxSpeed, maxSpeed, 1000.0)
     }
-
-
 
     props
   }
