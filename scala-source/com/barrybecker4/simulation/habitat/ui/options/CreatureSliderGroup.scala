@@ -82,6 +82,8 @@ class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSli
         creatureType.gestationPeriod = value.toInt
       else if (sliderName.endsWith(CreatureSliderGroup.STARVATION_LABEL))
         creatureType.starvationThreshold = value.toInt
+      else if (sliderName.endsWith(CreatureSliderGroup.MAX_AGE_LABEL))
+        creatureType.maxAge = value.toInt
       else if (sliderName.endsWith(CreatureSliderGroup.NUTRITION_LABEL))
         creatureType.nutritionalValue = value.toInt
       else if (sliderName.endsWith(CreatureSliderGroup.NORM_SPEED_LABEL))

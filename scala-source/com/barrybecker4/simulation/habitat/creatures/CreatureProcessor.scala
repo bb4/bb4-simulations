@@ -1,0 +1,105 @@
+// Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.habitat.creatures
+
+import com.barrybecker4.common.concurrency.ThreadUtil
+import com.barrybecker4.math.MathUtil
+import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor.*
+import com.barrybecker4.simulation.habitat.model.HabitatGrid
+import javax.vecmath.{Point2d, Vector2d}
+
+
+/**
+  * Everything we need to know about a creature.
+  * There are many different sorts of creatures, but they are all represented by instance of this class.
+  *
+  * @author Barry Becker
+  */
+object CreatureProcessor {
+  /** When this close we are considered on top ot the prey */
+  private val THRESHOLD_TO_PREY = 0.002
+  /** If not at least this hungary, then won't chase prey */
+  private val HUNGRY_THRESH = 0.2
+  private val DEBUG = false
+}
+
+case class CreatureProcessor(creature: Creature) {
+
+  /** @return true if new child spawned */
+  def nextDay(grid: HabitatGrid): Boolean = {
+    val a = creature.getAttributes
+    val cType = creature.cType
+    var spawn = false
+    a.adjustAgeAndHunger(cType)
+
+    if (a.hunger >= cType.starvationThreshold || a.age > cType.maxAge) {
+      if (DEBUG) {
+        val cause = if (a.age > cType.maxAge) "died of old age" else "starved to death"
+        println(s"${creature.nameAndId} $cause at age=${a.age} with starveThresh=${cType.starvationThreshold}")
+      }
+      a.alive = false
+    } else {
+      if (a.numDaysPregnant >= cType.gestationPeriod) {
+        // spawn new child.
+        spawn = true
+        a.numDaysPregnant = 0
+        if (DEBUG)
+          println(s"new ${creature.nameAndId} born")
+      }
+      doMovement(grid)
+    }
+    spawn
+  }
+  
+  private def doMovement(grid: HabitatGrid): Unit = {
+    val a = creature.getAttributes
+    if (a.prey.isDefined) {
+      moveTowardPreyAndEatIfPossible(a.prey.get)
+      moveToNewLocation(grid)
+    }
+    else if (a.speed > 0) {
+      val nbrs = new Neighbors(creature, grid)
+      if (a.hunger > HUNGRY_THRESH * creature.cType.starvationThreshold && nbrs.nearestPrey.isDefined && nbrs.nearestPrey.get.isAlive)
+        a.prey = nbrs.nearestPrey
+        moveTowardPreyAndEatIfPossible(a.prey.get)
+      else
+        a.flock(creature.cType, nbrs.flockFriends, nbrs.nearestFriend) // move toward friends and swarm
+      moveToNewLocation(grid)
+    }
+  }
+
+  private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature): Unit = {
+    val a = creature.getAttributes
+    val cType = creature.cType
+    // Can't run as fast when pregnant
+    a.speed = if (a.numDaysPregnant > cType.gestationPeriod / 2)
+      cType.normalSpeed else cType.maxSpeed
+    val distance = Neighbors.distanceTo(a.location, nearestPrey.getLocation)
+
+    if (distance < THRESHOLD_TO_PREY) {
+      eatPrey(nearestPrey)
+      a.direction = randomDirection()
+    }
+    else {
+      a.direction = Neighbors.getDirectionTo(a.location, nearestPrey.getLocation)
+      if (distance < cType.maxSpeed) a.speed = distance
+      if (DEBUG)
+        println(s"$creature.nameAndId pursuing from $a.getLocation to ${nearestPrey.getLocation} " +
+          s"\n  with vel=${a.getVelocity}")
+    }
+  }
+
+  private def moveToNewLocation(grid: HabitatGrid): Unit = {
+    val a = creature.getAttributes
+    val oldLocation = a.location
+    a.location = a.computeNewPosition()
+    grid.move(oldLocation, a.location, creature)
+  }
+
+  /** @param thePrey the creature we will now eat.
+    */
+  private def eatPrey(thePrey: Creature): Unit = {
+    if (DEBUG)
+      println(" *** " + creature.nameAndId + " ate " + thePrey.cType.name)
+    creature.getAttributes.eatPrey(thePrey, creature.cType.normalSpeed)
+  }
+}

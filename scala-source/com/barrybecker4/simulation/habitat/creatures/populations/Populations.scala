@@ -41,7 +41,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   def nextDay(): Unit = {
     for (population <- this) population.nextDay(grid)
 
-    // remove any creatures that might have died by starvation or by being eaten.
+    // remove any creatures that might have died by old age, starvation or by being eaten.
     for (pop <- this) pop.removeDead()
 
     updateFunctions(dayCount)

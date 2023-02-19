@@ -27,6 +27,8 @@ case class HabitatGrid(smellDistance: Double) {
   def getYDim: Int = yDim
 
   def getCellForPosition(position: Point2d): Cell = {
+    assert(position.x >= 0 && position.x < 1)
+    assert(position.y >= 0 && position.y < 1)
     val x = (position.x * xDim).toInt
     val y = (position.y * yDim).toInt
     cells(x)(y)

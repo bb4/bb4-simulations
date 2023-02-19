@@ -15,4 +15,7 @@ class Cell(var xIndex: Int, var yIndex: Int) {
   def addCreature(c: Creature): Unit = { creatures += c}
   def removeCreature(c: Creature): Unit = { creatures -= c}
   def getNumCreatures: Int = creatures.size
+  
+  override def toString: String = 
+    s"Cell($xIndex, $yIndex)"
 }
