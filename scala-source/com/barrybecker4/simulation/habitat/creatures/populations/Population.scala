@@ -68,8 +68,8 @@ class Population(var creatureType: CreatureType) {
     if (spawnRate > 0) {
       for (i <- 0 until spawnRate) {
         val loc = new Point2d(
-          absMod(MathUtil.RANDOM.nextDouble() * grid.xDim),
-          absMod(MathUtil.RANDOM.nextDouble() * grid.yDim)
+          absMod(MathUtil.RANDOM.nextDouble() * grid.getXDim),
+          absMod(MathUtil.RANDOM.nextDouble() * grid.getYDim)
         )
         spawnLocations +:= loc
       }

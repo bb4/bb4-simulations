@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.habitat.creatures.populations
 
 import com.barrybecker4.math.function.{CountFunction, Function}
+import com.barrybecker4.simulation.habitat.creatures.Neighbors
 import com.barrybecker4.simulation.habitat.creatures.populations.Population
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
@@ -23,14 +24,14 @@ abstract class Populations extends ArrayBuffer[Population] {
   initialize()
 
   private def initialize(): Unit = {
-    grid = new HabitatGrid(20, 15)
+    grid = createHabitatGrid()
     this.clear()
     addPopulations()
     updateGridCellCounts()
   }
 
   def reset(): Unit = {
-    grid = new HabitatGrid(10, 6)
+    grid = createHabitatGrid()
     for (pop <- this) pop.reset()
     updateGridCellCounts()
   }
@@ -77,5 +78,9 @@ abstract class Populations extends ArrayBuffer[Population] {
         cell.addCreature(c)
       }
     }
+  }
+  
+  private def createHabitatGrid(): HabitatGrid = {
+    new HabitatGrid(Neighbors.SMELL_NEIGHBOR_DISTANCE)
   }
 }

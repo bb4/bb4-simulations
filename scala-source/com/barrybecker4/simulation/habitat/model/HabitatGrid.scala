@@ -7,15 +7,22 @@ import javax.vecmath.Point2d
 /** Grid that contains all the creatures.
   * Good performance is achieved by dividing the space up into a grid of cells 
   * where there are a subset of creatures in each cell.
+  * @param smellDistance the distance that a creature can smell another creature (0, 1).
   */
-class HabitatGrid(var xDim: Int, var yDim: Int) {
+case class HabitatGrid(smellDistance: Double) {
 
+  private val xDim = Math.ceil(1.0 / smellDistance).toInt
+  private val yDim = xDim
   private val cells = Array.ofDim[Cell](xDim + 1, yDim + 1)
-
+  
+  
   for (i <- 0 to xDim)
     for (j <- 0 to yDim)
       cells(i)(j) = new Cell(i, j)
 
+  def getXDim: Int = xDim
+  def getYDim: Int = yDim
+  
   def getCellForPosition(position: Point2d): Cell = {
     val x = (position.x * xDim).toInt
     val y = (position.y * yDim).toInt

@@ -12,7 +12,7 @@ import javax.vecmath.Point2d
   */
 object Neighbors {
   /** only pursue prey that is this close to us */
-  private val SMELL_NEIGHBOR_DISTANCE = 0.25
+  val SMELL_NEIGHBOR_DISTANCE = 0.2
 
   def distanceTo(loc1: Point2d, loc2: Point2d): Double = {
     val rawDist = getRawVector(loc1, loc2)
