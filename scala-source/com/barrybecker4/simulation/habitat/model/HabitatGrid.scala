@@ -1,6 +1,9 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.model
 
+import com.barrybecker4.common.geometry.Location
+import com.barrybecker4.simulation.habitat.creatures.Creature
+
 import javax.vecmath.Point2d
 
 
@@ -14,15 +17,15 @@ case class HabitatGrid(smellDistance: Double) {
   private val xDim = Math.ceil(1.0 / smellDistance).toInt
   private val yDim = xDim
   private val cells = Array.ofDim[Cell](xDim + 1, yDim + 1)
-  
-  
+
+
   for (i <- 0 to xDim)
     for (j <- 0 to yDim)
       cells(i)(j) = new Cell(i, j)
 
   def getXDim: Int = xDim
   def getYDim: Int = yDim
-  
+
   def getCellForPosition(position: Point2d): Cell = {
     val x = (position.x * xDim).toInt
     val y = (position.y * yDim).toInt
@@ -47,6 +50,17 @@ case class HabitatGrid(smellDistance: Double) {
     nbrCells
   }
 
+  def move(oldLocation: Point2d, newLocation: Point2d, creature: Creature): Unit = {
+    val oldCell = getCellForPosition(oldLocation)
+    val newCell = getCellForPosition(newLocation)
+    if (newCell != oldCell) {
+      newCell.addCreature(creature)
+      oldCell.removeCreature(creature)
+    }
+  }
+
   private def getSafeX(xIndex: Int) = (xIndex + xDim) % xDim
+
   private def getSafeY(yIndex: Int) = (yIndex + yDim) % yDim
+
 }

@@ -84,7 +84,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
         spawn = true
         numDaysPregnant = 0
         if (DEBUG)
-          println(s"new ${nameAndId} born")
+          println(s"new $nameAndId born")
       }
       if (prey.isDefined) {
         moveTowardPreyAndEatIfPossible(prey.get)
@@ -145,13 +145,9 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
   }
 
   private def moveToNewLocation(grid: HabitatGrid): Unit = {
+    val oldLocation = location
     location = computeNewPosition()
-    val oldCell = grid.getCellForPosition(location)
-    val newCell = grid.getCellForPosition(location)
-    if (newCell != oldCell) {
-      newCell.addCreature(this)
-      oldCell.removeCreature(this)
-    }
+    grid.move(oldLocation, location, this)
   }
 
   /**
