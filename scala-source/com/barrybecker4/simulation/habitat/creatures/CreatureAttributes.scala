@@ -81,10 +81,10 @@ class CreatureAttributes private[creatures](
   }
 
   def doneEating(normalSpeed: Double): Unit = {
-    isEating = false
     assert(prey.isDefined)
     prey.get.getAttributes.age = prey.get.cType.maxAge - DECOMPOSE_TIME
     prey = None
+    isEating = false
     speed = normalSpeed
     direction = randomDirection()
   }

@@ -57,11 +57,16 @@ case class CreatureProcessor(creature: Creature) {
     val a = creature.getAttributes
     val cType = creature.cType
     if (a.isEating) {
-      a.prey.get.getAttributes.hitPoints -= cType.eatRate
-      a.hitPoints = cType.nutritionalValue
-      a.hunger = Math.max(0, a.hunger - cType.eatRate)
-      if (a.isEating && a.hunger == 0)
-        a.doneEating(cType.normalSpeed)
+      if (a.prey.isEmpty) {
+        a.isEating = false
+      }
+      else {
+        a.prey.get.getAttributes.hitPoints -= cType.eatRate
+        a.hitPoints = cType.nutritionalValue
+        a.hunger = Math.max(0, a.hunger - cType.eatRate)
+        if (a.isEating && a.hunger == 0)
+          a.doneEating(cType.normalSpeed)
+      }
     }
 
     if (a.prey.isDefined && !a.isBeingEaten) {
@@ -94,7 +99,7 @@ case class CreatureProcessor(creature: Creature) {
       a.direction = Neighbors.getDirectionTo(a.location, nearestPrey.getLocation)
       if (distance < cType.maxSpeed) a.speed = distance
       if (DEBUG)
-        println(s"$creature.nameAndId pursuing from $a.getLocation to ${nearestPrey.getLocation} " +
+        println(s"${creature.nameAndId} pursuing ${nearestPrey.cType.name} from ${a.location} to ${nearestPrey.getLocation} " +
           s"\n  with vel=${a.getVelocity}")
     }
   }

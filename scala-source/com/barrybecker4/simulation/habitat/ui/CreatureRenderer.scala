@@ -26,8 +26,8 @@ case class CreatureRenderer(width: Int, height: Int) {
     // if being eaten, and has ability to move, draw some blood
     if (creature.isBeingEaten && creature.cType.maxSpeed > 0) {
       g2.setColor(BLOOD_RED)
-      val w = (creature.getSize * width  * (1 + Math.random()) * SIZE_SCALE).toInt
-      val h = (creature.getSize * height * (1 + Math.random()) * SIZE_SCALE).toInt
+      val w = (creature.getSize * width  * (1.1 + Math.random()) * SIZE_SCALE + 1).toInt
+      val h = (creature.getSize * height * (1.1 + Math.random()) * SIZE_SCALE + 1).toInt
       val centerX = (creature.getLocation.x * width).toInt
       val centerY = (creature.getLocation.y * height).toInt
       g2.fillOval(centerX - w / 2, centerY - h / 2, w, h)
@@ -42,6 +42,7 @@ case class CreatureRenderer(width: Int, height: Int) {
     val vectorEndpointX = (centerX + creature.getVelocity.x * width).toInt
     val vectorEndpointY = (centerY + creature.getVelocity.y * height).toInt
     g2.drawLine(centerX, centerY, vectorEndpointX, vectorEndpointY)
+
     if (creature.isPursuing) 
       g2.drawOval(centerX - w, centerY - h, 2 * w, 2 * h)
 

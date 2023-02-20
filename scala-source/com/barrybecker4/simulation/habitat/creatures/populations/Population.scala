@@ -101,9 +101,12 @@ class Population(var creatureType: CreatureType) {
   }
 
   /** Remove dead after next day is done. */
-  private[creatures] def removeDead(): Unit =
+  private[creatures] def removeDead(grid: HabitatGrid): Unit =
     val origAlive: Int = creatures.size
-    creatures = creatures.filter(_.isAlive)
+    
+    val (living, dead) = creatures.partition(_.isAlive)
+    grid.removeCreatures(dead)
+    creatures = living
     if (creatures.size > origAlive)
       println("starved: " + (origAlive - creatures.size) + " " + creatureType.name)
 

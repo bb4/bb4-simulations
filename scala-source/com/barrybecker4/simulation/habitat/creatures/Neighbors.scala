@@ -58,17 +58,19 @@ class Neighbors private[creatures](var creature: Creature, var grid: HabitatGrid
       for (nearbyCreature <- cell.creatures) {
         if (nearbyCreature != creature) {
           val dist = distanceTo(creatureLoc, nearbyCreature.getLocation)
-          if (dist < Neighbors.SMELL_NEIGHBOR_DISTANCE) if (nearbyCreature.getType eq cType) {
-            flockFriends +:= nearbyCreature
-            if (dist < nearestFriendDistance) {
-              nearestFriendDistance = dist
-              nearestFriend = Some(nearbyCreature)
+          if (dist < Neighbors.SMELL_NEIGHBOR_DISTANCE) {
+            if (nearbyCreature.getType eq cType) {
+              flockFriends +:= nearbyCreature
+              if (dist < nearestFriendDistance) {
+                nearestFriendDistance = dist
+                nearestFriend = Some(nearbyCreature)
+              }
             }
-          }
-          else if (cType.getPreys.contains(nearbyCreature.getType)) {
-            if (dist < nearestPreyDistance) {
-              nearestPreyDistance = dist
-              nearestPrey = Some(nearbyCreature)
+            else if (cType.getPreys.contains(nearbyCreature.getType)) {
+              if (dist < nearestPreyDistance) {
+                nearestPreyDistance = dist
+                nearestPrey = Some(nearbyCreature)
+              }
             }
           }
         }

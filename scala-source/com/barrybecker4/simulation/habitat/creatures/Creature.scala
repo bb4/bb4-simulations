@@ -19,7 +19,10 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
     new CreatureAttributes(0, 0, 0,
       cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false, None)
 
-  def kill(): Unit = { attributes.isBeingEaten = true }
+  def kill(): Unit = { 
+    attributes.isBeingEaten = true 
+    attributes.prey = None
+  }
   def isAlive: Boolean = attributes.hitPoints > 0
   def isPursuing: Boolean = attributes.prey.isDefined
   def isBeingEaten: Boolean = attributes.isBeingEaten

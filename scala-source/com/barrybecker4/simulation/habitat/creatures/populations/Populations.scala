@@ -42,7 +42,7 @@ abstract class Populations extends ArrayBuffer[Population] {
     for (population <- this) population.nextDay(grid)
 
     // remove any creatures that might have died by old age, starvation or by being eaten.
-    for (pop <- this) pop.removeDead()
+    for (pop <- this) pop.removeDead(grid)
 
     updateFunctions(dayCount)
     
@@ -81,6 +81,6 @@ abstract class Populations extends ArrayBuffer[Population] {
   }
   
   private def createHabitatGrid(): HabitatGrid = {
-    new HabitatGrid(Neighbors.SMELL_NEIGHBOR_DISTANCE)
+    HabitatGrid(Neighbors.SMELL_NEIGHBOR_DISTANCE)
   }
 }

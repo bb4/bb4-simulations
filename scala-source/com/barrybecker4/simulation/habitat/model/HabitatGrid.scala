@@ -52,6 +52,13 @@ case class HabitatGrid(smellDistance: Double) {
     nbrCells
   }
 
+  def removeCreatures(creatures: Set[Creature]): Unit = {
+    for (creature <- creatures) {
+      val cell = getCellForPosition(creature.getLocation)
+      cell.removeCreature(creature)
+    }
+  }
+
   def move(oldLocation: Point2d, newLocation: Point2d, creature: Creature): Unit = {
     val oldCell = getCellForPosition(oldLocation)
     val newCell = getCellForPosition(newLocation)

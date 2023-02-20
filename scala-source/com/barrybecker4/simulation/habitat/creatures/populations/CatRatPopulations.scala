@@ -11,7 +11,8 @@ import com.barrybecker4.simulation.habitat.creatures.populations.{Population, Po
   */
 class CatRatPopulations extends Populations {
   override def addPopulations(): Unit = {
-    this.append(Population.createPopulation(CreatureType.RAT, 7))
-    this.append(Population.createPopulation(CreatureType.CAT, 2))
+    this.append(Population.createPopulation(CreatureType.RAT, 70))
+    this.append(Population.createPopulation(CreatureType.CAT, 15))
+    this.append(Population.createPopulation(CreatureType.GRASS, 100))
   }
 }
