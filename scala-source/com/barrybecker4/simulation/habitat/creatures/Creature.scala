@@ -16,12 +16,13 @@ import javax.vecmath.Vector2d
 class Creature private[creatures](var cType: CreatureType, var location: Point2d) {
 
   private val attributes =
-    new CreatureAttributes(0, 0, 0, true,
-      cType.normalSpeed, randomDirection(), location, None)
+    new CreatureAttributes(0, 0, 0,
+      cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false, None)
 
-  def kill(): Unit = { attributes.alive = false }
-  def isAlive: Boolean = attributes.alive
+  def kill(): Unit = { attributes.isBeingEaten = true }
+  def isAlive: Boolean = attributes.hitPoints > 0
   def isPursuing: Boolean = attributes.prey.isDefined
+  def isBeingEaten: Boolean = attributes.isBeingEaten
   def getName: String = cType.name
   def getType: CreatureType = cType
   def getLocation: Point2d = attributes.location
@@ -40,5 +41,5 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
   def nameAndId: String = s"$getName ${Integer.toHexString(hashCode())}"
 
   override def toString: String =
-    s"$getName hunger=${attributes.hunger} pregnant=${attributes.numDaysPregnant} alive=${attributes.alive}"
+    s"$getName hunger=${attributes.hunger} pregnant=${attributes.numDaysPregnant} hitPoints=${attributes.hitPoints}"
 }

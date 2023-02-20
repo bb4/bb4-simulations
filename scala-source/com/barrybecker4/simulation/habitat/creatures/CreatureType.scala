@@ -13,11 +13,11 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
   */
 object CreatureType  {
 
-  val GRASS = new CreatureType("grass", new Color(90, 160, 0),   6.0,   0.0,     0.0,    12, 3,  100,  32,     60)
-  val COW = new CreatureType("cow", new Color(140, 60, 170), 20.0,   0.008,   0.001, 25,  29,  390, 84,    90, 0.5)
-  val RAT = new CreatureType("rat", new Color(150, 115, 40),    3.0,   0.011,   0.002,   6, 6, 80,  21,     10, 0.1)
-  val CAT = new CreatureType("cat", new Color(200, 105, 20),     6.0,   0.03,    0.01,  11,  18,  220,35,     40, 0.2)
-  val LION = new CreatureType("lion", new Color(210, 210, 0),    11.0,   0.05,    0.01,  22, 26,  290, 55,     60, 0.4)
+  val GRASS = new CreatureType("grass", new Color(120, 180, 0),   6.0,   0.0,     0.0,    12, 3,  100,  32,     40, 0)
+  val COW = new CreatureType("cow", new Color(140, 90, 240), 20.0,   0.007,   0.002, 35,  39,  390, 64,    90, 3,  0.5)
+  val RAT = new CreatureType("rat", new Color(140, 115, 100),    3.0,   0.006,   0.001,   9, 11, 32,  12,     8, 2, 0.05)
+  val CAT = new CreatureType("cat", new Color(190, 135, 20),     6.0,   0.022,    0.005,  21,  31,  190,9,     25, 5,0.2)
+  val LION = new CreatureType("lion", new Color(210, 210, 0),    11.0,   0.04,    0.01,  25, 40,  290, 35,     50, 10,0.4)
 
   val VALUES = Array(GRASS, COW, RAT, CAT, LION)
 
@@ -43,7 +43,7 @@ object CreatureType  {
 class CreatureType(val name: String, val color: Color,
                    var size: Double, var maxSpeed: Double, var normalSpeed: Double,
                    var gestationPeriod: Int, var timeToMaturity: Int, var maxAge: Int,
-                   var starvationThreshold: Int, var nutritionalValue: Int,
+                   var starvationThreshold: Int, var nutritionalValue: Int, var eatRate: Int,
                    var flockTendancy: Double = 0, var spawnRate: Int = 0) {
 
   def getPreyToPredators: Set[CreatureType] = CreatureType.preyToPredatorsMap(this)

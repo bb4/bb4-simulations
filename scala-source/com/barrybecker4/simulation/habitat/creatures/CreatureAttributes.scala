@@ -3,9 +3,10 @@ package com.barrybecker4.simulation.habitat.creatures
 
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.math.MathUtil
-import com.barrybecker4.simulation.habitat.creatures.CreatureAttributes.PREGNANCY_HUNGER_THRESH
+import com.barrybecker4.simulation.habitat.creatures.CreatureAttributes._
 import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor.DEBUG
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
+import sun.text.Normalizer
 
 import javax.vecmath.{Point2d, Vector2d}
 
@@ -13,33 +14,38 @@ import javax.vecmath.{Point2d, Vector2d}
 /**
   * Everything we need to know about a creature.
   * There are many different sorts of creatures, but they are all represented by instance of this class.
+  * There are many different sorts of creatures, but they are all represented by instance of this class.
   *
   * @author Barry Becker
   */
 object CreatureAttributes {
   /** when more hungary than this, pregnancy gets aborted */
   private val PREGNANCY_HUNGER_THRESH = 0.8
+  /** Num time increments until the dead animal corpse is removed */
+  private val DECOMPOSE_TIME = 6
 }
 
 class CreatureAttributes private[creatures](
-  var age: Int, var hunger: Int, var numDaysPregnant: Int, var alive: Boolean,
+  var age: Int, var hunger: Int, var numDaysPregnant: Int,
   var speed: Double, var direction: Double, var location: Point2d,
+  var hitPoints: Int,
+  var isEating: Boolean = false, var isBeingEaten: Boolean = false,
   var prey: Option[Creature] = None) {
-  
+
   def getVelocity = new Vector2d(Math.cos(direction) * speed, Math.sin(direction) * speed)
-  
+
   def adjustAgeAndHunger(cType: CreatureType): Unit = {
     age += 1
 
-    if (age > cType.timeToMaturity)
+    if (age > cType.timeToMaturity && !isBeingEaten && hunger < 0.6 * cType.starvationThreshold)
       numDaysPregnant += 1
-    if (hunger > PREGNANCY_HUNGER_THRESH * cType.starvationThreshold) {
+    if (hunger > PREGNANCY_HUNGER_THRESH * cType.starvationThreshold || isBeingEaten)
       numDaysPregnant = 0 // stillborn
-    }
+
     hunger += 1
   }
-  
-  def computeNewPosition() = {
+
+  def computeNewPosition(): Point2d = {
     val vel = getVelocity
     new Point2d(absMod(location.x + vel.x), absMod(location.y + vel.y))
   }
@@ -65,11 +71,21 @@ class CreatureAttributes private[creatures](
       direction = cType.flockTendancy * flockDirection + (1.0 - cType.flockTendancy) * perturbedDirection
     }
   }
-  
-  def eatPrey(thePrey: Creature, normalSpeed: Double): Unit = {
-    hunger = Math.max(0, hunger - thePrey.cType.nutritionalValue)
+
+  def eatPrey(thePrey: Creature, eatRate: Int): Unit = {
+    hunger = Math.max(0, hunger - eatRate)
     thePrey.kill()
+    thePrey.getAttributes.hitPoints -= eatRate
+    isEating = true
+    speed = 0
+  }
+
+  def doneEating(normalSpeed: Double): Unit = {
+    isEating = false
+    assert(prey.isDefined)
+    prey.get.getAttributes.age = prey.get.cType.maxAge - DECOMPOSE_TIME
     prey = None
     speed = normalSpeed
+    direction = randomDirection()
   }
 }

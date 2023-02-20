@@ -31,14 +31,17 @@ case class CreatureProcessor(creature: Creature) {
     var spawn = false
     a.adjustAgeAndHunger(cType)
 
-    if (a.hunger >= cType.starvationThreshold || a.age > cType.maxAge) {
+    if (a.hunger >= cType.starvationThreshold || a.age > cType.maxAge || a.hitPoints <= 0) {
       if (DEBUG) {
-        val cause = if (a.age > cType.maxAge) "died of old age" else "starved to death"
+        val cause =
+          if (a.hitPoints <= 0) "was eaten"
+          else if (a.age > cType.maxAge) "died of old age"
+          else "starved to death"
         println(s"${creature.nameAndId} $cause at age=${a.age} with starveThresh=${cType.starvationThreshold}")
       }
-      a.alive = false
+      a.hitPoints = 0
     } else {
-      if (a.numDaysPregnant >= cType.gestationPeriod) {
+      if (a.numDaysPregnant >= cType.gestationPeriod && !a.isBeingEaten) {
         // spawn new child.
         spawn = true
         a.numDaysPregnant = 0
@@ -49,20 +52,29 @@ case class CreatureProcessor(creature: Creature) {
     }
     spawn
   }
-  
+
   private def doMovement(grid: HabitatGrid): Unit = {
     val a = creature.getAttributes
-    if (a.prey.isDefined) {
+    val cType = creature.cType
+    if (a.isEating) {
+      a.prey.get.getAttributes.hitPoints -= cType.eatRate
+      a.hitPoints = cType.nutritionalValue
+      a.hunger = Math.max(0, a.hunger - cType.eatRate)
+      if (a.isEating && a.hunger == 0)
+        a.doneEating(cType.normalSpeed)
+    }
+
+    if (a.prey.isDefined && !a.isBeingEaten) {
       moveTowardPreyAndEatIfPossible(a.prey.get)
       moveToNewLocation(grid)
     }
-    else if (a.speed > 0) {
+    else if (a.speed > 0 && !a.isBeingEaten) {
       val nbrs = new Neighbors(creature, grid)
-      if (a.hunger > HUNGRY_THRESH * creature.cType.starvationThreshold && nbrs.nearestPrey.isDefined && nbrs.nearestPrey.get.isAlive)
+      if (a.hunger > HUNGRY_THRESH * cType.starvationThreshold && nbrs.nearestPrey.isDefined)
         a.prey = nbrs.nearestPrey
         moveTowardPreyAndEatIfPossible(a.prey.get)
       else
-        a.flock(creature.cType, nbrs.flockFriends, nbrs.nearestFriend) // move toward friends and swarm
+        a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend) // move toward friends and swarm
       moveToNewLocation(grid)
     }
   }
@@ -70,14 +82,13 @@ case class CreatureProcessor(creature: Creature) {
   private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature): Unit = {
     val a = creature.getAttributes
     val cType = creature.cType
-    // Can't run as fast when pregnant
+    // Can't run as fast when late-term pregnant
     a.speed = if (a.numDaysPregnant > cType.gestationPeriod / 2)
       cType.normalSpeed else cType.maxSpeed
     val distance = Neighbors.distanceTo(a.location, nearestPrey.getLocation)
 
     if (distance < THRESHOLD_TO_PREY) {
       eatPrey(nearestPrey)
-      a.direction = randomDirection()
     }
     else {
       a.direction = Neighbors.getDirectionTo(a.location, nearestPrey.getLocation)
@@ -100,6 +111,6 @@ case class CreatureProcessor(creature: Creature) {
   private def eatPrey(thePrey: Creature): Unit = {
     if (DEBUG)
       println(" *** " + creature.nameAndId + " ate " + thePrey.cType.name)
-    creature.getAttributes.eatPrey(thePrey, creature.cType.normalSpeed)
+    creature.getAttributes.eatPrey(thePrey, creature.cType.eatRate)
   }
 }
