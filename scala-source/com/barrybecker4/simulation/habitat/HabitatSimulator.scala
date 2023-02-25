@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat
 
 import com.barrybecker4.common.concurrency.ThreadUtil
@@ -15,7 +15,6 @@ import java.awt.*
 import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
 
 
-
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.
   *
@@ -30,7 +29,9 @@ object HabitatSimulator {
 }
 
 class HabitatSimulator() extends Simulator("Habitat Simulation") {
+
   setBackground(Color.WHITE)
+  private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
   private val populations = new SerengetiPopulations
   private var options: DynamicOptions = _
   private val splitPanel = new HabitatSplitPanel(populations)
@@ -49,8 +50,10 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   override protected def getInitialTimeStep = 0.1
 
   override def timeStep: Double = {
-    options.update()
-    populations.nextDay()
+    for (i <- 0 until iterationsPerFrame) {
+      options.update()
+      populations.nextDay()
+    }
     tStep
   }
 
@@ -58,6 +61,10 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {
     splitPanel.setNumPixelsPerXPoint(numPixels)
+  }
+
+  def setIterationsPerFrame(iterationsPerFrame: Int): Unit = {
+    this.iterationsPerFrame = iterationsPerFrame
   }
   
   /** Draw the population graph under the habitat. */
