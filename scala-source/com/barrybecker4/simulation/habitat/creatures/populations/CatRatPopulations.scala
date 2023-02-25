@@ -15,4 +15,6 @@ class CatRatPopulations extends Populations {
     this.append(Population.createPopulation(CreatureType.CAT, 15))
     this.append(Population.createPopulation(CreatureType.GRASS, 100))
   }
+
+  def getName: String = "Cats and Rats"
 }

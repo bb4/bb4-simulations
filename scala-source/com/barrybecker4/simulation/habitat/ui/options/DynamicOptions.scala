@@ -2,11 +2,13 @@
 package com.barrybecker4.simulation.habitat.ui.options
 
 import com.barrybecker4.simulation.habitat.HabitatSimulator
-import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions._
+import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
+import com.barrybecker4.simulation.habitat.creatures.populations.Populations.{POPULATIONS, DEFAULT_POPULATIONS_INDEX}
 
 import javax.swing.*
 import java.awt.*
+import java.awt.event.{ItemEvent, ItemListener}
 import javax.swing.border.EtchedBorder
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.collection.mutable.ArrayBuffer
@@ -22,26 +24,59 @@ object DynamicOptions {
   * @author Barry Becker
   */
 class DynamicOptions(val simulator: HabitatSimulator)
-  extends JPanel with SliderGroupChangeListener with ChangeListener {
+  extends JPanel with SliderGroupChangeListener with ChangeListener with ItemListener {
 
   private val tabbedPane = new JTabbedPane()
   private var numPixelsPerPointSlider: JSlider = _
   private var iterationsPerFrameSlider: JSlider = _
 
-  setLayout(new BorderLayout())
-  setPreferredSize(new Dimension(300, 300))
-
-  private val sliderGroups = createSliderGroups()
+  private var sliderGroups = createSliderGroups()
+  private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
+  private var populationsChoice = new JComboBox[String]
 
-  add(tabbedPane, BorderLayout.CENTER)
-  add(bottomSlidersPanel, BorderLayout.SOUTH)
+  initialize()
 
   def update(): Unit = {}
-  def reset(): Unit = { for (group <- sliderGroups) group.reset() }
+
+  def reset(): Unit = {
+    for (group <- sliderGroups) group.reset()
+  }
+
+  private def initialize(): Unit = {
+    setLayout(new BorderLayout())
+    setPreferredSize(new Dimension(300, 300))
+
+    add(topControlPanel, BorderLayout.NORTH)
+    add(tabbedPane, BorderLayout.CENTER)
+    add(bottomSlidersPanel, BorderLayout.SOUTH)
+  }
 
   private def hexColor(color: Color): String =
     "#" + Integer.toHexString(color.getRGB).substring(2)
+
+  private def createTopControlPanel(): JPanel = {
+    val panel = new JPanel()
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
+    panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
+
+
+    val populationsChoicePanel: JPanel = new JPanel
+    val label: JLabel = new JLabel("Select a habitat: ")
+    populationsChoice = new JComboBox[String]
+    for (populationsType <- POPULATIONS) {
+      populationsChoice.addItem(populationsType.getName) // .name
+    }
+
+    populationsChoice.setSelectedIndex(DEFAULT_POPULATIONS_INDEX)
+    populationsChoice.addItemListener(this)
+    populationsChoicePanel.add(label)
+    populationsChoicePanel.add(populationsChoice)
+    populationsChoicePanel
+
+    panel.add(populationsChoicePanel)
+    panel
+  }
 
   private def createBottomSlidersPanel(): JPanel = {
     val panel = new JPanel()
@@ -108,4 +143,11 @@ class DynamicOptions(val simulator: HabitatSimulator)
     }
     else throw new IllegalArgumentException("Unexpected source: " + source);
   }
+
+  override def itemStateChanged(e: ItemEvent): Unit = {
+    val populationsType = POPULATIONS.filter(p => p.getName == e.getItem.toString).head
+    // set the new pop type on the sim
+    // this.changePopulation // update panel
+  }
+
 }

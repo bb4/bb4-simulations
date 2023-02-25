@@ -16,4 +16,6 @@ class SinglePopulation extends Populations {
   override def addPopulations(): Unit = {
     this.append(Population.createPopulation(CreatureType.CAT, 9))
   }
+
+  def getName: String = "Just Cats"
 }

@@ -10,6 +10,10 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import java.awt.Color
 import scala.collection.mutable.ArrayBuffer
 
+object Populations {
+  val POPULATIONS = Array(new SerengetiPopulations, new CatRatPopulations, new SinglePopulation)
+  val DEFAULT_POPULATIONS_INDEX = 0
+}
 
 /**
   * Create populations for all our creatures.
@@ -23,13 +27,8 @@ abstract class Populations extends ArrayBuffer[Population] {
   private var grid: HabitatGrid = _
   initialize()
 
-  private def initialize(): Unit = {
-    grid = createHabitatGrid()
-    this.clear()
-    addPopulations()
-    updateGridCellCounts()
-  }
-
+  def getName: String
+  
   def reset(): Unit = {
     grid = createHabitatGrid()
     for (pop <- this) pop.reset()
@@ -62,6 +61,13 @@ abstract class Populations extends ArrayBuffer[Population] {
     val funcRenderer = new MultipleFunctionRenderer(functions, Some(lineColors))
     funcRenderer.setRightNormalizePercent(40)
     funcRenderer
+  }
+
+  private def initialize(): Unit = {
+    grid = createHabitatGrid()
+    this.clear()
+    addPopulations()
+    updateGridCellCounts()
   }
 
   private def updateFunctions(iteration: Long): Unit = {
