@@ -6,10 +6,10 @@ import java.awt.{BorderLayout, Dimension, Graphics}
 import javax.swing.{JPanel, JSplitPane}
 
 
-class HabitatSplitPanel(populations: Habitat) extends JPanel {
+class HabitatSplitPanel(habitat: Habitat) extends JPanel {
 
-  private val graphPanel = new PopulationGraphPanel(populations)
-  private val habitatPanel = new HabitatPanel(populations)
+  private val graphPanel = new PopulationGraphPanel(habitat)
+  private val habitatPanel = new HabitatPanel(habitat)
   private val splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, habitatPanel, graphPanel)
   
   override val minimumSize = new Dimension(100, 50)

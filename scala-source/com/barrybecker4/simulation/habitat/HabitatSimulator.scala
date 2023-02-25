@@ -32,9 +32,9 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   setBackground(Color.WHITE)
   private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
-  private val habitat = new SerengetiHabitat
+  private var habitat = Habitat.HABITATS(Habitat.DEFAULT_HABITAT_INDEX)
   private var options: DynamicOptions = _
-  private val splitPanel = new HabitatSplitPanel(habitat)
+  private var splitPanel = new HabitatSplitPanel(habitat)
   this.add(splitPanel)
 
   override protected def reset(): Unit = {
@@ -58,6 +58,13 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   }
 
   def getHabitat: Habitat = habitat
+
+  def setHabitat(habitat: Habitat): Unit = {
+    this.habitat = habitat
+    this.remove(splitPanel)
+    splitPanel = new HabitatSplitPanel(habitat)
+    this.add(splitPanel)
+  }
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {
     splitPanel.setNumPixelsPerXPoint(numPixels)

@@ -11,9 +11,9 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
   * Shows the time series graph of all the animal populations in the habitat.
   * @author Barry Becker
   */
-class PopulationGraphPanel private[habitat](val populations: Habitat) extends JPanel {
+class PopulationGraphPanel private[habitat](val habitat: Habitat) extends JPanel {
 
-  private val graphRenderer: MultipleFunctionRenderer = populations.createFunctionRenderer
+  private val graphRenderer: MultipleFunctionRenderer = habitat.createFunctionRenderer
   graphRenderer.setNumPixelsPerXPoint(2)
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {

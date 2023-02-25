@@ -144,9 +144,11 @@ class DynamicOptions(val simulator: HabitatSimulator)
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    val populationsType = HABITATS.filter(p => p.getName == e.getItem.toString).head
-    // set the new pop type on the sim
-    // this.changePopulation // update panel
+    val habitat = HABITATS.filter(p => p.getName == e.getItem.toString).head
+    habitat.reset()
+    simulator.setHabitat(habitat)
+    tabbedPane.removeAll()
+    createSliderGroups()
+    repaint()
   }
-
 }

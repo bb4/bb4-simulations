@@ -23,11 +23,11 @@ object CreatureType  {
     0.005,  0.002,   12, 11, 120,
     24,     10, 2, 0.01)
   val CAT = new CreatureType("cat", new Color(190, 135, 20),     6.0,
-    0.022,  0.005,  21,  30,  310,
-    34,     25, 3,0.2)
+    0.022,  0.005,  23,  30,  300,
+    32,     25, 3,0.2)
   val LION = new CreatureType("lion", new Color(210, 210, 0),   11.0,
-    0.03, 0.01,  26, 40,  390,
-    38,     50, 8,0.3)
+    0.03, 0.01,  28, 40,  390,
+    36,     50, 6,0.3)
 
   val VALUES = Array(GRASS, COW, RAT, CAT, LION)
 
