@@ -6,7 +6,7 @@ import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
-import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatPopulations, Populations, SerengetiPopulations}
+import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatHabitat, Habitat, SerengetiHabitat}
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
 
@@ -32,9 +32,9 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   setBackground(Color.WHITE)
   private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
-  private val populations = new SerengetiPopulations
+  private val habitat = new SerengetiHabitat
   private var options: DynamicOptions = _
-  private val splitPanel = new HabitatSplitPanel(populations)
+  private val splitPanel = new HabitatSplitPanel(habitat)
   this.add(splitPanel)
 
   override protected def reset(): Unit = {
@@ -42,7 +42,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     // wait till actually paused. Not clean, but oh well.
     ThreadUtil.sleep(500)
     MathUtil.RANDOM.setSeed(1)
-    populations.reset()
+    habitat.reset()
     options.reset()
     this.setPaused(false)
   }
@@ -52,12 +52,12 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   override def timeStep: Double = {
     for (i <- 0 until iterationsPerFrame) {
       options.update()
-      populations.nextDay()
+      habitat.nextDay()
     }
     tStep
   }
 
-  def getPopulations: Populations = populations
+  def getHabitat: Habitat = habitat
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {
     splitPanel.setNumPixelsPerXPoint(numPixels)

@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.habitat.ui
 
 import com.barrybecker4.simulation.habitat.creatures.Creature
-import com.barrybecker4.simulation.habitat.creatures.populations.Populations
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
 import com.barrybecker4.simulation.habitat.ui.CreatureRenderer.*
 
 import java.awt.*

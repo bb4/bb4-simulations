@@ -3,14 +3,14 @@ package com.barrybecker4.simulation.habitat.ui
 
 import java.awt.*
 import com.barrybecker4.simulation.habitat.creatures.Creature
-import com.barrybecker4.simulation.habitat.creatures.populations.Populations
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
 
 
 /**
   * This class draws a the global habitat and all the creatures in it.
   * @author Barry Becker
   */
-class HabitatRenderer private[habitat](var populations: Populations) {
+class HabitatRenderer private[habitat](var populations: Habitat) {
   private var width = 0
   private var height = 0
   private var creatureRenderer: CreatureRenderer = _

@@ -10,16 +10,16 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import java.awt.Color
 import scala.collection.mutable.ArrayBuffer
 
-object Populations {
-  val POPULATIONS = Array(new SerengetiPopulations, new CatRatPopulations, new SinglePopulation)
-  val DEFAULT_POPULATIONS_INDEX = 0
+object Habitat {
+  val HABITATS: Array[Habitat] = Array(new SerengetiHabitat, new CatRatHabitat, new SingleCreatureHabitat)
+  val DEFAULT_HABITAT_INDEX = 0
 }
 
 /**
-  * Create populations for all our creatures.
+  * A habitat is a collection of populations for all the creatures in it.
   * @author Barry Becker
   */
-abstract class Populations extends ArrayBuffer[Population] {
+abstract class Habitat extends ArrayBuffer[Population] {
 
   private var functionMap = Map[Population, CountFunction]()
   private var dayCount: Int = 0
@@ -28,7 +28,7 @@ abstract class Populations extends ArrayBuffer[Population] {
   initialize()
 
   def getName: String
-  
+
   def reset(): Unit = {
     grid = createHabitatGrid()
     for (pop <- this) pop.reset()

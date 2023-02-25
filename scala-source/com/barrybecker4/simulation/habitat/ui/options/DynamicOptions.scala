@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.habitat.ui.options
 import com.barrybecker4.simulation.habitat.HabitatSimulator
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
-import com.barrybecker4.simulation.habitat.creatures.populations.Populations.{POPULATIONS, DEFAULT_POPULATIONS_INDEX}
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{HABITATS, DEFAULT_HABITAT_INDEX}
 
 import javax.swing.*
 import java.awt.*
@@ -33,7 +33,7 @@ class DynamicOptions(val simulator: HabitatSimulator)
   private var sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
-  private var populationsChoice = new JComboBox[String]
+  private var habitatChoice = new JComboBox[String]
 
   initialize()
 
@@ -61,20 +61,19 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
 
 
-    val populationsChoicePanel: JPanel = new JPanel
+    val habitatChoicePanel: JPanel = new JPanel
     val label: JLabel = new JLabel("Select a habitat: ")
-    populationsChoice = new JComboBox[String]
-    for (populationsType <- POPULATIONS) {
-      populationsChoice.addItem(populationsType.getName) // .name
+    habitatChoice = new JComboBox[String]
+    for (habitat <- HABITATS) {
+      habitatChoice.addItem(habitat.getName) // .name
     }
 
-    populationsChoice.setSelectedIndex(DEFAULT_POPULATIONS_INDEX)
-    populationsChoice.addItemListener(this)
-    populationsChoicePanel.add(label)
-    populationsChoicePanel.add(populationsChoice)
-    populationsChoicePanel
+    habitatChoice.setSelectedIndex(DEFAULT_HABITAT_INDEX)
+    habitatChoice.addItemListener(this)
+    habitatChoicePanel.add(label)
+    habitatChoicePanel.add(habitatChoice)
 
-    panel.add(populationsChoicePanel)
+    panel.add(habitatChoicePanel)
     panel
   }
 
@@ -111,13 +110,13 @@ class DynamicOptions(val simulator: HabitatSimulator)
   private def createSliderGroups(): ArrayBuffer[CreatureSliderGroup] = {
     val sliderGroups = ArrayBuffer[CreatureSliderGroup]()
 
-    for (creaturePop <- simulator.getPopulations) {
+    for (creaturePop <- simulator.getHabitat) {
       val group = new CreatureSliderGroup(creaturePop)
       group.setSliderListener(this)
       sliderGroups.append(group)
 
       val groupPanel = new JPanel(new BorderLayout())
-      groupPanel.add(group, BorderLayout.NORTH);
+      groupPanel.add(group, BorderLayout.NORTH)
 
       val creatureType = creaturePop.creatureType
       val color = hexColor(creatureType.color)
@@ -141,11 +140,11 @@ class DynamicOptions(val simulator: HabitatSimulator)
     else if (source == iterationsPerFrameSlider) {
       simulator.setIterationsPerFrame(iterationsPerFrameSlider.getValue)
     }
-    else throw new IllegalArgumentException("Unexpected source: " + source);
+    else throw new IllegalArgumentException("Unexpected source: " + source)
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    val populationsType = POPULATIONS.filter(p => p.getName == e.getItem.toString).head
+    val populationsType = HABITATS.filter(p => p.getName == e.getItem.toString).head
     // set the new pop type on the sim
     // this.changePopulation // update panel
   }

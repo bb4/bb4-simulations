@@ -11,7 +11,7 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType
   *
   * @author Barry Becker
   */
-class SinglePopulation extends Populations {
+class SingleCreatureHabitat extends Habitat {
 
   override def addPopulations(): Unit = {
     this.append(Population.createPopulation(CreatureType.CAT, 9))

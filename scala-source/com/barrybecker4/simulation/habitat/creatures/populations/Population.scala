@@ -10,7 +10,7 @@ import javax.vecmath.Point2d
 
 /** Everything we need to know about a population of a certain kind of creature. */
 object Population {
-  private val SPAWN_RADIUS = 0.05
+  private val SPAWN_RADIUS = 0.2
 
   /** Factory method to create an initial population of randomly distributed members. */
   private[creatures] def createPopulation(creatureType: CreatureType, initialSize: Int) = {

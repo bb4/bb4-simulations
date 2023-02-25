@@ -2,14 +2,14 @@
 package com.barrybecker4.simulation.habitat.creatures.populations
 
 import com.barrybecker4.simulation.habitat.creatures.CreatureType
-import com.barrybecker4.simulation.habitat.creatures.populations.{Population, Populations}
+import com.barrybecker4.simulation.habitat.creatures.populations.{Population, Habitat}
 
 /**
   * Collection of creature populations that would appear on the Serengeti.
   *
   * @author Barry Becker
   */
-class CatRatPopulations extends Populations {
+class CatRatHabitat extends Habitat {
   override def addPopulations(): Unit = {
     this.append(Population.createPopulation(CreatureType.RAT, 70))
     this.append(Population.createPopulation(CreatureType.CAT, 15))
