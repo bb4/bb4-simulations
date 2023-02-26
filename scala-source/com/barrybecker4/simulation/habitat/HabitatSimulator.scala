@@ -64,6 +64,9 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     this.remove(splitPanel)
     splitPanel = new HabitatSplitPanel(habitat)
     this.add(splitPanel)
+    this.reset()
+    ThreadUtil.sleep(100)
+    this.setPaused(true)
   }
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {

@@ -87,6 +87,8 @@ class Population(var creatureType: CreatureType) {
 
   private def calculateNaturalSpawnLocations(grid: HabitatGrid): List[Point2d] = {
     var spawnLocations = List[Point2d]()
+    
+    // todo: add concurrency. Break the creatures into chunks and process them in parallel.
     for (creature <- creatures) {
       val spawn = creature.nextDay(grid)
       if (spawn) {
