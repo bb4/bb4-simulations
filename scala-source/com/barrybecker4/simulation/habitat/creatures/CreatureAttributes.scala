@@ -30,7 +30,8 @@ class CreatureAttributes private[creatures](
   var speed: Double, var direction: Double, var location: Point2d,
   var hitPoints: Int,
   var isEating: Boolean = false, var isBeingEaten: Boolean = false,
-  var prey: Option[Creature] = None) {
+  var prey: Option[Creature] = None, 
+  var pursuedBy: Option[Creature] = None) {
 
   def getVelocity = new Vector2d(Math.cos(direction) * speed, Math.sin(direction) * speed)
 

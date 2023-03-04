@@ -11,8 +11,6 @@ import javax.vecmath.{Point2d, Vector2d}
 /**
   * Everything we need to know about a creature.
   * There are many different sorts of creatures, but they are all represented by instance of this class.
-  *
-  * @author Barry Becker
   */
 object CreatureProcessor {
   /** When this close we are considered on top ot the prey */
@@ -73,6 +71,9 @@ case class CreatureProcessor(creature: Creature) {
       moveTowardPreyAndEatIfPossible(a.prey.get)
       moveToNewLocation(grid)
     }
+    else if (a.pursuedBy.isDefined && !a.isBeingEaten) {
+      attemptToFlee(grid)
+    }
     else if (a.speed > 0 && !a.isBeingEaten) {
       val nbrs = new Neighbors(creature, grid)
       if (a.hunger > HUNGRY_THRESH * cType.starvationThreshold && nbrs.nearestPrey.isDefined)
@@ -82,6 +83,15 @@ case class CreatureProcessor(creature: Creature) {
         a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend) // move toward friends and swarm
       moveToNewLocation(grid)
     }
+  }
+
+  private def attemptToFlee(grid: HabitatGrid): Unit = {
+    val a = creature.getAttributes
+    val cType = creature.cType
+    val predator = a.pursuedBy.get
+    a.direction = predator.getDirection
+    a.speed = cType.maxSpeed
+    moveToNewLocation(grid)
   }
 
   private def moveTowardPreyAndEatIfPossible(nearestPrey: Creature): Unit = {
@@ -97,6 +107,7 @@ case class CreatureProcessor(creature: Creature) {
     }
     else {
       a.direction = Neighbors.getDirectionTo(a.location, nearestPrey.getLocation)
+      nearestPrey.getAttributes.pursuedBy = Some(creature)
       if (distance < cType.maxSpeed) a.speed = distance
       if (DEBUG)
         println(s"${creature.nameAndId} pursuing ${nearestPrey.cType.name} from ${a.location} to ${nearestPrey.getLocation} " +

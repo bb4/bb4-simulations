@@ -17,11 +17,12 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
 
   private val attributes =
     new CreatureAttributes(0, 0, 0,
-      cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false, None)
+      cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false)
 
   def kill(): Unit = { 
     attributes.isBeingEaten = true 
     attributes.prey = None
+    attributes.pursuedBy = None
   }
   def isAlive: Boolean = attributes.hitPoints > 0
   def isPursuing: Boolean = attributes.prey.isDefined
