@@ -18,10 +18,10 @@ object CreatureType  {
     46,     70, 0)
   val COW = new CreatureType("cow", new Color(140, 90, 240),    20.0,
     0.007,  0.002,  38,  40,  390,
-    68,     90, 3,  0.5)
+    68,     110, 3,  0.5)
   val RAT = new CreatureType("rat", new Color(140, 115, 100),    3.0,
     0.007,  0.002,   14, 11, 120,
-    24,     10, 1, 0.7)
+    27,     12, 1, 0.7)
   val CAT = new CreatureType("cat", new Color(190, 135, 20),     6.0,
     0.024,  0.005,  21,  30,  310,
     33,     25, 3,0.2)
