@@ -14,19 +14,19 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
 object CreatureType  {
 
   val GRASS = new CreatureType("grass", new Color(120, 180, 0), 6.0,
-    0.0,    0.0,    12, 4,  180,
+    0.0,    0.0,    12, 5,  180,
     46,     70, 0)
   val COW = new CreatureType("cow", new Color(140, 90, 240),    20.0,
     0.007,  0.002,  38,  40,  390,
     68,     90, 3,  0.5)
   val RAT = new CreatureType("rat", new Color(140, 115, 100),    3.0,
-    0.006,  0.002,   14, 11, 100,
-    23,     10, 1, 0.7)
+    0.007,  0.002,   14, 11, 120,
+    24,     10, 1, 0.7)
   val CAT = new CreatureType("cat", new Color(190, 135, 20),     6.0,
-    0.024,  0.005,  21,  30,  300,
-    32,     25, 3,0.2)
+    0.024,  0.005,  21,  30,  310,
+    33,     25, 3,0.2)
   val LION = new CreatureType("lion", new Color(210, 210, 0),   11.0,
-    0.03, 0.01,  29, 40,  320,
+    0.03, 0.01,  29, 40,  330,
     36,     50, 6,0.3)
 
   val VALUES = Array(GRASS, COW, RAT, CAT, LION)

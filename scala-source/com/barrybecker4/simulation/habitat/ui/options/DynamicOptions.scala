@@ -1,21 +1,24 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
+import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.simulation.habitat.HabitatSimulator
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
-import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{HABITATS, DEFAULT_HABITAT_INDEX}
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{DEFAULT_HABITAT_INDEX, HABITATS}
 
 import javax.swing.*
 import java.awt.*
-import java.awt.event.{ItemEvent, ItemListener}
+import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 import javax.swing.border.EtchedBorder
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.collection.mutable.ArrayBuffer
 
 object DynamicOptions {
   val INITIAL_ITERATIONS_PER_FRAME = 1
+  val DEFAULT_USE_CONTINUOUS_ITERATION = true
   private val INITIAL_X_PIXELS_PER_POINT = 5
+
 }
 
 /**
@@ -24,13 +27,15 @@ object DynamicOptions {
   * @author Barry Becker
   */
 class DynamicOptions(val simulator: HabitatSimulator)
-  extends JPanel with SliderGroupChangeListener with ChangeListener with ItemListener {
+  extends JPanel with SliderGroupChangeListener with ChangeListener with ItemListener with ActionListener {
 
   private val tabbedPane = new JTabbedPane()
   private var numPixelsPerPointSlider: JSlider = _
   private var iterationsPerFrameSlider: JSlider = _
 
-  private var sliderGroups = createSliderGroups()
+  private var useContinuousIteration: JCheckBox = _
+  private var nextButton: JButton = _
+  private val sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
   private var habitatChoice = new JComboBox[String]
@@ -74,6 +79,29 @@ class DynamicOptions(val simulator: HabitatSimulator)
     habitatChoicePanel.add(habitatChoice)
 
     panel.add(habitatChoicePanel)
+    panel.add(createIncrementPanel)
+    panel
+  }
+
+  /** Controls to allow iterating continuously or one step at a time.
+    */
+  private def createIncrementPanel: JPanel = {
+    val panel: JPanel = new JPanel(new BorderLayout)
+    useContinuousIteration =
+      createCheckbox("Continuous iteration", DEFAULT_USE_CONTINUOUS_ITERATION,
+        "When checked, the simulation proceeds continuously. " +
+          "When unchecked, use the 'Next' button to advance one time step at a time.")
+
+    val nextPanel = new JPanel()
+    nextPanel.setToolTipText("Click to advance one time step at a time")
+    nextPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20))
+    nextButton = new JButton("Next")
+    nextButton.addActionListener(this)
+    nextButton.setEnabled(!useContinuousIteration.isSelected)
+    nextPanel.add(nextButton)
+
+    panel.add(useContinuousIteration, BorderLayout.CENTER)
+    panel.add(nextPanel, BorderLayout.EAST)
     panel
   }
 
@@ -85,6 +113,14 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.add(createPixelsPerXPointSlider())
     panel.add(createIterationsPerFrameSlider())
     panel
+  }
+
+  private def createCheckbox(labelText: String, defaultValue: Boolean, tooltip: String): JCheckBox = {
+    val cb: JCheckBox = new JCheckBox(labelText)
+    cb.setToolTipText(tooltip)
+    cb.setSelected(defaultValue)
+    cb.addActionListener(this)
+    cb
   }
 
   private def createPixelsPerXPointSlider(): JPanel = {
@@ -150,5 +186,24 @@ class DynamicOptions(val simulator: HabitatSimulator)
     tabbedPane.removeAll()
     createSliderGroups()
     repaint()
+  }
+
+  override def actionPerformed(e: ActionEvent): Unit = {
+    val source: Component = e.getSource.asInstanceOf[Component]
+    if (source == nextButton) {
+      simulator.requestNextStep()
+    }
+    else {
+      if (source == useContinuousIteration) {
+        val useContinuous: Boolean = useContinuousIteration.isSelected
+        simulator.setUseContinuousIteration(useContinuous)
+        nextButton.setEnabled(!useContinuous)
+        if (!useContinuous) {
+          // do one last step in case the rendering was interrupted.
+          ThreadUtil.sleep(100)
+          simulator.requestNextStep()
+        }
+      }
+    }
   }
 }

@@ -85,8 +85,7 @@ class DynamicOptions(var conwayModel: ConwayModel, var simulator: ConwayExplorer
   }
 
   /**
-    * The dropdown menu at the top for selecting a kernel type.
-    * @return a dropdown/down component.
+    * Controls to allow iterating continuously or one step at a time.
     */
   private def createIncrementPanel: JPanel = {
     val panel: JPanel = new JPanel (new BorderLayout)

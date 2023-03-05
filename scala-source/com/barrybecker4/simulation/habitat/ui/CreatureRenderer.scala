@@ -16,7 +16,7 @@ object CreatureRenderer {
   private val SIZE_SCALE = 0.001
   private val HEALTH_BAR_COLOR = new Color(0, 145, 0)
   private val BLOOD_RED = new Color(210, 20, 0)
-  private val DEBUG = false
+  private val DEBUG = true
 }
 
 case class CreatureRenderer(width: Int, height: Int) {
