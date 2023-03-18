@@ -14,7 +14,7 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
 object CreatureType  {
 
   val GRASS = new CreatureType("grass", new Color(120, 180, 0), 6.0,
-    0.0,    0.0,    12, 4,  180,
+    0.0,    0.0,    14, 4,  180,
     46,     70, 0)
   val COW = new CreatureType("cow", new Color(140, 90, 240),    20.0,
     0.007,  0.002,  38,  40,  390,
@@ -31,7 +31,7 @@ object CreatureType  {
 
   val VALUES = Array(GRASS, COW, RAT, CAT, LION)
 
-  val preyToPredatorsMap: Map[CreatureType, Set[CreatureType]] = Map(
+  private val preyToPredatorsMap: Map[CreatureType, Set[CreatureType]] = Map(
     GRASS -> Set(COW, RAT),
     COW -> Set(LION),
     RAT -> Set(CAT, LION),
@@ -39,7 +39,7 @@ object CreatureType  {
     LION -> Set[CreatureType]() // king of the jungle, top of the food chain
   )
 
-  var predatorToPreysMap: Map[CreatureType, Set[CreatureType]] = Map[CreatureType, Set[CreatureType]]()
+  private var predatorToPreysMap: Map[CreatureType, Set[CreatureType]] = Map[CreatureType, Set[CreatureType]]()
   for (creature <- VALUES) {
     var preys = Set[CreatureType]()
     for (potentialPrey <- VALUES) {
@@ -56,7 +56,6 @@ class CreatureType(val name: String, val color: Color,
                    var starvationThreshold: Int, var nutritionalValue: Int, var eatRate: Int,
                    var flockTendancy: Double = 0, var spawnRate: Int = 0) {
 
-  def getPreyToPredators: Set[CreatureType] = CreatureType.preyToPredatorsMap(this)
   def getPreys: Set[CreatureType] = CreatureType.predatorToPreysMap(this)
   override def toString: String = name
 }

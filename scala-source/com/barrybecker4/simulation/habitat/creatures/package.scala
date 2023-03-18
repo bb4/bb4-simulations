@@ -7,11 +7,13 @@ import com.barrybecker4.math.MathUtil
 package object creatures {
 
   val TWO_PI: Double =  2.0 * Math.PI
-  
-  private def absMod(value: Double): Double = (value + 1.0) % 1.0
 
-  private def randomDirection() = TWO_PI * MathUtil.RANDOM.nextDouble()
-  private def perturbDirection(direction: Double): Double = {
+
+  def absMod(value: Double): Double = (value + 1.0) % 1.0
+
+  def randomDirection() = TWO_PI * MathUtil.RANDOM.nextDouble()
+
+  def perturbDirection(direction: Double): Double = {
     val perturbation = 0.1 * TWO_PI * MathUtil.RANDOM.nextDouble()
     val perturbedDirection = direction + perturbation
     if (perturbedDirection < 0) perturbedDirection + TWO_PI

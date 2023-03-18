@@ -30,7 +30,7 @@ class DynamicOptions(val simulator: HabitatSimulator)
   private var numPixelsPerPointSlider: JSlider = _
   private var iterationsPerFrameSlider: JSlider = _
 
-  private var sliderGroups = createSliderGroups()
+  private val sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
   private var habitatChoice = new JComboBox[String]

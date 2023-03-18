@@ -13,7 +13,7 @@ import javax.swing.*
   * @author Barry Becker
   */
 class HabitatPanel private[habitat](val populations: Habitat) extends JPanel {
-  private var renderer = new HabitatRenderer(populations)
+  private val renderer = new HabitatRenderer(populations)
 
   override def paint(g: Graphics): Unit = {
     renderer.setSize(getWidth, getHeight)
