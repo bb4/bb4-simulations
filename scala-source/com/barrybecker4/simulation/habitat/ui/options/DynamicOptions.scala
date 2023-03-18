@@ -4,11 +4,11 @@ package com.barrybecker4.simulation.habitat.ui.options
 import com.barrybecker4.simulation.habitat.HabitatSimulator
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
-import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{HABITATS, DEFAULT_HABITAT_INDEX}
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{DEFAULT_HABITAT_INDEX, HABITATS}
 
 import javax.swing.*
 import java.awt.*
-import java.awt.event.{ItemEvent, ItemListener}
+import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 import javax.swing.border.EtchedBorder
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.collection.mutable.ArrayBuffer
@@ -24,16 +24,19 @@ object DynamicOptions {
   * @author Barry Becker
   */
 class DynamicOptions(val simulator: HabitatSimulator)
-  extends JPanel with SliderGroupChangeListener with ChangeListener with ItemListener {
+  extends JPanel with SliderGroupChangeListener with ChangeListener
+                 with ItemListener with ActionListener {
 
   private val tabbedPane = new JTabbedPane()
   private var numPixelsPerPointSlider: JSlider = _
   private var iterationsPerFrameSlider: JSlider = _
+  private var debugCheckBox: JCheckBox = _
 
   private val sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
   private var habitatChoice = new JComboBox[String]
+
 
   initialize()
 
@@ -60,9 +63,14 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
 
+    panel.add(createHabitatChoicePanel())
+    panel.add(createDebugCheckBoxPanel())
+    panel
+  }
 
-    val topControlsPanel: JPanel = new JPanel
-    val label: JLabel = new JLabel("Select a habitat: ")
+  private def createHabitatChoicePanel(): JPanel = {
+    val panel: JPanel = new JPanel
+    val choiceLabel: JLabel = new JLabel("Select a habitat: ")
     habitatChoice = new JComboBox[String]
     for (habitat <- HABITATS) {
       habitatChoice.addItem(habitat.getName)
@@ -70,10 +78,17 @@ class DynamicOptions(val simulator: HabitatSimulator)
 
     habitatChoice.setSelectedIndex(DEFAULT_HABITAT_INDEX)
     habitatChoice.addItemListener(this)
-    topControlsPanel.add(label)
-    topControlsPanel.add(habitatChoice)
 
-    panel.add(topControlsPanel)
+    panel.add(choiceLabel)
+    panel.add(habitatChoice)
+    panel
+  }
+
+  private def createDebugCheckBoxPanel(): JPanel = {
+    val panel: JPanel = new JPanel
+    debugCheckBox = new JCheckBox("Debug")
+    debugCheckBox.addActionListener(this)
+    panel.add(debugCheckBox)
     panel
   }
 
@@ -150,5 +165,10 @@ class DynamicOptions(val simulator: HabitatSimulator)
     tabbedPane.removeAll()
     createSliderGroups()
     repaint()
+  }
+
+  override def actionPerformed(e: ActionEvent): Unit = {
+    val isDebug = debugCheckBox.isSelected
+    simulator.setDebug(isDebug)
   }
 }

@@ -9,10 +9,11 @@ import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatHabitat, Habitat, SerengetiHabitat}
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
+import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor}
 
 import javax.swing.*
 import java.awt.*
-import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
+import com.barrybecker4.simulation.habitat.ui.{CreatureRenderer, HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
 
 
 /**
@@ -67,6 +68,11 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     this.reset()
     ThreadUtil.sleep(100)
     this.setPaused(true)
+  }
+  
+  def setDebug(isDebug: Boolean): Unit = {
+    CreatureProcessor.DEBUG = isDebug
+    CreatureRenderer.DEBUG = isDebug
   }
 
   def setNumPixelsPerXPoint(numPixels: Int): Unit = {

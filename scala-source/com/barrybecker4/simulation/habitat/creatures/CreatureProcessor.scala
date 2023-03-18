@@ -17,7 +17,7 @@ object CreatureProcessor {
   private val THRESHOLD_TO_PREY = 0.002
   /** If not at least this hungary, then won't chase prey */
   private val HUNGRY_THRESH = 0.2
-  private val DEBUG = false
+  var DEBUG = false
 }
 
 case class CreatureProcessor(creature: Creature) {

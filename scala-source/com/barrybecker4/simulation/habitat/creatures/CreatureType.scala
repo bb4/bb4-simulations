@@ -14,8 +14,8 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
 object CreatureType  {
 
   val GRASS = new CreatureType("grass", new Color(120, 180, 10), 6.0,
-    0.0,    0.0,    14, 3,  280,
-    56,     70, 0)
+    0.0,    0.0,    15, 4,  280,
+    47,     70, 0)
   val COW = new CreatureType("cow", new Color(140, 140, 240),    20.0,
     0.007,  0.002,  39,  40,  390,
     67,     90, 2,  0.5)
