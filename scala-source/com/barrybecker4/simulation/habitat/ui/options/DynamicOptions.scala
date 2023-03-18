@@ -61,19 +61,19 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
 
 
-    val habitatChoicePanel: JPanel = new JPanel
+    val topControlsPanel: JPanel = new JPanel
     val label: JLabel = new JLabel("Select a habitat: ")
     habitatChoice = new JComboBox[String]
     for (habitat <- HABITATS) {
-      habitatChoice.addItem(habitat.getName) // .name
+      habitatChoice.addItem(habitat.getName)
     }
 
     habitatChoice.setSelectedIndex(DEFAULT_HABITAT_INDEX)
     habitatChoice.addItemListener(this)
-    habitatChoicePanel.add(label)
-    habitatChoicePanel.add(habitatChoice)
+    topControlsPanel.add(label)
+    topControlsPanel.add(habitatChoice)
 
-    panel.add(habitatChoicePanel)
+    panel.add(topControlsPanel)
     panel
   }
 

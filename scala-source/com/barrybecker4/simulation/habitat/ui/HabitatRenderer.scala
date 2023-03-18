@@ -25,6 +25,9 @@ class HabitatRenderer private[habitat](var populations: Habitat) {
   def paint(g: Graphics): Unit = {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
+    
+    g2.setColor(Color.WHITE)
+    g2.fillRect(0, 0, width, height)
 
     for (pop <- populations) {
       for (creature <- pop.creatures) {

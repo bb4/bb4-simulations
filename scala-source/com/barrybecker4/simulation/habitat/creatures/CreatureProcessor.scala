@@ -59,7 +59,8 @@ case class CreatureProcessor(creature: Creature) {
         a.isEating = false
       }
       else {
-        a.prey.get.getAttributes.hitPoints -= cType.eatRate
+        val prey = a.prey.get
+        prey.getAttributes.hitPoints -= cType.eatRate
         a.hitPoints = cType.nutritionalValue
         a.hunger = Math.max(0, a.hunger - cType.eatRate)
         if (a.isEating && a.hunger == 0)

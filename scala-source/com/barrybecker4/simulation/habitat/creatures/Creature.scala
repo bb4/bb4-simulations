@@ -20,6 +20,7 @@ class Creature private[creatures](var cType: CreatureType, var location: Point2d
       cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false)
 
   def kill(): Unit = { 
+    attributes.speed = 0
     attributes.isBeingEaten = true 
     attributes.prey = None
     attributes.pursuedBy = None
