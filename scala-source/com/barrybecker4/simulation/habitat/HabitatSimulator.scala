@@ -10,10 +10,11 @@ import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatHabitat,
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
 import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor}
+import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer
 
 import javax.swing.*
 import java.awt.*
-import com.barrybecker4.simulation.habitat.ui.{CreatureRenderer, HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
+import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
 
 
 /**

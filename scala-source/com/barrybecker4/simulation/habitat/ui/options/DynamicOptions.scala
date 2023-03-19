@@ -40,7 +40,7 @@ class DynamicOptions(val simulator: HabitatSimulator)
   private val sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
-  private var habitatChoice = new JComboBox[String]
+  private var habitatChoice: JComboBox[String] = _
 
   initialize()
 
@@ -67,14 +67,17 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
 
+    debugCheckBox = createCheckbox("Debug", DEFAULT_DEBUG,
+      "When checked, debug info is shown graphicall and in the console.")
+
     panel.add(createHabitatChoicePanel())
     panel.add(createIncrementPanel())
-    panel.add(createDebugCheckBox())
+    panel.add(debugCheckBox)
     panel
   }
 
   private def createHabitatChoicePanel(): JPanel = {
-    val panel: JPanel = new JPanel
+    val panel: JPanel = new JPanel()
     val choiceLabel: JLabel = new JLabel("Select a habitat: ")
     habitatChoice = new JComboBox[String]
     for (habitat <- HABITATS) {
@@ -86,16 +89,12 @@ class DynamicOptions(val simulator: HabitatSimulator)
 
     panel.add(choiceLabel)
     panel.add(habitatChoice)
-  }
-
-  private def createDebugCheckBox(): JPanel = {
-    debugCheckBox = createCheckbox("Debug", DEFAULT_DEBUG,
-      "When checked, debug info is shown graphicall and in the console.")
+    panel
   }
 
   /** Controls to allow iterating continuously or one step at a time.
    */
-  private def createIncrementPanel: JPanel = {
+  private def createIncrementPanel(): JPanel = {
     val panel: JPanel = new JPanel(new BorderLayout)
     useContinuousIteration =
       createCheckbox("Continuous iteration", DEFAULT_USE_CONTINUOUS_ITERATION,
