@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
+import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.simulation.habitat.HabitatSimulator
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
@@ -15,6 +16,8 @@ import scala.collection.mutable.ArrayBuffer
 
 object DynamicOptions {
   val INITIAL_ITERATIONS_PER_FRAME = 1
+  val DEFAULT_USE_CONTINUOUS_ITERATION = true
+  val DEFAULT_DEBUG = false
   private val INITIAL_X_PIXELS_PER_POINT = 5
 }
 
@@ -32,11 +35,12 @@ class DynamicOptions(val simulator: HabitatSimulator)
   private var iterationsPerFrameSlider: JSlider = _
   private var debugCheckBox: JCheckBox = _
 
+  private var useContinuousIteration: JCheckBox = _
+  private var nextButton: JButton = _
   private val sliderGroups = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
   private var habitatChoice = new JComboBox[String]
-
 
   initialize()
 
@@ -64,7 +68,8 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))
 
     panel.add(createHabitatChoicePanel())
-    panel.add(createDebugCheckBoxPanel())
+    panel.add(createIncrementPanel())
+    panel.add(createDebugCheckBox())
     panel
   }
 
@@ -81,14 +86,32 @@ class DynamicOptions(val simulator: HabitatSimulator)
 
     panel.add(choiceLabel)
     panel.add(habitatChoice)
-    panel
   }
 
-  private def createDebugCheckBoxPanel(): JPanel = {
-    val panel: JPanel = new JPanel
-    debugCheckBox = new JCheckBox("Debug")
-    debugCheckBox.addActionListener(this)
-    panel.add(debugCheckBox)
+  private def createDebugCheckBox(): JPanel = {
+    debugCheckBox = createCheckbox("Debug", DEFAULT_DEBUG,
+      "When checked, debug info is shown graphicall and in the console.")
+  }
+
+  /** Controls to allow iterating continuously or one step at a time.
+   */
+  private def createIncrementPanel: JPanel = {
+    val panel: JPanel = new JPanel(new BorderLayout)
+    useContinuousIteration =
+      createCheckbox("Continuous iteration", DEFAULT_USE_CONTINUOUS_ITERATION,
+        "When checked, the simulation proceeds continuously. " +
+          "When unchecked, use the 'Next' button to advance one time step at a time.")
+
+    val nextPanel = new JPanel()
+    nextPanel.setToolTipText("Click to advance one time step at a time")
+    nextPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20))
+    nextButton = new JButton("Next")
+    nextButton.addActionListener(this)
+    nextButton.setEnabled(!useContinuousIteration.isSelected)
+    nextPanel.add(nextButton)
+
+    panel.add(useContinuousIteration, BorderLayout.CENTER)
+    panel.add(nextPanel, BorderLayout.EAST)
     panel
   }
 
@@ -100,6 +123,14 @@ class DynamicOptions(val simulator: HabitatSimulator)
     panel.add(createPixelsPerXPointSlider())
     panel.add(createIterationsPerFrameSlider())
     panel
+  }
+
+  private def createCheckbox(labelText: String, defaultValue: Boolean, tooltip: String): JCheckBox = {
+    val cb: JCheckBox = new JCheckBox(labelText)
+    cb.setToolTipText(tooltip)
+    cb.setSelected(defaultValue)
+    cb.addActionListener(this)
+    cb
   }
 
   private def createPixelsPerXPointSlider(): JPanel = {
@@ -168,7 +199,23 @@ class DynamicOptions(val simulator: HabitatSimulator)
   }
 
   override def actionPerformed(e: ActionEvent): Unit = {
-    val isDebug = debugCheckBox.isSelected
-    simulator.setDebug(isDebug)
+    val source: Component = e.getSource.asInstanceOf[Component]
+    if (source == nextButton) {
+      simulator.requestNextStep()
+    }
+    else if (source == useContinuousIteration) {
+        val useContinuous: Boolean = useContinuousIteration.isSelected
+        simulator.setUseContinuousIteration(useContinuous)
+        nextButton.setEnabled(!useContinuous)
+        if (!useContinuous) {
+          // do one last step in case the rendering was interrupted.
+          ThreadUtil.sleep(100)
+          simulator.requestNextStep()
+        }
+    }
+    else if (source == debugCheckBox) {
+      val isDebug = debugCheckBox.isSelected
+      simulator.setDebug(isDebug)
+    }
   }
 }

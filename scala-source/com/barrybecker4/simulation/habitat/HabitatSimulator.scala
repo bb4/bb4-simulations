@@ -33,6 +33,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   setBackground(Color.WHITE)
   private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
+  private var useContinuousIteration = DynamicOptions.DEFAULT_USE_CONTINUOUS_ITERATION
   private var habitat = Habitat.HABITATS(Habitat.DEFAULT_HABITAT_INDEX)
   private var options: DynamicOptions = _
   private var splitPanel = new HabitatSplitPanel(habitat)
@@ -51,9 +52,11 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   override protected def getInitialTimeStep = 0.1
 
   override def timeStep: Double = {
-    for (_ <- 0 until iterationsPerFrame) {
-      options.update()
-      habitat.nextDay()
+    if (useContinuousIteration) {
+      for (i <- 0 until iterationsPerFrame) {
+        options.update()
+        habitat.nextDay()
+      }
     }
     tStep
   }
@@ -69,7 +72,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     ThreadUtil.sleep(100)
     this.setPaused(true)
   }
-  
+
   def setDebug(isDebug: Boolean): Unit = {
     CreatureProcessor.DEBUG = isDebug
     CreatureRenderer.DEBUG = isDebug
@@ -82,7 +85,16 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   def setIterationsPerFrame(iterationsPerFrame: Int): Unit = {
     this.iterationsPerFrame = iterationsPerFrame
   }
-  
+
+  def setUseContinuousIteration(useContinuous: Boolean): Unit = {
+    this.useContinuousIteration = useContinuous
+  }
+
+  def requestNextStep(): Unit = {
+      habitat.nextDay()
+      splitPanel.repaint()
+  }
+
   /** Draw the population graph under the habitat. */
   override def paint(g: Graphics): Unit = {
     splitPanel.setSize(getSize)

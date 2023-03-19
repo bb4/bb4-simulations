@@ -1,9 +1,9 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.habitat.ui
+// Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+package com.barrybecker4.simulation.habitat.ui.renderers
 
 import com.barrybecker4.simulation.habitat.creatures.Creature
 import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
-import com.barrybecker4.simulation.habitat.ui.CreatureRenderer.*
+import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer.*
 
 import java.awt.*
 
@@ -17,6 +17,8 @@ object CreatureRenderer {
   private val HEALTH_BAR_COLOR = new Color(0, 145, 0)
   private val BLOOD_RED = new Color(210, 20, 0)
   var DEBUG = false
+  private val HEALTH_BAR_X_OFFSET = 4
+  private val DEBUG = true
 }
 
 case class CreatureRenderer(width: Int, height: Int) {
@@ -25,14 +27,10 @@ case class CreatureRenderer(width: Int, height: Int) {
 
     val centerX = (creature.getLocation.x * width).toInt
     val centerY = (creature.getLocation.y * height).toInt
-    
+
     // if being eaten, and has ability to move, draw some blood
     if (creature.isBeingEaten && creature.cType.maxSpeed > 0) {
-      assert(creature.getVelocity.length() == 0)
-      g2.setColor(BLOOD_RED)
-      val w = (creature.getSize * width  * (1.1 + Math.random()) * SIZE_SCALE + 2).toInt
-      val h = (creature.getSize * height * (1.1 + Math.random()) * SIZE_SCALE + 2).toInt
-      g2.fillOval(centerX - w / 2, centerY - h / 2, w, h)
+      drawBlood(creature, g2)
       return
     }
     g2.setColor(creature.cType.color)
@@ -59,13 +57,22 @@ case class CreatureRenderer(width: Int, height: Int) {
     }
   }
 
+  private def drawBlood(creature: Creature, g2: Graphics2D): Unit = {
+    g2.setColor(BLOOD_RED)
+    val w = (creature.getSize * width * (1.1 + Math.random()) * SIZE_SCALE + 1).toInt
+    val h = (creature.getSize * height * (1.1 + Math.random()) * SIZE_SCALE + 1).toInt
+    val centerX = (creature.getLocation.x * width).toInt
+    val centerY = (creature.getLocation.y * height).toInt
+    g2.fillOval(centerX - w / 2, centerY - h / 2, w, h)
+  }
+
   private def drawStarvationBar(creature: Creature, centerX: Int, centerY: Int, g2: Graphics2D): Unit = {
     g2.setColor(HEALTH_BAR_COLOR)
     val healthSize = creature.getHealth / 4
     val y = (centerY + 3 + creature.getSize * height * SIZE_SCALE / 2).toInt
     g2.drawLine(centerX - 8, y, centerX + healthSize, y)
-  }  
-  
+  }
+
   private def drawConnectingLine(creature: Creature, g2: Graphics2D): Unit = {
     g2.setColor(Color.BLACK)
     val prey = creature.getPrey.get
