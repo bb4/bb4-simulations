@@ -56,6 +56,20 @@ class VelocityUpdater {
     if (!neighbors.getRight.isObstacle) {
       val xNume = u_i * u_i - u_ip1 * u_ip1
       val yNume = u_ipjm * v_ipjm - ipjp2
+      /*
+      val xNume = if (cell.getU >= 0) {
+        cell.getU * (cell.getV - neighbors.getLeft.getV)
+      } else {
+        cell.getU * (neighbors.getRight.getV - cell.getV)
+      }
+
+      val yNume = if (cell.getV >= 0) {
+        cell.getV * (cell.getU - neighbors.getBottom.getU)
+      } else {
+        cell.getV * (neighbors.getTop.getU - cell.getU)
+      }
+      */
+
       val v1 = (neighbors.getRight.getU - 2 * cell.getU + neighbors.getLeft.getU) / dims.dxSq
       val v2 = (neighbors.getTop.getU - 2 * cell.getU + neighbors.getBottom.getU) / dims.dySq
       val pf = xNume / dims.dx + yNume / dims.dy +

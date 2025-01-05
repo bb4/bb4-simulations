@@ -2,10 +2,10 @@
 package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.Logger
-import com.barrybecker4.simulation.liquid.model.Grid
 import com.barrybecker4.simulation.liquid.model.Particles
 import javax.vecmath.Vector2d
 import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
+import com.barrybecker4.simulation.liquid.model.grid.Grid
 
 
 /**
@@ -44,8 +44,7 @@ class GridUpdater(var grid: Grid) {
   /** Compute tilde velocity of each cell */
   def updateVelocity(timeStep: Double, gravity: Double): Unit = {
     Logger.log(1, "stepForward: about to update the velocity field (timeStep=" + timeStep + ')')
-    //var i = 0
-    //var j = 0
+
     val force = new Vector2d(0, gravity)
     val velocityUpdater = new VelocityUpdater
     for (j <- 1 until grid.getYDimension - 1) {

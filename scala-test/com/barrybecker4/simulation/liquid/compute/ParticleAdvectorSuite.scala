@@ -3,11 +3,13 @@ package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.math.linear.LinearUtil
 import com.barrybecker4.math.MathUtil
-import com.barrybecker4.simulation.liquid.model._
+import com.barrybecker4.simulation.liquid.model.*
+
 import javax.vecmath.Vector2d
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import ParticleAdvectorSuite._
+import ParticleAdvectorSuite.*
+import com.barrybecker4.simulation.liquid.model.grid.{Grid, NonUniformGrid}
 import org.scalatest.funsuite.AnyFunSuite
 
 

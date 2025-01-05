@@ -38,7 +38,7 @@ class LiquidSimulator()
   private var envRenderer: EnvironmentRenderer = _
   /** These options can be changed while the simulation is running. */
   private var dynamicOptions: LiquidDynamicOptions = _
-  private var advectionOnly = false
+  private var advectionOnly = true
   commonInit()
 
   private[liquid] def loadEnvironment(configFile: String): Unit = {

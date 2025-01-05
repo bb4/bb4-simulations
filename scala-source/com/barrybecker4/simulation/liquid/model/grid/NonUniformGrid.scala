@@ -1,8 +1,9 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.model
+// Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+package com.barrybecker4.simulation.liquid.model.grid
+
+import com.barrybecker4.simulation.liquid.model.CellStatus
 
 import javax.vecmath.Vector2d
-import com.barrybecker4.simulation.liquid.model.CellStatus
 
 
 /**

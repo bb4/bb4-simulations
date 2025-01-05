@@ -5,9 +5,9 @@ import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.model.Cell
 import com.barrybecker4.simulation.liquid.model.CellDimensions
 import com.barrybecker4.simulation.liquid.model.CellStatus
-import com.barrybecker4.simulation.liquid.model.Grid
 import com.barrybecker4.simulation.liquid.model.Particle
 import com.barrybecker4.simulation.liquid.model.Particles
+import com.barrybecker4.simulation.liquid.model.grid.Grid
 
 
 /**

@@ -1,6 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.model
 
+import com.barrybecker4.simulation.liquid.model.grid.Grid
+
 import scala.collection.immutable.HashSet
 import scala.util.Random
 

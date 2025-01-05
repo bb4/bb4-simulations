@@ -5,6 +5,9 @@ import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.simulation.liquid.config.Conditions
 import com.barrybecker4.simulation.liquid.config.Source
+import com.barrybecker4.simulation.liquid.model.grid.{FluidGrid, Grid, VortexGrid}
+
+import javax.vecmath.Vector2d
 
 
 /**
@@ -36,11 +39,12 @@ class LiquidEnvironment(val configFile: String) {
   private var gridUpdater: GridUpdater = _
   /** constraints and conditions from the configuration file. */
   private var conditions: Conditions = _
+
   // the set of particles in this simulation
   private var particles: Particles = _
   /** the time since the start of the simulation  */
   private var time = 0.0
-  private var advectionOnly = false
+  private var advectionOnly = true
 
   private def initializeFromConfigFile(configFile: String): Unit = {
     conditions = new Conditions(configFile)
@@ -68,7 +72,9 @@ class LiquidEnvironment(val configFile: String) {
   def setViscosity(v: Double): Unit = { gridUpdater.setViscosity(v)}
   def setB0(b0: Double): Unit = { gridUpdater.setB0(b0) }
   def getAdvectionOnly: Boolean = advectionOnly
-  def setAdvectionOnly(advectOnly: Boolean): Unit = { advectionOnly = advectOnly }
+  def setAdvectionOnly(advectOnly: Boolean): Unit = { 
+    advectionOnly = advectOnly 
+  }
 
   /**
     * Steps the simulation forward in time.

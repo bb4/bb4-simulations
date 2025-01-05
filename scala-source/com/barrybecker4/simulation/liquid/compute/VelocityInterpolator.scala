@@ -2,8 +2,8 @@
 package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model.Cell
-import com.barrybecker4.simulation.liquid.model.Grid
 import com.barrybecker4.simulation.liquid.model.Particle
+import com.barrybecker4.simulation.liquid.model.grid.Grid
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
 

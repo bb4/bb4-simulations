@@ -1,11 +1,13 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.compute
 
-import com.barrybecker4.simulation.liquid.model._
+import com.barrybecker4.simulation.liquid.model.*
+
 import javax.vecmath.Vector2d
 import org.junit.Assert.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
-import PressureUpdaterSuite._
+import PressureUpdaterSuite.*
+import com.barrybecker4.simulation.liquid.model.grid.{Grid, NonUniformGrid}
 
 
 /**

@@ -1,8 +1,10 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.model
+// Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
+package com.barrybecker4.simulation.liquid.model.grid
 
-import javax.vecmath.Vector2d
+import com.barrybecker4.simulation.liquid.model.{Cell, CellNeighbors, CellStatus}
+
 import java.text.DecimalFormat
+import javax.vecmath.Vector2d
 
 
 /**
@@ -18,7 +20,7 @@ import java.text.DecimalFormat
 class Grid(var xDim: Int, var yDim: Int) {
 
   /** the grid of cells that make up the environment in x,y (col, row) order */
-  private var grid = Array.ofDim[Cell](xDim, yDim)
+  protected val grid: Array[Array[Cell]] = Array.ofDim[Cell](xDim, yDim)
 
   for (j <- 0 until yDim)
     for (i <- 0 until xDim)
