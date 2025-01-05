@@ -44,7 +44,6 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
         drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
       }
     }
-    show()
   }
 
   def drawPoints(samples: Seq[Point]): Unit = {
@@ -86,16 +85,11 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
       drawPolygon(poly)
 
     // the original code passed a delay here to give interaction a chance to process, but I'm not sure that it is needed.
-    show() // pass 1?
+    //show() // pass 1?
   }
 
   def clear(): Unit = {
     offlineGraphics.clear()
-  }
-
-  def show(): Unit = {
-    if (panel != null)
-      panel.repaint()
   }
 
   private def fillCircle(p: Point, radius: Double): Unit = {

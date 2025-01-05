@@ -6,7 +6,7 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
     dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.8-SNAPSHOT'
+        classpath 'com.barrybecker4:bb4-gradle:1.9-SNAPSHOT'
     }
 }
 
@@ -36,8 +36,8 @@ dependencies {
     implementation 'com.barrybecker4:bb4-sound:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-optimization:1.8-SNAPSHOT'
     implementation 'com.barrybecker4:bb4-ui:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-common:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-math:1.8-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:1.8'
+    implementation 'com.barrybecker4:bb4-math:1.8'
 }
 
 task runFractExpLocalized(type: JavaExec) {

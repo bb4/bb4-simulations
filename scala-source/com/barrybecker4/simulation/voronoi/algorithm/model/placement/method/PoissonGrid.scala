@@ -21,18 +21,6 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
   private val grid: Array[Array[Int]] = Array.fill(xBins, yBins)(-1)
   var samples: IndexedSeq[Point] = IndexedSeq()
 
-  def getSampleIndex(x: Double, y:Double): Int = grid(getIdx(x))(getIdx(y))
-  def getPoint(index: Int): Point = samples(index)
-  def getNumSamples: Int = samples.length
-
-  def addSample(point: Point): Int = {
-    samples :+= point
-    val xIdx = getIdx(point.x)
-    val yIdx = getIdx(point.y)
-    assert(grid(xIdx)(yIdx) == -1, "There is already a value at " + xIdx + " "  + yIdx)
-    grid(xIdx)(yIdx) = samples.length - 1
-    samples.length - 1
-  }
 
   def addNewElementIfPossible(index: Int, k: Int): Int = {
     val point = samples(index)
@@ -46,6 +34,15 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
       }
     }
     -1
+  }
+
+  def addSample(point: Point): Int = {
+    samples :+= point
+    val xIdx = getIdx(point.x)
+    val yIdx = getIdx(point.y)
+    assert(grid(xIdx)(yIdx) == -1, "There is already a value at " + xIdx + " " + yIdx)
+    grid(xIdx)(yIdx) = samples.length - 1
+    samples.length - 1
   }
 
   private def getIdx(d: Double): Int = (d / cellSize).toInt

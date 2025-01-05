@@ -17,7 +17,6 @@ object CreatureRenderer {
   private val HEALTH_BAR_COLOR = new Color(0, 145, 0)
   private val BLOOD_RED = new Color(210, 20, 0)
   var DEBUG = false
-  private val HEALTH_BAR_X_OFFSET = 4
 }
 
 case class CreatureRenderer(width: Int, height: Int) {

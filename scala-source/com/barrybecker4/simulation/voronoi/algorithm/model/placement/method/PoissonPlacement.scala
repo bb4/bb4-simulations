@@ -48,9 +48,10 @@ class PoissonPlacement(
       if (newIndex >= 0) {
         activeList.addElement(newIndex)
         activeList.addElement(index) // add it back
+        count += 1
       }
-      count += 1
     }
+    //println("numPoints = " + count)
   }
 
 }
