@@ -1,9 +1,12 @@
 /** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
-import GrayScottModel._
-import java.awt._
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration._
+import GrayScottModel.*
+
+import java.awt.*
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.*
+
+import scala.compiletime.uninitialized
 
 
 /**
@@ -18,6 +21,9 @@ object GrayScottModel {
   val K0: Double =  0.079
 
   val H0: Double = 1.0
+
+  val DEFAULT_DU: Double = 2.0e-1
+  val DEFAULT_DV: Double = 1.0e-1
 
   /** Radius for area of effect when doing manual modification with click/drag brush */
   val DEFAULT_BRUSH_RADIUS = 2
@@ -42,14 +48,14 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   var initializer: Initializer = Initializer.DEFAULT_INITIALIZER
 
   /** concentrations of the 2 chemicals, u and v. */
-  var u: Array[Array[Double]] = _
-  var v: Array[Array[Double]] = _
+  var u: Array[Array[Double]] = uninitialized
+  var v: Array[Array[Double]] = uninitialized
 
-  private[algorithm] var tmpU: Array[Array[Double]] = _
-  private[algorithm] var tmpV: Array[Array[Double]] = _
+  private[algorithm] var tmpU: Array[Array[Double]] = uninitialized
+  private[algorithm] var tmpV: Array[Array[Double]] = uninitialized
 
-  private var k: Double = _
-  private var f: Double = _
+  private var k: Double = uninitialized
+  private var f: Double = uninitialized
   resetState()
 
   def getWidth: Int = width

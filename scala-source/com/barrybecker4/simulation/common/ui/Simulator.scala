@@ -7,14 +7,16 @@ import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.ui.animation.AnimationComponent
 import com.barrybecker4.ui.components.GradientButton
 import com.barrybecker4.ui.util.GUIUtil
+
 import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.JPanel
 import java.awt.Component
 import java.awt.event.ActionEvent
-
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.util.FileUtil
+
+import scala.compiletime.uninitialized
 
 
 /**
@@ -26,8 +28,9 @@ import com.barrybecker4.common.util.FileUtil
 abstract class Simulator(val name: String) extends AnimationComponent with Optimizee {
 
   protected var tStep: Double = getInitialTimeStep
-  private var optionsDialog: SimulatorOptionsDialog = _
-  protected var frame: JFrame = _
+  private var optionsDialog: SimulatorOptionsDialog = uninitialized
+  protected var frame: JFrame = uninitialized
+  
   setName(name)
 
   /** whether or not to use anti-aliasing when rendering */

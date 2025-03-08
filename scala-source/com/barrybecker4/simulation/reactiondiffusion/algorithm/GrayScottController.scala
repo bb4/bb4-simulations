@@ -77,10 +77,14 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
 
   def reset(): Unit = {
     algorithm.setH(GrayScottModel.H0)
+    algorithm.setDu(GrayScottModel.DEFAULT_DU)
+    algorithm.setDv(GrayScottModel.DEFAULT_DV)
     model.resetState()
   }
 
   def setH(h: Double): Unit = { algorithm.setH(h) }
+  def setDu(du: Double): Unit = { algorithm.setDu(du) }
+  def setDv(dv: Double): Unit = { algorithm.setDv(dv) }
 
   /** Set this to true if you want to run the version
     * that will partition the task of computing the next timeStop

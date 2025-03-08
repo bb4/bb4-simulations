@@ -5,8 +5,10 @@ import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
 import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOptions
-import javax.swing._
-import java.awt._
+
+import javax.swing.*
+import java.awt.*
+import scala.compiletime.uninitialized
 
 
 /**
@@ -20,10 +22,10 @@ object RDSimulator {
 
 class RDSimulator() extends Simulator("Reaction Diffusion") {
 
-  private var grayScott: GrayScottController = _
-  private var viewer: RDViewer = _
-  private var rdOptions: RDDynamicOptions = _
-  private var handler: InteractionHandler = _
+  private var grayScott: GrayScottController = uninitialized
+  private var viewer: RDViewer = uninitialized
+  private var rdOptions: RDDynamicOptions = uninitialized
+  private var handler: InteractionHandler = uninitialized
   commonInit()
 
   /**
@@ -37,6 +39,14 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
 
   def setUseOffscreenRendering(use: Boolean): Unit = {
     viewer.setUseOffscreenRendering(use)
+  }
+
+  def setUDiffusionRate(rate: Double): Unit = {
+    grayScott.setDu(rate)
+  }
+
+  def setVDiffusionRate(rate: Double): Unit = {
+    grayScott.setDv(rate)
   }
 
   def getUseOffScreenRendering: Boolean = viewer.getUseOffScreenRendering

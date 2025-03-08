@@ -1,21 +1,21 @@
 /** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
-import GrayScottAlgorithm._
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel.{DEFAULT_DU, DEFAULT_DV, H0}
+
+import scala.compiletime.uninitialized
+
 
 /**
   * This is the core of the Gray-Scott reaction diffusion simulation implementation.
-  * Based on an work by Joakim Linde and modified by Barry Becker.
+  * Based on work by Joakim Linde and modified by Barry Becker.
   */
-object GrayScottAlgorithm {
-  /** These are the diffusion rates of the 2 chemicals. We could add scrollbars to scale these */
-  private val DU: Double = 2.0e-1
-  private val DV: Double = 1.0e-1
-}
-
 final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
-  private var duDivh2: Double = _
-  private var dvDivh2: Double = _
+  private var du = DEFAULT_DU
+  private var dv = DEFAULT_DV
+  private var h = H0
+  private var duDivh2: Double = uninitialized
+  private var dvDivh2: Double = uninitialized
 
   def computeNextTimeStep(minX: Int, maxX: Int, dt: Double): Unit = {
     val u = model.tmpU
@@ -47,10 +47,25 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
     }
   }
 
+  def setDu(rate: Double): Unit = {
+    du = rate
+    updateRates()
+  }
+
+  def setDv(rate: Double): Unit = {
+    dv = rate
+    updateRates()
+  }
+  
   def setH(h: Double): Unit = {
+    this.h = h
+    updateRates()
+  }
+  
+  private def updateRates(): Unit = {
     val h2 = h * h
-    duDivh2 = DU / h2
-    dvDivh2 = DV / h2
+    duDivh2 = du / h2
+    dvDivh2 = dv / h2
   }
 
   /** Calculate new values on an edge. */

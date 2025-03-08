@@ -1,19 +1,19 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion
 
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
-import RDDynamicOptions._
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.{GrayScottAlgorithm, GrayScottController, GrayScottModel}
+import RDDynamicOptions.*
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
-import javax.swing._
-import java.awt._
-import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 
-import com.barrybecker4.simulation.cave.model.CaveProcessor
+import javax.swing.*
+import java.awt.*
+import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Initializer
+
+import scala.compiletime.uninitialized
 
 
 /**
@@ -32,18 +32,23 @@ object RDDynamicOptions {
   private val TIMESTEP_SLIDER = "Time Step Size"
   private val BRUSH_RADIUS_SLIDER = "Brush Radius"
   private val BRUSH_STRENGTH_SLIDER = "Brush Strength"
+  private val DIFFUSION_U_SLIDER = "U Diffusion Rate"
+  private val DIFFUSION_V_SLIDER = "V Diffusion Rate"
+
   private val MIN_NUM_STEPS = RDSimulator.DEFAULT_STEPS_PER_FRAME / 10.0
   private val MAX_NUM_STEPS = 10.0 * RDSimulator.DEFAULT_STEPS_PER_FRAME
   private val SPACER_HT = 10
 
   private val SLIDER_PROPS = Array(
     new SliderProperties(F_SLIDER, 0, 0.25, GrayScottModel.F0, 10000),
-    new SliderProperties(K_SLIDER, 0, 0.25, GrayScottModel.K0, 10000),
+    new SliderProperties(K_SLIDER, 0.05, 0.10, GrayScottModel.K0, 10000),
     new SliderProperties(H_SLIDER, 0.5, 4.0, GrayScottModel.H0, 10000),
     new SliderProperties(BH_SLIDER, 0, 20.0, 0.0, 10),
     new SliderProperties(SH_SLIDER, 0, 1.0, 0.0, 100),
     new SliderProperties(NS_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, RDSimulator.DEFAULT_STEPS_PER_FRAME, 1),
-    new SliderProperties(TIMESTEP_SLIDER, 0.1, 2.0, RDSimulator.INITIAL_TIME_STEP, 100)
+    new SliderProperties(TIMESTEP_SLIDER, 0.1, 2.0, RDSimulator.INITIAL_TIME_STEP, 100),
+    new SliderProperties(DIFFUSION_U_SLIDER, 0.001, 0.5, GrayScottModel.DEFAULT_DU, 1000),
+    new SliderProperties(DIFFUSION_V_SLIDER, 0.001, 0.5, GrayScottModel.DEFAULT_DV, 1000),
   )
 
   private val BRUSH_SLIDER_PROPS = Array(
@@ -55,13 +60,13 @@ object RDDynamicOptions {
 class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, var simulator: RDSimulator)
   extends JPanel with ActionListener with ItemListener with SliderGroupChangeListener {
 
-  private var showU: JCheckBox = _
-  private var showV: JCheckBox = _
-  private var useComputeConcurrency: JCheckBox = _
-  private var useRenderingConcurrency: JCheckBox = _
-  private var useFixedSize: JCheckBox = _
-  private var sliderGroup: SliderGroup = _
-  private var initialConditionsDroplist: JComboBox[Initializer] = _
+  private var showU: JCheckBox = uninitialized
+  private var showV: JCheckBox = uninitialized
+  private var useComputeConcurrency: JCheckBox = uninitialized
+  private var useRenderingConcurrency: JCheckBox = uninitialized
+  private var useFixedSize: JCheckBox = uninitialized
+  private var sliderGroup: SliderGroup = uninitialized
+  private var initialConditionsDroplist: JComboBox[Initializer] = uninitialized
 
   initialize()
 
@@ -195,6 +200,8 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
       case SH_SLIDER => simulator.getRenderingOptions.setSpecular(value)
       case NS_SLIDER => simulator.setNumStepsPerFrame(value.toInt)
       case TIMESTEP_SLIDER => simulator.setTimeStep(value)
+      case DIFFUSION_U_SLIDER => simulator.setUDiffusionRate(value)
+      case DIFFUSION_V_SLIDER => simulator.setVDiffusionRate(value)
       case BRUSH_RADIUS_SLIDER => simulator.getInteractionHandler.setBrushRadius(value.toInt)
       case BRUSH_STRENGTH_SLIDER => simulator.getInteractionHandler.setBrushStrength(value)
     }
