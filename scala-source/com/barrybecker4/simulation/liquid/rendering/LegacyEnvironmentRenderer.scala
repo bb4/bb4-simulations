@@ -2,19 +2,18 @@
 package com.barrybecker4.simulation.liquid.rendering
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.compute.VelocityInterpolator
-import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
-import com.barrybecker4.simulation.liquid.model.Particle
+import com.barrybecker4.simulation.liquid.model.{Environment, LegacyLiquidEnvironment, Particle}
 import com.barrybecker4.ui.util.GUIUtil
-import java.awt._
+
+import java.awt.*
 
 
 /**
   * Renders a specified liquid environment.
   * @author Barry Becker
   */
-object EnvironmentRenderer {
+object LegacyEnvironmentRenderer {
   // rendering style attributes
   private val GRID_COLOR = new Color(20, 20, 20, 15)
   private val PARTICLE_VELOCITY_COLOR = new Color(225, 0, 35, 20)
@@ -31,8 +30,8 @@ object EnvironmentRenderer {
   private val BASE_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
 }
 
-final class EnvironmentRenderer(var env: LiquidEnvironment) {
-  private var scale: Double = EnvironmentRenderer.DEFAULT_SCALE
+final class LegacyEnvironmentRenderer(var env: Environment) {
+  private var scale: Double = LegacyEnvironmentRenderer.DEFAULT_SCALE
   private var wallLineWidth: Float = 0.0F
   private var particleSize = 0
   private val options = new RenderingOptions
@@ -61,23 +60,16 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     // make sure all the cell statuses are in a consistent state
     env.getGrid.updateCellStatus()
     drawGrid(g)
-    // draw the cells colored by ---pressure--- val
-    if (options.getShowPressures) renderPressure(g)
-    // draw the ---walls---
     drawWalls(g)
     drawParticles(g)
-    if (options.getShowCellStatus) drawCellSymbols(g)
-    // draw the ---velocity--- field (and status)
-    if (options.getShowVelocities) drawCellFaceVelocities(g)
     val duration = (System.currentTimeMillis - time) / 100.0
-    Logger.log(1, "time to render:  (" + duration + ") ")
   }
 
-  private def getMaxY = scale * env.getGrid.getYDimension + EnvironmentRenderer.OFFSET
+  private def getMaxY = scale * env.getGrid.getYDimension + LegacyEnvironmentRenderer.OFFSET
 
   /** Draw the cells/grid */
   private def drawGrid(g: Graphics2D): Unit = {
-    g.setColor(EnvironmentRenderer.GRID_COLOR)
+    g.setColor(LegacyEnvironmentRenderer.GRID_COLOR)
     val grid = env.getGrid
     val xDim = grid.getXDimension
     val yDim = grid.getYDimension
@@ -86,11 +78,11 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     val maxY = getMaxY.toInt
     for (j <- 0 until yDim) { //  -----
       val ypos = (j * scale).toInt
-      g.drawLine(EnvironmentRenderer.OFFSET, maxY - ypos, rightEdgePos + EnvironmentRenderer.OFFSET, maxY - ypos)
+      g.drawLine(LegacyEnvironmentRenderer.OFFSET, maxY - ypos, rightEdgePos + LegacyEnvironmentRenderer.OFFSET, maxY - ypos)
     }
     for (i <- 0 until xDim) { //  ||||
       val xpos = (i * scale).toInt
-      g.drawLine(xpos + EnvironmentRenderer.OFFSET, maxY, xpos + EnvironmentRenderer.OFFSET, maxY - bottomEdgePos)
+      g.drawLine(xpos + LegacyEnvironmentRenderer.OFFSET, maxY, xpos + LegacyEnvironmentRenderer.OFFSET, maxY - bottomEdgePos)
     }
   }
 
@@ -104,9 +96,8 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
       g.setColor(getColorForParticle(p))
       val offset = -particleSize / 2.0
       val y = (maxY - (scale * a(1) - offset)).toInt
-      g.fillOval((scale * a(0) + offset + EnvironmentRenderer.OFFSET).toInt, y, particleSize, particleSize)
+      g.fillOval((scale * a(0) + offset + LegacyEnvironmentRenderer.OFFSET).toInt, y, particleSize, particleSize)
     }
-    if (options.getShowVelocities) drawParticleVelocities(g)
   }
 
   private def getColorForParticle(part: Particle) = {
@@ -119,24 +110,12 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   }
 
   private def drawParticleVelocities(g: Graphics2D): Unit = {
-    g.setStroke(EnvironmentRenderer.PARTICLE_VELOCITY_STROKE)
-    g.setColor(EnvironmentRenderer.PARTICLE_VELOCITY_COLOR)
+    g.setStroke(LegacyEnvironmentRenderer.PARTICLE_VELOCITY_STROKE)
+    g.setColor(LegacyEnvironmentRenderer.PARTICLE_VELOCITY_COLOR)
     val a: Array[Double] = new Array[Double](2)
     val grid = env.getGrid
     val interpolator = new VelocityInterpolator(grid)
     val maxY = getMaxY
-
-    for (p <- env.getParticles) {
-      if (options.getShowVelocities) {
-        val vel = interpolator.findVelocity(p)
-        p.get(a)
-        val x = (scale * a(0)) + EnvironmentRenderer.OFFSET
-        val xLen = x + EnvironmentRenderer.VELOCITY_SCALE * vel.x
-        val y = maxY - scale * a(1)
-        val yLen = y - EnvironmentRenderer.VELOCITY_SCALE * vel.y
-        g.drawLine(x.toInt, y.toInt, xLen.toInt, yLen.toInt)
-      }
-    }
   }
 
   /** PathColor the squares according to the pressure in that discrete region. */
@@ -146,8 +125,8 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
 
     for (j <- 0 until grid.getYDimension) {
       for (i <- 0 until grid.getXDimension) {
-        g.setColor(EnvironmentRenderer.pressureColorMap.getColorForValue(grid.getCell(i, j).getPressure))
-        g.fillRect((scale * i).toInt + EnvironmentRenderer.OFFSET, (maxY - scale * j).toInt, scale.toInt, scale.toInt)
+        g.setColor(LegacyEnvironmentRenderer.pressureColorMap.getColorForValue(grid.getCell(i, j).getPressure))
+        g.fillRect((scale * i).toInt + LegacyEnvironmentRenderer.OFFSET, (maxY - scale * j).toInt, scale.toInt, scale.toInt)
       }
     }
   }
@@ -156,39 +135,26 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
   private def drawWalls(g: Graphics2D): Unit = {
     val wallStroke = new BasicStroke(wallLineWidth)
     g.setStroke(wallStroke)
-    g.setColor(EnvironmentRenderer.WALL_COLOR)
-    /*
-            //Stroke stroke = new BasicStroke(wall.getThickness(), BasicStroke.CAP_BUTT,
-            //                                BasicStroke.JOIN_ROUND, 10);
-            for (i=0; i<walls_.size(); i++)  {
-                Wall wall = (Wall)walls_.elementAt(i);
-                g.drawLine( (int)(wall.getStartPoint().getX()*rat+OFFSET),
-                            (int)(maxY - (wall.getStartPoint().getY()*rat+OFFSET)),
-                            (int)(wall.getStopPoint().getX()*rat+OFFSET),
-                            (int)(maxY - (wall.getStopPoint().getY()*rat+OFFSET)) );
-            }*/
+    g.setColor(LegacyEnvironmentRenderer.WALL_COLOR)
     // outer boundary
-    g.drawRect(EnvironmentRenderer.OFFSET, EnvironmentRenderer.OFFSET,
+    g.drawRect(LegacyEnvironmentRenderer.OFFSET, LegacyEnvironmentRenderer.OFFSET,
       (env.getGrid.getXDimension * scale).toInt, (env.getGrid.getYDimension * scale).toInt)
   }
 
   /** Draw text representing internal state for debug purposes. */
   private def drawCellSymbols(g: Graphics2D): Unit = {
     val grid = env.getGrid
-    g.setColor(EnvironmentRenderer.TEXT_COLOR)
-    g.setFont(EnvironmentRenderer.BASE_FONT)
+    g.setColor(LegacyEnvironmentRenderer.TEXT_COLOR)
+    g.setFont(LegacyEnvironmentRenderer.BASE_FONT)
     val strBuf = new StringBuilder("12")
     val maxY = getMaxY
 
     for (j <- 0 until grid.getYDimension) {
       for (i <- 0 until grid.getXDimension) {
-        val x = (scale * i).toInt + EnvironmentRenderer.OFFSET
+        val x = (scale * i).toInt + LegacyEnvironmentRenderer.OFFSET
         val y = (maxY - scale * (j + 1)).toInt
         strBuf.append(0, grid.getCell(i, j).getStatus.toString)
         strBuf.setLength(1)
-        //int nump = grid.getCell(i, j).getNumParticles();
-        //if ( nump > 0 )
-        //    strBuf.append( String.valueOf( nump ) );
         g.drawString(strBuf.toString, x + 6, y + 18)
       }
     }
@@ -196,8 +162,8 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
 
   /** There is a velocity vector in the center of each cell face. */
   private def drawCellFaceVelocities(g: Graphics2D): Unit = {
-    g.setStroke(EnvironmentRenderer.FACE_VELOCITY_STROKE)
-    g.setColor(EnvironmentRenderer.FACE_VELOCITY_COLOR)
+    g.setStroke(LegacyEnvironmentRenderer.FACE_VELOCITY_STROKE)
+    g.setColor(LegacyEnvironmentRenderer.FACE_VELOCITY_COLOR)
     val grid = env.getGrid
     val maxY = getMaxY
     for (j <- 0 until grid.getYDimension) {
@@ -205,12 +171,12 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
         val cell = grid.getCell(i, j)
         val u = cell.getU
         val v = cell.getV
-        val x = (scale * i).toInt + EnvironmentRenderer.OFFSET
-        val xMid = (scale * (i + 0.5)).toInt + EnvironmentRenderer.OFFSET
-        val xLen = (scale * i + EnvironmentRenderer.VELOCITY_SCALE * u).toInt + EnvironmentRenderer.OFFSET
+        val x = (scale * i).toInt + LegacyEnvironmentRenderer.OFFSET
+        val xMid = (scale * (i + 0.5)).toInt + LegacyEnvironmentRenderer.OFFSET
+        val xLen = (scale * i + LegacyEnvironmentRenderer.VELOCITY_SCALE * u).toInt + LegacyEnvironmentRenderer.OFFSET
         val y = (maxY - scale * j).toInt
         val yMid = (maxY - (scale * (j + 0.5))).toInt
-        val yLen = (maxY - (scale * j + EnvironmentRenderer.VELOCITY_SCALE * v)).toInt
+        val yLen = (maxY - (scale * j + LegacyEnvironmentRenderer.VELOCITY_SCALE * v)).toInt
         g.drawLine(xMid, y, xMid, yLen)
         g.drawLine(x, yMid, xLen, yMid)
       }

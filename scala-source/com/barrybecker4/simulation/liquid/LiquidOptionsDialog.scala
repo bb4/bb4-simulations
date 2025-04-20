@@ -3,9 +3,11 @@ package com.barrybecker4.simulation.liquid
 
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import javax.swing._
-import java.awt._
+
+import javax.swing.*
+import java.awt.*
 import java.awt.event.ActionEvent
+import scala.compiletime.uninitialized
 
 
 /**
@@ -16,12 +18,8 @@ import java.awt.event.ActionEvent
 class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSimulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var configurationChoiceField: JComboBox[String] = _
-  private var showPressureCheckbox: JCheckBox = _
-  private var showCellStatusCheckbox: JCheckBox = _
-  private var showGridCheckbox: JCheckBox = _
-  private var showVelocitiesCheckbox: JCheckBox = _
-  private var useSingleStepModeCheckbox: JCheckBox = _
+  private var configurationChoiceField: JComboBox[String] = uninitialized
+  private var showGridCheckbox: JCheckBox = uninitialized
 
   override protected def addAdditionalToggles(togglesPanel: JPanel): Unit = {
     val sim = getSimulator.asInstanceOf[LiquidSimulator]
@@ -29,24 +27,7 @@ class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSi
     showGridCheckbox = createCheckBox(
       "Show Wireframe", "draw showing the underlying wireframe mesh",
       ropts.getShowGrid)
-    showVelocitiesCheckbox = createCheckBox(
-      "Show Velocity Vectors", "show lines representing velocity vectors on each partical mass",
-      ropts.getShowVelocities)
-    showPressureCheckbox = createCheckBox(
-      "Show Force Vectors", "show lines representing force vectors on each partical mass",
-      ropts.getShowPressures)
-    showCellStatusCheckbox = createCheckBox(
-      "Show Cell Status", "show status for each of the cells",
-      ropts.getShowCellStatus)
-    useSingleStepModeCheckbox = createCheckBox(
-      "Use Single Stepping", "For debugging is may be useful to press a key to advance each timestep",
-      sim.getSingleStepMode)
-
     togglesPanel.add(showGridCheckbox)
-    togglesPanel.add(showVelocitiesCheckbox)
-    togglesPanel.add(showPressureCheckbox)
-    togglesPanel.add(showCellStatusCheckbox)
-    togglesPanel.add(useSingleStepModeCheckbox)
   }
 
   override protected def createCustomParamPanel: JPanel = {
@@ -84,10 +65,6 @@ class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSi
     val selected = ConfigurationEnum.toEnum(configurationChoiceField.getSelectedItem.toString)
     simulator.loadEnvironment(selected.fileName)
     simulator.getRenderingOptions.setShowGrid(showGridCheckbox.isSelected)
-    simulator.getRenderingOptions.setShowVelocities(showVelocitiesCheckbox.isSelected)
-    simulator.getRenderingOptions.setShowPressures(showPressureCheckbox.isSelected)
-    simulator.getRenderingOptions.setShowCellStatus(showCellStatusCheckbox.isSelected)
-    simulator.setSingleStepMode(useSingleStepModeCheckbox.isSelected)
     super.ok()
   }
 }

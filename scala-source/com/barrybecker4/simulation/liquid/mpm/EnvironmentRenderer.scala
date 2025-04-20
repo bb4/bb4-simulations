@@ -11,7 +11,7 @@ import java.awt.geom.Ellipse2D
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
-class SimulationRenderer(val simulation: MpmSimulation) extends JPanel {
+class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
   private val WINDOW_WIDTH = 800
   private val WINDOW_HEIGHT = 800
   private val mouseInteraction = new MouseInteraction(this, simulation, WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -20,6 +20,10 @@ class SimulationRenderer(val simulation: MpmSimulation) extends JPanel {
     super.paintComponent(g)
     val g2d = g.asInstanceOf[Graphics2D]
 
+    render(g2d, WINDOW_WIDTH, WINDOW_HEIGHT)
+  }
+  
+  def render(g2d: Graphics2D, width: Int, height: Int): Unit = {
     g2d.setRenderingHint(
       RenderingHints.KEY_ANTIALIASING,
       RenderingHints.VALUE_ANTIALIAS_ON

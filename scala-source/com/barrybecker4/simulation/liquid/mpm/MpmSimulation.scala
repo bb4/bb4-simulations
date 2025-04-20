@@ -47,7 +47,7 @@ abstract class MpmSimulation {
   }
 
   // Main simulation step
-  def advanceSimulation(): Unit = {
+  private def advanceSimulation(): Unit = {
     resetGrid()
     particlesToGrid()
     updateGridVelocities(params.gravity)

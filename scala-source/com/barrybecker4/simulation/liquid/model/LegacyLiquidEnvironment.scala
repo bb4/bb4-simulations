@@ -1,13 +1,11 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.model
 
-import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.simulation.liquid.config.Conditions
 import com.barrybecker4.simulation.liquid.config.Source
 import com.barrybecker4.simulation.liquid.model.grid.{FluidGrid, Grid, VortexGrid}
-
-import javax.vecmath.Vector2d
+import scala.compiletime.uninitialized
 
 
 /**
@@ -24,27 +22,26 @@ import javax.vecmath.Vector2d
   *
   * @author Barry Becker
   */
-object LiquidEnvironment {
+object LegacyLiquidEnvironment {
   private val NUM_RAND_PARTS = 1
 }
 
 /**
   * Constructor to use if you want the environment based on a config file.
   */
-class LiquidEnvironment(val configFile: String) {
+class LegacyLiquidEnvironment(val configFile: String) extends Environment {
   initializeFromConfigFile(configFile)
   /** the grid of cells that make up the environment */
-  private var grid: Grid = _
+  private var grid: Grid = uninitialized
   /** Does all the computational processing on the grid */
-  private var gridUpdater: GridUpdater = _
+  private var gridUpdater: GridUpdater = uninitialized
   /** constraints and conditions from the configuration file. */
-  private var conditions: Conditions = _
+  private var conditions: Conditions = uninitialized
 
   // the set of particles in this simulation
-  private var particles: Particles = _
+  private var particles: Particles = uninitialized
   /** the time since the start of the simulation  */
   private var time = 0.0
-  private var advectionOnly = true
 
   private def initializeFromConfigFile(configFile: String): Unit = {
     conditions = new Conditions(configFile)
@@ -71,10 +68,6 @@ class LiquidEnvironment(val configFile: String) {
 
   def setViscosity(v: Double): Unit = { gridUpdater.setViscosity(v)}
   def setB0(b0: Double): Unit = { gridUpdater.setB0(b0) }
-  def getAdvectionOnly: Boolean = advectionOnly
-  def setAdvectionOnly(advectOnly: Boolean): Unit = { 
-    advectionOnly = advectOnly 
-  }
 
   /**
     * Steps the simulation forward in time.
@@ -83,24 +76,16 @@ class LiquidEnvironment(val configFile: String) {
     * Courant-Friedrichs-Levy condition is met.
     * In other words a particle should not be able to move more than a single cell
     * magnitude in a given timestep.
-    * @return new new timeStep to use.
+    * @return new timeStep to use.
     */
   def stepForward(timeStep: Double): Double = { // Update cell status so we can track the surface.
     grid.updateCellStatus()
     // Set up obstacle conditions for the free surface and obstacle cells
     setConstraints()
-    if (!advectionOnly) { // Compute velocities for all full cells.
-      gridUpdater.updateVelocity(timeStep, conditions.getGravity)
-      ////println(grid.toString());
-      // Compute the pressure for all Full Cells.
-      gridUpdater.updatePressure(timeStep)
-      // Re-calculate velocities for Surface cells.
-      gridUpdater.updateSurfaceVelocity()
-    }
+
     // Update the position of the surface and objects.
     val newTimeStep = gridUpdater.updateParticlePosition(timeStep, particles)
     time += newTimeStep
-    Logger.log(1, " the Time= " + time)
     newTimeStep
   }
 
@@ -108,7 +93,7 @@ class LiquidEnvironment(val configFile: String) {
     for (region <- conditions.getInitialLiquidRegions) {
       for (i <- region.getStart.getX to region.getStop.getX) {
         for (j <- region.getStart.getY to region.getStop.getY) {
-          particles.addRandomParticles(i, j, 4 * LiquidEnvironment.NUM_RAND_PARTS, grid)
+          particles.addRandomParticles(i, j, 4 * LegacyLiquidEnvironment.NUM_RAND_PARTS, grid)
         }
       }
     }
@@ -133,7 +118,7 @@ class LiquidEnvironment(val configFile: String) {
       for (i <- source.getStart.getX to source.getStop.getX) {
         for (j <- source.getStart.getY to source.getStop.getY) {
           grid.setVelocity(i, j, velocity)
-          particles.addRandomParticles(i, j, LiquidEnvironment.NUM_RAND_PARTS, grid)
+          particles.addRandomParticles(i, j, LegacyLiquidEnvironment.NUM_RAND_PARTS, grid)
         }
       }
     }

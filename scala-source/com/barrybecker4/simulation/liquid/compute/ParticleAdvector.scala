@@ -1,8 +1,6 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.compute
 
-import com.barrybecker4.simulation.liquid.Logger
-import com.barrybecker4.simulation.liquid.model.Cell
 import com.barrybecker4.simulation.liquid.model.CellDimensions
 import com.barrybecker4.simulation.liquid.model.CellStatus
 import com.barrybecker4.simulation.liquid.model.Particle
@@ -135,11 +133,9 @@ class ParticleAdvector(var grid: Grid) {
     var newTimeStep = timeStep
     if (increment > maxDistance) {
       newTimeStep /= 2.0
-      Logger.log(1, "advectParticles: HALVED dt=" + timeStep + " increment=" + increment)
     }
     else if (increment < minDistance) {
       newTimeStep *= 2.0
-      Logger.log(1, "advectParticles: DOUBLED dt=" + timeStep + " increment=" + increment + " maxLength=" + maxLength)
     }
     newTimeStep
   }

@@ -1,10 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.compute
 
-import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.model.Particles
-import javax.vecmath.Vector2d
-import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
 import com.barrybecker4.simulation.liquid.model.grid.Grid
 
 
@@ -41,47 +38,6 @@ class GridUpdater(var grid: Grid) {
 
   def setB0(b0: Double): Unit =  {this.b0 = b0 }
 
-  /** Compute tilde velocity of each cell */
-  def updateVelocity(timeStep: Double, gravity: Double): Unit = {
-    Logger.log(1, "stepForward: about to update the velocity field (timeStep=" + timeStep + ')')
-
-    val force = new Vector2d(0, gravity)
-    val velocityUpdater = new VelocityUpdater
-    for (j <- 1 until grid.getYDimension - 1) {
-      for (i <- 1 until grid.getXDimension - 1) {
-        velocityUpdater.updateTildeVelocities(
-          grid.getCell(i, j), grid.getNeighbors(i, j), grid.getCell(i - 1, j + 1), grid.getCell(i + 1, j - 1),
-          timeStep, force, viscosity)
-      }
-    }
-
-    for (j <- 1 until grid.getYDimension - 1)
-      for (i <- 1 until grid.getXDimension - 1)
-        grid.getCell(i, j).swap()
-  }
-
-  /**
-    * perform pressure iteration to consider mass conservation.
-    * repeat till all cells in the flow field have a divergence less than EPSILON.
-    * When things go bad, this can take 50-70 or more iterations.
-    * RISK: 6
-    * @return the maximum divergence of any of the cells in the grid.
-    */
-  def updatePressure(timeStep: Double): Double = {
-    val updater = new PressureUpdater(grid, b0)
-    val div = updater.updatePressure(timeStep)
-    if (updater.getNumIterations > 10) Logger.log(1, " updatePress: converged to maxDiv = " + div + " after " + updater.getNumIterations + " iterations.")
-    div
-  }
-
-  /** compute velocity and pressure of SURFACE cells. */
-  def updateSurfaceVelocity(): Unit = {
-    val surfaceUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE)
-
-    for (j <- 1 until grid.getYDimension - 1)
-      for (i <- 1 until grid.getXDimension - 1)
-        surfaceUpdater.updateSurfaceVelocities(grid.getCell(i, j), grid.getNeighbors(i, j))
-  }
 
   /**
     * move particles according to vector field.

@@ -6,8 +6,7 @@ import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 import com.barrybecker4.simulation.liquid.mpm.util.Mat2
 
 
-class WaterSimulation extends MpmSimulation {
-  import Vec2._
+class WaterEnvironment extends MpmSimulation {
   import Mat2._
 
   // Material constants for water

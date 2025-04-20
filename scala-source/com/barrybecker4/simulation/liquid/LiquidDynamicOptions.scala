@@ -24,7 +24,7 @@ object LiquidDynamicOptions {
 }
 
 class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
-  extends JPanel with SliderGroupChangeListener with ActionListener {
+  extends JPanel with SliderGroupChangeListener {
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
@@ -32,10 +32,7 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
   private var sliderGroup = new SliderGroup(createSliderProperties)
   sliderGroup.setSliderListener(this)
   add(sliderGroup)
-  private var advectionOnlyCheckBox = createCheckBox(
-    "Do advection only", "If checked we will not apply the Navier Stokes solver", liquidSim.getAdvectionOnly)
-
-  add(advectionOnlyCheckBox)
+  
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(10, 1000))
   add(fill)
@@ -44,7 +41,6 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
   protected def createCheckBox(label: String, ttip: String, initialValue: Boolean): JCheckBox = {
     val cb = new JCheckBox(label, initialValue)
     cb.setToolTipText(ttip)
-    cb.addActionListener(this)
     cb
   }
 
@@ -65,8 +61,5 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
     else if (sliderName == LiquidDynamicOptions.B0_SLIDER) liquidSim.getEnvironment.setB0(value)
     else if (sliderName == LiquidDynamicOptions.TIMESTEP_SLIDER) liquidSim.setTimeStep(value)
   }
-
-  override def actionPerformed(e: ActionEvent): Unit = {
-    if (e.getSource eq advectionOnlyCheckBox) liquidSim.setAdvectionOnly(advectionOnlyCheckBox.isSelected)
-  }
+  
 }

@@ -106,15 +106,6 @@ class VelocityUpdater {
       val v2 = (neighbors.getTop.getV - 2 * cell.getV + neighbors.getBottom.getV) / dims.dySq
       val pf = xNume / dims.dx + yNume / dims.dy + forceY + (cell.getPressure - neighbors.getBottom.getPressure) / dims.dy + viscosity * (v1 + v2)
       val newv = cell.getV + dt * pf
-      /*
-      if (Math.abs(pf) > 5.0) {
-          println("much bigger y change than expected. oldv ="
-                + vjp_[current_] + " newv="+ newv
-                  + "\nforceX=" + forceX + " forceY="+forceY
-                  + "\ncXp1=" + cXp1 + " cXm1=" + cXm1
-                  + "\ncXp1=" + cYp1 + " cXm1=" + cYm1
-                  + "\ncXp1Ym1=" + cXp1Ym1 + " cXm1Yp1=" + cXm1Yp1);
-      } */
       cell.setNewV(newv)
     }
   }

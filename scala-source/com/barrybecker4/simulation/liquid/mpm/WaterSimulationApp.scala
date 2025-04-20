@@ -11,11 +11,11 @@ object WaterSimulationApp {
 
     SwingUtilities.invokeLater(() => {
       // Create the water simulation
-      val simulation = new WaterSimulation()
+      val simulation = new WaterEnvironment()
       simulation.initialize()
 
       // Create visualization
-      val renderer = new SimulationRenderer(simulation)
+      val renderer = new EnvironmentRenderer(simulation)
 
       // Create frame
       val frame = new JFrame("MPM Water Simulation")

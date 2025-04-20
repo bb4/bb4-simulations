@@ -2,22 +2,15 @@
 package com.barrybecker4.simulation.liquid
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.optimization.Optimizer
-import com.barrybecker4.optimization.parameter.NumericParameterArray
-import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
-import com.barrybecker4.simulation.liquid.rendering.EnvironmentRenderer
+import com.barrybecker4.simulation.liquid.model.{Environment, LegacyLiquidEnvironment}
+import com.barrybecker4.simulation.liquid.rendering.LegacyEnvironmentRenderer
 import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
-import com.barrybecker4.ui.util.GUIUtil
-import javax.swing._
-import java.awt._
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
 
-import scala.util.Random
+import javax.swing.*
+import java.awt.*
+import scala.compiletime.uninitialized
 
 
 /**
@@ -28,22 +21,18 @@ object LiquidSimulator {
   /** The initial time step. It may adapt. */
   private val INITIAL_TIME_STEP = 0.005
   private val BG_COLOR = Color.white
-  private val NUM_OPT_PARAMS = 3
 }
 
-class LiquidSimulator()
-  extends Simulator("Liquid") with MouseListener {
+class LiquidSimulator() extends Simulator("Liquid") {
 
-  private var environment = new LiquidEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
-  private var envRenderer: EnvironmentRenderer = _
+  private var environment: Environment = new LegacyLiquidEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
+  private var envRenderer: LegacyEnvironmentRenderer = uninitialized
   /** These options can be changed while the simulation is running. */
-  private var dynamicOptions: LiquidDynamicOptions = _
-  private var advectionOnly = true
+  private var dynamicOptions: LiquidDynamicOptions = uninitialized
   commonInit()
 
   private[liquid] def loadEnvironment(configFile: String): Unit = {
-    environment = new LiquidEnvironment(configFile)
-    environment.setAdvectionOnly(advectionOnly)
+    environment = new LegacyLiquidEnvironment(configFile)
     commonInit()
   }
 
@@ -57,18 +46,17 @@ class LiquidSimulator()
 
   private def commonInit(): Unit = {
     initCommonUI()
-    envRenderer = new EnvironmentRenderer(environment)
+    envRenderer = new LegacyEnvironmentRenderer(environment)
     val s = envRenderer.getScale.toInt
     setPreferredSize(new Dimension(environment.getWidth * s, environment.getHeight * s))
   }
 
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = LiquidSimulator.INITIAL_TIME_STEP
-  def getEnvironment: LiquidEnvironment = environment
+  def getEnvironment: Environment = environment
   override def setScale(scale: Double): Unit = { envRenderer.setScale(scale)}
   override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions
-  def getSingleStepMode: Boolean = !isAnimating
   override def getBackground: Color = LiquidSimulator.BG_COLOR
   override protected def getFileNameBase: String = FileUtil.getHomeDir + "temp/animations/simulation/liquid/liquidFrame"
 
@@ -77,32 +65,14 @@ class LiquidSimulator()
     if (!isPaused) tStep = environment.stepForward(tStep)
     tStep
   }
-
-  def setSingleStepMode(singleStep: Boolean): Unit = {
-    setAnimating(!singleStep)
-    if (singleStep) addMouseListener(this)
-    else removeMouseListener(this)
-  }
-
-  def getAdvectionOnly: Boolean = advectionOnly
-
-  def setAdvectionOnly(advectOnly: Boolean): Unit = {
-    advectionOnly = advectOnly
-    environment.setAdvectionOnly(advectOnly)
-  }
-
+  
   override def createDynamicControls: JPanel = {
     dynamicOptions = new LiquidDynamicOptions(this)
     dynamicOptions
   }
 
   override def doOptimization(): Unit = {
-    val optimizer = new Optimizer(this)
-      //, Some(FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt"))
-    val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params.toIndexedSeq, 5, new Random(1))
-    setPaused(false)
-    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
+    throw new UnsupportedOperationException("Optimization not supported in liquid simulator.")
   }
 
   override def paint(g: Graphics): Unit = {
@@ -110,15 +80,4 @@ class LiquidSimulator()
     val g2 = g.asInstanceOf[Graphics2D]
     envRenderer.render(g2, getWidth, getHeight)
   }
-
-  override def mouseClicked(e: MouseEvent): Unit = {
-    //println("mclick timeStep="+ timeStep_ );
-    environment.stepForward(tStep)
-    this.repaint()
-  }
-
-  override def mousePressed(e: MouseEvent): Unit = {}
-  override def mouseReleased(e: MouseEvent): Unit = {}
-  override def mouseEntered(e: MouseEvent): Unit = {}
-  override def mouseExited(e: MouseEvent): Unit = {}
 }
