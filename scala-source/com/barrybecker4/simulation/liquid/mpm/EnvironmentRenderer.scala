@@ -1,20 +1,26 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.mpm
 
+import com.barrybecker4.simulation.liquid.mpm.Environment
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 
 import java.awt.{Color, Graphics, Graphics2D, RenderingHints}
 import javax.swing.JPanel
 import java.awt.geom.Ellipse2D
+import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
+
 
 /**
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
-class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
+class EnvironmentRenderer(val environment: Environment) extends JPanel {
   private val WINDOW_WIDTH = 800
   private val WINDOW_HEIGHT = 800
-  private val mouseInteraction = new MouseInteraction(this, simulation, WINDOW_WIDTH, WINDOW_HEIGHT)
+  private val mouseInteraction = new MouseInteraction(this, environment, WINDOW_WIDTH, WINDOW_HEIGHT)
+  
+  private var scale = 1.0
+  private val options = new RenderingOptions()
 
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
@@ -22,6 +28,12 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
 
     render(g2d, WINDOW_WIDTH, WINDOW_HEIGHT)
   }
+
+  def setScale(scale: Double): Unit = {
+    this.scale = scale
+  }
+  def getScale: Double = scale
+  def getRenderingOptions: RenderingOptions = options
   
   def render(g2d: Graphics2D, width: Int, height: Int): Unit = {
     g2d.setRenderingHint(
@@ -32,10 +44,10 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
     drawWalls(g2d)
 
     // Draw faucet if active
-    if (simulation.faucetRunning) {
+    if (environment.getFaucetRunning) {
       g2d.setColor(new Color(150, 255, 150))
-      val (faucetX, faucetY) = mouseInteraction.simToScreen(simulation.faucetPosition)
-      val faucetSize = (simulation.faucetSize * WINDOW_WIDTH).toInt
+      val (faucetX, faucetY) = mouseInteraction.simToScreen(environment.getFaucetPosition)
+      val faucetSize = (environment.getFaucetSize * WINDOW_WIDTH).toInt
       g2d.fillRect(faucetX - faucetSize / 2, faucetY - faucetSize / 2, faucetSize, faucetSize)
     }
 
@@ -60,7 +72,7 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
     g2d.fillRect(0, 0, getWidth, getHeight)
 
     g2d.setColor(new Color(50, 50, 50))
-    val boundary = simulation.params.boundary
+    val boundary = environment.getParams.boundary
     val boundaryWidth = (boundary * WINDOW_WIDTH).toInt
     g2d.fillRect(0, 0, boundaryWidth, WINDOW_HEIGHT)
     g2d.fillRect(WINDOW_WIDTH - boundaryWidth, 0, boundaryWidth, WINDOW_HEIGHT)
@@ -70,7 +82,7 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
 
   private def renderParticles(g2d: Graphics2D): Unit = {
     // Choose rendering method based on particle count for performance
-    val particleCount = simulation.particles.size
+    val particleCount = environment.getParticles.size
 
     if (particleCount > 10000) {
       // For very large numbers of particles, use more efficient rendering
@@ -88,7 +100,7 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
 
     // Direct pixel manipulation for extremely fast rendering
     // This method just draws points - simpler but faster
-    for (particle <- simulation.particles) {
+    for (particle <- environment.getParticles) {
       val (x, y) = mouseInteraction.simToScreen(particle.position)
 
       // Skip particles outside view
@@ -104,7 +116,7 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
 
   private def renderParticlesHighQuality(g2d: Graphics2D): Unit = {
     // Higher quality rendering for particles - uses circles and can add effects
-    for (particle <- simulation.particles) {
+    for (particle <- environment.getParticles) {
       val (x, y) = mouseInteraction.simToScreen(particle.position)
 
       // Get color from particle
@@ -167,7 +179,7 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
   private def drawGridOverlay(g2d: Graphics2D): Unit = {
     g2d.setColor(new Color(80, 80, 80, 100)) // Semi-transparent gray
 
-    val n = simulation.params.n
+    val n = environment.getParams.n
     val cellSize = WINDOW_WIDTH / n
 
     // Draw vertical grid lines
@@ -185,14 +197,14 @@ class EnvironmentRenderer(val simulation: MpmSimulation) extends JPanel {
 
   private def drawStats(g2d: Graphics2D): Unit = {
     g2d.setColor(Color.WHITE)
-    g2d.drawString(s"Particles: ${simulation.particles.size}", 10, 20)
-    g2d.drawString(s"Frame: ${simulation.iter}", 10, 40)
+    g2d.drawString(s"Particles: ${environment.getParticles.size}", 10, 20)
+    g2d.drawString(s"Frame: ${environment.getIter}", 10, 40)
 
     val fps = calculateFPS()
     g2d.drawString(s"FPS: $fps", 10, 60)
 
     // Show active simulation parameters if desired
-    g2d.drawString(s"Gravity: ${simulation.params.gravity}", 10, 80)
+    g2d.drawString(s"Gravity: ${environment.getParams.gravity}", 10, 80)
   }
 
   // FPS calculation

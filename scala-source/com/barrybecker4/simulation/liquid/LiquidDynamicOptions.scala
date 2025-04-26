@@ -7,9 +7,6 @@ import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 import javax.swing._
 import java.awt._
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-
 
 
 /**
@@ -57,9 +54,9 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    if (sliderName == LiquidDynamicOptions.VISCOSITY_SLIDER) liquidSim.getEnvironment.setViscosity(value)
-    else if (sliderName == LiquidDynamicOptions.B0_SLIDER) liquidSim.getEnvironment.setB0(value)
-    else if (sliderName == LiquidDynamicOptions.TIMESTEP_SLIDER) liquidSim.setTimeStep(value)
+    //if (sliderName == LiquidDynamicOptions.VISCOSITY_SLIDER) liquidSim.getEnvironment.setViscosity(value)
+    //else if (sliderName == LiquidDynamicOptions.B0_SLIDER) liquidSim.getEnvironment.setB0(value)
+    if (sliderName == LiquidDynamicOptions.TIMESTEP_SLIDER) liquidSim.setTimeStep(value)
   }
   
 }

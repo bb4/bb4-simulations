@@ -11,11 +11,11 @@ object WaterSimulationApp {
 
     SwingUtilities.invokeLater(() => {
       // Create the water simulation
-      val simulation = new WaterEnvironment()
-      simulation.initialize()
+      val environment = new WaterEnvironment("")
+      environment.initialize()
 
       // Create visualization
-      val renderer = new EnvironmentRenderer(simulation)
+      val renderer = new EnvironmentRenderer(environment)
 
       // Create frame
       val frame = new JFrame("MPM Water Simulation")
@@ -28,26 +28,26 @@ object WaterSimulationApp {
 
       val pauseButton = new JButton("Pause")
       pauseButton.addActionListener(_ => {
-        if (simulation.isPaused) {
-          simulation.resume()
+        if (environment.isPaused) {
+          environment.resume()
           pauseButton.setText("Pause")
         } else {
-          simulation.pause()
+          environment.pause()
           pauseButton.setText("Resume")
         }
       })
 
       val restartButton = new JButton("Restart")
       restartButton.addActionListener(_ => {
-        simulation.restart()
+        environment.restart()
       })
 
       val faucetButton = new JButton("Toggle Faucet")
       faucetButton.addActionListener(_ => {
-        if (simulation.faucetRunning) {
-          simulation.stopFaucet()
+        if (environment.faucetRunning) {
+          environment.stopFaucet()
         } else {
-          simulation.startFaucet((0.5, 0.9), (0.0, -1.0), 0.05)
+          environment.startFaucet((0.5, 0.9), (0.0, -1.0), 0.05)
         }
       })
 
@@ -60,7 +60,7 @@ object WaterSimulationApp {
       paramsPanel.setLayout(new BoxLayout(paramsPanel, BoxLayout.Y_AXIS))
 
       // Add sliders for each parameter
-      val sliders = simulation.getUiParameters().map { param =>
+      val sliders = environment.getUiParameters().map { param =>
         val slider = new JSlider(SwingConstants.HORIZONTAL,
           (param.minValue * 100).toInt,
           (param.maxValue * 100).toInt,
@@ -76,16 +76,16 @@ object WaterSimulationApp {
 
           // Update the simulation parameter using reflection
           try {
-            val field = simulation.getClass.getDeclaredField(param.name)
+            val field = environment.getClass.getDeclaredField(param.name)
             field.setAccessible(true)
-            field.set(simulation, value)
+            field.set(environment, value)
             label.setText(s"${param.displayName}: $value")
           } catch {
             case e: Exception =>
               try {
-                val field = simulation.params.getClass.getDeclaredField(param.name)
+                val field = environment.params.getClass.getDeclaredField(param.name)
                 field.setAccessible(true)
-                field.set(simulation.params, value)
+                field.set(environment.params, value)
                 label.setText(s"${param.displayName}: $value")
               } catch {
                 case e: Exception => println(s"Could not set parameter ${param.name}: ${e.getMessage}")
@@ -115,7 +115,7 @@ object WaterSimulationApp {
       // Start animation timer
       val timer = new Timer(16, new ActionListener {
         override def actionPerformed(e: ActionEvent): Unit = {
-          simulation.advance()
+          environment.advance()
           renderer.repaint()
         }
       })

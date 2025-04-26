@@ -2,7 +2,9 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown
 
 import java.awt.{Component, Dimension, Font}
-import javax.swing._
+import javax.swing.*
+import scala.compiletime.uninitialized
+
 
 class ComboBoxRenderer(images: IndexedSeq[ImageIcon], labels: IndexedSeq[String])
   extends JLabel with ListCellRenderer[Integer] {
@@ -10,7 +12,7 @@ class ComboBoxRenderer(images: IndexedSeq[ImageIcon], labels: IndexedSeq[String]
   setOpaque(true)
   setHorizontalAlignment(SwingConstants.CENTER)
   setVerticalAlignment(SwingConstants.CENTER)
-  private var uhOhFont: Font = _
+  private var uhOhFont: Font = uninitialized
 
 
   /*
@@ -19,7 +21,7 @@ class ComboBoxRenderer(images: IndexedSeq[ImageIcon], labels: IndexedSeq[String]
    * to display the text and image.
    */
   override def getListCellRendererComponent(
-    list: JList[_ <: Integer], value: Integer, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {
+    list: JList[? <: Integer], value: Integer, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component = {
 
     //if (index == -1) return this
     // Get the selected index. (The index param isn't always valid, so just use the value.)

@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.liquid.mpm
 import com.barrybecker4.simulation.liquid.mpm.util.{Decomp, Mat2, Utils, Vec2, Vec3}
 
 
-abstract class MpmSimulation {
+abstract class MpmEnvironment extends Environment {
   import Vec2._
   import Vec3._
   import Mat2._
@@ -18,6 +18,16 @@ abstract class MpmSimulation {
   var faucetPosition: Vec2.Vec2 = (0.0, 0.0)
   var faucetVelocity: Vec2.Vec2 = (0.0, 0.0)
   var faucetSize: Double = 0.0
+  
+  def getParams: MpmParameters = params
+  def getParticles: List[Particle] = particles
+  def getIter: Int = iter
+
+  def getFaucetRunning: Boolean = faucetRunning
+  def getFaucetPosition: Vec2.Vec2 = faucetPosition
+  def getFaucetVelocity: Vec2.Vec2 = faucetVelocity
+  def getFaucetSize: Double = faucetSize
+  
 
   def getUiParameters(): List[UiParameter] = List(
     UiParameter("particle_mass", 0.5, 2.0, 0.1, "Particle Mass"),

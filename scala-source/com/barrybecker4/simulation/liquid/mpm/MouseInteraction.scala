@@ -1,7 +1,9 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.mpm
 
+import com.barrybecker4.simulation.liquid.mpm.Environment
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
+
 import java.awt.event.{MouseAdapter, MouseEvent, MouseMotionAdapter}
 import javax.swing.JPanel
 
@@ -11,7 +13,7 @@ import javax.swing.JPanel
   */
 class MouseInteraction(
   val panel: JPanel,
-  val simulation: MpmSimulation,
+  val environment: Environment,
   val windowWidth: Int,
   val windowHeight: Int
 ) {
@@ -61,7 +63,7 @@ class MouseInteraction(
           val scaledForce = Vec2.scale(force, 20.0)
 
           // Apply force at mouse position
-          simulation.applyForce(currentPos, scaledForce, forceRadius)
+          environment.applyForce(currentPos, scaledForce, forceRadius)
 
           // Update for next frame
           mouseX = newX

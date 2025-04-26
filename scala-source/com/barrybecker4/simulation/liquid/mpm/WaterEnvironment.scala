@@ -6,7 +6,7 @@ import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 import com.barrybecker4.simulation.liquid.mpm.util.Mat2
 
 
-class WaterEnvironment extends MpmSimulation {
+class WaterEnvironment(configFile: String) extends MpmEnvironment {
   import Mat2._
 
   // Material constants for water
@@ -18,7 +18,19 @@ class WaterEnvironment extends MpmSimulation {
   var minJ: Double = 0.9               // Minimum volume change factor
   var maxNewJ: Double = 1.05           // Maximum new volume change factor
   var minNewJ: Double = 0.95           // Minimum new volume change factor
-
+  
+  def getHeight: Int = 1000
+  def getWidth: Int = 1000
+  def reset(): Unit = {
+  }
+  def setViscosity(v: Double): Unit = {
+    dynamic_viscosity = v
+  }
+  def stepForward(timeStep: Double): Double = {
+    advance()
+    timeStep
+  }
+  
   override def getUiParameters(): List[UiParameter] = {
     super.getUiParameters() ++ List(
       UiParameter("density0", 500.0, 2000.0, 10.0, "Density"),

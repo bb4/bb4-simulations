@@ -4,8 +4,7 @@ package com.barrybecker4.simulation.liquid
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.model.{Environment, LegacyLiquidEnvironment}
-import com.barrybecker4.simulation.liquid.rendering.LegacyEnvironmentRenderer
+import com.barrybecker4.simulation.liquid.mpm.{Environment, EnvironmentRenderer, WaterEnvironment}
 import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
 
 import javax.swing.*
@@ -25,14 +24,14 @@ object LiquidSimulator {
 
 class LiquidSimulator() extends Simulator("Liquid") {
 
-  private var environment: Environment = new LegacyLiquidEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
-  private var envRenderer: LegacyEnvironmentRenderer = uninitialized
+  private var environment: Environment = new WaterEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
+  private var envRenderer: EnvironmentRenderer = uninitialized
   /** These options can be changed while the simulation is running. */
   private var dynamicOptions: LiquidDynamicOptions = uninitialized
   commonInit()
 
   private[liquid] def loadEnvironment(configFile: String): Unit = {
-    environment = new LegacyLiquidEnvironment(configFile)
+    environment = new WaterEnvironment(configFile)
     commonInit()
   }
 
@@ -46,7 +45,7 @@ class LiquidSimulator() extends Simulator("Liquid") {
 
   private def commonInit(): Unit = {
     initCommonUI()
-    envRenderer = new LegacyEnvironmentRenderer(environment)
+    envRenderer = new EnvironmentRenderer(environment)
     val s = envRenderer.getScale.toInt
     setPreferredSize(new Dimension(environment.getWidth * s, environment.getHeight * s))
   }

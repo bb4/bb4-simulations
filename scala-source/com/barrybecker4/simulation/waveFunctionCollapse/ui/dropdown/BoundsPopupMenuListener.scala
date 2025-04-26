@@ -6,7 +6,8 @@ package com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown
 import java.awt.Adjustable
 import javax.swing.event.{PopupMenuEvent, PopupMenuListener}
 import javax.swing.plaf.basic.BasicComboPopup
-import javax.swing._
+import javax.swing.*
+import scala.compiletime.uninitialized
 
 
 /**
@@ -30,7 +31,7 @@ class BoundsPopupMenuListener(
   var maximumWidth: Int = -1,
   var popupAbove: Boolean = false) extends PopupMenuListener {
 
-  private var scrollPane: JScrollPane = _
+  private var scrollPane: JScrollPane = uninitialized
 
   /** Allows the display of a horizontal scrollbar when required. */
   def this() = this(true, false, -1, false)

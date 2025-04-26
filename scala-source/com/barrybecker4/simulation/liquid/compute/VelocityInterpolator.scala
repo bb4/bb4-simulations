@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model.Cell
-import com.barrybecker4.simulation.liquid.model.Particle
+import com.barrybecker4.simulation.liquid.model.LegacyParticle
 import com.barrybecker4.simulation.liquid.model.grid.Grid
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
@@ -19,7 +19,7 @@ class VelocityInterpolator(var grid: Grid) {
     * @param particle particle to find velocity for
     * @return the interpolated (weighted) velocity vector for the particle
     */
-  def findVelocity(particle: Particle): Vector2d = {
+  def findVelocity(particle: LegacyParticle): Vector2d = {
     val i = particle.x.toInt
     val j = particle.y.toInt
     val ii = if ((particle.x - i) > 0.5) i + 1

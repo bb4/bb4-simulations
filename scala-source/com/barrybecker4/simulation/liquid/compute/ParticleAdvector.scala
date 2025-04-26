@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model.CellDimensions
 import com.barrybecker4.simulation.liquid.model.CellStatus
-import com.barrybecker4.simulation.liquid.model.Particle
+import com.barrybecker4.simulation.liquid.model.LegacyParticle
 import com.barrybecker4.simulation.liquid.model.Particles
 import com.barrybecker4.simulation.liquid.model.grid.Grid
 
@@ -44,7 +44,7 @@ class ParticleAdvector(var grid: Grid) {
     *
     * @return advect a particle if it is completely under water.
     */
-  private def advectParticle(timeStep: Double, particle: Particle) = {
+  private def advectParticle(timeStep: Double, particle: LegacyParticle) = {
     val i = Math.floor(particle.x).toInt
     val j = Math.floor(particle.y).toInt
     val status = grid.getCell(i, j).getStatus
@@ -58,7 +58,7 @@ class ParticleAdvector(var grid: Grid) {
     * Advect a single water particle.
     * @return the magnitude of its velocity vector.
     */
-  private def advectWaterParticle(timeStep: Double, particle: Particle, i: Int, j: Int) = {
+  private def advectWaterParticle(timeStep: Double, particle: LegacyParticle, i: Int, j: Int) = {
     val vel = interpolator.findVelocity(particle)
     // scale the velocity by the cell size so we can assume the cells have unit dims
     vel.scale(CellDimensions.INVERSE_CELL_SIZE)
@@ -89,7 +89,7 @@ class ParticleAdvector(var grid: Grid) {
     *
     * @return new Cell that the particle is in. Not necessarily different than original.
     */
-  private def findNewHomeCell(particle: Particle, i: Int, j: Int) = {
+  private def findNewHomeCell(particle: LegacyParticle, i: Int, j: Int) = {
     var ii = Math.floor(particle.x).toInt
     var jj = Math.floor(particle.y).toInt
     if (ii < 0) {

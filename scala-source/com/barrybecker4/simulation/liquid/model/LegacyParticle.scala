@@ -14,7 +14,7 @@ import javax.vecmath.Point2d
   * @param cell the cell that the particle belongs to
   * @author Barry Becker
   */
-class Particle(x: Double, y: Double, var cell: Cell) extends Point2d(x, y) {
+class LegacyParticle(x: Double, y: Double, var cell: Cell) extends Point2d(x, y) {
 
   private var age = 0.0  // Age of the particle. May be used to color flow by age.
 

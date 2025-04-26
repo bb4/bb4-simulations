@@ -28,7 +28,7 @@ class LExpressionParser extends RegexParsers {
       tn.hasParens = true
       tn.children = fact.asInstanceOf[Seq[TreeNode]]
       tn
-    case x => throw new UnsupportedOperationException("Unexpected: " + x.getClass.getName )
+    case null => throw new UnsupportedOperationException("Unexpected: " + null)
   }
 
   def parseToTree(expression: String): TreeNode = {
@@ -37,7 +37,7 @@ class LExpressionParser extends RegexParsers {
     if (parsed.isEmpty) throw new IllegalArgumentException(parsed.toString)
     if (parsed.get.length > 1) {
       val root = new TreeNode("", ops)
-      root.children = Seq(parsed.get:_*)
+      root.children = Seq(parsed.get*)
       root
     } else parsed.get.head
   }

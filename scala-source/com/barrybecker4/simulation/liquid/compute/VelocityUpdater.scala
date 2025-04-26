@@ -76,15 +76,6 @@ class VelocityUpdater {
         forceX + (cell.getPressure + neighbors.getLeft.getPressure) / dims.dx +
         viscosity * (v1 + v2)
       val newu = cell.getU + dt * pf
-      /*
-        if (Math.abs(pf) > 10) {
-            println("much bigger x change than expected. oldu ="
-              + uip_[current_] + " newu="+ newu
-                    + " forceX=" + forceX + " forceY="+forceY
-                    + "\ncXp1=" + cXp1 + " cXm1=" + cXm1
-                    + "\ncXp1=" + cYp1 + " cXm1=" + cYm1
-                    + "\ncXp1Ym1=" + cXp1Ym1 + " cXm1Yp1=" + cXm1Yp1);
-        } */
       cell.setNewU(newu)
     }
   }

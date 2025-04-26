@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.liquid.model
 import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.simulation.liquid.config.Conditions
 import com.barrybecker4.simulation.liquid.config.Source
-import com.barrybecker4.simulation.liquid.model.grid.{FluidGrid, Grid, VortexGrid}
+import com.barrybecker4.simulation.liquid.model.grid.{Grid, VortexGrid}
 import scala.compiletime.uninitialized
 
 
@@ -29,7 +29,7 @@ object LegacyLiquidEnvironment {
 /**
   * Constructor to use if you want the environment based on a config file.
   */
-class LegacyLiquidEnvironment(val configFile: String) extends Environment {
+class LegacyLiquidEnvironment(val configFile: String) {
   initializeFromConfigFile(configFile)
   /** the grid of cells that make up the environment */
   private var grid: Grid = uninitialized
@@ -64,7 +64,7 @@ class LegacyLiquidEnvironment(val configFile: String) extends Environment {
   def getWidth: Int = grid.getXDimension + 2
   def getHeight: Int = grid.getYDimension + 2
   def getGrid: Grid = grid
-  def getParticles: Iterator[Particle] = particles.iterator
+  def getParticles: Iterator[LegacyParticle] = particles.iterator
 
   def setViscosity(v: Double): Unit = { gridUpdater.setViscosity(v)}
   def setB0(b0: Double): Unit = { gridUpdater.setB0(b0) }

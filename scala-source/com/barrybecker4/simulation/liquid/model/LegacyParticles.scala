@@ -17,7 +17,7 @@ object Particles {
 
 class Particles {
 
-  var set: HashSet[Particle] = HashSet()
+  var set: HashSet[LegacyParticle] = HashSet()
 
   /**
     * @param x            cell location x
@@ -32,11 +32,11 @@ class Particles {
 
   def addParticle(x: Double, y: Double, grid: Grid): Unit = {
     val cell = grid.getCell(x.toInt, y.toInt)
-    val p = new Particle(x, y, cell)
+    val p = new LegacyParticle(x, y, cell)
     set += p
     cell.incParticles()
   }
 
-  def iterator: Iterator[Particle] = set.iterator
-  def contains(p: Particle): Boolean = set.contains(p)
+  def iterator: Iterator[LegacyParticle] = set.iterator
+  def contains(p: LegacyParticle): Boolean = set.contains(p)
 }

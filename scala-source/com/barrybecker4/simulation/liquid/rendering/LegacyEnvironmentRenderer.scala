@@ -3,7 +3,8 @@ package com.barrybecker4.simulation.liquid.rendering
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.liquid.compute.VelocityInterpolator
-import com.barrybecker4.simulation.liquid.model.{Environment, LegacyLiquidEnvironment, Particle}
+import com.barrybecker4.simulation.liquid.model.{LegacyEnvironment, LegacyLiquidEnvironment, LegacyParticle}
+import com.barrybecker4.simulation.liquid.mpm.Particle
 import com.barrybecker4.ui.util.GUIUtil
 
 import java.awt.*
@@ -30,7 +31,7 @@ object LegacyEnvironmentRenderer {
   private val BASE_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
 }
 
-final class LegacyEnvironmentRenderer(var env: Environment) {
+final class LegacyEnvironmentRenderer(var env: LegacyEnvironment) {
   private var scale: Double = LegacyEnvironmentRenderer.DEFAULT_SCALE
   private var wallLineWidth: Float = 0.0F
   private var particleSize = 0
@@ -100,7 +101,7 @@ final class LegacyEnvironmentRenderer(var env: Environment) {
     }
   }
 
-  private def getColorForParticle(part: Particle) = {
+  private def getColorForParticle(part: LegacyParticle) = {
     val green = if ((part.y.toInt % 2) == 0) 150
     else 50
     var comp = (256.0 * part.getAge / 20.0).toInt
