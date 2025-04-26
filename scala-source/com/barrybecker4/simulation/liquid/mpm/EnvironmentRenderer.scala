@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.mpm
 
-import com.barrybecker4.simulation.liquid.mpm.Environment
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 
 import java.awt.{Color, Graphics, Graphics2D, RenderingHints}
@@ -14,7 +13,7 @@ import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
-class EnvironmentRenderer(val environment: Environment) extends JPanel {
+class EnvironmentRenderer(val environment: WaterEnvironment) extends JPanel {
   private val WINDOW_WIDTH = 800
   private val WINDOW_HEIGHT = 800
   private val mouseInteraction = new MouseInteraction(this, environment, WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -72,7 +71,7 @@ class EnvironmentRenderer(val environment: Environment) extends JPanel {
     g2d.fillRect(0, 0, getWidth, getHeight)
 
     g2d.setColor(new Color(50, 50, 50))
-    val boundary = environment.getParams.boundary
+    val boundary = environment.boundary
     val boundaryWidth = (boundary * WINDOW_WIDTH).toInt
     g2d.fillRect(0, 0, boundaryWidth, WINDOW_HEIGHT)
     g2d.fillRect(WINDOW_WIDTH - boundaryWidth, 0, boundaryWidth, WINDOW_HEIGHT)
@@ -179,7 +178,7 @@ class EnvironmentRenderer(val environment: Environment) extends JPanel {
   private def drawGridOverlay(g2d: Graphics2D): Unit = {
     g2d.setColor(new Color(80, 80, 80, 100)) // Semi-transparent gray
 
-    val n = environment.getParams.n
+    val n = environment.n
     val cellSize = WINDOW_WIDTH / n
 
     // Draw vertical grid lines
@@ -204,7 +203,7 @@ class EnvironmentRenderer(val environment: Environment) extends JPanel {
     g2d.drawString(s"FPS: $fps", 10, 60)
 
     // Show active simulation parameters if desired
-    g2d.drawString(s"Gravity: ${environment.getParams.gravity}", 10, 80)
+    g2d.drawString(s"Gravity: ${environment.gravity}", 10, 80)
   }
 
   // FPS calculation

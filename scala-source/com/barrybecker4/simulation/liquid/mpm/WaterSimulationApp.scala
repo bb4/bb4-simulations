@@ -66,7 +66,8 @@ object WaterSimulationApp {
           (param.maxValue * 100).toInt,
           (param.minValue * 100).toInt)
 
-        slider.setMajorTickSpacing((param.step * 500).toInt)
+        val step = (param.maxValue - param.minValue) / param.scale
+        slider.setMajorTickSpacing((step * 500).toInt)
         slider.setPaintTicks(true)
 
         val label = new JLabel(s"${param.displayName}: ${param.minValue}")
@@ -82,14 +83,7 @@ object WaterSimulationApp {
             label.setText(s"${param.displayName}: $value")
           } catch {
             case e: Exception =>
-              try {
-                val field = environment.params.getClass.getDeclaredField(param.name)
-                field.setAccessible(true)
-                field.set(environment.params, value)
-                label.setText(s"${param.displayName}: $value")
-              } catch {
-                case e: Exception => println(s"Could not set parameter ${param.name}: ${e.getMessage}")
-              }
+              println(s"Could not set parameter ${param.name}: ${e.getMessage}")
           }
         })
 

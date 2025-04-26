@@ -22,9 +22,9 @@ object LiquidSimulator {
   private val BG_COLOR = Color.white
 }
 
-class LiquidSimulator() extends Simulator("Liquid") {
+class LiquidSimulator extends Simulator("Liquid") {
 
-  private var environment: Environment = new WaterEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
+  private var environment: WaterEnvironment = new WaterEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
   private var envRenderer: EnvironmentRenderer = uninitialized
   /** These options can be changed while the simulation is running. */
   private var dynamicOptions: LiquidDynamicOptions = uninitialized
@@ -52,7 +52,7 @@ class LiquidSimulator() extends Simulator("Liquid") {
 
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = LiquidSimulator.INITIAL_TIME_STEP
-  def getEnvironment: Environment = environment
+  def getEnvironment: WaterEnvironment = environment
   override def setScale(scale: Double): Unit = { envRenderer.setScale(scale)}
   override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions

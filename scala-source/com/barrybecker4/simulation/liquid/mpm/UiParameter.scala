@@ -6,6 +6,7 @@ case class UiParameter(
   name: String,
   minValue: Double,
   maxValue: Double,
-  step: Double,
-  displayName: String
+  initialValue: Double,
+  scale: Int,
+  displayName: String,
 )

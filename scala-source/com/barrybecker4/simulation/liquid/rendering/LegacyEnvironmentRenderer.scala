@@ -1,12 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.rendering
 
-import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.liquid.compute.VelocityInterpolator
-import com.barrybecker4.simulation.liquid.model.{LegacyEnvironment, LegacyLiquidEnvironment, LegacyParticle}
-import com.barrybecker4.simulation.liquid.mpm.Particle
+import com.barrybecker4.simulation.liquid.model.{LegacyEnvironment, LegacyParticle}
 import com.barrybecker4.ui.util.GUIUtil
-
 import java.awt.*
 
 
@@ -27,7 +23,6 @@ object LegacyEnvironmentRenderer {
   /** scales the size of everything */
   private val DEFAULT_SCALE = 30
   /* grid offset  */ private val OFFSET = 10
-  private val pressureColorMap: ColorMap = new PressureColorMap
   private val BASE_FONT = new Font(GUIUtil.DEFAULT_FONT_FAMILY, Font.PLAIN, 12)
 }
 
@@ -115,21 +110,8 @@ final class LegacyEnvironmentRenderer(var env: LegacyEnvironment) {
     g.setColor(LegacyEnvironmentRenderer.PARTICLE_VELOCITY_COLOR)
     val a: Array[Double] = new Array[Double](2)
     val grid = env.getGrid
-    val interpolator = new VelocityInterpolator(grid)
+    //val interpolator = new VelocityInterpolator(grid)
     val maxY = getMaxY
-  }
-
-  /** PathColor the squares according to the pressure in that discrete region. */
-  private def renderPressure(g: Graphics2D): Unit = {
-    val grid = env.getGrid
-    val maxY = getMaxY
-
-    for (j <- 0 until grid.getYDimension) {
-      for (i <- 0 until grid.getXDimension) {
-        g.setColor(LegacyEnvironmentRenderer.pressureColorMap.getColorForValue(grid.getCell(i, j).getPressure))
-        g.fillRect((scale * i).toInt + LegacyEnvironmentRenderer.OFFSET, (maxY - scale * j).toInt, scale.toInt, scale.toInt)
-      }
-    }
   }
 
   /** Draw walls and boundary.  */

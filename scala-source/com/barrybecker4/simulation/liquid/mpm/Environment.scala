@@ -6,12 +6,13 @@ import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 trait Environment {
   def reset(): Unit
   def stepForward(timeStep: Double): Double
+  
+  def getUiParameters(): List[UiParameter]
 
   def getWidth: Int
   def getHeight: Int
   def getParticles: List[Particle]
-
-  def getParams: MpmParameters
+  
   def getIter: Int
   def getFaucetRunning: Boolean
   def getFaucetPosition: Vec2.Vec2

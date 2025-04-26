@@ -10,7 +10,6 @@ abstract class MpmEnvironment extends Environment {
   import Mat2._
 
   var isPaused: Boolean = false
-  val params: MpmParameters = new MpmParameters()
   var particles: List[Particle] = List.empty
   var grid: Array[Vec3.Vec3] = Array.empty
   var iter: Int = 0
@@ -18,8 +17,20 @@ abstract class MpmEnvironment extends Environment {
   var faucetPosition: Vec2.Vec2 = (0.0, 0.0)
   var faucetVelocity: Vec2.Vec2 = (0.0, 0.0)
   var faucetSize: Double = 0.0
-  
-  def getParams: MpmParameters = params
+
+  var n: Int = 64 // Grid resolution
+  var dx: Double = 1.0 / n // Grid cell size
+  var inv_dx: Double = n.toDouble // Inverse of dx
+  var dt: Double = 1e-4 // Time step
+  var particle_mass: Double = 1.0 // Particle mass
+  var vol: Double = 1.0 // Particle volume
+  var hardening: Double = 10.0 // Hardening coefficient for snow
+  var E: Double = 1e4 // Young's modulus
+  var nu: Double = 0.2 // Poisson ratio
+  var gravity: Double = -9.8 // Gravity
+  var forceScale: Double = 100.0 // Scale for external forces
+  var boundary: Double = 0.05 // Boundary condition parameter
+
   def getParticles: List[Particle] = particles
   def getIter: Int = iter
 
@@ -27,14 +38,13 @@ abstract class MpmEnvironment extends Environment {
   def getFaucetPosition: Vec2.Vec2 = faucetPosition
   def getFaucetVelocity: Vec2.Vec2 = faucetVelocity
   def getFaucetSize: Double = faucetSize
-  
 
   def getUiParameters(): List[UiParameter] = List(
-    UiParameter("particle_mass", 0.5, 2.0, 0.1, "Particle Mass"),
-    UiParameter("vol", 0.5, 2.0, 0.1, "Volume"),
-    UiParameter("gravity", -400.0, 400.0, 20.0, "Gravity"),
-    UiParameter("forceScale", 50.0, 300.0, 10.0, "Force Scale"),
-    UiParameter("dt", 0.0001, 0.0009, 0.0001, "time step (dt)")
+    UiParameter("particle_mass", 0.5, 2.0, 1.0, 100, "Mass"),
+    UiParameter("vol", 0.5, 2.0, 1.0, 100, "Volume"),
+    UiParameter("gravity", -400.0, 400.0, -9.8, 1000, "Gravity"),
+    UiParameter("forceScale", 50.0, 300.0, 100, 1000, "Force Scale"),
+    UiParameter("dt", 0.0001, 0.0009, 0.0001, 10000, "time step (dt)"),
   )
 
   def initialize(): Unit
@@ -60,7 +70,7 @@ abstract class MpmEnvironment extends Environment {
   private def advanceSimulation(): Unit = {
     resetGrid()
     particlesToGrid()
-    updateGridVelocities(params.gravity)
+    updateGridVelocities(gravity)
     gridToParticles()
   }
 
@@ -123,7 +133,7 @@ abstract class MpmEnvironment extends Environment {
 
   def particleToGrid(particle: Particle): Unit = {
     val baseCoord = calcBaseCoord(particle)
-    val invDx = params.inv_dx
+    val invDx = inv_dx
     val fx = Vec2.sub(Vec2.scale(particle.position, invDx), (baseCoord._1.toDouble, baseCoord._2.toDouble))
     val w = Utils.createKernel(fx)
 
@@ -134,14 +144,14 @@ abstract class MpmEnvironment extends Environment {
     // Stress computation
     val J = determinant(particle.F)
     val (r, _) = Decomp.polar(particle.F)
-    val k1 = -4 * invDx * invDx * params.dt * params.vol
+    val k1 = -4 * invDx * invDx * dt * vol
     val k2 = lambda * (J - 1) * J
 
     val temp = map(Mat2.mul(Mat2.sub(Mat2.transpose(particle.F), r), particle.F), _ * 2 * mu)
     val k2Mat = (k2, 0.0, 0.0, k2)
     val stress = map(Mat2.add(temp, k2Mat), _ * k1)
 
-    val particleMass = params.particle_mass
+    val particleMass = particle_mass
     val cauchyScaled = map(particle.Cauchy, _ * particleMass)
     val affine = Mat2.add(stress, cauchyScaled)
 
@@ -162,7 +172,7 @@ abstract class MpmEnvironment extends Environment {
 
   def gridToParticle(particle: Particle): Unit = {
     val baseCoord = calcBaseCoord(particle)
-    val fx = Vec2.sub(Vec2.scale(particle.position, params.inv_dx), (baseCoord._1.toDouble, baseCoord._2.toDouble))
+    val fx = Vec2.sub(Vec2.scale(particle.position, inv_dx), (baseCoord._1.toDouble, baseCoord._2.toDouble))
     val w = Utils.createKernel(fx)
 
     particle.Cauchy = (0.0, 0.0, 0.0, 0.0)
@@ -183,7 +193,7 @@ abstract class MpmEnvironment extends Environment {
 
       val weightedGrid = Vec2.scale((gridCell._1, gridCell._2), weight)
       val outer = Mat2.outer(weightedGrid, dpos)
-      val scaledOuter = map(outer, _ * 4 * params.inv_dx)
+      val scaledOuter = map(outer, _ * 4 * inv_dx)
       particle.Cauchy = Mat2.add(particle.Cauchy, scaledOuter)
 
       if (particle.Cauchy._1.isNaN || particle.Cauchy._2.isNaN) {
@@ -193,16 +203,16 @@ abstract class MpmEnvironment extends Environment {
 
     // Apply external force, if any
     particle.externalForce.foreach { force =>
-      particle.velocity = Vec2.add(particle.velocity, Vec2.scale(force, params.forceScale))
+      particle.velocity = Vec2.add(particle.velocity, Vec2.scale(force, forceScale))
       particle.externalForce = None
     }
 
     // Advection
-    particle.position = Vec2.add(particle.position, Vec2.scale(particle.velocity, params.dt))
+    particle.position = Vec2.add(particle.position, Vec2.scale(particle.velocity, dt))
 
     // F update
     val identity = (1.0, 0.0, 0.0, 1.0)
-    val cauchyDt = map(particle.Cauchy, _ * params.dt)
+    val cauchyDt = map(particle.Cauchy, _ * dt)
     val F = Mat2.mul(particle.F, Mat2.add(identity, cauchyDt))
 
     if (F._1.isNaN || F._2.isNaN) {
@@ -213,23 +223,23 @@ abstract class MpmEnvironment extends Environment {
   }
 
   def calcBaseCoord(particle: Particle): (Int, Int) = {
-    val x = (particle.position._1 * params.inv_dx - 0.5).toInt
-    val y = (particle.position._2 * params.inv_dx - 0.5).toInt
+    val x = (particle.position._1 * inv_dx - 0.5).toInt
+    val y = (particle.position._2 * inv_dx - 0.5).toInt
 
     if (x < 0 /*|| x.isNaN*/) {
-      println(s"Invalid base_coord: $x $y particle.pos=${particle.position} inv_dx=${params.inv_dx}")
+      println(s"Invalid base_coord: $x $y particle.pos=${particle.position} inv_dx=${inv_dx}")
     }
 
     (x, y)
   }
 
   def resetGrid(): Unit = {
-    val maxIndex = (params.n + 1) * (params.n + 1)
+    val maxIndex = (n + 1) * (n + 1)
     grid = Array.fill(maxIndex)((0.0, 0.0, 0.0))
   }
 
   def gridIndex(i: Int, j: Int): Int = {
-    i + (params.n + 1) * j
+    i + (n + 1) * j
   }
 
   def transferToGrid(
@@ -243,7 +253,7 @@ abstract class MpmEnvironment extends Environment {
     val mv = (particle.velocity._1 * mass, particle.velocity._2 * mass, mass)
 
     for (i <- 0 until 3; j <- 0 until 3) {
-      val dpos = ((i - fx._1) * params.dx, (j - fx._2) * params.dx)
+      val dpos = ((i - fx._1) * dx, (j - fx._2) * dx)
       val idx = gridIndex(baseCoord._1 + i, baseCoord._2 + j)
 
       if (idx < 0 || idx >= grid.length) {
@@ -265,7 +275,6 @@ abstract class MpmEnvironment extends Environment {
 
   // Update grid velocities
   def updateGridVelocities(gravity: Double): Unit = {
-    val n = params.n
     for (i <- 0 to n; j <- 0 to n) {
       val idx = gridIndex(i, j)
       updateGridVelocity(idx, i, j, gravity)
@@ -279,13 +288,12 @@ abstract class MpmEnvironment extends Environment {
       grid(idx) = (grid(idx)._1 / mass, grid(idx)._2 / mass, grid(idx)._3 / mass)
 
       // Add gravity
-      grid(idx) = Vec3.add(grid(idx), (0.0, gravity * params.dt, 0.0))
+      grid(idx) = Vec3.add(grid(idx), (0.0, gravity * dt, 0.0))
 
-      val x = i.toDouble / params.n
-      val y = j.toDouble / params.n
+      val x = i.toDouble / n
+      val y = j.toDouble / n
 
       // Apply boundary conditions
-      val boundary = params.boundary
       if (x < boundary || x > 1.0 - boundary || y > 1.0 - boundary) {
         grid(idx) = (0.0, 0.0, 0.0)
       }

@@ -30,15 +30,15 @@ class WaterEnvironment(configFile: String) extends MpmEnvironment {
     advance()
     timeStep
   }
-  
+
   override def getUiParameters(): List[UiParameter] = {
     super.getUiParameters() ++ List(
-      UiParameter("density0", 500.0, 2000.0, 10.0, "Density"),
-      UiParameter("bulk_modulus", 50.0, 4000.0, 10.0, "Bulk Modulus"),
-      UiParameter("dynamic_viscosity", 0.01, 1.0, 0.01, "Viscosity"),
-      UiParameter("gamma", 1.0, 10.0, 0.1, "Gamma"),
-      UiParameter("maxJ", 1.0, 1.9, 0.05, "Max Volume Change"),
-      UiParameter("minJ", 0.2, 1.0, 0.05, "Min Volume Change")
+      UiParameter("density0", 500.0, 2000.0, 1000.0, 100, "Density"),
+      UiParameter("bulk_modulus", 50.0, 4000.0, 200.0, 100, "Bulk Modulus"),
+      UiParameter("dynamic_viscosity", 0.01, 1.0, 0.1, 100, "Viscosity"),
+      UiParameter("gamma", 1.0, 10.0, 7.0, 100, "Gamma"),
+      UiParameter("maxJ", 1.0, 1.9, 1.05, 100, "Max Volume Change"),
+      UiParameter("minJ", 0.2, 1.0, 0.95, 100,"Min Volume Change"),
     )
   }
 
