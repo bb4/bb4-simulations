@@ -1,13 +1,14 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm
+package com.barrybecker4.simulation.liquid.mpm.environment
+
+import com.barrybecker4.simulation.liquid.mpm.util.{Mat2, Vec2}
+import com.barrybecker4.simulation.liquid.mpm.{Particle, UiParameter}
 
 import scala.util.Random
-import com.barrybecker4.simulation.liquid.mpm.util.Vec2
-import com.barrybecker4.simulation.liquid.mpm.util.Mat2
 
 
 class WaterEnvironment(configFile: String) extends MpmEnvironment {
-  import Mat2._
+  import Mat2.*
 
   // Material constants for water
   var density0: Double = 1000.0        // water density

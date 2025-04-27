@@ -12,8 +12,9 @@ object Decomp {
     val trace = C._1 + C._4
     val det = determinant(C)
 
-    val lambda1 = trace/2 + Math.sqrt((trace*trace)/4 - det)
-    val lambda2 = trace/2 - Math.sqrt((trace*trace)/4 - det)
+    val factor = Math.sqrt((trace * trace) / 4 - det)
+    val lambda1 = trace / 2 + factor
+    val lambda2 = trace / 2 - factor
 
     // Approximate rotation matrix
     val h = Math.sqrt(F._1 * F._1 + F._3 * F._3)

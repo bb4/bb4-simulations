@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.mpm
 
-import com.barrybecker4.simulation.liquid.mpm.Environment
+import com.barrybecker4.simulation.liquid.mpm.environment.{Environment, MpmEnvironment}
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 
 import java.awt.event.{MouseAdapter, MouseEvent, MouseMotionAdapter}

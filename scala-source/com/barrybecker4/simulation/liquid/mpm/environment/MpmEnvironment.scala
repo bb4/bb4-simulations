@@ -1,8 +1,9 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm
+package com.barrybecker4.simulation.liquid.mpm.environment
 
-import com.barrybecker4.simulation.liquid.mpm.util.{Decomp, Mat2, Utils, Vec2, Vec3}
-import MpmEnvironment._
+import com.barrybecker4.simulation.liquid.mpm.environment.MpmEnvironment.*
+import com.barrybecker4.simulation.liquid.mpm.util.*
+import com.barrybecker4.simulation.liquid.mpm.{Particle, UiParameter}
 
 object MpmEnvironment {
   val DEFAULT_N: Int = 64
@@ -12,13 +13,13 @@ object MpmEnvironment {
   val DEFAULT_PARTICLE_MASS: Double = 1.0
   val DEFAULT_VOL: Double = 1.0
   val DEFAULT_HARDENING: Double = 10.0
-  val DEFAULT_FORCE_SCALE: Double = 100.0
+  val DEFAULT_FORCE_SCALE: Double = 10.0
 }
 
 abstract class MpmEnvironment extends Environment {
-  import Vec2._
-  import Vec3._
-  import Mat2._
+  import Mat2.*
+  import Vec2.*
+  import Vec3.*
 
   var isPaused: Boolean = false
   var particles: List[Particle] = List.empty
@@ -56,7 +57,7 @@ abstract class MpmEnvironment extends Environment {
     UiParameter("particle_mass", 0.5, 2.0, DEFAULT_PARTICLE_MASS, 100, "Mass"),
     UiParameter("vol", 0.5, 2.0, DEFAULT_VOL, 100, "Volume"),
     UiParameter("gravity", -400.0, 400.0, DEFAULT_GRAVITY, 1000, "Gravity"),
-    UiParameter("forceScale", 50.0, 300.0, DEFAULT_FORCE_SCALE, 1000, "Force Scale"),
+    UiParameter("forceScale", 5.0, 50.0, DEFAULT_FORCE_SCALE, 1000, "Force Scale"),
     UiParameter("dt", 0.0001, 0.0009, DEFAULT_TIMESTEP, 10000, "time step (dt)"),
   )
 

@@ -1,7 +1,8 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm
+package com.barrybecker4.simulation.liquid.mpm.environment
 
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
+import com.barrybecker4.simulation.liquid.mpm.{Particle, UiParameter}
 
 trait Environment {
   

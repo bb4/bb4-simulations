@@ -5,7 +5,7 @@ import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.LiquidSimulator.{INITIAL_HEIGHT, INITIAL_WIDTH}
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.mpm.{MpmEnvironment, WaterEnvironment}
+import com.barrybecker4.simulation.liquid.mpm.environment.{MpmEnvironment, WaterEnvironment}
 import com.barrybecker4.simulation.liquid.rendering.{EnvironmentRenderer, RenderingOptions}
 
 import javax.swing.*

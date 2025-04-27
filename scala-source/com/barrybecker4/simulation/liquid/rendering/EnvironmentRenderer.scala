@@ -1,8 +1,9 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.rendering
 
+import com.barrybecker4.simulation.liquid.mpm.environment.MpmEnvironment
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
-import com.barrybecker4.simulation.liquid.mpm.{MouseInteraction, MpmEnvironment, Particle}
+import com.barrybecker4.simulation.liquid.mpm.{MouseInteraction, Particle}
 import java.awt.geom.Ellipse2D
 import java.awt.{Color, Graphics, Graphics2D, RenderingHints}
 import javax.swing.JPanel

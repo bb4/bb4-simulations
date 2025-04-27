@@ -1,5 +1,4 @@
-// Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
-
+// Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.rendering
 
 class FpsCalculator() {
@@ -20,18 +19,4 @@ class FpsCalculator() {
 
   def getFps: Double = fps
 
-
-//  private def calculateFPS(): Int = {
-//    frameCount += 1
-//    val currentTime = System.currentTimeMillis()
-//    val timeElapsed = currentTime - lastFpsTime
-//
-//    if (timeElapsed > 1000) { // Update FPS calculation once per second
-//      currentFps = (frameCount * 1000 / timeElapsed).toInt
-//      frameCount = 0
-//      lastFpsTime = currentTime
-//    }
-//
-//    currentFps
-//  }
 }
