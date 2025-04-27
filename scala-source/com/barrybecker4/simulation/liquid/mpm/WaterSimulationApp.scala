@@ -67,18 +67,18 @@ object WaterSimulationApp {
       environment.restart()
     })
 
-    val faucetButton = new JButton("Toggle Faucet")
-    faucetButton.addActionListener(_ => {
-      if (environment.faucetRunning) {
-        environment.stopFaucet()
-      } else {
-        environment.startFaucet((0.5, 0.9), (0.0, -1.0), 0.05)
-      }
-    })
+//    val faucetButton = new JButton("Toggle Faucet")
+//    faucetButton.addActionListener(_ => {
+//      if (environment.faucetRunning) {
+//        environment.stopFaucet()
+//      } else {
+//        environment.startFaucet((0.5, 0.9), (0.0, -1.0), 0.05)
+//      }
+//    })
 
     controlPanel.add(pauseButton)
     controlPanel.add(restartButton)
-    controlPanel.add(faucetButton)
+    //controlPanel.add(faucetButton)
     controlPanel
   }
 

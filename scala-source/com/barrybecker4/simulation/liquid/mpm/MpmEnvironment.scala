@@ -19,7 +19,7 @@ abstract class MpmEnvironment extends Environment {
   import Vec2._
   import Vec3._
   import Mat2._
-  
+
   var isPaused: Boolean = false
   var particles: List[Particle] = List.empty
   var grid: Array[Vec3.Vec3] = Array.empty
@@ -38,11 +38,11 @@ abstract class MpmEnvironment extends Environment {
   var particle_mass: Double = DEFAULT_PARTICLE_MASS // Particle mass
   var vol: Double = DEFAULT_VOL // Particle volume
   var hardening: Double = DEFAULT_HARDENING // Hardening coefficient for snow
-  
+
   var E: Double = 1e4 // Young's modulus
   var nu: Double = 0.2 // Poisson ratio
   var forceScale: Double = DEFAULT_FORCE_SCALE // Scale for external forces
-  
+
 
   def getParticles: List[Particle] = particles
   def getIter: Int = iter
@@ -283,7 +283,7 @@ abstract class MpmEnvironment extends Environment {
         throw new Error(s"Invalid change: $change p.velocity=${particle.velocity} mv=$mv dpos=$dpos affine=$affine weight=$weight idx=$idx")
       }
 
-      grid(idx) = Vec3.add(grid(idx), change)
+      grid(idx) = Vec3.add(grid(idx), change) // sometimes get ArrayIndexOutOfBounds here
     }
   }
 

@@ -11,8 +11,8 @@ import javax.swing.JPanel
   * Handles user interaction with the MPM simulation
   * Separates interaction logic from rendering
   */
-class MouseInteraction(val panel: JPanel, val environment: Environment) {
-  
+class MouseInteraction(val panel: JPanel, val environment: MpmEnvironment) {
+
   private var width: Int = 500
   private var height: Int = 500
   private var mouseX = 0
@@ -32,15 +32,26 @@ class MouseInteraction(val panel: JPanel, val environment: Environment) {
     this.width = width
     this.height = height
   }
-  
+
   // Set up mouse listeners for user interaction
   private def initializeMouseListeners(): Unit = {
+
     panel.addMouseListener(new MouseAdapter {
       override def mousePressed(e: MouseEvent): Unit = {
-        isMousePressed = true
-        mouseX = e.getX
-        mouseY = e.getY
-        lastMousePos = screenToSim(mouseX, mouseY)
+        val mousePos = screenToSim(mouseX, mouseY)
+        if (e.getButton == MouseEvent.BUTTON1) {  // Left mouse button
+          isMousePressed = true
+          mouseX = e.getX
+          mouseY = e.getY
+          lastMousePos = mousePos
+        }
+        else if (e.getButton == MouseEvent.BUTTON3) {  // Right mouse button
+          if (environment.faucetRunning) {
+            environment.stopFaucet()
+          } else {
+            environment.startFaucet(mousePos, (1.0, 0.0), 0.05)
+          }
+        }
       }
 
       override def mouseReleased(e: MouseEvent): Unit = {

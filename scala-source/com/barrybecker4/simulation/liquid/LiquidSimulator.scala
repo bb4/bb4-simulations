@@ -19,7 +19,7 @@ import scala.compiletime.uninitialized
   */
 object LiquidSimulator {
   private val BG_COLOR = Color.gray
-  private val INITIAL_WIDTH = 900
+  private val INITIAL_WIDTH = 800
   private val INITIAL_HEIGHT = 900
 }
 
