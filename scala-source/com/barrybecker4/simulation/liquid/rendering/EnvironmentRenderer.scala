@@ -16,6 +16,7 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
   private val mouseInteraction = new MouseInteraction(this, environment)
 
   private val options = new RenderingOptions()
+  private val fpsCalculator = new FpsCalculator()
 
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
@@ -34,7 +35,6 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     drawGridOverlay(g2d, width, height)
     drawWalls(g2d, width, height)
 
-    // Draw faucet if active
     if (environment.getFaucetRunning) {
       g2d.setColor(new Color(150, 255, 150))
       val (faucetX, faucetY) = mouseInteraction.simToScreen(environment.getFaucetPosition)
@@ -44,7 +44,6 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
 
     renderParticles(g2d)
 
-    // Draw mouse interaction indicator when pressed
     if (mouseInteraction.isPressed) {
       g2d.setColor(new Color(255, 255, 255, 100)) // Translucent white
       val radiusInPixels = (mouseInteraction.getForceRadius * width).toInt
@@ -132,8 +131,6 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
   }
 
   private def adjustParticleColor(baseColor: Color, particle: Particle): Color = {
-    // Optional: Adjust color based on particle properties
-    // For example, make unstable particles brighter
     if (particle.stability > 0.0) {
       // Mix with white based on stability
       val mixFactor = Math.min(particle.stability * 2.0, 0.7)
@@ -151,7 +148,6 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
   }
 
   private def drawVelocityVector(g2d: Graphics2D, particle: Particle, x: Int, y: Int): Unit = {
-    // Draw velocity vector
     val velocityScale = 10.0 // Scale factor for velocity vector
     val vx = particle.velocity._1 * velocityScale
     val vy = -particle.velocity._2 * velocityScale // Invert Y for screen coordinates
@@ -162,21 +158,18 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     }
   }
 
-  // Draw the MPM grid for visualization
   private def drawGridOverlay(g2d: Graphics2D, width: Int, height: Int): Unit = {
     g2d.setColor(new Color(80, 80, 80, 100)) // Semi-transparent gray
 
     val n = environment.n
-    val cellSize = width / n
+    val cellSize = Math.min(width, height) / n
 
-    // Draw vertical grid lines
-    for (i <- 0 to n) {
+    for (i <- 0 to n) { // vertical grid lines
       val x = i * cellSize
       g2d.drawLine(x, 0, x, height)
     }
 
-    // Draw horizontal grid lines
-    for (j <- 0 to n) {
+    for (j <- 0 to n) { // horizontal grid lines
       val y = j * cellSize
       g2d.drawLine(0, y, width, y)
     }
@@ -187,29 +180,7 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     g2d.drawString(s"Particles: ${environment.getParticles.size}", 10, 20)
     g2d.drawString(s"Frame: ${environment.getIter}", 10, 40)
 
-    val fps = calculateFPS()
+    val fps = fpsCalculator.update()
     g2d.drawString(s"FPS: $fps", 10, 60)
-
-    // Show active simulation parameters if desired
-    g2d.drawString(s"Gravity: ${environment.gravity}", 10, 80)
-  }
-
-  // FPS calculation
-  private var frameCount = 0
-  private var lastFpsTime = System.currentTimeMillis()
-  private var currentFps = 0
-
-  private def calculateFPS(): Int = {
-    frameCount += 1
-    val currentTime = System.currentTimeMillis()
-    val timeElapsed = currentTime - lastFpsTime
-
-    if (timeElapsed > 1000) { // Update FPS calculation once per second
-      currentFps = (frameCount * 1000 / timeElapsed).toInt
-      frameCount = 0
-      lastFpsTime = currentTime
-    }
-
-    currentFps
   }
 }

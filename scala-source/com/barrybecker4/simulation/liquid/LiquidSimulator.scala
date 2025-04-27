@@ -47,6 +47,12 @@ class LiquidSimulator extends Simulator("Liquid") {
   private def commonInit(): Unit = {
     initCommonUI()
     envRenderer = new EnvironmentRenderer(environment)
+
+    // Add the renderer to this component to enable proper event handling
+    setLayout(new BorderLayout())
+    removeAll() // Clear any existing components
+    add(envRenderer, BorderLayout.CENTER)
+
     setPreferredSize(new Dimension(environment.getWidth, environment.getHeight))
     environment.initialize()
   }
@@ -74,7 +80,6 @@ class LiquidSimulator extends Simulator("Liquid") {
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
     envRenderer.render(g2, getWidth, getHeight)
   }

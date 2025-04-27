@@ -11,8 +11,7 @@ import javax.swing.JPanel
   * Handles user interaction with the MPM simulation
   * Separates interaction logic from rendering
   */
-class MouseInteraction(
-  val panel: JPanel, val environment: Environment) {
+class MouseInteraction(val panel: JPanel, val environment: Environment) {
   
   private var width: Int = 500
   private var height: Int = 500
