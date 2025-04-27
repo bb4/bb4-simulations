@@ -26,10 +26,6 @@ class WaterEnvironment(configFile: String) extends MpmEnvironment {
   def setViscosity(v: Double): Unit = {
     dynamic_viscosity = v
   }
-  def stepForward(timeStep: Double): Double = {
-    advance()
-    timeStep
-  }
 
   override def getUiParameters(): List[UiParameter] = {
     super.getUiParameters() ++ List(

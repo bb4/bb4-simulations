@@ -13,7 +13,7 @@ import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
-class EnvironmentRenderer(val environment: WaterEnvironment) extends JPanel {
+class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
   private val WINDOW_WIDTH = 800
   private val WINDOW_HEIGHT = 800
   private val mouseInteraction = new MouseInteraction(this, environment, WINDOW_WIDTH, WINDOW_HEIGHT)

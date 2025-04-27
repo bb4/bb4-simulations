@@ -4,7 +4,8 @@ package com.barrybecker4.simulation.liquid
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.mpm.{Environment, EnvironmentRenderer, WaterEnvironment}
+import com.barrybecker4.simulation.liquid.mpm.{Environment, EnvironmentRenderer, MpmEnvironment, WaterEnvironment}
+import com.barrybecker4.simulation.liquid.mpm.MpmEnvironment.DEFAULT_TIMESTEP
 import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
 
 import javax.swing.*
@@ -17,14 +18,12 @@ import scala.compiletime.uninitialized
   * @author Barry Becker
   */
 object LiquidSimulator {
-  /** The initial time step. It may adapt. */
-  private val INITIAL_TIME_STEP = 0.005
   private val BG_COLOR = Color.white
 }
 
 class LiquidSimulator extends Simulator("Liquid") {
 
-  private var environment: WaterEnvironment = new WaterEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
+  private var environment: MpmEnvironment = new WaterEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
   private var envRenderer: EnvironmentRenderer = uninitialized
   /** These options can be changed while the simulation is running. */
   private var dynamicOptions: LiquidDynamicOptions = uninitialized
@@ -48,11 +47,12 @@ class LiquidSimulator extends Simulator("Liquid") {
     envRenderer = new EnvironmentRenderer(environment)
     val s = envRenderer.getScale.toInt
     setPreferredSize(new Dimension(environment.getWidth * s, environment.getHeight * s))
+    environment.initialize()
   }
 
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
-  override protected def getInitialTimeStep: Double = LiquidSimulator.INITIAL_TIME_STEP
-  def getEnvironment: WaterEnvironment = environment
+  override protected def getInitialTimeStep: Double = MpmEnvironment.DEFAULT_TIMESTEP
+  def getEnvironment: MpmEnvironment = environment
   override def setScale(scale: Double): Unit = { envRenderer.setScale(scale)}
   override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions
@@ -61,7 +61,7 @@ class LiquidSimulator extends Simulator("Liquid") {
 
   /** @return a new recommended time step change. */
   override def timeStep: Double = {
-    if (!isPaused) tStep = environment.stepForward(tStep)
+    if (!isPaused) tStep = environment.advance()
     tStep
   }
   

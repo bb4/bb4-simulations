@@ -2,13 +2,24 @@
 package com.barrybecker4.simulation.liquid.mpm
 
 import com.barrybecker4.simulation.liquid.mpm.util.{Decomp, Mat2, Utils, Vec2, Vec3}
+import MpmEnvironment._
 
+object MpmEnvironment {
+  val DEFAULT_N: Int = 64
+  val DEFAULT_GRAVITY: Double = -9.8
+  val DEFAULT_BOUNDARY: Double = 0.05
+  val DEFAULT_TIMESTEP: Double = 1e-4
+  val DEFAULT_PARTICLE_MASS: Double = 1.0
+  val DEFAULT_VOL: Double = 1.0
+  val DEFAULT_HARDENING: Double = 10.0
+  val DEFAULT_FORCE_SCALE: Double = 100.0
+}
 
 abstract class MpmEnvironment extends Environment {
   import Vec2._
   import Vec3._
   import Mat2._
-
+  
   var isPaused: Boolean = false
   var particles: List[Particle] = List.empty
   var grid: Array[Vec3.Vec3] = Array.empty
@@ -18,18 +29,20 @@ abstract class MpmEnvironment extends Environment {
   var faucetVelocity: Vec2.Vec2 = (0.0, 0.0)
   var faucetSize: Double = 0.0
 
-  var n: Int = 64 // Grid resolution
-  var dx: Double = 1.0 / n // Grid cell size
-  var inv_dx: Double = n.toDouble // Inverse of dx
-  var dt: Double = 1e-4 // Time step
-  var particle_mass: Double = 1.0 // Particle mass
-  var vol: Double = 1.0 // Particle volume
-  var hardening: Double = 10.0 // Hardening coefficient for snow
+  var n: Int = DEFAULT_N // Grid resolution
+  var gravity: Double = DEFAULT_GRAVITY // Gravity
+  var boundary: Double = DEFAULT_BOUNDARY // Boundary condition parameter
+  var dx: Double = 1.0 / DEFAULT_N // Grid cell size
+  var inv_dx: Double = DEFAULT_N.toDouble // Inverse of dx
+  var dt: Double = DEFAULT_TIMESTEP // Time step
+  var particle_mass: Double = DEFAULT_PARTICLE_MASS // Particle mass
+  var vol: Double = DEFAULT_VOL // Particle volume
+  var hardening: Double = DEFAULT_HARDENING // Hardening coefficient for snow
+  
   var E: Double = 1e4 // Young's modulus
   var nu: Double = 0.2 // Poisson ratio
-  var gravity: Double = -9.8 // Gravity
-  var forceScale: Double = 100.0 // Scale for external forces
-  var boundary: Double = 0.05 // Boundary condition parameter
+  var forceScale: Double = DEFAULT_FORCE_SCALE // Scale for external forces
+  
 
   def getParticles: List[Particle] = particles
   def getIter: Int = iter
@@ -40,21 +53,22 @@ abstract class MpmEnvironment extends Environment {
   def getFaucetSize: Double = faucetSize
 
   def getUiParameters(): List[UiParameter] = List(
-    UiParameter("particle_mass", 0.5, 2.0, 1.0, 100, "Mass"),
-    UiParameter("vol", 0.5, 2.0, 1.0, 100, "Volume"),
-    UiParameter("gravity", -400.0, 400.0, -9.8, 1000, "Gravity"),
-    UiParameter("forceScale", 50.0, 300.0, 100, 1000, "Force Scale"),
-    UiParameter("dt", 0.0001, 0.0009, 0.0001, 10000, "time step (dt)"),
+    UiParameter("particle_mass", 0.5, 2.0, DEFAULT_PARTICLE_MASS, 100, "Mass"),
+    UiParameter("vol", 0.5, 2.0, DEFAULT_VOL, 100, "Volume"),
+    UiParameter("gravity", -400.0, 400.0, DEFAULT_GRAVITY, 1000, "Gravity"),
+    UiParameter("forceScale", 50.0, 300.0, DEFAULT_FORCE_SCALE, 1000, "Force Scale"),
+    UiParameter("dt", 0.0001, 0.0009, DEFAULT_TIMESTEP, 10000, "time step (dt)"),
   )
 
   def initialize(): Unit
 
   // Progress simulation by one time step
-  def advance(): Unit = {
+  def advance(): Double = {
     if (!isPaused) {
       advanceSimulation()
       iter += 1
     }
+    dt
   }
 
   // Reset and restart simulation

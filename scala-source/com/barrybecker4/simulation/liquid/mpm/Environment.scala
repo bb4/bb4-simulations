@@ -4,8 +4,9 @@ package com.barrybecker4.simulation.liquid.mpm
 import com.barrybecker4.simulation.liquid.mpm.util.Vec2
 
 trait Environment {
+  
   def reset(): Unit
-  def stepForward(timeStep: Double): Double
+  def advance(): Double
   
   def getUiParameters(): List[UiParameter]
 
