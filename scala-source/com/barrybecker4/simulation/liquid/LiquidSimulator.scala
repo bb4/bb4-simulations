@@ -3,10 +3,10 @@ package com.barrybecker4.simulation.liquid
 
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.simulation.common.ui.Simulator
+import com.barrybecker4.simulation.liquid.LiquidSimulator.{INITIAL_HEIGHT, INITIAL_WIDTH}
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.mpm.{Environment, EnvironmentRenderer, MpmEnvironment, WaterEnvironment}
-import com.barrybecker4.simulation.liquid.mpm.MpmEnvironment.DEFAULT_TIMESTEP
-import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
+import com.barrybecker4.simulation.liquid.mpm.{MpmEnvironment, WaterEnvironment}
+import com.barrybecker4.simulation.liquid.rendering.{EnvironmentRenderer, RenderingOptions}
 
 import javax.swing.*
 import java.awt.*
@@ -18,7 +18,9 @@ import scala.compiletime.uninitialized
   * @author Barry Becker
   */
 object LiquidSimulator {
-  private val BG_COLOR = Color.white
+  private val BG_COLOR = Color.gray
+  private val INITIAL_WIDTH = 900
+  private val INITIAL_HEIGHT = 900
 }
 
 class LiquidSimulator extends Simulator("Liquid") {
@@ -44,17 +46,14 @@ class LiquidSimulator extends Simulator("Liquid") {
 
   private def commonInit(): Unit = {
     initCommonUI()
-    envRenderer = new EnvironmentRenderer(environment)
-    val s = envRenderer.getScale.toInt
-    setPreferredSize(new Dimension(environment.getWidth * s, environment.getHeight * s))
+    envRenderer = new EnvironmentRenderer(environment, INITIAL_WIDTH, INITIAL_HEIGHT)
+    setPreferredSize(new Dimension(environment.getWidth, environment.getHeight))
     environment.initialize()
   }
 
   override protected def createOptionsDialog = new LiquidOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = MpmEnvironment.DEFAULT_TIMESTEP
   def getEnvironment: MpmEnvironment = environment
-  override def setScale(scale: Double): Unit = { envRenderer.setScale(scale)}
-  override def getScale: Double = envRenderer.getScale
   def getRenderingOptions: RenderingOptions = envRenderer.getRenderingOptions
   override def getBackground: Color = LiquidSimulator.BG_COLOR
   override protected def getFileNameBase: String = FileUtil.getHomeDir + "temp/animations/simulation/liquid/liquidFrame"

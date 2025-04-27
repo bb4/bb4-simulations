@@ -12,11 +12,11 @@ import javax.swing.JPanel
   * Separates interaction logic from rendering
   */
 class MouseInteraction(
-  val panel: JPanel,
-  val environment: Environment,
-  val windowWidth: Int,
-  val windowHeight: Int
-) {
+  val panel: JPanel, val environment: Environment, 
+  val windowWidth: Int, val windowHeight: Int) {
+  
+  private var width = windowWidth
+  private var height = windowHeight
   private var mouseX = 0
   private var mouseY = 0
   private var isMousePressed = false
@@ -30,6 +30,11 @@ class MouseInteraction(
   def getMouseY: Int = mouseY
   def getForceRadius: Double = forceRadius
 
+  def setDimensions(width: Int, height: Int): Unit = {
+    this.width = width
+    this.height = height
+  }
+  
   // Set up mouse listeners for user interaction
   private def initializeMouseListeners(): Unit = {
     panel.addMouseListener(new MouseAdapter {
@@ -76,15 +81,15 @@ class MouseInteraction(
 
   // Convert screen coordinates to simulation coordinates
   def screenToSim(x: Int, y: Int): Vec2.Vec2 = {
-    val simX = x.toDouble / windowWidth
-    val simY = 1.0 - (y.toDouble / windowHeight) // Invert Y for screen coordinates
+    val simX = x.toDouble / width
+    val simY = 1.0 - (y.toDouble / height) // Invert Y for screen coordinates
     (simX, simY)
   }
 
   // Convert simulation coordinates to screen coordinates
   def simToScreen(pos: Vec2.Vec2): (Int, Int) = {
-    val screenX = (pos._1 * windowWidth).toInt
-    val screenY = ((1.0 - pos._2) * windowHeight).toInt // Invert Y for screen coordinates
+    val screenX = (pos._1 * width).toInt
+    val screenY = ((1.0 - pos._2) * height).toInt // Invert Y for screen coordinates
     (screenX, screenY)
   }
 }

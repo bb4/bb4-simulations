@@ -1,9 +1,15 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.mpm
 
+import com.barrybecker4.simulation.liquid.rendering.EnvironmentRenderer
+
 
 // Enhanced SimulationApp for the water simulation
 object WaterSimulationApp {
+
+  private val WIDTH: Int = 800
+  private val HEIGHT: Int = 830
+
   def main(args: Array[String]): Unit = {
     import javax.swing._
     import java.awt._
@@ -15,12 +21,12 @@ object WaterSimulationApp {
       environment.initialize()
 
       // Create visualization
-      val renderer = new EnvironmentRenderer(environment)
+      val renderer = new EnvironmentRenderer(environment, WIDTH, HEIGHT)
 
       // Create frame
       val frame = new JFrame("MPM Water Simulation")
       frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
-      frame.setSize(800, 830)
+      frame.setSize(WIDTH, HEIGHT)
 
       // Create control panel
       val controlPanel = new JPanel()

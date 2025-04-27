@@ -70,7 +70,7 @@ class LiquidDynamicOptions private[liquid](var liquidSim: LiquidSimulator)
         try {
           val field = currentClass.getDeclaredField(fieldName)
           field.setAccessible(true)
-          println(s"Setting field $fieldName in ${currentClass.getSimpleName} = $value")
+          //println(s"Setting field $fieldName in ${currentClass.getSimpleName} = $value")
           field.set(env, value)
           fieldFound = true
         } catch {
