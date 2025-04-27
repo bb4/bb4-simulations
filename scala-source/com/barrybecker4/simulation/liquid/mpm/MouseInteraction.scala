@@ -12,11 +12,10 @@ import javax.swing.JPanel
   * Separates interaction logic from rendering
   */
 class MouseInteraction(
-  val panel: JPanel, val environment: Environment, 
-  val windowWidth: Int, val windowHeight: Int) {
+  val panel: JPanel, val environment: Environment) {
   
-  private var width = windowWidth
-  private var height = windowHeight
+  private var width: Int = 500
+  private var height: Int = 500
   private var mouseX = 0
   private var mouseY = 0
   private var isMousePressed = false

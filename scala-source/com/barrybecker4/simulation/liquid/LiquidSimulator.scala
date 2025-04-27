@@ -46,7 +46,7 @@ class LiquidSimulator extends Simulator("Liquid") {
 
   private def commonInit(): Unit = {
     initCommonUI()
-    envRenderer = new EnvironmentRenderer(environment, INITIAL_WIDTH, INITIAL_HEIGHT)
+    envRenderer = new EnvironmentRenderer(environment)
     setPreferredSize(new Dimension(environment.getWidth, environment.getHeight))
     environment.initialize()
   }

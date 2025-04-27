@@ -21,7 +21,7 @@ object WaterSimulationApp {
       environment.initialize()
 
       // Create visualization
-      val renderer = new EnvironmentRenderer(environment, WIDTH, HEIGHT)
+      val renderer = new EnvironmentRenderer(environment)
 
       // Create frame
       val frame = new JFrame("MPM Water Simulation")

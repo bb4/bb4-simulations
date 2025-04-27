@@ -12,17 +12,14 @@ import javax.swing.JPanel
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
-class EnvironmentRenderer(val environment: MpmEnvironment, width: Int, height: Int) extends JPanel {
-  private val mouseInteraction = new MouseInteraction(this, environment, width, height)
+class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
+  private val mouseInteraction = new MouseInteraction(this, environment)
 
   private val options = new RenderingOptions()
 
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
     val g2d = g.asInstanceOf[Graphics2D]
-
-    //mouseInteraction.setDimensions(width, height)
-    //render(g2d, width, height)
   }
 
   def getRenderingOptions: RenderingOptions = options
