@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT 
 
-package com.barrybecker4.simulation.liquid.mpm
+package com.barrybecker4.simulation.liquid.model
 
-import com.barrybecker4.simulation.liquid.mpm.util.{Mat2, Vec2}
+import com.barrybecker4.simulation.liquid.model.util.{Mat2, Vec2}
 
 case class Particle(var position: Vec2.Vec2, color: Int) {
   var velocity: Vec2.Vec2 = (0.0, 0.0)

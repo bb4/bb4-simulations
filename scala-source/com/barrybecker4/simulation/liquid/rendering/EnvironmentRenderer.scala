@@ -1,23 +1,30 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.rendering
 
-import com.barrybecker4.simulation.liquid.mpm.environment.MpmEnvironment
-import com.barrybecker4.simulation.liquid.mpm.util.Vec2
-import com.barrybecker4.simulation.liquid.mpm.{MouseInteraction, Particle}
+import com.barrybecker4.simulation.liquid.model.environment.MpmEnvironment
+import com.barrybecker4.simulation.liquid.model.util.Vec2
+import com.barrybecker4.simulation.liquid.model.Particle
 import java.awt.geom.Ellipse2D
 import java.awt.{Color, Graphics, Graphics2D, RenderingHints}
 import javax.swing.JPanel
+import EnvironmentRenderer.*
 
+
+object EnvironmentRenderer {
+  private val DEFAULT_WIDTH = 800
+  private val DEFAULT_HEIGHT = 800
+  private val FAUCET_LIQUID_COLOR = new Color(150, 255, 150)
+}
 
 /**
   * Visualization component for the MPM simulation
   * Handles rendering particles and delegates user interaction to MouseInteraction
   */
 class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
+  
   private val mouseInteraction = new MouseInteraction(this, environment)
-
   private val options = new RenderingOptions()
-  private val fpsCalculator = new FpsCalculator()
+  private val statsRenderer = new StatsRenderer(environment)
 
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)
@@ -37,7 +44,7 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     drawWalls(g2d, width, height)
 
     if (environment.getFaucetRunning) {
-      g2d.setColor(new Color(150, 255, 150))
+      g2d.setColor(FAUCET_LIQUID_COLOR)
       val (faucetX, faucetY) = mouseInteraction.simToScreen(environment.getFaucetPosition)
       val faucetSize = (environment.getFaucetSize * width).toInt
       g2d.fillRect(faucetX - faucetSize / 2, faucetY - faucetSize / 2, faucetSize, faucetSize)
@@ -46,16 +53,9 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     renderParticles(g2d)
 
     if (mouseInteraction.isPressed) {
-      g2d.setColor(new Color(255, 255, 255, 100)) // Translucent white
-      val radiusInPixels = (mouseInteraction.getForceRadius * width).toInt
-      g2d.drawOval(
-        mouseInteraction.getMouseX - radiusInPixels,
-        mouseInteraction.getMouseY - radiusInPixels,
-        radiusInPixels * 2,
-        radiusInPixels * 2
-      )
+      mouseInteraction.drawInteractor(g2d, width)
     }
-    drawStats(g2d)
+    statsRenderer.renderStats(g2d, 10, 20)
   }
 
   private def drawWalls(g2d: Graphics2D, width: Int, height: Int): Unit = {
@@ -176,12 +176,4 @@ class EnvironmentRenderer(val environment: MpmEnvironment) extends JPanel {
     }
   }
 
-  private def drawStats(g2d: Graphics2D): Unit = {
-    g2d.setColor(Color.WHITE)
-    g2d.drawString(s"Particles: ${environment.getParticles.size}", 10, 20)
-    g2d.drawString(s"Frame: ${environment.getIter}", 10, 40)
-
-    val fps = fpsCalculator.update()
-    g2d.drawString(s"FPS: $fps", 10, 60)
-  }
 }

@@ -1,37 +1,49 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm.environment
+package com.barrybecker4.simulation.liquid.model.environment
 
-import com.barrybecker4.simulation.liquid.mpm.util.{Mat2, Vec2}
-import com.barrybecker4.simulation.liquid.mpm.{Particle, UiParameter}
+import com.barrybecker4.simulation.liquid.model.environment.WaterEnvironment.{DEFAULT_MAX_J, DEFAULT_MIN_J}
+import com.barrybecker4.simulation.liquid.model.util.{Mat2, Vec2}
+import com.barrybecker4.simulation.liquid.model.{Particle, UiParameter}
 
 import scala.util.Random
+import WaterEnvironment.*
 
+
+object WaterEnvironment {
+  private val INITIAL_WIDTH = 900
+  private val INITIAL_HEIGHT = 1000
+  private val DEFAULT_DENSITY0 = 1000.0
+  private val DEFAULT_BULK_MODULUS = 200.0
+  private val DEFAULT_DYNAMIC_VISCOSITY = 0.1
+  private val DEFAULT_GAMMA = 7.0
+  private val DEFAULT_MIN_J = 0.95
+  private val DEFAULT_MAX_J = 1.05
+  private val minNewJ = 0.9 // Minimum new volume change factor
+  private val maxNewJ = 1.1 // Maximum new volume change factor
+}
 
 class WaterEnvironment(configFile: String) extends MpmEnvironment {
   import Mat2.*
 
   // Material constants for water
-  var density0: Double = 1000.0        // water density
-  var bulk_modulus: Double = 200.0     // bulk modulus of water (Pa). Resistance to compression
-  var dynamic_viscosity: Double = 0.1  // water viscosity
-  var gamma: Double = 7.0              // For nonlinear pressure response
-  var maxJ: Double = 1.1               // Maximum volume change factor
-  var minJ: Double = 0.9               // Minimum volume change factor
-  var maxNewJ: Double = 1.05           // Maximum new volume change factor
-  var minNewJ: Double = 0.95           // Minimum new volume change factor
+  var density0: Double = DEFAULT_DENSITY0         // water density
+  var bulk_modulus: Double = DEFAULT_BULK_MODULUS // bulk modulus of water (Pa). Resistance to compression
+  var dynamic_viscosity: Double = DEFAULT_DYNAMIC_VISCOSITY  // water viscosity
+  var gamma: Double = DEFAULT_GAMMA                         // For nonlinear pressure response
+  var maxJ: Double = DEFAULT_MAX_J                // Maximum volume change factor
+  var minJ: Double = DEFAULT_MIN_J                // Minimum volume change factor
   
-  def getHeight: Int = 1000
-  def getWidth: Int = 1000
-  def reset(): Unit = {}
+  def getHeight: Int = INITIAL_HEIGHT
+  def getWidth: Int = INITIAL_WIDTH
 
   override def getUiParameters(): List[UiParameter] = {
     super.getUiParameters() ++ List(
-      UiParameter("density0", 500.0, 2000.0, 1000.0, 100, "Density"),
-      UiParameter("bulk_modulus", 50.0, 4000.0, 200.0, 100, "Bulk Modulus"),
-      UiParameter("dynamic_viscosity", 0.01, 1.0, 0.1, 100, "Viscosity"),
-      UiParameter("gamma", 1.0, 10.0, 7.0, 100, "Gamma"),
-      UiParameter("maxJ", 1.0, 1.9, 1.05, 100, "Max Volume Change"),
-      UiParameter("minJ", 0.2, 1.0, 0.95, 100,"Min Volume Change"),
+      UiParameter("density0", 500.0, 2000.0, DEFAULT_DENSITY0, 100, "Density"),
+      UiParameter("bulk_modulus", 50.0, 4000.0, DEFAULT_BULK_MODULUS, 100, "Bulk Modulus"),
+      UiParameter("dynamic_viscosity", 0.01, 1.0, DEFAULT_DYNAMIC_VISCOSITY, 100, "Viscosity"),
+      UiParameter("gamma", 1.0, 10.0, DEFAULT_GAMMA, 100, "Gamma"),
+      UiParameter("maxJ", 1.0, 1.9, DEFAULT_MAX_J, 100, "Max Volume Change"),
+      UiParameter("minJ", 0.2, 1.0, DEFAULT_MIN_J, 100,"Min Volume Change"),
     )
   }
 

@@ -3,9 +3,8 @@ package com.barrybecker4.simulation.liquid
 
 import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.liquid.LiquidSimulator.{INITIAL_HEIGHT, INITIAL_WIDTH}
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
-import com.barrybecker4.simulation.liquid.mpm.environment.{MpmEnvironment, WaterEnvironment}
+import com.barrybecker4.simulation.liquid.model.environment.{MpmEnvironment, WaterEnvironment}
 import com.barrybecker4.simulation.liquid.rendering.{EnvironmentRenderer, RenderingOptions}
 
 import javax.swing.*
@@ -19,8 +18,6 @@ import scala.compiletime.uninitialized
   */
 object LiquidSimulator {
   private val BG_COLOR = Color.gray
-  private val INITIAL_WIDTH = 800
-  private val INITIAL_HEIGHT = 900
 }
 
 class LiquidSimulator extends Simulator("Liquid") {

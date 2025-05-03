@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm.util
+package com.barrybecker4.simulation.liquid.model.util
 
 object Mat2 {
   // Matrix is represented as [a, b, c, d] for:

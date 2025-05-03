@@ -1,14 +1,13 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid
 
-import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 
 import javax.swing.*
 import java.awt.*
-import com.barrybecker4.simulation.liquid.mpm.UiParameter
+import com.barrybecker4.simulation.liquid.model.UiParameter
 
 import scala.collection.immutable.List
 

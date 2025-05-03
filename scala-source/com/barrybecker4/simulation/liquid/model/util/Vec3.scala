@@ -1,5 +1,5 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm.util
+package com.barrybecker4.simulation.liquid.model.util
 
 object Vec3 {
   type Vec3 = (Double, Double, Double)

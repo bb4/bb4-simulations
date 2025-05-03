@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm.environment
+package com.barrybecker4.simulation.liquid.model.environment
 
-import com.barrybecker4.simulation.liquid.mpm.environment.MpmEnvironment.*
-import com.barrybecker4.simulation.liquid.mpm.util.*
-import com.barrybecker4.simulation.liquid.mpm.{Particle, UiParameter}
+import com.barrybecker4.simulation.liquid.model.environment.MpmEnvironment.*
+import com.barrybecker4.simulation.liquid.model.util.*
+import com.barrybecker4.simulation.liquid.model.{Particle, UiParameter}
 
 object MpmEnvironment {
   val DEFAULT_N: Int = 64
@@ -72,12 +72,16 @@ abstract class MpmEnvironment extends Environment {
     dt
   }
 
-  // Reset and restart simulation
-  def restart(): Unit = {
+  def reset(): Unit = {
     particles = List.empty
     grid = Array.empty
     iter = 0
     resetGrid()
+  }
+
+  // Reset and restart simulation
+  def restart(): Unit = {
+    reset()
     initialize()
   }
 

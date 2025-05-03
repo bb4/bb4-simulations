@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.common.ui
 import com.barrybecker4.common.app.{AppContext, ClassLoaderSingleton, CommandLineOptions}
 import com.barrybecker4.ui.animation.AnimationPanel
 import com.barrybecker4.ui.application.ApplicationApplet
-import com.barrybecker4.ui.util.{GUIUtil, Log}
+import com.barrybecker4.ui.util.Log
 
 import javax.swing.JPanel
 import java.awt.BorderLayout

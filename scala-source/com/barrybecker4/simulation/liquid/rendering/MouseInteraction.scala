@@ -1,12 +1,18 @@
 // Copyright by Barry G. Becker, 2025. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-package com.barrybecker4.simulation.liquid.mpm
+package com.barrybecker4.simulation.liquid.rendering
 
-import com.barrybecker4.simulation.liquid.mpm.environment.{Environment, MpmEnvironment}
-import com.barrybecker4.simulation.liquid.mpm.util.Vec2
+import com.barrybecker4.simulation.liquid.model.environment.{Environment, MpmEnvironment}
+import com.barrybecker4.simulation.liquid.model.util.Vec2
 
+import java.awt.{Color, Graphics2D}
 import java.awt.event.{MouseAdapter, MouseEvent, MouseMotionAdapter}
 import javax.swing.JPanel
+import MouseInteraction.*
 
+
+object MouseInteraction {
+  private val INTERACTOR_GLYPH_COLOR = new Color(255, 255, 255, 100) // Translucent white
+}
 /**
   * Handles user interaction with the MPM simulation
   * Separates interaction logic from rendering
@@ -31,6 +37,17 @@ class MouseInteraction(val panel: JPanel, val environment: MpmEnvironment) {
   def setDimensions(width: Int, height: Int): Unit = {
     this.width = width
     this.height = height
+  }
+
+  def drawInteractor(g2d: Graphics2D, width: Int): Unit = {
+    g2d.setColor(INTERACTOR_GLYPH_COLOR)
+    val radiusInPixels = (getForceRadius * width).toInt
+    g2d.drawOval(
+      getMouseX - radiusInPixels,
+      getMouseY - radiusInPixels,
+      radiusInPixels * 2,
+      radiusInPixels * 2
+    )
   }
 
   // Set up mouse listeners for user interaction
