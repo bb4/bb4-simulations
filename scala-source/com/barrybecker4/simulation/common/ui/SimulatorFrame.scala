@@ -3,16 +3,15 @@ package com.barrybecker4.simulation.common.ui
 
 import com.barrybecker4.common.app.{AppContext, ClassLoaderSingleton, CommandLineOptions}
 import com.barrybecker4.ui.animation.AnimationPanel
-import com.barrybecker4.ui.application.ApplicationApplet
+import com.barrybecker4.ui.application.ApplicationFrame
 import com.barrybecker4.ui.util.Log
 
 import javax.swing.JPanel
 import java.awt.BorderLayout
 import com.barrybecker4.common.i18n.LocaleType
-import SimulatorApplet.*
 
 
-object SimulatorApplet {
+object SimulatorFrame {
   val RUN_OPTIMIZATION = false
   val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"
 
@@ -37,8 +36,8 @@ object SimulatorApplet {
 /**
   * Construct the applet
   */
-class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationApplet(args.toArray) {
-  private var simulator = sim
+class SimulatorFrame(args: Seq[String], sim: Simulator) extends ApplicationFrame {
+  private val simulator = sim
 
   if (args.length > 1) {
     val options = new CommandLineOptions(args.toArray)
@@ -54,14 +53,11 @@ class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationAppl
     }
   }
 
+  this.setContentPane(this.createMainPanel)
+
   /** @param simulatorClassName name of the simulator class to show. */
   def this(args: Seq[String], simulatorClassName: String) = {
-    this(args, SimulatorApplet.createSimulationFromClassName(simulatorClassName))
-  }
-
-  /** @param sim the simulator to show.*/
-  def this(sim: Simulator) = {
-    this(Seq[String](), sim)
+    this(args, SimulatorFrame.createSimulationFromClassName(simulatorClassName))
   }
 
   override def getName: String = simulator.getName
@@ -70,25 +66,13 @@ class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationAppl
     * The top controls define common buttons like start / reset
     * There is an optional set of dynamic options on the right for modifying the simulation as it runs.
     */
-  override def createMainPanel: JPanel = {
-    if (simulator == null) {
-      var className = getParameter("panel_class") //NON-NLS
-      className = if (className == null) DEFAULT_SIMULATOR else className
-      simulator = SimulatorApplet.createSimulationFromClassName(className)
-    }
-
-    simulator.setVisible(true)
+  def createMainPanel: JPanel = {
     val animPanel = new AnimationPanel(simulator)
     animPanel.add(simulator.createTopControls, BorderLayout.NORTH)
     val dynamicControls = simulator.createDynamicControls
     if (dynamicControls != null) animPanel.add(dynamicControls, BorderLayout.EAST)
-    animPanel
-  }
 
-  /** The applet's start method. */
-  override def start(): Unit = {
-    super.start()
-    if (RUN_OPTIMIZATION) simulator.doOptimization()
-    this.repaint()
+    simulator.setVisible(true)
+    animPanel
   }
 }

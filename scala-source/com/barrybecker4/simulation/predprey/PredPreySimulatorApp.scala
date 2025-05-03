@@ -2,7 +2,9 @@
 package com.barrybecker4.simulation.predprey
 
 import com.barrybecker4.ui.util.GUIUtil
-import com.barrybecker4.simulation.common.ui.SimulatorApplet
+import com.barrybecker4.simulation.common.ui.SimulatorFrame
+
+import java.awt.Dimension
 
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.
@@ -13,6 +15,8 @@ object PredPreySimulatorApp {
   def main(args: Array[String]): Unit = {
     val sim = new PredPreySimulator
     sim.setPaused(true)
-    GUIUtil.showApplet(new SimulatorApplet(sim))
+    val frame = new SimulatorFrame(args.toIndexedSeq, sim)
+    frame.pack()
+    frame.setVisible(true)
   }
 }

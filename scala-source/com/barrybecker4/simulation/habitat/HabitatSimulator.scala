@@ -4,17 +4,16 @@ package com.barrybecker4.simulation.habitat
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.common.ui.SimulatorApplet
+import com.barrybecker4.simulation.common.ui.SimulatorFrame
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
-import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatHabitat, Habitat, SerengetiHabitat}
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
-import com.barrybecker4.ui.util.GUIUtil
-import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor}
+import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor
 import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer
 
 import javax.swing.*
 import java.awt.*
-import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
+import com.barrybecker4.simulation.habitat.ui.HabitatSplitPanel
 
 
 /**
@@ -26,11 +25,15 @@ object HabitatSimulator {
   def main(args: Array[String]): Unit = {
     val sim = new HabitatSimulator
     sim.setPaused(true)
-    GUIUtil.showApplet(new SimulatorApplet(sim))
+    val frame = new SimulatorFrame(args.toIndexedSeq, sim)
+
+    frame.pack()
+    frame.setLocationRelativeTo(null)
+    frame.setVisible(true)
   }
 }
 
-class HabitatSimulator() extends Simulator("Habitat Simulation") {
+class HabitatSimulator extends Simulator("Habitat Simulation") {
 
   setBackground(Color.WHITE)
   private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
@@ -42,13 +45,15 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
 
   override protected def reset(): Unit = {
     this.setPaused(true)
-    // wait till actually paused. Not clean, but oh well.
+    // wait till actually paused.
     ThreadUtil.sleep(500)
     MathUtil.RANDOM.setSeed(1)
     habitat.reset()
     options.reset()
     this.setPaused(false)
   }
+
+  override def getPreferredSize: Dimension = new Dimension(1200, 1000)
 
   override protected def getInitialTimeStep = 0.1
 

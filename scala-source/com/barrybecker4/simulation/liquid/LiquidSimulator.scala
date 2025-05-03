@@ -33,6 +33,8 @@ class LiquidSimulator extends Simulator("Liquid") {
     commonInit()
   }
 
+  override def getPreferredSize: Dimension = new Dimension(1000, 1000)
+
   override protected def reset(): Unit = {
     val oldPaused = this.isPaused
     setPaused(true)
