@@ -53,8 +53,6 @@ class HabitatSimulator extends Simulator("Habitat Simulation") {
     this.setPaused(false)
   }
 
-  override def getPreferredSize: Dimension = new Dimension(1200, 1000)
-
   override protected def getInitialTimeStep = 0.1
 
   override def timeStep: Double = {

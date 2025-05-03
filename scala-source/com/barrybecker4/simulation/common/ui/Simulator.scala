@@ -11,7 +11,7 @@ import com.barrybecker4.ui.util.GUIUtil
 import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.JPanel
-import java.awt.Component
+import java.awt.{Component, Dimension}
 import java.awt.event.ActionEvent
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.util.FileUtil
@@ -35,6 +35,8 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
 
   /** whether or not to use anti-aliasing when rendering */
   private var useAntialiasing = true
+
+  override def getPreferredSize: Dimension = new Dimension(1200, 1000)
 
   protected def initCommonUI(): Unit = {
     GUIUtil.setCustomLookAndFeel()

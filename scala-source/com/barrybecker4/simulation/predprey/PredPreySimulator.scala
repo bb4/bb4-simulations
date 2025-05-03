@@ -34,8 +34,7 @@ class PredPreySimulator() extends Simulator("Predator Prey Simulation") {
     creatures :+= rabbits
     creatures
   }
-
-  override def getPreferredSize: Dimension = new Dimension(1200, 1000)
+  
 
   override protected def reset(): Unit = {
     initGraph()
