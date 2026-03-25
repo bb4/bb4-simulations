@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent
 
 import com.barrybecker4.common.app.AppContext
 
+import scala.compiletime.uninitialized
+
 
 object SimulatorOptionsDialog {
   private val MAX_NUM_STEPS_PER_FRAME = 10000
@@ -22,12 +24,12 @@ object SimulatorOptionsDialog {
 class SimulatorOptionsDialog(parent: Component,
                                       simulator: Simulator) extends OptionsDialog(parent) {
   // rendering option controls
-  private var antialiasingCheckbox: JCheckBox = _
-  private var recordAnimationCheckbox: JCheckBox = _
+  private var antialiasingCheckbox: JCheckBox = uninitialized
+  private var recordAnimationCheckbox: JCheckBox = uninitialized
   // animation param options controls
-  private var timeStepField: NumberInput = _
-  private var numStepsPerFrameField: NumberInput = _
-  private var scaleField: NumberInput = _
+  private var timeStepField: NumberInput = uninitialized
+  private var numStepsPerFrameField: NumberInput = uninitialized
+  private var scaleField: NumberInput = uninitialized
   // bottom buttons
   private val startButton = new GradientButton
   showContent()
@@ -47,7 +49,7 @@ class SimulatorOptionsDialog(parent: Component,
     tabbedPanel.setToolTipTextAt(0, "Change the rendering options for the simulation")
     if (globalPhysicalParamPanel != null) {
       tabbedPanel.add("Animation", globalPhysicalParamPanel)
-      tabbedPanel.setToolTipTextAt(0, "Change the animation and physical constants controlling the simulation")
+      tabbedPanel.setToolTipTextAt(1, "Change the animation and physical constants controlling the simulation")
     }
     tabbedPanel.add("Custom", customParamPanel)
     tabbedPanel.setToolTipTextAt(tabbedPanel.getTabCount - 1, "Change the custom options for the simulation")
@@ -85,12 +87,15 @@ class SimulatorOptionsDialog(parent: Component,
   protected def createRenderingParamPanel: JPanel = {
     val paramPanel = new JPanel
     paramPanel.setLayout(new BorderLayout)
+    paramPanel.add(buildToggleOptionsPanel, BorderLayout.CENTER)
+    paramPanel.add(buildAnimationInputsPanel, BorderLayout.SOUTH)
+    paramPanel
+  }
+
+  private def buildToggleOptionsPanel: JPanel = {
     val togglesPanel = new JPanel
     togglesPanel.setLayout(new BoxLayout(togglesPanel, BoxLayout.Y_AXIS))
     togglesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Toggle Options"))
-    val textInputsPanel = new JPanel
-    textInputsPanel.setLayout(new BoxLayout(textInputsPanel, BoxLayout.Y_AXIS))
-    textInputsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Animation Options"))
     antialiasingCheckbox = new JCheckBox("Use Antialiasing", simulator.getAntialiasing)
     antialiasingCheckbox.setToolTipText("this toggle the use of antialising when rendering lines.")
     antialiasingCheckbox.addActionListener(this)
@@ -100,17 +105,21 @@ class SimulatorOptionsDialog(parent: Component,
     recordAnimationCheckbox.setToolTipText("Record each animation frame to a unique file")
     recordAnimationCheckbox.addActionListener(this)
     togglesPanel.add(recordAnimationCheckbox)
+    togglesPanel
+  }
 
+  private def buildAnimationInputsPanel: JPanel = {
+    val textInputsPanel = new JPanel
+    textInputsPanel.setLayout(new BoxLayout(textInputsPanel, BoxLayout.Y_AXIS))
+    textInputsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Animation Options"))
     timeStepField = new NumberInput("Time Step (.001 slow - .9 fast but unstable):  ",
       simulator.getTimeStep,
       "This controls the size of the numerical integration steps", 0.001, 10.0, false)
-
     numStepsPerFrameField = new NumberInput("Num Steps Per Frame (1 slow but smooth - " +
       SimulatorOptionsDialog.MAX_NUM_STEPS_PER_FRAME + " (fast but choppy):  ",
       simulator.getNumStepsPerFrame,
       "This controls the number of the numerical intergration steps per animation frame", 1,
       SimulatorOptionsDialog.MAX_NUM_STEPS_PER_FRAME, true)
-
     textInputsPanel.add(timeStepField)
     textInputsPanel.add(numStepsPerFrameField)
     scaleField = new NumberInput("Geometry Scale (1.0 = standard size):  ",
@@ -118,9 +127,7 @@ class SimulatorOptionsDialog(parent: Component,
       "This controls the size of the objects in the simulation", 0.01, 1000, false)
     scaleField.setEnabled(false)
     textInputsPanel.add(scaleField)
-    paramPanel.add(togglesPanel, BorderLayout.CENTER)
-    paramPanel.add(textInputsPanel, BorderLayout.SOUTH)
-    paramPanel
+    textInputsPanel
   }
 
   /** override if you want to add more toggles. */

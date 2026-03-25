@@ -52,15 +52,19 @@ class RectangularModelImage(var model: RectangularModel, var cmap: ColorMap, val
     val xScaledStart = scale * xStart
     val yScaledStart = scale * yStart
     val yPos = yStart + lastRow
+    val w = model.getWidth
+    val h = model.getHeight
+    def clampX(x: Int): Int = math.max(0, math.min(w - 1, x))
+    def clampY(y: Int): Int = math.max(0, math.min(h - 1, y))
     if (useLinearInterpolation) {
       val colorLL = new Array[Float](4)
       val colorLR = new Array[Float](4)
       val colorUL = new Array[Float](4)
       val colorUR = new Array[Float](4)
-      cmap.getColorForValue(model.getValue(xStart, yPos)).getComponents(colorLL)
-      cmap.getColorForValue(model.getValue(xStart + 1, yPos)).getComponents(colorLR)
-      cmap.getColorForValue(model.getValue(xStart, yPos + 1)).getComponents(colorUL)
-      cmap.getColorForValue(model.getValue(xStart + 1, yPos + 1)).getComponents(colorUR)
+      cmap.getColorForValue(model.getValue(clampX(xStart), clampY(yPos))).getComponents(colorLL)
+      cmap.getColorForValue(model.getValue(clampX(xStart + 1), clampY(yPos))).getComponents(colorLR)
+      cmap.getColorForValue(model.getValue(clampX(xStart), clampY(yPos + 1))).getComponents(colorUL)
+      cmap.getColorForValue(model.getValue(clampX(xStart + 1), clampY(yPos + 1))).getComponents(colorUR)
       for (xx <- 0 until scale) {
         for (yy <- 0 until scale) {
           val xrat = xx.toDouble / scale

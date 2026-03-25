@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.util.FileUtil
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Base class for all simulations.
@@ -26,11 +28,11 @@ import com.barrybecker4.common.util.FileUtil
 abstract class Simulator(val name: String) extends AnimationComponent with Optimizee {
 
   protected var tStep: Double = getInitialTimeStep
-  private var optionsDialog: SimulatorOptionsDialog = _
-  protected var frame: JFrame = _
+  private var optionsDialog: SimulatorOptionsDialog = uninitialized
+  protected var frame: JFrame = uninitialized
   setName(name)
 
-  /** whether or not to use anti-aliasing when rendering */
+  /** whether or not to use antialiasing when rendering */
   private var useAntialiasing = true
 
   protected def initCommonUI(): Unit = {
@@ -110,8 +112,6 @@ abstract class Simulator(val name: String) extends AnimationComponent with Optim
     * *** implements the key method of the Optimizee interface
     * evaluates the fitness.
     */
-  override def evaluateFitness(params: ParameterArray): Double = {
+  override def evaluateFitness(params: ParameterArray): Double =
     throw new UnsupportedOperationException("evaluateFitness not implemented yet")
-    0.0
-  }
 }

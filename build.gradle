@@ -33,7 +33,11 @@ dependencies {
     implementation 'com.barrybecker4:bb4-math:2.0-SNAPSHOT'
 }
 
-task runFractExpLocalized(type: JavaExec) {
+tasks.withType(ScalaCompile).configureEach {
+    scalaCompileOptions.additionalParameters += '-deprecation'
+}
+
+tasks.register('runFractExpLocalized', JavaExec) {
     group = 'application'
     mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
     args "-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"
@@ -331,7 +335,8 @@ appMap.each { appId, propMap ->
     if (propMap.containsKey('panel_class'))
         argsList = ["-panel_class", "${propMap['panel_class']}"]
 
-    tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
+    tasks.register("run${appId.capitalize()}", JavaExec) {
+        description = "${propMap.description}"
         group = 'application'
         mainClass = execMainClass
         args argsList
@@ -369,7 +374,7 @@ jarMap['waveFunctionCollapse'] =    [include:['com/barrybecker4/simulation/waveF
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.
 // Additional script to run text version.
 // It can take parameters like "panel_class com.barrybecker4.simulation.dice.DiceSimulator"
-task createSimulatorApp(type: CreateStartScripts) {
+def createSimulatorApp = tasks.register('createSimulatorApp', CreateStartScripts) {
     mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
@@ -377,14 +382,14 @@ task createSimulatorApp(type: CreateStartScripts) {
     defaultJvmOpts = ["-Xmx2048m"]
 }
 
-task createSierpinskiApp(type: CreateStartScripts) {
+def createSierpinskiApp = tasks.register('createSierpinskiApp', CreateStartScripts) {
     mainClass = 'com.barrybecker4.simulation.sierpinski.SierpinskiApplet'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-sierpinski'
 }
 
-task createSpirographApp(type: CreateStartScripts) {
+def createSpirographApp = tasks.register('createSpirographApp', CreateStartScripts) {
     mainClass = 'com.barrybecker4.simulation.spirograph.Spirograph'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir

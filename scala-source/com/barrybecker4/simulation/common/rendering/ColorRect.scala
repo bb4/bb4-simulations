@@ -25,8 +25,11 @@ class ColorRect(var width: Int, var height: Int) {
     val color = c.getRGB
     for (i <- x until x + width)
       for (j <- y until y + height)
-        setColor(x, y, color)
+        setColor(i, j, color)
   }
+
+  /** For tests: RGB packed int at pixel (x, y), same convention as [[setColor]]. */
+  private[rendering] def getRgb(x: Int, y: Int): Int = pixels(y * width + x)
 
   private def setColor(x: Int, y: Int, color: Int): Unit = {
     val location = y * width + x

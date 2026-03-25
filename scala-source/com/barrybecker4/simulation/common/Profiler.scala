@@ -7,15 +7,11 @@ import com.barrybecker4.common.format.FormatUtil
 object Profiler {
   protected val RENDERING = "rendering"
   val CALCULATION = "calculation"
-  private var instance: Profiler = _
 
-  /**
-    * @return singleton instance.
-    */
-  def getInstance: Profiler = {
-    if (instance == null) instance = new Profiler
-    instance
-  }
+  private lazy val instance: Profiler = new Profiler
+
+  /** @return singleton instance. */
+  def getInstance: Profiler = instance
 }
 
 /**

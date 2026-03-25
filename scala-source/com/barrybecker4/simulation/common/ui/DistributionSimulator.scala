@@ -6,6 +6,8 @@ import com.barrybecker4.ui.renderers.HistogramRenderer
 import java.awt.Dimension
 import java.awt.Graphics
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Simulates the the generation of a histogram based on
@@ -24,8 +26,8 @@ object DistributionSimulator {
 
 abstract class DistributionSimulator(val title: String) extends Simulator(title) {
 
-  protected var histogram: HistogramRenderer = _
-  protected var data: Array[Int] = _
+  protected var histogram: HistogramRenderer = uninitialized
+  protected var data: Array[Int] = uninitialized
   commonInit()
 
   override protected def reset(): Unit = {

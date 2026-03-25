@@ -9,6 +9,6 @@ trait HeightField {
   def getWidth: Int
   def getHeight: Int
 
-  /** @return the heigt value for the specified coordinates */
+  /** @return the height value for the specified coordinates */
   def getValue(x: Int, y: Int): Double
 }

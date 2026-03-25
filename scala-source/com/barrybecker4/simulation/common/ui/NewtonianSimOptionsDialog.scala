@@ -5,21 +5,23 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
-  * Options for Newtoniam based simulations.
+  * Options for Newtonian based simulations.
   * @author Barry Becker
   */
 abstract class NewtonianSimOptionsDialog(parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
   // rendering option controls
-  private var drawMeshCheckbox: JCheckBox = _
-  private var showVelocitiesCheckbox: JCheckBox = _
-  private var showForcesCheckbox: JCheckBox = _
+  private var drawMeshCheckbox: JCheckBox = uninitialized
+  private var showVelocitiesCheckbox: JCheckBox = uninitialized
+  private var showForcesCheckbox: JCheckBox = uninitialized
   // physics param options controls
-  private var staticFrictionField: NumberInput = _
-  private var dynamicFrictionField: NumberInput = _
+  private var staticFrictionField: NumberInput = uninitialized
+  private var dynamicFrictionField: NumberInput = uninitialized
 
   override def getTitle = "Newtonian Simulation Configuration"
 
@@ -61,15 +63,21 @@ abstract class NewtonianSimOptionsDialog(parent: Component, simulator: Simulator
   }
 
   override protected def ok(): Unit = {
+    val staticFriction = staticFrictionField.getValue
+    val dynamicFriction = dynamicFrictionField.getValue
+    if (staticFriction < dynamicFriction) {
+      JOptionPane.showMessageDialog(
+        this,
+        "Static friction must be greater than or equal to dynamic friction.",
+        "Invalid friction",
+        JOptionPane.WARNING_MESSAGE)
+      return
+    }
     super.ok()
     val simulator = getSimulator.asInstanceOf[NewtonianSimulator]
-    // set the common rendering and global physics options
     simulator.setDrawMesh(drawMeshCheckbox.isSelected)
     simulator.setShowVelocityVectors(showVelocitiesCheckbox.isSelected)
     if (showForcesCheckbox != null) simulator.setShowForceVectors(showForcesCheckbox.isSelected)
-    val staticFriction = staticFrictionField.getValue
-    val dynamicFriction = dynamicFrictionField.getValue
-    assert(staticFriction >= dynamicFriction)
     simulator.setStaticFriction(staticFriction)
     simulator.setDynamicFriction(dynamicFriction)
   }
