@@ -3,8 +3,9 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 import com.barrybecker4.expression.Operator
 import com.barrybecker4.expression.OperatorsDefinition
-import com.barrybecker4.expression.TreeNode
-import scala.collection.mutable.ListBuffer
+import com.barrybecker4.expression.ParseListItem
+import com.barrybecker4.expression.PlOperator
+import scala.collection.Seq
 
 
 /**
@@ -25,6 +26,6 @@ class LOperatorsDefinition extends OperatorsDefinition {
   override def isOperator(ch: Char) = false
 
   /** @return true if the last node is an operator or there were no previous nodes  */
-  override def isLastNodeOperator(nodes: ListBuffer[TreeNode]): Boolean =
-    nodes.isEmpty || nodes.last.isOperator
+  override def isLastNodeOperator(nodes: Seq[ParseListItem]): Boolean =
+    nodes.isEmpty || nodes.last.isInstanceOf[PlOperator]
 }

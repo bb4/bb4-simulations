@@ -1,29 +1,20 @@
-// Copyright by Barry G. Becker, 2013 - 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
-
-buildscript {
-    repositories {
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/"}
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-    }
-    dependencies {
-        classpath 'com.barrybecker4:bb4-gradle:1.9-SNAPSHOT'
-    }
-}
+// Copyright by Barry G. Becker, 2013 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 plugins {
-    id "com.github.maiflai.scalatest" version "0.32" // needed to run scala tests
+    id 'com.barrybecker4.bb4.scala-library' version '2.0-SNAPSHOT'
+    id 'com.barrybecker4.bb4.publish' version '2.0-SNAPSHOT'
+    id 'com.barrybecker4.bb4.application' version '2.0-SNAPSHOT'
 }
 
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '1.8-SNAPSHOT'
-ext {
-    archivesBaseName = 'bb4-simulation'
-    mainClass = "com.barrybecker4.simulation.dice.DiceSimulator"
-}
-apply from: project.buildscript.classLoader.getResource('bb4.gradle').toURI()
+version = '2.0-SNAPSHOT'
 
+bb4 {
+    archivesBaseName.set('bb4-simulation')
+    mainClass.set('com.barrybecker4.simulation.dice.DiceSimulator')
+}
 
 dependencies {
     //def javaHome = System.properties.'java.home'
@@ -31,18 +22,20 @@ dependencies {
 
     implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
+    // Ensures RegexParsers/LExpressionParser resolve when tests run from IDEs or isolated JUnit workers
+    testImplementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.barrybecker4:bb4-expression:1.7'
-    implementation 'com.barrybecker4:bb4-sound:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-optimization:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-ui:1.8-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-common:1.8'
-    implementation 'com.barrybecker4:bb4-math:1.8'
+    implementation 'com.barrybecker4:bb4-expression:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-sound:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-optimization:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-ui:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-common:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-math:2.0-SNAPSHOT'
 }
 
 task runFractExpLocalized(type: JavaExec) {
     group = 'application'
-    main 'com.barrybecker4.simulation.common.ui.SimulatorApp'
+    mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
     args "-panel_class", "com.barrybecker4.simulation.fractalexplorer.FractalExplorer", "-locale", "VIETNAMESE"
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-ea"]
@@ -332,7 +325,7 @@ appMap['waveFunctionCollapse'] = [
 
 appMap.each { appId, propMap ->
 
-    def mainClass = propMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApp"
+    def execMainClass = propMap['mainClass'] ?: "com.barrybecker4.simulation.common.ui.SimulatorApp"
 
     def argsList = []
     if (propMap.containsKey('panel_class'))
@@ -340,7 +333,7 @@ appMap.each { appId, propMap ->
 
     tasks.create(name: "run${appId.capitalize()}", type: JavaExec, description: "${propMap.description}") {
         group = 'application'
-        main "${mainClass}"
+        mainClass = execMainClass
         args argsList
         classpath = sourceSets.main.runtimeClasspath
         jvmArgs = ["-ea"]
@@ -369,7 +362,7 @@ jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
 jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
 jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
 jarMap['water'] =    [include:['com/barrybecker4/simulation/water/**']]
-jarMap['waveFunctonCollapse'] =    [include:['com/barrybecker4/simulation/waveFunctionCollapse/**']]
+jarMap['waveFunctionCollapse'] =    [include:['com/barrybecker4/simulation/waveFunctionCollapse/**']]
 
 
 // add extra execution scripts
@@ -377,7 +370,7 @@ jarMap['waveFunctonCollapse'] =    [include:['com/barrybecker4/simulation/waveFu
 // Additional script to run text version.
 // It can take parameters like "panel_class com.barrybecker4.simulation.dice.DiceSimulator"
 task createSimulatorApp(type: CreateStartScripts) {
-    mainClassName('com.barrybecker4.simulation.common.ui.SimulatorApp')
+    mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-simulator'
@@ -385,14 +378,14 @@ task createSimulatorApp(type: CreateStartScripts) {
 }
 
 task createSierpinskiApp(type: CreateStartScripts) {
-    mainClassName('com.barrybecker4.simulation.sierpinski.SierpinskiApplet')
+    mainClass = 'com.barrybecker4.simulation.sierpinski.SierpinskiApplet'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-sierpinski'
 }
 
 task createSpirographApp(type: CreateStartScripts) {
-    mainClassName('com.barrybecker4.simulation.spirograph.Spirograph')
+    mainClass = 'com.barrybecker4.simulation.spirograph.Spirograph'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-spirograph'
@@ -405,6 +398,3 @@ applicationDistribution.into("bin") {
     from(createSpirographApp)
     fileMode = 0755
 }
-
-apply from: project.buildscript.classLoader.getResource('bb4-publish.gradle').toURI()
-apply from: project.buildscript.classLoader.getResource('bb4-deploy.gradle').toURI()

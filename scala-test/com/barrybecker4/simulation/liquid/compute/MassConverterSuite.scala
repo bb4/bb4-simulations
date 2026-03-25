@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.liquid.compute
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
 
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import MassConserverSuite.{DT, DIM, EPS, TOL}
 import com.barrybecker4.simulation.liquid.model.UniformGrid
@@ -33,7 +33,7 @@ class MassConserverTest extends AnyFunSuite {
     val cell = grid.getCell(2, 2)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.0, div, TOL)
+    assertEquals(0.0, div, TOL, "Unexpected divergence")
   }
 
   test("MassConservationForFullCellInUniformFlow") {
@@ -44,8 +44,8 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.0, div, EPS)
-    assertEquals("Unexpected cell pressure", 0.9, cell.getPressure, EPS)
+    assertEquals(0.0, div, EPS, "Unexpected divergence")
+    assertEquals(0.9, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(1.0, 1.0), new Vector2d(1.0, 1.0))
   }
 
@@ -57,9 +57,9 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.032088732160504604, div, EPS)
+    assertEquals(0.032088732160504604, div, EPS, "Unexpected divergence")
     // @@ seems wrong
-    assertEquals("Unexpected cell pressure", -7.122183040126151, cell.getPressure, EPS)
+    assertEquals(-7.122183040126151, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.49120674102731, 0.49120674102731), new Vector2d(0.49120674102731, 0.49120674102731))
   }
 
@@ -74,8 +74,8 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.05, div, TOL)
-    assertEquals("Unexpected cell pressure", -24.1, cell.getPressure, TOL)
+    assertEquals(0.05, div, TOL, "Unexpected divergence")
+    assertEquals(-24.1, cell.getPressure, TOL, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.75, 0.75), new Vector2d(0.75, 1.25))
   }
 
@@ -89,8 +89,8 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.05, div, EPS)
-    assertEquals("Unexpected cell pressure", -11.6, cell.getPressure, EPS)
+    assertEquals(0.05, div, EPS, "Unexpected divergence")
+    assertEquals(-11.6, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.875, 0.875), new Vector2d(0.625, 1.125))
   }
 
@@ -104,8 +104,8 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.05, div, EPS)
-    assertEquals("Unexpected cell pressure", 13.4, cell.getPressure, EPS)
+    assertEquals(0.05, div, EPS, "Unexpected divergence")
+    assertEquals(13.4, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.625, 1.125), new Vector2d(0.875, 0.875))
   }
 
@@ -120,8 +120,8 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.05, div, EPS)
-    assertEquals("Unexpected cell pressure", -11.6, cell.getPressure, EPS)
+    assertEquals(0.05, div, EPS, "Unexpected divergence")
+    assertEquals(-11.6, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.875, 0.875), new Vector2d(1.125, 0.625))
   }
 
@@ -134,15 +134,15 @@ class MassConserverTest extends AnyFunSuite {
     cell.setStatus(CellStatus.FULL)
     val neighbors = grid.getNeighbors(2, 2)
     val div = conserver.updateMassConservation(cell, neighbors)
-    assertEquals("Unexpected divergence", 0.05, div, EPS)
-    assertEquals("Unexpected cell pressure", 13.4, cell.getPressure, EPS)
+    assertEquals(0.05, div, EPS, "Unexpected divergence")
+    assertEquals(13.4, cell.getPressure, EPS, "Unexpected cell pressure")
     verifyResult(cell, neighbors, new Vector2d(0.625, 1.125), new Vector2d(0.875, 0.875))
   }
 
   private def verifyResult(cell: Cell, neighbors: CellNeighbors, expUV: Vector2d, expBottomLeftUV: Vector2d) = {
-    assertEquals("Unexpected UV", expUV, new Vector2d(cell.getU, cell.getV))
+    assertEquals(expUV, new Vector2d(cell.getU, cell.getV), "Unexpected UV")
     val bottomLeftUV = new Vector2d(neighbors.getLeft.getU, neighbors.getBottom.getV)
-    assertEquals("Unexpected bottom left UV", expBottomLeftUV, bottomLeftUV)
+    assertEquals(expBottomLeftUV, bottomLeftUV, "Unexpected bottom left UV")
   }
 }
 

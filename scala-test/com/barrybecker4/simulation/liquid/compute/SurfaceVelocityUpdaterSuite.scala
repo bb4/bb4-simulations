@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.liquid.compute
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
 import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import SurfaceVelocityUpdaterSuite._
 
@@ -36,7 +36,7 @@ class SurfaceVelocityUpdaterSuite extends AnyFunSuite {
     val neighbors = grid.getNeighbors(2, 2)
     svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE)
     svUpdater.updateSurfaceVelocities(cell, neighbors)
-    assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure, TOL)
+    assertEquals(ATMOSPHERIC_PRESSURE, cell.getPressure, TOL, "Unexpected pressure")
     verifyBorderVelocities(cell, neighbors, 0, 0, 0, 0)
   }
 
@@ -47,7 +47,7 @@ class SurfaceVelocityUpdaterSuite extends AnyFunSuite {
     val neighbors = grid.getNeighbors(2, 2)
     svUpdater = new SurfaceVelocityUpdater(ATMOSPHERIC_PRESSURE)
     svUpdater.updateSurfaceVelocities(cell, neighbors)
-    assertEquals("Unexpected pressure", ATMOSPHERIC_PRESSURE, cell.getPressure, TOL)
+    assertEquals(ATMOSPHERIC_PRESSURE, cell.getPressure, TOL, "Unexpected pressure")
     verifyBorderVelocities(cell, neighbors, 0.285714285714, 0.28571428, 0.2054924, 0.205492455313)
   }
 

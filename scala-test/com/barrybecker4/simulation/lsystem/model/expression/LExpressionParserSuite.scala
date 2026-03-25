@@ -3,8 +3,6 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 import org.scalatest.funsuite.AnyFunSuite
 import com.barrybecker4.common.testsupport.strip
-import com.barrybecker4.expression.TreeNode
-
 class LExpressionParserSuite extends AnyFunSuite {
 
   /** instance under test */
@@ -40,10 +38,9 @@ class LExpressionParserSuite extends AnyFunSuite {
     //println("expression = " + root)
 
     if (expSerializedStr.isEmpty) {
-      assertResult(TreeNode()) { root }
+      assert(root.getData == "" && root.children.isEmpty)
     }
     else {
-      println("serialized = "  + serializer.serialize(root))
       assertResult(expSerializedStr) { serializer.serialize(root) }
     }
   }

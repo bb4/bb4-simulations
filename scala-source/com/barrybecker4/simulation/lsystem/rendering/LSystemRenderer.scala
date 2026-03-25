@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem.rendering
 
-import com.barrybecker4.expression.TreeNode
-import com.barrybecker4.simulation.lsystem.model.expression.{LExpressionParser, LTreeSerializer}
+import com.barrybecker4.simulation.lsystem.model.expression.{LExpressionParser, LSystemNode, LTreeSerializer}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt.Color
 import java.awt.Dimension
@@ -37,7 +36,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
   private var scaleFactor = initialScaleFactor
   private var expression: String = _
   private val cmap = new DepthColorMap
-  private var root: TreeNode = _
+  private var root: LSystemNode = _
   private var angleIncrement: Double = _
   private var offset: Location = IntLocation(0, 0)
   private val parser = new LExpressionParser
@@ -114,7 +113,7 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
     * Draw the tree recursively.
     * @param pos the position and angle in radians that the turtle graphics used when rotating '+' or '-'
     */
-  private def drawTree(pos: OrientedPosition, length: Double, tree: TreeNode, numIterations: Int, depth: Int): Unit = {
+  private def drawTree(pos: OrientedPosition, length: Double, tree: LSystemNode, numIterations: Int, depth: Int): Unit = {
     for (child <- tree.children) {
       if (child.hasParens) drawTree(new OrientedPosition(pos), scaleFactor * length, child, numIterations, depth + 1)
       else {

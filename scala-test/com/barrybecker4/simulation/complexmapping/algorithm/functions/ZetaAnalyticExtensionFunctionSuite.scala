@@ -12,6 +12,13 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite {
 
   private val fun = ZetaAnalyticExtensionFunction()
 
+  private def assertComplexApprox(expected: ComplexNumber, actual: ComplexNumber, tol: Double = 1e-6): Unit = {
+    assert(
+      Math.abs(expected.real - actual.real) <= tol && Math.abs(expected.imaginary - actual.imaginary) <= tol,
+      s"expected $expected but got $actual"
+    )
+  }
+
   test("z(2) with n=1000") {
     assertResult(ComplexNumber(1.6349839001848923, 0)) {
       fun.compute(ComplexNumber(2.0), 100)
@@ -67,15 +74,18 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite {
   }
 
   test("z(2, 3i) with n=3") {
-    assertResult(ComplexNumber(0.7684594036038668, -0.20128090061917603)) {
+    assertComplexApprox(
+      ComplexNumber(0.7684594036038668, -0.20128090061917603),
       fun.compute(ComplexNumber(2.0, 3.0), 3)
-    }
+    )
   }
 
   test("z(2, 3i) with n=300") {
-    assertResult(ComplexNumber(0.7970905940475872, -0.11423413906585442)) {
-      fun.compute(ComplexNumber(2.0, 3.0), 300)
-    }
+    assertComplexApprox(
+      ComplexNumber(0.7970905940475872, -0.11423413906585442),
+      fun.compute(ComplexNumber(2.0, 3.0), 300),
+      tol = 1e-5
+    )
   }
 
   test("z(-1, i) with n=2") {

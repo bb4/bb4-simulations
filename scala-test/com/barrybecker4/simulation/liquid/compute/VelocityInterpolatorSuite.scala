@@ -2,9 +2,8 @@
 package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model._
-import org.junit.Test
 import javax.vecmath.Vector2d
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import VelocityInterpolatorSuite._
 
@@ -31,7 +30,7 @@ class VelocityInterpolatorSuite extends AnyFunSuite {
       val cell = grid.getCell(x.toInt, y.toInt)
       val point = new Particle(x, y, cell)
       val vel = interpolator.findVelocity(point)
-      assertEquals("Unexpected interpolated velocity for point " + point, expectedVelocity, vel)
+      assertEquals(expectedVelocity, vel, "Unexpected interpolated velocity for point " + point)
     }
   }
 

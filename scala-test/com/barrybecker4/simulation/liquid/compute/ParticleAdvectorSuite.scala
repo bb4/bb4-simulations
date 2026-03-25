@@ -5,8 +5,7 @@ import com.barrybecker4.math.linear.LinearUtil
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
 import ParticleAdvectorSuite._
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -32,10 +31,10 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val particles = createParticles(2.1, 2.5, grid)
     val part = particles.iterator.next()
     particleAdvector.advectParticles(DT, particles)
-    assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
+    assertEquals(0.1, part.getAge, TOL, "Unexpected age for particle")
     val pos = new Vector2d(part.x, part.y)
-    assertTrue("Unexpected new particle position: " + pos,
-      LinearUtil.appxVectorsEqual(new Vector2d(2.1, 2.5), pos, MathUtil.EPS_MEDIUM))
+    assertTrue(LinearUtil.appxVectorsEqual(new Vector2d(2.1, 2.5), pos, MathUtil.EPS_MEDIUM),
+      "Unexpected new particle position: " + pos)
   }
 
   test("AdvectInUpdateInNorthEastFlow") {
@@ -44,11 +43,11 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val particles = createParticles(2.1, 2.5, grid)
     val part = particles.iterator.next()
     val newDt = particleAdvector.advectParticles(DT, particles)
-    assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
+    assertEquals(0.1, part.getAge, TOL, "Unexpected age for particle")
     val pos = new Vector2d(part.x, part.y)
-    assertTrue("Unexpected new particle position: " + pos,
-      LinearUtil.appxVectorsEqual(new Vector2d(2.105, 2.505), pos, MathUtil.EPS_MEDIUM))
-    assertEquals("Timestep unexpectedly changed", DT, newDt, TOL)
+    assertTrue(LinearUtil.appxVectorsEqual(new Vector2d(2.105, 2.505), pos, MathUtil.EPS_MEDIUM),
+      "Unexpected new particle position: " + pos)
+    assertEquals(DT, newDt, TOL, "Timestep unexpectedly changed")
   }
 
   test("AdvectInUpdateInNorthEastNonUniformFlow(") {
@@ -57,11 +56,11 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     val particles = createParticles(2.1, 2.5, grid)
     val part = particles.iterator.next()
     val newDt = particleAdvector.advectParticles(DT, particles)
-    assertEquals("Unexpected age for particle", 0.1, part.getAge, TOL)
+    assertEquals(0.1, part.getAge, TOL, "Unexpected age for particle")
     val pos = new Vector2d(part.x, part.y)
-    assertTrue("Unexpected new particle position: " + pos,
-      LinearUtil.appxVectorsEqual(new Vector2d(2.1021351463835316, 2.5021703194194225), pos, MathUtil.EPS_MEDIUM))
-    assertEquals("Timestep unexpectedly changed", DT, newDt, TOL)
+    assertTrue(LinearUtil.appxVectorsEqual(new Vector2d(2.1021351463835316, 2.5021703194194225), pos, MathUtil.EPS_MEDIUM),
+      "Unexpected new particle position: " + pos)
+    assertEquals(DT, newDt, TOL, "Timestep unexpectedly changed")
   }
 
   private def createParticles(x: Double, y: Double, grid: Grid) = {

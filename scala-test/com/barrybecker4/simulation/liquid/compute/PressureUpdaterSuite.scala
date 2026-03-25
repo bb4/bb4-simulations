@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import PressureUpdaterSuite._
 
@@ -27,8 +27,8 @@ class PressureUpdaterSuite extends AnyFunSuite {
     val grid = new UniformGrid(DIM, DIM, new Vector2d(1.0, 1.0), CellStatus.FULL)
     pressureUpdater = new PressureUpdater(grid, b0)
     val maxDiv = pressureUpdater.updatePressure(DT)
-    assertEquals("Unexpected divergence", 0.0, maxDiv, TOL)
-    assertEquals("Unexpected number of iterations till convergence", 2, pressureUpdater.getNumIterations)
+    assertEquals(0.0, maxDiv, TOL, "Unexpected divergence")
+    assertEquals(2, pressureUpdater.getNumIterations, "Unexpected number of iterations till convergence")
     val cell1 = grid.getCell(1, 1)
     verifyCell(cell1, -49.1, new Vector2d(0.5, 0.5))
     val cell2 = grid.getCell(1, 2)
@@ -41,8 +41,8 @@ class PressureUpdaterSuite extends AnyFunSuite {
     val grid = new NonUniformGrid(DIM, DIM, new Vector2d(1.0, 1.0), CellStatus.FULL)
     pressureUpdater = new PressureUpdater(grid, b0)
     val maxDiv = pressureUpdater.updatePressure(DT)
-    assertEquals("Unexpected divergence", 0.0, maxDiv, 0.000000001)
-    assertEquals("Unexpected number of iterations till convergence", 45, pressureUpdater.getNumIterations)
+    assertEquals(0.0, maxDiv, 0.000000001, "Unexpected divergence")
+    assertEquals(45, pressureUpdater.getNumIterations, "Unexpected number of iterations till convergence")
     /*
             Cell cell1 = grid.getCell(1, 1);
             verifyCell(cell1, -13.385714285714284, new Vector2d(0.14285714285714285, 0.14285714285714285));
@@ -63,8 +63,8 @@ class PressureUpdaterSuite extends AnyFunSuite {
     cell33.setV(-0.8)
     pressureUpdater = new PressureUpdater(grid, b0)
     val maxDiv = pressureUpdater.updatePressure(DT)
-    assertEquals("Unexpected divergence", 2.7755575615628914E-17, maxDiv, TOL)
-    assertEquals("Unexpected number of iterations till convergence", 2, pressureUpdater.getNumIterations)
+    assertEquals(2.7755575615628914E-17, maxDiv, TOL, "Unexpected divergence")
+    assertEquals(2, pressureUpdater.getNumIterations, "Unexpected number of iterations till convergence")
     System.out.println(grid.toString)
     val cell1 = grid.getCell(1, 1)
     verifyCell(cell1, 0.9, new Vector2d(0.0, 0.0))
@@ -73,15 +73,15 @@ class PressureUpdaterSuite extends AnyFunSuite {
   }
 
   private def verifyCell(cell: Cell, pressure: Double, expUV: Vector2d) = {
-    assertEquals("Unexpected pressure", pressure, cell.getPressure, TOL)
-    assertEquals("Unexpected velocity", expUV, new Vector2d(cell.getU, cell.getV))
+    assertEquals(pressure, cell.getPressure, TOL, "Unexpected pressure")
+    assertEquals(expUV, new Vector2d(cell.getU, cell.getV), "Unexpected velocity")
   }
 
   private def verifyPressures(grid: Grid, expPressure: Double) = {
     for (i <- 1 until grid.getXDimension - 1)
       for (j <- 1 until grid.getYDimension - 1) {
         val cell = grid.getCell(i, j)
-        assertEquals("Unexpected pressure at " + cell, expPressure, cell.getPressure, TOL)
+        assertEquals(expPressure, cell.getPressure, TOL, "Unexpected pressure at " + cell)
       }
   }
 }

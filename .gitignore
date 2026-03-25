@@ -8,3 +8,6 @@ bin/
 *.iml
 bb4-simulations.ipr
 bb4-simulations.iws
+.vscode/settings.json
+.bloop/
+.metals/
