@@ -8,6 +8,7 @@ import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import javax.swing.*
 import java.awt.*
 
+import scala.compiletime.uninitialized
 
 /**
   * Interactively explores generating cave systems.
@@ -20,9 +21,9 @@ object CaveExplorer {
 
 class CaveExplorer() extends Simulator("Cave Explorer") {
 
-  private var caveModel: CaveModel = _
-  private var options: DynamicOptions = _
-  private var handler: InteractionHandler = _
+  private var caveModel: CaveModel = uninitialized
+  private var options: Option[DynamicOptions] = None
+  private var handler: InteractionHandler = uninitialized
   commonInit()
 
   def getInteractionHandler: InteractionHandler = handler
@@ -44,10 +45,9 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
 
   override protected def reset(): Unit = {
     setNumStepsPerFrame(CaveExplorer.DEFAULT_STEPS_PER_FRAME)
-    // remove handlers to void memory leak
     this.removeMouseListener(handler)
     this.removeMouseMotionListener(handler)
-    if (options != null) options.reset()
+    options.foreach(_.reset())
     commonInit()
   }
 
@@ -74,8 +74,9 @@ class CaveExplorer() extends Simulator("Cave Explorer") {
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
-    options = new DynamicOptions(caveModel, this)
+    val opts = new DynamicOptions(caveModel, this)
+    options = Some(opts)
     setPaused(false)
-    options
+    opts
   }
 }

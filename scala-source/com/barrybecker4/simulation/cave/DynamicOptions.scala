@@ -1,20 +1,17 @@
 // Copyright by Barry G. Becker, 2016 - 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.cave
 
-import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.simulation.cave.model.CaveProcessor
-import com.barrybecker4.simulation.cave.CaveExplorer
-import com.barrybecker4.simulation.cave.model.CaveModel
-import com.barrybecker4.ui.legend.ContinuousColorLegend
-import com.barrybecker4.ui.sliders.SliderGroup
-import com.barrybecker4.ui.sliders.SliderGroupChangeListener
-import com.barrybecker4.ui.sliders.SliderProperties
-import javax.swing._
-import java.awt._
-import java.awt.event._
-
 import com.barrybecker4.common.app.AppContext
+import com.barrybecker4.common.concurrency.ThreadUtil
+import com.barrybecker4.simulation.cave.model.CaveModel
+import com.barrybecker4.simulation.cave.model.CaveProcessor
+import com.barrybecker4.ui.legend.ContinuousColorLegend
+import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
+import java.awt.*
+import java.awt.event.*
+import javax.swing.*
 
+import scala.compiletime.uninitialized
 
 /**
   * Dynamic controls for the Cave simulation that will show on the right.
@@ -34,7 +31,7 @@ object DynamicOptions {
   private val LIGHT_SOURCE_AZYMUTH_SLIDER = "Light azymuthal angle (for bumps)"
   private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame"
   private val SCALE_SLIDER = "Scale"
-  private val PI_D2 = Math.PI / 2.0
+  private val PI_D2 = math.Pi / 2.0
   private val PREFERRED_WIDTH = 300
   private val SPACING = 14
 
@@ -49,8 +46,8 @@ object DynamicOptions {
   private val BUMP_SLIDER_PROPS = Array(
     new SliderProperties(BUMP_HEIGHT_SLIDER, 0.0, 10.0, CaveModel.DEFAULT_BUMP_HEIGHT, 100),
     new SliderProperties(SPECULAR_PCT_SLIDER, 0.0, 1.0, CaveModel.DEFAULT_SPECULAR_PCT, 100),
-    new SliderProperties(LIGHT_SOURCE_ELEVATION_SLIDER, 0.0, Math.PI / 2.0, CaveModel.DEFAULT_LIGHT_SOURCE_ELEVATION, 100),
-    new SliderProperties(LIGHT_SOURCE_AZYMUTH_SLIDER, 0.0, Math.PI, CaveModel.DEFAULT_LIGHT_SOURCE_AZYMUTH, 100)
+    new SliderProperties(LIGHT_SOURCE_ELEVATION_SLIDER, 0.0, math.Pi / 2.0, CaveModel.DEFAULT_LIGHT_SOURCE_ELEVATION, 100),
+    new SliderProperties(LIGHT_SOURCE_AZYMUTH_SLIDER, 0.0, math.Pi, CaveModel.DEFAULT_LIGHT_SOURCE_AZYMUTH, 100)
   )
   private val BRUSH_SLIDER_PROPS = Array(
     new SliderProperties(BRUSH_RADIUS_SLIDER, 1, 50, CaveModel.DEFAULT_BRUSH_RADIUS),
@@ -58,8 +55,16 @@ object DynamicOptions {
   )
 }
 
-class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: CaveExplorer)
-  extends JPanel with SliderGroupChangeListener with ItemListener with ActionListener {
+class DynamicOptions private[cave](val caveModel: CaveModel, val simulator: CaveExplorer)
+    extends JPanel with SliderGroupChangeListener with ItemListener with ActionListener {
+
+  private var kernelChoice: JComboBox[String] = uninitialized
+  private var nextButton: JButton = uninitialized
+  private var resetButton: JButton = uninitialized
+  private var generalSliderGroup: SliderGroup = uninitialized
+  private var bumpSliderGroup: SliderGroup = uninitialized
+  private var useContinuousIteration: JCheckBox = uninitialized
+  private var useParallelComputation: JCheckBox = uninitialized
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
@@ -69,7 +74,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   val brushPanel: JPanel = createBrushControls
   val legend = new ContinuousColorLegend(null, caveModel.getColormap, true)
 
-  add(createKernalDropdown)
+  add(createKernelDropdown)
   add(createCheckboxPanel)
   add(createButtons)
   add(legend)
@@ -83,13 +88,6 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
-  private var kernelChoice: JComboBox[String] = _
-  private var nextButton: JButton = _
-  private var resetButton: JButton = _
-  private var generalSliderGroup: SliderGroup = _
-  private var bumpSliderGroup: SliderGroup = _
-  private var useContinuousIteration: JCheckBox = _
-  private var useParallelComputation: JCheckBox = _
 
   private def createGeneralControls = {
     val panel = new JPanel(new BorderLayout)
@@ -118,7 +116,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
   private def createBrushControls = {
     val panel = new JPanel(new BorderLayout)
     panel.setBorder(createTitledBorder("Brush Parameters (left: raise; right: lower)"))
-    val brushSliderGroup: SliderGroup= new SliderGroup(DynamicOptions.BRUSH_SLIDER_PROPS)
+    val brushSliderGroup: SliderGroup = new SliderGroup(DynamicOptions.BRUSH_SLIDER_PROPS)
     brushSliderGroup.setSliderListener(this)
     panel.add(brushSliderGroup, BorderLayout.CENTER)
     panel
@@ -128,13 +126,12 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     * The dropdown menu at the top for selecting a kernel type.
     * @return a dropdown/down component.
     */
-  private def createKernalDropdown = {
+  private def createKernelDropdown = {
     val kernelChoicePanel = new JPanel
-    val label = new JLabel("Kernal type: ")
+    val label = new JLabel("Kernel type: ")
     kernelChoice = new JComboBox[String]
-    for (kernelType <- CaveProcessor.KernelType.values) {
-      kernelChoice.addItem(kernelType.toString) //name)
-    }
+    for (kernelType <- CaveProcessor.KernelType.values)
+      kernelChoice.addItem(kernelType.toString)
     kernelChoice.setSelectedIndex(CaveProcessor.DEFAULT_KERNEL_TYPE.ordinal)
     kernelChoice.addItemListener(this)
     kernelChoicePanel.add(label)
@@ -150,8 +147,10 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
 
     val continuousIterPanel = new JPanel
-    continuousIterPanel.setToolTipText("When checked, iteration proceeds continuously. " +
-      "When unchecked, click 'Next' to advance a times step at a time.")
+    continuousIterPanel.setToolTipText(
+      "When checked, iteration proceeds continuously. " +
+        "When unchecked, click 'Next' to advance a times step at a time."
+    )
     val continuousIterLabel = new JLabel("Continuous iteration: ")
     useContinuousIteration = new JCheckBox
     useContinuousIteration.setSelected(CaveModel.DEFAULT_USE_CONTINUOUS_ITERATION)
@@ -193,7 +192,6 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
 
   def reset(): Unit = generalSliderGroup.reset()
 
-
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
@@ -220,7 +218,7 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
         simulator.getInteractionHandler.setBrushRadius(value.toInt)
       case DynamicOptions.BRUSH_STRENGTH_SLIDER =>
         simulator.getInteractionHandler.setBrushStrength(value)
-      case _ => throw new IllegalArgumentException("Unexpected slider: " + sliderName)
+      case _ => throw new IllegalArgumentException(s"Unexpected slider: $sliderName")
     }
   }
 
@@ -243,6 +241,6 @@ class DynamicOptions private[cave](var caveModel: CaveModel, var simulator: Cave
     }
     else if (e.getSource == useParallelComputation)
       caveModel.setUseParallelComputation(useParallelComputation.isSelected)
-    else throw new IllegalStateException("Unexpected button " + e.getSource)
+    else throw new IllegalStateException(s"Unexpected button ${e.getSource}")
   }
 }

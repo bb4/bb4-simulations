@@ -2,13 +2,15 @@
 package com.barrybecker4.simulation.cave.model
 
 import com.barrybecker4.math.Range
-import com.barrybecker4.simulation.cave.model.kernal.BasicKernel
-import com.barrybecker4.simulation.cave.model.kernal.Kernel
-import com.barrybecker4.simulation.cave.model.kernal.RadialKernel
+import com.barrybecker4.simulation.cave.model.kernel.AbstractKernel
+import com.barrybecker4.simulation.cave.model.kernel.BasicKernel
+import com.barrybecker4.simulation.cave.model.kernel.Kernel
+import com.barrybecker4.simulation.cave.model.kernel.RadialKernel
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField
 import CaveProcessor._
 import CaveProcessor.KernelType
-import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.CollectionConverters.*
+import scala.compiletime.uninitialized
 
 /**
   * This Cave simulation program is based on work by Michael Cook
@@ -35,27 +37,22 @@ object CaveProcessor {
 
   enum KernelType:
     case BASIC, RADIAL3, RADIAL5, RADIAL7, RADIAL9, RADIAL11, RADIAL13, RADIAL15, RADIAL17, RADIAL19
-  
 
   val DEFAULT_KERNEL_TYPE: KernelType = KernelType.RADIAL9
 
-  def main(args: Array[String]): Unit = {
-    val cave = new CaveProcessor(32, 32, 0.25, 0.8, 3, 2, KernelType.BASIC, DEFAULT_USE_PARALLEL)
-    cave.printCave()
-    cave.nextPhase()
-    cave.printCave()
-  }
+  private def radialSize(kt: KernelType): Int =
+    kt.toString.stripPrefix("RADIAL").toInt
 }
 
 class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
                     val ceilThresh: Double, var lossFactor: Double, var effectFactor: Double,
-                    val kernelType: KernelType, var useParallel: Boolean = true) extends HeightField {
+                    val initialKernelType: KernelType, var useParallel: Boolean = true)
+    extends HeightField {
 
   private var cave = new Cave(width, height, floorThresh, ceilThresh)
-  cave.randomInitialization()
-  private var kernel: Kernel = _
+  private var kernel: Kernel = uninitialized
 
-  setKernelType(kernelType)
+  setKernelType(initialKernelType)
 
   /** Constructor that allows you to specify the dimensions of the cave */
   def this(width: Int, height: Int) = {
@@ -71,32 +68,23 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
   override def getWidth: Int = cave.getWidth
   override def getHeight: Int = cave.getLength
 
-  def setKernelType(`type`: KernelType): Unit = {
-    `type` match {
-      case KernelType.BASIC => kernel = new BasicKernel(cave)
-      case KernelType.RADIAL3 => kernel = new RadialKernel(cave, 3)
-      case KernelType.RADIAL5 => kernel = new RadialKernel(cave, 5)
-      case KernelType.RADIAL7 => kernel = new RadialKernel(cave, 7)
-      case KernelType.RADIAL9 => kernel = new RadialKernel(cave, 9)
-      case KernelType.RADIAL11 => kernel = new RadialKernel(cave, 11)
-      case KernelType.RADIAL13 => kernel = new RadialKernel(cave, 13)
-      case KernelType.RADIAL15 => kernel = new RadialKernel(cave, 15)
-      case KernelType.RADIAL17 => kernel = new RadialKernel(cave, 17)
-      case KernelType.RADIAL19 => kernel = new RadialKernel(cave, 19)
-    }
-  }
+  def setKernelType(kernelType: KernelType): Unit =
+    kernel = kernelType match
+      case KernelType.BASIC => new BasicKernel(cave)
+      case radial => new RadialKernel(cave, CaveProcessor.radialSize(radial))
 
-  def setLossFactor(loss: Double): Unit = { lossFactor = loss}
-  def setEffectFactor(scale: Double): Unit = { effectFactor = scale}
-  def setFloorThresh(floor: Double): Unit = { cave.setFloorThresh(floor)}
+  def setLossFactor(loss: Double): Unit = { lossFactor = loss }
+  def setEffectFactor(scale: Double): Unit = { effectFactor = scale }
+  def setFloorThresh(floor: Double): Unit = { cave.setFloorThresh(floor) }
   def setCeilThresh(ceil: Double): Unit = { cave.setCeilThresh(ceil) }
-  def incrementHeight(x: Int, y: Int, amount: Double): Unit = { cave.incrementHeight(x, y, amount) }
+  def incrementHeight(x: Int, y: Int, amount: Double): Unit = cave.incrementHeight(x, y, amount)
 
   override def getValue(x: Int, y: Int): Double = cave.getValue(x, y)
   def getRange: Range = cave.getRange
-  def printCave(): Unit = {cave.print() }
+  def printCave(): Unit = cave.print()
 
   override def toString: String = cave.toString
+
   def setUseParallel(parallelized: Boolean): Unit = {
     useParallel = parallelized
   }
@@ -109,41 +97,18 @@ class CaveProcessor(val width: Int, val height: Int, val floorThresh: Double,
     */
   def nextPhase(): Unit = {
     val newCave = cave.createCopy
-    val numThreads = Runtime.getRuntime.availableProcessors()
-    val workers = Array.ofDim[Runnable](numThreads)
-    val range = cave.getWidth / numThreads
-    for (i <- 0 until numThreads) {
-      val offset = i * range
-      workers(i) = new Worker(offset, offset + range, newCave)
+    val xs = 0 until cave.getWidth
+    val cols = if useParallel then xs.par else xs
+    cols.iterator.foreach { x =>
+      for y <- 0 until cave.getLength do
+        val neibNum = kernel.countNeighbors(x, y)
+        val oldValue = cave.getValue(x, y)
+        val newValue = oldValue + (neibNum - lossFactor) * effectFactor
+        newCave.setValue(x, y, newValue)
     }
-
-    assert(workers != null)
-    if (useParallel)
-      workers.par.foreach(w => {
-        assert(w != null)
-        w.run()
-      })
-    else
-      workers.foreach(w => w.run())
-
     cave = newCave
-  }
-
-
-  /** Runs one of the chunks. */
-  private class Worker(minX: Int, maxX: Int, newCave: Cave) extends Runnable {
-
-    override def run(): Unit = {nextPhase() }
-
-    private def nextPhase(): Unit = { // Loop over each row and column of the map
-      for (x <- minX until maxX) {
-        for (y <- 0 until cave.length) {
-          val neibNum = kernel.countNeighbors(x, y)
-          val oldValue = cave.getValue(x, y)
-          val newValue = oldValue + (neibNum - lossFactor) * effectFactor
-          newCave.setValue(x, y, newValue)
-        }
-      }
+    kernel match {
+      case k: AbstractKernel => k.cave = cave
     }
   }
 }

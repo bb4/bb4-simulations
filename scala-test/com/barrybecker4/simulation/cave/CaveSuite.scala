@@ -42,4 +42,26 @@ class CaveSuite extends AnyFunSuite {
     val cave = new Cave(1, 4, CaveSuite.FLOOR, CaveSuite.CEILING, RND)
     assertResult("W\n \nW\nC\n") { cave.toString }
   }
+
+  test("SetValueAndIncrementHeightClampToRange") {
+    val cave = new Cave(3, 3, 0.2, 0.7, RND)
+    cave.setValue(1, 1, 0.05)
+    assert(cave.getValue(1, 1) == 0.2)
+    cave.setValue(1, 1, 0.99)
+    assert(cave.getValue(1, 1) == 0.7)
+    cave.setValue(1, 1, 0.5)
+    cave.incrementHeight(1, 1, 10.0)
+    assert(cave.getValue(1, 1) == 0.7)
+    cave.incrementHeight(1, 1, -10.0)
+    assert(cave.getValue(1, 1) == 0.2)
+  }
+
+  test("CreateCopyIsIndependent") {
+    val cave = new Cave(2, 2, 0.2, 0.8, RND)
+    val copy = cave.createCopy
+    val orig = cave.getValue(0, 0)
+    val alt = if (orig < 0.5) 0.75 else 0.25
+    copy.setValue(0, 0, alt)
+    assert(math.abs(cave.getValue(0, 0) - copy.getValue(0, 0)) > 1e-6)
+  }
 }

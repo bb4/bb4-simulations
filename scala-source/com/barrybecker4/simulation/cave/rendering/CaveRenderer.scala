@@ -6,9 +6,8 @@ import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import com.barrybecker4.ui.util.ColorMap
 import javax.vecmath.Vector3d
-import java.awt._
+import java.awt.*
 import java.awt.image.BufferedImage
-
 
 /**
   * Draws the 2D cave model by applying the processor to it.
@@ -18,9 +17,10 @@ object CaveRenderer {
   private val FLOOR_COLOR = new Color(130, 255, 175)
 }
 
-class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcessor, var cmap: ColorMap) {
+class CaveRenderer(val width: Double, val height: Double, val cave: CaveProcessor, val cmap: ColorMap) {
 
-  private val offlineGraphics = new OfflineGraphics(new Dimension(width.toInt, height.toInt), CaveRenderer.FLOOR_COLOR)
+  private val offlineGraphics =
+    new OfflineGraphics(new Dimension(width.toInt, height.toInt), CaveRenderer.FLOOR_COLOR)
   final private val bmapper = new BumpMapper
 
   def getWidth: Int = width.toInt
@@ -31,12 +31,13 @@ class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcesso
     * Draw the floor of the cave.
     * Synchronized so we do not end up calling it multiple times from the same thread until processing is done.
     */
-  def render(bumpHeight: Double, specularPct: Double, lightAzymuthAngle: Double,
-             lightDescensionAngle: Double): Unit = synchronized {
-    val cellWidth = Math.max(1, (width / cave.getWidth).toInt)
-    val cellHeight = Math.max(1, (height / cave.getHeight).toInt)
-    val lightVector = if (bumpHeight > 0) computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle)
-    else null
+  def render(
+      bumpHeight: Double, specularPct: Double, lightAzymuthAngle: Double, lightDescensionAngle: Double
+  ): Unit = synchronized {
+    val cellWidth = math.max(1, (width / cave.getWidth).toInt)
+    val cellHeight = math.max(1, (height / cave.getHeight).toInt)
+    val lightVectorOpt =
+      Option.when(bumpHeight > 0)(computeSphericalCoordinateUnitVector(lightAzymuthAngle, lightDescensionAngle))
 
     for (i <- 0 until cave.getWidth) {
       for (j <- 0 until cave.getHeight) {
@@ -44,7 +45,8 @@ class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcesso
         val ypos = j * cellHeight
         val value = cave.getValue(i, j)
         var color = cmap.getColorForValue(value)
-        if (bumpHeight > 0) color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector)
+        for lightVector <- lightVectorOpt do
+          color = bmapper.adjustForLighting(color, i, j, cave, bumpHeight, specularPct, lightVector)
         offlineGraphics.setColor(color)
         offlineGraphics.fillRect(xpos, ypos, cellWidth.toInt, cellHeight.toInt)
       }
@@ -58,5 +60,9 @@ class CaveRenderer(val width: Double, val height: Double, var cave: CaveProcesso
     * @return unit vector defined by spherical coordinates
     */
   private def computeSphericalCoordinateUnitVector(theta: Double, phi: Double) =
-    new Vector3d(Math.cos(theta) * Math.sin(phi), Math.sin(theta) * Math.sin(phi), Math.cos(phi))
+    new Vector3d(
+      math.cos(theta) * math.sin(phi),
+      math.sin(theta) * math.sin(phi),
+      math.cos(phi)
+    )
 }
