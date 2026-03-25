@@ -8,6 +8,8 @@ import javax.swing._
 import java.awt._
 import DiceOptions._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
@@ -15,8 +17,8 @@ import DiceOptions._
 class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var numDiceField: NumberInput = _
-  private var numSidesField: NumberInput = _
+  private var numDiceField: NumberInput = uninitialized
+  private var numSidesField: NumberInput = uninitialized
 
   override def getTitle = "Dice Simulation Configuration"
 
@@ -31,7 +33,7 @@ class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
     numDiceField = new NumberInput("Number of Dice (1 - 200): ", DEFAULT_NUMBER_OF_DICE,
       "This sets the number of dice to throw on each step of the simulation.", 1, 200, true)
     numSidesField = new NumberInput("Number of Sides on Dice (2 - 100): ", DEFAULT_NUMBER_OF_SIDES,
-      "This sets the number of sides on each dice that is thrown.", 1, 100, true)
+      "This sets the number of sides on each die that is thrown.", 2, 100, true)
 
     innerPanel.add(numDiceField)
     innerPanel.add(numSidesField)

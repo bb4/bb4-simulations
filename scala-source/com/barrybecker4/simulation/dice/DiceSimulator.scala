@@ -31,17 +31,19 @@ class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
   initHistogram()
 
   def setNumDice(numDice: Int): Unit = {
+    require(numDice >= 1, "numDice must be >= 1")
     options.numDice = numDice
     initHistogram()
   }
 
   def setNumSides(numSides: Int): Unit = {
+    require(numSides >= 1, "numSides must be >= 1")
     options.numSides = numSides
     initHistogram()
   }
 
   override protected def initHistogram(): Unit = {
-    data = new Array[Int](options.numDice * (options.numSides - 1) + 1)
+    data = new Array[Int](DiceRollLogic.histogramBinCount(options.numDice, options.numSides))
     histogram =
       new HistogramRenderer(data, new LinearFunction(1.0, -options.numDice), true)
     histogram.setXFormatter(new IntegerFormatter)
@@ -49,11 +51,6 @@ class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
 
   override protected def createOptionsDialog = new DiceOptionsDialog(frame, this)
 
-  override protected def getXPositionToIncrement: Double = {
-    var total = 0
-    for (i <- 0 until options.numDice) {
-      total += MathUtil.RANDOM.nextInt(options.numSides) + 1
-    }
-    total
-  }
+  override protected def getXPositionToIncrement: Double =
+    DiceRollLogic.rollSum(options.numDice, options.numSides, MathUtil.RANDOM)
 }

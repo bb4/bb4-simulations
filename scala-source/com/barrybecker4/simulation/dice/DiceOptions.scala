@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.dice
 
 /**
-  * Defaults for disce simulation app.
+  * Defaults for dice simulation app.
   *
   * @author Barry Becker
   */
