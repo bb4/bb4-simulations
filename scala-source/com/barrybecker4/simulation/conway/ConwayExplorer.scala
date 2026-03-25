@@ -7,7 +7,7 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
-
+import scala.compiletime.uninitialized
 
 /**
   * Interactively explores Conway's game of life.
@@ -15,9 +15,9 @@ import java.awt._
   * @author Barry Becker.
   */
 class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
-  private var conwayModel: ConwayModel = _
-  private var options: DynamicOptions = _
-  private var handler: InteractionHandler = _
+  private var conwayModel: ConwayModel = uninitialized
+  private var options: Option[DynamicOptions] = None
+  private var handler: InteractionHandler = uninitialized
   commonInit()
 
   private def commonInit(): Unit = {
@@ -30,10 +30,10 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
 
   override protected def reset(): Unit = {
     setNumStepsPerFrame(1)
-    // remove handlers to void memory leak
+    // remove handlers to avoid memory leak
     this.removeMouseListener(handler)
     this.removeMouseMotionListener(handler)
-    if (options != null) options.reset()
+    options.foreach(_.reset())
     commonInit()
   }
 
@@ -67,8 +67,9 @@ class ConwayExplorer() extends Simulator("Conway's Game of Life Explorer") {
   }
 
   override def createDynamicControls: JPanel = {
-    options = new DynamicOptions(conwayModel, this)
+    val panel = new DynamicOptions(conwayModel, this)
+    options = Some(panel)
     setPaused(false)
-    options
+    panel
   }
 }

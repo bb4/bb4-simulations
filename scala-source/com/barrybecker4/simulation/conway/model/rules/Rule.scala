@@ -5,25 +5,22 @@ import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.conway.model.Conway
 import scala.collection.parallel.CollectionConverters._
 
-
 /**
-  * All conway game of life rules systems must implement this.
+  * All Conway Game of Life rule implementations must extend this trait.
   * @author Barry Becker
   */
 trait Rule {
 
   /**
-    * For each live point in the old conway, determine if there is a new point in newConway.
-    * first create a big set of all the points that must be examined (this includes empty nbrs of live points)
+    * For each candidate cell (live cells and neighbors of live cells), apply the rule to `newConway`.
+    * Synchronized so two threads never apply rules concurrently on shared rule state (parallelism is
+    * confined to processing the candidate set in `applyRule`).
     *
-    * @return the new conway set with points either added or removed according to some set of rules.
+    * @return the new generation grid.
     */
   def applyRule(conway: Conway, newConway: Conway, parallel: Boolean): Conway = synchronized {
     val candidates = conway.getCandidates
-
-    // Loop through all the candidates, apply the life-rule, and update the new grid appropriately.
-    if (parallel)
-      candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway))
+    if parallel then candidates.par.foreach(c => applyRuleToCandidate(c, conway, newConway))
     else candidates.foreach(c => applyRuleToCandidate(c, conway, newConway))
     newConway
   }

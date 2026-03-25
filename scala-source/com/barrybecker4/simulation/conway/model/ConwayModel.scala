@@ -7,6 +7,8 @@ import com.barrybecker4.simulation.conway.rendering.ConwayRenderer
 import com.barrybecker4.ui.util.ColorMap
 import javax.swing._
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
+
 import com.barrybecker4.simulation.conway.model.ConwayProcessor._
 import ConwayModel._
 
@@ -26,8 +28,8 @@ object ConwayModel {
 }
 
 class ConwayModel() {
-  private var processor: ConwayProcessor = _
-  private var renderer: ConwayRenderer = _
+  private var processor: ConwayProcessor = uninitialized
+  private var renderer: ConwayRenderer = uninitialized
   private var scale = DEFAULT_SCALE_FACTOR
   private var numStepsPerFrame = DEFAULT_NUM_STEPS_PER_FRAME
   private var useParallel = DEFAULT_USE_PARALLEL
@@ -80,7 +82,14 @@ class ConwayModel() {
 
   def requestRestart(): Unit = { requestRestart(renderer.getWidth, renderer.getHeight) }
   def requestNextStep(): Unit = { nextStepRequested = true }
-  def setAlive(i: Int, j: Int): Unit = { processor.setAlive(i, j)}
+  def setAlive(row: Int, col: Int): Unit = processor.setAlive(row, col)
+  def setDead(row: Int, col: Int): Unit = processor.setDead(row, col)
+
+  /** Simulation grid width in cells (from renderer pixels and scale). */
+  def gridCols: Int = math.max(1, renderer.getWidth / scale)
+
+  /** Simulation grid height in cells. */
+  def gridRows: Int = math.max(1, renderer.getHeight / scale)
   def getNumIterations: Int = numIterations
   def getImage: BufferedImage = renderer.getImage
   def doRender(): Unit = { renderer.render() }

@@ -3,11 +3,9 @@ package com.barrybecker4.simulation.conway.model
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.geometry.Location
-import com.barrybecker4.simulation.conway.model.rules._
+import com.barrybecker4.simulation.conway.model.rules.{Rule, TotalisticLifeRule}
 import ConwayProcessor.RuleType
-import ConwayProcessor.RuleType.{SwarmB356S23, TraditionalB3S23, AmoebaB34S456, HighlifeB36S23}
-import ConwayProcessor._
-
+import ConwayProcessor.RuleType.{AmoebaB34S456, HighlifeB36S23, SwarmB356S23, TraditionalB3S23}
 
 /**
   * @author Barry Becker
@@ -16,30 +14,20 @@ object ConwayProcessor {
 
   val DEFAULT_USE_PARALLEL = false
 
-  enum RuleType :
+  enum RuleType:
     case TraditionalB3S23, AmoebaB34S456, HighlifeB36S23, SwarmB356S23
-  
 
-  val DEFAULT_RULE_TYPE: RuleType= RuleType.TraditionalB3S23
-
-  def main(args: Array[String]): Unit = {
-    val proc = new ConwayProcessor(DEFAULT_USE_PARALLEL)
-    proc.nextPhase()
-  }
+  val DEFAULT_RULE_TYPE: RuleType = RuleType.TraditionalB3S23
 }
 
-class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARALLEL) {
+class ConwayProcessor private[model](var useParallel: Boolean = ConwayProcessor.DEFAULT_USE_PARALLEL) {
+
   private var conway = new Conway
   private var wrapGrid = false
   private var width = -1
   private var height = -1
-  private var rule: Rule = new RuleB3S23 // new RuleB34S456Amoeba();
+  private var rule: Rule = TotalisticLifeRule(Set(3), Set(2, 3))
   conway.initialize()
-
-  /** Constructor that allows you to specify the dimensions of the conway */
-  def this() = {
-    this(ConwayProcessor.DEFAULT_USE_PARALLEL)
-  }
 
   private[model] def setWrap(wrapGrid: Boolean, width: Int, height: Int): Unit = {
     this.wrapGrid = wrapGrid
@@ -49,18 +37,20 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
 
   private[model] def setRuleType(ruleType: RuleType): Unit = {
     rule = ruleType match {
-      case TraditionalB3S23 => new RuleB3S23
-      case AmoebaB34S456 => new RuleB34S456Amoeba
-      case HighlifeB36S23 => new RuleB36S23Highlife
-      case SwarmB356S23 => new RuleB356S23Swarm
+      case TraditionalB3S23 => TotalisticLifeRule(Set(3), Set(2, 3))
+      case AmoebaB34S456 => TotalisticLifeRule(Set(3, 4), Set(4, 5, 6))
+      case HighlifeB36S23 => TotalisticLifeRule(Set(3, 6), Set(2, 3))
+      case SwarmB356S23 => TotalisticLifeRule(Set(3, 5, 6), Set(2, 3))
     }
   }
 
   def getPoints: Set[Location] = conway.getPoints
 
-  private[model] def setAlive(row: Int, col: Int): Unit = {
+  private[model] def setAlive(row: Int, col: Int): Unit =
     conway.setValue(IntLocation(row, col), 1)
-  }
+
+  private[model] def setDead(row: Int, col: Int): Unit =
+    conway.setValue(IntLocation(row, col), 0)
 
   private[model] def clearGridForTesting(): Unit =
     conway.clearForTesting()
@@ -72,7 +62,9 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
     conway = rule.applyRule(conway, newConway, useParallel)
   }
 
-  def getValue(c: Location): Integer = conway.getValue(c)
+  def getValue(c: Location): Int = conway.getValue(c)
+
+  def isAlive(c: Location): Boolean = conway.isAlive(c)
 
   override def toString: String = conway.toString
 }

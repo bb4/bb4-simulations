@@ -7,41 +7,38 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 
-
 /**
-  * Everything we need to know to compute the l-System tree.
-  * Should make the tree automatically center.
-  * Shadows show where the life has been.
+  * Renders live Conway cells into a buffered image. When [[showShadows]] is true, past positions linger.
   * @author Barry Becker
   */
 object ConwayRenderer {
-  private val FLOOR_COLOR = new Color(240, 244, 254)
+  private val FloorColor = new Color(240, 244, 254)
 }
 
-class ConwayRenderer(val width: Double, val height: Double,
- val showShadows: Boolean, val scale: Int, var processor: ConwayProcessor, var cmap: ColorMap) {
+class ConwayRenderer(
+    val width: Double,
+    val height: Double,
+    val showShadows: Boolean,
+    val scale: Int,
+    var processor: ConwayProcessor,
+    var cmap: ColorMap
+) {
 
   final private val offlineGraphics: OfflineGraphics =
-    new OfflineGraphics(new Dimension(width.toInt, height.toInt), ConwayRenderer.FLOOR_COLOR)
+    new OfflineGraphics(new Dimension(width.toInt, height.toInt), ConwayRenderer.FloorColor)
 
   def getWidth: Int = width.toInt
   def getHeight: Int = height.toInt
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
 
-  /** render the live cells on the grid */
+  /** Draw live cells using the color map (cell age). */
   def render(): Unit = synchronized {
-    // if not showing where life has been, clear all first
-    // Consider double buffering to avoid flicker during interaction
-    if (!showShadows) offlineGraphics.clear()
-    for (c <- processor.getPoints) {
+    if !showShadows then offlineGraphics.clear()
+    for c <- processor.getPoints do
       val value = processor.getValue(c)
-      if (value != null) {
-        val color = cmap.getColorForValue(value)
-        offlineGraphics.setColor(color)
-        val xpos = c.getX * scale
-        val ypos = c.getY * scale
-        offlineGraphics.fillRect(xpos, ypos, scale, scale)
-      }
-    }
+      offlineGraphics.setColor(cmap.getColorForValue(value))
+      val xpos = c.getX * scale
+      val ypos = c.getY * scale
+      offlineGraphics.fillRect(xpos, ypos, scale, scale)
   }
 }
