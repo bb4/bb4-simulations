@@ -7,7 +7,7 @@ import com.barrybecker4.simulation.dungeon.model.Orientation.*
 import com.barrybecker4.simulation.dungeon.model.util.Intersector
 
 import java.awt.Dimension
-import scala.collection.immutable.HashSet
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -17,8 +17,8 @@ object RoomJoiner {
 
 case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = RND) {
 
-  private var dMap: DungeonMap = _
-  private var roomToRoomSet: RoomToRoomSetMap = _
+  private var dMap: DungeonMap = uninitialized
+  private var roomToRoomSet: RoomToRoomSetMap = uninitialized
   private val startPointGenerator = StartPointGenerator(rnd)
 
   /**
@@ -82,10 +82,7 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
                                       xDirection: Int, yDirection: Int): Boolean = {
     val newConnection: Option[(Corridor, Room | Corridor)] =
       Intersector(dungeonDim, dMap).checkForIntersection(startLocation, room, xDirection, yDirection)
-    if (newConnection.nonEmpty) {
-      update(room, newConnection.get)
-      true
-    } else false
+    newConnection.exists(update(room, _))
   }
   
   /**
@@ -103,17 +100,15 @@ case class RoomJoiner(connectivity: Float, dungeonDim: Dimension, rnd: Random = 
     if (!connectsOtherRoomSet && rnd.nextFloat() > connectivity)
       return false
 
-    val corridorToAdd =
-      if (connection._2.isInstanceOf[Room]) connection._1
-      else {
-        val corridor = connection._2.asInstanceOf[Corridor]
-        // first remove the corridor from the roomSet to which it belongs
+    val corridorToAdd = connection._2 match {
+      case _: Room => connection._1
+      case corridor: Corridor =>
         if (connectsOtherRoomSet)
           otherRoomSet = otherRoomSet.removeCorridor(corridor)
         else
           thisRoomSet = thisRoomSet.removeCorridor(corridor)
         corridor.addCorridor(connection._1)
-      }
+    }
 
     if (isAlreadyDirectlyConnected(corridorToAdd, thisRoomSet))
       return false

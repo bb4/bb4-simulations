@@ -10,7 +10,7 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Room}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
 import scala.collection.immutable.Queue
-import scala.collection.mutable
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -20,7 +20,7 @@ object RoomGenerator {
 
 case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  private var dungeonMap: DungeonMap = _
+  private var dungeonMap: DungeonMap = uninitialized
   private var queue: Queue[SproutLocation] = Queue()
   private val roomOptions = options.roomOptions
   private val minPaddedDim = roomOptions.getMinPaddedDim
@@ -105,22 +105,21 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
     */
   private def update(room: Room, connection: (Corridor, Room | Corridor)): Unit = {
 
-    if (alreadyConnected(room, connection) || Math.random() > connectivity)
+    if (alreadyConnected(room, connection) || rnd.nextFloat() > connectivity)
       return
 
-    val corridorToAdd =
-      if (connection._2.isInstanceOf[Room]) connection._1
-      else {
-        val corridor = connection._2.asInstanceOf[Corridor]
-        corridor.addCorridor(connection._1)
-      }
+    val corridorToAdd = connection._2 match {
+      case _: Room  => connection._1
+      case c: Corridor => c.addCorridor(connection._1)
+    }
 
     dungeonMap = dungeonMap.addCorridor(corridorToAdd)
   }
 
-  private def alreadyConnected(room: Room, connection: (Corridor, Room | Corridor)): Boolean = {
-    if (connection._2.isInstanceOf[Room]) dungeonMap.isConnected(room, connection._2.asInstanceOf[Room])
-    else false
-  }
+  private def alreadyConnected(room: Room, connection: (Corridor, Room | Corridor)): Boolean =
+    connection._2 match {
+      case other: Room => dungeonMap.isConnected(room, other)
+      case _: Corridor => false
+    }
 
 }

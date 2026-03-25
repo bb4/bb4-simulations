@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
+import com.barrybecker4.simulation.dungeon.generator.organic.room.RandomRoomCreator.exceedsMaxAspect
 import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.SproutLocation
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
@@ -17,56 +18,50 @@ object RoomExpander {
 case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds: Box, rnd: Random = RND) {
 
   private val minDim = roomOptions.minRoomDim
-  private val maxAspectRation = roomOptions.maxAspectRatio
+  private val maxAspectRatio = roomOptions.maxAspectRatio
 
   /**
    * Incrementally expand the room until it hits something or reaches size preference,
    * then back up two cells to leave room for buffer between rooms.
    * @return a version of the room that has been expanded to as close to its desired size as we can get
    */
-  def expand(room: Room, preferredDim: Dimension, sproutLocation: SproutLocation): Room = {
-    var expandedRoom: Room = room
-    var previousRoom: Room = null
+  def expand(room: Room, preferredDim: Dimension, sproutLocation: SproutLocation): Room =
+    expandStep(room, preferredDim, sproutLocation)
 
-    while (expandedRoom != previousRoom) {
-      previousRoom = expandedRoom
-      val newHorizontalRoom = attemptToExpandHorizontally(expandedRoom, preferredDim.width, sproutLocation)
-      if (newHorizontalRoom.isDefined) {
-        expandedRoom = newHorizontalRoom.get
-      }
-      val newVerticalRoom = attemptToExpandVertically(expandedRoom, preferredDim.height, sproutLocation)
-      if (newVerticalRoom.isDefined) {
-        expandedRoom = newVerticalRoom.get
-      }
-      if (exceedsMaxAspectRatio(expandedRoom.box))
-        previousRoom = expandedRoom
-    }
-    expandedRoom
+  private def expandStep(room: Room, preferredDim: Dimension, sprout: SproutLocation): Room = {
+    val before = room.box
+    val afterHorizontal =
+      attemptToExpandHorizontally(room, preferredDim.width, sprout).getOrElse(room)
+    val afterVertical =
+      attemptToExpandVertically(afterHorizontal, preferredDim.height, sprout).getOrElse(afterHorizontal)
+
+    if afterVertical.box == before || exceedsMaxAspect(afterVertical.box.getWidth, afterVertical.box.getHeight, maxAspectRatio)
+    then afterVertical
+    else expandStep(afterVertical, preferredDim, sprout)
   }
 
   private def attemptToExpandHorizontally(room: Room, preferredWidth: Int, sprout: SproutLocation): Option[Room] = {
     val box = room.box
-    if (box.getWidth + 1 >= preferredWidth)
-      return None
+    if (box.getWidth + 1 >= preferredWidth) return None
 
     if (sprout.orientation == Horizontal)
       return if (sprout.direction == 1) attemptToExpandRight(box) else attemptToExpandLeft(box)
 
-    val attemptRightFirst = (rnd.nextDouble() < 0.5)
-    if (attemptRightFirst) {
-      val possibleRoom = attemptToExpandRight(box)
-      if (possibleRoom.isEmpty) {
-        return attemptToExpandLeft(box)
-      }
-      else return possibleRoom
-    } else {
-      val possibleRoom = attemptToExpandLeft(box)
-      if (possibleRoom.isEmpty) {
-        return attemptToExpandRight(box)
-      }
-      else return possibleRoom
-    }
+    tryAlternatives(attemptToExpandRight(box), attemptToExpandLeft(box))
   }
+
+  private def attemptToExpandVertically(room: Room, preferredHeight: Int, sprout: SproutLocation): Option[Room] = {
+    val box = room.box
+    if (box.getHeight + 1 >= preferredHeight) return None
+
+    if (sprout.orientation == Vertical)
+      return if (sprout.direction == 1) attemptToExpandBottom(box) else attemptToExpandTop(box)
+
+    tryAlternatives(attemptToExpandBottom(box), attemptToExpandTop(box))
+  }
+
+  private def tryAlternatives(first: => Option[Room], second: => Option[Room]): Option[Room] =
+    if (rnd.nextDouble() < 0.5) first.orElse(second) else second.orElse(first)
 
   private def attemptToExpandRight(box: Box): Option[Room] = {
     val rightX = box.getBottomRightCorner.getX
@@ -84,30 +79,6 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
     if (canExpand(topExpandedPt, bottomExpandedPt))
       Some(Room(new Box(IntLocation(box.getTopLeftCorner.getY, leftX - 1), box.getBottomRightCorner)))
     else None
-  }
-
-  private def attemptToExpandVertically(room: Room, preferredHeight: Int, sprout: SproutLocation): Option[Room] = {
-    val box = room.box
-    if (box.getHeight + 1 >= preferredHeight)
-      return None
-
-    if (sprout.orientation == Vertical)
-      return if (sprout.direction == 1) attemptToExpandBottom(box) else attemptToExpandTop(box)
-
-    val attemptBottomFirst = (rnd.nextDouble() < 0.5)
-    if (attemptBottomFirst) {
-      val possibleRoom = attemptToExpandBottom(box)
-      if (possibleRoom.isEmpty) {
-        return attemptToExpandTop(box)
-      }
-      else return possibleRoom
-    } else {
-      val possibleRoom = attemptToExpandTop(box)
-      if (possibleRoom.isEmpty) {
-        return attemptToExpandBottom(box)
-      }
-      else return possibleRoom
-    }
   }
 
   private def attemptToExpandBottom(box: Box): Option[Room] = {
@@ -141,11 +112,5 @@ case class RoomExpander(dungeonMap: DungeonMap, roomOptions: RoomOptions, bounds
     val occupied = edgePoints.exists(pt => dungeonMap(pt).nonEmpty)
     val inBounds = bounds.contains(point1) && bounds.contains(point2)
     !occupied && inBounds
-  }
-
-  private def exceedsMaxAspectRatio(box: Box): Boolean = {
-    val width = box.getWidth
-    val height = box.getHeight
-    ((width.toFloat / height) > maxAspectRation || ((height.toFloat / width) > maxAspectRation))
   }
 }

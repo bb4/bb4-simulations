@@ -1,16 +1,11 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2021 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.uniongraph
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.CorridorGenerator
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.RoomGenerator
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonModel, Room}
 
-import java.awt.{Color, Dimension}
-import scala.collection.immutable.HashSet
-import scala.collection.mutable
 import scala.util.Random
 
 
@@ -21,7 +16,7 @@ import scala.util.Random
 class UnionGraphDungeonGenerator extends DungeonGeneratorStrategy {
 
   override def doGeneration(options: DungeonOptions, rnd: Random): DungeonModel = {
-    
+
     val roomGenerator = RoomGenerator(options, rnd)
     val corridorGenerator = CorridorGenerator(options, rnd)
 

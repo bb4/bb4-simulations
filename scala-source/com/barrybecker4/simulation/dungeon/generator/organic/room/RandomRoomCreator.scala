@@ -26,6 +26,13 @@ object RandomRoomCreator {
 
     Dimension(adjWidth, adjHeight)
   }
+
+  /** True if width:height violates maxAspectRatio in either direction. */
+  def exceedsMaxAspect(width: Int, height: Int, maxAspectRatio: Float): Boolean = {
+    val w = width.toFloat
+    val h = height.toFloat
+    (w / h) > maxAspectRatio || (h / w) > maxAspectRatio
+  }
 }
 
 case class RandomRoomCreator(roomOptions: RoomOptions,

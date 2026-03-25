@@ -5,8 +5,7 @@ import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.{RoomJoiner
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{DungeonMap, Room}
 
-import java.util.PriorityQueue
-import scala.collection.mutable
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -16,8 +15,8 @@ object CorridorGenerator {
 
 case class CorridorGenerator(options: DungeonOptions, rnd: Random = RND) {
 
-  private var roomToRoomSetMap: RoomToRoomSetMap = _
-  private var dungeonMap: DungeonMap = _
+  private var roomToRoomSetMap: RoomToRoomSetMap = uninitialized
+  private var dungeonMap: DungeonMap = uninitialized
 
   /**
    * Find corridors to connect a set of rooms.

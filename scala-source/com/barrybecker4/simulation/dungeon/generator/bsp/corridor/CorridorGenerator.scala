@@ -12,6 +12,7 @@ import com.barrybecker4.simulation.dungeon.model.{Corridor, Orientation, Room}
 
 import java.awt.Dimension
 
+import scala.compiletime.uninitialized
 
 object CorridorGenerator {
   private val CONNECTIVITY_SCALE = 12
@@ -19,7 +20,7 @@ object CorridorGenerator {
 
 case class CorridorGenerator(options: DungeonOptions) {
 
-  private var roomToCorridors: RoomToCorridorsMap = _
+  private var roomToCorridors: RoomToCorridorsMap = uninitialized
   private val roomFinder = RoomFinder()
   private val straightCorridorCreator = StraightCorridorCreator()
   private val connectivityThresh = options.connectivity * CONNECTIVITY_SCALE

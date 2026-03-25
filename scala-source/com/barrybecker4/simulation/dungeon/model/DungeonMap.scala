@@ -55,15 +55,17 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
 
   def apply(pos: IntLocation): Option[Room | Corridor] = cellToStructure.get(pos)
 
-  def isRoom(pos: IntLocation): Boolean = {
-    val item = cellToStructure.get(pos)
-    item.nonEmpty && item.get.isInstanceOf[Room]
-  }
+  def isRoom(pos: IntLocation): Boolean =
+    cellToStructure.get(pos).exists {
+      case _: Room => true
+      case _       => false
+    }
 
-  def isCorridor(pos: IntLocation): Boolean = {
-    val item = cellToStructure.get(pos)
-    item.nonEmpty && item.get.isInstanceOf[Corridor]
-  }
+  def isCorridor(pos: IntLocation): Boolean =
+    cellToStructure.get(pos).exists {
+      case _: Corridor => true
+      case _           => false
+    }
 
   def update(roomSet: RoomSet): DungeonMap = {
     var map: Map[IntLocation, Room | Corridor] = cellToStructure
@@ -93,16 +95,11 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   def isEmptyRegion(box: Box): Boolean = {
     val topLeft = box.getTopLeftCorner
     val bottomRight = box.getBottomRightCorner
-
-    for (x <- topLeft.getX to bottomRight.getX) {
-      for (y <- topLeft.getY to bottomRight.getY) {
-        val item = this(IntLocation(y, x))
-        if (item.nonEmpty) {
-          return false
-        }
+    (topLeft.getX to bottomRight.getX).forall { x =>
+      (topLeft.getY to bottomRight.getY).forall { y =>
+        this(IntLocation(y, x)).isEmpty
       }
     }
-    true
   }
   
   // this could be optimized by just considering corridors connected to room1
@@ -112,10 +109,10 @@ case class DungeonMap(cellToStructure: Map[IntLocation, Room | Corridor]) {
   }
 
   val getRooms: Set[Room] =
-    cellToStructure.values.filter(_.isInstanceOf[Room]).map(_.asInstanceOf[Room]).toSet
+    cellToStructure.values.collect { case r: Room => r }.toSet
 
   val getCorridors: Set[Corridor] =
-    cellToStructure.values.filter(_.isInstanceOf[Corridor]).map(_.asInstanceOf[Corridor]).toSet
+    cellToStructure.values.collect { case c: Corridor => c }.toSet
 
   def getCorridorCells: Set[IntLocation] = cellToStructure.keys.toSet.filter(key => isCorridor(key))
 }

@@ -1,21 +1,20 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.model.util
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
+import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.simulation.dungeon.model.Orientation.{Horizontal, Vertical}
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Path, Room}
 
-import scala.collection.immutable.HashSet
 import java.awt.Dimension
 
 /**
-  * Use to check for connections from rooms 
+  * Use to check for connections from rooms
   */
 case class Intersector(dungeonDim: Dimension, dungeonMap: DungeonMap) {
 
   /** Send out a ray from the specified point on the edge of a room and see what it hits.
     * It will hit either nothing, room, or corridor.
-    * @return noting, or the corridor to the intersected object (and that object Room|Corridor)
+    * @return nothing, or the corridor to the intersected object (and that object Room|Corridor)
     */
   def checkForIntersection(startPos: IntLocation, room: Room,
     xDirection: Int, yDirection: Int): Option[(Corridor, Room | Corridor)] = {
@@ -28,6 +27,7 @@ case class Intersector(dungeonDim: Dimension, dungeonMap: DungeonMap) {
       yPos += yDirection
       if (xPos <= 0 || xPos >= dungeonDim.width || yPos <= 0 || yPos >= dungeonDim.height)
         return None
+
       val (pos1, pos2, pos3) = getStartTriple(xDirection, xPos, yPos, startPos)
 
       if (grazesRoom(pos1, pos2, pos3))
@@ -37,19 +37,27 @@ case class Intersector(dungeonDim: Dimension, dungeonMap: DungeonMap) {
         return None
       firstPosition = false
 
-      if (dungeonMap(pos2).isDefined) {
-        val middleItem = dungeonMap(pos2).get
-        val path = getPath(xDirection, yDirection, startPos, pos2)
-        middleItem match {
-          case c: Corridor =>
-            return Some((Corridor(path, HashSet(room)), middleItem))
-          case _ => if (dungeonMap.isRoom(pos1) || dungeonMap.isRoom(pos3))
-            return Some((Corridor(path, HashSet(room, middleItem.asInstanceOf[Room])), middleItem))
-        }
+      rayHitAt(pos2, pos1, pos3, room, xDirection, yDirection, startPos) match {
+        case Some(result) => return Some(result)
+        case None         => ()
       }
     }
     None
   }
+
+  private def rayHitAt(pos2: IntLocation, pos1: IntLocation, pos3: IntLocation, room: Room,
+      xDirection: Int, yDirection: Int, startPos: IntLocation): Option[(Corridor, Room | Corridor)] =
+    dungeonMap(pos2).flatMap { middleItem =>
+      val path = getPath(xDirection, yDirection, startPos, pos2)
+      middleItem match {
+        case c: Corridor =>
+          Some((Corridor(path, Set(room)), middleItem))
+        case hitRoom: Room =>
+          if (dungeonMap.isRoom(pos1) || dungeonMap.isRoom(pos3))
+            Some((Corridor(path, Set(room, hitRoom)), middleItem))
+          else None
+      }
+    }
 
   private def getStartTriple(xDirection: Int, xPos: Int, yPos: Int,
     startPos: IntLocation): (IntLocation, IntLocation, IntLocation) = {
