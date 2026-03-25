@@ -2,14 +2,54 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
-import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.SimpleTiled
+import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.{SampleSet, SampleTiledData, Tile}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.SimpleTiledPropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleTiledData, readImage}
+
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 import scala.collection.mutable
+import scala.compiletime.uninitialized
 
+
+object SimpleTiledModel {
+
+  /**
+    * @return `null` when `subsetName` is null (caller uses all tiles).
+    *         Otherwise the base tile names belonging to the named subset from `data.json`.
+    */
+  def resolveSubsetTileNames(subsetName: String, dataset: SampleSet): Seq[String] = {
+    if (subsetName == null) return null
+    if (dataset.subsets == null || dataset.subsets.isEmpty)
+      throw new IllegalArgumentException("Subsets are required in data.json when a subset name is selected.")
+
+    dataset.subsets.find(_.name == subsetName) match {
+      case None =>
+        val available = dataset.subsets.map(_.name).mkString(", ")
+        throw new IllegalArgumentException(
+          s"Subset '$subsetName' not found. Available: $available")
+      case Some(subset) =>
+        if (subset.tiles == null || subset.tiles.isEmpty)
+          throw new IllegalArgumentException(s"Subset '$subsetName' has no tiles in data.json.")
+        subset.tiles.map(_.name).toSeq
+    }
+  }
+
+  private def symmetryCardinalityAndOps(sym: String): (Int, Int => Int, Int => Int) =
+    sym match {
+      case "L" =>
+        (4, i => (i + 1) % 4, i => if (i % 2 == 0) i + 1 else i - 1)
+      case "T" =>
+        (4, i => (i + 1) % 4, i => if (i % 2 == 0) i else 4 - i)
+      case "I" =>
+        (2, i => 1 - i, i => i)
+      case "\\" =>
+        (2, i => 1 - i, i => 1 - i)
+      case _ =>
+        (1, i => i, i => i)
+    }
+}
 
 class SimpleTiledModel(
   val width: Int, val height: Int,
@@ -19,8 +59,8 @@ class SimpleTiledModel(
   val allowInconsistencies: Boolean = false
 ) extends WfcModel(name, width, height, limit) {
 
-  private var tiles: Seq[Array[Color]] = _
-  private var tilenames: Seq[String] = _
+  private var tiles: Seq[Array[Color]] = uninitialized
+  private var tilenames: Seq[String] = uninitialized
   private var tilesize: Int = 0
   private val useSubset = subsetName != null
 
@@ -45,27 +85,8 @@ class SimpleTiledModel(
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
     dimensions = new Dimension(Math.max(1, width / tilesize), Math.max(1, height / tilesize))
 
-    val subsets: Seq[String] = getSubsets(subsetName, dataset)
-    processTiles(dataset, subsets)
-  }
-
-  private def getSubsets(subsetName: String, dataset: SampleSet): Seq[String] = {
-    var subsets: Seq[String] = null
-    if (subsetName != null) {
-      val xSubSet = dataset.subsets(0).name
-      if (xSubSet == null) {
-        println(s"ERROR SUBSET $subsetName not found among " + dataset.subsets.mkString(", "))
-      }
-      else {
-        for (tile <- dataset.tiles) {
-          if (subsets == null) {
-            subsets = Seq()
-          }
-          subsets :+= tile.name
-        }
-      }
-    }
-    subsets
+    val subsetTileNames: Seq[String] = SimpleTiledModel.resolveSubsetTileNames(subsetName, dataset)
+    processTiles(dataset, subsetTileNames)
   }
 
   private def tileFun(passedInFunc: (Int, Int) => Color): Array[Color] = {
@@ -83,88 +104,79 @@ class SimpleTiledModel(
     })
   }
 
-  private def processTiles(dataset: SampleSet, subsets: Seq[String]): Unit = {
+  private def appendRotatedActionMaps(
+      cardinality: Int,
+      a: Int => Int,
+      b: Int => Int,
+      tCounterBase: Int,
+      action: mutable.ArrayBuffer[IntArray]): Unit = {
+    val map: Array[IntArray] = Array.fill(cardinality)(null)
+    for (t <- 0 until cardinality) {
+      map(t) = new IntArray(8)
+      val mapt = map(t)
+
+      mapt(0) = t
+      mapt(1) = a(t)
+      mapt(2) = a(a(t))
+      mapt(3) = a(a(a(t)))
+      mapt(4) = b(t)
+      mapt(5) = b(a(t))
+      mapt(6) = b(a(a(t)))
+      mapt(7) = b(a(a(a(t))))
+
+      for (s <- 0 to 7)
+        map(t)(s) = map(t)(s) + tCounterBase
+
+      action += map(t)
+    }
+  }
+
+  private def loadTilesForCardinality(
+      tile: Tile,
+      tileName: String,
+      unique: Boolean,
+      cardinality: Int): Unit = {
+    if (unique) {
+      for (t <- 0 until cardinality) {
+        val bufferedImage: BufferedImage = readImage(s"samples/$name/$tileName $t.png")
+        tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
+        tilenames :+= s"$tileName $t"
+      }
+    } else {
+      val bufferedImage: BufferedImage = readImage(s"samples/$name/$tileName.png")
+      tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
+      tilenames :+= s"$tileName ${0}"
+
+      for (t <- 1 until cardinality) {
+        tiles :+= rotateFun(tiles(tCounter + t - 1))
+        tilenames :+= s"$tileName $t"
+      }
+    }
+  }
+
+  private def processTiles(dataset: SampleSet, subsetTileNames: Seq[String]): Unit = {
     tiles = Seq()
     tilenames = Seq()
     val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
     var tempStationary: Seq[Double] = Seq()
-    var action: Seq[IntArray] = Seq()
+    val action = mutable.ArrayBuffer[IntArray]()
 
     val firstOccurrence = new mutable.HashMap[String, Int]()
 
     for (tile <- dataset.tiles) {
       val tileName = tile.name
-      if (!useSubset || subsets.contains(tileName)) {
-        var a: Int => Int = null
-        var b: Int => Int = null
-        var cardinality: Int = 0
-
+      if (!useSubset || subsetTileNames.contains(tileName)) {
         val sym = if (tile.symmetry != null) tile.symmetry else "X"
-        sym match {
-          case "L" =>
-            cardinality = 4
-            a = i => (i + 1) % 4
-            b = i => if (i % 2 == 0) i + 1 else i - 1
-          case "T" =>
-            cardinality = 4
-            a = i => (i + 1) % 4
-            b = i => if (i % 2 == 0) i else 4 - i
-          case "I" =>
-            cardinality = 2
-            a = i => 1 - i
-            b = i => i
-          case "\\" =>
-            cardinality = 2
-            a = i => 1 - i
-            b = i => 1 - i
-          case _ =>
-            cardinality = 1
-            a = i => i
-            b = i => i
-        }
+        val (cardinality, a, b) = SimpleTiledModel.symmetryCardinalityAndOps(sym)
 
         tCounter = action.size
         firstOccurrence(tileName) = tCounter
 
-        val map: Array[IntArray] = Array.fill(cardinality)(null)
-        for (t <- 0 until cardinality) {
-          map(t) = new IntArray(8)
-          val mapt = map(t)
+        appendRotatedActionMaps(cardinality, a, b, tCounter, action)
 
-          mapt(0) = t
-          mapt(1) = a(t)
-          mapt(2) = a(a(t))
-          mapt(3) = a(a(a(t)))
-          mapt(4) = b(t)
-          mapt(5) = b(a(t))
-          mapt(6) = b(a(a(t)))
-          mapt(7) = b(a(a(a(t))))
+        loadTilesForCardinality(tile, tileName, unique, cardinality)
 
-          for (s <- 0 to 7)
-            map(t)(s) = map(t)(s) + tCounter
-
-          action :+= map(t)
-        }
-
-        if (unique) {
-          for (t <- 0 until cardinality) {
-            val bufferedImage: BufferedImage = readImage(s"samples/$name/$tileName $t.png")
-            tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
-            tilenames :+= s"$tileName $t"
-          }
-        }
-        else {
-          val bufferedImage: BufferedImage = readImage(s"samples/$name/$tileName.png")
-          tiles :+= tileFun((x, y) => new Color(bufferedImage.getRGB(x, y)))
-          tilenames :+= s"$tileName ${0}"
-
-          for (t <- 1 until cardinality) {
-            tiles :+= rotateFun(tiles(tCounter + t - 1))
-            tilenames :+= s"$tileName $t"
-          }
-        }
-
-        for (t <- 0 until cardinality) {
+        for (_ <- 0 until cardinality) {
           tempStationary :+= tile.getWeight
         }
       }
@@ -173,7 +185,7 @@ class SimpleTiledModel(
     tCounter = action.size
     weights = tempStationary.toArray
 
-    propagator = new SimpleTiledPropagatorState(tCounter, action, dataset.neighbors, firstOccurrence, subsets)
+    propagator = new SimpleTiledPropagatorState(tCounter, action.toSeq, dataset.neighbors, firstOccurrence, subsetTileNames)
   }
 
   def onBoundary(x: Int, y: Int): Boolean = {

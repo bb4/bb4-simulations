@@ -75,7 +75,7 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     tabbedPane.add("Tiled", createTiledOptionsPanel())
     tabbedPane.setToolTipTextAt(0, "Parameters for SimpleTiled model")
     tabbedPane.add("Overlapping", createOverlappingOptionsPanel())
-    tabbedPane.setToolTipTextAt(0, "Parameters for Overlapping Model")
+    tabbedPane.setToolTipTextAt(1, "Parameters for Overlapping Model")
     tabbedPane.addChangeListener(this)
     tabbedPane.setSelectedIndex(0)
 
@@ -272,7 +272,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
       subsetCombo = new JComboBox[String]()
     } else {
       val values = sampleTiledData.set.subsets.map(s => s.name)
-      println("SUBSET VALUES ======= " + values.mkString(", "))
       subsetCombo = createCombo(values.toIndexedSeq)
       subsetCombo.setSelectedItem(values.head)
     }
@@ -287,8 +286,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     val sampleModel: CommonModel =
       if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
       else samples.overlapping(overlappingSampleCombo.getSelectedItem.asInstanceOf[Int])
-
-    println("getModel dims = " + dimensions)
 
     val wfcModel: WfcModel = sampleModel match {
       case overlapping: Overlapping => new OverlappingModel(
@@ -317,8 +314,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
       case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
     }
 
-    println("now running " + wfcModel)
-
     wfcModel
   }
 
@@ -326,7 +321,6 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     model = getModel
 
     simulator.setModel(model)
-    println("selected " + model.getName  )
     model.startRun(RND.nextInt())
   }
 

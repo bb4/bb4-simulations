@@ -20,7 +20,9 @@ object FileUtil {
   val GSON: Gson = new Gson()
 
   def readImage(fileName: String): BufferedImage = {
-    val is: InputStream = getClass.getClassLoader.getResourceAsStream(RELATIVE_DIR + fileName)
+    val is = getClass.getClassLoader.getResourceAsStream(RELATIVE_DIR + fileName)
+    if (is == null)
+      throw new IllegalArgumentException(s"Resource not found: $RELATIVE_DIR$fileName")
     ImageIO.read(is)
   }
 
@@ -42,8 +44,10 @@ object FileUtil {
 
   private def getReader(resourceName: String): BufferedReader = {
     // reading as a resource instead of file allows it to work from deployed version
-    println("reading from " + RELATIVE_DIR + resourceName)
-    val is: InputStream = getClass.getClassLoader.getResourceAsStream(RELATIVE_DIR + resourceName)
+    val path = RELATIVE_DIR + resourceName
+    val is: InputStream = getClass.getClassLoader.getResourceAsStream(path)
+    if (is == null)
+      throw new IllegalArgumentException(s"Resource not found: $path")
     new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
   }
 }

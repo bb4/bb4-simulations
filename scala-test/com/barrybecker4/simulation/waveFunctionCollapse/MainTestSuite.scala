@@ -13,6 +13,8 @@ import java.io.File
 import java.net.URLDecoder
 import scala.collection.mutable
 import scala.io.Source
+import scala.util.boundary
+import scala.util.boundary.break
 
 
 object MainTestSuite {
@@ -62,16 +64,12 @@ class MainTestSuite extends AnyFunSuite {
       scale = 1
     )
 
-    for (i <- 0 until 2) {
-      for (k <- 0 until 10) {
+    boundary:
+      for (_ <- 0 until 2; k <- 0 until 10) {
         val finished = model.runWithLimit(SEED)
-        if (finished) {
-          return model.graphics()
-        }
+        if (finished) break(model.graphics())
       }
-    }
-
-    null
+      null
   }
 
   test("simpleTileModelTestConsistency") {
@@ -107,27 +105,24 @@ class MainTestSuite extends AnyFunSuite {
   }
 
   private def generateSimpleImage(): BufferedImage = {
+    // null subset = all tiles (matches historic golden); named subsets are covered in SimpleTiledSubsetSuite.
     val model = new SimpleTiledModel(
       name = "Knots",
       width = 24,
       height = 24,
-      subsetName = "Dense Fabric",
+      subsetName = null,
       isPeriodic = true,
       black = false,
       limit = 0,
       allowInconsistencies = false
     )
 
-    for (i <- 0 until 2) {
-      for (k <- 0 until 10) {
+    boundary:
+      for (_ <- 0 until 2; k <- 0 until 10) {
         val finished = model.runWithLimit(SEED)
-        if (finished) {
-          return model.graphics()
-        }
+        if (finished) break(model.graphics())
       }
-    }
-
-    null
+      null
   }
 
   private def getResource(fileName: String): Source = {

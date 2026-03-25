@@ -57,6 +57,10 @@ class Conway private[model]() {
 
   private[model] def getPoints = points.keySet
 
+  /** Clears live cells (for tests or resetting an initial pattern). */
+  private[model] def clearForTesting(): Unit =
+    points = Map.empty
+
   def isAlive(coord: Location): Boolean = points.contains(coord)
 
   def getNumNeighbors(c: Location): Int = {

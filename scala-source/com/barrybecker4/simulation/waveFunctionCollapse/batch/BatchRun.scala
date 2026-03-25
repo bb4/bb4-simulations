@@ -6,7 +6,8 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel,
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingModel, SimpleTiledModel, WfcModel}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, writeImage}
 
-import scala.util.control.Breaks.{break, breakable}
+import scala.util.boundary
+import scala.util.boundary.break
 
 
 object BatchRun extends App {
@@ -40,7 +41,7 @@ object BatchRun extends App {
     val name = model.getName
     println("Now processing " + name + " screenshots = " + screenshots)
     for (i <- 0 until screenshots) {
-      breakable {
+      boundary:
         for (k <- 0 until 10) {
           val seed = counter * 100 + i * 10 + k
           val finished = model.runWithLimit(seed)
@@ -54,7 +55,6 @@ object BatchRun extends App {
             println(s"$name didn't finish ${model.getName} for $i $k")
           }
         }
-      }
     }
   }
 }

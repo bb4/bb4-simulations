@@ -62,6 +62,9 @@ class ConwayProcessor private[model](var useParallel: Boolean = DEFAULT_USE_PARA
     conway.setValue(IntLocation(row, col), 1)
   }
 
+  private[model] def clearGridForTesting(): Unit =
+    conway.clearForTesting()
+
   /** Compute the next step of the simulation. */
   private[model] def nextPhase(): Unit = {
     val newConway = new Conway

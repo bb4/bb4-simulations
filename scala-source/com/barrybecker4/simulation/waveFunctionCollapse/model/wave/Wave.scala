@@ -6,8 +6,9 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave.{DEFAULT
 import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, IntArray}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.Utils
 
+import scala.compiletime.uninitialized
+
 import scala.util.Random
-import scala.util.control.Breaks.{break, breakable}
 
 
 object Wave {
@@ -18,7 +19,7 @@ object Wave {
   private val INITIAL_ENTROPY: Double = 1E+3
   private val UNSET: Int = -1
   private val INCONSISTENT: Int = -2
-  private val DEFAULT_NOISE_SCALE = 1E-6  // was 1E-6
+  private val DEFAULT_NOISE_SCALE = 1E-6
 }
 
 /**
@@ -28,8 +29,10 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
 
   private val waveCells: Array[WaveCell] = Array.fill(FMX * FMY)(null)
 
-  private var stack: Array[(Int, Int)] = _
-  private var weightLogWeights: DoubleArray = _
+  /** Pair stacks avoid storing null as a dummy tuple in Scala 3. */
+  private var stackCell: Array[Int] = uninitialized
+  private var stackTile: Array[Int] = uninitialized
+  private var weightLogWeights: DoubleArray = uninitialized
   private var sumOfWeights: Double = 0
   private var sumOfWeightLogWeights: Double = 0
   private var startingEntropy: Double = 0
@@ -65,9 +68,9 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
 
     startingEntropy = Math.log(sumOfWeights) - sumOfWeightLogWeights / sumOfWeights
 
-    println(s"creating stack of size ${waveCells.length} * $tCounter" )
-    stack = Array.fill(waveCells.length * tCounter)(null)
-    println("Wave.init stack total size = " + (waveCells.length * tCounter))
+    val cap = waveCells.length * tCounter
+    stackCell = Array.ofDim(cap)
+    stackTile = Array.ofDim(cap)
     stackSize = 0
   }
 
@@ -75,18 +78,6 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
   /**
     * Finds the most constrained variable and picks a value to assign by weighted random sampling.
     *
-    * function Observe(wave_matrix):
-    *   # find the minimum entropy cell in grid
-    *   cell = FindMinimumEntropy(wave_matrix)
-    *   If any cell has zero possibilities:
-    *     # this is contradictory state, where a node has an empty domain
-    *     return paradox failure exception
-    *   If all cells have exactly one possibility:
-    *     return wave_matrix
-    *   In node with the least entropy (ties broken randomly):
-    *     Assign a value via weighted random sample of the cell’s current domain.
-    *   Add node to the propagation stack.
-
     * @return true if in observed state (i.e. complete),
     *         false if done but inconsistent,
     *         None if not done yet
@@ -99,67 +90,77 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       val minEntropy = calculateMinEntropy(onBoundary, random)
 
       if (minEntropy == INCONSISTENT)
-        return Some(false)
+        Some(false)
       else if (minEntropy == UNSET) {
         hasObserved = true
-        for (i <- 0 until size()) {
-          breakable {
-            val waveCell = waveCells(i)
-            for (t <- 0 until tCounter) {
-              if (waveCell.enabled != null && waveCell.enabled(t)) {
-                waveCell.observed = t
-                break()
-              }
-            }
-          }
-        }
-        return Some(true)
+        markFullyObserved(tCounter)
+        Some(true)
       }
-
-      val distribution = Array.fill(tCounter)(0.0)
-      for (t <- 0 until tCounter)
-        distribution(t) =
-          if (waveCells(minEntropy).enabled != null && waveCells(minEntropy).enabled(t)) weights(t) else 0.0
-
-      val r = Utils.randomFromArray(distribution, random.nextDouble())
-      val waveCell = waveCells(minEntropy)
-      for (t <- 0 until tCounter)
-        if (waveCell.enabled != null && waveCell.enabled(t) != (t == r))
-          ban(minEntropy, t, weights)
-
-      None
+      else {
+        collapseMinEntropyCell(minEntropy, tCounter, weights, random)
+        None
+      }
     }
   }
 
-  /***
+  private def markFullyObserved(tCounter: Int): Unit = {
+    for (i <- 0 until size()) {
+      val waveCell = waveCells(i)
+      var t = 0
+      while (t < tCounter) {
+        if (waveCell.enabled != null && waveCell.enabled(t)) {
+          waveCell.observed = t
+          t = tCounter
+        } else t += 1
+      }
+    }
+  }
+
+  private def collapseMinEntropyCell(
+      minEntropyIdx: Int,
+      tCounter: Int,
+      weights: DoubleArray,
+      random: Random): Unit = {
+    val distribution = Array.fill(tCounter)(0.0)
+    for (t <- 0 until tCounter)
+      distribution(t) =
+        if (waveCells(minEntropyIdx).enabled != null && waveCells(minEntropyIdx).enabled(t)) weights(t) else 0.0
+
+    val r = Utils.randomFromArray(distribution, random.nextDouble())
+    val waveCell = waveCells(minEntropyIdx)
+    for (t <- 0 until tCounter)
+      if (waveCell.enabled != null && waveCell.enabled(t) != (t == r))
+        ban(minEntropyIdx, t, weights)
+  }
+
+  /**
     * Entropy is used to identify the most constrained cell (least risky choice).
     * A uniform distribution of possibilities has the highest entropy.
-    * The entropy of a cell is the weighted sum of patterns that may still be validly placed at that cell
-    * (with weights based on how often that pattern was seen in the input image)
-    * @return minimum entropy for cell
     */
   private def calculateMinEntropy(onBoundary: (Int, Int) => Boolean, random: Random): Int = {
     var min = INITIAL_ENTROPY
     var argMin = UNSET
-
-    for (i <- 0 until size()) {
+    var inconsistent = false
+    var i = 0
+    while (i < size() && !inconsistent) {
       if (!onBoundary(i % FMX, i / FMX)) {
         val amount = waveCells(i).sumOfOnes
-        // If amount is 0, then no neighboring cells have any possibilities
         if (amount == 0)
-          return INCONSISTENT
-
-        val entropy = waveCells(i).entropy
-        if (amount > 1 && entropy <= min) {
-          val noise = DEFAULT_NOISE_SCALE * random.nextDouble()
-          if (entropy + noise < min) {
-            min = entropy + noise
-            argMin = i
+          inconsistent = true
+        else {
+          val entropy = waveCells(i).entropy
+          if (amount > 1 && entropy <= min) {
+            val noise = DEFAULT_NOISE_SCALE * random.nextDouble()
+            if (entropy + noise < min) {
+              min = entropy + noise
+              argMin = i
+            }
           }
         }
       }
+      i += 1
     }
-    argMin
+    if (inconsistent) INCONSISTENT else argMin
   }
 
   /** remove patterns from the domains of the cells */
@@ -167,9 +168,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
     if (i >= waveCells.length) return
     val waveCell = waveCells(i)
 
-    // if only one options left, don't ban it - so we avoid an inconsistent state
     if (allowInconsistencies && waveCells(i).sumOfOnes == 1) {
-      println("INCONSISTENCY FOUND, but continuing")
       return
     }
 
@@ -181,42 +180,19 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       for (d <- 0 to 3) comp(d) = 0
     }
 
-    stack(stackSize) = (i, t)
+    stackCell(stackSize) = i
+    stackTile(stackSize) = t
     stackSize += 1
 
     waveCell.updateEntropy(weights(t), weightLogWeights(t))
   }
 
-  /**
-    * Updates the domains of variables at each grid location.
-    *
-    * function Propagate(wave_matrix, adjacencies):
-    *  Initialize the propagation stack to contain the last cell observed.
-    *  while there are cells on the propagation stack:
-    *    for neighbor of this cell:
-    *      for neighbor_pattern in neighbor_domain(neighbor):
-    *        if not( adjacency(original_pattern, neighbor_pattern) ):
-    *          Decrement count of neighbor_pattern.
-    *        if count is zero:
-    *          Remove neighbor_pattern from neighbor_cell.
-    *          Add neighbor_cell to the propagation stack.
-    *   return wave_matrix
-    *
-    * Once a cell is solved (the domain of the associated variable is reduced to a single value),
-    * WFC propagates the implications of the change to the neighboring cells. WFCs propagation
-    * ensures that a value only appears in a domain of a variable if there exists a valid value in
-    * the domain of related variables such that constraints over those variables could be satisfied.
-    */
   def propagate(onBoundary: (Int, Int) => Boolean, weights: DoubleArray, propState: PropagatorState): Unit = {
     while (stackSize > 0) {
       stackSize -= 1
-      val e1 = stack(stackSize)
-
-      if (e1 == null) {
-        //println(s"WARNING: e1 was null at position $stackSize of total = ${stack.length}. ")
-        throw new IllegalStateException(s"e1 was null at position ${stackSize - 1} of total = ${stack.length}. ")
-      }
-      else doPropagation(e1, onBoundary, weights, propState)
+      val cellIdx = stackCell(stackSize)
+      val tileIdx = stackTile(stackSize)
+      doPropagation((cellIdx, tileIdx), onBoundary, weights, propState)
     }
   }
 
@@ -244,7 +220,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
         val compat = waveCells(i2).compatible
 
         for (l <- 0 until (if (p == null) 0 else p.length)) {
-          val t2 = if (p == null) 0 else p(l)
+          val t2 = p(l)
           val comp = if (compat == null) null else compat(t2)
 
           if (comp != null) {
