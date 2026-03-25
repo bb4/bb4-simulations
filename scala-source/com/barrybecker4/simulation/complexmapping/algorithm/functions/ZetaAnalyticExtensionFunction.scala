@@ -26,9 +26,9 @@ import com.barrybecker4.math.complex.ComplexNumber
   */
 case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
 
-  val zetaFunction = RiemannZetaFunction()
-  val etaFun = DirichletEtaFunction()
-  val gammaFunction = GammaFunction()
+  private lazy val zetaFunction = RiemannZetaFunction()
+  private lazy val etaFun = DirichletEtaFunction()
+  private lazy val gammaFunction = GammaFunction()
 
   /** @param s complex number
     * @param n the number of iterations. The larger this is, the more accurate the result.
@@ -43,6 +43,7 @@ case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
       else if (s.real > 0) continuanceInCriticalRegion(s, n)
       else continuanceInNegativeRegion(s, n)
 
+    // Visualization uses finite values only; poles / failed numerics become 0 (not zeta(1)=∞).
     if (result.real.isInfinite || result.real.isNaN || result.imaginary.isNaN) ComplexNumber(0) else result
   }
 

@@ -2,25 +2,18 @@
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
 import com.barrybecker4.math.complex.ComplexNumber
+import com.barrybecker4.simulation.complexmapping.ComplexMappingTestAssertions
 import org.scalatest.funsuite.AnyFunSuite
 
-class RiemannZetaFunctionSuite extends AnyFunSuite {
+class RiemannZetaFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertions {
 
   private val fun = RiemannZetaFunction()
-
-  /** Absolute tolerance per component; default accommodates JVM / bb4-math floating-point variance. */
-  private def assertComplexApprox(expected: ComplexNumber, actual: ComplexNumber, tol: Double = 1e-6): Unit = {
-    assert(
-      Math.abs(expected.real - actual.real) <= tol && Math.abs(expected.imaginary - actual.imaginary) <= tol,
-      s"expected $expected but got $actual"
-    )
-  }
 
   test("zeta(2) with n=100") {
     assertResult(ComplexNumber(1.6349839001848923)) {
       fun.compute(ComplexNumber(2.0), 100)
     }
-  } //  1.0, but got 1.6349839001848923
+  }
 
   test("zeta(1) with n=1") {
 

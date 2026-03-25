@@ -1,12 +1,13 @@
 /* Copyright by Barry G. Becker, 2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT   */
 package com.barrybecker4.simulation.complexmapping
 
-import java.awt.event.{ActionEvent, ActionListener, MouseAdapter, MouseEvent}
+import java.awt.event.{ActionEvent, ActionListener}
 import java.awt.{BorderLayout, Dimension, GridLayout}
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
-import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_ORIG_GRID_BOUNDS }
+import scala.compiletime.uninitialized
+import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL}
 import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
 
 /**
@@ -34,8 +35,8 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
 
-  private var functionChoice: JComboBox[String] = _
-  var sliderGroup: SliderGroup = _
+  private var functionChoice: JComboBox[String] = uninitialized
+  var sliderGroup: SliderGroup = uninitialized
 
   createUI()
 
@@ -56,6 +57,10 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     add(javax.swing.Box.createVerticalStrut(10))
     add(legend)
     add(gridBox)
+    addUpdateButtonAndSpacer()
+  }
+
+  private def addUpdateButtonAndSpacer(): Unit = {
     val updateButton = new JButton("Update")
     updateButton.addActionListener(this)
     add(updateButton)
@@ -69,13 +74,13 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     * @return a dropdown/down component.
     */
   private def createFunctionDropdown: JComboBox[String] = {
-    functionChoice = new JComboBox[String]()
-    functionChoice.addActionListener(this)
+    val combo = new JComboBox[String]()
+    combo.addActionListener(this)
     for (func <- FunctionType.values) {
-      functionChoice.addItem(func.name)
+      combo.addItem(func.name)
     }
-    functionChoice.setSelectedIndex(FunctionType.values.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
-    functionChoice
+    combo.setSelectedIndex(FunctionType.values.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
+    combo
   }
 
   private def createCheckBoxes = {

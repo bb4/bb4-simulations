@@ -14,14 +14,12 @@ case class Box(upperLeft: Point2d, lowerRight: Point2d) {
   def width: Double = rightX - leftX
   def height: Double = topY - bottomY
 
-  def extendBy(pt: Point2d): Box = {
-    if (pt.x < upperLeft.x || pt.y > upperLeft.y) {
-      Box(new Point2d(Math.min(pt.x, upperLeft.x), Math.max(pt.y, upperLeft.y)), lowerRight)
-    }
-    else if (pt.x > lowerRight.x || pt.y < lowerRight.y) {
-      Box(upperLeft, new Point2d(Math.max(pt.x, lowerRight.x), Math.min(pt.y, lowerRight.y)))
-    } else this
-  }
+  /** Grow the axis-aligned bounds so they include `pt` (y increases upward). */
+  def extendBy(pt: Point2d): Box =
+    Box(
+      new Point2d(Math.min(upperLeft.x, pt.x), Math.max(upperLeft.y, pt.y)),
+      new Point2d(Math.max(lowerRight.x, pt.x), Math.min(lowerRight.y, pt.y))
+    )
 
   def addMargin(margin: Double): Box = {
     Box(

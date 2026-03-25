@@ -6,12 +6,6 @@ import com.barrybecker4.simulation.complexmapping.algorithm.model.Grid.createMes
 
 
 object Grid {
-
-  // this should be a function passed in
-  private def computeContinuousValue(x: Double, y: Double): Double = {
-    val base = Math.sqrt(x * x + y * y) / 4.0
-    base - base.toInt
-  }
   private def computeQuadrantValue(x: Double, y: Double): Double = {
       if (x * y < 0) {
         if (x > 0) 0.33 else 0.66

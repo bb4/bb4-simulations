@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.complexmapping.algorithm
 
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
 import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
@@ -18,10 +19,10 @@ object GridRenderer {
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
   // these are global to avoid having to pass them in every internal method.
-  private var xScale: Double = _
-  private var yScale: Double = _
-  private var xOffset: Double = _
-  private var yOffset: Double = _
+  private var xScale: Double = uninitialized
+  private var yScale: Double = uninitialized
+  private var xOffset: Double = uninitialized
+  private var yOffset: Double = uninitialized
 
   /**
     * The viewport will be automatically determined from the bounds of the grid.
@@ -53,22 +54,27 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   /** As a first approximation, just look at where the border and a few middle points map to.
     * That should be much faster than checking all points. */
   private def findViewport(): Box = {
-    var box: Box = Box(new Point2d(0, 0), new Point2d(0, 0))
-    for (j <- 0 until grid.height - 1) {
-       box = box.extendBy(grid(0, j).pt)
-       box = box.extendBy(grid(grid.width - 1, j).pt)
-    }
-    for (i <- 0 until grid.width - 1) {
-      box = box.extendBy(grid(i, 0).pt)
-      box = box.extendBy(grid(i, grid.height - 1).pt)
-    }
-    for (i <- SKIP until (grid.height - SKIP) by SKIP) {
-      for (j <- SKIP until grid.width - SKIP by SKIP) {
-        box = box.extendBy(grid(j, i).pt)
-      }
-    }
-    box.addMargin(MARGIN)
+    val base = Box(new Point2d(0, 0), new Point2d(0, 0))
+    extendBoxWithInteriorSamples(
+      extendBoxWithHorizontalEdges(extendBoxWithVerticalEdges(base))
+    ).addMargin(MARGIN)
   }
+
+  private def extendBoxWithVerticalEdges(box: Box): Box =
+    (0 until grid.height - 1).foldLeft(box) { (b, j) =>
+      b.extendBy(grid(0, j).pt).extendBy(grid(grid.width - 1, j).pt)
+    }
+
+  private def extendBoxWithHorizontalEdges(box: Box): Box =
+    (0 until grid.width - 1).foldLeft(box) { (b, i) =>
+      b.extendBy(grid(i, 0).pt).extendBy(grid(i, grid.height - 1).pt)
+    }
+
+  private def extendBoxWithInteriorSamples(box: Box): Box =
+    (for {
+      i <- SKIP until (grid.height - SKIP) by SKIP
+      j <- SKIP until grid.width - SKIP by SKIP
+    } yield grid(j, i).pt).foldLeft(box)(_.extendBy(_))
 
   private def renderGrid(g: Graphics2D): Unit = {
     for (j <- 0 until grid.height - 1)
@@ -93,8 +99,8 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     val centerValue = meshPoints.map(_.value).sum / 4.0
     val avgX: Double = meshPoints.map(_.x).sum / 4.0
     val avgY: Double = meshPoints.map(_.y).sum / 4.0
-    val centerPoint = model.MeshPoint(new Point2d(avgX, avgY), centerValue)
-    if (!centerPoint.x.isNaN && !centerPoint.x.isNaN) {
+    val centerPoint = MeshPoint(new Point2d(avgX, avgY), centerValue)
+    if (!centerPoint.x.isNaN && !centerPoint.y.isNaN) {
       if (WIREFRAME_MODE) {
         drawLine(meshPoints(0), meshPoints(1), g)
         drawLine(meshPoints(1), meshPoints(2), g)

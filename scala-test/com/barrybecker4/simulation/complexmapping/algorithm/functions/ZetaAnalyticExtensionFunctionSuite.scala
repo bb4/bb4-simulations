@@ -4,20 +4,12 @@
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
 import com.barrybecker4.math.complex.ComplexNumber
+import com.barrybecker4.simulation.complexmapping.ComplexMappingTestAssertions
 import org.scalatest.funsuite.AnyFunSuite
 
-
-// This is the analytic extension of the zeta function
-class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite {
+class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertions {
 
   private val fun = ZetaAnalyticExtensionFunction()
-
-  private def assertComplexApprox(expected: ComplexNumber, actual: ComplexNumber, tol: Double = 1e-6): Unit = {
-    assert(
-      Math.abs(expected.real - actual.real) <= tol && Math.abs(expected.imaginary - actual.imaginary) <= tol,
-      s"expected $expected but got $actual"
-    )
-  }
 
   test("z(2) with n=1000") {
     assertResult(ComplexNumber(1.6349839001848923, 0)) {

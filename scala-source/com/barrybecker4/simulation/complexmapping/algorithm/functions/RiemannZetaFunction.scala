@@ -19,7 +19,6 @@ case class RiemannZetaFunction() extends ComplexFunction {
       var sum: ComplexNumber = ComplexNumber(0, 0)
       for (i <- 1 to n)
         sum = sum.add(ComplexNumber.pow(i.toDouble, s).reciprocal)
-      // if (Math.random() < 0.1) println("sum=" + sum)
       sum
     }
   }

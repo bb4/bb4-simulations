@@ -16,10 +16,10 @@ class ComplexMappingOptionsDialog(val parent1: Component, val simulator: Simulat
 
   override protected def createCustomParamPanel: JPanel = {
     setResizable(true)
-    val mainPanel = new JPanel(new BorderLayout)
+    val mainPanel = new JPanel
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS))
     val panel = new JPanel
-    mainPanel.add(panel, BorderLayout.NORTH)
+    mainPanel.add(panel)
     mainPanel
   }
 

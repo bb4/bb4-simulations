@@ -39,40 +39,4 @@ class DirichletEtaFunctionSuite extends AnyFunSuite {
       fun.compute(ComplexNumber(-1, 0), 100)
     }
   }
-/*
-  test("eta(-3) with n=100 should be -1/120") {
-    assertResult(ComplexNumber(-1/120, 0)) {
-      fun.compute(ComplexNumber(-3, 0), 100)
-    }
-  }
-
-  test("eta(-4) with n=100 should be -0") {
-    assertResult(ComplexNumber(0, 0)) {
-      fun.compute(ComplexNumber(-4, 0), 100)
-    }
-  }
-
-  test("eta(1, i) with n=2") {
-    assertResult(ComplexNumber(1.384619450681986, -0.3194806381568174)) {
-      fun.compute(ComplexNumber(1.0, 1.0), 2)
-    }
-  }
-
-  test("eta(2, 3i) with n=3") {
-    assertResult(ComplexNumber(0.7684594036038668, -0.20128090061917603)) {
-      fun.compute(ComplexNumber(2.0, 3.0), 3)
-    }
-  }
-
-  test("eta(2, 3i) with n=300") {
-    assertResult(ComplexNumber(0.798021168058162, -0.11374364531522344)) {
-      fun.compute(ComplexNumber(2.0, 3.0), 300)
-    }
-  }
-
-  test("eta(-1, i) with n=2") {
-    assertResult(ComplexNumber(0.5804885123387991, -0.5077930715422768)) {
-      fun.compute(ComplexNumber(-1.0, 1.0), 2)
-    }
-  }*/
 }

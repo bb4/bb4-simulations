@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.complexmapping.algorithm.model
 
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
 import com.barrybecker4.simulation.complexmapping.algorithm.functions.{ComplexFunction, IdentityFunction}
 import com.barrybecker4.simulation.complexmapping.algorithm.{GridRenderer, MeshColorMap}
 import com.barrybecker4.ui.util.ColorMap
@@ -18,17 +19,28 @@ case class MeshMappingModel(grid: Grid,
   interpolationVal: Double, colorMap: ColorMap = new MeshColorMap()) {
 
   private val transformedGrid: Grid = grid.transform(function, n, interpolationVal)
-  private var lastTransformedGrid: Grid = _
-  private var lastViewport: Box = _
-  private var lastImage: BufferedImage = _
+  private var lastTransformedGrid: Grid = uninitialized
+  private var lastViewport: Box = uninitialized
+  /** When true, `lastImage` was produced via `findViewport`; when false, via an explicit `Box`. */
+  private var lastImageWasAutoViewport: Boolean = false
+  private var lastPixelWidth: Int = -1
+  private var lastPixelHeight: Int = -1
+  private var lastImage: BufferedImage = uninitialized
 
   def getColorMap: ColorMap = colorMap
 
   /* get the image given specified viewport */
   def getImage(viewport: Box, pixelWidth: Int, pixelHeight: Int): BufferedImage = {
-    if (viewport != lastViewport || transformedGrid != lastTransformedGrid) {
+    if (
+      viewport != lastViewport || transformedGrid != lastTransformedGrid
+        || pixelWidth != lastPixelWidth || pixelHeight != lastPixelHeight
+        || lastImageWasAutoViewport
+    ) {
       lastViewport = viewport
       lastTransformedGrid = transformedGrid
+      lastPixelWidth = pixelWidth
+      lastPixelHeight = pixelHeight
+      lastImageWasAutoViewport = false
       val gridRenderer = GridRenderer(transformedGrid, colorMap)
       lastImage = gridRenderer.render(viewport, pixelWidth, pixelHeight)
     }
@@ -36,8 +48,14 @@ case class MeshMappingModel(grid: Grid,
   }
 
   def getImage(pixelWidth: Int, pixelHeight: Int): BufferedImage = {
-    if (transformedGrid != lastTransformedGrid) {
+    if (
+      transformedGrid != lastTransformedGrid || pixelWidth != lastPixelWidth
+        || pixelHeight != lastPixelHeight || !lastImageWasAutoViewport
+    ) {
       lastTransformedGrid = transformedGrid
+      lastPixelWidth = pixelWidth
+      lastPixelHeight = pixelHeight
+      lastImageWasAutoViewport = true
       val gridRenderer = GridRenderer(transformedGrid, colorMap)
       lastImage = gridRenderer.render(pixelWidth, pixelHeight)
     }
