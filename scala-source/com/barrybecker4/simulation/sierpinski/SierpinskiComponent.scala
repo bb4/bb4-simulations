@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.sierpinski
 import com.barrybecker4.ui.components.NumberInput
 import com.barrybecker4.ui.sliders.LabeledSlider
 import com.barrybecker4.ui.sliders.SliderChangeListener
+import scala.compiletime.uninitialized
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
@@ -16,16 +17,17 @@ import SierpinskiComponent._
   * @author Barry Becker
   */
 object SierpinskiComponent {
+  private val MIN_RECURSIVE_DEPTH = 1
   private val INITIAL_RECURSIVE_DEPTH = 1
   private val MAX_RECURSIVE_DEPTH = 10
 }
 
 class SierpinskiComponent() extends JPanel with ActionListener with SliderChangeListener {
   createUI()
-  private var sierpinskiPanel: SierpinskiPanel = _
-  private var lineWidthSlider: LabeledSlider = _
-  private var depthField: NumberInput = _
-  private var drawButton: JButton = _
+  private var sierpinskiPanel: SierpinskiPanel = uninitialized
+  private var lineWidthSlider: LabeledSlider = uninitialized
+  private var depthField: NumberInput = uninitialized
+  private var drawButton: JButton = uninitialized
 
   private def createUI(): Unit = {
     this.setLayout(new BorderLayout)
@@ -37,7 +39,7 @@ class SierpinskiComponent() extends JPanel with ActionListener with SliderChange
   private def createControlsPanel = {
     val controlsPanel = new JPanel(new FlowLayout)
     depthField = new NumberInput("Recursive depth:  ",
-      INITIAL_RECURSIVE_DEPTH, "This the amount of detail that will be shown.", 0, MAX_RECURSIVE_DEPTH, true)
+      INITIAL_RECURSIVE_DEPTH, "This is the amount of detail that will be shown.", MIN_RECURSIVE_DEPTH, MAX_RECURSIVE_DEPTH, true)
     lineWidthSlider = new LabeledSlider("Line Width", SierpinskiRenderer.DEFAULT_LINE_WIDTH, 0.1, 100.0)
     lineWidthSlider.addChangeListener(this)
     drawButton = new JButton("Draw it!")
@@ -53,7 +55,7 @@ class SierpinskiComponent() extends JPanel with ActionListener with SliderChange
     */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource eq drawButton) {
-      val depth = Math.min(depthField.getIntValue, MAX_RECURSIVE_DEPTH)
+      val depth = math.min(math.max(depthField.getIntValue, MIN_RECURSIVE_DEPTH), MAX_RECURSIVE_DEPTH)
       sierpinskiPanel.setRecursiveDepth(depth)
       sierpinskiPanel.repaint()
     }

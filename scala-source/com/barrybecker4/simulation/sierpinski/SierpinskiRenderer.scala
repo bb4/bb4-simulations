@@ -19,8 +19,6 @@ class SierpinskiRenderer() {
   private val triangleRenderer = new TriangleRenderer(styler)
   private var width = 0
   private var height = 0
-  private var g2: Graphics2D = _
-
 
   def setDepth(depth: Int): Unit = triangleRenderer.setDepth(depth)
   def setLineWidth(width: Float): Unit = styler.setLineWidth(width)
@@ -31,18 +29,19 @@ class SierpinskiRenderer() {
   }
 
   /** draw the sierpinski triangle */
-  def paint(g: Graphics): Unit = {
-    g2 = g.asInstanceOf[Graphics2D]
-    clear()
-    val A = new Point(width / 2, SierpinskiRenderer.MARGIN)
-    val B = new Point(SierpinskiRenderer.MARGIN, height - SierpinskiRenderer.MARGIN)
-    val C = new Point(width - 2 * SierpinskiRenderer.MARGIN, height - SierpinskiRenderer.MARGIN)
-    val triangle = new Triangle(A, B, C)
-    triangleRenderer.render(triangle, g2)
-  }
+  def paint(g: Graphics): Unit =
+    g match
+      case g2: Graphics2D =>
+        clear(g2)
+        val pa = new Point(width / 2, SierpinskiRenderer.MARGIN)
+        val pb = new Point(SierpinskiRenderer.MARGIN, height - SierpinskiRenderer.MARGIN)
+        val pc = new Point(width - 2 * SierpinskiRenderer.MARGIN, height - SierpinskiRenderer.MARGIN)
+        val triangle = Triangle(pa, pb, pc)
+        triangleRenderer.render(triangle, g2)
+      case _ => ()
 
   /** erase everything so we can start anew. */
-  private def clear(): Unit = {
+  private def clear(g2: Graphics2D): Unit = {
     g2.setBackground(SierpinskiRenderer.BACKGROUND_COLOR)
     g2.clearRect(0, 0, width, height)
     // this smooths the lines when we draw.

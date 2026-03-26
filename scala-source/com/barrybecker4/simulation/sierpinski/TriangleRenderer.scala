@@ -2,60 +2,44 @@
 package com.barrybecker4.simulation.sierpinski
 
 import java.awt.Graphics2D
-import java.awt.Point
+import scala.compiletime.uninitialized
 
-
-object TriangleRenderer {
-  private val FILL = false
-}
 
 /**
-  * This class draws a Sierpinski triangle to a specified depth.
+  * Draws a Sierpinski triangle to a specified depth (recursive subdivision).
   * @author Barry Becker
   */
 class TriangleRenderer(var styler: GraphicsStyler) {
   private var maxDepth = 1
-  private var g2: Graphics2D = _
+  private var g2: Graphics2D = uninitialized
 
   def setDepth(depth: Int): Unit = {
-    assert(depth > 0 && depth < 20, "Unreasonable max depth of " + depth + " specified.")
+    require(depth > 0 && depth < 20, s"Unreasonable max depth of $depth specified.")
     maxDepth = depth
   }
 
-  /** Recursive method to actually draw the algorithm
-    * This is the secret sauce of the whole application.
-    */
   def render(triangle: Triangle, g2: Graphics2D): Unit = {
     this.g2 = g2
     draw(triangle, 0)
   }
 
-  /** Recursive method to actually draw the algorithm.
-    * This is the secret sauce of the whole application.
-    */
   private def draw(triangle: Triangle, depth: Int): Unit = {
     styler.setStyle(depth, g2)
-    drawTriangle(triangle)
-    val a = midpoint(triangle.B, triangle.C)
-    val b = midpoint(triangle.A, triangle.C)
-    val c = midpoint(triangle.B, triangle.A)
-    if (depth >= maxDepth) drawTriangle(new Triangle(a, b, c), fill = true)
-    else {
-      draw(new Triangle(triangle.A, c, b), depth + 1)
-      draw(new Triangle(c, triangle.B, a), depth + 1)
-      draw(new Triangle(b, a, triangle.C), depth + 1)
-    }
+    drawTriangle(triangle, fill = false)
+    val pMidBc = Triangle.midpoint(triangle.b, triangle.c)
+    val pMidAc = Triangle.midpoint(triangle.a, triangle.c)
+    val pMidBa = Triangle.midpoint(triangle.b, triangle.a)
+    if depth >= maxDepth then
+      drawTriangle(Triangle(pMidBc, pMidAc, pMidBa), fill = true)
+    else
+      draw(Triangle(triangle.a, pMidBa, pMidAc), depth + 1)
+      draw(Triangle(pMidBa, triangle.b, pMidBc), depth + 1)
+      draw(Triangle(pMidAc, pMidBa, triangle.c), depth + 1)
   }
 
-  private def midpoint(P1: Point, P2: Point) = new Point((P1.x + P2.x) / 2, (P1.y + P2.y) / 2)
-
-  private def drawTriangle(triangle: Triangle): Unit = {
-    drawTriangle(triangle, TriangleRenderer.FILL)
-  }
-
-  private def drawTriangle(sTriangle: Triangle, fill: Boolean): Unit = {
-    val triangle = sTriangle.getPoly
-    if (fill) g2.fillPolygon(triangle)
-    else g2.drawPolygon(triangle)
+  private def drawTriangle(triangle: Triangle, fill: Boolean): Unit = {
+    val poly = triangle.getPoly
+    if fill then g2.fillPolygon(poly)
+    else g2.drawPolygon(poly)
   }
 }
