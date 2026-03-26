@@ -9,6 +9,8 @@ import com.barrybecker4.ui.renderers.HistogramRenderer
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 object ProfitHistogramPanel {
   /** Sometimes the numbers on the x axis can get very large. Scientific notation is used in those cases.
@@ -22,7 +24,7 @@ object ProfitHistogramPanel {
   * @author Barry Becker
   */
 class ProfitHistogramPanel extends JPanel {
-  private var histogram: HistogramRenderer = _
+  private var histogram: HistogramRenderer = uninitialized
 
   def setOptions(maxGain: Double, graphingOpts: GraphingOptions): Unit = {
     val xScale = Math.pow(10, Math.max(0, Math.log10(maxGain) - graphingOpts.histogramXResolution))

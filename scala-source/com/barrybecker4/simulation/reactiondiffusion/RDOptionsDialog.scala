@@ -7,6 +7,8 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
@@ -14,9 +16,9 @@ import java.awt.event.ActionEvent
 class RDOptionsDialog private[reactiondiffusion](parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var offscreenRenderingCheckbox: JCheckBox = _
-  private var showProfilingCheckbox: JCheckBox = _
-  private var useParallelRenderingCheckbox: JCheckBox = _
+  private var offscreenRenderingCheckbox: JCheckBox = uninitialized
+  private var showProfilingCheckbox: JCheckBox = uninitialized
+  private var useParallelRenderingCheckbox: JCheckBox = uninitialized
 
   override protected def showCustomTabByDefault: Boolean = true
 

@@ -3,11 +3,13 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.voronoi
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 
+import scala.compiletime.uninitialized
+
 
 class VoronoiEdge(val site1: Point, val site2: Point) {
   private val isVertical = site1.y == site2.y
-  var p1: Point = _
-  var p2: Point = _
+  var p1: Point = uninitialized
+  var p2: Point = uninitialized
   val midpoint: Point = Point.midpoint(site1, site2)
 
   // parameters for line that the edge lies on

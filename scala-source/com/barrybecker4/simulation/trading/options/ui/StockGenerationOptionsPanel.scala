@@ -9,6 +9,8 @@ import java.awt.{BorderLayout, Component, FlowLayout}
 import java.awt.event.{ItemEvent, ItemListener}
 import javax.swing.{BorderFactory, BoxLayout, JComboBox, JLabel, JPanel}
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
@@ -48,7 +50,7 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
         new SineStrategy,
         new RandomUpAndDownStrategy,
         new RandomWithAdditiveMomentumStrategy))
-  private var generationStrategyCombo: JComboBox[String] = _
+  private var generationStrategyCombo: JComboBox[String] = uninitialized
 
   val strategyDropDownElement: JPanel = createStrategyDropDown
   private val strategyOptionsPanel = new JPanel(new BorderLayout)

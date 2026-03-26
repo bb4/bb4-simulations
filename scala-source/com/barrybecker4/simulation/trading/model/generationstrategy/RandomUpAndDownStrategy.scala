@@ -6,6 +6,8 @@ import javax.swing._
 import java.awt._
 import RandomUpAndDownStrategy._
 
+import scala.compiletime.uninitialized
+
 
 object RandomUpAndDownStrategy {
   private val DEFAULT_PERCENT_INCREASE = 0.04
@@ -23,13 +25,13 @@ class RandomUpAndDownStrategy extends IncrementalGenerationStrategy {
   var useRandomChange: Boolean = DEFAULT_USE_RANDOM_CHANGE
 
   /** Amount to increase after each time period if heads   */
-  private var percentIncreaseField: NumberInput = _
+  private var percentIncreaseField: NumberInput = uninitialized
 
   /** Amount to decrease after each time period if tails  */
-  private var percentDecreaseField: NumberInput = _
+  private var percentDecreaseField: NumberInput = uninitialized
 
   /** if true changes are between 0 and percent change. */
-  private var useRandomChangeCB: JCheckBox = _
+  private var useRandomChangeCB: JCheckBox = uninitialized
 
   override def name = "Random Ups and Downs"
 

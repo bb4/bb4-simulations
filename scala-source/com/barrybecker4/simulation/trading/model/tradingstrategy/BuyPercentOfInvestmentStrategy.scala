@@ -6,6 +6,8 @@ import com.barrybecker4.simulation.trading.options.ui.ChangePolicyPanel
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * When the market dips, we buy with a percentage of our reserve.
@@ -20,8 +22,8 @@ object BuyPercentOfInvestmentStrategy {
 class BuyPercentOfInvestmentStrategy extends TradingStrategy {
   private var gainPolicy = BuyPercentOfInvestmentStrategy.DEFAULT_GAIN_POLICY
   private var lossPolicy = BuyPercentOfInvestmentStrategy.DEFAULT_LOSS_POLICY
-  private var gainPolicyPanel: ChangePolicyPanel = _
-  private var lossPolicyPanel: ChangePolicyPanel = _
+  private var gainPolicyPanel: ChangePolicyPanel = uninitialized
+  private var lossPolicyPanel: ChangePolicyPanel = uninitialized
 
   override def name = "Percent of Investment"
   override def description: String =

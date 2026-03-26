@@ -5,6 +5,8 @@ import com.barrybecker4.ui.components.NumberInput
 import java.awt.Component
 import javax.swing.{BorderFactory, BoxLayout, JPanel}
 
+import scala.compiletime.uninitialized
+
 
 /**
   * This is the strategy suggested by John Roh.
@@ -36,10 +38,10 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
     * It is computed from fixedPurchasePercent * startingTotal
     */
   private var fixedPurchaseAmount = .0
-  private var transactions: Seq[Transaction] = _
-  private var fixedPurchasePctField: NumberInput = _
-  private var gainThresholdField: NumberInput = _
-  private var lossThresholdField: NumberInput = _
+  private var transactions: Seq[Transaction] = uninitialized
+  private var fixedPurchasePctField: NumberInput = uninitialized
+  private var gainThresholdField: NumberInput = uninitialized
+  private var lossThresholdField: NumberInput = uninitialized
 
   override def name = "Sell What Was Bought"
   override def description: String =

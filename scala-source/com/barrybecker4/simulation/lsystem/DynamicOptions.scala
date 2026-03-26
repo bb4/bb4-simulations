@@ -21,6 +21,8 @@ import java.awt.event.ActionListener
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Dynamic controls for the RD simulation that will show on the right.
@@ -57,9 +59,9 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
   add(createFormulaText)
-  private var useFixedSize: JCheckBox = _
-  private var expression: TextInput = _
-  private var formulaText: JTextArea = _
+  private var useFixedSize: JCheckBox = uninitialized
+  private var expression: TextInput = uninitialized
+  private var formulaText: JTextArea = uninitialized
 
   private def createExpressionInput = {
     val p = new JPanel(new FlowLayout)

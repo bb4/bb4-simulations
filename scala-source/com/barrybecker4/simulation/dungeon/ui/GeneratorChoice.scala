@@ -6,10 +6,12 @@ import java.awt.Dimension
 import javax.swing.{JComboBox, JLabel, JPanel}
 import java.awt.event.ItemListener
 
+import scala.compiletime.uninitialized
+
 
 class GeneratorChoice(listener: ItemListener) extends JPanel {
 
-  private var generatorStrategyChoice: JComboBox[String] = _
+  private var generatorStrategyChoice: JComboBox[String] = uninitialized
 
   init()
 

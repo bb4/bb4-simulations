@@ -15,6 +15,7 @@ import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.{Dimension, Graphics}
 import javax.swing.JPanel
 
+import scala.compiletime.uninitialized
 
 
 object DungeonExplorer {
@@ -29,7 +30,7 @@ class DungeonExplorer() extends Simulator("Dungeon Generator") with DungeonOptio
 
   private var dungeonOptions: DungeonOptions = DungeonOptions()
   private var oldDungeonOptions: DungeonOptions = dungeonOptions
-  private var options: DynamicOptions = _
+  private var options: DynamicOptions = uninitialized
   private val dungeonRenderer: DungeonRenderer = DungeonRenderer()
   commonInit()
 

@@ -6,6 +6,8 @@ import javax.swing._
 import java.awt._
 import java.util.Random
 
+import scala.compiletime.uninitialized
+
 
 object GaussianStrategy {
   private val DEFAULT_MEAN = 0.01
@@ -20,9 +22,9 @@ class GaussianStrategy extends IncrementalGenerationStrategy {
   var mean: Double = GaussianStrategy.DEFAULT_MEAN
   var variance: Double = GaussianStrategy.DEFAULT_VARIANCE
   /** Amount to increase after each time period if heads   */
-  private var meanField: NumberInput = _
+  private var meanField: NumberInput = uninitialized
   /** Amount to decrease after each time period if tails  */
-  private var varianceField: NumberInput = _
+  private var varianceField: NumberInput = uninitialized
   /** random number generator */
   private val rand = new Random
 

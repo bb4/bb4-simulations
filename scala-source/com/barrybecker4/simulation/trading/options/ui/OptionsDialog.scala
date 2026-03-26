@@ -7,15 +7,17 @@ import com.barrybecker4.simulation.trading.TradingSimulator
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
   */
 class OptionsDialog(parent: Component, simulator: Simulator) extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var stockGenerationOptionsPanel: StockGenerationOptionsPanel = _
-  private var tradingOptionsPanel: TradingOptionsPanel = _
-  private var graphingOptionsPanel: GraphingOptionsPanel = _
+  private var stockGenerationOptionsPanel: StockGenerationOptionsPanel = uninitialized
+  private var tradingOptionsPanel: TradingOptionsPanel = uninitialized
+  private var graphingOptionsPanel: GraphingOptionsPanel = uninitialized
 
   override def getTitle = "Stock Simulation Configuration"
 

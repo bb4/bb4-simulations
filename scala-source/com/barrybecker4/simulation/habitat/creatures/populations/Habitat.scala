@@ -9,6 +9,7 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 
 import java.awt.Color
 import scala.collection.mutable.ArrayBuffer
+import scala.compiletime.uninitialized
 
 object Habitat {
   val HABITATS: Array[Habitat] = Array(new SerengetiHabitat, new CatRatHabitat, new SingleCreatureHabitat)
@@ -26,7 +27,7 @@ abstract class Habitat extends ArrayBuffer[Population] {
   /** Avoid calling setMaxXValues on every paint when graph resolution unchanged. */
   private var lastGraphTotalSamples: Int = -1
   /** associate population with function */
-  private var grid: HabitatGrid = _
+  private var grid: HabitatGrid = uninitialized
   initialize()
 
   def getName: String

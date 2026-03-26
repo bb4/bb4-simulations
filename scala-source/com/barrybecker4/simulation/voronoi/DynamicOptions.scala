@@ -13,6 +13,8 @@ import com.barrybecker4.ui.sliders.SliderProperties
 import javax.swing.*
 import java.awt.*
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Dynamic controls for the Voronoi that will show on the right.
@@ -35,11 +37,11 @@ object DynamicOptions {
 class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simulator: VoronoiExplorer)
   extends JPanel with ActionListener with ItemListener with SliderGroupChangeListener {
 
-  private var useFixedSize: JCheckBox = _
-  private var showVoronoiDiagram: JCheckBox = _
+  private var useFixedSize: JCheckBox = uninitialized
+  private var showVoronoiDiagram: JCheckBox = uninitialized
   private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var currentParams = new PoissonParams()
-  private var distributionChoice: JComboBox[String] = _
+  private var distributionChoice: JComboBox[String] = uninitialized
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)

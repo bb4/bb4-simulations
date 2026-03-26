@@ -6,6 +6,8 @@ import javax.swing._
 import java.awt._
 import SineStrategy._
 
+import scala.compiletime.uninitialized
+
 
 object SineStrategy { // radians
   private val DEFAULT_INCREMENT = 0.01
@@ -17,8 +19,8 @@ object SineStrategy { // radians
   */
 class SineStrategy extends IncrementalGenerationStrategy {
   /** Amount to increase after each time period if heads   */
-  private var amplitudeField: NumberInput = _
-  private var incrementField: NumberInput = _
+  private var amplitudeField: NumberInput = uninitialized
+  private var incrementField: NumberInput = uninitialized
   private var theta = 0.1
   private var increment = DEFAULT_INCREMENT
   private var amplitude: Double = DEFAULT_AMPLITUDE

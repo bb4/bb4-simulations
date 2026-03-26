@@ -12,6 +12,8 @@ import com.barrybecker4.ui.util.Log
 import java.awt.{Dimension, Graphics, BorderLayout}
 import javax.swing.{JPanel, JSplitPane, JTextArea}
 
+import scala.compiletime.uninitialized
+
 
 object TradingSimulatorConsts {
   val TIME_STEP = 1.0
@@ -37,7 +39,7 @@ object TradingSimulator {
 class TradingSimulator() extends Simulator("Stock Market Simulation") {
   AppContext.initialize("ENGLISH", Seq("com.barrybecker4.ui.message").toList, new Log)
 
-  private var splitPane: JSplitPane = _
+  private var splitPane: JSplitPane = uninitialized
   private val stockChartInfoPanel = new JTextArea()
   private val stockChartPanel = new StockChartPanel
   private val investmentChartInfoPanel = new JTextArea()

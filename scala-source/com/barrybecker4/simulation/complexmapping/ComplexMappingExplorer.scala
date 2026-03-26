@@ -11,6 +11,8 @@ import javax.vecmath.Point2d
 import ComplexMappingExplorer._
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshMappingModel}
 
+import scala.compiletime.uninitialized
+
 
 object ComplexMappingExplorer {
   val DEFAULT_ORIG_GRID_BOUNDS: Box = Box(new Point2d(-1.0, 1.5), new Point2d(2, -2))
@@ -36,7 +38,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   private var grid = new Grid(origGridBounds, increment, increment)
   private var theN = DEFAULT_N
   private var model: MeshMappingModel = MeshMappingModel(grid, function, theN, DEFAULT_INTERPOLATION_VAL)
-  private var options: DynamicOptions = _
+  private var options: DynamicOptions = uninitialized
   private var useFixedSize: Boolean = false
   private var interpolationValue = DEFAULT_INTERPOLATION_VAL
   private var colorMap: ColorMap = new MeshColorMap()

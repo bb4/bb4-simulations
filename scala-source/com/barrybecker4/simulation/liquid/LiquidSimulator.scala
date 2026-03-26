@@ -13,6 +13,8 @@ import java.awt._
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Main class for particle liquid simulation.
@@ -28,9 +30,9 @@ class LiquidSimulator()
   extends Simulator("Liquid") with MouseListener {
 
   private var environment = new LiquidEnvironment(ConfigurationEnum.DEFAULT_VALUE.fileName)
-  private var envRenderer: EnvironmentRenderer = _
+  private var envRenderer: EnvironmentRenderer = uninitialized
   /** These options can be changed while the simulation is running. */
-  private var dynamicOptions: LiquidDynamicOptions = _
+  private var dynamicOptions: LiquidDynamicOptions = uninitialized
   private var advectionOnly = false
   commonInit()
 

@@ -8,6 +8,8 @@ import com.barrybecker4.simulation.lsystem.model.LSystemModel
 import javax.swing.JPanel
 import java.awt.Graphics
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Interactively explores LSystem generated trees based on a user supplied expression.
@@ -24,9 +26,9 @@ object LSystemExplorer {
 
 class LSystemExplorer() extends Simulator("LSystem Tree Explorer") {
 
-  private var algorithm: LSystemModel = _
-  var handler: InteractionHandler = _
-  private var options: DynamicOptions = _
+  private var algorithm: LSystemModel = uninitialized
+  var handler: InteractionHandler = uninitialized
+  private var options: DynamicOptions = uninitialized
   private var useFixedSize = false
   commonInit()
 

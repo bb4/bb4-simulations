@@ -7,6 +7,8 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Use this modal dialog to let the user choose from among the
@@ -16,12 +18,12 @@ import java.awt.event.ActionEvent
 class LiquidOptionsDialog private[liquid](parent: Component, simulator: LiquidSimulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var configurationChoiceField: JComboBox[String] = _
-  private var showPressureCheckbox: JCheckBox = _
-  private var showCellStatusCheckbox: JCheckBox = _
-  private var showGridCheckbox: JCheckBox = _
-  private var showVelocitiesCheckbox: JCheckBox = _
-  private var useSingleStepModeCheckbox: JCheckBox = _
+  private var configurationChoiceField: JComboBox[String] = uninitialized
+  private var showPressureCheckbox: JCheckBox = uninitialized
+  private var showCellStatusCheckbox: JCheckBox = uninitialized
+  private var showGridCheckbox: JCheckBox = uninitialized
+  private var showVelocitiesCheckbox: JCheckBox = uninitialized
+  private var useSingleStepModeCheckbox: JCheckBox = uninitialized
 
   override protected def addAdditionalToggles(togglesPanel: JPanel): Unit = {
     val sim = getSimulator.asInstanceOf[LiquidSimulator]

@@ -6,6 +6,8 @@ import com.barrybecker4.simulation.liquid.compute.GridUpdater
 import com.barrybecker4.simulation.liquid.config.Conditions
 import com.barrybecker4.simulation.liquid.config.Source
 
+import scala.compiletime.uninitialized
+
 
 /**
   * This is the global space containing all the cells, walls, and particles
@@ -31,13 +33,13 @@ object LiquidEnvironment {
 class LiquidEnvironment(val configFile: String) {
   initializeFromConfigFile(configFile)
   /** the grid of cells that make up the environment */
-  private var grid: Grid = _
+  private var grid: Grid = uninitialized
   /** Does all the computational processing on the grid */
-  private var gridUpdater: GridUpdater = _
+  private var gridUpdater: GridUpdater = uninitialized
   /** constraints and conditions from the configuration file. */
-  private var conditions: Conditions = _
+  private var conditions: Conditions = uninitialized
   // the set of particles in this simulation
-  private var particles: Particles = _
+  private var particles: Particles = uninitialized
   /** the time since the start of the simulation  */
   private var time = 0.0
   private var advectionOnly = false

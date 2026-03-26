@@ -16,6 +16,8 @@ import javax.swing.*
 import java.awt.*
 import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.
@@ -36,7 +38,7 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
   private var iterationsPerFrame = DynamicOptions.INITIAL_ITERATIONS_PER_FRAME
   private var useContinuousIteration = DynamicOptions.DEFAULT_USE_CONTINUOUS_ITERATION
   private var habitat = Habitat.HABITATS(Habitat.DEFAULT_HABITAT_INDEX)
-  private var options: DynamicOptions = _
+  private var options: DynamicOptions = uninitialized
   private var splitPanel = new HabitatSplitPanel(habitat)
   this.add(splitPanel)
 

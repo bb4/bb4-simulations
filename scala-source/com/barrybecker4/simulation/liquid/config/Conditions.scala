@@ -11,6 +11,8 @@ import org.w3c.dom.Node.ELEMENT_NODE
 import javax.vecmath.Vector2d
 import java.net.URL
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Configuration constraints and initial conditions to use while running the simulation.
@@ -26,7 +28,7 @@ object Conditions {
   * @param configFile file defines the constraints and initial conditions.
   */
 class Conditions(val configFile: String) { // use a default if null passed in.
-  private var walls: Seq[Wall] = _
+  private var walls: Seq[Wall] = uninitialized
   val file: String = if (configFile == null) BASIC.fileName else configFile
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
@@ -36,10 +38,10 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   private var cellSize = .0
   private var gravity = .0
   /** keep the walls globally because we need to draw them each frame. */
-  private var sources: List[Source] = _
+  private var sources: List[Source] = uninitialized
   /** Parsed from config; reserved until sink physics is implemented. */
-  private var sinks: List[Region] = _
-  private var initialLiquidRegions: List[Region]= _
+  private var sinks: List[Region] = uninitialized
+  private var initialLiquidRegions: List[Region] = uninitialized
   parseFromDocument(document)
 
   private def parseFromDocument(document: Document): Unit = {

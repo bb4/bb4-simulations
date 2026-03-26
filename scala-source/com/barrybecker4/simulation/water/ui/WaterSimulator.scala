@@ -7,6 +7,8 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.water.model.Environment
 import com.barrybecker4.simulation.water.rendering
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Simulate waves in deep water.
@@ -24,8 +26,8 @@ class WaterSimulator() extends Simulator("Water") {
 
   private var env: Environment = new Environment(320, 200)
   private val renderOptions = new rendering.RenderingOptions
-  private var envRenderer: rendering.EnvironmentRenderer = _
-  private var handler: InteractionHandler = _
+  private var envRenderer: rendering.EnvironmentRenderer = uninitialized
+  private var handler: InteractionHandler = uninitialized
   private var oldDimensions = new Dimension(0, 0)
   commonInit()
 

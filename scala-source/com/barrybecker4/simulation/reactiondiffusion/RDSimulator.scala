@@ -8,6 +8,8 @@ import com.barrybecker4.simulation.reactiondiffusion.rendering.RDRenderingOption
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Reaction diffusion simulator.
@@ -20,10 +22,10 @@ object RDSimulator {
 
 class RDSimulator() extends Simulator("Reaction Diffusion") {
 
-  private var grayScott: GrayScottController = _
-  private var viewer: RDViewer = _
-  private var rdOptions: RDDynamicOptions = _
-  private var handler: InteractionHandler = _
+  private var grayScott: GrayScottController = uninitialized
+  private var viewer: RDViewer = uninitialized
+  private var rdOptions: RDDynamicOptions = uninitialized
+  private var handler: InteractionHandler = uninitialized
   commonInit()
 
   /**

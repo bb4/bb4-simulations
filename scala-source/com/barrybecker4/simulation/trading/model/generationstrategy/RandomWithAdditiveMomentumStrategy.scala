@@ -5,6 +5,8 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 object RandomWithAdditiveMomentumStrategy {
   private val DEFAULT_PERCENT_INCREASE = 0.04
@@ -23,10 +25,10 @@ class RandomWithAdditiveMomentumStrategy extends IncrementalGenerationStrategy {
 
   private var lastPercentChange: Double = 0
   /** Amount to increase after each time period if heads   */
-  private var percentIncreaseField: NumberInput = _
+  private var percentIncreaseField: NumberInput = uninitialized
   /** Amount to decrease after each time period if tails  */
-  private var percentDecreaseField: NumberInput = _
-  private var momentumFactorField: NumberInput = _
+  private var percentDecreaseField: NumberInput = uninitialized
+  private var momentumFactorField: NumberInput = uninitialized
 
   override def name = "Random Additive Momentum"
   override def description: String =

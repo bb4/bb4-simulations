@@ -9,6 +9,8 @@ import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
 import javax.swing.*
 import java.awt.*
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker.
@@ -19,8 +21,8 @@ object VoronoiExplorer {
 
 class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
 
-  private var algorithm: VoronoiAlgorithm = _
-  private var options: DynamicOptions = _
+  private var algorithm: VoronoiAlgorithm = uninitialized
+  private var options: DynamicOptions = uninitialized
   private var useFixedSize = false
   commonInit()
 

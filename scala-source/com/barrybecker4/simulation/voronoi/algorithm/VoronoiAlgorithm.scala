@@ -13,6 +13,8 @@ import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 import VoronoiAlgorithm.*
 
+import scala.compiletime.uninitialized
+
 
 object VoronoiAlgorithm {
   val DEFAULT_MAX_POINTS = 100
@@ -31,15 +33,15 @@ object VoronoiAlgorithm {
   */
 class VoronoiAlgorithm(panel: JComponent) {
 
-  private var pointModel: PointPlacementModel = _
-  private var voronoiProcessor: VoronoiProcessor = _
-  private var voronoiRenderer: VoronoiRenderer = _
+  private var pointModel: PointPlacementModel = uninitialized
+  private var voronoiProcessor: VoronoiProcessor = uninitialized
+  private var voronoiRenderer: VoronoiRenderer = uninitialized
 
-  private var maxPoints: Int = _
-  private var numStepsPerFrame: Int = _
+  private var maxPoints: Int = uninitialized
+  private var numStepsPerFrame: Int = uninitialized
   private var distributionType: PointPlacementModel.DistributionType = PointPlacementModel.DEFAULT_DISTRIBUTION_TYPE
-  private var poissonParams: PoissonParams = _
-  private var showVoronoiDiagram: Boolean = _
+  private var poissonParams: PoissonParams = uninitialized
+  private var showVoronoiDiagram: Boolean = uninitialized
   private var restartRequested = false
   private var finished: Boolean = false
   private var iterations: Int = 0

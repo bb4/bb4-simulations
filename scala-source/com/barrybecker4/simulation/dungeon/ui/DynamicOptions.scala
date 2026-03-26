@@ -12,6 +12,8 @@ import java.awt.*
 import java.awt.event.*
 import javax.swing.*
 
+import scala.compiletime.uninitialized
+
 
 /**
  * Dynamic controls for the Dungeon generator that will show on the right.
@@ -31,10 +33,10 @@ class DynamicOptions(listener: DungeonOptionsChangedListener)
   add(generalPanel)
   add(Box.createVerticalStrut(SPACING))
 
-  private var resetButton: JButton = _
-  private var parameterSliders: ParameterSliders = _
-  private var halfPaddedCheckBox: JCheckBox = _
-  private var showGridCHeckBox: JCheckBox = _
+  private var resetButton: JButton = uninitialized
+  private var parameterSliders: ParameterSliders = uninitialized
+  private var halfPaddedCheckBox: JCheckBox = uninitialized
+  private var showGridCHeckBox: JCheckBox = uninitialized
 
   private def createGeneralControls = {
     val panel = new JPanel()

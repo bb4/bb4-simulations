@@ -5,6 +5,8 @@ import com.barrybecker4.common.app.ILog
 import com.barrybecker4.ui.dialogs.OutputWindow
 import com.barrybecker4.ui.util.Log
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Singleton instance of logger.
@@ -16,7 +18,7 @@ object Logger {
   val LOG_LEVEL = 0
 
   /** The singleton instance */
-  private var logger: Log = _
+  private var logger: Log = uninitialized
 
   def getInstance: ILog = {
     if (logger == null) {

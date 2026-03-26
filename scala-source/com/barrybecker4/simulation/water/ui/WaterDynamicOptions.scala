@@ -7,6 +7,8 @@ import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, Slid
 import javax.swing._
 import WaterDynamicOptions._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Dynamic controls for the Fluid simulation.
@@ -30,7 +32,7 @@ object WaterDynamicOptions {
 class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
-  private var showVelocities: JCheckBox = _
+  private var showVelocities: JCheckBox = uninitialized
 
   setBorder(BorderFactory.createEtchedBorder)
   val controlsPanel = new JPanel

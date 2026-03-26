@@ -9,6 +9,8 @@ import java.awt.{BorderLayout, Component, FlowLayout}
 import java.awt.event.{ItemEvent, ItemListener}
 import javax.swing.{BorderFactory, BoxLayout, JComboBox, JLabel, JPanel}
 
+import scala.compiletime.uninitialized
+
 
 /**
   * There are basic trading options, and then there is the trading strategy.
@@ -34,7 +36,7 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
   startingInvestmentPercentField.setAlignmentX(Component.CENTER_ALIGNMENT)
   theoreticalMaxGainField.setAlignmentX(Component.CENTER_ALIGNMENT)
 
-  private var strategyCombo: JComboBox[String] = _
+  private var strategyCombo: JComboBox[String] = uninitialized
   private val tradingPlugins = new StrategyPlugins[TradingStrategy](
     "com.barrybecker4.simulation.trading.model.tradingstrategy",
     classOf[TradingStrategy],

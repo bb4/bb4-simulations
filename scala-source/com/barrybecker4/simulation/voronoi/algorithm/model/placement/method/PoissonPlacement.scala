@@ -5,6 +5,8 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 
 import scala.util.Random
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Everything we need to know to compute the Voronoi diagram.
@@ -15,9 +17,9 @@ class PoissonPlacement(
     val width: Int, val height: Int, margin: Int,
     var params: PoissonParams, var numPoints: Int, rnd: Random) extends PlacementMethod {
 
-  private var grid: PoissonGrid = _
-  private var activeList: ActiveList = _
-  private var activePoint: Point = _
+  private var grid: PoissonGrid = uninitialized
+  private var activeList: ActiveList = uninitialized
+  private var activePoint: Point = uninitialized
 
   rnd.setSeed(0)
   grid = PoissonGrid(width, height, margin, params.radius)

@@ -8,6 +8,8 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 
 import scala.util.Random
 
+import scala.compiletime.uninitialized
+
 
 object PointPlacementModel {
   enum DistributionType:
@@ -26,7 +28,7 @@ class PointPlacementModel private[algorithm](val width: Int, val height: Int,
   var params: PoissonParams, var numPoints: Int, distributionType: DistributionType, rnd: Random = RND) {
 
   
-  private var placementMethod: PlacementMethod = _
+  private var placementMethod: PlacementMethod = uninitialized
 
   def getWidth: Int = width
   def getHeight: Int = height
