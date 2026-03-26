@@ -26,8 +26,8 @@ import Segment._
   * @author Barry Becker
   */
 object Segment {
-  /** Edge angles are not allowed to become less than this - to prevent instability. */
-  private val MIN_EDGE_ANGLE = 0.3
+  /** Minimum dot product of edge directions (with neighbor) for stability; used by [[com.barrybecker4.simulation.snake.Snake.isStable]]. */
+  private[snake] val MinEdgeAngleDotProduct = 0.3
   /** number of particles per segment (2 of which are shared between segments)  */
   private[geometry] val NUM_PARTICLES = 5
   /** index of the center particle */
@@ -49,13 +49,15 @@ object Segment {
   */
 class Segment(width1: Double, width2: Double, var length: Double,
               pos: Point2d, val segmentInFront: Option[Segment],
-              segmentIndex: Int, snake: Snake) {
+              val segmentIndex: Int, val snake: Snake) {
 
   protected var halfLength: Double = length / 2.0
   // keep pointers to the segments in front and in back
   protected var segmentInBack: Option[Segment] = None
   val edges: Array[Edge] = Array.ofDim[Edge](8)
   val particles: Array[Particle] = Array.ofDim[Particle](5)
+  /** Geometric mass factor before [[com.barrybecker4.simulation.snake.LocomotionParameters.massScale]]. */
+  protected var baseParticleMass: Double = 0
   protected var particleMass: Double = 0
   /** The unit directional spinal vector */
   protected var direction = new Vector2d(0, 0)
@@ -88,12 +90,30 @@ class Segment(width1: Double, width2: Double, var length: Double,
   protected def commonInit(width1: Double, width2: Double, pos: Point2d,
                            segmentIdx: Int, snake: Snake): Unit = {
     val segmentMass: Double = (width1 + width2) * halfLength
-    particleMass = Segment.MASS_SCALE * segmentMass / 3
+    baseParticleMass = Segment.MASS_SCALE * segmentMass / 3
+    particleMass = scaledParticleMass(snake)
     val scale = 1.0 //snake.getRenderingParams().getScale();
     particles(0) = new Particle(pos.x - halfLength, pos.y + scale * width2 / 2.0, particleMass)
     particles(3) = new Particle(pos.x - halfLength, pos.y - scale * width2 / 2.0, particleMass)
     particles(Segment.CENTER_INDEX) = new Particle(pos.x, pos.y, particleMass)
   }
+
+  private def scaledParticleMass(snake: Snake): Double =
+    baseParticleMass * snake.locomotionParams.massScale / LocomotionParameters.DefaultMassScale
+
+  /** Called each step so [[com.barrybecker4.simulation.snake.LocomotionParameters.massScale]] changes take effect. */
+  def syncParticleMassFromLocomotionParams(): Unit = {
+    particleMass = scaledParticleMass(snake)
+    var i = 0
+    while (i < NUM_PARTICLES) {
+      if particles(i) != null then particles(i).mass = particleMass
+      i += 1
+    }
+  }
+
+  /** Particles that participate in body motion (shared edge particles excluded except at tail). */
+  def particleParticipatesInBodyMotion(i: Int): Boolean =
+    (i != 3 && i != 0) || isTail
 
   protected def initCommonEdges(): Unit = {
     edges(0) = new Edge(particles(0), particles(1)) // bottom (left of snake)
@@ -117,10 +137,13 @@ class Segment(width1: Double, width2: Double, var length: Double,
   def getCenterParticle: Particle = particles(Segment.CENTER_INDEX)
   private def getHalfLength = halfLength
 
-  def getRightForce: Vector2d = edges(0).getForce
-  def getLeftForce: Vector2d = edges(2).getForce
-  def getRightBackDiagForce: Vector2d = edges(4).getForce
-  def getLeftBackDiagForce: Vector2d = edges(7).getForce
+  private def springK: Double = snake.locomotionParams.springK
+  private def springDamping: Double = snake.locomotionParams.springDamping
+
+  def getRightForce: Vector2d = edges(0).getForce(springK, springDamping)
+  def getLeftForce: Vector2d = edges(2).getForce(springK, springDamping)
+  def getRightBackDiagForce: Vector2d = edges(4).getForce(springK, springDamping)
+  def getLeftBackDiagForce: Vector2d = edges(7).getForce(springK, springDamping)
 
   def getSpinalDirection: Vector2d = {
     if (isTail)
@@ -159,24 +182,18 @@ class Segment(width1: Double, width2: Double, var length: Double,
   }
 
   def translate(vec: Vector2d): Unit = {
-    for (i <- 0 until Segment.NUM_PARTICLES) {
-      if ((i != 3 && i != 0) || isTail) {
-        velocityVec.set(particles(i).x, particles(i).y)
-        velocityVec.add(vec)
-        particles(i).set(velocityVec.x, velocityVec.y)
-      }
+    for (i <- 0 until Segment.NUM_PARTICLES if particleParticipatesInBodyMotion(i)) {
+      velocityVec.set(particles(i).x, particles(i).y)
+      velocityVec.add(vec)
+      particles(i).set(velocityVec.x, velocityVec.y)
     }
   }
 
-  /** @return true if either of the edge segments bends to much when compared to its nbr in the next segment */
+  /** @return true if either of the edge segments bends too much when compared to its nbr in the next segment */
   def isStable: Boolean = {
     val dot1 = edges(0).dot(segmentInFront.get.getRightEdge)
     val dot2 = edges(2).dot(segmentInFront.get.getLeftEdge)
-    if (dot1 < Segment.MIN_EDGE_ANGLE || dot2 < Segment.MIN_EDGE_ANGLE) {
-      println("dot1=" + dot1 + " dot2=" + dot2)
-      return false
-    }
-    true
+    dot1 >= Segment.MinEdgeAngleDotProduct && dot2 >= Segment.MinEdgeAngleDotProduct
   }
 
   override def toString: String = {

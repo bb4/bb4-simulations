@@ -8,6 +8,7 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionListener
+import scala.compiletime.uninitialized
 
 
 /**
@@ -19,46 +20,26 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
   extends NewtonianSimOptionsDialog(parent, simulator) with ActionListener {
 
   /** type of snake to show.   */
-  private var snakeCombo: JComboBox[String] = _
-  private var waveTypeCombo: JComboBox[WaveType] = _
+  private var snakeCombo: JComboBox[String] = uninitialized
+  private var waveTypeCombo: JComboBox[WaveType] = uninitialized
   // snake numeric param options controls
-  private var waveSpeedField: NumberInput = _
-  private var waveAmplitudeField: NumberInput = _
-  private var wavePeriodField: NumberInput = _
-  private var massScaleField: NumberInput = _
-  private var springKField: NumberInput = _
-  private var springDampingField: NumberInput = _
+  private var waveSpeedField: NumberInput = uninitialized
+  private var waveAmplitudeField: NumberInput = uninitialized
+  private var wavePeriodField: NumberInput = uninitialized
+  private var massScaleField: NumberInput = uninitialized
+  private var springKField: NumberInput = uninitialized
+  private var springDampingField: NumberInput = uninitialized
 
   override protected def showCustomTabByDefault: Boolean = true
 
   override protected def createCustomParamPanel: JPanel = {
-    val customParamPanel = new JPanel
-    customParamPanel.setLayout(new BorderLayout)
+    val customParamPanel = new JPanel(new BorderLayout)
     val snakeParamPanel = new JPanel
     snakeParamPanel.setLayout(new BoxLayout(snakeParamPanel, BoxLayout.Y_AXIS))
     snakeParamPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Snake Parameters"))
-    val snakeModel = new DefaultComboBoxModel[String](SnakeType.values.map(_.name))
-    snakeCombo = new JComboBox[String](snakeModel)
-    snakeCombo.setToolTipText("Select a type of snake to show.")
-    val waveModel = new DefaultComboBoxModel[WaveType]()
-    WaveType.VALUES.foreach(w => waveModel.addElement(w))
-    waveTypeCombo = new JComboBox[WaveType](waveModel)
-    waveTypeCombo.setToolTipText("Select a type of wave form to use for muscle contractions.")
-    val params = getSimulator.asInstanceOf[SnakeSimulator].getLocomotionParams
-
-    waveSpeedField = new NumberInput("Wave Speed (.001 slow - .9 fast):  ", params.waveSpeed,
-      "This controls the speed at which the force function that travels down the body of the snake", 0.001, 0.9, false)
-    waveAmplitudeField = new NumberInput("Wave Amplitude (.001 small - 2.0 large):  ", params.waveAmplitude,
-      "This controls the amplitude of the force function that travels down the body of the snake", 0.001, 0.9, false)
-    wavePeriodField = new NumberInput("Wave Period (0.5 small - 5.0 large):  ", params.wavePeriod,
-      "This controls the period (in number of PI radians) of the force function " +
-        "that travels down the body of the snake", 0.5, 5.0, false)
-    massScaleField = new NumberInput("Mass Scale (.1 small - 6.0 large):  ", params.massScale,
-      "This controls the overall mass of the snake. A high number indicates that the snake weighs a lot.", 0.1, 6.0, false)
-    springKField = new NumberInput("Spring Stiffness  (0.1 small - 4.0 large):  ", params.springK,
-      "This controls the stiffness of the springs used to make up the snake's body.", 0.1, 4.0, false)
-    springDampingField = new NumberInput("Spring Damping (.1 small - 4.0 large):  ", params.springDamping,
-      "This controls how quickly the spring returns to rest once released.", 0.1, 4.0, false)
+    snakeCombo = buildSnakeTypeCombo()
+    waveTypeCombo = buildWaveTypeCombo()
+    buildNumericFields(getSimulator.asInstanceOf[SnakeSimulator].getLocomotionParams)
     snakeParamPanel.add(snakeCombo)
     snakeParamPanel.add(waveTypeCombo)
     snakeParamPanel.add(waveSpeedField)
@@ -72,9 +53,39 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     customParamPanel
   }
 
+  private def buildSnakeTypeCombo(): JComboBox[String] = {
+    val snakeModel = new DefaultComboBoxModel[String](SnakeType.values.map(_.name))
+    val combo = new JComboBox[String](snakeModel)
+    combo.setToolTipText("Select a type of snake to show.")
+    combo
+  }
+
+  private def buildWaveTypeCombo(): JComboBox[WaveType] = {
+    val waveModel = new DefaultComboBoxModel[WaveType]()
+    WaveType.VALUES.foreach(w => waveModel.addElement(w))
+    val combo = new JComboBox[WaveType](waveModel)
+    combo.setToolTipText("Select a type of wave form to use for muscle contractions.")
+    combo
+  }
+
+  private def buildNumericFields(params: LocomotionParameters): Unit = {
+    waveSpeedField = new NumberInput("Wave Speed (.001 slow - .9 fast):  ", params.waveSpeed,
+      "This controls the speed at which the force function that travels down the body of the snake", 0.001, 0.9, false)
+    waveAmplitudeField = new NumberInput("Wave Amplitude (.001 small - 2.0 large):  ", params.waveAmplitude,
+      "This controls the amplitude of the force function that travels down the body of the snake", 0.001, 0.9, false)
+    wavePeriodField = new NumberInput("Wave Period (0.5 small - 5.0 large):  ", params.wavePeriod,
+      "This controls the period (in number of PI radians) of the force function " +
+        "that travels down the body of the snake", 0.5, 5.0, false)
+    massScaleField = new NumberInput("Mass Scale (.1 small - 6.0 large):  ", params.massScale,
+      "This controls the overall mass of the snake. A high number indicates that the snake weighs a lot.", 0.1, 6.0, false)
+    springKField = new NumberInput("Spring Stiffness  (0.1 small - 4.0 large):  ", params.springK,
+      "This controls the stiffness of the springs used to make up the snake's body.", 0.1, 4.0, false)
+    springDampingField = new NumberInput("Spring Damping (.1 small - 4.0 large):  ", params.springDamping,
+      "This controls how quickly the spring returns to rest once released.", 0.1, 4.0, false)
+  }
+
   override protected def ok(): Unit = {
     super.ok()
-    // set the snake params
     val simulator = getSimulator.asInstanceOf[SnakeSimulator]
     val params = simulator.getLocomotionParams
     params.waveSpeed = waveSpeedField.getValue

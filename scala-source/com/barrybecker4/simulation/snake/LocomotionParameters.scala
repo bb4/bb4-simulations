@@ -16,8 +16,11 @@ object LocomotionParameters { // I used simulated annealing to come up with thes
   private[snake] val WAVE_PERIOD = 3.6346 // 3.0
 
   private val USE_FRICTION = true
-  private val MASS_SCALE = 1.5
-  private val SPRING_K = 0.6
+  /** Default matches prior UI default; particle mass is scaled relative to this. */
+  val DefaultMassScale: Double = 1.5
+  private val MASS_SCALE = DefaultMassScale
+  /** Default matches the spring constant previously hardcoded in Edge. */
+  private val SPRING_K = 0.8
   private val SPRING_DAMPING = 1.2
   private val STATIC_FRICTION = 0.1
   private val DYNAMIC_FRICTION = 0.1

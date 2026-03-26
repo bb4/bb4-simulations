@@ -39,7 +39,6 @@ final class EdgeRenderer private[rendering](val renderParams: RenderingParameter
     val y1 = (scale * part1.y).toInt
     val x2 = (scale * part2.x).toInt
     val y2 = (scale * part2.y).toInt
-    //println("scale = " + scale + "  x1 = " + x1 + " x2=" + x2)
     g.drawLine(x1, y1, x2, y2)
   }
 }

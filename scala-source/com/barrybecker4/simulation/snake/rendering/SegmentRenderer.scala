@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.snake.rendering
 import com.barrybecker4.simulation.snake.geometry.Particle
 import com.barrybecker4.simulation.snake.geometry.Segment
 import java.awt._
+import scala.compiletime.uninitialized
 
 
 object SegmentRenderer {
@@ -19,9 +20,8 @@ object SegmentRenderer {
   * @author Barry Becker
   */
 class SegmentRenderer private[rendering](val renderParams: RenderingParameters) {
-  //private val renderParams = new RenderingParameters
   private val edgeRenderer = new EdgeRenderer(renderParams)
-  private var g: Graphics2D = _
+  private var g: Graphics2D = uninitialized
 
   /** @param segment the segment to render. */
   def render(segment: Segment, g: Graphics2D): Unit = {

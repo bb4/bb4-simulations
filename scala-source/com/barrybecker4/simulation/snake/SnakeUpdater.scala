@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.snake
 
 import com.barrybecker4.simulation.snake.geometry.SegmentUpdater
+import scala.compiletime.uninitialized
 
 
 /**
@@ -10,7 +11,7 @@ import com.barrybecker4.simulation.snake.geometry.SegmentUpdater
   */
 class SnakeUpdater private[snake]() {
   private var segmentUpdater = new SegmentUpdater
-  private var snake: Snake = _
+  private var snake: Snake = uninitialized
   /** the time since the start of the simulation */
   private var time = 0.0
   private val locomotionParams = new LocomotionParameters
@@ -22,6 +23,7 @@ class SnakeUpdater private[snake]() {
     */
   def stepForward(snake: Snake, timeStep: Double): Double = {
     this.snake = snake
+    snake.syncParticleMassesFromLocomotionParams()
     updateParticleForces()
     if (locomotionParams.useFriction) updateFrictionalForces()
     updateParticleAccelerations()
@@ -34,6 +36,11 @@ class SnakeUpdater private[snake]() {
 
   /**  Parameters controlling the movement (i.e. locomotion) */
   def getLocomotionParams: LocomotionParameters = locomotionParams
+
+  /** Reset the muscular contraction clock (used in [[contractMuscles]]); call when restoring initial snake state. */
+  private[snake] def resetSimulationTime(): Unit = {
+    time = 0.0
+  }
 
   /** update forces */
   private def updateParticleForces(): Unit = { // apply the sinusoidal muscular contraction function to the

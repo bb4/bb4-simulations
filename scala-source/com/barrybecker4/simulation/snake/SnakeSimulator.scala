@@ -1,23 +1,21 @@
 // Copyright by Barry G. Becker, 2016-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake
 
-import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.common.format.FormatUtil
-import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.{DoubleParameter, Parameter}
-import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
+import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.rendering.BackgroundGridRenderer
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.snake.rendering.RenderingParameters
 import com.barrybecker4.simulation.snake.rendering.SnakeRenderer
-import com.barrybecker4.ui.util.GUIUtil
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
 import java.awt._
 import com.barrybecker4.simulation.snake.data.{SnakeData, SnakeType}
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -45,37 +43,62 @@ object SnakeSimulator {
   private val YDIM = 10
   private val CELL_SIZE = 80.0
   private val GRID_COLOR = new Color(0, 0, 60, 100)
+
+  /** Physics steps per round when estimating locomotion fitness (no rendering). */
+  private val FitnessStepsPerRound = 400
+  /** Outer rounds: stop when speed plateaus or snake becomes unstable. */
+  private val FitnessMaxRounds = 25
+  private val FitnessSpeedImprovementEps = 1e-5
+  /** Penalize configurations where the snake becomes unstable. */
+  private val UnstableFitnessPenalty = 100000.0
+  private val MinSpeedForFitness = 1e-9
+
+  private def fitnessFromSpeed(speed: Double): Double =
+    1.0 / math.max(speed, MinSpeedForFitness)
 }
 
 class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake") {
 
   private val updater: SnakeUpdater = new SnakeUpdater()
   /** change in center of the snake between time steps */
-  private var oldCenter: Point2d = _
+  private var oldCenter: Point2d = uninitialized
   /** the overall distance the the snake has travelled so far. */
   private val distance = new Vector2d(0.0, 0.0)
   /** magnitude of the snakes velocity vector */
   private var velocity: Double = 0
   private val gridColor = SnakeSimulator.GRID_COLOR
   private val renderParams = new RenderingParameters
-  private var renderer: SnakeRenderer = _
-  private var snake: Snake = Snake(snakeData)
+  private var renderer: SnakeRenderer = uninitialized
+  private var snake: Snake = Snake(snakeData, updater.getLocomotionParams)
   commonInit()
+  reinitializeViewAndClock()
 
   def this() = {
     this(SnakeType.LONG_SNAKE.snakeData)
   }
 
-  override protected def reset(): Unit = { snake.reset()}
+  override protected def reset(): Unit = {
+    snake.reset()
+    reinitializeViewAndClock()
+  }
   override protected def getInitialTimeStep: Double = SnakeSimulator.INITIAL_TIME_STEP
 
   def setSnakeData(snakeData: SnakeData): Unit = {
-    snake = Snake(snakeData)
+    snake = Snake(snakeData, updater.getLocomotionParams)
     commonInit()
+    reinitializeViewAndClock()
+  }
+
+  /** Align camera/scroll state and physics clock with the current [[snake]] (after reset or new geometry). */
+  private def reinitializeViewAndClock(): Unit = {
+    updater.resetSimulationTime()
+    oldCenter = new Point2d(snake.getCenter)
+    distance.set(0.0, 0.0)
+    velocity = 0.0
+    tStep = getInitialTimeStep
   }
 
   private def commonInit(): Unit = {
-    oldCenter = snake.getCenter
     renderer = new SnakeRenderer(renderParams)
     setNumStepsPerFrame(SnakeSimulator.NUM_STEPS_PER_FRAME)
     this.setPreferredSize(
@@ -125,7 +148,6 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
   override def createDynamicControls = new SnakeDynamicOptions(this)
   override def doOptimization(): Unit = {
     val optimizer = new Optimizer(this)
-      //, Some(FileUtil.getHomeDir + "performance/snake/snake_optimization.txt"))
     setPaused(false)
     optimizer.doOptimization(GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
   }
@@ -156,33 +178,53 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
   override protected def getStatusMessage: String = super.getStatusMessage + "    velocity=" + FormatUtil.formatNumber(velocity)
 
   /**
-    * *** implements the key method of the Optimizee interface
-    * evaluates the snake's fitness.
-    * The measure is purely based on its velocity.
-    * If the snake becomes unstable, then 0.0 is returned.
+    * Implements the Optimizee interface: fitness from average center speed over physics steps only
+    * (does not depend on [[paint]] or display refresh).
     */
   override def evaluateFitness(params: ParameterArray): Double = {
     val locoParams = updater.getLocomotionParams
     locoParams.waveSpeed = params.get(0).getValue
     locoParams.waveAmplitude = params.get(1).getValue
     locoParams.wavePeriod = params.get(2).getValue
-    var stable = true
+    snake.reset()
+    updater.resetSimulationTime()
+    val (stable, bestSpeed) = runFitnessConvergence()
+    if (!stable) SnakeSimulator.UnstableFitnessPenalty
+    else SnakeSimulator.fitnessFromSpeed(bestSpeed)
+  }
+
+  /** Advance the simulation in rounds until speed plateaus or the snake becomes unstable. */
+  private def runFitnessConvergence(): (Boolean, Double) = {
+    var oldSpeed = 0.0
     var improved = true
-    var oldVelocity = 0.0
-    var ct = 0
-    while ( {
-      stable && improved
-    }) { // let the snake run for a while
-      ThreadUtil.sleep(1000 + (3000 / (1.0 + 0.2 * ct)).toInt)
-      improved = (velocity - oldVelocity) > 0.00001
-      oldVelocity = velocity
-      ct += 1
+    var round = 0
+    var stable = true
+    while (round < SnakeSimulator.FitnessMaxRounds && stable && improved) {
+      val speed = sampleAverageCenterSpeed(SnakeSimulator.FitnessStepsPerRound, SnakeSimulator.INITIAL_TIME_STEP)
+      improved = (speed - oldSpeed) > SnakeSimulator.FitnessSpeedImprovementEps
+      oldSpeed = speed
       stable = snake.isStable
+      round += 1
     }
-    if (!stable) {
-      println("SnakeSim unstable")
-      100000.0
+    (stable, oldSpeed)
+  }
+
+  /**
+    * Average speed of the snake center of mass over the given number of [[SnakeUpdater.stepForward]] calls.
+    */
+  private def sampleAverageCenterSpeed(steps: Int, initialDt: Double): Double = {
+    val c0 = new Point2d(snake.getCenter)
+    var dt = initialDt
+    var elapsed = 0.0
+    var i = 0
+    while (i < steps) {
+      val used = dt
+      dt = updater.stepForward(snake, dt)
+      elapsed += used
+      i += 1
     }
-    else 1.0 / oldVelocity
+    val c1 = snake.getCenter
+    if (elapsed <= 0.0) 0.0
+    else Math.hypot(c1.x - c0.x, c1.y - c0.y) / elapsed
   }
 }

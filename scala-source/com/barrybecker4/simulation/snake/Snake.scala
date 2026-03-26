@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.snake.geometry.HeadSegment
 import com.barrybecker4.simulation.snake.geometry.Segment
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
+import scala.compiletime.uninitialized
 
 
 /**
@@ -26,17 +27,27 @@ import javax.vecmath.Vector2d
   *
   * Use a hardcoded static data interface to initialize so it can be easily run in an applet without using resources.
   * @param snakeData defines the snake geometry
+  * @param locomotionParams shared parameters for mass, springs, and locomotion (same object as [[SnakeSimulator]]'s updater)
   * @author Barry Becker
   */
-case class Snake(snakeData: SnakeData) {
+class Snake(val snakeData: SnakeData, val locomotionParams: LocomotionParameters) {
 
   /** the array of segments which make up the snake */
-  private var segment: Array[Segment] = _
+  private var segment: Array[Segment] = uninitialized
   initFromData()
 
   def reset(): Unit = { resetFromData() }
   def getNumSegments: Int = snakeData.numSegments
   def getSegment(i: Int): Segment = segment(i)
+
+  /** Apply current [[LocomotionParameters.massScale]] to all segment particles (call once per simulation step). */
+  def syncParticleMassesFromLocomotionParams(): Unit = {
+    var i = 0
+    while (i < snakeData.numSegments) {
+      getSegment(i).syncParticleMassFromLocomotionParams()
+      i += 1
+    }
+  }
 
   /** use this if you need to avoid reading from a file */
   private def initFromData(): Unit = {
@@ -81,13 +92,10 @@ case class Snake(snakeData: SnakeData) {
     for (i <- 0 until snakeData.numSegments) segment(i).translate(vec)
 
   /**
-    * the snake is not considered stable if the angle between any edge segments exceeds Snake.MIN_EDGE_ANGLE
+    * The snake is not considered stable if the angle between any edge segments exceeds
+    * [[com.barrybecker4.simulation.snake.geometry.Segment.MinEdgeAngleDotProduct]] (see segment stability).
     * @return true if the snake has not gotten twisted too badly
     */
-  def isStable: Boolean = {
-    for (i <- 2 until snakeData.numSegments) {
-      if (!segment(i).isStable) return false
-    }
-    true
-  }
+  def isStable: Boolean =
+    (2 until snakeData.numSegments).forall(i => segment(i).isStable)
 }

@@ -9,11 +9,9 @@ import java.awt.geom.Rectangle2D
   * @author Barry Becker
   */
 object Edge {
-  /** constants related the the spring for this edge segment  */
-  private val K = 0.8 // default  .6
-
-  /** the damping coefficient */
-  private val D = 1.2 // default
+  /** Defaults used when spring constants are not supplied (e.g. tests). */
+  val DefaultSpringK: Double = 0.8
+  val DefaultSpringDamping: Double = 1.2
 }
 
 /**
@@ -24,10 +22,6 @@ object Edge {
 class Edge private[geometry](val firstParticle: Particle, val secondParticle: Particle) {
 
   private val segment = new Line2D.Double(firstParticle.x, firstParticle.y, secondParticle.x, secondParticle.y)
-  /** the spring constant K (large K = stiffer) */
-  private val k = Edge.K
-  /** damping constant  */
-  private val damping = Edge.D
 
   /** these act like temporary variables for some calculations avoiding many object constructions */
   private val direction = new Vector2d
@@ -61,7 +55,7 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
     * k(L-l) - D* dl/dt
     * @return the computed force exerted on the particle.
     */
-  def getForce: Vector2d = {
+  def getForce(springK: Double, springDamping: Double): Vector2d = {
     force.set(secondParticle)
     force.sub(firstParticle)
     direction.set(force)
@@ -70,18 +64,17 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
     dampingVec.set(secondParticle.velocity)
     dampingVec.sub(firstParticle.velocity)
     val halfEffectiveL = effectiveLength / 2.0
-    val damp = damping * dampingVec.dot(direction)
+    val damp = springDamping * dampingVec.dot(direction)
     length = force.length
     // never let the force get too great or too small
     if (length > 2.0 * effectiveLength)
-      force.scale(-k * (effectiveLength - length) * (effectiveLength - length) / effectiveLength - damp)
+      force.scale(-springK * (effectiveLength - length) * (effectiveLength - length) / effectiveLength - damp)
     else if (length < halfEffectiveL) { // prevent the springs from getting too compressed
       val lengthDiff = restingLength - length
-      force.scale(k * (lengthDiff + 100000.0 * (halfEffectiveL - length)) / halfEffectiveL - damp)
+      force.scale(springK * (lengthDiff + 100000.0 * (halfEffectiveL - length)) / halfEffectiveL - damp)
     }
-    else { //if (d>1.0)
-      //   println("f="+k*(effectiveLength-length)+" - d="+d);
-      force.scale(k * (effectiveLength - length) - damp)
+    else {
+      force.scale(springK * (effectiveLength - length) - damp)
     }
     force
   }

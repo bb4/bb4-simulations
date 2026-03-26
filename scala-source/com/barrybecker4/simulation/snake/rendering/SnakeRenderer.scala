@@ -10,7 +10,7 @@ import java.awt._
   * @author Barry Becker
   */
 class SnakeRenderer(val params: RenderingParameters) {
-  private var segmentRenderer = new SegmentRenderer(params)
+  private val segmentRenderer = new SegmentRenderer(params)
 
   /** render each segment of the snake */
   def render(snake: Snake, g: Graphics2D): Unit = {

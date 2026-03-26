@@ -28,14 +28,30 @@ class SegmentUpdater() {
   def updateForces(segment: Segment): Unit = {
     val edges = segment.edges
     val particles = segment.particles
-    val e0Force = edges(0).getForce
-    val e1Force = edges(1).getForce
-    val e2Force = edges(2).getForce
-    val e4Force = edges(4).getForce
-    val e5Force = edges(5).getForce
-    val e6Force = edges(6).getForce
-    val e7Force = edges(7).getForce
-    // update the front 3 particle forces
+    val k = segment.snake.locomotionParams.springK
+    val d = segment.snake.locomotionParams.springDamping
+    val e0Force = edges(0).getForce(k, d)
+    val e1Force = edges(1).getForce(k, d)
+    val e2Force = edges(2).getForce(k, d)
+    val e4Force = edges(4).getForce(k, d)
+    val e5Force = edges(5).getForce(k, d)
+    val e6Force = edges(6).getForce(k, d)
+    val e7Force = edges(7).getForce(k, d)
+    applyMainParticleForcesFromEdges(particles, e0Force, e1Force, e2Force, e4Force, e5Force, e6Force, e7Force)
+    if (!segment.isHead) applyCouplingFromSegmentInFront(segment, particles)
+    if (segment.isTail) applyTailParticleForces(edges, particles, k, d, e0Force, e2Force, e4Force, e7Force)
+  }
+
+  private def applyMainParticleForcesFromEdges(
+    particles: Array[Particle],
+    e0Force: Vector2d,
+    e1Force: Vector2d,
+    e2Force: Vector2d,
+    e4Force: Vector2d,
+    e5Force: Vector2d,
+    e6Force: Vector2d,
+    e7Force: Vector2d
+  ): Unit = {
     particles(1).force.set(0, 0)
     particles(1).force.add(e0Force)
     particles(1).force.sub(e5Force)
@@ -49,25 +65,35 @@ class SegmentUpdater() {
     particles(CENTER_INDEX).force.add(e7Force)
     particles(CENTER_INDEX).force.add(e5Force)
     particles(CENTER_INDEX).force.add(e6Force)
-    if (!segment.isHead) {
-      val segmentInFront = segment.segmentInFront.get
-      particles(1).force.sub(segmentInFront.getRightForce)
-      particles(1).force.sub(segmentInFront.getRightBackDiagForce)
-      particles(2).force.add(segmentInFront.getLeftForce)
-      particles(2).force.sub(segmentInFront.getLeftBackDiagForce)
-    }
-    if (segment.isTail) {
-      val e3Force = edges(3).getForce
-      // update back 2 particle forces if at tail
-      particles(0).force.set(0, 0)
-      particles(0).force.sub(e3Force)
-      particles(0).force.sub(e0Force)
-      particles(0).force.sub(e4Force)
-      particles(3).force.set(0, 0)
-      particles(3).force.add(e3Force)
-      particles(3).force.sub(e7Force)
-      particles(3).force.add(e2Force)
-    }
+  }
+
+  private def applyCouplingFromSegmentInFront(segment: Segment, particles: Array[Particle]): Unit = {
+    val segmentInFront = segment.segmentInFront.get
+    particles(1).force.sub(segmentInFront.getRightForce)
+    particles(1).force.sub(segmentInFront.getRightBackDiagForce)
+    particles(2).force.add(segmentInFront.getLeftForce)
+    particles(2).force.sub(segmentInFront.getLeftBackDiagForce)
+  }
+
+  private def applyTailParticleForces(
+    edges: Array[Edge],
+    particles: Array[Particle],
+    springK: Double,
+    springDamping: Double,
+    e0Force: Vector2d,
+    e2Force: Vector2d,
+    e4Force: Vector2d,
+    e7Force: Vector2d
+  ): Unit = {
+    val e3Force = edges(3).getForce(springK, springDamping)
+    particles(0).force.set(0, 0)
+    particles(0).force.sub(e3Force)
+    particles(0).force.sub(e0Force)
+    particles(0).force.sub(e4Force)
+    particles(3).force.set(0, 0)
+    particles(3).force.add(e3Force)
+    particles(3).force.sub(e7Force)
+    particles(3).force.add(e2Force)
   }
 
   /**
@@ -85,37 +111,49 @@ class SegmentUpdater() {
     val particles = segment.particles
     velocityVec.set(particles(i).force)
     val forceMag = velocityVec.length
-    // the frictional force is the weight of the segment (particle mass *3) * coefficient of friction
-    var frictionalForce = .0
-    // take into account friction for the center particle
     changeVec.set(particles(i).velocity)
     val velMag = changeVec.length
     if (velMag > SegmentUpdater.EPS) {
-      changeVec.normalize()
-      frictionalForce = -particles(i).mass * params.dynamicFriction
-      changeVec.scale(frictionalForce)
-      // eliminate the frictional force in the spinal direction
-      val spineDir = segment.getSpinalDirection
-      val dot = spineDir.dot(changeVec)
-      if (dot < 0) { // then the velocity vector is going at least partially backwards
-        // remove the backwards component.
-        velocityVec.set(spineDir)
-        velocityVec.scale(dot)
-        changeVec.sub(velocityVec)
-      }
-    }
-    else if (velMag <= SegmentUpdater.EPS && forceMag > SegmentUpdater.EPS) {
-      changeVec.set(particles(i).force)
-      changeVec.normalize()
-      frictionalForce = -particles(i).mass * params.staticFriction
-      changeVec.scale(frictionalForce)
-    }
-    else { // velocity and force are both very near 0, so make them both 0
-      particles(i).force.set(0.0, 0.0)
-      particles(i).velocity.set(0.0, 0.0)
-      changeVec.set(0.0, 0.0)
+      applyDynamicFriction(segment, particles, i, params, changeVec)
+    } else if (velMag <= SegmentUpdater.EPS && forceMag > SegmentUpdater.EPS) {
+      applyStaticFriction(particles, i, params)
+    } else {
+      zeroCenterForceAndVelocity(particles, i)
     }
     particles(i).frictionalForce.set(changeVec)
+  }
+
+  private def applyDynamicFriction(
+    segment: Segment,
+    particles: Array[Particle],
+    i: Int,
+    params: LocomotionParameters,
+    velDir: Vector2d
+  ): Unit = {
+    velDir.normalize()
+    var frictionalForce = -particles(i).mass * params.dynamicFriction
+    changeVec.set(velDir)
+    changeVec.scale(frictionalForce)
+    val spineDir = segment.getSpinalDirection
+    val dot = spineDir.dot(changeVec)
+    if (dot < 0) {
+      velocityVec.set(spineDir)
+      velocityVec.scale(dot)
+      changeVec.sub(velocityVec)
+    }
+  }
+
+  private def applyStaticFriction(particles: Array[Particle], i: Int, params: LocomotionParameters): Unit = {
+    changeVec.set(particles(i).force)
+    changeVec.normalize()
+    val frictionalForce = -particles(i).mass * params.staticFriction
+    changeVec.scale(frictionalForce)
+  }
+
+  private def zeroCenterForceAndVelocity(particles: Array[Particle], i: Int): Unit = {
+    particles(i).force.set(0.0, 0.0)
+    particles(i).velocity.set(0.0, 0.0)
+    changeVec.set(0.0, 0.0)
   }
 
   /**
@@ -126,7 +164,7 @@ class SegmentUpdater() {
   def updateAccelerations(segment: Segment): Unit = {
     val particles: Array[Particle] = segment.particles
     for (i <- 0 until NUM_PARTICLES) {
-      if ((i != 3 && i != 0) || segment.isTail) {
+      if (segment.particleParticipatesInBodyMotion(i)) {
         velocityVec.set(particles(i).force)
         velocityVec.add(particles(i).frictionalForce)
         velocityVec.scale(1.0 / particles(i).mass)
@@ -149,11 +187,11 @@ class SegmentUpdater() {
     val particles: Array[Particle] = segment.particles
     var unstable = false
     for (i <- 0 until NUM_PARTICLES) {
-      if ((i != 3 && i != 0) || segment.isTail) { // the current velocity v0
+      if (segment.particleParticipatesInBodyMotion(i)) {
         velocityVec.set(particles(i).velocity)
         changeVec.set(particles(i).acceleration)
         changeVec.scale(timeStep)
-        if (changeVec.length > 100.0) { //println("becoming unstable vel mag="+changeVec.magnitude());
+        if (changeVec.length > 100.0) {
           unstable = true
         }
         velocityVec.add(changeVec)
@@ -172,7 +210,7 @@ class SegmentUpdater() {
   def updatePositions(segment: Segment, timeStep: Double): Unit = {
     val particles: Array[Particle] = segment.particles
     for (i <- 0 until NUM_PARTICLES) {
-      if ((i != 3 && i != 0) || segment.isTail) {
+      if (segment.particleParticipatesInBodyMotion(i)) {
         velocityVec.set(particles(i).x, particles(i).y)
         changeVec.set(particles(i).velocity)
         changeVec.scale(timeStep)
