@@ -1,11 +1,8 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures
 
-import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor.*
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
-import javax.vecmath.{Point2d, Vector2d}
 
 
 /**
@@ -77,11 +74,12 @@ case class CreatureProcessor(creature: Creature) {
     }
     else if (a.speed > 0 && !a.isBeingEaten) {
       val nbrs = new Neighbors(creature, grid)
-      if (a.hunger > HUNGRY_THRESH * cType.starvationThreshold && nbrs.nearestPrey.isDefined)
+      if (a.hunger > HUNGRY_THRESH * cType.starvationThreshold && nbrs.nearestPrey.isDefined) {
         a.prey = nbrs.nearestPrey
         moveTowardPreyAndEatIfPossible(a.prey.get)
-      else
-        a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend) // move toward friends and swarm
+      } else {
+        a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend)
+      }
       moveToNewLocation(grid)
     }
   }

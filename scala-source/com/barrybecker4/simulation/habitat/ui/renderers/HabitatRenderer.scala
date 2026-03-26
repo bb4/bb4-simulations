@@ -1,11 +1,10 @@
 // Copyright by Barry G. Becker, 2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.renderers
 
-import com.barrybecker4.simulation.habitat.creatures.Creature
 import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
-import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer
 
 import java.awt.*
+import scala.compiletime.uninitialized
 
 
 /**
@@ -15,7 +14,7 @@ import java.awt.*
 class HabitatRenderer private[habitat](var populations: Habitat) {
   private var width = 0
   private var height = 0
-  private var creatureRenderer: CreatureRenderer = _
+  private var creatureRenderer: CreatureRenderer = uninitialized
 
   def setSize(width: Int, height: Int): Unit = {
     this.width = width

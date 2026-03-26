@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.habitat.ui.options
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.simulation.habitat.HabitatSimulator
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions.*
-import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener}
+import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.simulation.habitat.creatures.populations.Habitat.{DEFAULT_HABITAT_INDEX, HABITATS}
 
 import javax.swing.*
@@ -13,6 +13,7 @@ import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 import javax.swing.border.EtchedBorder
 import javax.swing.event.{ChangeEvent, ChangeListener}
 import scala.collection.mutable.ArrayBuffer
+import scala.compiletime.uninitialized
 
 object DynamicOptions {
   val INITIAL_ITERATIONS_PER_FRAME = 1
@@ -31,16 +32,16 @@ class DynamicOptions(val simulator: HabitatSimulator)
                  with ItemListener with ActionListener {
 
   private val tabbedPane = new JTabbedPane()
-  private var numPixelsPerPointSlider: JSlider = _
-  private var iterationsPerFrameSlider: JSlider = _
-  private var debugCheckBox: JCheckBox = _
+  private var numPixelsPerPointSlider: JSlider = uninitialized
+  private var iterationsPerFrameSlider: JSlider = uninitialized
+  private var debugCheckBox: JCheckBox = uninitialized
 
-  private var useContinuousIteration: JCheckBox = _
-  private var nextButton: JButton = _
-  private val sliderGroups = createSliderGroups()
+  private var useContinuousIteration: JCheckBox = uninitialized
+  private var nextButton: JButton = uninitialized
+  private var sliderGroups: ArrayBuffer[CreatureSliderGroup] = createSliderGroups()
   private val topControlPanel = createTopControlPanel()
   private val bottomSlidersPanel = createBottomSlidersPanel()
-  private var habitatChoice: JComboBox[String] = _
+  private var habitatChoice: JComboBox[String] = uninitialized
 
   initialize()
 
@@ -193,7 +194,7 @@ class DynamicOptions(val simulator: HabitatSimulator)
     habitat.reset()
     simulator.setHabitat(habitat)
     tabbedPane.removeAll()
-    createSliderGroups()
+    sliderGroups = createSliderGroups()
     repaint()
   }
 

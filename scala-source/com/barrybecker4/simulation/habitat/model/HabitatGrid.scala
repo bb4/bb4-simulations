@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.model
 
-import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.habitat.creatures.Creature
 
 import javax.vecmath.Point2d

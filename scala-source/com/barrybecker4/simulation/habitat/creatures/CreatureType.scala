@@ -39,15 +39,11 @@ object CreatureType  {
     LION -> Set[CreatureType]() // king of the jungle, top of the food chain
   )
 
-  private var predatorToPreysMap: Map[CreatureType, Set[CreatureType]] = Map[CreatureType, Set[CreatureType]]()
-  for (creature <- VALUES) {
-    var preys = Set[CreatureType]()
-    for (potentialPrey <- VALUES) {
-      val preds: Set[CreatureType] = preyToPredatorsMap(potentialPrey)
-      if (preds.contains(creature)) preys += potentialPrey
-    }
-    predatorToPreysMap += (creature -> preys)
-  }
+  /** For each predator, the set of creature types it preys on (inverse of preyToPredatorsMap). */
+  private val predatorToPreysMap: Map[CreatureType, Set[CreatureType]] =
+    VALUES.map { predator =>
+      predator -> preyToPredatorsMap.filter(_._2.contains(predator)).keySet
+    }.toMap
 }
 
 class CreatureType(val name: String, val color: Color,

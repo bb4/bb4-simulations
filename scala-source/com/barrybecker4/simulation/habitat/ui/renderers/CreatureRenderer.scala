@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.habitat.ui.renderers
 
 import com.barrybecker4.simulation.habitat.creatures.Creature
-import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
 import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer.*
 
 import java.awt.*
@@ -74,37 +73,31 @@ case class CreatureRenderer(width: Int, height: Int) {
   private def drawConnectingLine(creature: Creature, g2: Graphics2D): Unit = {
     g2.setColor(Color.BLACK)
     val prey = creature.getPrey.get
-    var preyX = prey.getLocation.x
-    var preyY = prey.getLocation.y
-
-    var creatureX = creature.getLocation.x
-    var creatureY = creature.getLocation.y
-    val xdelta = creature.getLocation.x - preyX
-    val ydelta = creature.getLocation.y - preyY
-    if (Math.abs(xdelta) > 0.5) {
-      if (preyX < creatureX) {
-        if (preyX < (1 - creatureX)) preyX += 1.0
-        else creatureX -= 1.0
-      }
-      else {
-        if ((1 - preyX) < creatureX) preyX += 1.0
-        else creatureX -= 1.0
-      }
-    }
-    if (Math.abs(ydelta) > 0.5) {
-      if (preyY < creatureY) {
-        if (preyY < (1 - creatureY)) preyY += 1.0
-        else creatureY -= 1.0
-      }
-      else {
-        if ((1 - preyY) < creatureY) preyY += 1.0
-        else creatureY -= 1.0
-      }
-    }
+    val (preyX, creatureX) =
+      adjustTorusAxisForLine(prey.getLocation.x, creature.getLocation.x)
+    val (preyY, creatureY) =
+      adjustTorusAxisForLine(prey.getLocation.y, creature.getLocation.y)
 
     g2.drawLine(
       (creatureX * width).toInt, (creatureY * height).toInt,
       (preyX * width).toInt, (preyY * height).toInt
     )
+  }
+
+  /** On a torus, choose shifted coordinates so the line segment is the shortest in pixel space. */
+  private def adjustTorusAxisForLine(preyCoord: Double, creatureCoord: Double): (Double, Double) = {
+    var preyC = preyCoord
+    var creatureC = creatureCoord
+    val delta = creatureCoord - preyC
+    if (Math.abs(delta) > 0.5) {
+      if (preyC < creatureC) {
+        if (preyC < (1 - creatureC)) preyC += 1.0
+        else creatureC -= 1.0
+      } else {
+        if ((1 - preyC) < creatureC) preyC += 1.0
+        else creatureC -= 1.0
+      }
+    }
+    (preyC, creatureC)
   }
 }

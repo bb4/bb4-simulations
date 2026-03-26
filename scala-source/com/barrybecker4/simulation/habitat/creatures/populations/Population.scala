@@ -79,7 +79,9 @@ class Population(var creatureType: CreatureType) {
       val numToRetain = Math.max(spawnLocations.size - numToKill, 0)
       val numToStillKill = numToKill - (spawnLocations.size - numToRetain)
       spawnLocations = spawnLocations.take(numToRetain)
-      creatures = creatures.drop(numToStillKill)
+      // Deterministic culling: iterator order of HashSet is undefined; sort for stable behavior.
+      val sorted = creatures.toVector.sortBy(c => (c.getName, c.hashCode))
+      creatures = sorted.drop(numToStillKill).toSet
     }
 
     spawnLocations
@@ -109,8 +111,8 @@ class Population(var creatureType: CreatureType) {
     val (living, dead) = creatures.partition(_.isAlive)
     grid.removeCreatures(dead)
     creatures = living
-    if (creatures.size > origAlive)
-      println("starved: " + (origAlive - creatures.size) + " " + creatureType.name)
+    if (creatures.size < origAlive)
+      println("deaths: " + (origAlive - creatures.size) + " " + creatureType.name)
 
   def getSize: Int = creatures.size
   def getName: String = "Population of " + creatureType.name

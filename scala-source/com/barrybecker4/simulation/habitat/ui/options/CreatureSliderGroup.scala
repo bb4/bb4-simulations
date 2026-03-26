@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2016-2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.ui.options
 
-import com.barrybecker4.ui.sliders.SliderGroup
-import com.barrybecker4.ui.sliders.SliderProperties
-import CreatureSliderGroup._
+import com.barrybecker4.ui.sliders.{SliderGroup, SliderProperties}
+import CreatureSliderGroup.*
+import com.barrybecker4.simulation.habitat.creatures.CreatureType
 import com.barrybecker4.simulation.habitat.creatures.populations.Population
 
 
@@ -24,46 +24,52 @@ object CreatureSliderGroup {
   private val MIN_FACTOR = 0.2
   private val MAX_FACTOR = 6
 
-  private final def createSliderProperties(creaturePop: Population): Array[SliderProperties] = {
-    val ctype = creaturePop.creatureType
-    val normSpeed = ctype.normalSpeed
-    val props = if (normSpeed == 0) new Array[SliderProperties](6)
-    else new Array[SliderProperties](8)
-    val creatureName = ctype.name
-
+  private def baseSliderProperties(creatureName: String, ctype: CreatureType): Array[SliderProperties] = {
+    val props = new Array[SliderProperties](6)
     val size = ctype.size
-    props(0) = new SliderProperties(creatureName + CreatureSliderGroup.SIZE_LABEL,
-      CreatureSliderGroup.MIN_FACTOR * size, CreatureSliderGroup.MAX_FACTOR * size, size, 200)
+    props(0) = new SliderProperties(creatureName + SIZE_LABEL,
+      MIN_FACTOR * size, MAX_FACTOR * size, size, 200)
 
     val gestation = ctype.gestationPeriod
-    props(1) = new SliderProperties(creatureName + CreatureSliderGroup.GESTATION_LABEL, 1,
-      CreatureSliderGroup.MAX_FACTOR * gestation, gestation)
+    props(1) = new SliderProperties(creatureName + GESTATION_LABEL, 1,
+      MAX_FACTOR * gestation, gestation)
 
     val starveTime = ctype.starvationThreshold
-    props(2) = new SliderProperties(creatureName + CreatureSliderGroup.STARVATION_LABEL,
-      (CreatureSliderGroup.MIN_FACTOR * starveTime).toInt, CreatureSliderGroup.MAX_FACTOR * starveTime, starveTime)
+    props(2) = new SliderProperties(creatureName + STARVATION_LABEL,
+      (MIN_FACTOR * starveTime).toInt, MAX_FACTOR * starveTime, starveTime)
 
     val maxAge = ctype.maxAge
-    props(3) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_AGE_LABEL,
-      (CreatureSliderGroup.MIN_FACTOR * maxAge).toInt, CreatureSliderGroup.MAX_FACTOR * maxAge, maxAge)
+    props(3) = new SliderProperties(creatureName + MAX_AGE_LABEL,
+      (MIN_FACTOR * maxAge).toInt, MAX_FACTOR * maxAge, maxAge)
 
     val nutrition = ctype.nutritionalValue
-    props(4) = new SliderProperties(creatureName + CreatureSliderGroup.NUTRITION_LABEL, 1,
-      CreatureSliderGroup.MAX_FACTOR * nutrition, nutrition)
+    props(4) = new SliderProperties(creatureName + NUTRITION_LABEL, 1,
+      MAX_FACTOR * nutrition, nutrition)
 
     val spawnRate = ctype.spawnRate
-    props(5) = new SliderProperties(creatureName + CreatureSliderGroup.SPAWN_RATE_LABEL, -10,
+    props(5) = new SliderProperties(creatureName + SPAWN_RATE_LABEL, -10,
       10, spawnRate)
-
-    if (normSpeed > 0) {
-      props(6) = new SliderProperties(creatureName + CreatureSliderGroup.NORM_SPEED_LABEL, 0,
-        CreatureSliderGroup.MAX_FACTOR * normSpeed, normSpeed, 1000.0)
-      val maxSpeed = ctype.maxSpeed
-      props(7) = new SliderProperties(creatureName + CreatureSliderGroup.MAX_SPEED_LABEL, 0,
-        CreatureSliderGroup.MAX_FACTOR * maxSpeed, maxSpeed, 1000.0)
-    }
-
     props
+  }
+
+  private def speedSliderProperties(creatureName: String, ctype: CreatureType): Array[SliderProperties] = {
+    val props = new Array[SliderProperties](2)
+    val normSpeed = ctype.normalSpeed
+    props(0) = new SliderProperties(creatureName + NORM_SPEED_LABEL, 0,
+      MAX_FACTOR * normSpeed, normSpeed, 1000.0)
+    val maxSpeed = ctype.maxSpeed
+    props(1) = new SliderProperties(creatureName + MAX_SPEED_LABEL, 0,
+      MAX_FACTOR * maxSpeed, maxSpeed, 1000.0)
+    props
+  }
+
+  private def createSliderProperties(creaturePop: Population): Array[SliderProperties] = {
+    val ctype = creaturePop.creatureType
+    val creatureName = ctype.name
+    val base = baseSliderProperties(creatureName, ctype)
+    if (ctype.normalSpeed == 0) base
+    else
+      Array.concat(base, speedSliderProperties(creatureName, ctype))
   }
 }
 
@@ -75,25 +81,26 @@ class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(createSli
     */
   def checkSliderChanged(sliderName: String, value: Double): Unit = {
     val creatureType = creaturePop.creatureType
-    for (props <- this.getSliderProperties) {
-      if (sliderName == props.getName) if (sliderName.endsWith(CreatureSliderGroup.SIZE_LABEL))
+    for (props <- this.getSliderProperties if sliderName == props.getName) {
+      if (sliderName.endsWith(SIZE_LABEL)) {
         creatureType.size = value
-      else if (sliderName.endsWith(CreatureSliderGroup.GESTATION_LABEL))
+      } else if (sliderName.endsWith(GESTATION_LABEL)) {
         creatureType.gestationPeriod = value.toInt
-      else if (sliderName.endsWith(CreatureSliderGroup.STARVATION_LABEL))
+      } else if (sliderName.endsWith(STARVATION_LABEL)) {
         creatureType.starvationThreshold = value.toInt
-      else if (sliderName.endsWith(CreatureSliderGroup.MAX_AGE_LABEL))
+      } else if (sliderName.endsWith(MAX_AGE_LABEL)) {
         creatureType.maxAge = value.toInt
-      else if (sliderName.endsWith(CreatureSliderGroup.NUTRITION_LABEL))
+      } else if (sliderName.endsWith(NUTRITION_LABEL)) {
         creatureType.nutritionalValue = value.toInt
-      else if (sliderName.endsWith(CreatureSliderGroup.NORM_SPEED_LABEL))
+      } else if (sliderName.endsWith(NORM_SPEED_LABEL)) {
         creatureType.normalSpeed = value
-      else if (sliderName.endsWith(CreatureSliderGroup.MAX_SPEED_LABEL))
+      } else if (sliderName.endsWith(MAX_SPEED_LABEL)) {
         creatureType.maxSpeed = value
-      else if (sliderName.endsWith(CreatureSliderGroup.SPAWN_RATE_LABEL))
+      } else if (sliderName.endsWith(SPAWN_RATE_LABEL)) {
         creatureType.spawnRate = value.toInt
-      else throw new IllegalStateException("Unexpected sliderName:" + sliderName)
+      } else {
+        throw new IllegalStateException("Unexpected sliderName:" + sliderName)
+      }
     }
   }
 }
-

@@ -1,19 +1,14 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures
 
-import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.habitat.creatures.CreatureAttributes._
-import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor.DEBUG
-import com.barrybecker4.simulation.habitat.model.HabitatGrid
-import sun.text.Normalizer
 
 import javax.vecmath.{Point2d, Vector2d}
 
 
 /**
   * Everything we need to know about a creature.
-  * There are many different sorts of creatures, but they are all represented by instance of this class.
   * There are many different sorts of creatures, but they are all represented by instance of this class.
   *
   * @author Barry Becker
