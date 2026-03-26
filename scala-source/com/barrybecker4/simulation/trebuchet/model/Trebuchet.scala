@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model
 
-import com.barrybecker4.ui.util.Log
 import javax.vecmath.Vector2d
 import java.awt.Color
 import java.awt.Graphics2D
@@ -16,20 +15,14 @@ import java.lang.Math.sin
 
 /**
   * Data structure and methods for representing a single dynamic trebuchet (advanced form of a catapult)
-  * The geometry of the trebuchet is defined by constants in TebuchetConstants.
-  *
-  * Performance Improvements:
-  *    - profile (where is the time spent? rendering or computation)
+  * The geometry of the trebuchet is defined by constants in [[TrebuchetConstants]].
   *
   * @author Barry Becker
   */
 object Trebuchet {
-  protected val MIN_EDGE_ANGLE = 0.3
   private val GRAVITY_VEC = new Vector2d(0, GRAVITY)
   private val MAX_LEVER_ANGLE = PI - 0.1
   private val NUM_PARTS = 5
-  // the time since the start of the simulation
-  private var logger = new Log
 }
 
 /**
@@ -77,7 +70,6 @@ class Trebuchet() {
     * @return the new timestep
     */
   def stepForward(timeStep: Double): Double = {
-    //logger_.println(1, LOG_LEVEL, "stepForward: about to update (timeStep="+timeStep+')');
     var angle = RenderablePart.angle
     var angularVelocity = RenderablePart.angularVelocity
     val slingAngle = sling.getAngleWithLever
