@@ -178,7 +178,7 @@ appMap['verhulst'] = [
         title: 'Verhulst Population Simulation',
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.verhulst.VerhulstSimulator',
         panel_class: 'com.barrybecker4.simulation.verhulst.VerhulstSimulator',
-        description: 'Simulate fox and rabbit population dynamics based on Verhulst growth model',
+        description: 'Simulate rabbit population dynamics using a discrete Verhulst (logistic) growth model',
         longDescription: 'Chaotic behavior can emerge from using a dynamic logistic population growth model ' +
                 'like the one researched by Pierr Verhulst. ' +
                 ' See <a href="https://fractalfoundation.org/OFC/OFC-6-1.html">Rabbits and Coyotes</a>.'

@@ -5,7 +5,7 @@ import com.barrybecker4.ui.animation.AnimationFrame
 
 
 /**
-  * Simulates foxes (predators) and rabbits (prey) in the wild.
+  * Entry point for the Verhulst (logistic) rabbit population simulation.
   */
 object VerhulstSimulatorApp {
 

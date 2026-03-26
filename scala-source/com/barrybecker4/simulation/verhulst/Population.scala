@@ -5,7 +5,11 @@ package com.barrybecker4.simulation.verhulst
   * Everything we need to know about a population of creatures.
   * @author Barry Becker
   */
-abstract class Population() {
+object Population {
+  val DefaultMaxBirthRate: Double = 3.0
+}
+
+abstract class Population {
 
   var birthRate = .0
   private var population = .0
@@ -21,5 +25,5 @@ abstract class Population() {
   def setPopulation(value: Double): Unit = { population = value}
   def getInitialPopulation: Double
   def getInitialBirthRate: Double
-  def getMaxBirthRate = 3.0
+  def getMaxBirthRate: Double = Population.DefaultMaxBirthRate
 }

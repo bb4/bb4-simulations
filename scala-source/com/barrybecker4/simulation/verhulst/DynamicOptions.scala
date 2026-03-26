@@ -7,7 +7,7 @@ import java.awt._
 
 
 /**
-  * Dynamic controls for the RD simulation that will show on the right.
+  * Dynamic controls for the Verhulst population simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
   * @author Barry Becker
   */
@@ -15,14 +15,14 @@ class DynamicOptions(simulator: VerhulstSimulator) extends JPanel with SliderGro
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
   setBorder(BorderFactory.createEtchedBorder)
   setPreferredSize(new Dimension(300, 300))
-  private var sliderGroups = Seq[CreatureSliderGroup]()
 
-  for (creaturePop <- simulator.getCreatures) {
+  private val sliderGroups: Seq[CreatureSliderGroup] = simulator.getCreatures.map { creaturePop =>
     val group = new CreatureSliderGroup(creaturePop)
     group.setSliderListener(this)
-    sliderGroups :+= group
     add(group)
+    group
   }
+
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(1, 1000))
   add(fill)
