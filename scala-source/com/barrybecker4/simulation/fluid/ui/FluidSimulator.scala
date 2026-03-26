@@ -101,7 +101,9 @@ class FluidSimulator() extends Simulator("Fluid") {
     if (g == null) return
 
     val s = renderOptions.getScale
-    environment.setSize((getWidth / s).toInt - 2, (getHeight / s).toInt - 2)
+    val cellW = math.max(1, (getWidth / s).toInt - 2)
+    val cellH = math.max(1, (getHeight / s).toInt - 2)
+    environment.setSize(cellW, cellH)
 
     val g2 = g.asInstanceOf[Graphics2D]
     Profiler.getInstance.startRenderingTime()

@@ -14,8 +14,6 @@ class Grid(var dimX: Int, var dimY: Int) extends RectangularModel {
   private val grid0 = new CellGrid(dimX, dimY)
   private val grid1 = new CellGrid(dimX, dimY)
 
-  grid1.addInitialInkDensity()
-
   override def getWidth: Int = dimX
   override def getHeight: Int = dimY
 
