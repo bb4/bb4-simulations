@@ -2,20 +2,16 @@
 package com.barrybecker4.simulation.voronoi.algorithm
 
 import com.barrybecker4.simulation.common.Profiler
-import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm.*
-import com.barrybecker4.ui.util.ColorMap
 
 import java.awt.image.BufferedImage
 import javax.swing.JComponent
-import VoronoiAlgorithm.*
-import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel.DistributionType
+
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.MARGIN
 
-import javax.vecmath.Point2d
+import VoronoiAlgorithm.*
 
 
 object VoronoiAlgorithm {
@@ -47,6 +43,8 @@ class VoronoiAlgorithm(panel: JComponent) {
   private var restartRequested = false
   private var finished: Boolean = false
   private var iterations: Int = 0
+  /** Avoid repeating profiler stop/print on every nextStep after the model completes. */
+  private var profilerReported: Boolean = false
   reset()
 
   /** if the size changes from what we have not, then request a restart */
@@ -63,6 +61,7 @@ class VoronoiAlgorithm(panel: JComponent) {
     pointModel = new PointPlacementModel(DEFAULT_SIZE, DEFAULT_SIZE, poissonParams, maxPoints, distributionType)
     voronoiRenderer = new VoronoiRenderer(pointModel.width, pointModel.height, panel)
     finished = false
+    profilerReported = false
   }
 
   def setPoissonParams(newParams: PoissonParams): Unit = {
@@ -116,6 +115,7 @@ class VoronoiAlgorithm(panel: JComponent) {
       finished = false
       iterations = 0
       voronoiProcessor = null
+      profilerReported = false
       pointModel.reset()
       Profiler.getInstance.startCalculationTime()
     }
@@ -150,12 +150,11 @@ class VoronoiAlgorithm(panel: JComponent) {
   }
 
   private def showProfileInfo(): Unit = {
-    if (!finished) {
-      finished = true
-      val prof = Profiler.getInstance
-      prof.stopCalculationTime()
-      prof.print()
-      prof.resetAll()
-    }
+    if (profilerReported) return
+    profilerReported = true
+    val prof = Profiler.getInstance
+    prof.stopCalculationTime()
+    prof.print()
+    prof.resetAll()
   }
 }

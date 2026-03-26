@@ -1,11 +1,8 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm.model.placement
 
-import com.barrybecker4.simulation.cave.model.CaveProcessor
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel.{DistributionType, MARGIN_PERCENT}
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.{GaussianPlacement, PlacementMethod, PoissonParams, PoissonPlacement, RandomPlacement}
-import com.barrybecker4.ui.renderers.OfflineGraphics
-import com.barrybecker4.ui.util.ColorMap
 import PointPlacementModel.DistributionType.*
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 

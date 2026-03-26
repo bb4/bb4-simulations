@@ -2,8 +2,6 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
-import com.barrybecker4.ui.renderers.OfflineGraphics
-import com.barrybecker4.ui.util.ColorMap
 
 import scala.util.Random
 

@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams.*
 
 /**
-  * Henon traveler params are immutable.
+  * Parameters for Poisson-disc point placement (minimum separation radius and local sample count).
   * @author Barry Becker
   */
 object PoissonParams {

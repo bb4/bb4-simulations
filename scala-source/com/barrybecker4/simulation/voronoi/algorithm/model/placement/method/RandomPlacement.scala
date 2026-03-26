@@ -2,9 +2,8 @@
 package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
-import com.barrybecker4.ui.renderers.OfflineGraphics
-import com.barrybecker4.ui.util.ColorMap
 
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
 
@@ -16,11 +15,10 @@ import scala.util.Random
 class RandomPlacement(val width: Int, val height: Int, margin: Int,
                       var numPoints: Int, rnd: Random) extends PlacementMethod {
 
-  private var randomPoints: IndexedSeq[Point] = _
+  private val randomPoints = ArrayBuffer.empty[Point]
   rnd.setSeed(0)
-  randomPoints = IndexedSeq()
 
-  def getSamples: IndexedSeq[Point] = randomPoints
+  def getSamples: IndexedSeq[Point] = randomPoints.toIndexedSeq
 
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
@@ -28,7 +26,7 @@ class RandomPlacement(val width: Int, val height: Int, margin: Int,
     val w = width - 2 * margin
     val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints :+= new Point(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
+      randomPoints += new Point(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
       count += 1
     }
   }

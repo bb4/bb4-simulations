@@ -3,6 +3,10 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.voronoi
 
 
 object Point {
+  /**
+    * Ordering for Fortune sweep events: larger screen Y is processed first (see `SiteEvent` / `TreeSet` order).
+    * Do not replace with default `Point` ordering without revisiting the event queue.
+    */
   def minYOrderedCompareTo(p1: Point, p2: Point): Int = {
     if (p1.y < p2.y) return 1
     if (p1.y > p2.y) return -1

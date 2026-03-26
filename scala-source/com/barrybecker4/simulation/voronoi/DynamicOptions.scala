@@ -1,14 +1,11 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi
 
-import com.barrybecker4.common.format.FormatUtil
-import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
 
 import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
-import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties

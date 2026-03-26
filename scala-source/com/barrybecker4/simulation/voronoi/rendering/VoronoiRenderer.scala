@@ -2,15 +2,13 @@
 package com.barrybecker4.simulation.voronoi.rendering
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.*
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.CircleEvent
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
-import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.{BasicStroke, Color, Dimension, Polygon}
 import java.awt.image.BufferedImage
 import javax.swing.JComponent
-import scala.collection.mutable
+
+import VoronoiRenderer.*
 
 
 object VoronoiRenderer {
@@ -19,15 +17,16 @@ object VoronoiRenderer {
   val INFINITY_MARGIN: Double = 10000.0
   val RADIUS: Double = 1.0
 
-  private val POINT_COLOR = Color.YELLOW
-  private val LINE_COLOR = Color.WHITE
-  private val BREAK_COLOR = new Color(255, 110, 55)
-  private val POLYGON_FILL_COLOR = new Color(100, 70, 225, 50)
-  private val POLYGON_EDGE_COLOR = new Color(140, 90, 255, 210)
-  private val BACKGROUND_COLOR = Color.BLACK
-  private val STROKE: BasicStroke = new BasicStroke(0.5)
-  private val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
-  private val PARABOLA_INC = 2
+  // Visible to companion class below; not part of public API beyond this file.
+  private[voronoi] val POINT_COLOR = Color.YELLOW
+  private[voronoi] val LINE_COLOR = Color.WHITE
+  private[voronoi] val BREAK_COLOR = new Color(255, 110, 55)
+  private[voronoi] val POLYGON_FILL_COLOR = new Color(100, 70, 225, 50)
+  private[voronoi] val POLYGON_EDGE_COLOR = new Color(140, 90, 255, 210)
+  private[voronoi] val BACKGROUND_COLOR = Color.BLACK
+  private[voronoi] val STROKE: BasicStroke = new BasicStroke(0.5)
+  private[voronoi] val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
+  private[voronoi] val PARABOLA_INC = 2
 }
 
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) extends IPointRenderer {
@@ -57,36 +56,47 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
 
   def draw(sites: IndexedSeq[Point], geometry: VoronoiGeometry, sweepLoc: Double): Unit = {
     clear()
-    setColor(POINT_COLOR)
-
-    for (p <- sites) {
-      fillCircle(p, VoronoiRenderer.RADIUS)
-    }
-    for (bp <- geometry.getBreakPoints) {
-      drawBreakPoint(bp)
-    }
-    setColor(BREAK_COLOR)
-    setStroke(BREAK_STROKE)
-    for (a <- geometry.getArcs.keySet) {
-      drawArc(a.asInstanceOf[Arc])
-    }
-    setColor(LINE_COLOR)
-    for (e <- geometry.getEdgeList) {
-      if (e.p1 != null && e.p2 != null) {
-        val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
-        else e.p1.y
-        drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
-      }
-    }
-    drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
-
-    // finally draw the polygons representing the regions
+    drawSiteMarkers(sites)
+    drawBreakPointsLayer(geometry)
+    drawArcParabolas(geometry)
+    drawCompletedEdges(geometry)
+    drawSweepLine(sweepLoc)
     for (poly <- geometry.getPolygonsForPoints)
       drawPolygon(poly)
-
-    // the original code passed a delay here to give interaction a chance to process, but I'm not sure that it is needed.
-    //show() // pass 1?
   }
+
+  private def drawSiteMarkers(sites: IndexedSeq[Point]): Unit = {
+    setColor(POINT_COLOR)
+    for (p <- sites)
+      fillCircle(p, RADIUS)
+  }
+
+  private def drawBreakPointsLayer(geometry: VoronoiGeometry): Unit = {
+    for (bp <- geometry.getBreakPoints)
+      drawBreakPoint(bp)
+  }
+
+  private def drawArcParabolas(geometry: VoronoiGeometry): Unit = {
+    setColor(BREAK_COLOR)
+    setStroke(BREAK_STROKE)
+    for (a <- geometry.getArcs.keySet)
+      drawArc(a.asInstanceOf[Arc])
+  }
+
+  private def drawCompletedEdges(geometry: VoronoiGeometry): Unit = {
+    setColor(LINE_COLOR)
+    for (e <- geometry.getEdgeList if e.p1 != null && e.p2 != null) {
+      val topY = topYForEdgeDraw(e.p1.y)
+      drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
+    }
+  }
+
+  private def topYForEdgeDraw(p1y: Double): Double =
+    if (p1y == Double.PositiveInfinity) height + INFINITY_MARGIN
+    else p1y
+
+  private def drawSweepLine(sweepLoc: Double): Unit =
+    drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
 
   def clear(): Unit = {
     offlineGraphics.clear()
@@ -110,7 +120,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
   private def drawBreakPoint(bp: BreakPoint): Unit = {
     val p = bp.getPoint
     setColor(BREAK_COLOR)
-    fillCircle(p, VoronoiRenderer.RADIUS)
+    fillCircle(p, RADIUS)
     drawLine(bp.edgeBegin.x, bp.edgeBegin.y, p.x, p.y)
     setColor(LINE_COLOR)
     setStroke(STROKE)
@@ -128,16 +138,16 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
   }
 
   private def drawParabola(par: Parabola, min: Double, max: Double): Unit = {
-    var x = min
+    var px = min
     var lastPoint: Point = null
-    while (x <= max) {
-      val y = ((x - par.a) * (x - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
-      val point = new Point(x, y)
+    while (px <= max) {
+      val y = ((px - par.a) * (px - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
+      val pt = new Point(px, y)
       if (lastPoint != null) {
-        drawLine(x, y, lastPoint.x, lastPoint.y)
+        drawLine(px, y, lastPoint.x, lastPoint.y)
       }
-      lastPoint = point
-      x += PARABOLA_INC
+      lastPoint = pt
+      px += PARABOLA_INC
     }
   }
 

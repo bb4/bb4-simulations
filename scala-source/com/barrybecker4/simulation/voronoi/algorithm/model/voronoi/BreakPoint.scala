@@ -1,19 +1,43 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm.model.voronoi
 
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.VoronoiEdge
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiProcessor
 
 
 object BreakPoint {
   private def sq(d: Double) = d * d
+
+  /** Breakpoint when the two sites share the same y (beach line meets vertical bisector region). */
+  def pointWhenSitesHorizontal(s1: Point, s2: Point, sweepLoc: Double): Point = {
+    val x = (s1.x + s2.x) / 2.0
+    val y = (sq(x - s1.x) + sq(s1.y) - sq(sweepLoc)) / (2.0 * (s1.y - sweepLoc))
+    new Point(x, y)
+  }
+
+  /** Intersect the edge line with the parabola of the higher site for general position. */
+  def pointWhenSitesGeneral(s1: Point, s2: Point, e: VoronoiEdge, sweepLoc: Double): Point = {
+    val px = if (s1.y > s2.y) s1.x else s2.x
+    val py = math.max(s1.y, s2.y)
+    val m = e.m
+    val b = e.b
+    val d = 2.0 * (py - sweepLoc)
+    val A = 1.0
+    val B = -2 * px - d * m
+    val C = sq(px) + sq(py) - sq(sweepLoc) - d * b
+    val sign = if (s1.y > s2.y) -1 else 1
+    val det = sq(B) - 4 * A * C
+    val x =
+      if (det <= 0) -B / (2 * A)
+      else (-B + sign * math.sqrt(det)) / (2 * A)
+    val y = m * x + b
+    new Point(x, y)
+  }
 }
 
 case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean, v: VoronoiProcessor) {
   val edgeBegin: Point = this.getPoint
   private var cacheSweepLoc: Double = .0
-  private var cachePoint: Point = _
+  private var cachePoint: Point = null
 
   def finish(vert: Point): Unit = {
     if (isEdgeLeft) this.e.p1 = vert
@@ -30,36 +54,9 @@ case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean,
     val sweepLoc = v.getSweepLoc
     if (sweepLoc == cacheSweepLoc) return cachePoint
     cacheSweepLoc = sweepLoc
-    var x: Double = .0
-    var y: Double = .0
-    // Handle the vertical line case
-    if (s1.y == s2.y) {
-      x = (s1.x + s2.x) / 2.0 // x coordinate is between the two sites
-
-      // comes from parabola focus-directrix definition:
-      y = (BreakPoint.sq(x - s1.x) + BreakPoint.sq(s1.y) - BreakPoint.sq(sweepLoc)) / (2.0 * (s1.y - sweepLoc))
-    }
-    else { // This method works by intersecting the line of the edge with the parabola of the higher point
-      // I'm not sure why I chose the higher point, either should work
-      val px = if (s1.y > s2.y) s1.x
-      else s2.x
-      val py = Math.max(s1.y, s2.y)
-      val m: Double = e.m
-      val b: Double = e.b
-      val d: Double = 2.0 * (py - sweepLoc)
-      // Straight up quadratic formula
-      val A: Double = 1
-      val B: Double = -2 * px - d * m
-      val C: Double = BreakPoint.sq(px) + BreakPoint.sq(py) - BreakPoint.sq(sweepLoc) - d * b
-      val sign = if (s1.y > s2.y) -1
-      else 1
-      val det: Double = BreakPoint.sq(B) - 4 * A * C
-      // When rounding leads to a very small negative determinant, fix it
-      if (det <= 0) x = -B / (2 * A)
-      else x = (-B + sign * Math.sqrt(det)) / (2 * A)
-      y = m * x + b
-    }
-    cachePoint = new Point(x, y)
+    cachePoint =
+      if (s1.y == s2.y) BreakPoint.pointWhenSitesHorizontal(s1, s2, sweepLoc)
+      else BreakPoint.pointWhenSitesGeneral(s1, s2, e, sweepLoc)
     cachePoint
   }
 

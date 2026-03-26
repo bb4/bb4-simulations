@@ -1,13 +1,11 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm
 
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.{Arc, ArcKey, ArcQuery, BreakPoint, Point, VoronoiEdge, VoronoiGeometry}
+import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.{Arc, ArcKey, BreakPoint, Point, VoronoiEdge, VoronoiGeometry}
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.CircleEvent
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.event.SiteEvent
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
-import java.util
-import java.util.Map.Entry
 import scala.collection.mutable
 import VoronoiRenderer.INFINITY_MARGIN
 
@@ -63,7 +61,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   private def addEventsForPoints(points: IndexedSeq[Point]): Unit = {
     for (site <- points) {
       if ((site.x < 0) || site.y < 0)
-        throw new RuntimeException(String.format("Invalid site in input, sites must be greater than 0"))
+        throw new IllegalArgumentException("Invalid site in input, sites must be greater than 0")
       events.add(SiteEvent(site))
     }
   }
@@ -74,8 +72,13 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
       geometry.addArc(new Arc(point, this))
       return
     }
-    val arcEntryAbove: (ArcKey, CircleEvent) = geometry.findFloorEntry(point)
-    val arcAbove: Arc = arcEntryAbove._1.asInstanceOf[Arc]
+    val arcEntryAbove = geometry.findFloorEntry(point).getOrElse(
+      throw new IllegalStateException("No beach-line arc for site event")
+    )
+    val arcAbove = arcEntryAbove._1 match {
+      case a: Arc => a
+      case other  => throw new IllegalStateException(s"Expected Arc, got ${other.getClass.getSimpleName}")
+    }
     // Deal with the degenerate case where the first two points are at the same y value
     if (!geometry.hasArcs && arcAbove.site.y == point.y) {
       updateGeometryWhenTwoPointsAtSameY(arcAbove, point)
@@ -86,7 +89,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     if (falseCE != null) events.remove(falseCE)
 
     val arcs = updateGeometry(arcAbove, point)
-    
+
     checkForCircleEvent(arcs._1)
     checkForCircleEvent(arcs._2)
   }
@@ -124,46 +127,24 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   }
 
   def handleCircleEvent(point: Point, arc: Arc, vert: Point): Unit = {
-    geometry.removeArc(arc)
-    arc.left.finish(vert)
-    arc.right.finish(vert)
-    geometry.removeBreakPoint(arc.left)
-    geometry.removeBreakPoint(arc.right)
-    var entryRight: (ArcKey, CircleEvent) = geometry.minAfterArc(arc)
-    var entryLeft: (ArcKey, CircleEvent) = geometry.maxBeforeArc(arc)
-    var arcRight: Arc = null
-    var arcLeft: Arc = null
+    removeArcAndFinishBreakpoints(arc, vert)
+
     val ceArcLeft = arc.getLeft
     val cocircularJunction = arc.getRight == ceArcLeft
-    if (entryRight != null) {
-      arcRight = entryRight._1.asInstanceOf[Arc]
-      while (cocircularJunction && arcRight.getRight == ceArcLeft) {
-        entryRight = calcEntry(arcRight, entryRight, vert)
-        arcRight = entryRight._1.asInstanceOf[Arc]
-      }
-      removeEvent(entryRight, arcRight)
-    }
-    if (entryLeft != null) {
-      arcLeft = entryLeft._1.asInstanceOf[Arc]
-      while (cocircularJunction && arcLeft.getLeft == ceArcLeft) {
-        entryLeft = calcEntry(arcLeft, entryLeft, vert)
-        arcLeft = entryLeft._1.asInstanceOf[Arc]
-      }
-      removeEvent(entryLeft, arcLeft)
-    }
+
+    val (arcRight, entryRightOpt) =
+      walkCocircularChain(geometry.minAfterArc(arc), cocircularJunction, ceArcLeft, vert, rightSide = true)
+    val (arcLeft, entryLeftOpt) =
+      walkCocircularChain(geometry.maxBeforeArc(arc), cocircularJunction, ceArcLeft, vert, rightSide = false)
+
+    entryRightOpt.foreach(e => removeEvent(e, arcRight))
+    entryLeftOpt.foreach(e => removeEvent(e, arcLeft))
+
+    // Invariants: neighbors exist for a valid circle event
     val edge = new VoronoiEdge(arcLeft.right.s1, arcRight.left.s2)
     geometry.addEdge(edge)
-    // Here we're trying to figure out if the VoronoiProcessor vertex
-    // we've found is the left or right point of the new edge.
-    // If the edges being traces out by these two arcs take a right turn then we know
-    // that the vertex is going to be above the current point
-    val turnsLeft = Point.ccw(arcLeft.right.edgeBegin, point, arcRight.left.edgeBegin) == 1
-    // So if it turns left, we know the next vertex will be below this vertex
-    // so if it's below and the slow is negative then this vertex is the left point
-    val isLeftPoint = if (turnsLeft) edge.m < 0
-    else edge.m > 0
-    if (isLeftPoint) edge.p1 = vert
-    else edge.p2 = vert
+    val isLeftPoint = assignVertexToEdge(edge, point, vert, arcLeft, arcRight)
+
     val newBP = new BreakPoint(arcLeft.right.s1, arcRight.left.s2, edge, !isLeftPoint, this)
     geometry.addBreakPoint(newBP)
     arcRight.left = newBP
@@ -171,6 +152,60 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
 
     checkForCircleEvent(arcLeft)
     checkForCircleEvent(arcRight)
+  }
+
+  private def removeArcAndFinishBreakpoints(arc: Arc, vert: Point): Unit = {
+    geometry.removeArc(arc)
+    arc.left.finish(vert)
+    arc.right.finish(vert)
+    geometry.removeBreakPoint(arc.left)
+    geometry.removeBreakPoint(arc.right)
+  }
+
+  /**
+    * Advance across duplicate circle events on the cocircular junction.
+    * @param rightSide if true, walk so that `getRight` is compared to `ceArcLeft`; else `getLeft`.
+    */
+  private def walkCocircularChain(
+      initial: Option[(ArcKey, CircleEvent)],
+      cocircularJunction: Boolean,
+      ceArcLeft: Point,
+      vert: Point,
+      rightSide: Boolean
+  ): (Arc, Option[(ArcKey, CircleEvent)]) = {
+    initial match {
+      case None => (null, None)
+      case Some(firstEntry) =>
+        var ar = firstEntry._1.asInstanceOf[Arc]
+        var entry = firstEntry
+        while (
+          cocircularJunction && (if (rightSide) ar.getRight == ceArcLeft else ar.getLeft == ceArcLeft)
+        ) {
+          val next = calcEntry(ar, entry, vert).getOrElse(
+            throw new IllegalStateException("Missing successor arc during cocircular walk")
+          )
+          ar = next._1.asInstanceOf[Arc]
+          entry = next
+        }
+        (ar, Some(entry))
+    }
+  }
+
+  /** @return whether the vertex was stored as the left (p1) endpoint of the edge */
+  private def assignVertexToEdge(
+      edge: VoronoiEdge,
+      point: Point,
+      vert: Point,
+      arcLeft: Arc,
+      arcRight: Arc
+  ): Boolean = {
+    // If the edges traced by these two arcs take a right turn, the vertex is above the current point.
+    val turnsLeft = Point.ccw(arcLeft.right.edgeBegin, point, arcRight.left.edgeBegin) == 1
+    // If it turns left, the next vertex will be below this vertex; combined with slope sign, pick p1 vs p2.
+    val isLeftPoint = if (turnsLeft) edge.m < 0 else edge.m > 0
+    if (isLeftPoint) edge.p1 = vert
+    else edge.p2 = vert
+    isLeftPoint
   }
 
   private def removeEvent(entry: (ArcKey, CircleEvent), arc: Arc): Unit = {
@@ -181,7 +216,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     }
   }
 
-  private def calcEntry(arc: Arc, entry: (ArcKey, CircleEvent), vert: Point): (ArcKey, CircleEvent) = {
+  private def calcEntry(arc: Arc, entry: (ArcKey, CircleEvent), vert: Point): Option[(ArcKey, CircleEvent)] = {
     geometry.removeArc(arc)
     arc.left.finish(vert)
     arc.right.finish(vert)
@@ -203,4 +238,3 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     }
   }
 }
-

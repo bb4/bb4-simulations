@@ -15,19 +15,23 @@ class VoronoiGeometry {
 
   private val arcs = new mutable.TreeMap[ArcKey, CircleEvent]()
   private val breakPoints = new mutable.HashSet[BreakPoint]()
-  private var edgeList: IndexedSeq[VoronoiEdge] = IndexedSeq()
+  private val edgeBuffer = mutable.ArrayBuffer.empty[VoronoiEdge]
   private var pointToEdgesMap: Map[Point, Set[VoronoiEdge]] = Map()
 
   def hasArcs: Boolean = arcs.nonEmpty
   def getArcs: mutable.TreeMap[ArcKey, CircleEvent] = arcs
-  def getEdgeList: IndexedSeq[VoronoiEdge] = edgeList
+  def getEdgeList: IndexedSeq[VoronoiEdge] = edgeBuffer.toIndexedSeq
   def getBreakPoints: mutable.HashSet[BreakPoint] = breakPoints
 
   def addArc(arc: Arc, circleEvent: CircleEvent): Unit = arcs.put(arc, circleEvent)
   def addArc(arc: Arc): Unit = arcs.put(arc, null)
   def removeArc(arc: Arc): Unit = arcs.remove(arc)
-  def minAfterArc(arc: Arc): (ArcKey, CircleEvent) = arcs.minAfter(arc).get
-  def maxBeforeArc(arc: Arc): (ArcKey, CircleEvent) = arcs.maxBefore(arc).get
+
+  /** Next arc after `arc` in the beach line, if any. */
+  def minAfterArc(arc: Arc): Option[(ArcKey, CircleEvent)] = arcs.minAfter(arc)
+
+  /** Arc before `arc` in the beach line, if any. */
+  def maxBeforeArc(arc: Arc): Option[(ArcKey, CircleEvent)] = arcs.maxBefore(arc)
 
   def addBreakPoint(bp: BreakPoint): Unit = breakPoints.add(bp)
   def removeBreakPoint(bp: BreakPoint): Unit = breakPoints.remove(bp)
@@ -35,7 +39,7 @@ class VoronoiGeometry {
   def addEdge(edge: VoronoiEdge): Unit = {
     addEdgeForPoint(edge.site1, edge)
     addEdgeForPoint(edge.site2, edge)
-    edgeList :+= edge
+    edgeBuffer += edge
   }
 
   private def addEdgeForPoint(pt: Point, edge: VoronoiEdge): Unit = {
@@ -48,10 +52,15 @@ class VoronoiGeometry {
     }
   }
 
-  def findFloorEntry(point: Point): (ArcKey, CircleEvent) = {
+  /**
+    * The arc on the beach line whose x-range contains `point`, or None if the structure is inconsistent.
+    */
+  def findFloorEntry(point: Point): Option[(ArcKey, CircleEvent)] = {
     val arcToSearchFor = new ArcQuery(point)
-    if (arcs.contains(arcToSearchFor)) arcs.find(p => p._1.compareTo(arcToSearchFor) == 0).get
-    else arcs.maxBefore(arcToSearchFor).get
+    if (arcs.contains(arcToSearchFor))
+      arcs.find(p => p._1.compareTo(arcToSearchFor) == 0)
+    else
+      arcs.maxBefore(arcToSearchFor)
   }
 
   def getPolygonsForPoints: Iterable[Seq[Point]] = {
@@ -75,7 +84,7 @@ class VoronoiGeometry {
       Math.atan2(deltaY, deltaX)
     }
 
-    points.toSeq.sortBy(angleOf)map(p => interpolate(site, p, POLYGON_PCT))
+    points.toSeq.sortBy(angleOf).map(p => interpolate(site, p, POLYGON_PCT))
   }
 
   /**
