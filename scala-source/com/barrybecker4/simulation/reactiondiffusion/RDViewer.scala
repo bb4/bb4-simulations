@@ -22,8 +22,8 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   private var oldHeight: Int = this.parent.getHeight
   private var cmap = new RDColorMap
   private var renderOptions = new RDRenderingOptions
-  private var onScreenRenderer: Option[RDOnscreenRenderer] = _
-  private var offScreenRenderer: Option[RDOffscreenRenderer] = _
+  private var onScreenRenderer: Option[RDOnscreenRenderer] = None
+  private var offScreenRenderer: Option[RDOffscreenRenderer] = None
   private var useFixedSize: Boolean = false
   private var useOfflineRendering = false
 

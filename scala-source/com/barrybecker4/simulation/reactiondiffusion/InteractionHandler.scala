@@ -94,7 +94,10 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseReleased(e: MouseEvent): Unit = {
+    if (e.getButton == MouseEvent.BUTTON1) mouse1Down = false
+    else if (e.getButton == MouseEvent.BUTTON3) mouse3Down = false
+  }
   override def mouseEntered(e: MouseEvent): Unit = {}
   override def mouseExited(e: MouseEvent): Unit = {}
 }

@@ -48,7 +48,6 @@ abstract class RDRenderer private[rendering](var model: GrayScottModel,
   def getColorRect(minX: Int, maxX: Int): ColorRect = {
     val ymax = model.getHeight
     val colorRect = new ColorRect(maxX - minX, ymax)
-    var x = minX
 
     for (x <- minX until maxX)
       for (y <- 0 until ymax)

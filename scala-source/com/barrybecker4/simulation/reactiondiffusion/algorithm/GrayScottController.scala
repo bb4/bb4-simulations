@@ -8,50 +8,8 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Ini
 
 
 /**
-  * Makes the GrayScott algorithm run concurrently if setParallelized is set to true.
-  * Primary purpose of this class is to handle breaking the algorithm up into concurrent worker threads.
-  *
-  * Here are some parallelism results using my Core2Duo 6400 (and later i7 2600k) using fixed size.
-  * Without parallelism  8.62 fps
-  * With parallelism (but not borders) 10.16 fps
-  * With parallelism (and borders in sep thread) 10.36 fps
-  * After more tuning 18 fps (num steps per frame = 10)
-  *
-  * Using offscreen rendering slowed things by about 10%
-  * These numbers are with Hyper-threading off. The difference compared to hyper-threading off is barely 10%.
-  *
-  *                      pr/ns   pr/sync  npr/ns   npr/synch
-  *                      ------- -------  -------  -------
-  * parallel calc       | 23.8     21.1     20.9     20.5
-  * n-par calc          | 19.0     17.1              17.0
-  * n-par calc/offscreen|                   12.8     12.9
-  * par calc/offscreen  | 17.2     14.2     14.3     14.1
-  *
-  * pr/ns : parallel rendering/ not synchronized
-  * npr/ns : no parallel rendering/ no synchronization.
-  * Parallel rendering without synchronization is fast, but has bad rendering artifacts.
-  *
-  * Made some more improvements
-  *   - upgraded to ci7 2600k with 4 cores and 8 threads (hyper-threaded).
-  *   - fixed a bug in Model.commit where I was using arrayCopy instead of just a pointer swap.
-  *   - Modified parallel rendering code so that I compute images and write them quickly
-  * rather than drawing individual points which needed to be synchronized (set color, then draw point)
-  * Notes
-  *   - The difference between onscreen and offscreen rendering seems negligible.
-  *   - Getting really great CPU utilization of cores - somewhere around 85%.
-  *   - The temperature of the CPU really heats up. Saw max temp of 76C.
-  *
-  *                         par rend           non-par rendering
-  *                         ------------       --------------
-  * parallel calc       |   180 fps             78 fps
-  * n-par calc          |   102 fps             66 fps
-  *
-  * For larger rectangle than fixed, the performance increases seem even better
-  *
-  *                         par rend           non-par rendering
-  *                         ------------       --------------
-  * parallel calc       |   19.5 fps            8.1 fps
-  * n-par calc          |   13.2 fps            6.8 fps
+  * Runs the Gray-Scott step: interior cells in parallel strips when `setParallelized(true)`,
+  * periodic edge updates in a separate worker, then `commitChanges` on the model.
   *
   * @param initialWidth  width of computational space.
   * @param initialHeight height of computational space.
@@ -64,7 +22,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
 
   /** null if no new size has been requested. */
   private var requestedNewSize: Option[Dimension] = None
-  private var paralellized = true
+  private var parallelized = true
   def getModel: GrayScottModel = model
 
   /** doesn't change the size immediately since running threads may
@@ -87,8 +45,8 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
     */
-  def setParallelized(parallelized: Boolean): Unit = { this.paralellized = parallelized }
-  def isParallelized: Boolean = this.paralellized
+  def setParallelized(parallelized: Boolean): Unit = { this.parallelized = parallelized }
+  def isParallelized: Boolean = this.parallelized
   def setInitializer(initializer: Initializer): Unit = model.setInitializer(initializer)
 
   /** Advance one time step increment.
@@ -111,7 +69,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     // also add the border calculations in a separate thread.
     workers(numThreads) = new EdgeWorker(dt)
 
-    if (paralellized) workers.par.foreach(w => w.run())
+    if (parallelized) workers.par.foreach(w => w.run())
     else workers.foreach(w => w.run())
 
     prof.stopConcurrentCalculationTime()

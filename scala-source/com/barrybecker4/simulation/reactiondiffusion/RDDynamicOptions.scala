@@ -12,8 +12,8 @@ import javax.swing._
 import java.awt._
 import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
 
-import com.barrybecker4.simulation.cave.model.CaveProcessor
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Initializer
+import scala.compiletime.uninitialized
 
 
 /**
@@ -55,13 +55,13 @@ object RDDynamicOptions {
 class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, var simulator: RDSimulator)
   extends JPanel with ActionListener with ItemListener with SliderGroupChangeListener {
 
-  private var showU: JCheckBox = _
-  private var showV: JCheckBox = _
-  private var useComputeConcurrency: JCheckBox = _
-  private var useRenderingConcurrency: JCheckBox = _
-  private var useFixedSize: JCheckBox = _
-  private var sliderGroup: SliderGroup = _
-  private var initialConditionsDroplist: JComboBox[Initializer] = _
+  private var showU: JCheckBox = uninitialized
+  private var showV: JCheckBox = uninitialized
+  private var useComputeConcurrency: JCheckBox = uninitialized
+  private var useRenderingConcurrency: JCheckBox = uninitialized
+  private var useFixedSize: JCheckBox = uninitialized
+  private var sliderGroup: SliderGroup = uninitialized
+  private var initialConditionsDroplist: JComboBox[Initializer] = uninitialized
 
   initialize()
 
@@ -161,24 +161,23 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
   }
 
   override def itemStateChanged(e: ItemEvent): Unit = {
-    gs.setInitializer(initialConditionsDroplist.getSelectedItem.asInstanceOf[Initializer])
+    if (e.getStateChange == ItemEvent.SELECTED)
+      gs.setInitializer(initialConditionsDroplist.getSelectedItem.asInstanceOf[Initializer])
   }
 
   /** One of the buttons was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
     val renderingOptions = simulator.getRenderingOptions
-    if (e.getSource eq showU) renderingOptions.setShowingU(!renderingOptions.isShowingU)
+    if (e.getSource eq showU) renderingOptions.setShowingU(showU.isSelected)
     else if (e.getSource eq showV) {
-      renderingOptions.setShowingV(!renderingOptions.isShowingV)
+      renderingOptions.setShowingV(showV.isSelected)
       repaint()
     }
     else if (e.getSource eq useComputeConcurrency) {
-      val isParallelized = !gs.isParallelized
-      gs.setParallelized(isParallelized)
+      gs.setParallelized(useComputeConcurrency.isSelected)
     }
     else if (e.getSource eq useRenderingConcurrency) {
-      val isParallelized = !renderingOptions.isParallelized
-      renderingOptions.setParallelized(isParallelized)
+      renderingOptions.setParallelized(useRenderingConcurrency.isSelected)
     }
     else if (e.getSource eq useFixedSize) simulator.setUseFixedSize(useFixedSize.isSelected)
   }

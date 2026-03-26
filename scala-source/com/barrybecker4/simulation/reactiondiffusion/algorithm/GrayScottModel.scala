@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm
 import GrayScottModel._
 import java.awt._
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration._
+import scala.compiletime.uninitialized
 
 
 /**
@@ -24,13 +25,10 @@ object GrayScottModel {
   /** The amount of impact that the brush has. */
   val DEFAULT_BRUSH_STRENGTH = 0.3
 
-  /** Periodic boundary conditions.
-    * @return new x value taking into account wrapping boundaries.
+  /** Periodic boundary conditions (index in `[0, max)`).
+    * @param max period; must be positive.
     */
-  def getPeriodicXValue(x: Int, max: Int): Int = {
-    val xp = x % max
-    if (xp < 0) xp + max else xp
-  }
+  def getPeriodicXValue(x: Int, max: Int): Int = java.lang.Math.floorMod(x, max)
 }
 
 /**
@@ -42,14 +40,14 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   var initializer: Initializer = Initializer.DEFAULT_INITIALIZER
 
   /** concentrations of the 2 chemicals, u and v. */
-  var u: Array[Array[Double]] = _
-  var v: Array[Array[Double]] = _
+  var u: Array[Array[Double]] = uninitialized
+  var v: Array[Array[Double]] = uninitialized
 
-  private[algorithm] var tmpU: Array[Array[Double]] = _
-  private[algorithm] var tmpV: Array[Array[Double]] = _
+  private[algorithm] var tmpU: Array[Array[Double]] = uninitialized
+  private[algorithm] var tmpV: Array[Array[Double]] = uninitialized
 
-  private var k: Double = _
-  private var f: Double = _
+  private var k: Double = uninitialized
+  private var f: Double = uninitialized
   resetState()
 
   def getWidth: Int = width

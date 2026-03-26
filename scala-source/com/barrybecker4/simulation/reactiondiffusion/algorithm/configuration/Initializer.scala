@@ -33,7 +33,7 @@ abstract class Initializer(name: String, initialU: Double = INITIAL_U, initialV:
   }
 
 
-  /** Place a square of chemicals with the initial concentrations. */
+  /** Place an annulus of chemicals with the initial concentrations. */
   protected def stampRing(centerX: Int, centerY: Int, radius: Int, thickness: Int,
                         initialU: Double, initialV: Double,
                         grid: InitializableGrid): Unit = {
@@ -46,13 +46,15 @@ abstract class Initializer(name: String, initialU: Double = INITIAL_U, initialV:
 
     for (x <- xMin to xMax)
       for (y <- yMin to yMax) {
-        val r = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2))
+        val dx = x - centerX
+        val dy = y - centerY
+        val r = Math.sqrt(dx * dx + dy * dy)
         if (r > radius - thicknessD2 && r <= radius + thicknessD2)
           grid.initializePoint(x, y, initialU, initialV)
       }
   }
 
-  /** Place a square of chemicals with the initial concentrations. */
+  /** Place a filled disk of chemicals with the initial concentrations. */
   protected def stampCircle(centerX: Int, centerY: Int, radius: Int,
                           initialU: Double, initialV: Double,
                           grid: InitializableGrid): Unit = {
@@ -63,8 +65,10 @@ abstract class Initializer(name: String, initialU: Double = INITIAL_U, initialV:
 
     for (x <- xMin to xMax)
       for (y <- yMin to yMax) {
-        val r = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2))
-        if ( r <= radius)
+        val dx = x - centerX
+        val dy = y - centerY
+        val r = Math.sqrt(dx * dx + dy * dy)
+        if (r <= radius)
           grid.initializePoint(x, y, initialU, initialV)
       }
   }

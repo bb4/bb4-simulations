@@ -2,10 +2,11 @@
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import GrayScottAlgorithm._
+import scala.compiletime.uninitialized
 
 /**
   * This is the core of the Gray-Scott reaction diffusion simulation implementation.
-  * Based on an work by Joakim Linde and modified by Barry Becker.
+  * Based on work by Joakim Linde and modified by Barry Becker.
   */
 object GrayScottAlgorithm {
   /** These are the diffusion rates of the 2 chemicals. We could add scrollbars to scale these */
@@ -14,8 +15,8 @@ object GrayScottAlgorithm {
 }
 
 final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
-  private var duDivh2: Double = _
-  private var dvDivh2: Double = _
+  private var duDivh2: Double = uninitialized
+  private var dvDivh2: Double = uninitialized
 
   def computeNextTimeStep(minX: Int, maxX: Int, dt: Double): Unit = {
     val u = model.tmpU

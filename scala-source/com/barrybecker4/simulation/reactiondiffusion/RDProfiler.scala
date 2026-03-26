@@ -12,15 +12,10 @@ import com.barrybecker4.simulation.common.Profiler
   */
 object RDProfiler {
   private val CONCURRENT_CALCULATION = "concurrent_calculation"
-  private var instance: RDProfiler = _
+  private lazy val instance: RDProfiler = new RDProfiler()
 
-  /**
-    * @return singleton instance.
-    */
-  def getInstance: RDProfiler = {
-    if (instance == null) instance = new RDProfiler
-    instance
-  }
+  /** @return singleton instance. */
+  def getInstance: RDProfiler = instance
 }
 
 /**
@@ -36,10 +31,16 @@ class RDProfiler private() extends Profiler {
     super.print()
     val calcTime = getCalcTime
     val renderingTime = getRenderingTime
+    val totalTime = calcTime + renderingTime
     printMessage("Number of Frames: " + FormatUtil.formatNumber(numFrames))
-    printMessage("Calculation time per frame (sec):" + FormatUtil.formatNumber(calcTime / numFrames))
-    printMessage("Rendering time per frame   (sec):" + FormatUtil.formatNumber(renderingTime / numFrames))
-    printMessage("FPS: " + FormatUtil.formatNumber((calcTime + renderingTime) / numFrames))
+    if (numFrames > 0) {
+      printMessage("Calculation time per frame (sec):" + FormatUtil.formatNumber(calcTime / numFrames))
+      printMessage("Rendering time per frame   (sec):" + FormatUtil.formatNumber(renderingTime / numFrames))
+      if (totalTime > 0)
+        printMessage("FPS: " + FormatUtil.formatNumber(numFrames / totalTime))
+      else
+        printMessage("FPS: n/a (zero total time)")
+    }
   }
 
   override def resetAll(): Unit = {
