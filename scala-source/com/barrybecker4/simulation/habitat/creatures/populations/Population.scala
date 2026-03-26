@@ -2,7 +2,7 @@
 package com.barrybecker4.simulation.habitat.creatures.populations
 
 import com.barrybecker4.math.MathUtil
-import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureType, absMod}
+import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor, CreatureType, absMod}
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
 
 import javax.vecmath.Point2d
@@ -111,7 +111,7 @@ class Population(var creatureType: CreatureType) {
     val (living, dead) = creatures.partition(_.isAlive)
     grid.removeCreatures(dead)
     creatures = living
-    if (creatures.size < origAlive)
+    if (creatures.size < origAlive && CreatureProcessor.DEBUG)
       println("deaths: " + (origAlive - creatures.size) + " " + creatureType.name)
 
   def getSize: Int = creatures.size

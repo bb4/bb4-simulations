@@ -23,6 +23,8 @@ abstract class Habitat extends ArrayBuffer[Population] {
 
   private var functionMap = Map[Population, CountFunction]()
   private var dayCount: Int = 0
+  /** Avoid calling setMaxXValues on every paint when graph resolution unchanged. */
+  private var lastGraphTotalSamples: Int = -1
   /** associate population with function */
   private var grid: HabitatGrid = _
   initialize()
@@ -30,9 +32,21 @@ abstract class Habitat extends ArrayBuffer[Population] {
   def getName: String
 
   def reset(): Unit = {
+    dayCount = 0
     grid = createHabitatGrid()
     for (pop <- this) pop.reset()
     updateGridCellCounts()
+    for (pop <- this)
+      functionMap.get(pop).foreach(_.setInitialValue(pop.getSize.toDouble))
+  }
+
+  /** Cap stored series length; should match graph horizontal resolution (see PopulationGraphPanel). */
+  def setGraphMaxSamples(totalSamples: Int): Unit = {
+    if (functionMap.isEmpty) return
+    if (totalSamples == lastGraphTotalSamples) return
+    lastGraphTotalSamples = totalSamples
+    val maxX = (totalSamples - 1).max(1)
+    for (f <- functionMap.values) f.setMaxXValues(maxX)
   }
 
   protected def addPopulations(): Unit
@@ -71,6 +85,7 @@ abstract class Habitat extends ArrayBuffer[Population] {
   }
 
   private def updateFunctions(iteration: Long): Unit = {
+    if (functionMap.isEmpty) return
     for (pop <- this) {
       val func = functionMap(pop)
       func.addValue(iteration.toDouble, pop.getSize.toDouble)
