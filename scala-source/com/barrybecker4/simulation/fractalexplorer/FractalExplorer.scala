@@ -9,6 +9,8 @@ import com.barrybecker4.ui.util.ColorMap
 import javax.swing.JPanel
 import java.awt.Graphics
 
+import scala.compiletime.uninitialized
+
 
 object FractalExplorer {
   val DEFAULT_ALGORITHM_ENUM: AlgorithmEnum = MANDELBROT
@@ -20,11 +22,11 @@ object FractalExplorer {
   */
 class FractalExplorer extends Simulator("Fractal Explorer") {
 
-  private var algorithm: FractalAlgorithm = _
-  private var algorithmEnum: AlgorithmEnum = _
+  private var algorithm: FractalAlgorithm = uninitialized
+  private var algorithmEnum: AlgorithmEnum = uninitialized
   private var juliaSeed = JuliaAlgorithm.DEFAULT_JULIA_SEED
-  private var options: DynamicOptions = _
-  private var zoomHandler: ZoomHandler = _
+  private var options: DynamicOptions | Null = null
+  private var zoomHandler: ZoomHandler | Null = null
   private var useFixedSize: Boolean = false
 
   commonInit()
@@ -67,9 +69,10 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
       this.removeMouseListener(zoomHandler)
       this.removeMouseMotionListener(zoomHandler)
     }
-    zoomHandler = new ZoomHandler(algorithm)
-    this.addMouseListener(zoomHandler)
-    this.addMouseMotionListener(zoomHandler)
+    val handler = new ZoomHandler(algorithm)
+    zoomHandler = handler
+    this.addMouseListener(handler)
+    this.addMouseMotionListener(handler)
     if (options != null) options.reset()
   }
 

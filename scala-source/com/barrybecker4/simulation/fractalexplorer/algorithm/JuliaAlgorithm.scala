@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.fractalexplorer.algorithm
 
 import com.barrybecker4.math.complex.ComplexNumber
 import com.barrybecker4.math.complex.ComplexNumberRange
-import JuliaAlgorithm._
 
 /**
   * Populates the FractalModel using the iterative Julia set algorithm.
@@ -21,17 +20,9 @@ class JuliaAlgorithm extends FractalAlgorithm(JuliaAlgorithm.INITIAL_RANGE) {
   private var seed: ComplexNumber = JuliaAlgorithm.DEFAULT_JULIA_SEED
 
   def setJuliaSeed(seed: ComplexNumber): Unit = {
-    println("setting jSeed to " + seed)
     this.seed = seed
   }
 
-  def getFractalValue(initialValue: ComplexNumber): Double = {
-    var z: ComplexNumber = initialValue
-    var numIterations: Int = 0
-    while (z.getMagnitude < 2.0 && numIterations < getMaxIterations) {
-      z = z.power(2).add(seed)
-      numIterations += 1
-    }
-    numIterations.toDouble / getMaxIterations
-  }
+  def getFractalValue(initialValue: ComplexNumber): Double =
+    EscapeIteration.normalizedEscapeTime(initialValue, seed, getMaxIterations)
 }

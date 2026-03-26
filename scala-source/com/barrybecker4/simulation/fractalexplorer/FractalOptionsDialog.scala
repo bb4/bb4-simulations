@@ -9,6 +9,8 @@ import com.barrybecker4.ui.components.ComplexNumberInput
 import javax.swing.{BoxLayout, JComboBox, JLabel, JPanel}
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
@@ -16,8 +18,8 @@ import java.awt._
 class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 
-  private var algorithmChoice: JComboBox[String] = _
-  private var juliaSeedField: ComplexNumberInput = _
+  private var algorithmChoice: JComboBox[String] = uninitialized
+  private var juliaSeedField: ComplexNumberInput = uninitialized
 
   override protected def createRenderingParamPanel = new JPanel
 
@@ -59,7 +61,6 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     val sim = getSimulator
     val selected = algorithmChoice.getSelectedIndex
     sim.setAlgorithm(AlgorithmEnum.VALUES(selected))
-    println("from seed field = " + juliaSeedField.getValue)
     sim.setJuliaSeed(juliaSeedField.getValue)
     setVisible(false)
     sim.repaint()

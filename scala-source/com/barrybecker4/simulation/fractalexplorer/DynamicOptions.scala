@@ -10,6 +10,8 @@ import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 
+import scala.compiletime.uninitialized
+
 
 /**
   * Dynamic controls for the Fractal explorer simulation that will show on the right.
@@ -50,11 +52,11 @@ class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
   val fill = new JPanel
   fill.setPreferredSize(new Dimension(10, 1000))
   add(fill)
-  private var useConcurrency: JCheckBox = _
-  private var useFixedSize: JCheckBox = _
-  private var useRunLengthOptimization: JCheckBox = _
-  private var coordinate1: JLabel = _
-  private var coordinate2: JLabel = _
+  private var useConcurrency: JCheckBox = uninitialized
+  private var useFixedSize: JCheckBox = uninitialized
+  private var useRunLengthOptimization: JCheckBox = uninitialized
+  private var coordinate1: JLabel = uninitialized
+  private var coordinate2: JLabel = uninitialized
 
   def setCoordinates(range: ComplexNumberRange): Unit = {
     coordinate1.setText("c1: " + range.point1)

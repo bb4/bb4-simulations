@@ -11,10 +11,11 @@ import FractalAlgorithm.DEFAULT_MAX_ITERATIONS
 import com.barrybecker4.ui.util.ColorMap
 import scala.collection.parallel.CollectionConverters._
 
+import scala.compiletime.uninitialized
+
 /**
   * Abstract implementation common to all fractal algorithms.
-  * Uses concurrency when parallelized is set.
-  * This will give good speedup on multi-core machines.
+  * Uses scala parallel collections when parallelized for multicore row computation.
   *
   * For core 2 Duo:
   * - not-parallel 32.4 seconds
@@ -51,7 +52,7 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
   private var range: ComplexNumberRange = initialRange
   private var parallelized = true
   private var maxIterations: Int = DEFAULT_MAX_ITERATIONS
-  private var rowCalculator: RowCalculator = _
+  private var rowCalculator: RowCalculator = uninitialized
   private var restartRequested: Boolean = false
   private var wasDone: Boolean = false
   private val history: History = new History
@@ -75,8 +76,8 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
     }
   }
 
-  private def processRange(rang: ComplexNumberRange): Unit = {
-    range = rang
+  private def processRange(newRange: ComplexNumberRange): Unit = {
+    range = newRange
     restartRequested = true
   }
 
@@ -117,35 +118,47 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
     }
     if (model.isDone) {
       showProfileInfoWhenFinished()
-      return true
+      true
+    } else {
+      val numProcs = Runtime.getRuntime.availableProcessors
+      var currentRow = model.getCurrentRow
+      startProfileTimeIfNeeded(currentRow)
+      val height = model.getHeight
+      val computeToRow = Math.min(height, currentRow + timeStep.toInt * numProcs)
+      val diff = computeToRow - currentRow
+      if (diff == 0) true
+      else {
+        val chunk = Math.max(1, diff / numProcs)
+        val (workers, endRow) = buildRowWorkers(currentRow, height, numProcs, chunk)
+        runRowWorkers(workers)
+        model.setCurrentRow(endRow)
+        model.updateImage()
+        false
+      }
     }
-    val numProcs: Int = Runtime.getRuntime.availableProcessors
-    var workers: List[Worker] = List()
-    var currentRow: Int = model.getCurrentRow
-    startProfileTimeIfNeeded(currentRow)
-    val height: Int = model.getHeight
-    val computeToRow: Int = Math.min(height, currentRow + timeStep.toInt * numProcs)
-    val diff: Int = computeToRow - currentRow
-    if (diff == 0) return true
-    val chunk: Int = Math.max(1, diff / numProcs)
+  }
 
-    var i: Int = 0
+  private def buildRowWorkers(
+      startRow: Int,
+      height: Int,
+      numProcs: Int,
+      chunk: Int
+  ): (List[Worker], Int) = {
+    var workers = List.empty[Worker]
+    var row = startRow
+    var i = 0
     while (i < numProcs) {
-      val nextRow: Int = Math.min(height, currentRow + chunk)
-      workers = new Worker(currentRow, nextRow) :: workers
-      currentRow = nextRow
+      val nextRow = Math.min(height, row + chunk)
+      workers = new Worker(row, nextRow) :: workers
+      row = nextRow
       i += 1
     }
-
-    if (parallelized)
-      workers.par.foreach(x => x.run())
-    else
-      workers.foreach(x => x.run())
-
-    model.setCurrentRow(currentRow)
-    model.updateImage()
-    false
+    (workers, row)
   }
+
+  private def runRowWorkers(workers: List[Worker]): Unit =
+    if (parallelized) workers.par.foreach(_.run())
+    else workers.foreach(_.run())
 
   /** @return a number between 0 and 1.
     *         Typically corresponds to the number times we had to iterate before the point escaped (or not).
@@ -195,9 +208,9 @@ abstract class FractalAlgorithm(initialRange: ComplexNumberRange) {
   private class Worker(fromRow: Int, toRow: Int) extends Runnable {
 
     /** Do a chunk of work (i.e. compute the specified rows) */
-    private def computeChunk(fromRow: Int, toRow: Int): Unit = {
-      val width: Int = model.getWidth
-      for (y <- fromRow until toRow) rowCalculator.calculateRow(width, y)
+    private def computeChunk(rowsFrom: Int, rowsTo: Int): Unit = {
+      val width = model.getWidth
+      for (y <- rowsFrom until rowsTo) rowCalculator.calculateRow(width, y)
     }
 
     def run(): Unit = computeChunk(fromRow, toRow)

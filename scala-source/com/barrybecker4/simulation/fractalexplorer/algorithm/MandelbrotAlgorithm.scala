@@ -5,7 +5,7 @@ import com.barrybecker4.math.complex.ComplexNumber
 import com.barrybecker4.math.complex.ComplexNumberRange
 
 /**
-  * Populates the FractalModel using the iterative Mandelbrot algorithm..
+  * Populates the FractalModel using the iterative Mandelbrot algorithm.
   * @author Barry Becker
   */
 object MandelbrotAlgorithm {
@@ -15,13 +15,6 @@ object MandelbrotAlgorithm {
 
 class MandelbrotAlgorithm extends FractalAlgorithm(MandelbrotAlgorithm.INITIAL_RANGE) {
 
-  def getFractalValue(initialValue: ComplexNumber): Double = {
-    var z: ComplexNumber = initialValue
-    var numIterations: Int = 0
-    while (z.getMagnitude < 2.0 && numIterations < getMaxIterations) {
-      z = z.power(2).add(initialValue)
-      numIterations += 1
-    }
-    numIterations.toDouble / getMaxIterations
-  }
+  def getFractalValue(initialValue: ComplexNumber): Double =
+    EscapeIteration.normalizedEscapeTime(initialValue, initialValue, getMaxIterations)
 }

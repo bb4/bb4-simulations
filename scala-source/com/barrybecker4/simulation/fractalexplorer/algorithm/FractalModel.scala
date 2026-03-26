@@ -7,6 +7,8 @@ import com.barrybecker4.simulation.common.RectangularModel
 import com.barrybecker4.simulation.common.rendering.RectangularModelImage
 import com.barrybecker4.ui.util.ColorMap
 
+import scala.compiletime.uninitialized
+
 
 object FractalModel {
   private val FIXED_SIZE: Int = 200
@@ -17,8 +19,8 @@ object FractalModel {
   * @author Barry Becker
   */
 class FractalModel extends RectangularModel {
-  private var image: RectangularModelImage = _
-  private var values: Array[Array[Double]] = _
+  private var image: RectangularModelImage = uninitialized
+  private var values: Array[Array[Double]] = uninitialized
   private val colorMap: ColorMap = new FractalColorMap()
   private var lastRow: Int = 0
   private var currentRow: Int = 0
@@ -55,7 +57,7 @@ class FractalModel extends RectangularModel {
 
   def getWidth: Int = values.length
   def getHeight: Int = values(0).length
-  def getAspectRatio: Double = getWidth / getHeight
+  def getAspectRatio: Double = getWidth.toDouble / getHeight.toDouble
   def isDone: Boolean = currentRow >= getHeight
   def getCurrentRow: Int = currentRow
   def getLastRow: Int = lastRow

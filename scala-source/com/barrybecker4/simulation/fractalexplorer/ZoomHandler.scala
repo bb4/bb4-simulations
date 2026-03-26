@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.fractalexplorer
 
 import java.awt.Graphics
+import java.awt.event.InputEvent
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
@@ -27,20 +28,22 @@ class ZoomHandler(var algorithm: FractalAlgorithm)
 
   /**
     * Remember the location of the mouse when pressed,
-    * and determine if aspect ration should be preserved based on control/shit key.
+    * and determine if aspect ratio should be preserved based on control/shift key.
     */
   override def mousePressed(e: MouseEvent): Unit = {
-    keepAspectRatio = determineIfKeepAspectRation(e)
+    keepAspectRatio = determineIfKeepAspectRatio(e)
     zoomBox.setFirstCorner(e.getX, e.getY)
   }
 
   override def mouseDragged(e: MouseEvent): Unit = zoomBox.setSecondCorner(e.getX, e.getY)
 
-
-  private def determineIfKeepAspectRation(e: MouseEvent) = e.isControlDown || e.isShiftDown
+  private def determineIfKeepAspectRatio(e: MouseEvent): Boolean =
+    (e.getModifiersEx & InputEvent.CTRL_DOWN_MASK) != 0 ||
+      (e.getModifiersEx & InputEvent.SHIFT_DOWN_MASK) != 0
 
   override def mouseReleased(e: MouseEvent): Unit = {
     if (zoomBox.isValidBox) {
+      zoomBox.finalizeBoxForRange(algorithm.getAspectRatio, keepAspectRatio)
       val range = algorithm.getRange(zoomBox.getBox)
       algorithm.setRange(range)
     }

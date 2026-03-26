@@ -31,12 +31,20 @@ class ZoomBox {
 
   def getBox: Box = box.get
 
+  /** Recompute `box` from corners (needed before [[getBox]] if [[render]] did not run). */
+  def finalizeBoxForRange(aspectRatio: Double, keepAspectRatio: Boolean): Unit = {
+    if (firstCorner.isDefined && secondCorner.isDefined)
+      box = Some(findBox(aspectRatio, keepAspectRatio))
+  }
+
   def clearBox(): Unit = {
     firstCorner = None
     secondCorner = None
-}
+    box = None
+  }
 
-  def isValidBox: Boolean = box.isDefined && firstCorner.isDefined && !(firstCorner == secondCorner)
+  def isValidBox: Boolean =
+    firstCorner.isDefined && secondCorner.isDefined && firstCorner != secondCorner
 
   /** Draw the bounding box if dragging.
     */

@@ -76,14 +76,18 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
       }
       if (runLength > RowCalculator.M) {
         increment = RowCalculator.N
-        var xx: Int = x
-        while (xx < x + RowCalculator.N) {
-          model.setValue(xx, y, currentValue)
-          xx += 1; xx - 1
-        }
+        fillShortRun(x, y, currentValue, x + RowCalculator.N)
       }
       model.setValue(x, y, currentValue)
       x += increment
+    }
+  }
+
+  private def fillShortRun(x: Int, y: Int, value: Double, endExclusive: Int): Unit = {
+    var xx = x
+    while (xx < endExclusive) {
+      model.setValue(xx, y, value)
+      xx += 1
     }
   }
 
