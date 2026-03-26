@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
+import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import java.awt.event.MouseMotionListener
@@ -14,11 +15,22 @@ import java.awt.event.MouseMotionListener
 object InteractionHandler {
   private[ui] val DEFAULT_FORCE = 2.0
   private[ui] val DEFAULT_SOURCE_DENSITY = 1.0
+
+  def dragStencilIndices(i: Int, j: Int, width: Int, height: Int): IndexedSeq[(Int, Int)] = {
+    val startX = math.max(1, i - 1)
+    val stopX  = math.min(width, i + 1)
+    val startY = math.max(1, j - 1)
+    val stopY  = math.min(height, j + 1)
+    for (ii <- startX to stopX; jj <- startY to stopY) yield (ii, jj)
+  }
 }
 
-class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Double,
-                                     var force: Double = InteractionHandler.DEFAULT_FORCE)
-  extends MouseListener with MouseMotionListener {
+class InteractionHandler private[ui](
+    var env: FluidEnvironment,
+    var scale: Double,
+    var force: Double = InteractionHandler.DEFAULT_FORCE,
+    var renderContentOffsetPixels: Int = EnvironmentRenderer.ContentOffsetPixels
+) extends MouseListener with MouseMotionListener {
 
   private var sourceDensity: Double = InteractionHandler.DEFAULT_SOURCE_DENSITY
   private var currentX = 0
@@ -31,23 +43,16 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
   def setForce(force: Double): Unit = { this.force = force }
   private[ui] def setSourceDensity(sourceDensity: Double): Unit = { this.sourceDensity = sourceDensity }
 
-  /** Make waves or adds ink when dragging depending on the mouse key held down. */
   override def mouseDragged(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
-    val i = (currentX / scale).toInt
-    val j = (currentY / scale).toInt
-    // apply the change to a convolution kernel area
-    val startX = Math.max(1, i - 1)
-    val stopX = Math.min(env.getWidth, i + 1)
-    val startY = Math.max(1, j - 1)
-    val stopY = Math.min(env.getHeight, j + 1)
-    for (ii <- startX until stopX) {
-      for (jj <- startY until stopY) {
-        val weight = if (ii == i && jj == j) 1.0f
-        else 0.3f
-        applyChange(ii, jj, weight)
-      }
+    val ax = currentX - renderContentOffsetPixels
+    val ay = currentY - renderContentOffsetPixels
+    val i = (ax / scale).toInt
+    val j = (ay / scale).toInt
+    for ((ii, jj) <- InteractionHandler.dragStencilIndices(i, j, env.getWidth, env.getHeight)) {
+      val weight = if (ii == i && jj == j) 1.0f else 0.3f
+      applyChange(ii, jj, weight)
     }
     lastX = currentX
     lastY = currentY
@@ -65,7 +70,6 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
     else if (mouse3Down) { // if the right mouse is down, add ink (density)
       env.incrementDensity(i, j, weight * sourceDensity)
     }
-    else println("dragged with no button down")
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
@@ -84,7 +88,10 @@ class InteractionHandler private[ui](var env: FluidEnvironment, var scale: Doubl
     mouse3Down = e.getButton == MouseEvent.BUTTON3
   }
 
-  override def mouseReleased(e: MouseEvent): Unit = {}
+  override def mouseReleased(e: MouseEvent): Unit = {
+    if (e.getButton == MouseEvent.BUTTON1) mouse1Down = false
+    else if (e.getButton == MouseEvent.BUTTON3) mouse3Down = false
+  }
   override def mouseEntered(e: MouseEvent): Unit = {}
   override def mouseExited(e: MouseEvent): Unit = {}
 }

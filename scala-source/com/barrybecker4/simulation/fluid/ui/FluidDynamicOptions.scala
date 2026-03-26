@@ -10,6 +10,7 @@ import javax.swing._
 import java.awt._
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import scala.compiletime.uninitialized
 
 
 /**
@@ -40,10 +41,10 @@ object FluidDynamicOptions {
 
 class FluidDynamicOptions private[ui](var simulator: FluidSimulator) extends JPanel with ActionListener with SliderGroupChangeListener {
 
-  private var useConcurrentRendering: JCheckBox  = _
-  private var useLinearInterpolation: JCheckBox = _
-  private var showVelocities: JCheckBox = _
-  private var showGrid: JCheckBox = _
+  private var useConcurrentRendering: JCheckBox = uninitialized
+  private var useLinearInterpolation: JCheckBox = uninitialized
+  private var showVelocities: JCheckBox = uninitialized
+  private var showGrid: JCheckBox = uninitialized
 
   setBorder(BorderFactory.createEtchedBorder)
   val controlsPanel = new JPanel

@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-20179 Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.common.util.FileUtil
@@ -12,6 +12,7 @@ import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer
 import com.barrybecker4.simulation.fluid.rendering.RenderingOptions
 import java.awt._
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -32,8 +33,8 @@ object FluidSimulator {
 
 class FluidSimulator() extends Simulator("Fluid") {
   private val renderOptions = new RenderingOptions
-  private var envRenderer: EnvironmentRenderer = _
-  private var handler: InteractionHandler = _
+  private var envRenderer: EnvironmentRenderer = uninitialized
+  private var handler: InteractionHandler = uninitialized
   private val environment: FluidEnvironment = new FluidEnvironment(10, 10)
 
   commonInit()
@@ -45,7 +46,7 @@ class FluidSimulator() extends Simulator("Fluid") {
     setNumStepsPerFrame(FluidSimulator.DEFAULT_STEPS_PER_FRAME)
 
     val force: Double = if (handler != null) handler.force else InteractionHandler.DEFAULT_FORCE
-    handler = new InteractionHandler(environment, scale, force)
+    handler = new InteractionHandler(environment, scale, force, EnvironmentRenderer.ContentOffsetPixels)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
   }

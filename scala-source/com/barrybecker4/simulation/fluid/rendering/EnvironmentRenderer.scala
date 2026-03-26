@@ -12,11 +12,11 @@ import scala.collection.parallel.CollectionConverters._
   * Renders a specified fluid environment.
   * @author Barry Becker
   */
-object EnvironmentRenderer { // rendering attributes
+object EnvironmentRenderer {
+  val ContentOffsetPixels: Int = 10
   private val GRID_COLOR = new Color(30, 30, 30, 10)
   private val VECTOR_COLOR = new Color(200, 60, 30, 50)
   private val VECTOR_SCALE = 40.0
-  private val OFFSET = 10
   private val PRESSURE_COLOR_MAP = new PressureColorMap
 }
 
@@ -33,8 +33,8 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
     if (options.getShowPressures) concurrentRenderPressures(g)
     // outer boundary
     val scale = options.getScale
-    g.drawRect(OFFSET,
-      OFFSET, (env.getWidth * scale).toInt, (env.getHeight * scale).toInt)
+    g.drawRect(ContentOffsetPixels,
+      ContentOffsetPixels, (env.getWidth * scale).toInt, (env.getHeight * scale).toInt)
 
     // draw the ---velocity--- field (and status)
     if (options.getShowVelocities) drawVectors(g)
@@ -61,7 +61,7 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
     if (options.isParallelized) workers.par.foreach(_.run())
     else workers.foreach(_.run())
 
-    g2.drawImage(modelImage.getImage, OFFSET, OFFSET, null)
+    g2.drawImage(modelImage.getImage, ContentOffsetPixels, ContentOffsetPixels, null)
   }
 
   private def drawGrid(g: Graphics2D): Unit = {
@@ -71,12 +71,12 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
     val bottomEdgePos = (scale * env.getHeight).toInt
     for (j <- 0 until env.getHeight) { //  -----
       val ypos = (j * scale).toInt
-      g.drawLine(OFFSET, ypos + OFFSET, rightEdgePos + OFFSET, ypos + OFFSET)
+      g.drawLine(ContentOffsetPixels, ypos + ContentOffsetPixels, rightEdgePos + ContentOffsetPixels, ypos + ContentOffsetPixels)
     }
     for (i <- 0 until env.getWidth) { //  ||||
       val xpos = (i * scale).toInt
-      g.drawLine(xpos + OFFSET,
-        OFFSET, xpos + OFFSET, bottomEdgePos + OFFSET)
+      g.drawLine(xpos + ContentOffsetPixels,
+        ContentOffsetPixels, xpos + ContentOffsetPixels, bottomEdgePos + ContentOffsetPixels)
     }
   }
 
@@ -87,11 +87,11 @@ final class EnvironmentRenderer(var env: FluidEnvironment, var options: Renderin
       for (i <- 0 until env.getWidth) {
         val u = env.getU(i, j)
         val v = env.getV(i, j)
-        val x = (scale * i).toInt + OFFSET
-        val y = (scale * j).toInt + OFFSET
+        val x = (scale * i).toInt + ContentOffsetPixels
+        val y = (scale * j).toInt + ContentOffsetPixels
         g.drawLine(x, y,
-          (scale * i + VECTOR_SCALE * u).toInt + OFFSET,
-          (scale * j + VECTOR_SCALE * v).toInt + OFFSET)
+          (scale * i + VECTOR_SCALE * u).toInt + ContentOffsetPixels,
+          (scale * j + VECTOR_SCALE * v).toInt + ContentOffsetPixels)
       }
     }
   }
