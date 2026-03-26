@@ -88,13 +88,16 @@ class Trebuchet() {
     }
     RenderablePart.angle = angle
     RenderablePart.angularVelocity = angularVelocity
-    //println("angle="+angle+"  angularVelocity_="
-    //  +angularVelocity +" angularAcceleration="+angularAcceleration);
-    // calculate the forces acting on the projectile.
-    // the magnitude of the tangential force at the hook
+    // Forces use torque and slingAngle from the start of the step; getAngleWithHorz runs after angle is updated.
+    applyProjectileForcesAfterLeverStep(timeStep, torque, slingAngle)
+    checkProjectileRelease(slingAngle)
+    timeStep
+  }
+
+  /** Called only after [[RenderablePart.angle]] has been updated for this step. */
+  private def applyProjectileForcesAfterLeverStep(timeStep: Double, torque: Double, slingAngle: Double): Unit =
     if (!projectile.isReleased) {
       val tangentialForceAtHook = torque / lever.getSlingLeverLength
-      //println("tangentialForceAtHook="+tangentialForceAtHook);
       val slingAngleWithHorz = sling.getAngleWithHorz
       forceFromHook.set(-cos(slingAngleWithHorz), sin(slingAngleWithHorz)) //sin(PI - angle), -cos(PI + angle));
 
@@ -115,15 +118,14 @@ class Trebuchet() {
       gravityForce.scale(projectile.getMass)
       projectile.setForce(gravityForce, timeStep)
     }
-    // at the time when it is released, the only force acting on it will be gravity.
+
+  private def checkProjectileRelease(slingAngle: Double): Unit =
     if (!projectile.isReleased && slingAngle >= (PI + sling.getReleaseAngle)) {
       println("##########################################################################")
       println("released!  slingAngle = " + slingAngle + " sling release angle = " + sling.getReleaseAngle)
       println("##########################################################################")
       projectile.isReleased = true
     }
-    timeStep
-  }
 
   private def calculateTorque(angle: Double, slingAngle: Double) = {
     var primaryTorque: Double = 0

@@ -67,9 +67,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     zoomSlider.addChangeListener(this)
     zoomPanel.add(zoomLabel)
     zoomPanel.add(zoomSlider)
-    this.add(zoomPanel)
-    controls.add(zoomLabel)
-    controls.add(zoomSlider)
+    controls.add(zoomPanel)
     controls
   }
 
