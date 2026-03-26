@@ -33,9 +33,7 @@ class LExpressionParserSuite extends AnyFunSuite {
   private def verifyParse(exp: String): Unit = { verifyParse(exp, exp) }
 
   private def verifyParse(expression: String, expSerializedStr: String): Unit = {
-    //val root = parser.parseAll(parser.factor, expression)
     val root = parser.parseToTree(expression)
-    //println("expression = " + root)
 
     if (expSerializedStr.isEmpty) {
       assert(root.getData == "" && root.children.isEmpty)

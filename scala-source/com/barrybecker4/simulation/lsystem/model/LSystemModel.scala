@@ -8,6 +8,7 @@ import LSystemModel._
 import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.simulation.lsystem.Panable
 
+import scala.compiletime.uninitialized
 
 /**
   * See https://en.wikipedia.org/wiki/L-system
@@ -26,7 +27,7 @@ object LSystemModel {
 }
 
 class LSystemModel() extends Panable {
-  private var renderer: LSystemRenderer = _
+  private var renderer: LSystemRenderer = uninitialized
   reset()
 
   def reset(): Unit = {
@@ -49,8 +50,8 @@ class LSystemModel() extends Panable {
   def getImage: BufferedImage = renderer.getImage
 
   /**
-    * @param timeStep number of rows to compute on this timestep.
-    * @return true when done computing whole renderer.
+    * Renders the L-system to the backing image. Invoked each animation frame by the simulator.
+    * @param timeStep simulator timestep (unused; the tree re-renders when parameters or size change).
     */
   def timeStep(timeStep: Double): Unit = {
     renderer.render()

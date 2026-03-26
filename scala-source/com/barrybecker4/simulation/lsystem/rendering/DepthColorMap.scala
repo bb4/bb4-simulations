@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.lsystem.rendering
 
 import com.barrybecker4.ui.util.ColorMap
 import java.awt.Color
-import DepthColorMap._
 
 /**
   * Default colormap for visualization.
@@ -11,9 +10,6 @@ import DepthColorMap._
   * @author Barry Becker
   */
 object DepthColorMap {
-  private val MIN_VALUE = 0
-  private val MAX_VALUE = 20.0
-  private val RANGE = MAX_VALUE - MIN_VALUE
   private val VALUES: Array[Double] =
     Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
   private val COLORS = Array(
@@ -41,4 +37,4 @@ object DepthColorMap {
   )
 }
 
-class DepthColorMap() extends ColorMap(VALUES, DepthColorMap.COLORS)
+class DepthColorMap() extends ColorMap(DepthColorMap.VALUES, DepthColorMap.COLORS)

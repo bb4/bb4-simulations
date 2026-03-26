@@ -7,12 +7,10 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.image.BufferedImage
 
-import com.barrybecker4.simulation.lsystem.model.expression.LToken._
-
 import com.barrybecker4.common.geometry.{IntLocation, Location}
 import com.barrybecker4.simulation.lsystem.Panable
 
-
+import scala.compiletime.uninitialized
 
 /**
   * Everything we need to know to compute and draw the Lyndonmayer-System tree.
@@ -34,15 +32,15 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
   private var numIterations = initialNumIterations
   private var scale = initialScale
   private var scaleFactor = initialScaleFactor
-  private var expression: String = _
+  private var expression: String = uninitialized
   private val cmap = new DepthColorMap
-  private var root: LSystemNode = _
-  private var angleIncrement: Double = _
+  private var root: LSystemNode = uninitialized
+  private var angleIncrement: Double = uninitialized
   private var offset: Location = IntLocation(0, 0)
   private val parser = new LExpressionParser
   private val serializer = new LTreeSerializer
   private var needsRender: Boolean = true
-  private var offlineGraphics: OfflineGraphics = _
+  private var offlineGraphics: OfflineGraphics = uninitialized
 
   setExpression(initialExpression)
   setDimensions(initialWidth, initialHeight)
@@ -93,7 +91,6 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
   def incrementOffset(incrementAmount: Location): Unit = {
     offset = offset.incrementOnCopy(incrementAmount)
     needsRender = true
-    //render() ??
   }
 
   /** draw the tree */
@@ -118,19 +115,18 @@ class LSystemRenderer(initialWidth: Int, initialHeight: Int,
       if (child.hasParens) drawTree(new OrientedPosition(pos), scaleFactor * length, child, numIterations, depth + 1)
       else {
         val baseExp = child.getData
-        for (i <- 0 until baseExp.length) {
-          processSymbol(length, numIterations, pos, baseExp.substring(i, i + 1), depth)
-        }
+        for (ch <- baseExp)
+          processSymbol(length, numIterations, pos, ch, depth)
       }
     }
   }
 
-  /** note: current position is changed by the processing of the symbol */
-  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: String, depth: Int): Unit = {
-    if (c == F.symbol) if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
+  /** Current position is updated when drawing F (forward). */
+  private def processSymbol(length: Double, numIterations: Int, currentPos: OrientedPosition, c: Char, depth: Int): Unit = {
+    if (c == 'F') if (numIterations > 0) drawTree(currentPos, length, root, numIterations - 1, depth)
     else drawF(currentPos, length, depth)
-    else if (c == MINUS.symbol) currentPos.angle -= angleIncrement
-    else if (c == PLUS.symbol) currentPos.angle += angleIncrement
+    else if (c == '-') currentPos.angle -= angleIncrement
+    else if (c == '+') currentPos.angle += angleIncrement
     else throw new IllegalStateException("Unexpected char: " + c)
   }
 

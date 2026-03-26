@@ -20,24 +20,28 @@ class LExpressionParser extends RegexParsers {
   def theExp: Parser[Seq[LSystemNode]] = exp ^^ { Seq(_) }
   def factor: Parser[Seq[LSystemNode]] = rep(theExp | opFactor) ^^ { _.flatten.toSeq }
 
-  def exp: Parser[LSystemNode] = (F.symbol.r | "("~>factor<~")") ^^ {
-    case f: String => LSystemNode(F.symbol, ops)
-    case fact: Seq[_] =>
-      val tn = LSystemNode("", ops)
-      tn.hasParens = true
-      tn.children = fact.asInstanceOf[Seq[LSystemNode]]
-      tn
-    case x => throw new UnsupportedOperationException("Unexpected: " + x.getClass.getName )
+  /** One 'F' terminal (regex so it does not absorb following letters). */
+  private def fAtom: Parser[LSystemNode] = F.symbol.r ^^ { _ => LSystemNode(F.symbol, ops) }
+
+  /** A parenthesized subexpression as a single grouped node. */
+  private def parenGroup: Parser[LSystemNode] = "(" ~> factor <~ ")" ^^ { fact =>
+    val tn = LSystemNode("", ops)
+    tn.hasParens = true
+    tn.children = fact
+    tn
   }
+
+  def exp: Parser[LSystemNode] = fAtom | parenGroup
 
   def parseToTree(expression: String): LSystemNode = {
     val parsed: ParseResult[Seq[LSystemNode]] = parseAll(factor, expression)
 
-    if (parsed.isEmpty) throw new IllegalArgumentException(parsed.toString)
-    if (parsed.get.length > 1) {
+    if (!parsed.successful) throw new IllegalArgumentException(parsed.toString)
+    val seq = parsed.get
+    if (seq.length > 1) {
       val root = LSystemNode("", ops)
-      root.children = Seq(parsed.get:_*)
+      root.children = seq
       root
-    } else parsed.get.head
+    } else seq.head
   }
 }

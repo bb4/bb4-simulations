@@ -8,21 +8,21 @@ package com.barrybecker4.simulation.lsystem.model.expression
 class LTreeSerializer {
 
   def serialize(node: LSystemNode): String = {
-    var serialized = ""
-    if (node != null) serialized = traverse(node)
-    if (serialized.length > 0) serialized
-    else "Invalid"
+    val serialized = traverse(node)
+    if (serialized.nonEmpty) serialized else "Invalid"
   }
 
-  /** processing for inner nodes */
   private def traverse(node: LSystemNode): String = {
-    var text: String = ""
+    val sb = new StringBuilder
+    traverseInto(sb, node)
+    sb.toString
+  }
+
+  private def traverseInto(sb: StringBuilder, node: LSystemNode): Unit = {
     if (node.children.nonEmpty) {
-      text += (if (node.hasParens) "(" else "")
-      for (n <- node.children)
-        text += traverse(n)
-      text + (if (node.hasParens) ")" else "")
-    }
-    else text + node.getData
+      if (node.hasParens) sb.append('(')
+      for (n <- node.children) traverseInto(sb, n)
+      if (node.hasParens) sb.append(')')
+    } else sb.append(node.getData)
   }
 }
