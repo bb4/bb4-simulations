@@ -10,9 +10,11 @@ import scala.util.boundary
 import scala.util.boundary.break
 
 
-object BatchRun extends App {
+object BatchRun {
 
-  doBatchRun()
+  def main(args: Array[String]): Unit = {
+    doBatchRun()
+  }
 
   private def doBatchRun(): Unit = {
     val startTime = System.currentTimeMillis()

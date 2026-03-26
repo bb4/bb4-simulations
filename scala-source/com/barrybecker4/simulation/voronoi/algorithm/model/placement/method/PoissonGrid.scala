@@ -4,6 +4,8 @@ package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 
 import scala.util.Random
+import scala.util.boundary
+import scala.util.boundary.break
 
 
 object PoissonGrid {
@@ -26,14 +28,15 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
     val point = samples(index)
 
     // try k random neighboring points, if none accepted, return -1
-    for (i <- 0 until k) {
-      val nbrPoint = getRandomNeighborOf(point)
-      val distantEnough = isDistantFromAllNeighbors(nbrPoint)
-      if (distantEnough) {
-        return addSample(nbrPoint)
+    boundary:
+      for (i <- 0 until k) {
+        val nbrPoint = getRandomNeighborOf(point)
+        val distantEnough = isDistantFromAllNeighbors(nbrPoint)
+        if (distantEnough) {
+          break(addSample(nbrPoint))
+        }
       }
-    }
-    -1
+      -1
   }
 
   def addSample(point: Point): Int = {
@@ -70,20 +73,22 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
     val xMax = Math.min(xIdx + 2, xBins - 1)
     val yMin = Math.max(yIdx - 2, 0)
     val yMax = Math.min(yIdx + 2, yBins - 1)
-    for (xi <- xMin to xMax)
-      for (yi <- yMin to yMax)
-        val sampleIndex = grid(xi)(yi)
-        if (xi == xIdx && yi == yIdx && sampleIndex >= 0) {
-          return false
-        }
-        else {
-          if (sampleIndex >= 0) {
-            val samplePoint = samples(sampleIndex)
-            if (point.distanceTo(samplePoint) < radius) {
-              return false
+    boundary:
+      for (xi <- xMin to xMax) {
+        for (yi <- yMin to yMax) {
+          val sampleIndex = grid(xi)(yi)
+          if (xi == xIdx && yi == yIdx && sampleIndex >= 0) {
+            break(false)
+          } else {
+            if (sampleIndex >= 0) {
+              val samplePoint = samples(sampleIndex)
+              if (point.distanceTo(samplePoint) < radius) {
+                break(false)
+              }
             }
           }
         }
-    true
+      }
+      true
   }
 }
