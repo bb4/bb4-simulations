@@ -17,6 +17,18 @@ class SierpinskiLogicSuite extends AnyFunSuite {
     assert(p.y === 5)
   }
 
+  test("Triangle.sierpinskiSubdivision third corner uses midpoint of BC (regression guard)") {
+    val a = new Point(0, 0)
+    val b = new Point(100, 0)
+    val c = new Point(50, 80)
+    val t = Triangle(a, b, c)
+    val (_, _, _, nearC) = Triangle.sierpinskiSubdivision(t)
+    val midBc = Triangle.midpoint(b, c)
+    assert(nearC.a == Triangle.midpoint(a, c))
+    assert(nearC.b == midBc)
+    assert(nearC.c == c)
+  }
+
   test("Triangle.getPoly preserves vertices") {
     val a = new Point(1, 2)
     val b = new Point(3, 4)

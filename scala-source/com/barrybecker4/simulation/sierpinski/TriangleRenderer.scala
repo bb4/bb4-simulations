@@ -26,15 +26,12 @@ class TriangleRenderer(var styler: GraphicsStyler) {
   private def draw(triangle: Triangle, depth: Int): Unit = {
     styler.setStyle(depth, g2)
     drawTriangle(triangle, fill = false)
-    val pMidBc = Triangle.midpoint(triangle.b, triangle.c)
-    val pMidAc = Triangle.midpoint(triangle.a, triangle.c)
-    val pMidBa = Triangle.midpoint(triangle.b, triangle.a)
-    if depth >= maxDepth then
-      drawTriangle(Triangle(pMidBc, pMidAc, pMidBa), fill = true)
+    val (inner, nearA, nearB, nearC) = Triangle.sierpinskiSubdivision(triangle)
+    if depth >= maxDepth then drawTriangle(inner, fill = true)
     else
-      draw(Triangle(triangle.a, pMidBa, pMidAc), depth + 1)
-      draw(Triangle(pMidBa, triangle.b, pMidBc), depth + 1)
-      draw(Triangle(pMidAc, pMidBa, triangle.c), depth + 1)
+      draw(nearA, depth + 1)
+      draw(nearB, depth + 1)
+      draw(nearC, depth + 1)
   }
 
   private def drawTriangle(triangle: Triangle, fill: Boolean): Unit = {
