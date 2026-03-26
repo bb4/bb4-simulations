@@ -25,11 +25,10 @@ abstract class Population() {
     deathRate = getInitialDeathRate
   }
 
-  def setPopulation(value: Double): Unit = {
-    population = Math.max(0, value.round).toInt
-    if (population > Population.MAX_POPULATION)
-      population = Math.round(0.8 * population).toInt
-  }
+  def setPopulation(value: Double): Unit =
+    var p = math.max(0L, math.round(value)).toInt
+    while p > Population.MAX_POPULATION do p = math.max(0, (0.8 * p).toInt)
+    population = p
 
   def getInitialPopulation: Int
   def getInitialBirthRate: Double

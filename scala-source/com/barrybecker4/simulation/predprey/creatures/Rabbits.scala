@@ -1,8 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.predprey.creatures
 
-import java.awt._
-
+import java.awt.Color
 
 /**
   * Everything we need to know about the current rabbit population.
