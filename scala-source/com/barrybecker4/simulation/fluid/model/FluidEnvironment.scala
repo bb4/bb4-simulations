@@ -146,7 +146,13 @@ class FluidEnvironment(val dimX: Int, val dimY: Int) extends RectangularModel {
     grid.setBoundary(bound, d1)
   }
 
-  /** Solve the system */
+  /** Solve the diffusion/pressure system using a hybrid fixed-point iteration.
+    * The west (i-1) and south (j-1) neighbours use the freshly updated x values (Gauss-Seidel style)
+    * while the east neighbour deliberately uses x0(i+1)(j) — the value from *before* the solver was
+    * invoked — rather than x(i+1)(j).  Using x(i+1)(j) here references workspace data from the
+    * previous timestep cycle, which creates a positive-feedback path that causes velocity blow-up
+    * within a few frames.  x0 acts as a stabilising anchor for the east neighbour and must be kept.
+    */
   private def linearSolve(bound: Boundary, x: TwoDArray, x0: TwoDArray, a: Double, c: Double): Unit = {
     for (k <- 0 until numSolverIterations) {
       for (i <- 1 to grid.getWidth)
