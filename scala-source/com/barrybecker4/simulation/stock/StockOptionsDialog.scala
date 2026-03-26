@@ -8,6 +8,7 @@ import javax.swing._
 import java.awt._
 import com.barrybecker4.simulation.stock.StockSampleOptions._
 
+import scala.compiletime.uninitialized
 
 /**
   * @author Barry Becker
@@ -16,22 +17,22 @@ class StockOptionsDialog private[stock](parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
   private val options = new StockSampleOptions()
-  /** number of dice to use.  */
-  private var numStocksField: NumberInput = _
+  /** Number of stocks in each sample.  */
+  private var numStocksField: NumberInput = uninitialized
   /** Number of time periods (for example months or years)  */
-  private var numTimePeriodsField: NumberInput = _
+  private var numTimePeriodsField: NumberInput = uninitialized
   /** Amount to increase after each time period if heads   */
-  private var percentIncreaseField: NumberInput = _
+  private var percentIncreaseField: NumberInput = uninitialized
   /** Amount to decrease after each time period if tails  */
-  private var percentDecreaseField: NumberInput = _
+  private var percentDecreaseField: NumberInput = uninitialized
   /** Starting value of each stock in dollars  */
-  private var startingValueField: NumberInput = _
-  /** Granularity fo the histogram bins on the x axis.  */
-  private var xResolutionField: NumberInput = _
+  private var startingValueField: NumberInput = uninitialized
+  /** Granularity of the histogram bins on the x axis.  */
+  private var xResolutionField: NumberInput = uninitialized
   /** if true the x axis will have a log scale */
-  private var useLogScale: JCheckBox = _
+  private var useLogScale: JCheckBox = uninitialized
   /** if true changes are between 0 and percent change. */
-  private var useRandomChange: JCheckBox = _
+  private var useRandomChange: JCheckBox = uninitialized
 
   override def getTitle = "Stock Simulation Configuration"
 
