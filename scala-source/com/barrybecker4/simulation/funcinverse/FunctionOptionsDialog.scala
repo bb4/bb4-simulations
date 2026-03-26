@@ -5,14 +5,22 @@ import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
-import com.barrybecker4.math.interpolation._
-import FunctionOptionsDialog.INTERP_METHODS
+import com.barrybecker4.math.interpolation.{InterpolationMethod, _}
+import FunctionOptionsDialog.{INTERP_METHODS, indexOfInterpolationMethod}
+
+import scala.compiletime.uninitialized
 
 
 object FunctionOptionsDialog {
   private val INTERP_METHODS = Array(
     ("Linear", LINEAR), ("Cosine", COSINE), ("Cubic", CUBIC), ("Hermite", HERMITE), ("Step", STEP)
   )
+
+  /** Index into [[INTERP_METHODS]] for the given method, or 0 if unknown. */
+  private[funcinverse] def indexOfInterpolationMethod(method: InterpolationMethod): Int = {
+    val i = INTERP_METHODS.indexWhere(_._2 == method)
+    if (i >= 0) i else 0
+  }
 }
 
 /**
@@ -21,13 +29,11 @@ object FunctionOptionsDialog {
 class FunctionOptionsDialog(parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var funcInverseSim: FunctionInverseSimulator = _
-
   /** type of distribution function to test.   */
-  private var functionChoiceField: JComboBox[String] = _
+  private var functionChoiceField: JComboBox[String] = uninitialized
 
   /** manner in which to interpolate the function values */
-  private var interpolationChoiceField: JComboBox[String] = _
+  private var interpolationChoiceField: JComboBox[String] = uninitialized
 
   override def getTitle = "Function Inverse Configuration"
 
@@ -38,7 +44,7 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
 
-    funcInverseSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
+    val funcInverseSim = getSimulator.asInstanceOf[FunctionInverseSimulator]
     functionChoiceField = new JComboBox[String]()
     functionChoiceField.setModel(
       new DefaultComboBoxModel[String](FunctionType.values.map(_.name))
@@ -47,6 +53,11 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
     interpolationChoiceField = new JComboBox[String]()
     interpolationChoiceField.setModel(
       new DefaultComboBoxModel[String](INTERP_METHODS.map(_._1))
+    )
+
+    functionChoiceField.setSelectedIndex(funcInverseSim.getFunctionType.ordinal)
+    interpolationChoiceField.setSelectedIndex(
+      indexOfInterpolationMethod(funcInverseSim.getInterpolationMethod)
     )
 
     innerPanel.add(createChoicePanel("Function: ", functionChoiceField))
@@ -58,8 +69,8 @@ class FunctionOptionsDialog(parent: Component, simulator: Simulator)
     funcPanel
   }
 
-  private def createChoicePanel(label: String, chooser: JComboBox[String]): Panel = {
-    val choicePanel = new Panel(new FlowLayout)
+  private def createChoicePanel(label: String, chooser: JComboBox[String]): JPanel = {
+    val choicePanel = new JPanel(new FlowLayout)
     choicePanel.add(new JLabel(label))
     choicePanel.add(chooser)
     choicePanel
