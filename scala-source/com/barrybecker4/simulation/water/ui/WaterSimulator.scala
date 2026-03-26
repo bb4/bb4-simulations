@@ -5,7 +5,7 @@ import java.awt._
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.water.model.Environment
-import com.barrybecker4.simulation.water.{model, rendering}
+import com.barrybecker4.simulation.water.rendering
 
 
 /**

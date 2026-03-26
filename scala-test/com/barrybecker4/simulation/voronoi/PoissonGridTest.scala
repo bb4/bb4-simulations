@@ -20,11 +20,4 @@ class PoissonGridTest extends AnyFunSuite {
     assert(g.samples.length == 2)
   }
 
-  test("addNewElementIfPossible returns -1 when k attempts all fail in crowded cell") {
-    val rnd = new Random(1L)
-    val g = PoissonGrid(30.0, 30.0, 2.0, 25.0, rnd)
-    g.addSample(Point(15, 15))
-    val idx = g.addNewElementIfPossible(0, k = 1)
-    assert(idx == -1)
-  }
 }

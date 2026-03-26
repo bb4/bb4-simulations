@@ -52,7 +52,7 @@ case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean,
 
   def getPoint: Point = {
     val sweepLoc = v.getSweepLoc
-    if (sweepLoc == cacheSweepLoc) return cachePoint
+    if (sweepLoc == cacheSweepLoc && cachePoint != null) return cachePoint
     cacheSweepLoc = sweepLoc
     cachePoint =
       if (s1.y == s2.y) BreakPoint.pointWhenSitesHorizontal(s1, s2, sweepLoc)

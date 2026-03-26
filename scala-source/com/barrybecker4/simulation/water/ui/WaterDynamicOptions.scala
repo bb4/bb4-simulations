@@ -74,13 +74,12 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
   override def actionPerformed(e: ActionEvent): Unit = {
     val renderer = simulator.getRenderer
     val renderOpts = renderer.getOptions
-    if (e.getSource eq showVelocities) renderOpts.setShowVelocities(!renderOpts.getShowVelocities)
+    if (e.getSource eq showVelocities) renderOpts.setShowVelocities(showVelocities.isSelected)
   }
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
-      //case WaterDynamicOptions.VISC_SLIDER => simulator.getEnvironment.setViscosity(value)
       case TIME_STEP_SLIDER => simulator.setTimeStep(value)
       case VISC_SLIDER => simulator.setViscosity(value)
       case NUM_STEPS_PER_FRAME_SLIDER => simulator.setNumStepsPerFrame(value.toInt)

@@ -10,7 +10,7 @@ import javax.swing._
 
 /**
   * Use this modal dialog to let the user choose from among the different simulation options.
-  * @author Bary Becker
+  * @author Barry Becker
   */
 class WaterOptionsDialog private[ui](parent: Component, simulator: WaterSimulator)
   extends SimulatorOptionsDialog(parent, simulator) with ActionListener {
@@ -23,11 +23,5 @@ class WaterOptionsDialog private[ui](parent: Component, simulator: WaterSimulato
     waterParamPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder,"Water Parameters"))
     customParamPanel.add(waterParamPanel, BorderLayout.NORTH)
     customParamPanel
-  }
-
-  override protected def ok(): Unit = {
-    super.ok()
-    // set the snake params
-    val simulator = getSimulator.asInstanceOf[WaterSimulator]
   }
 }

@@ -127,20 +127,42 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
   }
 
   def handleCircleEvent(point: Point, arc: Arc, vert: Point): Unit = {
-    removeArcAndFinishBreakpoints(arc, vert)
+    geometry.removeArc(arc)
+    arc.left.finish(vert)
+    arc.right.finish(vert)
+    geometry.removeBreakPoint(arc.left)
+    geometry.removeBreakPoint(arc.right)
 
+    var entryRight: (ArcKey, CircleEvent) = geometry.minAfterArc(arc).getOrElse(
+      throw new NoSuchElementException("minAfter arc missing after circle event")
+    )
+    var entryLeft: (ArcKey, CircleEvent) = geometry.maxBeforeArc(arc).getOrElse(
+      throw new NoSuchElementException("maxBefore arc missing after circle event")
+    )
+    var arcRight: Arc = null
+    var arcLeft: Arc = null
     val ceArcLeft = arc.getLeft
     val cocircularJunction = arc.getRight == ceArcLeft
-
-    val (arcRight, entryRightOpt) =
-      walkCocircularChain(geometry.minAfterArc(arc), cocircularJunction, ceArcLeft, vert, rightSide = true)
-    val (arcLeft, entryLeftOpt) =
-      walkCocircularChain(geometry.maxBeforeArc(arc), cocircularJunction, ceArcLeft, vert, rightSide = false)
-
-    entryRightOpt.foreach(e => removeEvent(e, arcRight))
-    entryLeftOpt.foreach(e => removeEvent(e, arcLeft))
-
-    // Invariants: neighbors exist for a valid circle event
+    if (entryRight != null) {
+      arcRight = entryRight._1.asInstanceOf[Arc]
+      while (cocircularJunction && arcRight.getRight == ceArcLeft) {
+        entryRight = calcEntry(arcRight, entryRight, vert).getOrElse(
+          throw new NoSuchElementException("cocircular chain minAfter")
+        )
+        arcRight = entryRight._1.asInstanceOf[Arc]
+      }
+      removeEvent(entryRight, arcRight)
+    }
+    if (entryLeft != null) {
+      arcLeft = entryLeft._1.asInstanceOf[Arc]
+      while (cocircularJunction && arcLeft.getLeft == ceArcLeft) {
+        entryLeft = calcEntry(arcLeft, entryLeft, vert).getOrElse(
+          throw new NoSuchElementException("cocircular chain minAfter")
+        )
+        arcLeft = entryLeft._1.asInstanceOf[Arc]
+      }
+      removeEvent(entryLeft, arcLeft)
+    }
     val edge = new VoronoiEdge(arcLeft.right.s1, arcRight.left.s2)
     geometry.addEdge(edge)
     val isLeftPoint = assignVertexToEdge(edge, point, vert, arcLeft, arcRight)
@@ -154,43 +176,6 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     checkForCircleEvent(arcRight)
   }
 
-  private def removeArcAndFinishBreakpoints(arc: Arc, vert: Point): Unit = {
-    geometry.removeArc(arc)
-    arc.left.finish(vert)
-    arc.right.finish(vert)
-    geometry.removeBreakPoint(arc.left)
-    geometry.removeBreakPoint(arc.right)
-  }
-
-  /**
-    * Advance across duplicate circle events on the cocircular junction.
-    * @param rightSide if true, walk so that `getRight` is compared to `ceArcLeft`; else `getLeft`.
-    */
-  private def walkCocircularChain(
-      initial: Option[(ArcKey, CircleEvent)],
-      cocircularJunction: Boolean,
-      ceArcLeft: Point,
-      vert: Point,
-      rightSide: Boolean
-  ): (Arc, Option[(ArcKey, CircleEvent)]) = {
-    initial match {
-      case None => (null, None)
-      case Some(firstEntry) =>
-        var ar = firstEntry._1.asInstanceOf[Arc]
-        var entry = firstEntry
-        while (
-          cocircularJunction && (if (rightSide) ar.getRight == ceArcLeft else ar.getLeft == ceArcLeft)
-        ) {
-          val next = calcEntry(ar, entry, vert).getOrElse(
-            throw new IllegalStateException("Missing successor arc during cocircular walk")
-          )
-          ar = next._1.asInstanceOf[Arc]
-          entry = next
-        }
-        (ar, Some(entry))
-    }
-  }
-
   /** @return whether the vertex was stored as the left (p1) endpoint of the edge */
   private def assignVertexToEdge(
       edge: VoronoiEdge,
@@ -199,9 +184,7 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
       arcLeft: Arc,
       arcRight: Arc
   ): Boolean = {
-    // If the edges traced by these two arcs take a right turn, the vertex is above the current point.
     val turnsLeft = Point.ccw(arcLeft.right.edgeBegin, point, arcRight.left.edgeBegin) == 1
-    // If it turns left, the next vertex will be below this vertex; combined with slope sign, pick p1 vs p2.
     val isLeftPoint = if (turnsLeft) edge.m < 0 else edge.m > 0
     if (isLeftPoint) edge.p1 = vert
     else edge.p2 = vert

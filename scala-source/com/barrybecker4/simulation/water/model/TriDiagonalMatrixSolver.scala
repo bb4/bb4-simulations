@@ -5,12 +5,15 @@ package com.barrybecker4.simulation.water.model
   * Solves a tri-diagonal system of equations using a simplified form of Gaussian elimination
   * called the Thomas algorithm. See https://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm or
   * https://math.la.asu.edu/~gardner/tridiag.pdf
+  *
+  * Storage: row `i` has `(subDiagonal, mainDiagonal, superDiagonal)` as
+  * `array(i)(0)`, `array(i)(1)`, `array(i)(2)` (boundary rows may leave an unused slot at 0 or 2).
   * @author Barry Becker
   */
 case class TriDiagonalMatrixSolver(eps: Double = 0.0000001) {
 
-  /** Solve for x in A * x = rhs
-    * @param array the tri-diagonal N*3 matrix
+  /** Solve for x in A * x = rhs (overwrites `rhs` during elimination).
+    * @param array the tri-diagonal N×3 matrix
     * @param rhs right hand side vector
     * @param x the solution
     */
@@ -39,7 +42,6 @@ case class TriDiagonalMatrixSolver(eps: Double = 0.0000001) {
       val a = array(i)
       if (a(1) < eps)
         a(1) = eps
-      //println(s"rhs($i)=${rhs(i)} a2=${a(2)} x(${i+1}) = ${x(i + 1)}  den=${a(1)}")
       x(i) = (rhs(i) - a(2) * x(i + 1)) / a(1)
     }
   }
