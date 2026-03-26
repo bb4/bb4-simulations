@@ -6,18 +6,21 @@ import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
 import javax.swing._
 import java.awt._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * @author Barry Becker
   */
-class ParameterOptionsDialog private[parameter](parent: Component, simulator: Simulator)
+class ParameterOptionsDialog private[parameter] (parent: Component, simulator: Simulator)
     extends SimulatorOptionsDialog(parent, simulator) {
 
-  private var paramSim: ParameterSimulator = _
+  /** Always the [[ParameterSimulator]] passed to [[ParameterSimulator.createOptionsDialog]]. */
+  private def parameterSimulator: ParameterSimulator = getSimulator.asInstanceOf[ParameterSimulator]
 
   /** type of distribution function to test.   */
-  private var parameterChoiceField: JComboBox[String] = _
-  private var showRedistribution: JCheckBox = _
+  private var parameterChoiceField: JComboBox[String] = uninitialized
+  private var showRedistribution: JCheckBox = uninitialized
 
   override def getTitle = "Parameter Simulation Configuration"
 
@@ -29,13 +32,12 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
     val innerPanel = new JPanel
     innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS))
 
-    paramSim = getSimulator.asInstanceOf[ParameterSimulator]
     parameterChoiceField = new JComboBox[String]()
     parameterChoiceField.setModel(
       new DefaultComboBoxModel[String](ParameterDistributionType.values.map(_.name))
     )
     showRedistribution = new JCheckBox("Show Redistribution")
-    showRedistribution.setSelected(paramSim.showRedistribution)
+    showRedistribution.setSelected(parameterSimulator.showRedistribution)
 
     innerPanel.add(parameterChoiceField)
     innerPanel.add(showRedistribution)
@@ -47,8 +49,7 @@ class ParameterOptionsDialog private[parameter](parent: Component, simulator: Si
 
   override protected def ok(): Unit = {
     super.ok()
-    val simulator = getSimulator.asInstanceOf[ParameterSimulator]
-    simulator.setParameter(ParameterDistributionType.fromOrdinal(parameterChoiceField.getSelectedIndex).param)
-    simulator.showRedistribution = showRedistribution.isSelected
+    parameterSimulator.setParameter(ParameterDistributionType.fromOrdinal(parameterChoiceField.getSelectedIndex).param)
+    parameterSimulator.showRedistribution = showRedistribution.isSelected
   }
 }
