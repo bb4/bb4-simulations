@@ -5,19 +5,9 @@ import com.barrybecker4.simulation.trading.model.generationstrategy._
 import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins
 import com.barrybecker4.simulation.trading.options.StockGenerationOptions
 import com.barrybecker4.ui.components.NumberInput
-import javax.swing.BorderFactory
-import javax.swing.BoxLayout
-import javax.swing.JComboBox
-import java.awt.Component._
-import javax.swing.JDialog
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.SwingUtilities
-import java.awt.BorderLayout
-import java.awt.FlowLayout
-import java.awt.event.ItemEvent
-import java.awt.event.ItemListener
-import java.util
+import java.awt.{BorderLayout, Component, FlowLayout}
+import java.awt.event.{ItemEvent, ItemListener}
+import javax.swing.{BorderFactory, BoxLayout, JComboBox, JLabel, JPanel}
 
 
 /**
@@ -44,9 +34,9 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
     1, 1000000, false)
 
   // needed to get the field to extend to the left.
-  numStocksField.setAlignmentX(CENTER_ALIGNMENT)
-  numTimePeriodsField.setAlignmentX(CENTER_ALIGNMENT)
-  startingValueField.setAlignmentX(CENTER_ALIGNMENT)
+  numStocksField.setAlignmentX(Component.CENTER_ALIGNMENT)
+  numTimePeriodsField.setAlignmentX(Component.CENTER_ALIGNMENT)
+  startingValueField.setAlignmentX(Component.CENTER_ALIGNMENT)
 
   private val generationStrategies =
     new StrategyPlugins[GenerationStrategy](
@@ -79,10 +69,8 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
     val label = new JLabel("Stock generation strategy : ")
 
     val choices = generationStrategies.getStrategies
-    println("generation strategies: " + choices)
-    generationStrategyCombo = new JComboBox[String](choices.map(_.toString).toArray)
+    generationStrategyCombo = new JComboBox[String](choices.toArray)
 
-    println("Default generation strategy = " + StockGenerationOptions.DEFAULT_GENERATION_STRATEGY)
     generationStrategyCombo.setSelectedItem(StockGenerationOptions.DEFAULT_GENERATION_STRATEGY.name)
     generationOptions.generationStrategy = getCurrentlySelectedStrategy
     generationStrategyCombo.addItemListener(this)
@@ -97,16 +85,11 @@ class StockGenerationOptionsPanel() extends JPanel with ItemListener {
     generationOptions.generationStrategy = getCurrentlySelectedStrategy
     strategyOptionsPanel.removeAll()
     strategyOptionsPanel.add(generationOptions.generationStrategy.getOptionsUI)
-    // This will allow the dialog to resize appropriately given the new content.
-    val dlg = SwingUtilities.getAncestorOfClass(classOf[JDialog], this)
-    if (dlg != null) dlg.asInstanceOf[JDialog].pack()
+    StrategyPanelUi.repackAncestorDialog(this)
   }
 
-  private def getCurrentlySelectedStrategy = {
-    //println(s"Currently selected = ${generationStrategyCombo.getSelectedItem} " +
-    // s"out of ${generationStrategyCombo.getItemCount}")
+  private def getCurrentlySelectedStrategy =
     generationStrategies.getStrategy(generationStrategyCombo.getSelectedItem.asInstanceOf[String])
-  }
 
   private def setStrategyTooltip(): Unit = {
     generationStrategyCombo.setToolTipText(getCurrentlySelectedStrategy.description)

@@ -13,8 +13,8 @@ import java.awt._
   * @author Barry Becker
   */
 object BuyPercentOfReserveStrategy {
-  private val DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05)
-  private val DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05)
+  private val DEFAULT_GAIN_POLICY = ChangePolicy(0.02, 0.05)
+  private val DEFAULT_LOSS_POLICY = ChangePolicy(0.02, 0.05)
 }
 
 class BuyPercentOfReserveStrategy extends TradingStrategy {
@@ -25,8 +25,8 @@ class BuyPercentOfReserveStrategy extends TradingStrategy {
 
   override def name = "Percent of Reserve"
   override def description: String =
-    s"When the marked goes up ${gainPolicy.changePercent}%, we sell a ${gainPolicy.transactPercent}% of investment; " +
-    s"when it goes down ${lossPolicy.changePercent}%, we buy ${lossPolicy.transactPercent}% of reserve"
+    s"When the market goes up ${100 * gainPolicy.changePercent}%, we sell ${100 * gainPolicy.transactPercent}% of investment; " +
+    s"when it goes down ${100 * lossPolicy.changePercent}%, we buy ${100 * lossPolicy.transactPercent}% of reserve."
 
   /** if this new price triggers a transaction, then do it */
   override def updateInvestment(stockPrice: Double): MarketPosition = {
@@ -37,7 +37,8 @@ class BuyPercentOfReserveStrategy extends TradingStrategy {
     }
     else if (-pctChange >= lossPolicy.changePercent) { // buy more because its cheaper
       val amountToInvest = lossPolicy.transactPercent * reserve
-      buy(amountToInvest, stockPrice)
+      if (amountToInvest > 0)
+        buy(amountToInvest, stockPrice)
     }
     MarketPosition(invested, reserve, sharesOwned)
   }

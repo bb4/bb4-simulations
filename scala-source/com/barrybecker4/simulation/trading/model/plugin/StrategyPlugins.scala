@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trading.model.plugin
 import com.barrybecker4.common.util.PackageReflector
 import java.io.IOException
 import java.lang.reflect.Modifier
-import java.security.AccessControlException
 import scala.collection.mutable.ListBuffer
 
 
@@ -18,45 +17,64 @@ import scala.collection.mutable.ListBuffer
   * @param defaultStrategies list of default strategies to always include in the list.
   * @author Barry Becker
   */
-class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Class[_],
+class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Class[?],
                                            val defaultStrategies: Seq[E]) {
   private val strategyNames = ListBuffer[String]()
   private var valueMap = Map[String, E]()
 
   try {
-    val strategyClasses: Seq[Class[_]] = new PackageReflector().getClasses(packageName)
-    for (ci <- strategyClasses.indices) {
-      val c = strategyClasses(ci)
-      // Skip the abstract class (if any) because it cannot (and should not) be instantiated.
-      if (!Modifier.isAbstract(c.getModifiers) && clzz.isAssignableFrom(c)) {
-        val strategy: E = c.getDeclaredConstructor().newInstance().asInstanceOf[E]
-        val name = strategy.name
-        strategyNames.append(name)
-        valueMap += name -> strategy
-      }
-    }
-    println("Trading strategy plugins found: " + valueMap.values.map(_.name).mkString(", "))
+    loadFromReflection()
   } catch {
-    case e@(_: AccessControlException | _: NullPointerException) =>
-      // fallback to local strategies if cannot access filesystem (as for applet or webstart)
-      println("Unable to access filesystem to load plugin. Will use default strategies only")
-      for (si <- defaultStrategies.indices) {
-        val s = defaultStrategies(si)
-        strategyNames.append(s.name)
-        valueMap += s.name -> s
-      }
-      println("default strategies are : " + valueMap.values.map(_.name).mkString(", "))
+    case _: NullPointerException | _: SecurityException =>
+      useDefaultStrategiesOnly()
     case e@(_: ClassNotFoundException | _: InstantiationException | _: IOException | _: IllegalAccessException) =>
       e.printStackTrace()
   }
-  println("strategyNames = " + strategyNames.mkString(", "))
+
+  mergeDefaultStrategies()
+
+  private def registerStrategy(s: E): Unit = {
+    if (!valueMap.contains(s.name)) {
+      strategyNames.append(s.name)
+    }
+    valueMap += s.name -> s
+  }
+
+  private def loadFromReflection(): Unit = {
+    val strategyClasses: Seq[Class[?]] = new PackageReflector().getClasses(packageName)
+    for (c <- strategyClasses) {
+      if (!Modifier.isAbstract(c.getModifiers) && clzz.isAssignableFrom(c)) {
+        val strategy: E = c.getDeclaredConstructor().newInstance().asInstanceOf[E]
+        registerStrategy(strategy)
+      }
+    }
+  }
+
+  private def useDefaultStrategiesOnly(): Unit = {
+    valueMap = Map.empty
+    strategyNames.clear()
+    for (s <- defaultStrategies) {
+      registerStrategy(s)
+    }
+  }
+
+  /** Ensures built-in defaults appear in the map when reflection did not register them (e.g. alternate classloaders). */
+  private def mergeDefaultStrategies(): Unit = {
+    for (s <- defaultStrategies) {
+      if (!valueMap.contains(s.name)) {
+        registerStrategy(s)
+      }
+    }
+  }
 
   def getStrategies: Seq[String] = strategyNames.toSeq
 
-  /** Create an instance of the algorithm given the controller and a refreshable. */
-  def getStrategy(name: String): E = {
-    if (!valueMap.contains(name))
-      println("Could not find strategy with name " + name + " among " + valueMap)
-    valueMap(name)
-  }
+  /** Resolve a strategy by display name, or throw with a clear message. */
+  def getStrategy(name: String): E =
+    valueMap.getOrElse(
+      name,
+      throw new IllegalArgumentException(
+        s"Unknown strategy '$name'. Known: ${valueMap.keys.toSeq.sorted.mkString(", ")}"
+      )
+    )
 }

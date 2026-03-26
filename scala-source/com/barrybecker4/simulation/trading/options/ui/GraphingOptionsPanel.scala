@@ -16,7 +16,7 @@ class GraphingOptionsPanel() extends JPanel {
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
 
-  /** Granularity fo the histogram bins on the x axis.  */
+  /** Granularity of the histogram bins on the x axis.  */
   private val xResolutionField =
     new NumberInput("Histogram Resolution (1 - 5): ", graphOptions.histogramXResolution,
       "1 is low resolution 5 is high (meaning more bins on the x axis).",

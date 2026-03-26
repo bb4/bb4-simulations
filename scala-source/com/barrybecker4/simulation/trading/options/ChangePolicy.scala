@@ -9,4 +9,4 @@ package com.barrybecker4.simulation.trading.options
   *                        or percent of current reserve to buy more with. (0 - 1.0)
   * @author Barry Becker
   */
-class ChangePolicy(val changePercent: Double, val transactPercent: Double)
+case class ChangePolicy(changePercent: Double, transactPercent: Double)

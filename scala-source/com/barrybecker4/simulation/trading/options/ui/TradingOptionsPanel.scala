@@ -5,12 +5,9 @@ import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugins
 import com.barrybecker4.simulation.trading.model.tradingstrategy._
 import com.barrybecker4.simulation.trading.options.TradingOptions
 import com.barrybecker4.ui.components.NumberInput
-import javax.swing._
-import java.awt._
-import java.awt.Component._
-import java.awt.event.ItemEvent
-import java.awt.event.ItemListener
-import java.util
+import java.awt.{BorderLayout, Component, FlowLayout}
+import java.awt.event.{ItemEvent, ItemListener}
+import javax.swing.{BorderFactory, BoxLayout, JComboBox, JLabel, JPanel}
 
 
 /**
@@ -33,9 +30,9 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
     "Enter value for the biggest profit you could hope to get from this model. " +
       "Used only to determine the max extent of the x axis.", 0, 100000000, false)
   // needed to get the field to extend to the left.
-  startingTotalField.setAlignmentX(CENTER_ALIGNMENT)
-  startingInvestmentPercentField.setAlignmentX(CENTER_ALIGNMENT)
-  theoreticalMaxGainField.setAlignmentX(CENTER_ALIGNMENT)
+  startingTotalField.setAlignmentX(Component.CENTER_ALIGNMENT)
+  startingInvestmentPercentField.setAlignmentX(Component.CENTER_ALIGNMENT)
+  theoreticalMaxGainField.setAlignmentX(Component.CENTER_ALIGNMENT)
 
   private var strategyCombo: JComboBox[String] = _
   private val tradingPlugins = new StrategyPlugins[TradingStrategy](
@@ -67,7 +64,7 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
     val label = new JLabel("Trading strategy : ")
     val choices = tradingPlugins.getStrategies
 
-    strategyCombo = new JComboBox[String](choices.map(_.toString).toArray)
+    strategyCombo = new JComboBox[String](choices.toArray)
     strategyCombo.setSelectedItem(TradingOptions.DEFAULT_TRADING_STRATEGY.name)
     tradingOptions.tradingStrategy = getCurrentlySelectedStrategy
     strategyCombo.addItemListener(this)
@@ -90,18 +87,13 @@ class TradingOptionsPanel() extends JPanel with ItemListener {
     tradingOptions.tradingStrategy = getCurrentlySelectedStrategy
     strategyOptionsPanel.removeAll()
     strategyOptionsPanel.add(tradingOptions.tradingStrategy.getOptionsUI)
-    // This will allow the dialog to resize appropriately given the new content.
-    val dlg = SwingUtilities.getAncestorOfClass(classOf[JDialog], this)
-    if (dlg != null) dlg.asInstanceOf[JDialog].pack()
+    StrategyPanelUi.repackAncestorDialog(this)
   }
 
   private def getCurrentlySelectedStrategy =
     tradingPlugins.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String])
 
   private def setStrategyTooltip(): Unit = {
-    println("selected = " + strategyCombo.getSelectedItem)
-    println("plugins = " + tradingPlugins.getStrategies.mkString(", "))
-    strategyCombo.setToolTipText(
-      tradingPlugins.getStrategy(strategyCombo.getSelectedItem.asInstanceOf[String]).description)
+    strategyCombo.setToolTipText(getCurrentlySelectedStrategy.description)
   }
 }

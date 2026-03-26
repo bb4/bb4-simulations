@@ -13,8 +13,8 @@ import java.awt._
   * @author Barry Becker
   */
 object BuyPercentOfInvestmentStrategy {
-  private val DEFAULT_GAIN_POLICY = new ChangePolicy(0.02, 0.05)
-  private val DEFAULT_LOSS_POLICY = new ChangePolicy(0.02, 0.05)
+  private val DEFAULT_GAIN_POLICY = ChangePolicy(0.02, 0.05)
+  private val DEFAULT_LOSS_POLICY = ChangePolicy(0.02, 0.05)
 }
 
 class BuyPercentOfInvestmentStrategy extends TradingStrategy {

@@ -1,11 +1,11 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trading.charts
 
-import java.awt.{Color, Graphics, Graphics2D}
 import com.barrybecker4.math.function.Function
 import com.barrybecker4.simulation.trading.model.runner.StockSeries
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
-import javax.swing._
+import java.awt.{Color, Graphics, Graphics2D}
+import javax.swing.JPanel
 
 
 /**
@@ -23,20 +23,16 @@ object InvestmentChartPanel {
 
 class InvestmentChartPanel()
   extends JPanel {
-  private val functions = List[Function]()
-  private var investmentChart = new MultipleFunctionRenderer(functions)
+  private var investmentChart = new MultipleFunctionRenderer(Seq.empty[Function])
   private val series = new StockSeries(20)
 
   def addSeries(investmentFunction: Function, reserveFunction: Function): Unit = {
     series.appendSeries(investmentFunction)
     series.appendSeries(reserveFunction)
-    // this should change
     val size = series.size
-    var lineColors = Seq[Color]()
-    for (i <- 0 until size) {
-      val color = if (i % 2 == 0) InvestmentChartPanel.INVESTMENT_COLOR else InvestmentChartPanel.RESERVE_COLOR
-      lineColors :+= color
-    }
+    val lineColors = Vector.tabulate(size)(i =>
+      if (i % 2 == 0) InvestmentChartPanel.INVESTMENT_COLOR else InvestmentChartPanel.RESERVE_COLOR
+    )
     investmentChart = new MultipleFunctionRenderer(series.toSeq, Some(lineColors))
   }
 
@@ -49,19 +45,16 @@ class InvestmentChartPanel()
     drawLegend(g2)
   }
 
+  private def drawSwatch(g2: Graphics2D, color: Color, y: Int): Unit = {
+    g2.setColor(color)
+    g2.fillRect(InvestmentChartPanel.LEGEND_X, y,
+      InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
+  }
+
   private def drawLegend(g2: Graphics2D): Unit = {
-    g2.setColor(new Color(InvestmentChartPanel.INVESTMENT_COLOR.getRGB))
-    g2.fillRect(InvestmentChartPanel.LEGEND_X, InvestmentChartPanel.LEGEND_Y,
-      InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
-    g2.fillRect(InvestmentChartPanel.LEGEND_X, InvestmentChartPanel.LEGEND_Y,
-      InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
-    g2.setColor(new Color(InvestmentChartPanel.RESERVE_COLOR.getRGB))
-    g2.fillRect(InvestmentChartPanel.LEGEND_X,
-      InvestmentChartPanel.LEGEND_Y + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
-      InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
-    g2.fillRect(InvestmentChartPanel.LEGEND_X,
-      InvestmentChartPanel.LEGEND_Y + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,
-      InvestmentChartPanel.LEGEND_SWATCH_SIZE, InvestmentChartPanel.LEGEND_SWATCH_SIZE)
+    drawSwatch(g2, InvestmentChartPanel.INVESTMENT_COLOR, InvestmentChartPanel.LEGEND_Y)
+    drawSwatch(g2, InvestmentChartPanel.RESERVE_COLOR,
+      InvestmentChartPanel.LEGEND_Y + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10)
     g2.setColor(InvestmentChartPanel.TEXT_COLOR)
     g2.drawString("Investment amount",
       InvestmentChartPanel.LEGEND_X + InvestmentChartPanel.LEGEND_SWATCH_SIZE + 10,

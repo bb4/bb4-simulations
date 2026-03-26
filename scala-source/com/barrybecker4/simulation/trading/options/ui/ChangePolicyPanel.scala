@@ -3,8 +3,8 @@ package com.barrybecker4.simulation.trading.options.ui
 
 import com.barrybecker4.simulation.trading.options.ChangePolicy
 import com.barrybecker4.ui.components.NumberInput
-import javax.swing._
-import java.awt._
+import java.awt.FlowLayout
+import javax.swing.{BorderFactory, BoxLayout, JPanel}
 
 
 /**
@@ -34,6 +34,6 @@ class ChangePolicyPanel(val threshChangePercentLabel: String, val transactPercen
   panel.setBorder(BorderFactory.createEtchedBorder)
   this.add(panel)
 
-  def getChangePolicy =
-    new ChangePolicy(thresholdChangePercentField.getValue / 100.0, transactPercentField.getValue / 100.0)
+  def getChangePolicy: ChangePolicy =
+    ChangePolicy(thresholdChangePercentField.getValue / 100.0, transactPercentField.getValue / 100.0)
 }

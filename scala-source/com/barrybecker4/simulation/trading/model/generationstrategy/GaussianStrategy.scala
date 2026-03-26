@@ -29,7 +29,7 @@ class GaussianStrategy extends IncrementalGenerationStrategy {
   override def name = "Gaussian"
 
   override def description: String =
-    s"Each time period the market goes up or down by a guassian " +
+    s"Each time period the market goes up or down by a Gaussian " +
     s"distributed random value with mean, $mean, and variance, $variance."
 
   override def calcNewPrice(stockPrice: Double): Double = {

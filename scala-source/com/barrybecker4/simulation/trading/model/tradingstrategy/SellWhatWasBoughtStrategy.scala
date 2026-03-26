@@ -2,10 +2,8 @@
 package com.barrybecker4.simulation.trading.model.tradingstrategy
 
 import com.barrybecker4.ui.components.NumberInput
-import javax.swing._
-import java.awt._
-import java.util
-import java.util.{ArrayList, Iterator, List}
+import java.awt.Component
+import javax.swing.{BorderFactory, BoxLayout, JPanel}
 
 
 /**
@@ -24,7 +22,7 @@ import java.util.{ArrayList, Iterator, List}
   * If the market again goes down by lossChangePercent more, then buy fixedPurchaseAmount.
   * Remember these buy transactions
   * If the market ever increases gainChangePercent higher than one of those purchases, then sell it.
-  * Buy whenever the marked drops by lossChangePercent from last transaction.
+  * Buy whenever the market drops by lossChangePercent from last transaction.
   *
   * @author Barry Becker
   */
@@ -54,36 +52,39 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
                                  startingTotal: Double,
                                  startingInvestmentPercent: Double): MarketPosition = {
     fixedPurchaseAmount = fixedPurchasePercent * startingTotal
-    transactions = Seq[Transaction]() //(100)
+    transactions = Seq[Transaction]()
     super.initialInvestment(stockPrice, startingTotal, startingInvestmentPercent)
   }
 
-  /**
-    * if this new price triggers a transaction, then do it
-    */
   override def updateInvestment(stockPrice: Double): MarketPosition = {
-    // loop through all the buys and see if any of them are ready to sell.
-    transactions = transactions.filter(trans => {
+    sellEligibleLots(stockPrice)
+    maybeBuyOnDip(stockPrice)
+    MarketPosition(invested, reserve, sharesOwned)
+  }
+
+  /** Sell any lots whose gain threshold was reached at this price. */
+  private def sellEligibleLots(stockPrice: Double): Unit = {
+    transactions = transactions.filter { trans =>
       val sellIt = stockPrice >= (1.0 + gainThresholdPct) * trans.stockPrice
-      //println(s"numShares = ${trans.numShares}, sharesOwned = $sharesOwned")
       if (sellIt) {
         val sharesToSell = Math.min(trans.numShares, sharesOwned)
         sell(sharesToSell, stockPrice)
       }
       !sellIt
-    })
+    }
+  }
 
+  private def maybeBuyOnDip(stockPrice: Double): Unit = {
     assert(priceAtLastTransaction > 0)
     assert(stockPrice > 0, "The stockPrice must be > 0")
-    val pctChange =(stockPrice - priceAtLastTransaction) / priceAtLastTransaction
-    if (-pctChange >= lossThresholdPct) { // buy more because its cheaper
+    val pctChange = (stockPrice - priceAtLastTransaction) / priceAtLastTransaction
+    if (-pctChange >= lossThresholdPct) {
       val amountToInvest = Math.min(reserve, fixedPurchaseAmount)
       if (amountToInvest > 0) {
         buy(amountToInvest, stockPrice)
         transactions = transactions :+ Transaction(stockPrice, amountToInvest)
       }
     }
-    MarketPosition(invested, reserve, sharesOwned)
   }
 
   /** The UI to allow the user to configure the options */
@@ -92,7 +93,7 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
     strategyPanel.setLayout(new BoxLayout(strategyPanel, BoxLayout.Y_AXIS))
     strategyPanel.setBorder(BorderFactory.createEtchedBorder)
     fixedPurchasePctField = new NumberInput("Fixed purchase percent: ",
-      100 * gainThresholdPct,
+      100 * fixedPurchasePercent,
       "This is the fixed amount that is bought and sold at each transaction," +
         " specified as a percent of the starting amount.",
       0, 100, false)
@@ -101,7 +102,7 @@ class SellWhatWasBoughtStrategy extends TradingStrategy {
       "Triggers a sale if market goes up by this much.",
       0, 100, false)
     lossThresholdField = new NumberInput("Loss threshold percent: ",
-      100 * gainThresholdPct,
+      100 * lossThresholdPct,
       "Triggers a buy if market goes down by this much from last transaction.",
       0, 100, false)
     fixedPurchasePctField.setAlignmentX(Component.CENTER_ALIGNMENT)

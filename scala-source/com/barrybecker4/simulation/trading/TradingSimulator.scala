@@ -3,19 +3,14 @@ package com.barrybecker4.simulation.trading
 
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.trading.charts.InvestmentChartPanel
-import com.barrybecker4.simulation.trading.charts.ProfitHistogramPanel
-import com.barrybecker4.simulation.trading.charts.StockChartPanel
+import com.barrybecker4.simulation.trading.charts.{InvestmentChartPanel, ProfitHistogramPanel, StockChartPanel}
 import com.barrybecker4.simulation.trading.model.runner.StockRunner
-import com.barrybecker4.simulation.trading.options.GraphingOptions
-import com.barrybecker4.simulation.trading.options.StockGenerationOptions
-import com.barrybecker4.simulation.trading.options.TradingOptions
+import com.barrybecker4.simulation.trading.options.{GraphingOptions, StockGenerationOptions, TradingOptions}
 import com.barrybecker4.simulation.trading.options.ui.OptionsDialog
 import com.barrybecker4.ui.animation.AnimationFrame
 import com.barrybecker4.ui.util.Log
-import javax.swing._
-import java.awt._
-import TradingSimulatorConsts._
+import java.awt.{Dimension, Graphics, BorderLayout}
+import javax.swing.{JPanel, JSplitPane, JTextArea}
 
 
 object TradingSimulatorConsts {
@@ -30,11 +25,13 @@ object TradingSimulatorConsts {
   * Graphs the resulting distribution of expected profits given the assumptions of the model.
   * @author Barry Becker
   */
-object TradingSimulator extends App{
-  val simulator = new TradingSimulator
-  simulator.setPaused(false)
-  val af = new AnimationFrame(simulator)
-  af.setSize(DEFAULT_SIZE)
+object TradingSimulator {
+  def main(args: Array[String]): Unit = {
+    val simulator = new TradingSimulator
+    simulator.setPaused(false)
+    val af = new AnimationFrame(simulator)
+    af.setSize(TradingSimulatorConsts.DEFAULT_SIZE)
+  }
 }
 
 class TradingSimulator() extends Simulator("Stock Market Simulation") {
@@ -57,7 +54,7 @@ class TradingSimulator() extends Simulator("Stock Market Simulation") {
     this.tradingOpts = tradingOpts
     this.graphingOpts = graphingOpts
     update()
-    setNumStepsPerFrame(DEFAULT_STEPS_PER_FRAME)
+    setNumStepsPerFrame(TradingSimulatorConsts.DEFAULT_STEPS_PER_FRAME)
   }
 
   override protected def reset(): Unit = {update()}
@@ -103,7 +100,7 @@ class TradingSimulator() extends Simulator("Stock Market Simulation") {
   }
 
   override protected def createOptionsDialog = new OptionsDialog(frame, this)
-  override protected def getInitialTimeStep: Double = TIME_STEP
+  override protected def getInitialTimeStep: Double = TradingSimulatorConsts.TIME_STEP
   private def getXPositionToIncrement = createSample
 
   override def timeStep: Double = {
