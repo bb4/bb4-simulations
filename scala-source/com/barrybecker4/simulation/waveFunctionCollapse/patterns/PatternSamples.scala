@@ -2,9 +2,11 @@
 package com.barrybecker4.simulation.waveFunctionCollapse.patterns
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.ByteArray
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import java.awt.Color
 import java.awt.image.BufferedImage
+import scala.collection.mutable
 
 
 case class PatternSamples(bitmap: BufferedImage, N: Int) {
@@ -16,22 +18,25 @@ case class PatternSamples(bitmap: BufferedImage, N: Int) {
 
   private def initialize(bitmap: BufferedImage): Seq[Color] = {
     val start1 = System.currentTimeMillis()
-    var colors: Seq[Color] = Seq()
-    var i = 0
+    val palette = mutable.ArrayBuffer[Color]()
+    val colorToIndex = mutable.HashMap[Color, Int]()
     for (y <- 0 until smy) {
       for (x <- 0 until smx) {
         val color = new Color(bitmap.getRGB(x, y))
-        i = colors.indexOf(color)
-        if (i == -1) {
-          i = colors.length
-          colors :+= color
+        val i = colorToIndex.get(color) match {
+          case Some(idx) => idx
+          case None =>
+            val idx = palette.size
+            palette += color
+            colorToIndex(color) = idx
+            idx
         }
-        assert(i >= 0)
         sample(x)(y) = i.toByte
       }
     }
-    println("done calc sample in " + (System.currentTimeMillis() - start1) / 1000.0)
-    colors
+    if (WfcDebug.enabled)
+      println("done calc sample in " + (System.currentTimeMillis() - start1) / 1000.0)
+    palette.toSeq
   }
 
   def getPatternSymmetries(x: Int, y: Int): Array[ByteArray] = {

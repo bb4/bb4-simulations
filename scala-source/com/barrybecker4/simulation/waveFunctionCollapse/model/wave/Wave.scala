@@ -50,9 +50,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       waveCell.compatible = Array.fill(tCounter)(null)
 
       for (t <- 0 until tCounter) {
-        if (waveCell.compatible != null) {
-          waveCell.compatible(t) = Array.fill(4)(0)
-        }
+        waveCell.compatible(t) = Array.fill(4)(0)
       }
     }
 

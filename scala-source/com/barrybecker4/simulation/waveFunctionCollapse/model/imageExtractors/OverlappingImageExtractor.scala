@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors
 import com.barrybecker4.simulation.waveFunctionCollapse.model.ByteArray
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.OverlappingImageExtractor.FILL_COLOR
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
@@ -29,7 +30,8 @@ class OverlappingImageExtractor(
     if (wave.hasObserved) populateObservedImage(wave, result)
     else populateUnobservedImage(wave, result)
 
-    println("overlap image extracted in " + (System.currentTimeMillis() - start) / 1000.0)
+    if (WfcDebug.enabled)
+      println("overlap image extracted in " + (System.currentTimeMillis() - start) / 1000.0)
     result
   }
 
@@ -75,22 +77,45 @@ class OverlappingImageExtractor(
 
         val s = sx + sy * FMX
 
-        if (!onBoundary(sx, sy)){
-          for (t <- 0 until tCounter) {
-            if (wave.get(s).enabled(t)) {
-              contributors += 1
-              val color = colors(patterns(t)(dx + dy * N).toInt)
-              r += color.getRed
-              g += color.getGreen
-              b += color.getBlue
-            }
-          }
-          val c = if (contributors == 0) FILL_COLOR
-          else new Color(r / contributors, g / contributors, b / contributors)
-          setPixel(x, y, c, result)
+        if (!onBoundary(sx, sy)) {
+          val (nr, ng, nb, nc) = accumulateContributorsAtOffset(wave, s, dx, dy, r, g, b, contributors)
+          r = nr
+          g = ng
+          b = nb
+          contributors = nc
         }
       }
     }
+    val c =
+      if (contributors == 0) FILL_COLOR
+      else new Color(r / contributors, g / contributors, b / contributors)
+    setPixel(x, y, c, result)
+  }
+
+  /** Adds enabled pattern colors at pattern offset (dx, dy) to running totals. */
+  private def accumulateContributorsAtOffset(
+      wave: Wave,
+      cellIdx: Int,
+      dx: Int,
+      dy: Int,
+      r: Int,
+      g: Int,
+      b: Int,
+      contributors: Int): (Int, Int, Int, Int) = {
+    var rr = r
+    var gg = g
+    var bb = b
+    var cc = contributors
+    for (t <- 0 until tCounter) {
+      if (wave.get(cellIdx).enabled(t)) {
+        cc += 1
+        val color = colors(patterns(t)(dx + dy * N).toInt)
+        rr += color.getRed
+        gg += color.getGreen
+        bb += color.getBlue
+      }
+    }
+    (rr, gg, bb, cc)
   }
 
   private def setPixel(x: Int, y: Int, c: Color, result: BufferedImage): Unit = {

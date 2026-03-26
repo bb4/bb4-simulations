@@ -14,6 +14,7 @@ import java.awt._
 import java.awt.event._
 import javax.swing._
 import javax.swing.event.{ChangeEvent, ChangeListener}
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -37,30 +38,30 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
 
   private var dimensions: Dimension = new Dimension(100, 100)
   private val samples: Samples = getSampleData("ui/menu-samples.json").samples
-  private var model: WfcModel = _
+  private var model: WfcModel = uninitialized
   private var stepsPerFrame: Int = DEFAULT_NUM_STEPS_PER_FRAME
 
-  private var tabbedPane: JTabbedPane = _
-  private var overlappingSampleCombo: JComboBox[Integer] = _
-  private var tiledSampleCombo: JComboBox[CommonModel] = _
+  private var tabbedPane: JTabbedPane = uninitialized
+  private var overlappingSampleCombo: JComboBox[Integer] = uninitialized
+  private var tiledSampleCombo: JComboBox[CommonModel] = uninitialized
 
   // overlapping params
-  private var nCombo: JComboBox[Int] = _
-  private var periodicInputCB: JCheckBox = _
-  private var overlappingPeriodicOutputCB: JCheckBox = _
-  private var symmetryCombo: JComboBox[Int] = _
-  private var groundCombo: JComboBox[Int] = _
+  private var nCombo: JComboBox[Int] = uninitialized
+  private var periodicInputCB: JCheckBox = uninitialized
+  private var overlappingPeriodicOutputCB: JCheckBox = uninitialized
+  private var symmetryCombo: JComboBox[Int] = uninitialized
+  private var groundCombo: JComboBox[Int] = uninitialized
 
   // tiled params
-  private var subsetCombo: JComboBox[String] = _
-  private var subsetComboPanel: JPanel = _
-  private var tiledPeriodicOutputCB: JCheckBox = _
-  private var blackCB: JCheckBox = _
+  private var subsetCombo: JComboBox[String] = uninitialized
+  private var subsetComboPanel: JPanel = uninitialized
+  private var tiledPeriodicOutputCB: JCheckBox = uninitialized
+  private var blackCB: JCheckBox = uninitialized
 
-  private var allowInconsistenciesCB: JCheckBox = _
+  private var allowInconsistenciesCB: JCheckBox = uninitialized
 
-  private var nextButton: JButton = _
-  private var resetButton: JButton = _
+  private var nextButton: JButton = uninitialized
+  private var resetButton: JButton = uninitialized
 
   createDialogContent()
 
@@ -281,41 +282,43 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     subsetComboPanel.revalidate()
   }
 
-  private def getModel: WfcModel = {
-
-    val sampleModel: CommonModel =
-      if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
-      else samples.overlapping(overlappingSampleCombo.getSelectedItem.asInstanceOf[Int])
-
-    val wfcModel: WfcModel = sampleModel match {
-      case overlapping: Overlapping => new OverlappingModel(
-        overlapping.getName,
-        dimensions.width,
-        dimensions.height,
-        overlappingPeriodicOutputCB.isSelected,
-        OverlappingImageParams(
-          nCombo.getSelectedItem.asInstanceOf[Int],
-          symmetryCombo.getSelectedItem.asInstanceOf[Int],
-          periodicInputCB.isSelected,
-          groundCombo.getSelectedItem.asInstanceOf[Int]
-        ),
-        100,
-        allowInconsistenciesCB.isSelected)
-      case simpleTiled: SimpleTiled => new SimpleTiledModel(
-        dimensions.width,
-        dimensions.height,
-        simpleTiled.getName,
-        subsetCombo.getSelectedItem.asInstanceOf[String],
-        tiledPeriodicOutputCB.isSelected,
-        blackCB.isSelected,
-        100,
-        allowInconsistenciesCB.isSelected
-      )
-      case _ => throw new IllegalArgumentException("Unexpected type for " + sampleModel)
-    }
-
-    wfcModel
+  private def selectedSampleModel: CommonModel = {
+    if (tabbedPane.getSelectedIndex == 0) tiledSampleCombo.getSelectedItem.asInstanceOf[CommonModel]
+    else samples.overlapping(overlappingSampleCombo.getSelectedItem.asInstanceOf[Int])
   }
+
+  private def buildOverlappingModel(overlapping: Overlapping): WfcModel =
+    new OverlappingModel(
+      overlapping.getName,
+      dimensions.width,
+      dimensions.height,
+      overlappingPeriodicOutputCB.isSelected,
+      OverlappingImageParams(
+        nCombo.getSelectedItem.asInstanceOf[Int],
+        symmetryCombo.getSelectedItem.asInstanceOf[Int],
+        periodicInputCB.isSelected,
+        groundCombo.getSelectedItem.asInstanceOf[Int]
+      ),
+      100,
+      allowInconsistenciesCB.isSelected)
+
+  private def buildSimpleTiledModel(simpleTiled: SimpleTiled): WfcModel =
+    new SimpleTiledModel(
+      dimensions.width,
+      dimensions.height,
+      simpleTiled.getName,
+      subsetCombo.getSelectedItem.asInstanceOf[String],
+      tiledPeriodicOutputCB.isSelected,
+      blackCB.isSelected,
+      100,
+      allowInconsistenciesCB.isSelected)
+
+  private def getModel: WfcModel =
+    selectedSampleModel match {
+      case overlapping: Overlapping => buildOverlappingModel(overlapping)
+      case simpleTiled: SimpleTiled => buildSimpleTiledModel(simpleTiled)
+      case sm => throw new IllegalArgumentException("Unexpected type for " + sm)
+    }
 
   def runModel(): Unit = {
     model = getModel

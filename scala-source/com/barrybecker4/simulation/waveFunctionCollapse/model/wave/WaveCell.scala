@@ -14,6 +14,7 @@ class WaveCell(
 
   def updateEntropy(weight: Double, weightLogWeight: Double): Unit = {
     var sum = sumOfWeights
+    assert(sum > 0, s"sumOfWeights must stay positive, got $sumOfWeights")
     entropy += sumOfWeightLogWeights / sum - Math.log(sum)
 
     sumOfOnes -= 1

@@ -3,6 +3,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.propagation
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.IntArray
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.tiled.Neighbor
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -36,6 +37,26 @@ class SimpleTiledPropagatorState(
     }
   }
 
+  private def tileActionIndex(tokens: Array[String]): Int = {
+    val base = firstOccurrence(tokens(0))
+    val sub = if (tokens.length == 1) 0 else tokens(1).toInt
+    action(base)(sub)
+  }
+
+  private def markHorizontalAdjacency(leftPosition: Int, rightPosition: Int): Unit = {
+    tempPropagator(0)(rightPosition)(leftPosition) = true
+    tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = true
+    tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = true
+    tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = true
+  }
+
+  private def markVerticalAdjacency(downPosition: Int, upPosition: Int): Unit = {
+    tempPropagator(1)(upPosition)(downPosition) = true
+    tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = true
+    tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = true
+    tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = true
+  }
+
   private def populateTempPropagator(): Unit = {
     if (neighbors != null) {
       for (neighbor <- neighbors) {
@@ -43,23 +64,16 @@ class SimpleTiledPropagatorState(
         val right = neighbor.right.split(" ").filter(_.nonEmpty)
 
         if (subsets == null || (subsets.contains(left(0)) && subsets.contains(right(0)))) {
-          val leftPosition: Int = action(firstOccurrence(left(0)))(if (left.length == 1) 0 else left(1).toInt)
-          val downPosition: Int = action(leftPosition)(1)
-          val rightPosition: Int = action(firstOccurrence(right(0)))(if (right.length == 1) 0 else right(1).toInt)
-          val upPosition: Int = action(rightPosition)(1)
+          val leftPosition = tileActionIndex(left)
+          val downPosition = action(leftPosition)(1)
+          val rightPosition = tileActionIndex(right)
+          val upPosition = action(rightPosition)(1)
 
-          tempPropagator(0)(rightPosition)(leftPosition) = true
-          tempPropagator(0)(action(rightPosition)(6))(action(leftPosition)(6)) = true
-          tempPropagator(0)(action(leftPosition)(4))(action(rightPosition)(4)) = true
-          tempPropagator(0)(action(leftPosition)(2))(action(rightPosition)(2)) = true
-
-          tempPropagator(1)(upPosition)(downPosition) = true
-          tempPropagator(1)(action(downPosition)(6))(action(upPosition)(6)) = true
-          tempPropagator(1)(action(upPosition)(4))(action(downPosition)(4)) = true
-          tempPropagator(1)(action(downPosition)(2))(action(upPosition)(2)) = true
+          markHorizontalAdjacency(leftPosition, rightPosition)
+          markVerticalAdjacency(downPosition, upPosition)
         }
       }
-    } else println("no neighbors for this")
+    } else if (WfcDebug.enabled) println("no neighbors for this")
 
     for (t2 <- 0 until tCounter) {
       for (t1 <- 0 until tCounter) {

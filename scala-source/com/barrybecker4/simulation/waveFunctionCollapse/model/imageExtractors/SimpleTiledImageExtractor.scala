@@ -1,8 +1,9 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{DoubleArray, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.DoubleArray
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.{Wave, WaveCell}
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
@@ -27,7 +28,8 @@ class SimpleTiledImageExtractor(
     if (wave.hasObserved) populateObservedImage(wave, result)
     else populateUnobservedImage(wave, result)
 
-    println("tile image extracted in " + (System.currentTimeMillis() - start) / 1000.0)
+    if (WfcDebug.enabled)
+      println("tile image extracted in " + (System.currentTimeMillis() - start) / 1000.0)
     result
   }
 

@@ -17,4 +17,16 @@ class OverlappingPropagatorStateSuite extends AnyFunSuite {
     val p2 = pattern(1, 1, 1, 2)
     assert(!OverlappingPropagatorState.agrees(p1, p2, N = 2, dx = 0, dy = 0))
   }
+
+  test("agrees with dx=1 when right column of p1 matches left column of p2") {
+    val p1 = pattern(1, 2, 3, 4)
+    val p2 = pattern(2, 9, 4, 8)
+    assert(OverlappingPropagatorState.agrees(p1, p2, N = 2, dx = 1, dy = 0))
+  }
+
+  test("agrees false with dx=1 when overlap column differs") {
+    val p1 = pattern(1, 2, 3, 4)
+    val p2 = pattern(9, 9, 4, 8)
+    assert(!OverlappingPropagatorState.agrees(p1, p2, N = 2, dx = 1, dy = 0))
+  }
 }

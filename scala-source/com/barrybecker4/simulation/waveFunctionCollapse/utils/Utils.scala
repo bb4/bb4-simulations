@@ -4,7 +4,12 @@ package com.barrybecker4.simulation.waveFunctionCollapse.utils
 
 object Utils {
 
-  /** @return index from probability distribution given random number r */
+  /**
+    * Picks an index from a weighted distribution.
+    * Normalizes `array` in place (mutates weights to sum to 1); if the sum was 0, assigns uniform weights first.
+    *
+    * @return sampled index for random `r` in [0, 1]
+    */
   def randomFromArray(array: Array[Double], r: Double): Int = {
     var sum: Double = array.sum
 

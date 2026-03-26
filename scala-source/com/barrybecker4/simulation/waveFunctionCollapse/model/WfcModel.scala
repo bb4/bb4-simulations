@@ -3,26 +3,30 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.PropagatorState
 import com.barrybecker4.simulation.waveFunctionCollapse.model.wave.Wave
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import java.awt.Dimension
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
 import scala.util.Random
+import scala.util.boundary
+import scala.util.boundary.break
 
 /**
-  * For a good explanation of the algorithm. See
+  * For a good explanation of the algorithm, see
   * https://escholarship.org/content/qt1fb9k44q/qt1fb9k44q_noSplash_1c5dcf5090d4595f7605b2653c89b245.pdf?t=qwpcsb
   */
 abstract class WfcModel(name: String,
                         val FMX: Int, val FMY: Int,
                         limit: Int, allowInconsistencies: Boolean = true) {
 
-  protected var wave: Wave = _
-  protected var propagator: PropagatorState = _
-  protected var weights: DoubleArray = _
+  protected var wave: Wave = uninitialized
+  protected var propagator: PropagatorState = uninitialized
+  protected var weights: DoubleArray = uninitialized
   protected var periodic: Boolean = false
   protected var tCounter: Int = 0
-  protected var dimensions: Dimension = _
-  private var random: Random = _
+  protected var dimensions: Dimension = uninitialized
+  private var random: Random = uninitialized
   private var ready: Boolean = false
   private var iterationCt = 0
   private var result: Option[Boolean] = None
@@ -31,6 +35,11 @@ abstract class WfcModel(name: String,
   def onBoundary(x: Int, y: Int): Boolean
   def isReady: Boolean = ready
 
+  /**
+    * Runs the solver for up to `limit` observe/propagate steps (or 10M if limit is 0).
+    *
+    * @return true iff the wave fully collapsed successfully (`advance` returned `Some(true)`).
+    */
   def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
     ready = false
     if (wave == null) {
@@ -42,11 +51,12 @@ abstract class WfcModel(name: String,
     random = new Random(seed)
     iterationCt = 0
     val steps = if (limit == 0) 10000000 else limit
-    advance(steps)
+    val outcome = advance(steps)
     ready = true
-    true
+    outcome.contains(true)
   }
 
+  /** One observe/propagate step. Returns whether the run completed successfully. */
   def startRun(seed: Int): Boolean = {
     runWithLimit(seed, 1)
   }
@@ -62,30 +72,28 @@ abstract class WfcModel(name: String,
     *
     * @return None if not done computing, return true if done successfully; false if done unsuccessfully
     */
-  def advance(steps: Int): Option[Boolean] = {
-    synchronized {
+  def advance(steps: Int): Option[Boolean] = synchronized {
+    boundary:
       if (random == null) {
-        Thread.sleep(100)
-        println("no advance. Result found")
-        return None
+        if (WfcDebug.enabled) println("no advance. Result found")
+        break(None)
       }
 
       for (i <- 0 until steps) {
         result = wave.observe(tCounter, weights, onBoundary, random)
         if (result.isDefined) {
           ready = true
-          if (!result.get) {
+          if (!result.get && WfcDebug.enabled) {
             println("*** Inconsistent state. No solution found!")
           }
-          return result
+          break(result)
         }
         wave.propagate(onBoundary, weights, propagator)
         iterationCt += 1
-        if (iterationCt % 100 == 0) println(s"$iterationCt, ")
+        if (iterationCt % 100 == 0 && WfcDebug.enabled) println(s"$iterationCt, ")
       }
-      println(s"iteration=$iterationCt")
+      if (WfcDebug.enabled) println(s"iteration=$iterationCt")
       None
-    }
   }
 
   def clear(): Unit = wave.clear(tCounter, weights, propagator)

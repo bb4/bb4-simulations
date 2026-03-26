@@ -5,6 +5,7 @@ import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.simulation.waveFunctionCollapse.model.WfcModel
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions
+import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 
 import javax.swing.*
 import java.awt.*
@@ -21,8 +22,8 @@ object WaveFunctionCollapseExplorer {
 
 class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
-  private var wfcModel: WfcModel = _
-  private var options: DynamicOptions = _
+  private var wfcModel: WfcModel = null
+  private var options: DynamicOptions = null
   commonInit()
 
   private def commonInit(): Unit = {
@@ -32,7 +33,7 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
       override def componentResized(ce: ComponentEvent): Unit = {
         val size: Dimension = self.getSize
         if (size.width != options.getWidth || size.height != options.getHeight) {
-          println("resized so rerunning...")
+          if (WfcDebug.enabled) println("resized so rerunning...")
           options.setDimensions(size)
         }
       }
@@ -54,7 +55,7 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
 
   override def timeStep: Double = {
     if (!isPaused && wfcModel != null && options != null) {
-      def result = options.advanceModel()
+      val result = options.advanceModel()
       this.invalidate()
       if (result.isDefined) {
         this.repaint()

@@ -8,6 +8,8 @@ import javax.swing.event.{PopupMenuEvent, PopupMenuListener}
 import javax.swing.plaf.basic.BasicComboPopup
 import javax.swing._
 
+import scala.compiletime.uninitialized
+
 
 /**
   * This class will change the bounds of the JComboBox popup menu to support
@@ -30,7 +32,7 @@ class BoundsPopupMenuListener(
   var maximumWidth: Int = -1,
   var popupAbove: Boolean = false) extends PopupMenuListener {
 
-  private var scrollPane: JScrollPane = _
+  private var scrollPane: JScrollPane = uninitialized
 
   /** Allows the display of a horizontal scrollbar when required. */
   def this() = this(true, false, -1, false)
@@ -58,7 +60,7 @@ class BoundsPopupMenuListener(
     * Alter the bounds of the popup just before it is made visible.
     */
   override def popupMenuWillBecomeVisible(e: PopupMenuEvent): Unit = {
-    val comboBox = e.getSource.asInstanceOf[JComboBox[_]]
+    val comboBox = e.getSource.asInstanceOf[JComboBox[?]]
     if (comboBox.getItemCount == 0) return
     val child = comboBox.getAccessibleContext.getAccessibleChild(0)
     child match {
@@ -158,7 +160,7 @@ class BoundsPopupMenuListener(
    */
   protected def getScrollBarWidth(popup: BasicComboPopup, scrollPane: JScrollPane): Int = {
     var scrollBarWidth = 0
-    val comboBox = popup.getInvoker.asInstanceOf[JComboBox[_]]
+    val comboBox = popup.getInvoker.asInstanceOf[JComboBox[?]]
     if (comboBox.getItemCount > comboBox.getMaximumRowCount) {
       val vertical = scrollPane.getVerticalScrollBar
       scrollBarWidth = vertical.getPreferredSize.width
