@@ -14,6 +14,7 @@ import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import scala.collection.mutable
+import scala.compiletime.uninitialized
 
 
 /**
@@ -43,11 +44,11 @@ object DynamicOptions {
 class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simulator: HenonPhaseExplorer)
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
-  private var useFixedSize: JCheckBox = _
-  private var useUniformSeeds: JCheckBox = _
-  private var connectPoints: JCheckBox = _
+  private var useFixedSize: JCheckBox = uninitialized
+  private var useUniformSeeds: JCheckBox = uninitialized
+  private var connectPoints: JCheckBox = uninitialized
   private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-  private var formulaText: JTextArea = _
+  private var formulaText: JTextArea = uninitialized
   private var currentParams = new TravelerParams
 
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
@@ -76,7 +77,6 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
     connectPoints = new JCheckBox("Connect points", algorithm.getConnectPoints)
     connectPoints.addActionListener(this)
     val checkBoxes = new JPanel(new GridLayout(0, 1))
-    //checkBoxes.add(useConcurrency);
     checkBoxes.add(useFixedSize)
     checkBoxes.add(useUniformSeeds)
     checkBoxes.add(connectPoints)
@@ -98,10 +98,10 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   private def updateFormulaText(): Unit = {
     val text = new mutable.StringBuilder()
     text.append("term = ")
-    if (currentParams.isDefaultMultiplier)
+    if (currentParams.usesExplicitMultiplier)
       text.append(FormatUtil.formatNumber(currentParams.multiplier)).append(" * ")
     text.append("y")
-    if (currentParams.isDefaultOffset)
+    if (currentParams.usesExplicitOffset)
       text.append(" + ").append(FormatUtil.formatNumber(currentParams.offset))
     text.append(" - x * x")
     text.append("\n")
@@ -122,24 +122,24 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
 
   /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    if (sliderName == DynamicOptions.PHASE_ANGLE_SLIDER) {
-      currentParams = new TravelerParams(value, currentParams.multiplier, currentParams.offset)
-      algorithm.setTravelerParams(currentParams)
-      updateFormulaText()
+    sliderName match {
+      case DynamicOptions.PHASE_ANGLE_SLIDER =>
+        currentParams = currentParams.copy(angle = value)
+        algorithm.setTravelerParams(currentParams)
+        updateFormulaText()
+      case DynamicOptions.MULTIPLIER_SLIDER =>
+        currentParams = currentParams.copy(multiplier = value)
+        algorithm.setTravelerParams(currentParams)
+        updateFormulaText()
+      case DynamicOptions.OFFSET_SLIDER =>
+        currentParams = currentParams.copy(offset = value)
+        algorithm.setTravelerParams(currentParams)
+        updateFormulaText()
+      case DynamicOptions.ALPHA_SLIDER => algorithm.setAlpha(value.toInt)
+      case DynamicOptions.NUM_TRAVELORS_SLIDER => algorithm.setNumTravelors(value.toInt)
+      case DynamicOptions.ITER_PER_FRAME_SLIDER => algorithm.setStepsPerFrame(value.toInt)
+      case DynamicOptions.ITER_SLIDER => algorithm.setMaxIterations(value.toInt)
+      case _ =>
     }
-    else if (sliderName == DynamicOptions.MULTIPLIER_SLIDER) {
-      currentParams = new TravelerParams(currentParams.angle, value, currentParams.offset)
-      algorithm.setTravelerParams(currentParams)
-      updateFormulaText()
-    }
-    else if (sliderName == DynamicOptions.OFFSET_SLIDER) {
-      currentParams = new TravelerParams(currentParams.angle, currentParams.multiplier, value)
-      algorithm.setTravelerParams(currentParams)
-      updateFormulaText()
-    }
-    else if (sliderName == DynamicOptions.ALPHA_SLIDER) algorithm.setAlpha(value.toInt)
-    else if (sliderName == DynamicOptions.NUM_TRAVELORS_SLIDER) algorithm.setNumTravelors(value.toInt)
-    else if (sliderName == DynamicOptions.ITER_PER_FRAME_SLIDER) algorithm.setStepsPerFrame(value.toInt)
-    else if (sliderName == DynamicOptions.ITER_SLIDER) algorithm.setMaxIterations(value.toInt)
   }
 }

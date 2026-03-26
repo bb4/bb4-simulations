@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.henonphase.algorithm
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.common.Profiler
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
 import HenonAlgorithm._
 
 
@@ -18,23 +19,20 @@ object HenonAlgorithm {
 }
 
 /**
-  * Abstract implementation common to all Henon Phase algorithms.
-  * Uses concurrency when parallelized is set.
-  * This will give good speedup on multi-core machines.
+  * Drives the Henon phase map iteration and rendering for a single run.
   * @author Barry Becker
   */
 class HenonAlgorithm() {
 
-  private var model: HenonModel = _
-  // should extract these into ModelParams class
+  private var model: HenonModel = uninitialized
   private var numTravelers: Int = 0
   private var maxIterations: Int = 0
   private var numStepsPerFrame: Int = 0
-  private var travelerParams: TravelerParams = _
+  private var travelerParams: TravelerParams = uninitialized
   private var useUniformSeeds = false
   private var connectPoints = false
   private var alpha: Int = 0
-  private var cmap: ColorMap = _
+  private var cmap: ColorMap = uninitialized
   private var restartRequested = false
   private var finished = false
   private var iterations: Int = 0
@@ -55,10 +53,11 @@ class HenonAlgorithm() {
     alpha = HenonAlgorithm.DEFAULT_ALPHA
     cmap = new HenonColorMap(alpha)
     model = new HenonModel(DEFAULT_SIZE, DEFAULT_SIZE, travelerParams, useUniformSeeds, connectPoints, numTravelers, cmap)
+    model.reset()
   }
 
   def setTravelerParams(newParams: TravelerParams): Unit = {
-    if (!(newParams == travelerParams)) {
+    if (newParams != travelerParams) {
       travelerParams = newParams
       requestRestart(model.getWidth, model.getHeight)
     }

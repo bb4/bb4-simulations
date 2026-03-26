@@ -3,8 +3,10 @@ package com.barrybecker4.simulation.henonphase.algorithm
 
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.ui.renderers.OfflineGraphics
-import java.awt._
+import java.awt.Color
+import java.awt.Dimension
 import java.awt.image.BufferedImage
+import scala.compiletime.uninitialized
 
 
 /**
@@ -15,13 +17,19 @@ class HenonModel private[algorithm](val width: Int, val height: Int,
                                     var params: TravelerParams, val uniformSeeds: Boolean, val connectPoints: Boolean,
                                     var numTravelers: Int, var cmap: ColorMap) {
 
-  final private var travelers: Array[Traveler] = _
+  final private var travelers: Array[Traveler] = uninitialized
 
   /** offline rendering is fast  */
   final private var offlineGraphics = new OfflineGraphics(new Dimension(width, height), Color.BLACK)
   def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
   def getWidth: Int = width
   def getHeight: Int = height
+
+  /** Map normalized world coordinate in [-1, 1] to pixel x. */
+  private def toPixelX(wx: Double): Int = (width * (wx / 2.0 + 0.5)).toInt
+
+  /** Map normalized world coordinate in [-1, 1] to pixel y. */
+  private def toPixelY(wy: Double): Int = (height * (wy / 2.0 + 0.5)).toInt
 
   def reset(): Unit = synchronized {
     travelers = Array.ofDim[Traveler](numTravelers)
@@ -43,18 +51,14 @@ class HenonModel private[algorithm](val width: Int, val height: Int,
 
   /** @param numSteps number of steps to increment each traveler */
   def increment(numSteps: Int): Unit = synchronized {
-    if (travelers == null) { // this should not happen, but it does sometimes
-      System.err.println("travelers array was unexpectedly null. numTravelers = " + numTravelers)
-      return
-    }
     for (traveler <- travelers) {
       offlineGraphics.setColor(traveler.color)
       for (i <- 0 until numSteps) {
-        val xpos = (width * (traveler.x / 2.0 + 0.5)).toInt
-        val ypos = (height * (traveler.y / 2.0 + 0.5)).toInt
+        val xpos = toPixelX(traveler.x)
+        val ypos = toPixelY(traveler.y)
         if (connectPoints) {
-          val xposLast = (width * (traveler.getLastX / 2.0 + 0.5)).toInt
-          val yposLast = (height * (traveler.getLastY / 2.0 + 0.5)).toInt
+          val xposLast = toPixelX(traveler.getLastX)
+          val yposLast = toPixelY(traveler.getLastY)
           offlineGraphics.drawLine(xposLast, yposLast, xpos, ypos)
         }
         else offlineGraphics.drawPoint(xpos, ypos)

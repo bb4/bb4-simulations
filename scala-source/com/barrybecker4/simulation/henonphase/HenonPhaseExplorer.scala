@@ -8,6 +8,7 @@ import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm
 
 import javax.swing.*
 import java.awt.*
+import scala.compiletime.uninitialized
 
 
 /**
@@ -22,8 +23,8 @@ object HenonPhaseExplorer {
 
 class HenonPhaseExplorer() extends Simulator("Henon Phase Explorer") {
 
-  private var algorithm: HenonAlgorithm = _
-  private var options: DynamicOptions = _
+  private var algorithm: HenonAlgorithm = uninitialized
+  private var options: DynamicOptions = uninitialized
   private var useFixedSize = false
   commonInit()
 
