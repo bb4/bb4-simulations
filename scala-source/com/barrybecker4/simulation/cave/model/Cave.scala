@@ -12,7 +12,7 @@ object Cave {
   private val RAND = new Random
   RAND.setSeed(0)
 
-  /** Reseed shared RNG used by caves that omit an explicit [[Random]] (tests, reproducible worlds). */
+  /** Reseed shared RNG used by caves that omit an explicit [[scala.util.Random]] (tests, reproducible worlds). */
   def reseedRandom(seed: Long): Unit = RAND.setSeed(seed)
 }
 

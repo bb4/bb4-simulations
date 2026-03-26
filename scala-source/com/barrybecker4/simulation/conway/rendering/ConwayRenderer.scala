@@ -8,7 +8,7 @@ import java.awt.{Color, Dimension}
 import java.awt.image.BufferedImage
 
 /**
-  * Renders live Conway cells into a buffered image. When [[showShadows]] is true, past positions linger.
+  * Renders live Conway cells into a buffered image. When the renderer's `showShadows` flag is true, past positions linger.
   * @author Barry Becker
   */
 object ConwayRenderer {

@@ -5,7 +5,7 @@ import scala.util.Random
 
 /**
   * Pure simulation logic for random up/down stock price paths (coin toss each period).
-  * Separated from [[StockSimulator]] for unit testing and reuse.
+  * Separated from [[com.barrybecker4.simulation.stock.StockSimulator]] for unit testing and reuse.
   */
 object StockPriceSimulation {
 
@@ -32,7 +32,7 @@ object StockPriceSimulation {
     }
   }
 
-  /** Final price for one stock using [[Random]] (same contract as the original `Math.random` implementation). */
+  /** Final price for one stock using [[scala.util.Random]] (same contract as the original `Math.random` implementation). */
   def finalPriceWithRandom(opts: StockSampleOptions, rnd: Random): Double = {
     (0 until opts.numTimePeriods).foldLeft(opts.startingValue) { (price, _) =>
       val coin = rnd.nextDouble()
