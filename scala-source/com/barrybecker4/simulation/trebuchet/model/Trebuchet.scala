@@ -7,6 +7,7 @@ import java.awt.Color
 import java.awt.Graphics2D
 import com.barrybecker4.simulation.common.PhysicsConstants.GRAVITY
 import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants._
+import scala.compiletime.uninitialized
 import java.lang.Math.PI
 import java.lang.Math.asin
 import java.lang.Math.cos
@@ -37,10 +38,10 @@ object Trebuchet {
   */
 class Trebuchet() {
 
-  private var lever: Lever = _
-  private var counterWeight: CounterWeight = _
-  private var sling: Sling = _
-  private var projectile: Projectile = _
+  private var lever: Lever = uninitialized
+  private var counterWeight: CounterWeight = uninitialized
+  private var sling: Sling = uninitialized
+  private var projectile: Projectile = uninitialized
   private val forceFromHook = new Vector2d(0, 0)
   private var part = new Array[RenderablePart](Trebuchet.NUM_PARTS)
   // tweakable rendering parameters

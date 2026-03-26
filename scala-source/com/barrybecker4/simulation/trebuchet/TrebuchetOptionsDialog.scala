@@ -7,6 +7,7 @@ import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionListener
+import scala.compiletime.uninitialized
 
 
 /**
@@ -17,12 +18,12 @@ import java.awt.event.ActionListener
 class TrebuchetOptionsDialog private[trebuchet](parent: Component, simulator: TrebuchetSimulator) // constructor
   extends NewtonianSimOptionsDialog(parent, simulator) with ActionListener {
   // snake param options controls
-  private var counterWeightLeverLengthField: NumberInput = _
-  private var projectileMassField: NumberInput = _
-  private var slingLengthField: NumberInput = _
-  private var slingLeverLengthField: NumberInput = _
-  private var counterWeightMassField: NumberInput = _
-  private var slingReleaseAngleField: NumberInput = _
+  private var counterWeightLeverLengthField: NumberInput = uninitialized
+  private var projectileMassField: NumberInput = uninitialized
+  private var slingLengthField: NumberInput = uninitialized
+  private var slingLeverLengthField: NumberInput = uninitialized
+  private var counterWeightMassField: NumberInput = uninitialized
+  private var slingReleaseAngleField: NumberInput = uninitialized
 
   override protected def showCustomTabByDefault: Boolean = true
 

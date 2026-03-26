@@ -84,14 +84,13 @@ class Sling(var length: Double, var releaseAngle: Double, var lever: Lever, var 
       (scale * projectileAttachPt.x).toInt, (BASE_Y + scale * projectileAttachPt.y).toInt)
     val startAngle = (getAngleWithHorz * 180.0 / PI).toInt
     val angle = (getAngleWithLever * 180.0 / PI).toInt
-    val endAngle = startAngle + angle
     val diameter = (SCALE_FACTOR * 2 * length).toInt
     val rad = diameter >> 1
     g2.setColor(Sling.ARC_COLOR)
     g2.drawArc((scale * (attachPt.x - rad)).toInt, (BASE_Y + scale * (attachPt.y - rad)).toInt,
       (scale * diameter).toInt, (scale * diameter).toInt, startAngle, angle)
     //g2.drawString("start = "+ startAngle, (int)(attachPt.x + rad), (int)(attachPt.y));
-    //g2.drawString("end   = "+ endAngle, (int)(attachPt.x + rad), (int)(attachPt.y + 15));
+    //g2.drawString("end   = "+ (startAngle + angle), (int)(attachPt.x + rad), (int)(attachPt.y + 15));
     g2.drawString("angle = " + angle, (scale * (attachPt.x + rad)).toInt, (BASE_Y + scale * (attachPt.y + 30)).toInt)
   }
 }

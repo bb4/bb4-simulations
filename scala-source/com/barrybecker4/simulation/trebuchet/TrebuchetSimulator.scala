@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.trebuchet
 
 import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
@@ -11,12 +10,12 @@ import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrat
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
-import com.barrybecker4.ui.util.GUIUtil
 import javax.swing._
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 import java.awt._
 
+import scala.compiletime.uninitialized
 import scala.util.Random
 
 
@@ -36,8 +35,8 @@ object TrebuchetSimulator {
 class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeListener {
   reset()
   this.setPreferredSize(new Dimension(800, 900))
-  private var trebuchet: Trebuchet = _
-  private var zoomSlider: JSlider = _
+  private var trebuchet: Trebuchet = uninitialized
+  private var zoomSlider: JSlider = uninitialized
 
   def this(trebuchet: Trebuchet) = {
     this()

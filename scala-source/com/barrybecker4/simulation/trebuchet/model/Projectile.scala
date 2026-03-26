@@ -11,7 +11,6 @@ import RenderablePart._
   * @author Barry Becker Date: Sep 25, 2005
   */
 object Projectile {
-  private val LEVER_STROKE = new BasicStroke(10.0f)
   private val BORDER_COLOR = new Color(140, 50, 110)
   private val FILL_COLOR = new Color(80, 150, 10)
 }

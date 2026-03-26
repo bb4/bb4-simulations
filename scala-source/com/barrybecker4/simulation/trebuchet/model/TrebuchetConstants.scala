@@ -14,7 +14,7 @@ object TrebuchetConstants { // scales the size of the trebuchet's geometry
   // the allowable ranges for these things will be .2*<default> to 4*<default>
   val MIN_FACTOR = 0.2
   val MAX_FACTOR = 4.0
-  // defaults for parameters                                                                                                                                                              _
+  // defaults for parameters
   val DEFAULT_COUNTER_WEIGHT_MASS = 10.0 // Kg
 
   val DEFAULT_CW_LEVER_LENGTH = 1.0 // M
