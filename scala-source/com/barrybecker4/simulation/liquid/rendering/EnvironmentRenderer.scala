@@ -75,6 +75,8 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
 
   private def getMaxY = scale * env.getGrid.getYDimension + EnvironmentRenderer.OFFSET
 
+  private def screenXCell(i: Int): Int = (scale * i).toInt + EnvironmentRenderer.OFFSET
+
   /** Draw the cells/grid */
   private def drawGrid(g: Graphics2D): Unit = {
     g.setColor(EnvironmentRenderer.GRID_COLOR)
@@ -147,7 +149,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     for (j <- 0 until grid.getYDimension) {
       for (i <- 0 until grid.getXDimension) {
         g.setColor(EnvironmentRenderer.pressureColorMap.getColorForValue(grid.getCell(i, j).getPressure))
-        g.fillRect((scale * i).toInt + EnvironmentRenderer.OFFSET, (maxY - scale * j).toInt, scale.toInt, scale.toInt)
+        g.fillRect(screenXCell(i), (maxY - scale * j).toInt, scale.toInt, scale.toInt)
       }
     }
   }
@@ -157,17 +159,6 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     val wallStroke = new BasicStroke(wallLineWidth)
     g.setStroke(wallStroke)
     g.setColor(EnvironmentRenderer.WALL_COLOR)
-    /*
-            //Stroke stroke = new BasicStroke(wall.getThickness(), BasicStroke.CAP_BUTT,
-            //                                BasicStroke.JOIN_ROUND, 10);
-            for (i=0; i<walls_.size(); i++)  {
-                Wall wall = (Wall)walls_.elementAt(i);
-                g.drawLine( (int)(wall.getStartPoint().getX()*rat+OFFSET),
-                            (int)(maxY - (wall.getStartPoint().getY()*rat+OFFSET)),
-                            (int)(wall.getStopPoint().getX()*rat+OFFSET),
-                            (int)(maxY - (wall.getStopPoint().getY()*rat+OFFSET)) );
-            }*/
-    // outer boundary
     g.drawRect(EnvironmentRenderer.OFFSET, EnvironmentRenderer.OFFSET,
       (env.getGrid.getXDimension * scale).toInt, (env.getGrid.getYDimension * scale).toInt)
   }
@@ -177,19 +168,13 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     val grid = env.getGrid
     g.setColor(EnvironmentRenderer.TEXT_COLOR)
     g.setFont(EnvironmentRenderer.BASE_FONT)
-    val strBuf = new StringBuilder("12")
     val maxY = getMaxY
 
     for (j <- 0 until grid.getYDimension) {
       for (i <- 0 until grid.getXDimension) {
-        val x = (scale * i).toInt + EnvironmentRenderer.OFFSET
+        val x = screenXCell(i)
         val y = (maxY - scale * (j + 1)).toInt
-        strBuf.append(0, grid.getCell(i, j).getStatus.toString)
-        strBuf.setLength(1)
-        //int nump = grid.getCell(i, j).getNumParticles();
-        //if ( nump > 0 )
-        //    strBuf.append( String.valueOf( nump ) );
-        g.drawString(strBuf.toString, x + 6, y + 18)
+        g.drawString(grid.getCell(i, j).getStatus.toString, x + 6, y + 18)
       }
     }
   }
@@ -205,7 +190,7 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
         val cell = grid.getCell(i, j)
         val u = cell.getU
         val v = cell.getV
-        val x = (scale * i).toInt + EnvironmentRenderer.OFFSET
+        val x = screenXCell(i)
         val xMid = (scale * (i + 0.5)).toInt + EnvironmentRenderer.OFFSET
         val xLen = (scale * i + EnvironmentRenderer.VELOCITY_SCALE * u).toInt + EnvironmentRenderer.OFFSET
         val y = (maxY - scale * j).toInt

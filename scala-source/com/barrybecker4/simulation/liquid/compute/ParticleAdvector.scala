@@ -30,15 +30,14 @@ class ParticleAdvector(var grid: Grid) {
     *
     * @return the current timeStep (it was possible adjusted)
     */
-  def advectParticles(timeStep: Double, particles: Particles): Double = { // keep track of the biggest velocity magnitude so we can adjust the timestep if needed.
+  def advectParticles(timeStep: Double, particles: Particles): Double = {
     var maxLength = Double.MinValue
-
     for (particle <- particles.iterator) {
       val length = advectParticle(timeStep, particle)
       if (length > maxLength) maxLength = length
     }
-    adjustTimeStep(timeStep, maxLength)
-    timeStep
+    if (maxLength == Double.MinValue || maxLength <= 0.0) timeStep
+    else adjustTimeStep(timeStep, maxLength)
   }
 
   /**
@@ -88,10 +87,19 @@ class ParticleAdvector(var grid: Grid) {
   /**
     * Determine the cell that the particle is in now after moving it. May be same as it was.
     * Ensure the liquid does not enter an OBSTACLE.
-    *
-    * @return new Cell that the particle is in. Not necessarily different than original.
     */
-  private def findNewHomeCell(particle: Particle, i: Int, j: Int) = {
+  private def findNewHomeCell(particle: Particle, fromI: Int, fromJ: Int): Cell = {
+    clampParticleToGrid(particle)
+    var ii = particle.x.toInt
+    var jj = particle.y.toInt
+    pushParticleOutOfObstacle(particle, ii, jj, fromI, fromJ)
+    ii = particle.x.toInt
+    jj = particle.y.toInt
+    grid.getCell(ii, jj)
+  }
+
+  /** Clamp [[particle]] coordinates to valid grid indices; updates [[particle]] if out of range. */
+  private def clampParticleToGrid(particle: Particle): Unit = {
     var ii = Math.floor(particle.x).toInt
     var jj = Math.floor(particle.y).toInt
     if (ii < 0) {
@@ -110,16 +118,15 @@ class ParticleAdvector(var grid: Grid) {
       jj = grid.getYDimension - 1
       particle.y = jj
     }
-    // move outside the obstacle if we find ourselves in one
-    if (grid.getCell(ii, jj).getStatus eq CellStatus.OBSTACLE) {
-      if (i < ii) particle.set(ii - ParticleAdvector.EPSILON, particle.y)
-      else if (i > ii) particle.set(ii + 1.0 + ParticleAdvector.EPSILON, particle.y)
-      if (j < jj) particle.set(particle.x, jj - ParticleAdvector.EPSILON)
-      else if (j > jj) particle.set(particle.x, jj + 1.0 + ParticleAdvector.EPSILON)
-    }
-    ii = particle.x.toInt
-    jj = particle.y.toInt
-    grid.getCell(ii, jj)
+  }
+
+  /** If the particle sits in an obstacle cell, nudge it back toward the previous cell. */
+  private def pushParticleOutOfObstacle(particle: Particle, ii: Int, jj: Int, fromI: Int, fromJ: Int): Unit = {
+    if (grid.getCell(ii, jj).getStatus ne CellStatus.OBSTACLE) return
+    if (fromI < ii) particle.set(ii - ParticleAdvector.EPSILON, particle.y)
+    else if (fromI > ii) particle.set(ii + 1.0 + ParticleAdvector.EPSILON, particle.y)
+    if (fromJ < jj) particle.set(particle.x, jj - ParticleAdvector.EPSILON)
+    else if (fromJ > jj) particle.set(particle.x, jj + 1.0 + ParticleAdvector.EPSILON)
   }
 
   /**

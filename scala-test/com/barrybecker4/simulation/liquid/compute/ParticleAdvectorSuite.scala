@@ -50,7 +50,7 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     assertEquals(DT, newDt, TOL, "Timestep unexpectedly changed")
   }
 
-  test("AdvectInUpdateInNorthEastNonUniformFlow(") {
+  test("AdvectInUpdateInNorthEastNonUniformFlow") {
     val grid = new NonUniformGrid(DIM, DIM, new Vector2d(0.5, 0.5), CellStatus.FULL)
     particleAdvector = new ParticleAdvector(grid)
     val particles = createParticles(2.1, 2.5, grid)
@@ -61,6 +61,25 @@ class ParticleAdvectorSuite extends AnyFunSuite {
     assertTrue(LinearUtil.appxVectorsEqual(new Vector2d(2.1021351463835316, 2.5021703194194225), pos, MathUtil.EPS_MEDIUM),
       "Unexpected new particle position: " + pos)
     assertEquals(DT, newDt, TOL, "Timestep unexpectedly changed")
+  }
+
+  /** CFL: increment = dt * max|v| must not exceed CELL_SIZE/10; large speed forces halving dt. */
+  test("AdvectHalvesTimeStepWhenCFLExceeded") {
+    val smallDt = 0.01
+    val grid = new UniformGrid(DIM, DIM, new Vector2d(1200.0, 0.0), CellStatus.FULL)
+    particleAdvector = new ParticleAdvector(grid)
+    val particles = createParticles(2.1, 2.5, grid)
+    val newDt = particleAdvector.advectParticles(smallDt, particles)
+    assertEquals(smallDt / 2.0, newDt, TOL, "Expected halved timestep when displacement per step is too large")
+  }
+
+  /** When flow is very weak, timestep is doubled (unless max |v| is zero). */
+  test("AdvectDoublesTimeStepWhenCFLWellBelowMinimum") {
+    val grid = new UniformGrid(DIM, DIM, new Vector2d(0.0001, 0.0001), CellStatus.FULL)
+    particleAdvector = new ParticleAdvector(grid)
+    val particles = createParticles(2.1, 2.5, grid)
+    val newDt = particleAdvector.advectParticles(DT, particles)
+    assertEquals(DT * 2.0, newDt, TOL, "Expected doubled timestep for very small particle displacement")
   }
 
   private def createParticles(x: Double, y: Double, grid: Grid) = {

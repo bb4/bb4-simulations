@@ -2,10 +2,6 @@
 package com.barrybecker4.simulation.liquid
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.optimization.Optimizer
-import com.barrybecker4.optimization.parameter.NumericParameterArray
-import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
 import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
@@ -17,8 +13,6 @@ import java.awt._
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 
-import scala.util.Random
-
 
 /**
   * Main class for particle liquid simulation.
@@ -28,7 +22,6 @@ object LiquidSimulator {
   /** The initial time step. It may adapt. */
   private val INITIAL_TIME_STEP = 0.005
   private val BG_COLOR = Color.white
-  private val NUM_OPT_PARAMS = 3
 }
 
 class LiquidSimulator()
@@ -97,12 +90,7 @@ class LiquidSimulator()
   }
 
   override def doOptimization(): Unit = {
-    val optimizer = new Optimizer(this)
-      //, Some(FileUtil.getHomeDir + "performance/liquid/liquid_optimization.txt"))
-    val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params.toIndexedSeq, 5, new Random(1))
-    setPaused(false)
-    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
+    Logger.log(1, "Liquid parameter optimization is not configured (no Parameter descriptors).")
   }
 
   override def paint(g: Graphics): Unit = {
@@ -112,7 +100,6 @@ class LiquidSimulator()
   }
 
   override def mouseClicked(e: MouseEvent): Unit = {
-    //println("mclick timeStep="+ timeStep_ );
     environment.stepForward(tStep)
     this.repaint()
   }

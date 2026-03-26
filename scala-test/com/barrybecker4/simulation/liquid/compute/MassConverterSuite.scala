@@ -6,15 +6,14 @@ import javax.vecmath.Vector2d
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
-import MassConserverSuite.{DT, DIM, EPS, TOL}
+import MassConserverSuiteConstants.{DT, DIM, EPS, TOL}
 import com.barrybecker4.simulation.liquid.model.UniformGrid
 
 
 /**
   * @author Barry Becker
   */
-object MassConserverSuite extends AnyFunSuite {
-  /** delta time */
+object MassConserverSuiteConstants {
   val DT = 0.1
   val EPS = 0.0000000001
   val DIM = 6

@@ -19,6 +19,15 @@ object CellSuite {
 }
 
 class CellSuite extends AnyFunSuite {
+
+  test("CellStatusSymbolStrings") {
+    assertResult(".") { CellStatus.EMPTY.toString }
+    assertResult("F") { CellStatus.FULL.toString }
+    assertResult("S") { CellStatus.SURFACE.toString }
+    assertResult("o") { CellStatus.OBSTACLE.toString }
+    assertResult("I") { CellStatus.ISOLATED.toString }
+  }
+
   test("CellStatus1") {
 
     val cb = new CellBlock

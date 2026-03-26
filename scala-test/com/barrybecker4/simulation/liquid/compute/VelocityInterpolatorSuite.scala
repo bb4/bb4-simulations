@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.liquid.compute
 
 import com.barrybecker4.simulation.liquid.model._
 import javax.vecmath.Vector2d
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
 import org.scalatest.funsuite.AnyFunSuite
 import VelocityInterpolatorSuite._
 
@@ -69,28 +69,22 @@ class VelocityInterpolatorSuite extends AnyFunSuite {
     verifyParticleVelocity(particle, cb, new Vector2d(0.6, 0.7))
   }
 
-  private def verifyParticleVelocity(particle: Particle, cb: CellBlock, expectedVelocity: Vector2d) = {
+  private def verifyParticleVelocity(particle: Particle, cb: CellBlock, expectedVelocity: Vector2d): Unit = {
     val cell = cb.getAbsolute(1, 1)
     val i = particle.x.toInt
     val j = particle.y.toInt
-    if (i > 2 || j > 2) System.out.println("i=" + i + " j=" + j)
     assert(i < 3 && j < 3, "i=" + i + " j=" + j)
     val ii = if ((particle.x - i) > 0.5) i + 1
     else i - 1
     val jj = if ((particle.y - j) > 0.5) j + 1
     else j - 1
-    if (ii > 2 || jj > 2) System.out.println("ii=" + ii + " jj=" + jj)
-    System.out.println("i=" + i + " j=" + j + "    ii=" + ii + " jj=" + jj)
     val interpolator = new VelocityInterpolator(null)
     val vel = interpolator.interpolateVelocity(particle, cell,
       cb.getAbsolute(ii, j), cb.getAbsolute(i, jj),
-      cb.getAbsolute(i - 1, j), cb.getAbsolute(i - 1, jj), // u
-      cb.getAbsolute(i, j - 1), cb.getAbsolute(ii, j - 1)) // v
-    if (!vel.epsilonEquals(expectedVelocity, 0.00000000001)) System.out.println("vel for " + particle + " was " + vel)
-    //Assert.assertTrue("vel for particle "+particle +" was "+
-    // vel, vel.epsilonEquals(expectedVelocity, 0.00000000001));
+      cb.getAbsolute(i - 1, j), cb.getAbsolute(i - 1, jj),
+      cb.getAbsolute(i, j - 1), cb.getAbsolute(ii, j - 1))
+    assertTrue(vel.epsilonEquals(expectedVelocity, 1e-8),
+      "vel for " + particle + " was " + vel + " expected " + expectedVelocity)
   }
-
-  private def getRandomCoord = 1 + Math.random * (DIM - 2)
 }
 

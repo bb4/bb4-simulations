@@ -7,6 +7,7 @@ import com.barrybecker4.common.util.FileUtil
 import com.barrybecker4.common.xml.DomUtil
 import org.w3c.dom.Document
 import org.w3c.dom.Node
+import org.w3c.dom.Node.ELEMENT_NODE
 import javax.vecmath.Vector2d
 import java.net.URL
 
@@ -29,7 +30,6 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   val file: String = if (configFile == null) BASIC.fileName else configFile
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
-  println(DomUtil.asString(document, 0))
 
   private var gridWidth = 0
   private var gridHeight = 0
@@ -37,6 +37,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   private var gravity = .0
   /** keep the walls globally because we need to draw them each frame. */
   private var sources: List[Source] = _
+  /** Parsed from config; reserved until sink physics is implemented. */
   private var sinks: List[Region] = _
   private var initialLiquidRegions: List[Region]= _
   parseFromDocument(document)
@@ -69,14 +70,15 @@ class Conditions(val configFile: String) { // use a default if null passed in.
     * </pre>
     */
   private def parseWalls(wallsNode: Node): Unit = {
+    walls = elementChildren(wallsNode, "wall").map(n =>
+      new Wall(parseLocation(n, Conditions.START), parseLocation(n, Conditions.STOP)))
+  }
 
-    val children = wallsNode.getChildNodes
-    val num = children.getLength
-
-    walls = for (i <- 0 until num) yield {
-       val n = children.item(i)
-       new Wall(parseLocation(n, Conditions.START), parseLocation(n, Conditions.STOP))
-     }
+  private def elementChildren(parent: Node, localName: String): IndexedSeq[Node] = {
+    val children = parent.getChildNodes
+    (0 until children.getLength).map(children.item).filter { n =>
+      n.getNodeType == ELEMENT_NODE && localName == n.getNodeName
+    }
   }
 
   /**
@@ -96,18 +98,21 @@ class Conditions(val configFile: String) { // use a default if null passed in.
     val num = children.getLength
     for (i <- 0 until num) {
       val n = children.item(i)
-      val name = n.getNodeName
-      if ("source" == name) {
-        val source = parseSource(n)
-        sources +:= source
-      }
-      else if ("sink" == name) {
-        val sink = parseRegion(n)
-        sinks +:= sink
-      }
-      else if ("region" == name) {
-        val region = parseRegion(n)
-        initialLiquidRegions +:= region
+      if (n.getNodeType != ELEMENT_NODE) () // skip whitespace / comment text
+      else {
+        val name = n.getNodeName
+        if ("source" == name) {
+          val source = parseSource(n)
+          sources +:= source
+        }
+        else if ("sink" == name) {
+          val sink = parseRegion(n)
+          sinks +:= sink
+        }
+        else if ("region" == name) {
+          val region = parseRegion(n)
+          initialLiquidRegions +:= region
+        }
       }
     }
   }
@@ -147,6 +152,7 @@ class Conditions(val configFile: String) { // use a default if null passed in.
 
   def getWalls: Seq[Wall] = walls
   def getSources: List[Source] = sources
+  /** @return sink regions from config (not yet applied in the solver). */
   def getSinks: List[Region] = sinks
   def getInitialLiquidRegions: List[Region] = initialLiquidRegions
 

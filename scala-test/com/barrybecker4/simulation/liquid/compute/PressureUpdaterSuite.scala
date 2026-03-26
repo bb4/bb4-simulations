@@ -35,7 +35,6 @@ class PressureUpdaterSuite extends AnyFunSuite {
     verifyCell(cell2, 0.9, new Vector2d(1.0, 1.0))
   }
 
-  /** Currently failing */
   test("PressureUpdateNonUniform") {
     val b0 = 1.0
     val grid = new NonUniformGrid(DIM, DIM, new Vector2d(1.0, 1.0), CellStatus.FULL)
@@ -43,12 +42,16 @@ class PressureUpdaterSuite extends AnyFunSuite {
     val maxDiv = pressureUpdater.updatePressure(DT)
     assertEquals(0.0, maxDiv, 0.000000001, "Unexpected divergence")
     assertEquals(45, pressureUpdater.getNumIterations, "Unexpected number of iterations till convergence")
-    /*
-            Cell cell1 = grid.getCell(1, 1);
-            verifyCell(cell1, -13.385714285714284, new Vector2d(0.14285714285714285, 0.14285714285714285));
-            Cell cell2 = grid.getCell(1, 2);
-            verifyCell(cell2, 0.9, new Vector2d(0.49120674102731, 0.41098491062604847));
-            */
+  }
+
+  test("PressureUpdateStopsAtMaxIterationsWhenNotConverged") {
+    val b0 = 1.0
+    val grid = new UniformGrid(DIM, DIM, new Vector2d(1.0, 1.0), CellStatus.FULL)
+    val pressureUpdater = new PressureUpdater(grid, b0, maxIterations = 1)
+    val maxDiv = pressureUpdater.updatePressure(DT)
+    assert(pressureUpdater.getStoppedByIterationCap, "expected iteration cap to stop before convergence")
+    assert(maxDiv > PressureUpdater.EPSILON, "divergence should remain above epsilon with cap of 1")
+    assertEquals(1, pressureUpdater.getNumIterations, "Unexpected iteration count")
   }
 
   test("PressureUpdateRandom") {
@@ -65,7 +68,6 @@ class PressureUpdaterSuite extends AnyFunSuite {
     val maxDiv = pressureUpdater.updatePressure(DT)
     assertEquals(2.7755575615628914E-17, maxDiv, TOL, "Unexpected divergence")
     assertEquals(2, pressureUpdater.getNumIterations, "Unexpected number of iterations till convergence")
-    System.out.println(grid.toString)
     val cell1 = grid.getCell(1, 1)
     verifyCell(cell1, 0.9, new Vector2d(0.0, 0.0))
     val cell2 = grid.getCell(1, 2)
@@ -75,14 +77,6 @@ class PressureUpdaterSuite extends AnyFunSuite {
   private def verifyCell(cell: Cell, pressure: Double, expUV: Vector2d) = {
     assertEquals(pressure, cell.getPressure, TOL, "Unexpected pressure")
     assertEquals(expUV, new Vector2d(cell.getU, cell.getV), "Unexpected velocity")
-  }
-
-  private def verifyPressures(grid: Grid, expPressure: Double) = {
-    for (i <- 1 until grid.getXDimension - 1)
-      for (j <- 1 until grid.getYDimension - 1) {
-        val cell = grid.getCell(i, j)
-        assertEquals(expPressure, cell.getPressure, TOL, "Unexpected pressure at " + cell)
-      }
   }
 }
 

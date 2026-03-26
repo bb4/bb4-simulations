@@ -62,21 +62,12 @@ class VelocityUpdater {
         forceX + (cell.getPressure + neighbors.getLeft.getPressure) / dims.dx +
         viscosity * (v1 + v2)
       val newu = cell.getU + dt * pf
-      /*
-        if (Math.abs(pf) > 10) {
-            println("much bigger x change than expected. oldu ="
-              + uip_[current_] + " newu="+ newu
-                    + " forceX=" + forceX + " forceY="+forceY
-                    + "\ncXp1=" + cXp1 + " cXm1=" + cXm1
-                    + "\ncXp1=" + cYp1 + " cXm1=" + cYm1
-                    + "\ncXp1Ym1=" + cXp1Ym1 + " cXm1Yp1=" + cXm1Yp1);
-        } */
       cell.setNewU(newu)
     }
   }
 
   /** Update new V component of velocity. */
-  def calcVTilde(cell: Cell, neighbors: CellNeighbors, upperLeftU: Double, ipjp2: Double, dt: Double, forceY: Double, viscosity: Double): Unit = {
+  private def calcVTilde(cell: Cell, neighbors: CellNeighbors, upperLeftU: Double, ipjp2: Double, dt: Double, forceY: Double, viscosity: Double): Unit = {
     // u(i-0.5, j+0.5) = 0.5*(u(i-0.5, j) + u(i-0.5, j+1))
     val u_imjp = (neighbors.getLeft.getU + upperLeftU) / 2.0
     // v(i-0.5, j+0.5) = 0.5*(v(i, j+0.5) + v(i-1, j+0.5))
@@ -92,15 +83,6 @@ class VelocityUpdater {
       val v2 = (neighbors.getTop.getV - 2 * cell.getV + neighbors.getBottom.getV) / dims.dySq
       val pf = xNume / dims.dx + yNume / dims.dy + forceY + (cell.getPressure - neighbors.getBottom.getPressure) / dims.dy + viscosity * (v1 + v2)
       val newv = cell.getV + dt * pf
-      /*
-      if (Math.abs(pf) > 5.0) {
-          println("much bigger y change than expected. oldv ="
-                + vjp_[current_] + " newv="+ newv
-                  + "\nforceX=" + forceX + " forceY="+forceY
-                  + "\ncXp1=" + cXp1 + " cXm1=" + cXm1
-                  + "\ncXp1=" + cYp1 + " cXm1=" + cYm1
-                  + "\ncXp1Ym1=" + cXp1Ym1 + " cXm1Yp1=" + cXm1Yp1);
-      } */
       cell.setNewV(newv)
     }
   }
