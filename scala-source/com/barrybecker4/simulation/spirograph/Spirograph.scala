@@ -34,6 +34,6 @@ class Spirograph extends ApplicationApplet {
     mainPanel
   }
 
-  override def getName = "Spirograph"
+  override def getName: String = "Spirograph"
 }
 

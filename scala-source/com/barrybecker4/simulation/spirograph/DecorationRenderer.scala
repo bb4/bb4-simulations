@@ -59,9 +59,13 @@ class DecorationRenderer(var params: Parameters) {
     val center = params.getCenter(width, height)
     val sign = params.sign
     val r2 = params.r2
-    g.drawOval((center.getX - sign * r2).toInt, (center.getY - sign * r2).toInt, (2 * sign * r2).toInt, (2 * sign * r2).toInt)
+    val ox = (center.getX - sign * r2).toInt
+    val oy = (center.getY - sign * r2).toInt
+    val dim = (2 * sign * r2).toInt
+    g.setColor(DecorationRenderer.CIRCLE_COLOR)
+    g.drawOval(ox, oy, dim, dim)
     g.setColor(DecorationRenderer.CIRCLE2_FILL_COLOR)
-    g.fillOval((center.getX - sign * r2).toInt, (center.getY - sign * r2).toInt, (2 * sign * r2).toInt, (2 * sign * r2).toInt)
+    g.fillOval(ox, oy, dim, dim)
   }
 
   private def drawLineAndDot(g: Graphics2D): Unit = {

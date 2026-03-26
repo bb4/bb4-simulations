@@ -13,6 +13,7 @@ import java.awt.Dimension
 import java.awt.GridLayout
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import scala.compiletime.uninitialized
 
 
 /**
@@ -36,10 +37,10 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   add(fill)
   add(createFunctionPanel)
   parameterChanged()
-  private var xFunction: JLabel = _
-  private var yFunction: JLabel = _
-  private var hideButton: GradientButton = _
-  private var drawButton: GradientButton = _
+  private var xFunction: JLabel = uninitialized
+  private var yFunction: JLabel = uninitialized
+  private var hideButton: GradientButton = uninitialized
+  private var drawButton: GradientButton = uninitialized
 
   private def createButtonGroup = {
     val bp = new JPanel(new BorderLayout)
@@ -49,8 +50,6 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
     hideButton = createButton(AppContext.getLabel("HIDE_DECORATION"))
     val reset = createButton(AppContext.getLabel("RESET"))
     drawButton = createButton(AppContext.getLabel("DRAW"))
-    val bl = new JPanel(new BorderLayout)
-    bl.add(hideButton, BorderLayout.CENTER)
     p.add(createButtonPanel(hideButton))
     p.add(createButtonPanel(reset))
     p.add(createButtonPanel(drawButton))
@@ -83,30 +82,40 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   /** a button was pressed. */
   override def actionPerformed(e: ActionEvent): Unit = {
     val source = e.getSource
-    assert(source.isInstanceOf[GradientButton])
-    val obj = source.asInstanceOf[AbstractButton].getText
-    if (sliderGroup.getRadius2Value != 0) if (AppContext.getLabel("DRAW") == obj) {
+    require(source.isInstanceOf[AbstractButton], "expected AbstractButton")
+    val label = source.asInstanceOf[AbstractButton].getText
+    handleDrawPauseResume(label)
+    handleReset(label)
+    handleDecorationToggle(label)
+  }
+
+  private def handleDrawPauseResume(label: String): Unit = {
+    if (sliderGroup.getRadius2Value == 0) return
+    if (AppContext.getLabel("DRAW") == label) {
       drawButton.setText(AppContext.getLabel("PAUSE"))
       graphPanel.startDrawingGraph()
-    }
-    else if (AppContext.getLabel("PAUSE") == obj) {
+    } else if (AppContext.getLabel("PAUSE") == label) {
       graphPanel.setPaused(true)
       drawButton.setText(AppContext.getLabel("RESUME"))
-    }
-    else if (AppContext.getLabel("RESUME") == obj) {
+    } else if (AppContext.getLabel("RESUME") == label) {
       graphPanel.setPaused(false)
       drawButton.setText(AppContext.getLabel("PAUSE"))
     }
-    if (AppContext.getLabel("RESET") == obj) {
+  }
+
+  private def handleReset(label: String): Unit = {
+    if (AppContext.getLabel("RESET") == label) {
       graphPanel.reset()
       drawButton.setText(AppContext.getLabel("DRAW"))
     }
-    else if (AppContext.getLabel("HIDE_DECORATION") == obj) {
+  }
+
+  private def handleDecorationToggle(label: String): Unit = {
+    if (AppContext.getLabel("HIDE_DECORATION") == label) {
       hideButton.setText(AppContext.getLabel("SHOW_DECORATION"))
       state.showDecoration = false
       graphPanel.repaint()
-    }
-    else if (AppContext.getLabel("SHOW_DECORATION") == obj) {
+    } else if (AppContext.getLabel("SHOW_DECORATION") == label) {
       hideButton.setText(AppContext.getLabel("HIDE_DECORATION"))
       state.showDecoration = true
       graphPanel.repaint()
@@ -116,8 +125,8 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   /** implements GraphStateChangeListener interface */
   override def parameterChanged(): Unit = {
     val equations = sliderGroup.getEquations
-    xFunction.setText(equations.getXEquation)
-    yFunction.setText(equations.getYEquation)
+    xFunction.setText(equations.xEquation)
+    yFunction.setText(equations.yEquation)
     if (state.isMaxVelocity) drawButton.setText(AppContext.getLabel("DRAW"))
   }
 

@@ -40,7 +40,7 @@ object ControlSliderGroup { // slider indices
     state.params.r2 = SLIDER_PROPS(RADIUS2).getInitialValue.toFloat
     state.params.pos = SLIDER_PROPS(POSITION).getInitialValue.toFloat
     state.setVelocity(SLIDER_PROPS(VELOCITY).getInitialValue.toInt)
-    state.width = SLIDER_PROPS(LINE_WIDTH).getInitialValue.toInt
+    state.lineWidth = SLIDER_PROPS(LINE_WIDTH).getInitialValue.toInt
     state.numSegmentsPerRev = SLIDER_PROPS(SEGMENTS).getInitialValue.toInt
     state
   }
@@ -73,7 +73,7 @@ class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
     else if (src == ControlSliderGroup.RADIUS2) state.setR2(value)
     else if (src == ControlSliderGroup.POSITION) state.setPos(value)
     else if (src == ControlSliderGroup.VELOCITY) state.setVelocity(value.toInt)
-    else if (src == ControlSliderGroup.LINE_WIDTH) state.width = value.toInt
+    else if (src == ControlSliderGroup.LINE_WIDTH) state.lineWidth = value.toInt
     else if (src == ControlSliderGroup.SEGMENTS) state.numSegmentsPerRev = value.toInt
     else throw new IllegalArgumentException("Unexpected slider index=" + src)
     autoUpdate()

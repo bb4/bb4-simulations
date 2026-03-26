@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.spirograph.model
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.ui.sliders.ColorChangeListener
 import java.awt.Color
+import scala.compiletime.uninitialized
 
 
 object GraphState {
@@ -18,8 +19,8 @@ object GraphState {
   */
 class GraphState() extends ColorChangeListener {
 
-  var width: Int = GraphState.INITIAL_LINE_WIDTH
-  var color: Color = _
+  var lineWidth: Int = GraphState.INITIAL_LINE_WIDTH
+  var color: Color = uninitialized
   var numSegmentsPerRev = 0
   var showDecoration = true
   var params: Parameters = new Parameters
