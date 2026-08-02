@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import MassConserverSuiteConstants.{DT, DIM, EPS, TOL}
 import com.barrybecker4.simulation.liquid.model.UniformGrid
+import scala.compiletime.uninitialized
 
 
 /**
@@ -23,7 +24,7 @@ object MassConserverSuiteConstants {
 class MassConserverTest extends AnyFunSuite {
 
   /** instance under test. */
-  private var conserver: MassConserver = _
+  private var conserver: MassConserver = uninitialized
 
   test("MassConservationForEmptyCell") {
     val b0 = 1.0

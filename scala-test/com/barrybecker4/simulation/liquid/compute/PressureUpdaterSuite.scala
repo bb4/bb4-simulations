@@ -6,6 +6,7 @@ import javax.vecmath.Vector2d
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import PressureUpdaterSuite._
+import scala.compiletime.uninitialized
 
 
 /**
@@ -20,7 +21,7 @@ object PressureUpdaterSuite {
 
 class PressureUpdaterSuite extends AnyFunSuite {
   /** instance under test. */
-  private var pressureUpdater: PressureUpdater = _
+  private var pressureUpdater: PressureUpdater = uninitialized
 
   test("PressureUpdateUniform") {
     val b0 = 1.0

@@ -8,6 +8,7 @@ import javax.vecmath.Vector2d
 import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
 import ParticleAdvectorSuite._
 import org.scalatest.funsuite.AnyFunSuite
+import scala.compiletime.uninitialized
 
 
 /**
@@ -23,7 +24,7 @@ object ParticleAdvectorSuite {
 class ParticleAdvectorSuite extends AnyFunSuite {
 
   /** instance under test. */
-  private var particleAdvector: ParticleAdvector = _
+  private var particleAdvector: ParticleAdvector = uninitialized
 
   test("AdvectInUpdateInAbsenceOfFlow") {
     val grid = new UniformGrid(DIM, DIM, new Vector2d(0.0, 0.0), CellStatus.FULL)

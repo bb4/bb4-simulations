@@ -1,15 +1,15 @@
 // Copyright by Barry G. Becker, 2013 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 plugins {
-    id 'com.barrybecker4.bb4.scala-library' version '2.0-SNAPSHOT'
-    id 'com.barrybecker4.bb4.publish' version '2.0-SNAPSHOT'
-    id 'com.barrybecker4.bb4.application' version '2.0-SNAPSHOT'
+    id 'com.barrybecker4.bb4.scala-library' version '2.0.0'
+    id 'com.barrybecker4.bb4.publish' version '2.0.0'
+    id 'com.barrybecker4.bb4.application' version '2.0.0'
 }
 
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
         'predator prey, fluid, snake, stocks, fractals, reaction diffusion, l-systems, trebuchet, and others.'
 group = 'com.barrybecker4'
-version = '2.0-SNAPSHOT'
+version = '2.0.0'
 
 bb4 {
     archivesBaseName.set('bb4-simulation')
@@ -25,12 +25,12 @@ dependencies {
     // Ensures RegexParsers/LExpressionParser resolve when tests run from IDEs or isolated JUnit workers
     testImplementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.barrybecker4:bb4-expression:2.0-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-sound:2.0-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-optimization:2.0-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-ui:2.0-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-common:2.0-SNAPSHOT'
-    implementation 'com.barrybecker4:bb4-math:2.0-SNAPSHOT'
+    implementation 'com.barrybecker4:bb4-expression:2.0.0'
+    implementation 'com.barrybecker4:bb4-sound:2.0.0'
+    implementation 'com.barrybecker4:bb4-optimization:2.0.0'
+    implementation 'com.barrybecker4:bb4-ui:2.0.0'
+    implementation 'com.barrybecker4:bb4-common:2.0.0'
+    implementation 'com.barrybecker4:bb4-math:2.0.0'
 }
 
 tasks.withType(ScalaCompile).configureEach {

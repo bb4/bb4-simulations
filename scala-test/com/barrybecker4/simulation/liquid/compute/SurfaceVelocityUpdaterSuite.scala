@@ -7,6 +7,7 @@ import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.scalatest.funsuite.AnyFunSuite
 import SurfaceVelocityUpdaterSuite._
+import scala.compiletime.uninitialized
 
 
 /**
@@ -27,7 +28,7 @@ object SurfaceVelocityUpdaterSuite {
 class SurfaceVelocityUpdaterSuite extends AnyFunSuite {
 
   /** instance under test. */
-  private var svUpdater: SurfaceVelocityUpdater = _
+  private var svUpdater: SurfaceVelocityUpdater = uninitialized
 
   test("UpdateIsolatedInAbsenceOfFlow") {
     val grid = new UniformGrid(DIM, DIM, new Vector2d(0.0, 0.0), CellStatus.EMPTY)

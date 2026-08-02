@@ -6,6 +6,7 @@ import javax.vecmath.Vector2d
 import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
 import org.scalatest.funsuite.AnyFunSuite
 import VelocityInterpolatorSuite._
+import scala.compiletime.uninitialized
 
 
 /**
@@ -19,7 +20,7 @@ object VelocityInterpolatorSuite {
 class VelocityInterpolatorSuite extends AnyFunSuite {
 
   /** instance under test. */
-  private var interpolator: VelocityInterpolator = _
+  private var interpolator: VelocityInterpolator = uninitialized
 
   private def verifyUniformField(expectedVelocity: Vector2d) = {
     val grid = new UniformGrid(DIM, DIM, expectedVelocity)

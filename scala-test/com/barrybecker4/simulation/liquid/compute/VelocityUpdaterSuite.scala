@@ -7,6 +7,7 @@ import com.barrybecker4.simulation.liquid.model._
 import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
 import org.scalatest.funsuite.AnyFunSuite
 import VelocityUpdaterSuite._
+import scala.compiletime.uninitialized
 
 /**
   *
@@ -24,7 +25,7 @@ object VelocityUpdaterSuite {
 class VelocityUpdaterSuite extends AnyFunSuite {
 
   /** instance under test. */
-  private var velocityUpdater: VelocityUpdater = _
+  private var velocityUpdater: VelocityUpdater = uninitialized
 
   test("True") {
     assertTrue(true)

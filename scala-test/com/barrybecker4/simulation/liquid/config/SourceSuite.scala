@@ -5,6 +5,7 @@ import com.barrybecker4.common.geometry.ByteLocation
 import javax.vecmath.Vector2d
 import org.scalatest.funsuite.AnyFunSuite
 import com.barrybecker4.simulation.liquid.config.SourceSuite.{LOCATION_START, LOCATION_STOP, VELOCITY1}
+import scala.compiletime.uninitialized
 
 
 object SourceSuite extends AnyFunSuite {
@@ -15,7 +16,7 @@ object SourceSuite extends AnyFunSuite {
 
 class TestSource extends AnyFunSuite {
   /** class under test. */
-  private var src: Source = _
+  private var src: Source = uninitialized
 
   test("OnTimeNoRepeat") {
     src = new Source(LOCATION_START, VELOCITY1)
