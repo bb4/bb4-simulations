@@ -5,6 +5,8 @@ import com.barrybecker4.common.app.ILog
 import com.barrybecker4.ui.dialogs.OutputWindow
 import com.barrybecker4.ui.util.Log
 
+import java.awt.GraphicsEnvironment
+
 import scala.compiletime.uninitialized
 
 
@@ -22,8 +24,14 @@ object Logger {
 
   def getInstance: ILog = {
     if (logger == null) {
-      logger = new Log(new OutputWindow("Log", null))
-      logger.setDestination(Log.LOG_TO_WINDOW)
+      // OutputWindow requires a display; fall back to console in headless/CI environments.
+      if (GraphicsEnvironment.isHeadless) {
+        logger = new Log()
+        logger.setDestination(Log.LOG_TO_CONSOLE)
+      } else {
+        logger = new Log(new OutputWindow("Log", null))
+        logger.setDestination(Log.LOG_TO_WINDOW)
+      }
     }
     logger
   }

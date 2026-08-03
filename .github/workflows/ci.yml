@@ -18,12 +18,16 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      # AWT/Swing (OfflineGraphics, dialogs) needs a display; ubuntu runners are headless.
+      - name: Install xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
       - name: Build and test
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            ./gradlew clean build --refresh-dependencies --info
+            xvfb-run -a ./gradlew clean build --refresh-dependencies --info
           else
-            ./gradlew build --info
+            xvfb-run -a ./gradlew build --info
           fi
 
       - name: Publish SNAPSHOT
