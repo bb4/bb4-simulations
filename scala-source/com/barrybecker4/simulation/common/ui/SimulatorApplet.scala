@@ -20,17 +20,17 @@ object SimulatorApplet {
   def createSimulationFromClassName(className: String): Simulator = {
     if (className == null) return null
     val simulatorClass = ClassLoaderSingleton.loadClass(className)
-    var simulator: Simulator = null
     try
-      simulator = simulatorClass.getDeclaredConstructor().newInstance().asInstanceOf[Simulator]
+      simulatorClass.getDeclaredConstructor().newInstance().asInstanceOf[Simulator]
     catch {
       case e: InstantiationException =>
         System.err.println("Could not create class for " + className) //NON-NLS
         e.printStackTrace()
+        null
       case e: IllegalAccessException =>
         e.printStackTrace()
+        null
     }
-    simulator
   }
 }
 
