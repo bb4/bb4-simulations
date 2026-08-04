@@ -22,8 +22,8 @@ object WaveFunctionCollapseExplorer {
 
 class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
-  private var wfcModel: WfcModel = null
-  private var options: DynamicOptions = null
+  private var wfcModel: Option[WfcModel] = None
+  private var options: Option[DynamicOptions] = None
   commonInit()
 
   private def commonInit(): Unit = {
@@ -31,22 +31,24 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
     val self = this
     this.addComponentListener(new ComponentAdapter {
       override def componentResized(ce: ComponentEvent): Unit = {
-        val size: Dimension = self.getSize
-        if (size.width != options.getWidth || size.height != options.getHeight) {
-          if (WfcDebug.enabled) println("resized so rerunning...")
-          options.setDimensions(size)
+        options.foreach { opts =>
+          val size: Dimension = self.getSize
+          if (size.width != opts.getWidth || size.height != opts.getHeight) {
+            if (WfcDebug.enabled) println("resized so rerunning...")
+            opts.setDimensions(size)
+          }
         }
       }
     })
   }
 
   def setModel(m: WfcModel): Unit = {
-    wfcModel = m
+    wfcModel = Some(m)
     this.setPaused(false)
   }
 
   override protected def reset(): Unit = {
-    if (options != null) options.reset()
+    options.foreach(_.reset())
     commonInit()
   }
 
@@ -54,31 +56,40 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   override protected def getInitialTimeStep: Double = 1
 
   override def timeStep: Double = {
-    if (!isPaused && wfcModel != null && options != null) {
-      val result = options.advanceModel()
-      this.invalidate()
-      if (result.isDefined) {
-        this.repaint()
-        this.setPaused(true)
+    if (!isPaused) {
+      for {
+        _ <- wfcModel
+        opts <- options
+      } {
+        val result = opts.advanceModel()
+        this.invalidate()
+        if (result.isDefined) {
+          this.repaint()
+          this.setPaused(true)
+        }
       }
     }
     tStep
   }
 
   override def paint(g: Graphics): Unit = {
-    if (g == null || wfcModel == null || !wfcModel.isReady) return
-    super.paint(g)
-    Profiler.getInstance.startRenderingTime()
-    g.drawImage(wfcModel.graphics(), 0, 0, null)
-    Profiler.getInstance.stopRenderingTime()
+    wfcModel match {
+      case Some(model) if g != null && model.isReady =>
+        super.paint(g)
+        Profiler.getInstance.startRenderingTime()
+        g.drawImage(model.graphics(), 0, 0, null)
+        Profiler.getInstance.stopRenderingTime()
+      case _ =>
+    }
   }
 
   override def setScale(scale: Double): Unit = {}
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
-    options = new DynamicOptions(this)
-    options
+    val opts = new DynamicOptions(this)
+    options = Some(opts)
+    opts
   }
 
   override def createTopControls: JPanel = {
