@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.waveFunctionCollapse.ui
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.simulation.waveFunctionCollapse.WaveFunctionCollapseExplorer
 import com.barrybecker4.simulation.waveFunctionCollapse.model.json.{CommonModel, Overlapping, Samples, SimpleTiled}
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, OverlappingModel, SimpleTiledModel, WfcModel}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, WfcModel, WfcModelFactory}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.DynamicOptions.{DEFAULT_NUM_STEPS_PER_FRAME, RND}
 import com.barrybecker4.simulation.waveFunctionCollapse.ui.dropdown.{BoundsPopupMenuListener, ComboBoxRenderer}
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil.{getSampleData, getSampleTiledData, readImage}
@@ -288,8 +288,8 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
   }
 
   private def buildOverlappingModel(overlapping: Overlapping): WfcModel =
-    new OverlappingModel(
-      overlapping.getName,
+    WfcModelFactory.overlapping(
+      overlapping,
       dimensions.width,
       dimensions.height,
       overlappingPeriodicOutputCB.isSelected,
@@ -299,19 +299,19 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
         periodicInputCB.isSelected,
         groundCombo.getSelectedItem.asInstanceOf[Int]
       ),
-      100,
-      allowInconsistenciesCB.isSelected)
+      allowInconsistenciesCB.isSelected
+    )
 
   private def buildSimpleTiledModel(simpleTiled: SimpleTiled): WfcModel =
-    new SimpleTiledModel(
+    WfcModelFactory.simpleTiled(
+      simpleTiled,
       dimensions.width,
       dimensions.height,
-      simpleTiled.getName,
       subsetCombo.getSelectedItem.asInstanceOf[String],
       tiledPeriodicOutputCB.isSelected,
       blackCB.isSelected,
-      100,
-      allowInconsistenciesCB.isSelected)
+      allowInconsistenciesCB.isSelected
+    )
 
   private def getModel: WfcModel =
     selectedSampleModel match {
