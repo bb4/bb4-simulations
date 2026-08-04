@@ -139,14 +139,12 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
 
   private def drawParabola(par: Parabola, min: Double, max: Double): Unit = {
     var px = min
-    var lastPoint: Point = null
+    var lastPoint: Option[Point] = None
     while (px <= max) {
       val y = ((px - par.a) * (px - par.a) + (par.b * par.b) - (par.c * par.c)) / (2 * (par.b - par.c))
       val pt = new Point(px, y)
-      if (lastPoint != null) {
-        drawLine(px, y, lastPoint.x, lastPoint.y)
-      }
-      lastPoint = pt
+      lastPoint.foreach(prev => drawLine(px, y, prev.x, prev.y))
+      lastPoint = Some(pt)
       px += PARABOLA_INC
     }
   }

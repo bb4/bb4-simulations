@@ -139,30 +139,24 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     var entryLeft: (ArcKey, CircleEvent) = geometry.maxBeforeArc(arc).getOrElse(
       throw new NoSuchElementException("maxBefore arc missing after circle event")
     )
-    var arcRight: Arc = null
-    var arcLeft: Arc = null
+    var arcRight: Arc = entryRight._1.asInstanceOf[Arc]
+    var arcLeft: Arc = entryLeft._1.asInstanceOf[Arc]
     val ceArcLeft = arc.getLeft
     val cocircularJunction = arc.getRight == ceArcLeft
-    if (entryRight != null) {
+    while (cocircularJunction && arcRight.getRight == ceArcLeft) {
+      entryRight = calcEntry(arcRight, entryRight, vert).getOrElse(
+        throw new NoSuchElementException("cocircular chain minAfter")
+      )
       arcRight = entryRight._1.asInstanceOf[Arc]
-      while (cocircularJunction && arcRight.getRight == ceArcLeft) {
-        entryRight = calcEntry(arcRight, entryRight, vert).getOrElse(
-          throw new NoSuchElementException("cocircular chain minAfter")
-        )
-        arcRight = entryRight._1.asInstanceOf[Arc]
-      }
-      removeEvent(entryRight, arcRight)
     }
-    if (entryLeft != null) {
+    removeEvent(entryRight, arcRight)
+    while (cocircularJunction && arcLeft.getLeft == ceArcLeft) {
+      entryLeft = calcEntry(arcLeft, entryLeft, vert).getOrElse(
+        throw new NoSuchElementException("cocircular chain minAfter")
+      )
       arcLeft = entryLeft._1.asInstanceOf[Arc]
-      while (cocircularJunction && arcLeft.getLeft == ceArcLeft) {
-        entryLeft = calcEntry(arcLeft, entryLeft, vert).getOrElse(
-          throw new NoSuchElementException("cocircular chain minAfter")
-        )
-        arcLeft = entryLeft._1.asInstanceOf[Arc]
-      }
-      removeEvent(entryLeft, arcLeft)
     }
+    removeEvent(entryLeft, arcLeft)
     val edge = new VoronoiEdge(arcLeft.right.s1, arcRight.left.s2)
     geometry.addEdge(edge)
     val isLeftPoint = assignVertexToEdge(edge, point, vert, arcLeft, arcRight)
