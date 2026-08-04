@@ -8,9 +8,9 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration
   */
 enum Initializer(name: String, initialU: Double = Initializer.INITIAL_U, initialV: Double = Initializer.INITIAL_V):
 
-  case CirclesInitializer extends Initializer("Circles")
-  case InterlockedSquaresInitializer extends Initializer("Interlocking squares")
-  case RingInitializer extends Initializer("Interlocking rings")
+  case CirclesInitializer extends Initializer("Circles", 0.5, 0.25)
+  case InterlockedSquaresInitializer extends Initializer("Interlocking squares", 0.5, 0.25)
+  case RingInitializer extends Initializer("Interlocking rings", 0.5, 0.25)
 
   def initialize(grid: InitializableGrid, width: Int, height: Int): Unit = this match
     case CirclesInitializer =>
