@@ -25,8 +25,8 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   private var algorithm: FractalAlgorithm = uninitialized
   private var algorithmEnum: AlgorithmEnum = uninitialized
   private var juliaSeed = JuliaAlgorithm.DEFAULT_JULIA_SEED
-  private var options: DynamicOptions | Null = null
-  private var zoomHandler: ZoomHandler | Null = null
+  private var options: Option[DynamicOptions] = None
+  private var zoomHandler: Option[ZoomHandler] = None
   private var useFixedSize: Boolean = false
 
   commonInit()
@@ -65,15 +65,15 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
     }
 
     setNumStepsPerFrame(DynamicOptions.DEFAULT_STEPS_PER_FRAME)
-    if (zoomHandler != null) {
-      this.removeMouseListener(zoomHandler)
-      this.removeMouseMotionListener(zoomHandler)
+    zoomHandler.foreach { handler =>
+      this.removeMouseListener(handler)
+      this.removeMouseMotionListener(handler)
     }
     val handler = new ZoomHandler(algorithm)
-    zoomHandler = handler
+    zoomHandler = Some(handler)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
-    if (options != null) options.reset()
+    options.foreach(_.reset())
   }
 
   override protected def createOptionsDialog = new FractalOptionsDialog(frame, this)
@@ -84,7 +84,7 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
       if (!useFixedSize)
         algorithm.setSize(getWidth, getHeight)
       algorithm.timeStep(tStep)
-      options.setCoordinates(algorithm.getRange)
+      options.foreach(_.setCoordinates(algorithm.getRange))
     }
     tStep
   }
@@ -94,8 +94,8 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
     Profiler.getInstance.startRenderingTime()
     if (g != null)
       g.drawImage(algorithm.getImage, 0, 0, null)
-    zoomHandler.render(g, algorithm.getAspectRatio)
-    options.setCoordinates(algorithm.getRange)
+    zoomHandler.foreach(_.render(g, algorithm.getAspectRatio))
+    options.foreach(_.setCoordinates(algorithm.getRange))
     Profiler.getInstance.stopRenderingTime()
   }
 
@@ -103,8 +103,9 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
-    options = new DynamicOptions(this)
-    options
+    val opts = new DynamicOptions(this)
+    options = Some(opts)
+    opts
   }
 
   def getColorMap: ColorMap = algorithm.getColorMap
