@@ -9,7 +9,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class ConditionsSuite extends AnyFunSuite {
 
   test("BasicConfigParsesExactlyOneWall") {
-    val c = new Conditions(BASIC.fileName)
+    val c = new Conditions(ConfigurationEnum.BASIC.fileName)
     assertResult(1) { c.getWalls.size }
     val w = c.getWalls.head
     assertResult(15.0) { w.getStartPoint.x }

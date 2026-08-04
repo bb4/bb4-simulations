@@ -29,7 +29,7 @@ object Conditions {
   */
 class Conditions(val configFile: String) { // use a default if null passed in.
   private var walls: Seq[Wall] = uninitialized
-  val file: String = if (configFile == null) BASIC.fileName else configFile
+  val file: String = if (configFile == null) ConfigurationEnum.BASIC.fileName else configFile
   val url: URL = FileUtil.getURL(file)
   val document: Document = DomUtil.parseXML(url)
 
