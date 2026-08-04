@@ -4,8 +4,8 @@ package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 import com.barrybecker4.simulation.waveFunctionCollapse.model.IntArray
 
 class WaveCell(
-  var enabled: Array[Boolean] = null,
-  var compatible: Array[IntArray] = null,
+  var enabled: Array[Boolean],
+  var compatible: Array[IntArray],
   var observed: Int = 0, // index of observed tile
   var sumOfOnes: Int = 0,
   var sumOfWeights: Double = 0,

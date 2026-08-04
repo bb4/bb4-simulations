@@ -13,7 +13,8 @@ class StockPriceSimulationSuite extends AnyFunSuite {
     opts.percentIncrease = 0.6
     opts.numTimePeriods = 100
     val expected = 1000.0 * math.pow(1.6, 100)
-    assert(opts.getTheoreticalMaximum === expected)
+    // Math.pow is not bit-identical across JVMs; compare with tolerance.
+    assert(math.abs(opts.getTheoreticalMaximum - expected) < 1e-9 * expected)
   }
 
   test("singlePeriodFactor heads vs tails without random change") {

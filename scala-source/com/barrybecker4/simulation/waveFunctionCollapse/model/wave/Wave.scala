@@ -27,7 +27,7 @@ object Wave {
   */
 class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
 
-  private val waveCells: Array[WaveCell] = Array.fill(FMX * FMY)(null)
+  private val waveCells: Array[WaveCell] = Array.ofDim(FMX * FMY)
 
   /** Pair stacks avoid storing null as a dummy tuple in Scala 3. */
   private var stackCell: Array[Int] = uninitialized
@@ -44,14 +44,9 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
 
   def init(tCounter: Int, weights: DoubleArray): Unit = {
     for (i <- 0 until size()) {
-      val waveCell = new WaveCell()
-      waveCells(i) = waveCell
-      waveCell.enabled = Array.fill(tCounter)(false)
-      waveCell.compatible = Array.fill(tCounter)(null)
-
-      for (t <- 0 until tCounter) {
-        waveCell.compatible(t) = Array.fill(4)(0)
-      }
+      val enabled = Array.fill(tCounter)(false)
+      val compatible = Array.tabulate(tCounter)(_ => Array.fill(4)(0))
+      waveCells(i) = new WaveCell(enabled, compatible)
     }
 
     weightLogWeights = Array.ofDim[Double](tCounter)
