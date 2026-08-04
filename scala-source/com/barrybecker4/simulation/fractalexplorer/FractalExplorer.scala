@@ -13,7 +13,7 @@ import scala.compiletime.uninitialized
 
 
 object FractalExplorer {
-  val DEFAULT_ALGORITHM_ENUM: AlgorithmEnum = MANDELBROT
+  val DEFAULT_ALGORITHM_ENUM: AlgorithmEnum = AlgorithmEnum.MANDELBROT
 }
 
 /**

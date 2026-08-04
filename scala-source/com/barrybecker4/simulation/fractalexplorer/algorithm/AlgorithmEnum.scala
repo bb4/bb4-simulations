@@ -2,29 +2,21 @@ package com.barrybecker4.simulation.fractalexplorer.algorithm
 
 import com.barrybecker4.common.app.AppContext
 
-case object MANDELBROT extends AlgorithmEnum
-case object JULIA extends AlgorithmEnum
-
 /**
   * Type of fractal generation algorithm to use.
   *
   * @author Barry Becker
   */
-sealed trait AlgorithmEnum  {
+enum AlgorithmEnum:
+
+  case MANDELBROT, JULIA
 
   def getLabel: String = AppContext.getLabel(toString)
-  
-  def createInstance(): FractalAlgorithm = {
-    this match {
-      case MANDELBROT => new MandelbrotAlgorithm()
-      case JULIA => new JuliaAlgorithm()
-    }
-  }
 
-  def ordinal(): Int = AlgorithmEnum.VALUES.indexOf(this)
-}
+  def createInstance(): FractalAlgorithm =
+    if this == AlgorithmEnum.MANDELBROT then new MandelbrotAlgorithm()
+    else new JuliaAlgorithm()
 
-object AlgorithmEnum {
-  val VALUES: Array[AlgorithmEnum] = Array(MANDELBROT, JULIA)
-}
 
+object AlgorithmEnum:
+  val VALUES: Array[AlgorithmEnum] = values

@@ -51,7 +51,7 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
     for (algorithm <- AlgorithmEnum.VALUES) {
       algorithmChoice.addItem(algorithm.getLabel)
     }
-    algorithmChoice.setSelectedIndex(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal())
+    algorithmChoice.setSelectedIndex(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal)
     algorithmChoice
   }
 
