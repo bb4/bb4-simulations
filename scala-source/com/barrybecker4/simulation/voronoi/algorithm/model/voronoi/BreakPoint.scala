@@ -35,9 +35,9 @@ object BreakPoint {
 }
 
 case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean, v: VoronoiProcessor) {
-  val edgeBegin: Point = this.getPoint
   private var cacheSweepLoc: Double = .0
-  private var cachePoint: Point = null
+  private var cachePoint: Option[Point] = None
+  val edgeBegin: Point = this.getPoint
 
   def finish(vert: Point): Unit = {
     if (isEdgeLeft) this.e.p1 = vert
@@ -52,12 +52,16 @@ case class BreakPoint(s1: Point, s2: Point, e: VoronoiEdge, isEdgeLeft: Boolean,
 
   def getPoint: Point = {
     val sweepLoc = v.getSweepLoc
-    if (sweepLoc == cacheSweepLoc && cachePoint != null) return cachePoint
-    cacheSweepLoc = sweepLoc
-    cachePoint =
-      if (s1.y == s2.y) BreakPoint.pointWhenSitesHorizontal(s1, s2, sweepLoc)
-      else BreakPoint.pointWhenSitesGeneral(s1, s2, e, sweepLoc)
-    cachePoint
+    cachePoint.filter(_ => sweepLoc == cacheSweepLoc) match {
+      case Some(cached) => cached
+      case None =>
+        cacheSweepLoc = sweepLoc
+        val point =
+          if (s1.y == s2.y) BreakPoint.pointWhenSitesHorizontal(s1, s2, sweepLoc)
+          else BreakPoint.pointWhenSitesGeneral(s1, s2, e, sweepLoc)
+        cachePoint = Some(point)
+        point
+    }
   }
 
   override def toString: String = String.format("%s \ts1: %s\ts2: %s", this.getPoint, this.s1, this.s2)
