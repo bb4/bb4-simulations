@@ -7,8 +7,14 @@ def jpackageType = jpackageOs.windows ? 'msi' : (jpackageOs.macOsX ? 'dmg' : 'de
 def jpackageHome = System.getProperty('java.home')
 def jpackageBin = new File(jpackageHome, 'bin/jpackage' + (jpackageOs.windows ? '.exe' : ''))
 
-def stripHtml = { String text ->
-    (text ?: '').replaceAll(/<[^>]+>/, '').replaceAll(/\s+/, ' ').trim()
+// Windows CreateProcess quoting splits on embedded " in --description (e.g. "go back"),
+// so jpackage then treats the trailing words as Invalid Option: [...].
+def sanitizeJpackageText = { String text ->
+    (text ?: '')
+        .replaceAll(/<[^>]+>/, '')
+        .replaceAll(/["']/, '')
+        .replaceAll(/\s+/, ' ')
+        .trim()
 }
 
 def iconForApp = { String appId ->
@@ -69,7 +75,7 @@ def jpackageTasks = jpackageAppIds.collect { String appId ->
                 '--dest', destDir.get().asFile.absolutePath,
                 '--name', displayName,
                 '--app-version', project.jpackageVersion as String,
-                '--description', stripHtml(propMap.description as String),
+                '--description', sanitizeJpackageText(propMap.description as String),
                 '--vendor', 'Barry Becker',
                 '--license-file', file('LICENSE').absolutePath,
                 '--icon', icon.absolutePath,
