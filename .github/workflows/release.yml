@@ -25,12 +25,23 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y fakeroot
 
-      - name: Install WiX (Windows)
+      - name: Ensure WiX on PATH (Windows)
         if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          choco install wixtoolset --version=3.14.1 -y --no-progress
-          echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" >> $GITHUB_PATH
-        shell: bash
+          # windows-latest often already has WiX; only install if light.exe is missing.
+          if (-not (Get-Command light -ErrorAction SilentlyContinue)) {
+            choco install wixtoolset -y --no-progress --limit-output
+          }
+          $wixBin = Get-ChildItem 'C:\Program Files*\WiX Toolset*\bin' -Directory -ErrorAction SilentlyContinue |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1 -ExpandProperty FullName
+          if (-not $wixBin) {
+            throw 'WiX Toolset bin directory not found after install'
+          }
+          Write-Host "Using WiX at $wixBin"
+          Add-Content -Path $env:GITHUB_PATH -Value $wixBin
+          & "$wixBin\light.exe" -? | Select-Object -First 1
 
       - name: Build installers
         shell: bash
