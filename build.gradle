@@ -17,9 +17,6 @@ bb4 {
 }
 
 dependencies {
-    //def javaHome = System.properties.'java.home'
-    //implementation fileTree(dir: "${javaHome}/../jre/lib", include: 'javaws.jar')       // for 1.7+
-
     implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
     // Ensures RegexParsers/LExpressionParser resolve when tests run from IDEs or isolated JUnit workers
@@ -364,6 +361,7 @@ jarMap['stock'] =       [include:['com/barrybecker4/simulation/stock/**']]
 jarMap['trading'] =     [include:['com/barrybecker4/simulation/trading/**']]
 jarMap['trebuchet'] =   [include:['com/barrybecker4/simulation/trebuchet/**']]
 jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
+jarMap['voronoi'] =    [include:['com/barrybecker4/simulation/voronoi/**']]
 jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
 jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
 jarMap['water'] =    [include:['com/barrybecker4/simulation/water/**']]
@@ -403,3 +401,10 @@ applicationDistribution.into("bin") {
     from(createSpirographApp)
     fileMode = 0755
 }
+
+// jpackage --app-version rejects -SNAPSHOT and other non x[.y[.z]] strings.
+def rawVersion = project.version.toString()
+def strippedVersion = rawVersion.replaceAll(/-SNAPSHOT$/, '')
+ext.jpackageVersion = (strippedVersion ==~ /\d+(\.\d+){0,2}/) ? strippedVersion : '0.0.1'
+
+apply from: 'gradle/jpackage.gradle'

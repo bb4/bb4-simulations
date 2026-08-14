@@ -4,6 +4,8 @@
 .project
 classes/
 build/
+build/jpackage/
+dist/
 bin/
 *.iml
 bb4-simulations.ipr

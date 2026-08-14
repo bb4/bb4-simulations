@@ -1,0 +1,48 @@
+name: Build Installers
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  installers:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install Linux packaging tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot
+
+      - name: Install WiX (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install wixtoolset --version=3.14.1 -y --no-progress
+          echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Build installers
+        shell: bash
+        run: ./gradlew jpackageAllApps --no-daemon
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/jpackage/**/*.dmg
+            build/jpackage/**/*.pkg
+            build/jpackage/**/*.msi
+            build/jpackage/**/*.exe
+            build/jpackage/**/*.deb
+            build/jpackage/**/*.rpm

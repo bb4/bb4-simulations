@@ -1,0 +1,112 @@
+// Native installers via jpackage (JDK 14+). Additive: does not change deploy/zip/publish.
+
+import org.gradle.internal.os.OperatingSystem
+
+def jpackageOs = OperatingSystem.current()
+def jpackageType = jpackageOs.windows ? 'msi' : (jpackageOs.macOsX ? 'dmg' : 'deb')
+def jpackageHome = System.getProperty('java.home')
+def jpackageBin = new File(jpackageHome, 'bin/jpackage' + (jpackageOs.windows ? '.exe' : ''))
+
+def stripHtml = { String text ->
+    (text ?: '').replaceAll(/<[^>]+>/, '').replaceAll(/\s+/, ' ').trim()
+}
+
+def iconForApp = { String appId ->
+    def dir = file("packaging/icons/${appId}")
+    if (jpackageOs.windows) new File(dir, 'icon.ico')
+    else if (jpackageOs.macOsX) new File(dir, 'icon.icns')
+    else new File(dir, 'icon.png')
+}
+
+def jpackageNameFor = { Map propMap ->
+    (propMap.title as String).replaceAll(/['"]/, '').trim()
+}
+
+def linuxPackageNameFor = { String appId ->
+    "bb4-${appId.toLowerCase()}"
+}
+
+def macPackageNameFor = { Map propMap ->
+    def cleaned = (propMap.title as String).replaceAll(/[^A-Za-z0-9 ]/, '').trim()
+    cleaned.length() <= 16 ? cleaned : cleaned.substring(0, 16).trim()
+}
+
+def jpackageAppIds = appMap.findAll { String ignored, Map propMap ->
+    !(propMap.containsKey('deploy') && propMap.deploy == false)
+}.keySet()
+
+def jpackageTasks = jpackageAppIds.collect { String appId ->
+    def propMap = appMap[appId]
+    def taskName = "jpackage${appId.capitalize()}"
+    tasks.register(taskName, Exec) {
+        group = 'distribution'
+        description = "Build a native ${jpackageType} installer for ${propMap.title}"
+        dependsOn 'installDist'
+
+        def destDir = layout.buildDirectory.dir("jpackage/${appId}")
+        outputs.dir(destDir)
+        executable = jpackageBin.absolutePath
+        args '--version'
+
+        doFirst {
+            destDir.get().asFile.deleteDir()
+            destDir.get().asFile.mkdirs()
+            if (!jpackageBin.exists()) {
+                throw new GradleException("jpackage not found at ${jpackageBin}. JDK 14+ is required.")
+            }
+            def icon = iconForApp(appId)
+            if (!icon.exists()) {
+                throw new GradleException("Missing jpackage icon for ${appId}: ${icon}")
+            }
+            logger.lifecycle("jpackage ${appId}: --app-version ${project.jpackageVersion} (raw project.version=${project.version})")
+
+            def installLib = layout.buildDirectory.dir("install/${project.name}/lib").get().asFile
+            def mainJarName = tasks.named('jar').get().archiveFile.get().asFile.name
+            def mainClassName = (propMap['mainClass'] ?: 'com.barrybecker4.simulation.common.ui.SimulatorApp') as String
+            def displayName = jpackageNameFor(propMap)
+            def cli = [
+                '--input', installLib.absolutePath,
+                '--dest', destDir.get().asFile.absolutePath,
+                '--name', displayName,
+                '--app-version', project.jpackageVersion as String,
+                '--description', stripHtml(propMap.description as String),
+                '--vendor', 'Barry Becker',
+                '--license-file', file('LICENSE').absolutePath,
+                '--icon', icon.absolutePath,
+                '--main-jar', mainJarName,
+                '--main-class', mainClassName,
+                '--java-options', '-Xmx2048m',
+                '--java-options', '-Dfile.encoding=UTF-8',
+                '--type', jpackageType,
+                '--add-modules',
+                'java.desktop,java.logging,java.xml,java.management,java.naming,java.prefs,java.datatransfer,jdk.unsupported,jdk.crypto.ec,jdk.localedata',
+                '--jlink-options', '--strip-debug --no-header-files --no-man-pages --ignore-signing-information',
+            ]
+            if (propMap.containsKey('panel_class')) {
+                cli.addAll(['--arguments', '-panel_class', '--arguments', propMap.panel_class as String])
+            }
+            if (jpackageOs.macOsX) {
+                cli.addAll([
+                    '--mac-package-identifier', "com.barrybecker4.simulation.${appId}",
+                    '--mac-package-name', macPackageNameFor(propMap),
+                ])
+            } else if (jpackageOs.windows) {
+                cli.addAll(['--win-menu', '--win-shortcut', '--win-dir-chooser'])
+            } else {
+                cli.addAll([
+                    '--linux-shortcut',
+                    '--linux-package-name', linuxPackageNameFor(appId),
+                    '--linux-deb-maintainer', 'barrybecker4@gmail.com',
+                ])
+            }
+            args = cli
+        }
+    }
+    return taskName
+}
+
+tasks.register('jpackageAllApps') {
+    group = 'distribution'
+    description = "Build native ${jpackageType} installers for every deployable simulation"
+    dependsOn jpackageTasks
+}
