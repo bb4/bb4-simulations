@@ -107,6 +107,30 @@ def jpackageTasks = jpackageAppIds.collect { String appId ->
             }
             args = cli
         }
+
+        // jpackage keeps human --name inside the app; rename the installer artifact so
+        // release assets group as bb4-<appId>-<version>.{dmg,msi,deb}.
+        doLast {
+            def outDir = destDir.get().asFile
+            def installers = outDir.listFiles()?.findAll { File f ->
+                f.name.toLowerCase().endsWith(".${jpackageType}")
+            } ?: []
+            if (installers.size() != 1) {
+                throw new GradleException(
+                    "Expected one .${jpackageType} in ${outDir}, found: ${installers*.name}")
+            }
+            def artifactBase = "bb4-${appId.toLowerCase()}-${project.jpackageVersion}"
+            def target = new File(outDir, "${artifactBase}.${jpackageType}")
+            def source = installers[0]
+            if (source.canonicalFile != target.canonicalFile) {
+                if (target.exists()) target.delete()
+                if (!source.renameTo(target)) {
+                    java.nio.file.Files.move(source.toPath(), target.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                }
+                logger.lifecycle("Renamed installer -> ${target.name}")
+            }
+        }
     }
     return taskName
 }
