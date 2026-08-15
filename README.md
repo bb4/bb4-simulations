@@ -6,13 +6,44 @@ Interactive Scala/Swing simulations of physical, mathematical, and procedural sy
 
 ## Screenshots
 
-![Reaction Diffusion](docs/screenshots/reactiondiffusion.jpg)
+<table>
+  <tr>
+    <td align="center"><a href="docs/screenshots/reactiondiffusion.jpg"><img src="docs/screenshots/reactiondiffusion.jpg" alt="Reaction Diffusion" width="200"/></a><br/>Reaction Diffusion</td>
+    <td align="center"><a href="docs/screenshots/henonexplorer.jpg"><img src="docs/screenshots/henonexplorer.jpg" alt="Henon Phase Explorer" width="200"/></a><br/>Henon Phase</td>
+    <td align="center"><a href="docs/screenshots/fractalexplorer.jpg"><img src="docs/screenshots/fractalexplorer.jpg" alt="Fractal Explorer" width="200"/></a><br/>Fractal Explorer</td>
+    <td align="center"><a href="docs/screenshots/cave.jpg"><img src="docs/screenshots/cave.jpg" alt="Cave Explorer" width="200"/></a><br/>Cave Explorer</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/screenshots/dungeon.png"><img src="docs/screenshots/dungeon.png" alt="Dungeon Generator" width="200"/></a><br/>Dungeon Generator</td>
+    <td align="center"><a href="docs/screenshots/conway.jpg"><img src="docs/screenshots/conway.jpg" alt="Conway's Game of Life" width="200"/></a><br/>Conway's Life</td>
+    <td align="center"><a href="docs/screenshots/snake.jpg"><img src="docs/screenshots/snake.jpg" alt="Snake" width="200"/></a><br/>Snake</td>
+    <td align="center"><a href="docs/screenshots/dice.jpg"><img src="docs/screenshots/dice.jpg" alt="Dice" width="200"/></a><br/>Dice</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/screenshots/stock.jpg"><img src="docs/screenshots/stock.jpg" alt="Stock Price" width="200"/></a><br/>Stock Price</td>
+    <td align="center"><a href="docs/screenshots/trading.jpg"><img src="docs/screenshots/trading.jpg" alt="Stock Trading" width="200"/></a><br/>Stock Trading</td>
+    <td align="center"><a href="docs/screenshots/habitat.jpg"><img src="docs/screenshots/habitat.jpg" alt="Habitat" width="200"/></a><br/>Habitat</td>
+    <td align="center"><a href="docs/screenshots/verhulst.jpg"><img src="docs/screenshots/verhulst.jpg" alt="Verhulst Population" width="200"/></a><br/>Verhulst</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/screenshots/voronoi.png"><img src="docs/screenshots/voronoi.png" alt="Voronoi Explorer" width="200"/></a><br/>Voronoi Explorer</td>
+    <td align="center"><a href="docs/screenshots/predprey.jpg"><img src="docs/screenshots/predprey.jpg" alt="Predator Prey" width="200"/></a><br/>Predator Prey</td>
+    <td align="center"><a href="docs/screenshots/fluid.jpg"><img src="docs/screenshots/fluid.jpg" alt="Fluid" width="200"/></a><br/>Fluid</td>
+    <td align="center"><a href="docs/screenshots/liquid.jpg"><img src="docs/screenshots/liquid.jpg" alt="Liquid" width="200"/></a><br/>Liquid</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/screenshots/water.jpg"><img src="docs/screenshots/water.jpg" alt="Water" width="200"/></a><br/>Water</td>
+    <td align="center"><a href="docs/screenshots/trebuchet.jpg"><img src="docs/screenshots/trebuchet.jpg" alt="Trebuchet" width="200"/></a><br/>Trebuchet</td>
+    <td align="center"><a href="docs/screenshots/spirograph.jpg"><img src="docs/screenshots/spirograph.jpg" alt="Spirograph" width="200"/></a><br/>Spirograph</td>
+    <td align="center"><a href="docs/screenshots/sierpinski.jpg"><img src="docs/screenshots/sierpinski.jpg" alt="Sierpinski Triangle" width="200"/></a><br/>Sierpinski</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/screenshots/lsystem.jpg"><img src="docs/screenshots/lsystem.jpg" alt="L-System Tree" width="200"/></a><br/>L-System Tree</td>
+    <td align="center"><a href="docs/screenshots/waveFunctionCollapse.png"><img src="docs/screenshots/waveFunctionCollapse.png" alt="Wave Function Collapse" width="200"/></a><br/>Wave Function Collapse</td>
+  </tr>
+</table>
 
-![Fractal Explorer](docs/screenshots/fractalexplorer.jpg)
-
-![Snake](docs/screenshots/snake.jpg)
-
-![Wave Function Collapse](docs/screenshots/waveFunctionCollapse.png)
+Click a thumbnail to open the full-size image.
 
 ## Simulations
 
@@ -22,7 +53,7 @@ Interactive Scala/Swing simulations of physical, mathematical, and procedural sy
 | [Henon Phase Explorer](docs/screenshots/henonexplorer.jpg) | `runHenonexplorer` | Explore parameters of the Hénon strange attractor. |
 | [Fractal Explorer](docs/screenshots/fractalexplorer.jpg) | `runFractalexplorer` | Zoom the Mandelbrot set; drag to zoom, undo with go-back. |
 | [Cave Explorer](docs/screenshots/cave.jpg) | `runCave` | Generate cave maps with cellular automata. |
-| Dungeon Generator <!-- TODO: screenshot needed --> | `runDungeon` | Procedurally generate dungeon levels. |
+| [Dungeon Generator](docs/screenshots/dungeon.png) | `runDungeon` | Procedurally generate dungeon levels. |
 | [Conway’s Game of Life](docs/screenshots/conway.jpg) | `runConway` | Cellular automaton with alternate rule sets; color shows age. |
 | [Snake](docs/screenshots/snake.jpg) | `runSnake` | Spring-based snake locomotion (Gavin Miller, SIGGRAPH 1988). |
 | [Dice](docs/screenshots/dice.jpg) | `runDice` | Histogram of rolling N dice with M sides. |
@@ -30,7 +61,7 @@ Interactive Scala/Swing simulations of physical, mathematical, and procedural sy
 | [Stock Trading](docs/screenshots/trading.jpg) | `runTrading` | Compare trading strategies on simulated price paths. |
 | [Habitat](docs/screenshots/habitat.jpg) | `runHabitat` | Multi-creature habitat with predator/prey dynamics. |
 | [Verhulst Population](docs/screenshots/verhulst.jpg) | `runVerhulst` | Discrete logistic (Verhulst) population growth / chaos. |
-| Voronoi Explorer <!-- TODO: screenshot needed --> | `runVoronoi` | Poisson-disc sampling and Voronoi diagrams. |
+| [Voronoi Explorer](docs/screenshots/voronoi.png) | `runVoronoi` | Poisson-disc sampling and Voronoi diagrams. |
 | [Predator Prey](docs/screenshots/predprey.jpg) | `runPredprey` | Fox and rabbit population curves over time. |
 | [Fluid](docs/screenshots/fluid.jpg) | `runFluid` | Deep-water fluid dynamics (Jos Stam); drag to stir. |
 | [Liquid](docs/screenshots/liquid.jpg) | `runLiquid` | Particle-based liquid simulation (Foster et al.). |
