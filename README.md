@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/bb4/bb4-simulations/actions/workflows/ci.yml/badge.svg)](https://github.com/bb4/bb4-simulations/actions/workflows/ci.yml)
 
+📊 [Build status for all bb4 projects](https://github.com/bb4)
+
 Interactive Scala/Swing simulations of physical, mathematical, and procedural systems — reaction–diffusion chemistry, Mandelbrot navigation, fluid flow, Conway’s Game of Life, spring-based snakes, stock trading strategies, wave-function collapse, and more. Each app shares a common simulator framework so you can tweak parameters and watch the system evolve in real time.
 
 ## Screenshots
