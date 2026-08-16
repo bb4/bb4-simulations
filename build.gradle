@@ -18,7 +18,7 @@ bb4 {
 
 dependencies {
     implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
-    implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.0.4'
+    implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.2.0'
     // Ensures RegexParsers/LExpressionParser resolve when tests run from IDEs or isolated JUnit workers
     testImplementation 'org.scala-lang.modules:scala-parser-combinators_3:2.1.0'
     implementation 'com.google.code.gson:gson:2.14.0'
