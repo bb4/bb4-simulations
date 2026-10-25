@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "runs": [
+    {
+      "libName": "bb4-optimization",
+      "libVersion": "2.0.0",
+      "label": "2.0.0",
+      "timestamp": "2026-10-25T13:17:14.945728Z",
+      "machine": {
+        "cpus": 14,
+        "os": "Mac OS X",
+        "arch": "aarch64",
+        "java": "21.0.10",
+        "maxHeapMb": 4096
+      },
+      "timeoutSeconds": 120,
+      "repetitions": 3,
+      "maxEvaluations": 40,
+      "results": [
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GLOBAL_SAMPLING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 17.003915734668034,
+          "medianMillis": 969,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GLOBAL_HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 17.003915734668034,
+          "medianMillis": 967,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 70.58259494770799,
+          "medianMillis": 1003,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 1.5129344965714506,
+          "medianMillis": 1357,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 2.518944184626908,
+          "medianMillis": 1010,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "CONCURRENT_GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 2.518944184626908,
+          "medianMillis": 1015,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GLOBAL_SAMPLING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -3511.378525957743,
+          "medianMillis": 395,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GLOBAL_HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9148.349663656787,
+          "medianMillis": 400,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -12831.801236859992,
+          "medianMillis": 420,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 387,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -10767.901613546279,
+          "medianMillis": 421,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "CONCURRENT_GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -10767.901613546279,
+          "medianMillis": 401,
+          "lastError": null
+        }
+      ]
+    }
+  ]
+}

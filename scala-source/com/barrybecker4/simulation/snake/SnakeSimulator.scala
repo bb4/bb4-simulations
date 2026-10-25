@@ -33,7 +33,11 @@ object SnakeSimulator {
   )
 
   private val INITIAL_PARAMS: NumericParameterArray =
-    new NumericParameterArray(PARAMS, 5, new Random(1))
+    initialParameters(new Random(1))
+
+  /** The three locomotion parameters the optimizer searches, with `rnd` as the array's own generator. */
+  def initialParameters(rnd: Random): NumericParameterArray =
+    new NumericParameterArray(PARAMS, 5, rnd)
 
   /** initial time step */
   val INITIAL_TIME_STEP = 0.2

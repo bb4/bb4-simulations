@@ -34,6 +34,26 @@ tasks.withType(ScalaCompile).configureEach {
     scalaCompileOptions.additionalParameters += '-deprecation'
 }
 
+// Benchmarks of the simulations that call bb4-optimization (see docs/benchmarks.md).
+// Pass options with -PbenchmarkArgs, for example:
+//   ./gradlew benchmark -PbenchmarkArgs="--lib-version=2.0.0 --reps=1 --max-evals=5 --apps=trebuchet --algorithms=GENETIC_SEARCH"
+def benchmarkArgsList = {
+    def raw = project.findProperty('benchmarkArgs')
+    raw ? raw.toString().trim().split(/\s+/).toList() : []
+}
+
+tasks.register('benchmark', JavaExec) {
+    group = 'verification'
+    description = 'Runs the continuous bb4-optimization strategies on Snake and Trebuchet and records fitness ' +
+            'for the library version on the classpath in docs/benchmarks.json and docs/benchmarks.md.'
+    mainClass = 'com.barrybecker4.simulation.benchmark.BenchmarkMain'
+    classpath = sourceSets.main.runtimeClasspath
+    workingDir = projectDir
+    jvmArgs = ['-Xmx4g', '-ea']
+    args = benchmarkArgsList()
+    outputs.upToDateWhen { false }
+}
+
 tasks.register('runFractExpLocalized', JavaExec) {
     group = 'application'
     mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
