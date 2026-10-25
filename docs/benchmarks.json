@@ -162,6 +162,288 @@
           "lastError": null
         }
       ]
+    },
+    {
+      "libName": "bb4-optimization",
+      "libVersion": "2.1-SNAPSHOT",
+      "label": "2.1-SNAPSHOT",
+      "timestamp": "2026-10-25T13:25:13.796870Z",
+      "machine": {
+        "cpus": 14,
+        "os": "Mac OS X",
+        "arch": "aarch64",
+        "java": "21.0.10",
+        "maxHeapMb": 4096
+      },
+      "timeoutSeconds": 120,
+      "repetitions": 3,
+      "maxEvaluations": 40,
+      "results": [
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GLOBAL_SAMPLING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 17.003915734668034,
+          "medianMillis": 1034,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GLOBAL_HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 17.003915734668034,
+          "medianMillis": 1049,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GLOBAL_SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 17.003915734668034,
+          "medianMillis": 1036,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 70.58259494770799,
+          "medianMillis": 1074,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 1.5129344965714506,
+          "medianMillis": 1452,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 2.518944184626908,
+          "medianMillis": 940,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "CONCURRENT_GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 78.24700066188373,
+          "medianMillis": 531,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "DIFFERENTIAL_EVOLUTION",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 2.1852272723029667,
+          "medianMillis": 961,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "PARTICLE_SWARM",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 1.6628547686905681,
+          "medianMillis": 1021,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "ITERATED_LOCAL_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 1.6763488096789916,
+          "medianMillis": 1235,
+          "lastError": null
+        },
+        {
+          "app": "Snake",
+          "variant": "3 parameters",
+          "algorithm": "VARIABLE_NEIGHBORHOOD_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": 1.6763488096789916,
+          "medianMillis": 1336,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GLOBAL_SAMPLING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -3511.378525957743,
+          "medianMillis": 295,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GLOBAL_HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -3511.378525957743,
+          "medianMillis": 323,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GLOBAL_SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -3511.378525957743,
+          "medianMillis": 328,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "HILL_CLIMBING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 274,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "SIMULATED_ANNEALING",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 285,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -10767.901613546279,
+          "medianMillis": 331,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "CONCURRENT_GENETIC_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -10473.931293372514,
+          "medianMillis": 380,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "DIFFERENTIAL_EVOLUTION",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -46682.40490214294,
+          "medianMillis": 323,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "PARTICLE_SWARM",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 311,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "ITERATED_LOCAL_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 282,
+          "lastError": null
+        },
+        {
+          "app": "Trebuchet",
+          "variant": "6 parameters",
+          "algorithm": "VARIABLE_NEIGHBORHOOD_SEARCH",
+          "attempts": 3,
+          "finished": 3,
+          "timedOut": 0,
+          "errored": 0,
+          "medianFitness": -9881.091839423132,
+          "medianMillis": 279,
+          "lastError": null
+        }
+      ]
     }
   ]
 }

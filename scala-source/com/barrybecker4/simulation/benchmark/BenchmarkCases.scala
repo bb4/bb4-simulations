@@ -4,7 +4,8 @@ package com.barrybecker4.simulation.benchmark
 import com.barrybecker4.math.MathUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.optimizee.{EvaluationBudgetExceededException, Optimizee}
-import com.barrybecker4.optimization.parameter.ParameterArray
+import com.barrybecker4.optimization.parameter.{NumericParameterArray, ParameterArray}
+import com.barrybecker4.optimization.parameter.types.DoubleParameter
 import com.barrybecker4.optimization.strategy.OptimizationStrategyType
 import com.barrybecker4.simulation.snake.SnakeSimulator
 import com.barrybecker4.simulation.trebuchet.{TrebuchetParameters, TrebuchetSimulator}
@@ -15,7 +16,7 @@ import scala.util.Random
 final case class BenchmarkCase(app: String, variant: String, algorithm: String)
 
 /**
-  * Snake and trebuchet, each against the continuous strategies that exist in bb4-optimization 2.0.0.
+  * Snake and trebuchet, each against every strategy for which `appliesTo` is true on a bounded continuous problem.
   * The benchmark calls [[Optimizer]] on a paused simulator. It does not call `doOptimization`, which would
   * unpause the animation and, for the trebuchet, also apply the result to the window.
   */
@@ -27,15 +28,14 @@ object BenchmarkCases {
   /** The fitness scale both apps pass to the optimizer today. */
   val FitnessRange = 0.3
 
-  /** Strategies that can search a bounded continuous parameter array in 2.0.0. */
-  val Strategies: List[String] = List(
-    "GLOBAL_SAMPLING",
-    "GLOBAL_HILL_CLIMBING",
-    "HILL_CLIMBING",
-    "SIMULATED_ANNEALING",
-    "GENETIC_SEARCH",
-    "CONCURRENT_GENETIC_SEARCH"
-  )
+  /**
+    * Strategies that can search a bounded continuous parameter array.
+    * Kept in enum order so a new strategy shows up when `appliesTo` is true for this kind of problem.
+    */
+  val Strategies: List[String] = {
+    val params = NumericParameterArray(IndexedSeq(DoubleParameter(0.5, 0.0, 1.0, "x")), 5, new Random(1))
+    OptimizationStrategyType.values.toList.filter(_.appliesTo(ContinuousProblem, params)).map(_.toString)
+  }
 
   def all(config: BenchmarkConfig): List[BenchmarkCase] = {
     val algorithms = if (config.algorithms.isEmpty) Strategies else Strategies.filter(config.algorithms.contains)
@@ -50,8 +50,9 @@ object BenchmarkCases {
 
   /**
     * Run one search and return the best fitness. Lower is better.
-    * bb4-optimization 2.0.0 throws [[EvaluationBudgetExceededException]] when the evaluation budget is used up
-    * instead of returning the best parameters, so the best fitness seen is kept here.
+    * `doOptimization` returns [[com.barrybecker4.optimization.OptimizationResult]] and, when the evaluation budget
+    * is used up, best-so-far with status BudgetExhausted. The best fitness seen is kept as well, in case the
+    * returned value is missing.
     */
   def run(benchCase: BenchmarkCase, seed: Long, maxEvaluations: Int): Double = {
     MathUtil.RANDOM.setSeed(seed)
@@ -81,12 +82,21 @@ object BenchmarkCases {
   ): Double = {
     val tracked = new BestFitness(optimizee)
     val returned =
-      try Some(new Optimizer(tracked).doOptimization(strategy, params, FitnessRange, rnd, Some(maxEvaluations)).fitness)
+      try Some(new Optimizer(tracked).doOptimization(strategy, params, FitnessRange, rnd, Some(maxEvaluations)).best.fitness)
       catch { case _: EvaluationBudgetExceededException => None }
     (returned.toList ++ tracked.bestFitness.toList) match {
       case Nil => throw new IllegalStateException(s"${strategy.toString} returned no fitness")
       case scores => scores.min
     }
+  }
+
+  /** A bounded continuous problem: not a comparison, and not a discrete state space. */
+  private object ContinuousProblem extends Optimizee {
+    override def getName: String = "continuous"
+    override def evaluateByComparison: Boolean = false
+    override def evaluateFitness(params: ParameterArray): Double = 0
+    override def compareFitness(params1: ParameterArray, params2: ParameterArray): Double = 0
+    override def getOptimalFitness: Double = 0
   }
 
   /** Remembers the lowest fitness passed to [[evaluateFitness]]. */

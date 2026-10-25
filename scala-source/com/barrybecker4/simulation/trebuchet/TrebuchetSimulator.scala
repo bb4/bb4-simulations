@@ -124,7 +124,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
           TrebuchetParameters.FitnessRange,
           new Random(),
           Some(optimizationEvaluations)
-        )
+        ).best
       catch {
         case _: EvaluationBudgetExceededException =>
           bestSeen.getOrElse(ParameterArrayWithFitness(params, TrebuchetFitness.UnstablePenalty))
