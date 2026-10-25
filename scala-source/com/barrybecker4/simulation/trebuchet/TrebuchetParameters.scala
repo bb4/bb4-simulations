@@ -3,6 +3,8 @@ package com.barrybecker4.simulation.trebuchet
 
 import com.barrybecker4.optimization.parameter.{NumericParameterArray, ParameterArray}
 import com.barrybecker4.optimization.parameter.types.DoubleParameter
+import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.DIFFERENTIAL_EVOLUTION
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
 
 import scala.util.Random
@@ -13,8 +15,16 @@ import scala.util.Random
   */
 object TrebuchetParameters {
 
-  /** Same scale the app has always passed to the optimizer. */
-  val FitnessRange = 0.3
+  /**
+    * Scale of a throw, in distance units. Successful throws travel thousands to tens of thousands;
+    * a range of 0.3 is far below a meaningful change in distance. The value is positive because
+    * annealing and the other range-scaled strategies require it, while the fitness itself stays
+    * a negated distance.
+    */
+  val FitnessRange = 10000.0
+
+  /** Best median fitness on the 2.1-SNAPSHOT benchmark column. */
+  val SearchStrategy: OptimizationStrategyType = DIFFERENTIAL_EVOLUTION
 
   /** Evaluations per Optimize click, matching the benchmark default so a click returns. */
   val MaxEvaluations = 40

@@ -25,8 +25,12 @@ object BenchmarkCases {
   val SNAKE = "Snake"
   val TREBUCHET = "Trebuchet"
 
-  /** The fitness scale both apps pass to the optimizer today. */
-  val FitnessRange = 0.3
+  /** The fitness scale `doOptimization` passes for this simulation. */
+  def fitnessRange(app: String): Double = app match {
+    case SNAKE => SnakeSimulator.FitnessRange
+    case TREBUCHET => TrebuchetParameters.FitnessRange
+    case other => throw new IllegalArgumentException(s"Unknown simulation '$other'")
+  }
 
   /**
     * Strategies that can search a bounded continuous parameter array.
@@ -62,12 +66,12 @@ object BenchmarkCases {
       case SNAKE =>
         val simulator = new SnakeSimulator()
         simulator.setPaused(true)
-        search(simulator, SnakeSimulator.initialParameters(new Random(seed)), strategy, rnd, maxEvaluations)
+        search(simulator, SnakeSimulator.initialParameters(new Random(seed)), strategy, rnd, maxEvaluations, fitnessRange(SNAKE))
       case TREBUCHET =>
         val simulator = new TrebuchetSimulator()
         simulator.setPaused(true)
         val params = TrebuchetParameters.initialArray(simulator.getTrebuchet, new Random(seed))
-        search(simulator, params, strategy, rnd, maxEvaluations)
+        search(simulator, params, strategy, rnd, maxEvaluations, fitnessRange(TREBUCHET))
       case other =>
         throw new IllegalArgumentException(s"Unknown simulation '$other'")
     }
@@ -78,11 +82,12 @@ object BenchmarkCases {
     params: ParameterArray,
     strategy: OptimizationStrategyType,
     rnd: Random,
-    maxEvaluations: Int
+    maxEvaluations: Int,
+    fitnessRange: Double
   ): Double = {
     val tracked = new BestFitness(optimizee)
     val returned =
-      try Some(new Optimizer(tracked).doOptimization(strategy, params, FitnessRange, rnd, Some(maxEvaluations)).best.fitness)
+      try Some(new Optimizer(tracked).doOptimization(strategy, params, fitnessRange, rnd, Some(maxEvaluations)).best.fitness)
       catch { case _: EvaluationBudgetExceededException => None }
     (returned.toList ++ tracked.bestFitness.toList) match {
       case Nil => throw new IllegalStateException(s"${strategy.toString} returned no fitness")

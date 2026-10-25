@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trebuchet
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.optimizee.EvaluationBudgetExceededException
 import com.barrybecker4.optimization.parameter.{ParameterArray, ParameterArrayWithFitness}
-import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
@@ -119,7 +118,7 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     val best =
       try
         new Optimizer(this).doOptimization(
-          GENETIC_SEARCH,
+          TrebuchetParameters.SearchStrategy,
           params,
           TrebuchetParameters.FitnessRange,
           new Random(),

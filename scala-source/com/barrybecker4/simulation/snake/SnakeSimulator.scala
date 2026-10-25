@@ -6,7 +6,8 @@ import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.parameter.NumericParameterArray
 import com.barrybecker4.optimization.parameter.ParameterArray
 import com.barrybecker4.optimization.parameter.types.{DoubleParameter, Parameter}
-import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
+import com.barrybecker4.optimization.strategy.OptimizationStrategyType
+import com.barrybecker4.optimization.strategy.SIMULATED_ANNEALING
 import com.barrybecker4.simulation.common.rendering.BackgroundGridRenderer
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.snake.rendering.RenderingParameters
@@ -55,6 +56,16 @@ object SnakeSimulator {
   private val FitnessSpeedImprovementEps = 1e-5
   /** Penalize configurations where the snake becomes unstable. */
   private val UnstableFitnessPenalty = 100000.0
+
+  /**
+    * Scale of a good locomotion fitness. `1 / speed` is a few units for a fast snake and
+    * [[UnstableFitnessPenalty]] for a failure. Annealing's starting temperature is this divided by 10,
+    * so a range of 0.3 freezes the search against ordinary speed differences.
+    */
+  val FitnessRange = 10.0
+
+  /** Best median fitness on the 2.1-SNAPSHOT benchmark column. */
+  val SearchStrategy: OptimizationStrategyType = SIMULATED_ANNEALING
   private val MinSpeedForFitness = 1e-9
 
   private def fitnessFromSpeed(speed: Double): Double =
@@ -153,7 +164,7 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
   override def doOptimization(): Unit = {
     val optimizer = new Optimizer(this)
     setPaused(false)
-    optimizer.doOptimization(GENETIC_SEARCH, SnakeSimulator.INITIAL_PARAMS, 0.3)
+    optimizer.doOptimization(SnakeSimulator.SearchStrategy, SnakeSimulator.INITIAL_PARAMS, SnakeSimulator.FitnessRange)
   }
 
   override def timeStep: Double = {
