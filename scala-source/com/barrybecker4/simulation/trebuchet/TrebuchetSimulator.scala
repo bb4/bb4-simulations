@@ -1,12 +1,10 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet
 
-import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.optimization.Optimizer
-import com.barrybecker4.optimization.parameter.NumericParameterArray
-import com.barrybecker4.optimization.parameter.ParameterArray
-import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.{GENETIC_SEARCH, OptimizationStrategyType}
+import com.barrybecker4.optimization.optimizee.EvaluationBudgetExceededException
+import com.barrybecker4.optimization.parameter.{ParameterArray, ParameterArrayWithFitness}
+import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.ui.NewtonianSimulator
 import com.barrybecker4.simulation.trebuchet.model.RenderablePart
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
@@ -27,16 +25,23 @@ import scala.util.Random
 object TrebuchetSimulator {
   private val DEFAULT_NUM_STEPS_PER_FRAME = 1
   // the amount to advance the animation in time for each frame in seconds
-  private val TIME_STEP = 0.002
   private val BACKGROUND_COLOR = new Color(253, 250, 253)
-  private val NUM_PARAMS = 3
 }
 
 class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeListener {
-  reset()
-  this.setPreferredSize(new Dimension(800, 900))
   private var trebuchet: Trebuchet = uninitialized
   private var zoomSlider: JSlider = uninitialized
+  private var optimizeButton: JButton = uninitialized
+  private var optimizeStatus: JLabel = uninitialized
+
+  /** Evaluations used by the Optimize button. Tests set this lower than the default. */
+  private[trebuchet] var optimizationEvaluations: Int = TrebuchetParameters.MaxEvaluations
+
+  /** Best design scored during the current search. 2.0.0 throws when the evaluation budget is used up. */
+  private var bestSeen: Option[ParameterArrayWithFitness] = None
+
+  reset()
+  this.setPreferredSize(new Dimension(800, 900))
 
   def this(trebuchet: Trebuchet) = {
     this()
@@ -68,28 +73,81 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     zoomPanel.add(zoomLabel)
     zoomPanel.add(zoomSlider)
     controls.add(zoomPanel)
+    optimizeButton = new JButton("Optimize")
+    optimizeButton.setName("optimize")
+    optimizeButton.addActionListener(_ => startOptimization())
+    optimizeStatus = new JLabel(" ")
+    optimizeStatus.setName("optimizeStatus")
+    controls.add(optimizeButton)
+    controls.add(optimizeStatus)
     controls
   }
 
-  override def doOptimization(): Unit = {
-    val optimizer = new Optimizer(this)
-      //, Some(FileUtil.getHomeDir + "performance/trebuchet/trebuchet_optimization.txt"))
-    val params = new Array[Parameter](TrebuchetSimulator.NUM_PARAMS).toIndexedSeq
-    val paramArray = new NumericParameterArray(params, 5, new Random(1))
-    setPaused(false)
-    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
+  /** Run genetic search on a background thread so the window stays responsive, then show the best design. */
+  private def startOptimization(): Unit = {
+    optimizeButton.setEnabled(false)
+    optimizeStatus.setText("Optimizing...")
+    setPaused(true)
+    val thread = new Thread(() => {
+      val outcome =
+        try Right(optimizeDesign())
+        catch { case e: Exception => Left(Option(e.getMessage).getOrElse(e.toString)) }
+      SwingUtilities.invokeLater(() => showOptimization(outcome))
+    }, "trebuchet-optimize")
+    thread.setDaemon(true)
+    thread.start()
   }
 
-  def getNumParameters: Int = TrebuchetSimulator.NUM_PARAMS
-  override protected def getInitialTimeStep: Double = TrebuchetSimulator.TIME_STEP
+  private def showOptimization(outcome: Either[String, ParameterArrayWithFitness]): Unit = {
+    outcome match {
+      case Right(best) =>
+        optimizeStatus.setText(TrebuchetFitness.statusText(best.fitness))
+        repaint()
+      case Left(message) =>
+        optimizeStatus.setText("Optimization failed: " + message)
+    }
+    optimizeButton.setEnabled(true)
+  }
+
+  /**
+    * Search from the current design and leave the trebuchet reset at the best parameters found.
+    * The animation stays paused; press Start to watch that design fire.
+    */
+  private[trebuchet] def optimizeDesign(): ParameterArrayWithFitness = {
+    bestSeen = None
+    val params = TrebuchetParameters.initialArray(trebuchet, new Random())
+    val best =
+      try
+        new Optimizer(this).doOptimization(
+          GENETIC_SEARCH,
+          params,
+          TrebuchetParameters.FitnessRange,
+          new Random(),
+          Some(optimizationEvaluations)
+        )
+      catch {
+        case _: EvaluationBudgetExceededException =>
+          bestSeen.getOrElse(ParameterArrayWithFitness(params, TrebuchetFitness.UnstablePenalty))
+      }
+    synchronized {
+      trebuchet.reset()
+      TrebuchetParameters.apply(trebuchet, best.pa)
+    }
+    best
+  }
+
+  override def doOptimization(): Unit = { optimizeDesign(); () }
+
+  def getNumParameters: Int = TrebuchetParameters.All.size
+  override protected def getInitialTimeStep: Double = TrebuchetFitness.TimeStep
   override protected def createOptionsDialog = new TrebuchetOptionsDialog(frame, this)
 
-  override def timeStep: Double = {
+  override def timeStep: Double = synchronized {
     if (!isPaused) tStep = trebuchet.stepForward(tStep)
     tStep
   }
 
-  override def paint(g: Graphics): Unit = {
+  override def paint(g: Graphics): Unit = synchronized {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
     g2.setColor(TrebuchetSimulator.BACKGROUND_COLOR)
@@ -141,28 +199,14 @@ class TrebuchetSimulator() extends NewtonianSimulator("Trebuchet") with ChangeLi
     }
   }
 
-  /**
-    * Evaluates the trebuchet's fitness.
-    * This method is an implement the Optimizee interface.
-    * The measure is purely based on its velocity.
-    * If the trebuchet becomes unstable, then 0.0 is returned.
-    */
-  override def evaluateFitness(params: ParameterArray): Double = {
-    val stable = true
-    val improved = true
-    val oldVelocity = 0.0
-    var ct = 0
-    while ( {
-      stable && improved
-    }) { // let it run for a while
-      ThreadUtil.sleep(1000 + (3000 / (1.0 + 0.2 * ct)).toInt)
-      ct += 1
-      //stable = trebuchet_.isStable();
+  /** Headless throw distance. Lower is better. Does not sleep and does not open a window. */
+  override def evaluateFitness(params: ParameterArray): Double = synchronized {
+    val fitness = TrebuchetFitness.shoot(trebuchet, params).fitness
+    val candidate = ParameterArrayWithFitness(params, fitness)
+    bestSeen = bestSeen match {
+      case Some(prev) if prev.fitness <= candidate.fitness => Some(prev)
+      case _ => Some(candidate)
     }
-    if (!stable) {
-      println("Trebuchet Sim unstable")
-      10000.0
-    }
-    else 1.0 / oldVelocity
+    fitness
   }
 }

@@ -35,23 +35,34 @@ class TrebuchetOptionsDialog private[trebuchet](parent: Component, simulator: Tr
     trebParamPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Trebuchet Parameters"))
     val simulator = getSimulator.asInstanceOf[TrebuchetSimulator]
     val treb = simulator.getTrebuchet
-    counterWeightLeverLengthField = new NumberInput("Counter Weight Lever Length (1.0 short - 3.0 long):  ",
+    val lever = TrebuchetParameters.CounterweightLever
+    val mass = TrebuchetParameters.CounterweightMass
+    val projectile = TrebuchetParameters.ProjectileMass
+    val slingLen = TrebuchetParameters.SlingLength
+    val slingLever = TrebuchetParameters.SlingLever
+    val release = TrebuchetParameters.ReleaseAngle
+    counterWeightLeverLengthField = new NumberInput(
+      s"Counter Weight Lever Length (${lever.min} short - ${lever.max} long):  ",
       treb.getCounterWeightLeverLength, "This controls the distance from the fulcrum point to the point " +
-        "where the counter weight is attached to the the end of the arm.", 1.0, 3.0, false)
-    counterWeightMassField = new NumberInput("Counter Weight Mass  (2.0 light - 60.0 heavy):  ",
+        "where the counter weight is attached to the the end of the arm.", lever.min, lever.max, false)
+    counterWeightMassField = new NumberInput(
+      s"Counter Weight Mass  (${mass.min} light - ${mass.max} heavy):  ",
       treb.getCounterWeightMass, "This controls mass of main counterweight on the right ",
-      2.0, 60.0, false)
-    projectileMassField = new NumberInput("Projectile Mass  (0.2 light - 5.0 heavy):  ",
-      treb.getProjectileMass, "This controls mass of the projectile thrown.", 0.2, 5.0, false)
-    slingLengthField = new NumberInput("Sling Length  (0.2 short - 3.0 long):  ",
-      treb.getSlingLength, "This controls the magnitude of the sling.", 0.2, 3.0, false)
-    slingLeverLengthField = new NumberInput("Sling Lever Length  (1.0 short - 5.0 long):  ",
+      mass.min, mass.max, false)
+    projectileMassField = new NumberInput(
+      s"Projectile Mass  (${projectile.min} light - ${projectile.max} heavy):  ",
+      treb.getProjectileMass, "This controls mass of the projectile thrown.", projectile.min, projectile.max, false)
+    slingLengthField = new NumberInput(
+      s"Sling Length  (${slingLen.min} short - ${slingLen.max} long):  ",
+      treb.getSlingLength, "This controls the magnitude of the sling.", slingLen.min, slingLen.max, false)
+    slingLeverLengthField = new NumberInput(
+      s"Sling Lever Length  (${slingLever.min} short - ${slingLever.max} long):  ",
       treb.getSlingLeverLength,
       "This controls magnitude of the lever arm from the fulcrum to the sling attachment point.",
-      1.0, 5.0, false)
+      slingLever.min, slingLever.max, false)
     slingReleaseAngleField = new NumberInput("Sling Release Angle  (0.0 small - PI/2 large):  ",
       treb.getSlingReleaseAngle, "The angle between the sling and the lever arm when the projectile will be released. ",
-      0, Math.PI / 2, false)
+      release.min, release.max, false)
     trebParamPanel.add(counterWeightLeverLengthField)
     trebParamPanel.add(counterWeightMassField)
     trebParamPanel.add(projectileMassField)
