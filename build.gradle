@@ -1,9 +1,9 @@
 // Copyright by Barry G. Becker, 2013 - 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 
 plugins {
-    id 'com.barrybecker4.bb4.scala-library' version '2.0.0'
-    id 'com.barrybecker4.bb4.publish' version '2.0.0'
-    id 'com.barrybecker4.bb4.application' version '2.0.0'
+    id 'com.barrybecker4.bb4.scala-library' version '2.1-SNAPSHOT'
+    id 'com.barrybecker4.bb4.publish' version '2.1-SNAPSHOT'
+    id 'com.barrybecker4.bb4.application' version '2.1-SNAPSHOT'
 }
 
 description = 'A Scala framework for creating simulations. Implementations include dice, graphing, ' +
@@ -14,6 +14,29 @@ version = '2.1-SNAPSHOT'
 bb4 {
     archivesBaseName.set('bb4-simulation')
     mainClass.set('com.barrybecker4.simulation.dice.DiceSimulator')
+    jarMap.put('reactiondiffusion', [include: ['com/barrybecker4/simulation/reactiondiffusion/**']])
+    jarMap.put('henonexplorer', [include: ['com/barrybecker4/simulation/henonphase/**']])
+    jarMap.put('simulation', [include: ['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']])
+    jarMap.put('dice', [include: ['com/barrybecker4/simulation/dice/**']])
+    jarMap.put('fluid', [include: ['com/barrybecker4/simulation/fluid/**']])
+    jarMap.put('fractalexplorer', [include: ['com/barrybecker4/simulation/fractalexplorer/**']])
+    jarMap.put('habitat', [include: ['com/barrybecker4/simulation/habitat/**']])
+    jarMap.put('cave', [include: ['com/barrybecker4/simulation/cave/**']])
+    jarMap.put('conway', [include: ['com/barrybecker4/simulation/conway/**']])
+    jarMap.put('dungeon', [include: ['com/barrybecker4/simulation/dungeon/**']])
+    jarMap.put('liquid', [include: ['com/barrybecker4/simulation/liquid/**']])
+    jarMap.put('lsystem', [include: ['com/barrybecker4/simulation/lsystem/**']])
+    jarMap.put('predprey', [include: ['com/barrybecker4/simulation/predprey/**']])
+    jarMap.put('snake', [include: ['com/barrybecker4/simulation/snake/**']])
+    jarMap.put('stock', [include: ['com/barrybecker4/simulation/stock/**']])
+    jarMap.put('trading', [include: ['com/barrybecker4/simulation/trading/**']])
+    jarMap.put('trebuchet', [include: ['com/barrybecker4/simulation/trebuchet/**']])
+    jarMap.put('verhulst', [include: ['com/barrybecker4/simulation/verhulst/**']])
+    jarMap.put('voronoi', [include: ['com/barrybecker4/simulation/voronoi/**']])
+    jarMap.put('sierpinski', [include: ['com/barrybecker4/simulation/sierpinski/**']])
+    jarMap.put('spirograph', [include: ['com/barrybecker4/simulation/spirograph/**']])
+    jarMap.put('water', [include: ['com/barrybecker4/simulation/water/**']])
+    jarMap.put('waveFunctionCollapse', [include: ['com/barrybecker4/simulation/waveFunctionCollapse/**']])
 }
 
 dependencies {
@@ -362,32 +385,6 @@ appMap.each { appId, propMap ->
     }
 }
 
-ext.jarMap = new LinkedHashMap()
-jarMap['reactiondiffusion'] =  [include:['com/barrybecker4/simulation/reactiondiffusion/**']]
-jarMap['henonexplorer'] =  [include:['com/barrybecker4/simulation/henonphase/**']]
-jarMap['simulation'] = [include:['com/barrybecker4/simulation/common/**', 'com/barrybecker4/simulation/graphing/**']]
-jarMap['dice'] =       [include:['com/barrybecker4/simulation/dice/**']]
-jarMap['fluid'] =      [include:['com/barrybecker4/simulation/fluid/**']]
-jarMap['fractalexplorer'] = [include:['com/barrybecker4/simulation/fractalexplorer/**']]
-jarMap['habitat'] =    [include:['com/barrybecker4/simulation/habitat/**']]
-jarMap['cave'] =  [include:['com/barrybecker4/simulation/cave/**']]
-jarMap['conway'] =  [include:['com/barrybecker4/simulation/conway/**']]
-jarMap['dungeon'] =  [include:['com/barrybecker4/simulation/dungeon/**']]
-jarMap['liquid'] =      [include:['com/barrybecker4/simulation/liquid/**']]
-jarMap['lsystem'] =     [include:['com/barrybecker4/simulation/lsystem/**']]
-jarMap['predprey'] =    [include:['com/barrybecker4/simulation/predprey/**']]
-jarMap['snake'] =       [include:['com/barrybecker4/simulation/snake/**']]
-jarMap['stock'] =       [include:['com/barrybecker4/simulation/stock/**']]
-jarMap['trading'] =     [include:['com/barrybecker4/simulation/trading/**']]
-jarMap['trebuchet'] =   [include:['com/barrybecker4/simulation/trebuchet/**']]
-jarMap['verhulst'] =    [include:['com/barrybecker4/simulation/verhulst/**']]
-jarMap['voronoi'] =    [include:['com/barrybecker4/simulation/voronoi/**']]
-jarMap['sierpinski'] =    [include:['com/barrybecker4/simulation/sierpinski/**']]
-jarMap['spirograph'] =    [include:['com/barrybecker4/simulation/spirograph/**']]
-jarMap['water'] =    [include:['com/barrybecker4/simulation/water/**']]
-jarMap['waveFunctionCollapse'] =    [include:['com/barrybecker4/simulation/waveFunctionCollapse/**']]
-
-
 // add extra execution scripts
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.
 // Additional script to run text version.
@@ -414,12 +411,14 @@ def createSpirographApp = tasks.register('createSpirographApp', CreateStartScrip
     applicationName = 'bb4-spirograph'
 }
 
-applicationDistribution.into("bin") {
+application.applicationDistribution.into('bin') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(createSimulatorApp)
     from(createSierpinskiApp)
     from(createSpirographApp)
-    fileMode = 0755
+    filePermissions {
+        unix('755')
+    }
 }
 
 // jpackage --app-version rejects -SNAPSHOT and other non x[.y[.z]] strings.
