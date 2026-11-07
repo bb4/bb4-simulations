@@ -42,27 +42,52 @@ class Trebuchet() {
   private var showForceVectors = false
   // scales the geometry of the trebuchet
   private var scale = SCALE
-  commonInit()
+  reset()
 
   def reset(): Unit = {
-    RenderablePart.angularVelocity = 0
-    commonInit()
+    configure(
+      DEFAULT_CW_LEVER_LENGTH,
+      DEFAULT_COUNTER_WEIGHT_MASS,
+      DEFAULT_PROJECTILE_MASS,
+      DEFAULT_SLING_LENGTH,
+      DEFAULT_SLING_LEVER_LENGTH,
+      DEFAULT_SLING_RELEASE_ANGLE
+    )
   }
 
-  private def commonInit(): Unit = {
-    val angle = PI / 2.0 - asin(HEIGHT / DEFAULT_SLING_LEVER_LENGTH)
-    RenderablePart.angle = angle
+  /**
+    * Rebuild the trebuchet at its starting pose for these six design parameters.
+    * The starting arm angle is `pi/2 - asin(height / sling lever length)`. A lever shorter than the
+    * strut height cannot make that pose, so the angle is left non-finite and a search treats the design as a miss.
+    */
+  def configure(
+    counterWeightLeverLength: Double,
+    counterWeightMass: Double,
+    projectileMass: Double,
+    slingLength: Double,
+    slingLeverLength: Double,
+    slingReleaseAngle: Double
+  ): Unit = {
+    RenderablePart.angularVelocity = 0
+    val ratio = HEIGHT / slingLeverLength
+    RenderablePart.angle =
+      if (ratio >= -1.0 && ratio <= 1.0) PI / 2.0 - asin(ratio)
+      else Double.NaN
     val base = new Base
     part(0) = base
-    lever = new Lever(DEFAULT_CW_LEVER_LENGTH, DEFAULT_SLING_LEVER_LENGTH)
+    lever = new Lever(counterWeightLeverLength, slingLeverLength)
     part(1) = lever
-    counterWeight = new CounterWeight(lever, DEFAULT_COUNTER_WEIGHT_MASS)
+    counterWeight = new CounterWeight(lever, counterWeightMass)
     part(2) = counterWeight
-    projectile = new Projectile(DEFAULT_PROJECTILE_MASS)
-    sling = new Sling(DEFAULT_SLING_LENGTH, DEFAULT_SLING_RELEASE_ANGLE, lever, projectile)
+    projectile = new Projectile(projectileMass)
+    sling = new Sling(slingLength, slingReleaseAngle, lever, projectile)
     part(3) = sling
     part(4) = projectile
   }
+
+  def projectileX: Double = projectile.getX
+  def projectileY: Double = projectile.getY
+  def isProjectileReleased: Boolean = projectile.isReleased
 
   /**
     * steps the simulation forward in time

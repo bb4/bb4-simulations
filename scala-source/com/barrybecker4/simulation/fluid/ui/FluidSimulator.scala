@@ -2,18 +2,14 @@
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.optimization.Optimizer
-import com.barrybecker4.optimization.parameter.NumericParameterArray
-import com.barrybecker4.optimization.parameter.types.Parameter
-import com.barrybecker4.optimization.strategy.GENETIC_SEARCH
 import com.barrybecker4.simulation.common.Profiler
+import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer
 import com.barrybecker4.simulation.fluid.rendering.RenderingOptions
 import java.awt._
 import scala.compiletime.uninitialized
-import scala.util.Random
 
 
 /**
@@ -88,12 +84,7 @@ class FluidSimulator() extends Simulator("Fluid") {
   }
 
   override def doOptimization(): Unit = {
-    val optimizer =  new Optimizer(this)
-    //, Some(FileUtil.getHomeDir + "performance/fluid/fluid_optimization.txt"))
-    val params = new Array[Parameter](3)
-    val paramArray = new NumericParameterArray(params.toIndexedSeq, 5, new Random(1))
-    setPaused(false)
-    optimizer.doOptimization(GENETIC_SEARCH, paramArray, 0.3)
+    Logger.log(1, "Fluid parameter optimization is not configured (no Parameter descriptors).")
   }
 
   /** Synchronized so that paint is not called until call to timestep is done */
