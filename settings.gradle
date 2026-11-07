@@ -10,4 +10,13 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
+def optimizationSibling = new File(settings.rootDir, '../bb4-optimization')
+if (optimizationSibling.isDirectory()) {
+    includeBuild(optimizationSibling.absolutePath) {
+        dependencySubstitution {
+            substitute module('com.barrybecker4:bb4-optimization') using project(':')
+        }
+    }
+}
+
 rootProject.name = 'bb4-simulations'
