@@ -78,7 +78,11 @@ enum ParameterDistributionType(val name: String, val param: Parameter):
       DiscreteRedistribution(Consts.NumDiscretes, Array(1, 2, 6), Array(0.3, 0.3, 0.3))))
   case SPECIFIC_DISCRETE_3a extends ParameterDistributionType("Uniform discrete3a",
     ParameterDistributionType.integerDiscrete(Consts.NumDiscretesM1,
-      DiscreteRedistribution(Consts.NumDiscretes, Array(1, 2, 6), Array(0.2, 0.6, 0.2)))) // still has a problem
+      // Keep special-probability sum < 1 when the last special is below the parameter max.
+      // With sum == 1, UniformRedistribution's final CDF point at x=1 is nudged by
+      // MathUtil.EPS (1e-16), which does not advance a Double at 1.0 and fails
+      // PiecewiseFunction's strictly-increasing x check (bb4-optimization 2.1).
+      DiscreteRedistribution(Consts.NumDiscretes, Array(1, 2, 6), Array(0.2, 0.5, 0.2))))
   case BOOLEAN extends ParameterDistributionType("Boolean Uniform", ParameterDistributionType.booleanUniform)
   case BOOLEAN_SKEWED extends ParameterDistributionType("Boolean Skewed",
     ParameterDistributionType.booleanSkewed(0.8))
