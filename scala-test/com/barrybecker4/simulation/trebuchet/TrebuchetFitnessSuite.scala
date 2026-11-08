@@ -1,8 +1,10 @@
 // Copyright by Barry G. Becker, 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet
 
+import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.optimization.parameter.types.DoubleParameter
 import com.barrybecker4.simulation.trebuchet.model.Trebuchet
+import com.barrybecker4.ui.util.Log
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.awt.Component
@@ -11,6 +13,17 @@ import scala.util.Random
 
 /** Headless trebuchet objective: six dialog parameters, and a throw that finishes. */
 class TrebuchetFitnessSuite extends AnyFunSuite {
+
+  /** Same bundles SimulatorApplet loads so createTopControls can resolve RESET/OPTIONS labels. */
+  private def ensureAppContext(): Unit = {
+    if (!AppContext.isInitialized) {
+      AppContext.initialize(
+        "ENGLISH",
+        List("com.barrybecker4.ui.message", "com.barrybecker4.simulation.common.ui.message"),
+        new Log
+      )
+    }
+  }
 
   private val Bounds = List(
     ("counterweight lever length", 1.0, 3.0),
@@ -62,6 +75,7 @@ class TrebuchetFitnessSuite extends AnyFunSuite {
   }
 
   test("Optimize button runs a short search and shows the fitness") {
+    ensureAppContext()
     val simulator = new TrebuchetSimulator
     simulator.optimizationEvaluations = 1
     val controls = simulator.createTopControls
