@@ -85,6 +85,9 @@ tasks.register('runFractExpLocalized', JavaExec) {
     jvmArgs = ["-ea"]
 }
 
+def static jvmArgsForApp(Map propMap) {
+    ['-ea', "-Xmx${propMap.mx ?: '2048m'}"]
+}
 
 // The appMap is used to create the list of available application in the html index page and to generate the app tasks.
 ext.appMap = new LinkedHashMap()
@@ -409,6 +412,17 @@ def createSpirographApp = tasks.register('createSpirographApp', CreateStartScrip
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-spirograph'
+}
+
+createSimulatorApp.configure { dependsOn 'simulationJar' }
+createSierpinskiApp.configure { dependsOn 'simulationJar', 'sierpinskiJar' }
+createSpirographApp.configure { dependsOn 'simulationJar', 'spirographJar' }
+
+def jarMapJarTaskNames = bb4.jarMap.get().keySet().collect { String key -> "${key}Jar" }
+afterEvaluate {
+    tasks.named('startScripts').configure {
+        dependsOn jarMapJarTaskNames
+    }
 }
 
 application.applicationDistribution.into('bin') {
