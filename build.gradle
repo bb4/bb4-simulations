@@ -418,7 +418,7 @@ def createSimulatorApp = tasks.register('createSimulatorApp', CreateStartScripts
     outputDir = startScripts.outputDir
     applicationName = 'bb4-simulator'
     defaultJvmOpts = ["-Xmx2048m"]
-    dependsOn 'simulationJar'
+    dependsOn 'jar'
 }
 
 afterEvaluate {
