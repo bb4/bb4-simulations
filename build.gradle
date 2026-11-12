@@ -434,6 +434,25 @@ afterEvaluate {
     tasks.named('startScripts').configure {
         dependsOn jarMapJarTaskNames
     }
+
+    // 23 jarMap publications each send a burst of PUTs (jar/sources/javadoc/scaladoc/pom/
+    // checksums/metadata). Central returns 429 when those bursts are chained only ~10s apart.
+    // Sonatype's guidance is to reduce request rate, not retry harder — space the uploads.
+    def delayMs = (findProperty('bb4.sonatypePublishDelayMs') ?: '20000').toString().toLong()
+    def sonatypePublishTasks = tasks.withType(org.gradle.api.publish.maven.tasks.PublishToMavenRepository)
+            .matching { it.name.endsWith('ToBb4SonatypeRepository') }
+            .toList()
+            .sort { it.name }
+    sonatypePublishTasks.eachWithIndex { task, idx ->
+        if (idx == 0) {
+            return
+        }
+        task.mustRunAfter(sonatypePublishTasks[idx - 1])
+        task.doFirst {
+            logger.lifecycle("Throttling Sonatype publish: sleeping ${delayMs}ms before ${task.name}")
+            Thread.sleep(delayMs)
+        }
+    }
 }
 
 application.applicationDistribution.into('bin') {

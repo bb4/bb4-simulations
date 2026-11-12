@@ -35,10 +35,12 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-        # One worker, and a longer retry when Central returns 429. Gradle already
-        # retries that status, but the default (3 attempts, 1s backoff) gives up
-        # while the snapshot repository is still limiting this job.
+        # Single-threaded publish plus build.gradle's inter-publication delay (default
+        # 20s) so 23 jarMap uploads stay under Central's rate limit. Keep a modest
+        # Gradle HTTP retry for mid-publication 429s; do not crank retries hard —
+        # Sonatype says that makes blocks worse.
         run: >
           ./gradlew publish --max-workers=1 --no-parallel
           -Dorg.gradle.internal.network.retry.max.attempts=4
           -Dorg.gradle.internal.network.retry.initial.backOff=8000
+          -Dorg.gradle.internal.publish.checksums.insecure=true
