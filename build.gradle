@@ -374,10 +374,6 @@ dependencies {
     implementation bb4Libs.math
 }
 
-tasks.withType(ScalaCompile).configureEach {
-    scalaCompileOptions.additionalParameters += '-deprecation'
-}
-
 // Benchmarks of the simulations that call bb4-optimization (see docs/benchmarks.md).
 // Pass options with -PbenchmarkArgs, for example:
 //   ./gradlew benchmark -PbenchmarkArgs="--lib-version=2.0.0 --reps=1 --max-evals=5 --apps=trebuchet --algorithms=GENETIC_SEARCH"
