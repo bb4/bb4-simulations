@@ -266,8 +266,8 @@ bb4 {
                 'Here\'s a version of <a href="http://en.wikipedia.org/wiki/Spirograph">Spirograph</a> for the computer, ' +
                 'that can do things beyond what that old toy could do. ' +
                 'Adapted from work done by ' +
-                '<a href=http://www.math.psu.edu/dlittle/java/parametricequations/spirograph/index.html>David Little</a>.',
-        createStartScript: false
+                '<a href=http://www.math.psu.edu/dlittle/java/parametricequations/spirograph/index.html>David Little</a>.'
+        // start script via bb4.application (createSpirographApp)
 ])
     apps.put('sierpinski', [
         title: 'Sierpinski Triangle',
@@ -276,8 +276,8 @@ bb4 {
         description: 'A triangular fractal discovered by Waclaw Sierpinski.',
         longDescription: 'This is an example of a self-similar set. \\\n' +
                 'It is a mathematically generated pattern that can be reproducible at any magnification. \\\n' +
-                'See <a href="http://en.wikipedia.org/wiki/Sierpinski_triangle">Sierpinski Triangle</a>',
-        createStartScript: false
+                'See <a href="http://en.wikipedia.org/wiki/Sierpinski_triangle">Sierpinski Triangle</a>'
+        // start script via bb4.application (createSierpinskiApp)
 ])
     apps.put('lsystem', [
         title: 'L-System Tree',
@@ -413,31 +413,16 @@ def static jvmArgsForApp(Map propMap) {
 // The application is deployed to /build/distributions. Run scripts are in the bin directory.
 // Additional script to run text version.
 // It can take parameters like "panel_class com.barrybecker4.simulation.dice.DiceSimulator"
+// Shared multi-panel launcher (not a single apps{} entry). Per-app start scripts for
+// sierpinski/spirograph come from bb4.application via apps.put.
 def createSimulatorApp = tasks.register('createSimulatorApp', CreateStartScripts) {
     mainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
     classpath = startScripts.classpath
     outputDir = startScripts.outputDir
     applicationName = 'bb4-simulator'
     defaultJvmOpts = ["-Xmx2048m"]
+    dependsOn 'simulationJar'
 }
-
-def createSierpinskiApp = tasks.register('createSierpinskiApp', CreateStartScripts) {
-    mainClass = 'com.barrybecker4.simulation.sierpinski.SierpinskiApplet'
-    classpath = startScripts.classpath
-    outputDir = startScripts.outputDir
-    applicationName = 'bb4-sierpinski'
-}
-
-def createSpirographApp = tasks.register('createSpirographApp', CreateStartScripts) {
-    mainClass = 'com.barrybecker4.simulation.spirograph.Spirograph'
-    classpath = startScripts.classpath
-    outputDir = startScripts.outputDir
-    applicationName = 'bb4-spirograph'
-}
-
-createSimulatorApp.configure { dependsOn 'simulationJar' }
-createSierpinskiApp.configure { dependsOn 'simulationJar', 'sierpinskiJar' }
-createSpirographApp.configure { dependsOn 'simulationJar', 'spirographJar' }
 
 afterEvaluate {
     // 23 jarMap publications each send a burst of PUTs (jar/sources/javadoc/scaladoc/pom/
@@ -463,8 +448,6 @@ afterEvaluate {
 application.applicationDistribution.into('bin') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(createSimulatorApp)
-    from(createSierpinskiApp)
-    from(createSpirographApp)
     filePermissions {
         unix('755')
     }
