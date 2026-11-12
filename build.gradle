@@ -37,6 +37,17 @@ bb4 {
     jarMap.put('spirograph', [include: ['com/barrybecker4/simulation/spirograph/**']])
     jarMap.put('water', [include: ['com/barrybecker4/simulation/water/**']])
     jarMap.put('waveFunctionCollapse', [include: ['com/barrybecker4/simulation/waveFunctionCollapse/**']])
+    jpackage {
+        enabled = true
+        packageIdentifierPrefix = 'com.barrybecker4.simulation'
+        defaultMainClass = 'com.barrybecker4.simulation.common.ui.SimulatorApp'
+        javaOptions = { String appId, Map props ->
+            jvmArgsForApp(props) + ['-Dfile.encoding=UTF-8']
+        }
+        arguments = { String appId, Map props ->
+            props.containsKey('panel_class') ? ['-panel_class', props.panel_class as String] : []
+        }
+    }
 }
 
 dependencies {
@@ -435,9 +446,3 @@ application.applicationDistribution.into('bin') {
     }
 }
 
-// jpackage --app-version rejects -SNAPSHOT and other non x[.y[.z]] strings.
-def rawVersion = project.version.toString()
-def strippedVersion = rawVersion.replaceAll(/-SNAPSHOT$/, '')
-ext.jpackageVersion = (strippedVersion ==~ /\d+(\.\d+){0,2}/) ? strippedVersion : '0.0.1'
-
-apply from: 'gradle/jpackage.gradle'

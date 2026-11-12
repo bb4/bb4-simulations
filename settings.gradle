@@ -1,4 +1,9 @@
 pluginManagement {
+    // Prefer a sibling bb4-gradle checkout for local plugin development.
+    def bb4GradleSibling = new File(rootDir, '../bb4-gradle')
+    if (bb4GradleSibling.isDirectory()) {
+        includeBuild(bb4GradleSibling.absolutePath)
+    }
     repositories {
         gradlePluginPortal()
         mavenCentral()
