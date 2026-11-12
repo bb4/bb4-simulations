@@ -1,27 +1,19 @@
 pluginManagement {
-    // Prefer a sibling bb4-gradle checkout for local plugin development.
-    def bb4GradleSibling = new File(rootDir, '../bb4-gradle')
-    if (bb4GradleSibling.isDirectory()) {
-        includeBuild(bb4GradleSibling.absolutePath)
-    }
+    def sibling = new File(settings.settingsDir, '../bb4-gradle')
+    // Included builds must not include bb4-gradle again.
+    if (sibling.directory && gradle.parent == null) includeBuild(sibling.canonicalFile)
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         mavenCentral()
         maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
     }
-}
-
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
-}
-
-def optimizationSibling = new File(settings.rootDir, '../bb4-optimization')
-if (optimizationSibling.isDirectory()) {
-    includeBuild(optimizationSibling.absolutePath) {
-        dependencySubstitution {
-            substitute module('com.barrybecker4:bb4-optimization') using project(':')
-        }
+    plugins {
+        id 'com.barrybecker4.bb4.settings' version '3.0-SNAPSHOT'
     }
+}
+plugins {
+    id 'com.barrybecker4.bb4.settings'
 }
 
 rootProject.name = 'bb4-simulations'
