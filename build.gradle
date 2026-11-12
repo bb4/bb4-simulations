@@ -50,6 +50,9 @@ bb4 {
     }
 }
 
+// bb4Libs.* accessors are valid version-catalog notation; the IDE inspection often
+// false-positives them when sibling includeBuild composites are active (IDEA-361672).
+//noinspection DependencyNotationArgument
 dependencies {
     implementation 'org.scala-lang.modules:scala-parser-combinators_3:2.4.0'
     implementation 'org.scala-lang.modules:scala-parallel-collections_3:1.3.0'
