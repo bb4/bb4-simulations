@@ -354,6 +354,14 @@ bb4 {
             props.containsKey('panel_class') ? ['-panel_class', props.panel_class as String] : []
         }
     }
+
+    // Panel apps have no mainClass of their own. bb4.mainClass is DiceSimulator, whose
+    // main ignores -panel_class, so every run* task would open dice. Use the shared launcher.
+    apps.configureEach { app ->
+        if (!app.mainClass.present) {
+            app.mainClass.set('com.barrybecker4.simulation.common.ui.SimulatorApp')
+        }
+    }
 }
 
 // bb4Libs.* accessors are valid version-catalog notation; the IDE inspection often
