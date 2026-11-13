@@ -10,7 +10,7 @@ import java.awt.{BasicStroke, Color}
 
 object GridRenderer {
   private val GRID_COLOR = new Color(10, 110, 180, 80)
-  private val GRID_STROKE = new BasicStroke(1.0)
+  private val GRID_STROKE = new BasicStroke(1.0f)
 }
 
 case class GridRenderer(g: OfflineGraphics, options: DungeonOptions) {

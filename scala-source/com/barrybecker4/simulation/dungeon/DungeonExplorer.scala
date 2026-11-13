@@ -19,7 +19,7 @@ import scala.compiletime.uninitialized
 
 
 object DungeonExplorer {
-  val INITIAL_TIME_STEP: Float = 0.01
+  val INITIAL_TIME_STEP: Float = 0.01f
 }
 
 /**

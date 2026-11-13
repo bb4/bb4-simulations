@@ -24,8 +24,8 @@ object VoronoiRenderer {
   private[voronoi] val POLYGON_FILL_COLOR = new Color(100, 70, 225, 50)
   private[voronoi] val POLYGON_EDGE_COLOR = new Color(140, 90, 255, 210)
   private[voronoi] val BACKGROUND_COLOR = Color.BLACK
-  private[voronoi] val STROKE: BasicStroke = new BasicStroke(0.5)
-  private[voronoi] val BREAK_STROKE: BasicStroke = new BasicStroke(1.0)
+  private[voronoi] val STROKE: BasicStroke = new BasicStroke(0.5f)
+  private[voronoi] val BREAK_STROKE: BasicStroke = new BasicStroke(1.0f)
   private[voronoi] val PARABOLA_INC = 2
 }
 
