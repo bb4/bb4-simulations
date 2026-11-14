@@ -7,7 +7,9 @@ import com.barrybecker4.math.complex.ComplexNumber
 trait ComplexFunction {
 
    /** @param s the complex valued parameter
-     * @param n an exponent that may or may not be used in the function
+     * @param n meaning depends on the function: an integer exponent (`IntPowerFunction`),
+     *          an integer base (`PowerFunction`), an iteration/truncation count (ζ/η),
+     *          or unused (`IdentityFunction`, `GammaFunction`)
      * @return the result of applying the function
      */
    def compute(s: ComplexNumber, n: Int): ComplexNumber

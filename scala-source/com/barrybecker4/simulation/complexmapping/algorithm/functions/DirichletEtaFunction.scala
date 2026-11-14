@@ -2,11 +2,14 @@
 package com.barrybecker4.simulation.complexmapping.algorithm.functions
 
 import com.barrybecker4.math.complex.ComplexNumber
+import DirichletEtaFunction.MAX_HOLDER_ORDER
 
 
 /**
-  * See 35 minutes into https://www.youtube.com/watch?v=YuIIjLr6vUA&feature=emb_rel_pause
-  * zeta(z) = eta(z) / (1 - 2/2&caret;z)
+  * Dirichlet eta function η(s) = Σ (-1)^{k-1} k^{-s}.
+  * Converges for Re(s) > 0. For Re(s) ≤ 0, uses Hölder (Cesàro) means of the partial sums.
+  * Relation to zeta: ζ(s) = η(s) / (1 − 2^{1−s}) for s ≠ 1.
+  * See https://www.youtube.com/watch?v=YuIIjLr6vUA
   */
 case class DirichletEtaFunction() extends ComplexFunction {
 
@@ -15,56 +18,50 @@ case class DirichletEtaFunction() extends ComplexFunction {
     * @return the result of applying the function
     */
   override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
-    if (s.real > 1.0) computeConvergent(s, n)
-    else computeWithSuperSum(s, n)
+    if (n < 1) ComplexNumber(0, 0)
+    else if (s.real > 0.0) ordinaryPartialSum(s, n)
+    else holderMean(s, n)
   }
 
-  /** When s.real > 1, we can use regular sums because the series converges
-    */
-  private def computeConvergent(s: ComplexNumber, n: Int): ComplexNumber = {
-    var sum: ComplexNumber = ComplexNumber(0, 0)
-    for (i <- 1 to n) {
-      val i2 = (2 * i).toDouble
-      val term1 = ComplexNumber.pow(i2 - 1, s).reciprocal
-      val term2 = ComplexNumber.pow(i2, s).reciprocal
-      sum = sum.add(term1).subtract(term2)
+  /** When Re(s) > 0 the alternating series converges (conditionally for Re ≤ 1). */
+  private def ordinaryPartialSum(s: ComplexNumber, n: Int): ComplexNumber = {
+    var sum = ComplexNumber(0, 0)
+    for (k <- 1 to n) {
+      val term = ComplexNumber.pow(k.toDouble, s).reciprocal
+      sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)
     }
     sum
   }
 
   /**
-    * If the sequence of partial sums does not converge, then use trickery to build a second sequence from the first.
-    * - The nth term of this new sequence is the average of the first n terms of the original sequence.
-    *
-    * For example, when s = -1, then
-    * eta(-1) = 1 - 2 + 3 - 4 + 5 - 6 - 7 ...
-    *
-    * The derived series is
-    *   -1, -1, -1, -1, -1
-    *   The super sum sequence is the same, so super-sum is -1
-    *
-    * When s = 0, we have
-    * eta(0) = 1 - 1 + 1 - 1 + 1 - 1 + ...
-    * then the nth sums do not diverge - they are:
-    * 1 + 0 + 1 + 0 + 1 + 0 +
-    * then the nth term in the derived series is the average of the sum of the first n terms.
-    *  equals 1 + 1/2 + 2/3 + 1/2 + 3/5 + 1/2 + 4/7 + 1/2 + 5/9 ...
-    *
-    * In some cases even this derived series may not converge. In those cases, we have to generate another one
-    * (or maybe more) until it converges (if it ever does).
+    * Hölder mean of order m of the alternating partial sums.
+    * The Dirichlet series is (C, k) summable for Re(s) > −k.
+    * Order is min(8, max(1, floor(−Re(s)) + 1)).
     */
-  private def computeWithSuperSum(s: ComplexNumber, n: Int): ComplexNumber = {
-    var sum: ComplexNumber = ComplexNumber(0, 0)
-    for (i <- 1 to n) {
-      val i2 = (2 * i).toDouble
-      val term1 = ComplexNumber.pow(i2 - 1, s).reciprocal
-      val term2 = ComplexNumber.pow(i2, s).reciprocal
-      // println("adding " + term1 + " - " + term2 + " to sum = " + sum)
-      sum = sum.add(term1.subtract(term2))
+  private def holderMean(s: ComplexNumber, n: Int): ComplexNumber = {
+    val order = math.min(MAX_HOLDER_ORDER, math.max(1, math.floor(-s.real).toInt + 1))
+    val partials = new Array[ComplexNumber](n)
+    var sum = ComplexNumber(0, 0)
+    for (k <- 1 to n) {
+      val term = ComplexNumber.pow(k.toDouble, s).reciprocal
+      sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)
+      partials(k - 1) = sum
     }
 
-    // If n.real < 1, then instead of summing directly, we need to do the supersum calculation described in
-    // https://www.youtube.com/watch?v=YuIIjLr6vUA&feature=emb_rel_pause about 17 - 18 minutes in.
-    sum.divide(ComplexNumber(2.0 * n, 0))
+    var seq = partials
+    for (_ <- 1 to order) {
+      val next = new Array[ComplexNumber](seq.length)
+      var prefix = ComplexNumber(0, 0)
+      for (i <- seq.indices) {
+        prefix = prefix.add(seq(i))
+        next(i) = prefix.divide(ComplexNumber((i + 1).toDouble, 0))
+      }
+      seq = next
+    }
+    seq(seq.length - 1)
   }
+}
+
+object DirichletEtaFunction {
+  private val MAX_HOLDER_ORDER = 8
 }

@@ -7,14 +7,12 @@ import com.barrybecker4.ui.util.ColorMap
 import java.awt.{Color, Graphics2D}
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshPoint}
 import javax.vecmath.Point2d
-import GridRenderer.{MARGIN, AXIS_COLOR, SKIP, WIREFRAME_MODE}
+import GridRenderer.{MARGIN, AXIS_COLOR}
 
 
 object GridRenderer {
   private val AXIS_COLOR = new Color(230, 230, 245)
   private val MARGIN = 0.3
-  private val SKIP = 5
-  private val WIREFRAME_MODE = true
 }
 case class GridRenderer(grid: Grid, cmap: ColorMap) {
 
@@ -40,47 +38,46 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
   def render(viewport: Box, width: Int, height: Int): BufferedImage = {
     val buf = createBufferedImage(width, height)
     val g: Graphics2D = buf.createGraphics()
+    try {
+      xScale = width / viewport.width
+      yScale = -height / viewport.height
+      xOffset = viewport.leftX
+      yOffset = viewport.topY
 
-    xScale = width / viewport.width
-    yScale = -height / viewport.height
-    xOffset = viewport.leftX
-    yOffset = viewport.topY
-
-    renderGrid(g)
-    renderAxes(g, viewport)
+      renderGrid(g)
+      renderAxes(g, viewport)
+    } finally {
+      g.dispose()
+    }
     buf
   }
 
-  /** As a first approximation, just look at where the border and a few middle points map to.
-    * That should be much faster than checking all points. */
-  private def findViewport(): Box = {
-    val base = Box(new Point2d(0, 0), new Point2d(0, 0))
-    extendBoxWithInteriorSamples(
-      extendBoxWithHorizontalEdges(extendBoxWithVerticalEdges(base))
-    ).addMargin(MARGIN)
+  /** Bounds from every finite mesh point (mesh cost is dominated by the transform, not this scan). */
+  private[algorithm] def findViewport(): Box = {
+    var box = Box(new Point2d(0, 0), new Point2d(0, 0))
+    var started = false
+    for (i <- 0 until grid.width; j <- 0 until grid.height) {
+      val pt = grid(i, j).pt
+      if (pt.x.isFinite && pt.y.isFinite) {
+        if (!started) {
+          box = Box(new Point2d(pt.x, pt.y), new Point2d(pt.x, pt.y))
+          started = true
+        } else {
+          box = box.extendBy(pt)
+        }
+      }
+    }
+    box.addMargin(MARGIN)
   }
-
-  private def extendBoxWithVerticalEdges(box: Box): Box =
-    (0 until grid.height - 1).foldLeft(box) { (b, j) =>
-      b.extendBy(grid(0, j).pt).extendBy(grid(grid.width - 1, j).pt)
-    }
-
-  private def extendBoxWithHorizontalEdges(box: Box): Box =
-    (0 until grid.width - 1).foldLeft(box) { (b, i) =>
-      b.extendBy(grid(i, 0).pt).extendBy(grid(i, grid.height - 1).pt)
-    }
-
-  private def extendBoxWithInteriorSamples(box: Box): Box =
-    (for {
-      i <- SKIP until (grid.height - SKIP) by SKIP
-      j <- SKIP until grid.width - SKIP by SKIP
-    } yield grid(j, i).pt).foldLeft(box)(_.extendBy(_))
 
   private def renderGrid(g: Graphics2D): Unit = {
     for (j <- 0 until grid.height - 1)
       for (i <- 0 until grid.width - 1) {
-        val meshPoints = Array(grid(i, j), grid(i + 1, j), grid(i + 1, j+ 1), grid(i, j + 1))
-        renderQuadrilateral(meshPoints, g)
+        val p0 = grid(i, j)
+        val p1 = grid(i + 1, j)
+        val p2 = grid(i + 1, j + 1)
+        val p3 = grid(i, j + 1)
+        renderQuadrilateral(p0, p1, p2, p3, g)
       }
   }
 
@@ -92,57 +89,38 @@ case class GridRenderer(grid: Grid, cmap: ColorMap) {
     g.drawLine(convertX(viewport.leftX), y0, convertX(viewport.rightX), y0)
   }
 
-  /** Draw 4 triangles to approximate the quadrilateral region.
-    * It we want to get fancy, we can try interpolating the colors using Barycentric coordinates
-    * as described here: https://codeplea.com/triangular-interpolation */
-  private def renderQuadrilateral(meshPoints: Array[MeshPoint], g: Graphics2D): Unit = {
-    val centerValue = meshPoints.map(_.value).sum / 4.0
-    val avgX: Double = meshPoints.map(_.x).sum / 4.0
-    val avgY: Double = meshPoints.map(_.y).sum / 4.0
-    val centerPoint = MeshPoint(new Point2d(avgX, avgY), centerValue)
-    if (!centerPoint.x.isNaN && !centerPoint.y.isNaN) {
-      if (WIREFRAME_MODE) {
-        drawLine(meshPoints(0), meshPoints(1), g)
-        drawLine(meshPoints(1), meshPoints(2), g)
-        drawLine(meshPoints(2), meshPoints(3), g)
-        drawLine(meshPoints(3), meshPoints(0), g)
-        drawLine(meshPoints(0), centerPoint, g)
-        drawLine(meshPoints(1), centerPoint, g)
-        drawLine(meshPoints(2), centerPoint, g)
-        drawLine(meshPoints(3), centerPoint, g)
-      } else {
-        renderTriangle(Array(meshPoints(0), meshPoints(1), centerPoint), g)
-        renderTriangle(Array(meshPoints(1), meshPoints(2), centerPoint), g)
-        renderTriangle(Array(meshPoints(2), meshPoints(3), centerPoint), g)
-        renderTriangle(Array(meshPoints(3), meshPoints(0), centerPoint), g)
-      }
+  /** Wireframe quads with spokes to the cell center. */
+  private def renderQuadrilateral(p0: MeshPoint, p1: MeshPoint, p2: MeshPoint, p3: MeshPoint, g: Graphics2D): Unit = {
+    val centerValue = (p0.value + p1.value + p2.value + p3.value) / 4.0
+    val avgX = (p0.x + p1.x + p2.x + p3.x) / 4.0
+    val avgY = (p0.y + p1.y + p2.y + p3.y) / 4.0
+    if (avgX.isFinite && avgY.isFinite) {
+      val center = MeshPoint(new Point2d(avgX, avgY), centerValue)
+      drawLine(p0, p1, g)
+      drawLine(p1, p2, g)
+      drawLine(p2, p3, g)
+      drawLine(p3, p0, g)
+      drawLine(p0, center, g)
+      drawLine(p1, center, g)
+      drawLine(p2, center, g)
+      drawLine(p3, center, g)
     }
   }
 
   private def convertX(x: Double): Int = ((x - xOffset) * xScale).toInt
   private def convertY(y: Double): Int = ((y - yOffset) * yScale).toInt
 
-  private def renderTriangle(pts: Array[MeshPoint], g: Graphics2D): Unit = {
-    g.setColor(getInterpolatedColor(pts))
-    val x = pts.map(pt => convertX(pt.x))
-    val y = pts.map(pt => convertY(pt.y))
-    g.fillPolygon(x, y, x.length)
-  }
-
   private def drawLine(from: MeshPoint, to: MeshPoint, g: Graphics2D): Unit = {
-    g.setColor(getInterpolatedColor(Array(from, to)))
+    g.setColor(getInterpolatedColor(from, to))
     g.drawLine(convertX(from.x), convertY(from.y), convertX(to.x), convertY(to.y))
   }
 
-  private def getInterpolatedColor(pts: Array[MeshPoint]): Color = {
-    val len = pts.length
-    val third = if (len == 3) pts(2).value else 0
-    if (Math.abs(2 * pts(0).value - pts(1).value - third) > 0.2) {
+  private def getInterpolatedColor(a: MeshPoint, b: MeshPoint): Color = {
+    if (Math.abs(a.value - b.value) > 0.2) {
       // avoid strange values across the colormap wrap threshold
-      cmap.getColorForValue(pts(0).value)
+      cmap.getColorForValue(a.value)
     } else {
-      val value = pts.map(_.value).sum / len
-      cmap.getColorForValue(value)
+      cmap.getColorForValue((a.value + b.value) / 2.0)
     }
   }
 

@@ -2,13 +2,14 @@
 package com.barrybecker4.simulation.complexmapping
 
 import java.awt.event.{ActionEvent, ActionListener}
-import java.awt.{BorderLayout, Dimension, GridLayout}
+import java.awt.Dimension
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
 import scala.compiletime.uninitialized
-import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL}
+import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_N}
 import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
+import DynamicOptions._
 
 /**
   * Dynamic controls for the complex mapping explorer simulation that will show on the right.
@@ -17,10 +18,10 @@ import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
   */
 object DynamicOptions {
 
-  private[complexmapping] val DEFAULT_N = 2
   private val EXPONENT_SLIDER = "Exponent N"
   private val INTERPOLATION_SLIDER = "Interpolation from original"
   private val MESH_DETAIL_SLIDER = "Mesh granularity"
+  private val SLIDER_DEBOUNCE_MS = 80
   private val SLIDER_PROPS = Array(
     new SliderProperties(EXPONENT_SLIDER, 1, 1000, DEFAULT_N, 1),
     new SliderProperties(INTERPOLATION_SLIDER, 0.0, 1.0, DEFAULT_INTERPOLATION_VAL, 200),
@@ -37,6 +38,10 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
 
   private var functionChoice: JComboBox[String] = uninitialized
   var sliderGroup: SliderGroup = uninitialized
+  private var pendingSliderName: String = uninitialized
+  private var pendingSliderValue: Double = 0.0
+  private val debounceTimer: Timer = new Timer(SLIDER_DEBOUNCE_MS, (_: ActionEvent) => applyPendingSlider())
+  debounceTimer.setRepeats(false)
 
   createUI()
 
@@ -45,34 +50,19 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     sliderGroup.setSliderListener(this)
     val legend: ContinuousColorLegend =
       new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
-    val checkBoxes: JPanel = createCheckBoxes
-    val gridBox: JPanel = createOriginalGridBoxUI
     functionChoice = createFunctionDropdown
 
     add(new JLabel("Function to apply to a grid in the complex plane:"))
     add(functionChoice)
     add(sliderGroup)
     add(javax.swing.Box.createVerticalStrut(10))
-    add(checkBoxes)
-    add(javax.swing.Box.createVerticalStrut(10))
     add(legend)
-    add(gridBox)
-    addUpdateButtonAndSpacer()
-  }
-
-  private def addUpdateButtonAndSpacer(): Unit = {
-    val updateButton = new JButton("Update")
-    updateButton.addActionListener(this)
-    add(updateButton)
     val fill = new JPanel
     fill.setPreferredSize(new Dimension(10, 1000))
     add(fill)
   }
 
-
-  /** The dropdown menu at the top for selecting an algorithm for solving the puzzle.
-    * @return a dropdown/down component.
-    */
+  /** The dropdown menu at the top for selecting a mapping function. */
   private def createFunctionDropdown: JComboBox[String] = {
     val combo = new JComboBox[String]()
     combo.addActionListener(this)
@@ -83,40 +73,28 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     combo
   }
 
-  private def createCheckBoxes = {
-    val checkBoxes = new JPanel(new GridLayout(0, 1))
-    checkBoxes.setBorder(BorderFactory.createEtchedBorder)
-    checkBoxes
-  }
-
-  private def createOriginalGridBoxUI = {
-    val view = new JPanel
-    view.setLayout(new BorderLayout)
-
-    val title = new JLabel("Original grid extent: ")
-    view.add(title, BorderLayout.NORTH)
-
-    val boundingBoxPanel = new JPanel()
-    boundingBoxPanel.setLayout(new BoxLayout(boundingBoxPanel, BoxLayout.Y_AXIS))
-    view.add(boundingBoxPanel, BorderLayout.CENTER)
-    view
-  }
-
   def reset(): Unit = sliderGroup.reset()
 
-  /** One of the buttons was pressed. */
+  /** Function combo selection applies immediately. */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == functionChoice) {
-      simulator.setFunction(FunctionType.fromOrdinal(functionChoice.getSelectedIndex).function)
-    } else simulator.redraw()
+      simulator.setFunction(FunctionType.values(functionChoice.getSelectedIndex).function)
+    }
   }
 
-  /** One of the sliders was moved. */
+  /** Slider changes are debounced so drag events do not recompute the mesh on every tick. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
-    sliderName match {
-      case DynamicOptions.EXPONENT_SLIDER => simulator.setN(value.toInt)
-      case DynamicOptions.INTERPOLATION_SLIDER => simulator.setInterpolation(value)
-      case DynamicOptions.MESH_DETAIL_SLIDER => simulator.setMeshDetailIncrement(value)
+    pendingSliderName = sliderName
+    pendingSliderValue = value
+    debounceTimer.restart()
+  }
+
+  private def applyPendingSlider(): Unit = {
+    pendingSliderName match {
+      case EXPONENT_SLIDER => simulator.setN(pendingSliderValue.toInt)
+      case INTERPOLATION_SLIDER => simulator.setInterpolation(pendingSliderValue)
+      case MESH_DETAIL_SLIDER => simulator.setMeshDetailIncrement(pendingSliderValue)
+      case _ => ()
     }
   }
 }

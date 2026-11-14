@@ -11,13 +11,11 @@ import javax.vecmath.Point2d
 import ComplexMappingExplorer._
 import com.barrybecker4.simulation.complexmapping.algorithm.model.{Box, Grid, MeshMappingModel}
 
-import scala.compiletime.uninitialized
-
 
 object ComplexMappingExplorer {
   val DEFAULT_ORIG_GRID_BOUNDS: Box = Box(new Point2d(-1.0, 1.5), new Point2d(2, -2))
   val DEFAULT_FUNCTION: FunctionType = FunctionType.ZETA_ANALYTIC_EXTENSION
-  val DEFAULT_N: Int = 2
+  val DEFAULT_N: Int = 50
   val DEFAULT_INTERPOLATION_VAL: Double = 1.0
   val DEFAULT_MESH_DETAIL: Double = 0.1
 }
@@ -27,7 +25,6 @@ object ComplexMappingExplorer {
   * Ideas for improvement:
   *  - dropdown for color function, slider for scaling color
   *  - dropdown for complex mapping function and UI for its options
-  *  - figure out how to analytically extend zeta function.
   * @author Barry Becker.
   */
 class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
@@ -38,19 +35,11 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   private var grid = new Grid(origGridBounds, increment, increment)
   private var theN = DEFAULT_N
   private var model: MeshMappingModel = MeshMappingModel(grid, function, theN, DEFAULT_INTERPOLATION_VAL)
-  private var options: DynamicOptions = uninitialized
-  private var useFixedSize: Boolean = false
+  private var options: Option[DynamicOptions] = None
   private var interpolationValue = DEFAULT_INTERPOLATION_VAL
   private var colorMap: ColorMap = new MeshColorMap()
 
   commonInit()
-
-  /** @param fixed if true then the render area does not resize automatically.*/
-  def setUseFixedSize(fixed: Boolean): Unit = {
-    useFixedSize = fixed
-  }
-
-  def getUseFixedSize: Boolean = useFixedSize
 
   private def commonInit(): Unit = {
     initCommonUI()
@@ -70,7 +59,7 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   def setOriginalGridBounds(bounds: Box): Unit = {
     origGridBounds = bounds
-    grid = new Grid(origGridBounds, increment, increment)
+    rebuildGrid()
     redraw()
   }
 
@@ -86,15 +75,19 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
 
   def setMeshDetailIncrement(inc: Double): Unit = {
     increment = inc
-    grid = new Grid(origGridBounds, increment, increment)
+    rebuildGrid()
     redraw()
+  }
+
+  private def rebuildGrid(): Unit = {
+    grid = new Grid(origGridBounds, increment, increment)
   }
 
   /** @return the current algorithm. Note: it can change so do not hang onto a reference. */
   def getFunction: ComplexFunction = function
 
   override protected def reset(): Unit = {
-    if (options != null) options.reset()
+    options.foreach(_.reset())
     redraw()
   }
 
@@ -118,8 +111,9 @@ class ComplexMappingExplorer extends Simulator("Complex Mapping Explorer") {
   override def getScale = 0.01
 
   override def createDynamicControls: JPanel = {
-    options = new DynamicOptions(this)
-    options
+    val panel = new DynamicOptions(this)
+    options = Some(panel)
+    panel
   }
 
   def getColorMap: ColorMap = model.getColorMap

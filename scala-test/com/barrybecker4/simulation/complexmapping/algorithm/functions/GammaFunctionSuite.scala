@@ -29,4 +29,18 @@ class GammaFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertions {
     val expected = math.Pi / math.sin(math.Pi * 0.25)
     assertComplexApprox(ComplexNumber(expected, 0), prod, tol = 1e-4)
   }
+
+  test("Gamma(0.5) is sqrt(pi)") {
+    assertComplexApprox(
+      ComplexNumber(math.sqrt(math.Pi), 0),
+      gamma.compute(ComplexNumber(0.5, 0), nDummy),
+      tol = 1e-6
+    )
+  }
+
+  test("Gamma(0) returns non-finite without throwing") {
+    val result = gamma.compute(ComplexNumber(0, 0), nDummy)
+    assert(result.real.isNaN || result.real.isInfinite || result.imaginary.isNaN)
+  }
 }
+

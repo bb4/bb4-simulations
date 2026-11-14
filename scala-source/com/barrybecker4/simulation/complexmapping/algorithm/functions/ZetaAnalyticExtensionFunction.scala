@@ -5,24 +5,18 @@ import com.barrybecker4.math.complex.ComplexNumber
 
 
 /**
-  * This function extends the zeta function so its domain is the whole complex plane.
+  * Analytic continuation of the Riemann zeta function to the whole complex plane.
   * See http://tmajlath.byethost13.com/Riemann.html?ckattempt=1&i=1
   *
-  * Also see 35 minutes into https://www.youtube.com/watch?v=YuIIjLr6vUA&feature=emb_rel_pause
-  * zeta(z) = eta(z) / (1 - 2/2&caret;z)
-  * The only place where it is not defined is for z = 1.
+  * Relation: ζ(z) = η(z) / (1 − 2^{1−z}) for z ≠ 1.
+  * The only pole is at z = 1.
   *
-  * For example,
-  * zeta(0) = 1/2 / (-1) = -1/2
-  * zeta(-1) = -1/12
-  * zeta(-2) = 0
-  * zeta(-3) = 1/120
-  * zeta(-4) = 0
-  * The trivial zeros are for z = 0, -2, -4, -6, ...
-  * All the non-trivial zeroes are hypothesized (by Riemann) to lie on z = 1/2
+  * Particular values:
+  * ζ(0) = −1/2, ζ(−1) = −1/12, ζ(−2) = 0, ζ(−3) = 1/120, ζ(−4) = 0.
+  * Trivial zeros at z = −2, −4, −6, …
   *
-  * The values at 0 and 1 are special and are computed according to
-  * https://en.wikipedia.org/wiki/Particular_values_of_the_Riemann_zeta_function
+  * Visualization maps non-finite results (including the pole) to 0.
+  * See https://en.wikipedia.org/wiki/Particular_values_of_the_Riemann_zeta_function
   */
 case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
 
@@ -37,11 +31,11 @@ case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
   override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
 
     val result =
-      if (s.real == 1) ComplexNumber(Double.PositiveInfinity, 0)
-      else if (s.real == 0) ComplexNumber(-0.5, 0)
+      if (s.imaginary == 0.0 && s.real == 1.0) ComplexNumber(Double.PositiveInfinity)
+      else if (s.imaginary == 0.0 && s.real == 0.0) ComplexNumber(-0.5)
       else if (s.real > 1) zetaFunction.compute(s, n)
-      else if (s.real > 0) continuanceInCriticalRegion(s, n)
-      else continuanceInNegativeRegion(s, n)
+      else if (s.real < 0) continuanceInNegativeRegion(s, n)
+      else continuanceInCriticalRegion(s, n) // critical strip and imag axis except origin
 
     // Visualization uses finite values only; poles / failed numerics become 0 (not zeta(1)=∞).
     if (result.real.isInfinite || result.real.isNaN || result.imaginary.isNaN) ComplexNumber(0) else result
@@ -53,7 +47,8 @@ case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
     num.divide(denominator)
   }
 
-  /** ζ(s) = 2(2π&caret;-s')cos(s'π/2)Γ(s')ζ(s') where s' = 1 - s  (the web ref has s - 1, but I think that is a typo)
+  /** ζ(s) = 2(2π)^{-s'}cos(s'π/2)Γ(s')ζ(s') where s' = 1 - s
+   *  Equivalent to ζ(s) = 2^s π^{s−1} sin(πs/2) Γ(1−s) ζ(1−s).
    *  also see http://www.nhn.ou.edu/~milton/p5013/zeta.pdf
    */
   private def continuanceInNegativeRegion(s: ComplexNumber, n: Int): ComplexNumber = {

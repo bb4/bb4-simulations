@@ -6,6 +6,7 @@ import GammaFunction._
 
 object GammaFunction {
   private val ZERO = ComplexNumber(0, 0)
+  private val NAN = ComplexNumber(Double.NaN, Double.NaN)
   private val G = 7
   private val P = Array(
     0.99999999999980993, 676.5203681218851, -1259.1392167224028,
@@ -26,8 +27,8 @@ case class GammaFunction() extends ComplexFunction {
       val denom =
         ComplexNumber.sin(s.multiply(ComplexNumber(Math.PI)))
           .multiply(this.compute(ComplexNumber(1.0).subtract(s), n))
-      assert(!denom.equals(ZERO))
-      ComplexNumber(Math.PI).divide(denom)
+      if (denom.equals(ZERO)) NAN
+      else ComplexNumber(Math.PI).divide(denom)
     }
     else {
       val z = s.subtract(1.0)

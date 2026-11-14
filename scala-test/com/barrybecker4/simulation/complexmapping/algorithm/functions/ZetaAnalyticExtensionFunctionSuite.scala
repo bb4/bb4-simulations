@@ -11,78 +11,76 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   private val fun = ZetaAnalyticExtensionFunction()
 
-  test("z(2) with n=1000") {
-    assertResult(ComplexNumber(1.6349839001848923, 0)) {
-      fun.compute(ComplexNumber(2.0), 100)
+  /** Alternating series for η, computed in-test so a shared eta bug cannot pass zeta tests. */
+  private def etaAlternatingSum(s: ComplexNumber, n: Int): ComplexNumber = {
+    var sum = ComplexNumber(0, 0)
+    for (k <- 1 to n) {
+      val term = ComplexNumber.pow(k.toDouble, s).reciprocal
+      sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)
     }
+    sum
   }
 
-  test("z(1) with n=1") {
-    assertResult(ComplexNumber(0)) {
-      fun.compute(ComplexNumber(1.0), 1)
-    }
+  private def zetaFromEta(s: ComplexNumber, n: Int): ComplexNumber = {
+    val num = etaAlternatingSum(s, n)
+    val denom = ComplexNumber(1.0, 0).subtract(ComplexNumber(2.0, 0).divide(ComplexNumber.pow(2.0, s)))
+    num.divide(denom)
   }
 
-  test("z(0) with n=100 should be 1/2") {
+  test("z(2) with n=1000 approaches pi^2/6") {
+    assertComplexApprox(
+      ComplexNumber(math.Pi * math.Pi / 6.0, 0),
+      fun.compute(ComplexNumber(2.0), 1000),
+      tol = 2e-3
+    )
+  }
+
+  test("z(0) is -1/2") {
     assertResult(ComplexNumber(-0.5)) {
       fun.compute(ComplexNumber(0), 100)
     }
   }
 
-  test("z(1, i) with n=1") {
+  test("z(1) maps pole to viz value 0") {
     assertResult(ComplexNumber(0)) {
-      fun.compute(ComplexNumber(1.0, 1.0), 1)
+      fun.compute(ComplexNumber(1.0), 1)
     }
   }
 
-  test("z(-1) with n=100 should be -1/12") {
-    assertResult(ComplexNumber(-0.08282925200144968, 0)) {  // this should be about -1/12
-      fun.compute(ComplexNumber(-1), 100)
-    }
-  }
-
-  test("z(-1) with n=1000 should be -1/12") {
-    assertResult(ComplexNumber(-0.08328269806336484, 0)) {  // this should be -1/12 = -0.08333333333333
-      fun.compute(ComplexNumber(-1, 0), 1000)
-    }
-  }
-
-  test("z(-3) with n=100 should be -1/120") {
-    assertResult(ComplexNumber(0.008333330805078558, 0)) {  // should be -1/120
-      fun.compute(ComplexNumber(-3, 0), 100)
-    }
-  }
-
-  test("z(-4) with n=100 should be -0") {
-    assertResult(ComplexNumber(1.5561134419018175E-18, 0)) {  // should be 0
-      fun.compute(ComplexNumber(-4, 0), 100)
-    }
-  }
-
-  test("z(1, i) with n=2") {
-    assertResult(ComplexNumber(0)) {
-      fun.compute(ComplexNumber(1.0, 1.0), 2)
-    }
-  }
-
-  test("z(2, 3i) with n=3") {
+  test("z(-1) with n=1000 approaches -1/12") {
     assertComplexApprox(
-      ComplexNumber(0.7684594036038668, -0.20128090061917603),
-      fun.compute(ComplexNumber(2.0, 3.0), 3)
+      ComplexNumber(-1.0 / 12.0, 0),
+      fun.compute(ComplexNumber(-1), 1000),
+      tol = 1e-4
     )
   }
 
-  test("z(2, 3i) with n=300") {
+  test("z(-2) with n=50 is a trivial zero") {
     assertComplexApprox(
-      ComplexNumber(0.7970905940475872, -0.11423413906585442),
-      fun.compute(ComplexNumber(2.0, 3.0), 300),
+      ComplexNumber(0, 0),
+      fun.compute(ComplexNumber(-2, 0), 50),
+      tol = 1e-8
+    )
+  }
+
+  test("z(-3) with n=200 approaches +1/120") {
+    assertComplexApprox(
+      ComplexNumber(1.0 / 120.0, 0),
+      fun.compute(ComplexNumber(-3, 0), 200),
       tol = 1e-5
     )
   }
 
-  test("z(-1, i) with n=2") {
-    assertResult(ComplexNumber(-0.009406554678370524, -0.11239864467936167)) {
-      fun.compute(ComplexNumber(-1.0, 1.0), 2)
-    }
+  test("z(1+i) with n=400 is finite via eta relation") {
+    val s = ComplexNumber(1.0, 1.0)
+    val actual = fun.compute(s, 400)
+    assert(!(actual.real.isNaN || actual.imaginary.isNaN), s"expected finite but got $actual")
+    assert(actual != ComplexNumber(0), s"expected non-zero but got $actual")
+    assertComplexApprox(zetaFromEta(s, 400), actual, tol = 1e-2)
+  }
+
+  test("z(0.5) with n=2000 matches eta continuance in critical strip") {
+    val s = ComplexNumber(0.5, 0)
+    assertComplexApprox(zetaFromEta(s, 2000), fun.compute(s, 2000), tol = 1e-2)
   }
 }

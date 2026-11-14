@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.complexmapping
 
 import java.awt._
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
-import javax.swing.{BoxLayout, JComboBox, JLabel, JPanel}
+import javax.swing.{BoxLayout, JPanel}
 
 
 /**
@@ -18,18 +18,14 @@ class ComplexMappingOptionsDialog(val parent1: Component, val simulator: Simulat
     setResizable(true)
     val mainPanel = new JPanel
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS))
-    val panel = new JPanel
-    mainPanel.add(panel)
     mainPanel
   }
 
   override def getSimulator: ComplexMappingExplorer = super.getSimulator.asInstanceOf[ComplexMappingExplorer]
 
-  override protected def ok(): Unit = { // set the common rendering and global options
+  override protected def ok(): Unit = {
     val sim = getSimulator
     setVisible(false)
     sim.repaint()
   }
 }
-
-
