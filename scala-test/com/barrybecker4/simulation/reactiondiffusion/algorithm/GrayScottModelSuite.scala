@@ -56,4 +56,17 @@ class GrayScottModelSuite extends AnyFunSuite {
     m.initializePoint(2, -1, 99, 99)
     assert(m.u(2)(2) == before)
   }
+
+  test("setSize keeps width/height consistent with u/v array dimensions") {
+    val m = new GrayScottModel(10, 10)
+    m.setSize(new java.awt.Dimension(20, 15))
+    assert(m.getWidth == 20)
+    assert(m.getHeight == 15)
+    assert(m.u.length == m.getWidth)
+    assert(m.u(0).length == m.getHeight)
+    assert(m.v.length == m.getWidth)
+    assert(m.v(0).length == m.getHeight)
+    // Corner access must not throw (the resize crash when painting).
+    val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
+  }
 }

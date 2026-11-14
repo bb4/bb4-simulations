@@ -53,10 +53,9 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   def getWidth: Int = width
   def getHeight: Int = height
 
-  def setSize(requestedNewSize: Dimension): Unit = {
-    this.width = requestedNewSize.width
-    this.height = requestedNewSize.height
-  }
+  /** Updates dimensions and reallocates concentration grids so they stay in sync. */
+  def setSize(requestedNewSize: Dimension): Unit =
+    reallocate(requestedNewSize.width, requestedNewSize.height)
 
   def setInitializer(init: Initializer): Unit = {
     initializer = init
@@ -92,16 +91,26 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
       tmp(x)(getPeriodicXValue(y - 1, height))
 
   /** Create some initial pattern of chemical that represents the initial condition. */
-  private[algorithm] def resetState(): Unit = {
+  private[algorithm] def resetState(): Unit = reallocate(width, height)
+
+  /**
+    * Allocate new grids, then publish width/height. Publishing size before the
+    * arrays exist lets AWT paint index past the old u/v (resize AIOOBE).
+    */
+  private def reallocate(w: Int, h: Int): Unit = {
     f = F0
     k = K0
-
-    u = Array.ofDim[Double](width, height)
-    v = Array.ofDim[Double](width, height)
-    tmpU = Array.ofDim[Double](width, height)
-    tmpV = Array.ofDim[Double](width, height)
-
-    initializer.initialize(this, width, height)
+    val newU = Array.ofDim[Double](w, h)
+    val newV = Array.ofDim[Double](w, h)
+    val newTmpU = Array.ofDim[Double](w, h)
+    val newTmpV = Array.ofDim[Double](w, h)
+    u = newU
+    v = newV
+    tmpU = newTmpU
+    tmpV = newTmpV
+    width = w
+    height = h
+    initializer.initialize(this, w, h)
     commitChanges()
   }
 

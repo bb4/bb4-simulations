@@ -75,9 +75,10 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     prof.stopConcurrentCalculationTime()
     model.commitChanges()
     if (requestedNewSize.isDefined) {
+      // setSize reallocates u/v in sync with width/height (avoids paint AIOOBE on resize)
       model.setSize(requestedNewSize.get)
       requestedNewSize = None
-      reset()
+      algorithm.setH(GrayScottModel.H0)
     }
   }
 
