@@ -23,7 +23,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   private def zetaFromEta(s: ComplexNumber, n: Int): ComplexNumber = {
     val num = etaAlternatingSum(s, n)
-    val denom = ComplexNumber(1.0, 0).subtract(ComplexNumber(2.0, 0).divide(ComplexNumber.pow(2.0, s)))
+    val denom = ComplexNumber(1.0).subtract(ComplexNumber(2.0, 0).divide(ComplexNumber.pow(2.0, s)))
     num.divide(denom)
   }
 
@@ -57,7 +57,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   test("z(-2) with n=50 is a trivial zero") {
     assertComplexApprox(
-      ComplexNumber(0, 0),
+      ComplexNumber(0),
       fun.compute(ComplexNumber(-2), 50),
       tol = 1e-8
     )
@@ -65,7 +65,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   test("z(-3) with n=200 approaches +1/120") {
     assertComplexApprox(
-      ComplexNumber(1.0 / 120.0, 0),
+      ComplexNumber(1.0 / 120.0),
       fun.compute(ComplexNumber(-3), 200),
       tol = 1e-5
     )
@@ -80,7 +80,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
   }
 
   test("z(0.5) with n=2000 matches eta continuance in critical strip") {
-    val s = ComplexNumber(0.5, 0)
+    val s = ComplexNumber(0.5)
     assertComplexApprox(zetaFromEta(s, 2000), fun.compute(s, 2000), tol = 1e-2)
   }
 }

@@ -25,7 +25,7 @@ case class DirichletEtaFunction() extends ComplexFunction {
 
   /** When Re(s) > 0 the alternating series converges (conditionally for Re ≤ 1). */
   private def ordinaryPartialSum(s: ComplexNumber, n: Int): ComplexNumber = {
-    var sum = ComplexNumber(0, 0)
+    var sum = ComplexNumber(0)
     for (k <- 1 to n) {
       val term = ComplexNumber.pow(k.toDouble, s).reciprocal
       sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)

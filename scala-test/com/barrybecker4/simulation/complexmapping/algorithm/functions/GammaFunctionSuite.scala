@@ -11,35 +11,35 @@ class GammaFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertions {
   private val nDummy = 10 // iteration count is ignored by GammaFunction
 
   test("Gamma(1) is 1") {
-    assertComplexApprox(ComplexNumber(1, 0), gamma.compute(ComplexNumber(1, 0), nDummy))
+    assertComplexApprox(ComplexNumber(1), gamma.compute(ComplexNumber(1), nDummy))
   }
 
   test("Gamma(2) is 1") {
-    assertComplexApprox(ComplexNumber(1, 0), gamma.compute(ComplexNumber(2, 0), nDummy))
+    assertComplexApprox(ComplexNumber(1), gamma.compute(ComplexNumber(2), nDummy))
   }
 
   test("Gamma(3) is 2") {
-    assertComplexApprox(ComplexNumber(2, 0), gamma.compute(ComplexNumber(3, 0), nDummy))
+    assertComplexApprox(ComplexNumber(2), gamma.compute(ComplexNumber(3), nDummy))
   }
 
   test("reflection: Gamma(0.25) * Gamma(0.75) = pi / sin(pi/4)") {
-    val g025 = gamma.compute(ComplexNumber(0.25, 0), nDummy)
-    val g075 = gamma.compute(ComplexNumber(0.75, 0), nDummy)
+    val g025 = gamma.compute(ComplexNumber(0.25), nDummy)
+    val g075 = gamma.compute(ComplexNumber(0.75), nDummy)
     val prod = g025.multiply(g075)
     val expected = math.Pi / math.sin(math.Pi * 0.25)
-    assertComplexApprox(ComplexNumber(expected, 0), prod, tol = 1e-4)
+    assertComplexApprox(ComplexNumber(expected), prod, tol = 1e-4)
   }
 
   test("Gamma(0.5) is sqrt(pi)") {
     assertComplexApprox(
-      ComplexNumber(math.sqrt(math.Pi), 0),
-      gamma.compute(ComplexNumber(0.5, 0), nDummy),
+      ComplexNumber(math.sqrt(math.Pi)),
+      gamma.compute(ComplexNumber(0.5), nDummy),
       tol = 1e-6
     )
   }
 
   test("Gamma(0) returns non-finite without throwing") {
-    val result = gamma.compute(ComplexNumber(0, 0), nDummy)
+    val result = gamma.compute(ComplexNumber(0), nDummy)
     assert(result.real.isNaN || result.real.isInfinite || result.imaginary.isNaN)
   }
 }
