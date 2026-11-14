@@ -5,9 +5,7 @@ import javax.vecmath.Vector2d
 import java.awt.geom.Line2D
 import java.awt.geom.Rectangle2D
 
-/**
-  * @author Barry Becker
-  */
+
 object Edge {
   /** Defaults used when spring constants are not supplied (e.g. tests). */
   val DefaultSpringK: Double = 0.8

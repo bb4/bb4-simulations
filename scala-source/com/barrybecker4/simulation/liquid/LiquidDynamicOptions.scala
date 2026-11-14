@@ -15,7 +15,6 @@ import java.awt.event.ActionListener
 /**
   * Dynamic controls for the liquid simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 object LiquidDynamicOptions {
   private val VISCOSITY_SLIDER = "Viscosity"

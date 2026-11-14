@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.common.rendering.RectangularModelImage
 
 /**
   * Renders one of the rectangular strips.
-  * @author Barry Becker
   */
 class RenderWorker private[rendering](modelImage: RectangularModelImage) extends Runnable {
   private var minY = 0

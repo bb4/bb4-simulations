@@ -6,8 +6,6 @@ import com.barrybecker4.simulation.common.ui.SimulatorApplet
 
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.
-  *
-  * @author Barry Becker
   */
 object PredPreySimulatorApp {
   def main(args: Array[String]): Unit = {

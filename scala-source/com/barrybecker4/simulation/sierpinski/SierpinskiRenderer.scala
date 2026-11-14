@@ -12,7 +12,6 @@ object SierpinskiRenderer {
 
 /**
   * This class draws the Sierpinski triangle.
-  * @author Barry Becker
   */
 class SierpinskiRenderer() {
   private val styler: GraphicsStyler = new GraphicsStyler(SierpinskiRenderer.DEFAULT_LINE_WIDTH.toFloat)

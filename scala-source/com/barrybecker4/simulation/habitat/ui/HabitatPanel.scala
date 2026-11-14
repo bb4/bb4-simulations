@@ -11,7 +11,6 @@ import javax.swing.*
 /**
   * Shows the time series graph of all the animal populations in the habitat.
  *
-  * @author Barry Becker
   */
 class HabitatPanel private[habitat](val populations: Habitat) extends JPanel {
   private val renderer = new HabitatRenderer(populations)

@@ -5,7 +5,6 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.Pois
 
 /**
   * Parameters for Poisson-disc point placement (minimum separation radius and local sample count).
-  * @author Barry Becker
   */
 object PoissonParams {
   val DEFAULT_RADIUS = 30.0

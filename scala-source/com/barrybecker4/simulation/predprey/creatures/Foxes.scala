@@ -6,7 +6,6 @@ import java.awt.Color
 /**
   * Everything we need to know about the current fox population.
   * Foxes are the predators in the simulation.
-  * @author Barry Becker
   */
 object Foxes {
   val COLOR: Color = Color.RED

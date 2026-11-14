@@ -5,7 +5,6 @@ import java.awt.Color
 
 /**
   * Henon travelers travel through time
-  * @author Barry Becker
   */
 class Traveler private[algorithm](var x: Double, var y: Double, val color: Color, var params: TravelerParams) {
 

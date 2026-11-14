@@ -15,8 +15,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Dynamic controls for the Fluid simulation.
-  *
-  * @author Barry Becker
   */
 object FluidDynamicOptions {
   private val DR_SLIDER = "Diffusion Rate"

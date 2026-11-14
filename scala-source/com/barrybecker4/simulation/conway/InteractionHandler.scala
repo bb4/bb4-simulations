@@ -10,7 +10,6 @@ import java.awt.event.MouseMotionListener
   * Mouse painting: left button sets cells alive, right button clears them.
   *
   * @param scale pixels per cell (must stay in sync with [[com.barrybecker4.simulation.conway.model.ConwayModel]] scale via `setScale`).
-  * @author Barry Becker
   */
 class InteractionHandler(var model: ConwayModel, var scale: Double)
   extends MouseListener with MouseMotionListener {

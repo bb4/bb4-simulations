@@ -10,9 +10,7 @@ import com.barrybecker4.simulation.stock.StockSampleOptions._
 
 import scala.compiletime.uninitialized
 
-/**
-  * @author Barry Becker
-  */
+
 class StockOptionsDialog private[stock](parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 

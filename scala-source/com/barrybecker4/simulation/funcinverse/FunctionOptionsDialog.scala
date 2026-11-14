@@ -9,7 +9,6 @@ import java.awt.Component
 
 /**
   * Configuration for the function-inverse plotter.
-  * @author Barry Becker
   */
 class FunctionOptionsDialog(parent: Component, simulator: Simulator)
   extends FunctionPlotOptionsDialog(parent, simulator) {

@@ -7,8 +7,6 @@ import com.barrybecker4.simulation.common.Profiler
 
 /**
   * Singleton for RD profiling.
-  *
-  * @author Barry Becker
   */
 object RDProfiler {
   private val CONCURRENT_CALCULATION = "concurrent_calculation"

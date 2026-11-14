@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.trading.model.tradingstrategy.{BuyAndHoldStra
 
 /**
   * Stock trading strategy options and default values.
-  * @author Barry Becker
   */
 object TradingOptions {
   val DEFAULT_TRADING_STRATEGY = new BuyAndHoldStrategy

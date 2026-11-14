@@ -7,7 +7,6 @@ import com.barrybecker4.common.geometry.IntLocation
 
 /**
   * Handle mouse interactions - converting them in to physical manifestations.
-  * @author Barry Becker
   */
 class InteractionHandler(val panable: Panable) extends MouseListener with MouseMotionListener {
   private var currentX = 0

@@ -14,7 +14,6 @@ import javax.vecmath.Vector2d
   * @param duration       magnitude of time that the liquid will flow. If negative, it will flow forever.
   * @param repeatInterval time from when the liquid starts flowing to when it should start flowing again.
   *                       if negative, then it will only flow once.
-  * @author Barry Becker
   */
 class Source(start: Location, stop: Location,
              var velocity: Vector2d, var startTime: Double, var duration: Double, var repeatInterval: Double)

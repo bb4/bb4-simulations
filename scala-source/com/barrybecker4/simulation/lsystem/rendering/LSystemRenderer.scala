@@ -15,7 +15,6 @@ import scala.compiletime.uninitialized
 /**
   * Everything we need to know to compute and draw the Lyndonmayer-System tree.
   * Should make the tree automatically center.
-  * @author Barry Becker
   */
 object LSystemRenderer {
   private val LENGTH = 1.0

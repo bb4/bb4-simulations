@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.water.rendering
 
 /**
   * Fluid rendering options
-  * @author Barry Becker
   */
 class RenderingOptions() {
 

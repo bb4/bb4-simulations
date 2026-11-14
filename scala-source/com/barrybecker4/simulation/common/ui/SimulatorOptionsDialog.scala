@@ -19,7 +19,6 @@ object SimulatorOptionsDialog {
 
 /**
   * The options get set directly on the simulator object that is passed in
-  * @author Barry Becker
   */
 class SimulatorOptionsDialog(parent: Component,
                                       simulator: Simulator) extends OptionsDialog(parent) {

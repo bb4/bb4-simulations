@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.liquid.rendering
 
 /**
   * Liquid Rendering options.
-  * @author Barry Becker
   */
 final class RenderingOptions() {
 

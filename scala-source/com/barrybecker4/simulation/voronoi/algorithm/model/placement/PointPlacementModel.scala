@@ -22,7 +22,6 @@ object PointPlacementModel {
 
 /**
   * Everything we need to know to compute the Voronoi diagram.
-  * @author Barry Becker
   */
 class PointPlacementModel private[algorithm](val width: Int, val height: Int,
   var params: PoissonParams, var numPoints: Int, distributionType: DistributionType, rnd: Random = RND) {

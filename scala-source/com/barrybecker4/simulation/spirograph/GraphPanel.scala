@@ -18,7 +18,6 @@ object GraphPanel {
   * Adapted from David Little's original work.
   * Rendering happens in a separate thread. Note use of monitor for locking.
   * @author David Little
-  * @author Barry Becker
   */
 class GraphPanel(var state: GraphState) extends JPanel with Runnable {
 

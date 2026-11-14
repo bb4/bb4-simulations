@@ -7,6 +7,5 @@ package com.barrybecker4.simulation.trading.options
   * @param changePercent the percent increase or decrease in the market.  (0 - 1.0)
   * @param transactPercent Either the percent of current investment to sell,
   *                        or percent of current reserve to buy more with. (0 - 1.0)
-  * @author Barry Becker
   */
 case class ChangePolicy(changePercent: Double, transactPercent: Double)

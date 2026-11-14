@@ -15,7 +15,6 @@ object InteractionHandler {
   * Using this handler, you can add more chemicals to the reaction.
   * Drag with left click to add U chemical locally.
   * Drag with right click to add V chemical locally.
-  * @author Barry Becker
   */
 class InteractionHandler(var model: GrayScottModel, var scale: Double)
   extends MouseListener with MouseMotionListener {

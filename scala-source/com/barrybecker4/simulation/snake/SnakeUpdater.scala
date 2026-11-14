@@ -7,7 +7,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Makes the snake animate forward one time step.
-  * @author Barry Becker
   */
 class SnakeUpdater private[snake]() {
   private var segmentUpdater = new SegmentUpdater

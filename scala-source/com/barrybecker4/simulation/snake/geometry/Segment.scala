@@ -22,8 +22,6 @@ import Segment._
   * | /               \ |
   * p0-------&gt;e0-------&gt;p1     right edge
   * </pre>
-  *
-  * @author Barry Becker
   */
 object Segment {
   /** Minimum dot product of edge directions (with neighbor) for stability; used by [[com.barrybecker4.simulation.snake.Snake.isStable]]. */

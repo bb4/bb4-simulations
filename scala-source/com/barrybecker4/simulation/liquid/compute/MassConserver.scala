@@ -10,7 +10,6 @@ import com.barrybecker4.simulation.liquid.model.CellNeighbors
   * Ensures that mass is conserved while processing.
   * @param b0 relaxation coefficient.
   * @param dt delta time.
-  * @author Barry Becker
   */
 class MassConserver(var b0: Double, var dt: Double) {
 

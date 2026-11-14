@@ -11,9 +11,7 @@ import DiceOptions._
 import scala.compiletime.uninitialized
 
 
-/**
-  * @author Barry Becker
-  */
+
 class DiceOptionsDialog private[dice](parent: Component,  simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 

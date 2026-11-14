@@ -8,7 +8,6 @@ import com.barrybecker4.math.function.HeightFunction
   * Contains the generated stock function.
   * The final stock valuation.
   * The gain from applying a trading strategy.
-  * @author Barry Becker
   */
 class StockRunResult private[runner](val stockSeries: HeightFunction,
                                      val investmentSeries: HeightFunction,

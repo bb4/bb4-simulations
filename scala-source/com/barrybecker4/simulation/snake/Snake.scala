@@ -28,7 +28,6 @@ import scala.compiletime.uninitialized
   * Use a hardcoded static data interface to initialize so it can be easily run in an applet without using resources.
   * @param snakeData defines the snake geometry
   * @param locomotionParams shared parameters for mass, springs, and locomotion (same object as [[SnakeSimulator]]'s updater)
-  * @author Barry Becker
   */
 class Snake(val snakeData: SnakeData, val locomotionParams: LocomotionParameters) {
 

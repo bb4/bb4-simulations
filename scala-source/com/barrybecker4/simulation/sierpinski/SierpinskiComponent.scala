@@ -14,7 +14,6 @@ import SierpinskiComponent._
 
 /**
   * Contains the area to draw the Sierpinski triangle and UI configuration controls at the top above it.
-  * @author Barry Becker
   */
 object SierpinskiComponent {
   private val MIN_RECURSIVE_DEPTH = 1

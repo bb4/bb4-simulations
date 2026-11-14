@@ -9,7 +9,6 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType._
   * Everything we need to know about all the different sorts of creatures.
   * Add more creatures like sheep, fox, chickens, ants, vulture, etc.
   * This is probably the best pattern to follow for enums with properties and methods.
-  * @author Barry Becker
   */
 object CreatureType  {
 

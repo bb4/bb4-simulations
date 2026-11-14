@@ -14,9 +14,7 @@ object RandomWithAdditiveMomentumStrategy {
   private val DEFAULT_MOMENTUM_FACTOR = 0.9
 }
 
-/**
-  * @author Barry Becker
-  */
+
 class RandomWithAdditiveMomentumStrategy extends IncrementalGenerationStrategy {
 
   var percentIncrease: Double = RandomWithAdditiveMomentumStrategy.DEFAULT_PERCENT_INCREASE

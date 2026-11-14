@@ -12,9 +12,7 @@ import javax.swing.{BorderFactory, BoxLayout, JComboBox, JLabel, JPanel}
 import scala.compiletime.uninitialized
 
 
-/**
-  * @author Barry Becker
-  */
+
 class StockGenerationOptionsPanel() extends JPanel with ItemListener {
 
   private val generationOptions = new StockGenerationOptions

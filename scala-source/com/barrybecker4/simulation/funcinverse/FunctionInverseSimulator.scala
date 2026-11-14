@@ -9,7 +9,6 @@ import com.barrybecker4.simulation.common.ui.FunctionPlotSimulator
 
 /**
   * Compare a function with its inverse.
-  * @author Barry Becker
   */
 class FunctionInverseSimulator extends FunctionPlotSimulator("Function Inverse Simulator") {
 

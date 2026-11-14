@@ -10,7 +10,6 @@ import javax.swing._
 
 /**
   * Use this modal dialog to let the user choose from among the different simulation options.
-  * @author Barry Becker
   */
 class WaterOptionsDialog private[ui](parent: Component, simulator: WaterSimulator)
   extends SimulatorOptionsDialog(parent, simulator) with ActionListener {

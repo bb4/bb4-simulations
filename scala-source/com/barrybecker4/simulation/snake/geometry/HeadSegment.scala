@@ -12,7 +12,6 @@ import com.barrybecker4.simulation.snake.Snake
   * @param width1 the width of the segment that is nearest the nose
   * @param width2 the width of the segment nearest the tail
   * @param pos position of the center of the segment
-  * @author Barry Becker
   */
 class HeadSegment(width1: Double, width2: Double, length: Double, val pos: Point2d, snake: Snake)
   extends Segment(width1, width2, length, pos, snake) {

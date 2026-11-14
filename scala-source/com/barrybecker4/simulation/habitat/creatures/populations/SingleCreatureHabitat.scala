@@ -8,8 +8,6 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType
 /**
   * Create populations for one creature.
   * Shows example of Verhulst dynamics.
-  *
-  * @author Barry Becker
   */
 class SingleCreatureHabitat extends Habitat {
 

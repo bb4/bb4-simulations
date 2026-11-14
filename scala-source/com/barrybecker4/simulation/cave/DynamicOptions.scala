@@ -16,7 +16,6 @@ import scala.compiletime.uninitialized
 /**
   * Dynamic controls for the Cave simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val FLOOR_SLIDER = "Floor"

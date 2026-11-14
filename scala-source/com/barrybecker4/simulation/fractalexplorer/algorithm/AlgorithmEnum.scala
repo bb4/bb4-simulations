@@ -4,8 +4,6 @@ import com.barrybecker4.common.app.AppContext
 
 /**
   * Type of fractal generation algorithm to use.
-  *
-  * @author Barry Becker
   */
 enum AlgorithmEnum:
 

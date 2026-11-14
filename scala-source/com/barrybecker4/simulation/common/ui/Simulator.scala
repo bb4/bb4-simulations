@@ -23,7 +23,6 @@ import scala.compiletime.uninitialized
   * Base class for all simulations.
   * Extends from  because simulation involve showing an animation of a process.
   * @param name the name of the simulator (eg Snake, Liquid, or Trebuchet)
-  * @author Barry Becker
   */
 abstract class Simulator(val name: String) extends AnimationComponent with Optimizee {
 

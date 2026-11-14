@@ -21,7 +21,6 @@ object ProfitHistogramPanel {
 
 /**
   * Show histogram of expected profit distribution given current strategy.
-  * @author Barry Becker
   */
 class ProfitHistogramPanel extends JPanel {
   private var histogram: HistogramRenderer = uninitialized

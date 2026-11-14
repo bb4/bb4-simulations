@@ -2,9 +2,7 @@
 package com.barrybecker4.simulation.trading.model.generationstrategy
 
 
-/**
-  * @author Barry Becker
-  */
+
 class FlatStrategy extends IncrementalGenerationStrategy {
 
   override def name = "Flat"

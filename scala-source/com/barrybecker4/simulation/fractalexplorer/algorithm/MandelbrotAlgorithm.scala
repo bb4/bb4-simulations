@@ -6,7 +6,6 @@ import com.barrybecker4.math.complex.ComplexNumberRange
 
 /**
   * Populates the FractalModel using the iterative Mandelbrot algorithm.
-  * @author Barry Becker
   */
 object MandelbrotAlgorithm {
   private val INITIAL_RANGE: ComplexNumberRange =

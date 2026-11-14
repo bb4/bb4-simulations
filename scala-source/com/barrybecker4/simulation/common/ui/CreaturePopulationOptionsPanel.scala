@@ -8,7 +8,6 @@ import javax.swing.JPanel
 /**
   * Shared DynamicOptions implementation for population simulations that show
   * one [[CreatureSliderControls]] group per creature population.
-  * @author Barry Becker
   */
 class CreaturePopulationOptionsPanel(
   groups: Seq[SliderGroup & CreatureSliderControls]

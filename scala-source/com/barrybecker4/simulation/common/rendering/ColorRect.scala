@@ -8,7 +8,6 @@ import java.awt.Image
 
 /**
   * Creates a uniformly colored rectangle.
-  * @author Barry Becker
   */
 class ColorRect(var width: Int, var height: Int) {
 

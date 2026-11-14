@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.lsystem.model.expression
 
 /**
   * Turns a tree into a string via in order traversal. Implements visitor pattern.
-  * @author Barry Becker
   */
 class LTreeSerializer {
 

@@ -20,7 +20,6 @@ import scala.util.Random
 
 /**
   * Dynamic controls for WFC that will show at the right
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val PREFERRED_WIDTH = 300

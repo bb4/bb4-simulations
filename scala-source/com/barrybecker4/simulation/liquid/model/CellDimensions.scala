@@ -5,7 +5,6 @@ import com.barrybecker4.simulation.liquid.model.CellDimensions.CELL_SIZE
 
 /**
   * The cell/s x and y dimensions. Should be square.
-  * @author Barry Becker
   */
 object CellDimensions {
   val CELL_SIZE: Double = 10.0

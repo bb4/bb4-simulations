@@ -10,7 +10,6 @@ import scala.collection.parallel.CollectionConverters._
 
 /**
   * Renders the state of the GrayScottController model to the screen.
-  * @author Barry Becker
   */
 abstract class RDRenderer private[rendering](var model: GrayScottModel,
                                              val cmap: ColorMap, var options: RDRenderingOptions)  {

@@ -13,7 +13,6 @@ object SegmentUpdater {
 
 /**
   * Updates a segment forward in time one timestep
-  * @author Barry Becker
   */
 class SegmentUpdater() {
   /** temporary vector to aid in calculations (saves creating a lot of new vector objects)  */

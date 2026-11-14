@@ -8,7 +8,6 @@ import java.awt._
 /**
   * Use this for drawing the background grid.
   * @param gridColor the color for the grid.
-  * @author Barry Becker
   */
 class BackgroundGridRenderer(var gridColor: Color) {
 

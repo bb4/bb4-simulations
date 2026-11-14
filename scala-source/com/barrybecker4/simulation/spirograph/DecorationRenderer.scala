@@ -8,7 +8,6 @@ import java.awt._
 /**
   * Draws the Axes, circles, and spoke.
   * The circles and spoke represent the plastic stylus tool of the old spirograph.
-  * @author Barry Becker
   */
 object DecorationRenderer {
   private val AXES_COLOR = new Color(120, 120, 200)

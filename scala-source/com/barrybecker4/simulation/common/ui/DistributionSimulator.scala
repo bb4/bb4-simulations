@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
 /**
   * Simulates the the generation of a histogram based on
   * some stochastic process.
-  * @author Barry Becker
   */
 object DistributionSimulator {
   private val TIME_STEP = 1.0

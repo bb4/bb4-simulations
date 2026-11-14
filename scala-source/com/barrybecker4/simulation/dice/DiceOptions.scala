@@ -3,8 +3,6 @@ package com.barrybecker4.simulation.dice
 
 /**
   * Defaults for dice simulation app.
-  *
-  * @author Barry Becker
   */
 object DiceOptions {
   private[dice] val DEFAULT_NUMBER_OF_DICE = 2

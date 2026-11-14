@@ -4,8 +4,6 @@ package com.barrybecker4.simulation.stock
 /**
   * Defaults for stock app.
   * Options for a sample of stocks being held for some number of years.
-  *
-  * @author Barry Becker
   */
 object StockSampleOptions {
   val DEFAULT_NUM_STOCKS = 1

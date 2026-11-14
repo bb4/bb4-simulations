@@ -14,7 +14,6 @@ import DynamicOptions._
 /**
   * Dynamic controls for the complex mapping explorer simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 object DynamicOptions {
 

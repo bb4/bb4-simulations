@@ -6,7 +6,6 @@ import LocomotionParameters._
 
 /**
   * Tweakable snake parameters that define locomotion.
-  * @author Barry Becker
   */
 object LocomotionParameters { // I used simulated annealing to come up with these optimal parameter values
   // When I originally started the snake's speed was about .21 using my best guess.

@@ -12,7 +12,6 @@ import com.barrybecker4.simulation.liquid.model.Particles
 
 /**
   * Updates positions of the particle markers in the grid.
-  * @author Barry Becker
   */
 object ParticleAdvector {
   private val EPSILON = 0.0000001

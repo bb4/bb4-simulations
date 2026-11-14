@@ -7,7 +7,6 @@ import scala.collection.parallel.CollectionConverters._
 
 /**
   * All Conway Game of Life rule implementations must extend this trait.
-  * @author Barry Becker
   */
 trait Rule {
 

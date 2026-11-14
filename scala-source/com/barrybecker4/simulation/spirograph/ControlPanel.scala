@@ -18,7 +18,6 @@ import scala.compiletime.uninitialized
 
 /**
   * A panel that holds sliders and buttons that control the rendering of the spirograph.
-  * @author Barry Becker
   */
 class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   extends JPanel with ActionListener with GraphStateChangeListener {

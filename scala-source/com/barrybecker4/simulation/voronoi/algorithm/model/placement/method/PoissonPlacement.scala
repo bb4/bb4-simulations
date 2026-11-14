@@ -10,8 +10,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Everything we need to know to compute the Voronoi diagram.
-  *
-  * @author Barry Becker
   */
 class PoissonPlacement(
     val width: Int, val height: Int, margin: Int,

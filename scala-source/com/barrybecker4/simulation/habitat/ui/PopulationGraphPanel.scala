@@ -16,7 +16,6 @@ object PopulationGraphPanel {
 
 /**
   * Shows the time series graph of all the animal populations in the habitat.
-  * @author Barry Becker
   */
 class PopulationGraphPanel private[habitat](val habitat: Habitat) extends JPanel {
 

@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
 /**
   * When the market dips, we buy with a percentage of our reserve.
   * Conversely, when the market goes up by some threshold percent, we sell a percentage of what is invested.
-  * @author Barry Becker
   */
 object BuyPercentOfInvestmentStrategy {
   private val DEFAULT_GAIN_POLICY = ChangePolicy(0.02, 0.05)

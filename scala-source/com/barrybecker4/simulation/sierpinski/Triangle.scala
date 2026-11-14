@@ -7,7 +7,6 @@ import java.awt.Polygon
 
 /**
   * The three vertices of a triangle.
-  * @author Barry Becker
   */
 case class Triangle(a: Point, b: Point, c: Point):
 

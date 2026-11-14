@@ -10,7 +10,6 @@ import com.barrybecker4.math.Range
 /**
   * Given a time series representing a stock's (or collection of stocks) price, calculate the expected gain (or loss)
   * by applying some trading strategy.
-  * @author Barry Becker
   */
 class StockRunner(var tradingOpts: TradingOptions) {
 

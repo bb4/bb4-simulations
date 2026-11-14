@@ -21,7 +21,6 @@ import scala.compiletime.uninitialized
 /**
   * Dynamic controls for the Henon Explorer simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val PHASE_ANGLE_SLIDER = "Phase Angle"

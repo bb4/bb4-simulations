@@ -19,7 +19,6 @@ object Habitat {
 
 /**
   * A habitat is a collection of populations for all the creatures in it.
-  * @author Barry Becker
   */
 abstract class Habitat extends ArrayBuffer[Population] {
 

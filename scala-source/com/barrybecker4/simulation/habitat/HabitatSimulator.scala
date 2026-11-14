@@ -20,8 +20,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.
-  *
-  * @author Barry Becker
   */
 object HabitatSimulator {
   def main(args: Array[String]): Unit = {

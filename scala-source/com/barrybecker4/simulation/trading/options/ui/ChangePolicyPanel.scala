@@ -9,7 +9,6 @@ import javax.swing.{BorderFactory, BoxLayout, JPanel}
 
 /**
   * Allow the user to add a change policy from the UI.
-  * @author Barry Becker
   */
 class ChangePolicyPanel(val threshChangePercentLabel: String, val transactPercentLabel: String,
                         val defaultPolicy: ChangePolicy) extends JPanel {

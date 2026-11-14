@@ -8,9 +8,7 @@ import java.lang.Math.atan
 import RenderablePart._
 
 
-/**
-  * @author Barry Becker
-  */
+
 object Sling {
   private val STROKE = new BasicStroke(2.0f)
   private val COLOR = new Color(0, 30, 0)

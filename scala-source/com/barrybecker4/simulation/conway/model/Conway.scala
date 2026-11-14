@@ -6,7 +6,6 @@ import com.barrybecker4.common.geometry.Location
 
 /**
   * Sparse storage for Conway's Game of Life: only live cells are stored.
-  * @author Barry Becker
   */
 object Conway {
   private val NbrOffsets: Array[Location] = Array(

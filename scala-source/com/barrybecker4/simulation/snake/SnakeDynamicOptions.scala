@@ -11,8 +11,6 @@ import javax.swing._
 /**
   * Dynamic controls for the snake simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  *
-  * @author Barry Becker
   */
 object SnakeDynamicOptions {
   private val DIRECTION_SLIDER = "Direction"

@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.common.ui
 /**
   * Use this for Newtonian physics type simulations.
   * @param name the name fo the simulator (eg Snake, Liquid, or Trebuchet)
-  * @author Barry Becker
   */
 abstract class NewtonianSimulator(name: String) extends Simulator(name) {
   def setShowVelocityVectors(show: Boolean): Unit

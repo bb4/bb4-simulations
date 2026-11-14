@@ -10,7 +10,6 @@ import javax.vecmath.Vector2d
 
 /**
   * Used to interpolate velocities in the grid.
-  * @author Barry Becker
   */
 class VelocityInterpolator(var grid: Grid) {
 

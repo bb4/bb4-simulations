@@ -1,9 +1,7 @@
 // Copyright by Barry G. Becker, 2005. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.trebuchet.model
 
-/**
-  * @author Barry Becker
-  */
+
 object TrebuchetConstants { // scales the size of the trebuchet's geometry
   val SCALE = 1.0
   // all distances are in meters, mass in Kilograms

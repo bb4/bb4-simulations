@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.liquid.model.Grid
 
 /**
   * Iterates, conserving mass, until the pressure stabilizes.
-  * @author Barry Becker
   */
 object PressureUpdater {
   private[compute] val EPSILON = 0.000000001

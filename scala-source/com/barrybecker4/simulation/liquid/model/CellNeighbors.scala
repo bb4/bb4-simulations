@@ -8,7 +8,6 @@ package com.barrybecker4.simulation.liquid.model
   * @param cellXm1 cell to the left
   * @param cellYp1 cell above
   * @param cellYm1 cell below
-  * @author Barry Becker
   */
 class CellNeighbors(var cellXp1: Cell, var cellXm1: Cell, var cellYp1: Cell, var cellYm1: Cell) {
 

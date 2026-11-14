@@ -25,7 +25,6 @@ object DynamicOptions {
 /**
   * Dynamic controls for the RD simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 class DynamicOptions(val simulator: HabitatSimulator)
   extends JPanel with SliderGroupChangeListener with ChangeListener

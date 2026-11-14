@@ -8,7 +8,6 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * A collection of stock market series to show.
   * Just keeps track of the last N series.
-  * @author Barry Becker
   */
 class StockSeries(var maxNum: Int) extends ArrayBuffer[Function] {
 

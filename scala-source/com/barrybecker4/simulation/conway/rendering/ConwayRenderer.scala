@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage
 
 /**
   * Renders live Conway cells into a buffered image. When the renderer's `showShadows` flag is true, past positions linger.
-  * @author Barry Becker
   */
 object ConwayRenderer {
   private val FloorColor = new Color(240, 244, 254)

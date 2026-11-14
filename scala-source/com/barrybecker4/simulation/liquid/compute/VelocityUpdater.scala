@@ -9,7 +9,6 @@ import javax.vecmath.Vector2d
 
 /**
   * Updates the velocities in the full regions of the liquid (i.e. not on the surface).
-  * @author Barry Becker
   */
 class VelocityUpdater {
 

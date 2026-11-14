@@ -10,9 +10,7 @@ import java.awt.event.ActionEvent
 import scala.compiletime.uninitialized
 
 
-/**
-  * @author Barry Becker
-  */
+
 class RDOptionsDialog private[reactiondiffusion](parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {
 

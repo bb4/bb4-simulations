@@ -8,7 +8,6 @@ import javax.swing.*
 
 /**
   * Shared Swing setup helpers for DynamicOptions panels shown on the right of simulators.
-  * @author Barry Becker
   */
 object DynamicOptionsPanelSupport {
   val DefaultPreferredSize: Dimension = new Dimension(300, 300)

@@ -9,7 +9,6 @@ import javax.vecmath.Vector2d
   * Particle is a point mass that approximates the mass of the snake.
   * It is also a vertex composing the geometry. Assumes that the initial velocity is 0.
   * No getter/setter because we need speed.
-  * @author Barry Becker
   */
 class Particle(x: Double, y: Double, val m: Double) extends Point2d(x, y) {
 

@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.common
 
 /**
   * Interface for models that exist on a cartesian grid.
-  * @author Barry Becker
   */
 trait RectangularModel {
 

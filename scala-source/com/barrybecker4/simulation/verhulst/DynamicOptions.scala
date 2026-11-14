@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.common.ui.CreaturePopulationOptionsPanel
 /**
   * Dynamic controls for the Verhulst population simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 class DynamicOptions(simulator: VerhulstSimulator)
   extends CreaturePopulationOptionsPanel(

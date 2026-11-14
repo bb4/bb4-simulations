@@ -7,9 +7,7 @@ import com.barrybecker4.simulation.conway.model.rules.{Rule, TotalisticLifeRule}
 import ConwayProcessor.RuleType
 import ConwayProcessor.RuleType.{AmoebaB34S456, HighlifeB36S23, SwarmB356S23, TraditionalB3S23}
 
-/**
-  * @author Barry Becker
-  */
+
 object ConwayProcessor {
 
   val DEFAULT_USE_PARALLEL = false

@@ -13,7 +13,6 @@ package com.barrybecker4.simulation.water.model
   *
   * Storage: row `i` has `(subDiagonal, mainDiagonal, superDiagonal)` as
   * `array(i)(0)`, `array(i)(1)`, `array(i)(2)` (boundary rows may leave an unused slot at 0 or 2).
-  * @author Barry Becker
   */
 case class TriDiagonalMatrixSolver(eps: Double = 0.0000001) {
 

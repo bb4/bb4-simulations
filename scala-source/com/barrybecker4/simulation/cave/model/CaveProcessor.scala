@@ -21,7 +21,6 @@ import scala.compiletime.uninitialized
   * But much of that is because of rendering time. We could use parallel rendering to make that faster too.
   *
   * @author Brian Becker
-  * @author Barry Becker
   */
 object CaveProcessor {
   /** The density is the chance that a cell starts as part of the cave area (alive) */

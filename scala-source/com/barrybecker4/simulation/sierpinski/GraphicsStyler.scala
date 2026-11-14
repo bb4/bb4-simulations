@@ -6,7 +6,6 @@ import java.awt._
 
 /**
   * Given a depth, and a Graphics2 instance, set appropriate color and style.
-  * @author Barry Becker
   */
 object GraphicsStyler {
   private val LINE_COLORS = Array(

@@ -8,7 +8,6 @@ import java.awt._
 
 /**
   * Draws a snake edge (line geometry). It is modeled as a spring to simulate muscles.
-  * @author Barry Becker
   */
 object EdgeRenderer {
   private val EDGE_SCALE = 30.0

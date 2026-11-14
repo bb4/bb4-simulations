@@ -11,7 +11,6 @@ import java.awt.geom.Rectangle2D
   * Walls form a basis for solid objects in the simulation space.
   * They are straight lines  (either horizontal or vertical) and immovable.
   * Endpoints of walls must be on cell boundaries
-  * @author Barry Becker
   */
 class Wall private(val x1: Double, val y1: Double, val x2: Double, val y2: Double) {
 

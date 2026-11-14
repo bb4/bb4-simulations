@@ -8,8 +8,6 @@ import java.awt._
 /**
   * A colormap for coloring the groups according to how healthy they are.
   * Blue will be healthy, while red will be near dead.
-  *
-  * @author Barry Becker
   */
 object PressureColorMap {
 

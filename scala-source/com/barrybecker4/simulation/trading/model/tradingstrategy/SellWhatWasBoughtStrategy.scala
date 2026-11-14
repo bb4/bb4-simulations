@@ -25,8 +25,6 @@ import scala.compiletime.uninitialized
   * Remember these buy transactions
   * If the market ever increases gainChangePercent higher than one of those purchases, then sell it.
   * Buy whenever the market drops by lossChangePercent from last transaction.
-  *
-  * @author Barry Becker
   */
 class SellWhatWasBoughtStrategy extends TradingStrategy {
   private var gainThresholdPct = 0.05

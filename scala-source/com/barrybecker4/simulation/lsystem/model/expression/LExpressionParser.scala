@@ -8,7 +8,6 @@ import LToken._
   * Parses the text form of an L-system expression into a tree representation.
   * See https://en.wikipedia.org/wiki/L-system
   * I originally implemented a custom parser, but this version leverages scala's parser combinator library.
-  * @author Barry Becker
   */
 class LExpressionParser extends RegexParsers {
 

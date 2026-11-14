@@ -14,7 +14,6 @@ import scala.compiletime.uninitialized
   * See https://en.wikipedia.org/wiki/L-system
   * For explanation of the grammar and different types of L-systems.
   * The language should be expanded to include support for more terms.
-  * @author Barry Becker
   */
 object LSystemModel {
   val DEFAULT_EXPRESSION = "F(+F)F(-F)F"

@@ -15,9 +15,7 @@ object RandomUpAndDownStrategy {
   private val DEFAULT_USE_RANDOM_CHANGE = true
 }
 
-/**
-  * @author Barry Becker
-  */
+
 class RandomUpAndDownStrategy extends IncrementalGenerationStrategy {
 
   var percentIncrease: Double = DEFAULT_PERCENT_INCREASE

@@ -16,7 +16,6 @@ object FractalModel {
 
 /**
   * A big matrix to hold the resulting values, and the image that gets rendered from it.
-  * @author Barry Becker
   */
 class FractalModel extends RectangularModel {
   private var image: RectangularModelImage = uninitialized

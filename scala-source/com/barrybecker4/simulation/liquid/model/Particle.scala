@@ -12,7 +12,6 @@ import javax.vecmath.Point2d
   *   - Have varying radii for particles (  private double radius_)
   *   - Have different types of liquids and use for coloration (private int materialType_)
   * @param cell the cell that the particle belongs to
-  * @author Barry Becker
   */
 class Particle(x: Double, y: Double, var cell: Cell) extends Point2d(x, y) {
 

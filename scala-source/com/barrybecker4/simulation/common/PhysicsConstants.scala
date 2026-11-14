@@ -1,9 +1,7 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.common
 
-/**
-  * @author Barry Becker
-  */
+
 object PhysicsConstants {
 
   /** gravity in m/(s*s)  */

@@ -7,9 +7,7 @@ import BorderFactory._
 import java.awt._
 
 
-/**
-  * @author Barry Becker
-  */
+
 object Section {
   private val HORZ_MARGIN = 8
   private val VERT_MARGIN = 4

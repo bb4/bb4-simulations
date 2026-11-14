@@ -8,7 +8,6 @@ import com.barrybecker4.simulation.liquid.model.CellStatus
 /**
   * Create a grid with non-uniform velocity throughout.
   * The velocity will be set in the middle and taper off toward 0 at the edges.
-  * @author Barry Becker
   */
 class NonUniformGrid(xDim: Int, yDim: Int, val velocity: Vector2d, val status: CellStatus)
   extends Grid(xDim, yDim) {

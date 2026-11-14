@@ -17,8 +17,6 @@ import scala.compiletime.uninitialized
 /**
   * Dynamic controls for the Fractal explorer simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  *
-  * @author Barry Becker
   */
 object DynamicOptions {
   private[fractalexplorer] val INITIAL_TIME_STEP = 10.0

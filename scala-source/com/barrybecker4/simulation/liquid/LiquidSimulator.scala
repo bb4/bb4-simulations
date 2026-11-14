@@ -18,7 +18,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Main class for particle liquid simulation.
-  * @author Barry Becker
   */
 object LiquidSimulator {
   /** The initial time step. It may adapt. */

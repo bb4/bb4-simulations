@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.trading.model.tradingstrategy
 
 /**
   * Contains the purchase price and how much was bought.
-  * @author Barry Becker
   */
 case class Transaction private[tradingstrategy](stockPrice: Double, amount: Double) {
   val numShares: Double = if (stockPrice == 0) 0 else amount / stockPrice

@@ -9,7 +9,6 @@ object RenderingParameters {
 
 /**
   * Tweakable rendering parameters.
-  * @author Barry Becker
   */
 class RenderingParameters(
    var showVelocityVectors: Boolean = false,

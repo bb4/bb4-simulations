@@ -8,7 +8,6 @@ import com.barrybecker4.ui.sliders.SliderProperties
 
 /**
   * Represents a set of sliders to associate with a creature population.
-  * @author Barry Becker
   */
 object CreatureSliderGroup {
   private val BIRTH_RATE_LABEL = "Birth Rate"

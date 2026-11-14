@@ -12,7 +12,6 @@ import com.barrybecker4.simulation.cave.model.Cave
   * 1/rt3  1/rt2  1    etc...
   *
   * @param size kernel size. Must be odd, like 3, 5, 7, 9, etc
-  * @author Barry Becker
   */
 class RadialKernel(cave: Cave, val size: Int = 5) extends AbstractKernel(cave) {
 

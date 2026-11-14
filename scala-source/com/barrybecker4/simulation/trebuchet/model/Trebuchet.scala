@@ -16,8 +16,6 @@ import java.lang.Math.sin
 /**
   * Data structure and methods for representing a single dynamic trebuchet (advanced form of a catapult)
   * The geometry of the trebuchet is defined by constants in [[TrebuchetConstants]].
-  *
-  * @author Barry Becker
   */
 object Trebuchet {
   private val GRAVITY_VEC = new Vector2d(0, GRAVITY)

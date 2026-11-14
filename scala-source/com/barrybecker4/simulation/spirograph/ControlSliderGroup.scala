@@ -14,8 +14,6 @@ import com.barrybecker4.ui.sliders.SliderProperties
   *
   * Use checkboxes instead of buttons for
   *  - show decoration (was show axis)
-  *
-  * @author Barry Becker
   */
 object ControlSliderGroup { // slider indices
   private val RADIUS1 = 0

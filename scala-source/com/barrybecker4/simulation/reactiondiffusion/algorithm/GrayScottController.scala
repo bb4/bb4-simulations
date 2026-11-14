@@ -13,7 +13,6 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Ini
   *
   * @param initialWidth  width of computational space.
   * @param initialHeight height of computational space.
-  * @author Barry Becker
   */
 final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   val model: GrayScottModel = new GrayScottModel(initialWidth, initialHeight)

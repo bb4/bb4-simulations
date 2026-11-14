@@ -13,7 +13,6 @@ private object Consts:
   * Different types of parameter distributions to test.
   * Since we apply a redistribution to the original skewed distribution,
   * we expect the result to be close to a uniform distribution.
-  * @author Barry Becker
   */
 enum ParameterDistributionType(val name: String, val param: Parameter):
 

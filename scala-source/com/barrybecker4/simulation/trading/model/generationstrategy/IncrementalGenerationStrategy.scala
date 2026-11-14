@@ -5,7 +5,6 @@ package com.barrybecker4.simulation.trading.model.generationstrategy
   * Base trait for generation strategies that base the next price on the last one.
   * The series has length `numSteps + 1`: index `0` is `initialValue` (starting price); each later index applies
   * `calcNewPrice` to the previous price.
-  * @author Barry Becker
   */
 trait IncrementalGenerationStrategy extends GenerationStrategy {
 

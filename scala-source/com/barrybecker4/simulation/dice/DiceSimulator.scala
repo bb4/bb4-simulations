@@ -14,7 +14,6 @@ import scala.util.Random
 /**
   * Simulates the rolling of N number of M sided dice lots of times
   * to see what kind of distribution of numbers you get.
-  * @author Barry Becker
   */
 object DiceSimulator {
   def main(args: Array[String]): Unit = {

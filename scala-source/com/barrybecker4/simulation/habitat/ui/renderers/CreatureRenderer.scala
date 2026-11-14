@@ -9,7 +9,6 @@ import java.awt.*
 
 /**
   * This class draws a the global hab and all the creatures in it.
-  * @author Barry Becker
   */
 object CreatureRenderer {
   private val SIZE_SCALE = 0.001

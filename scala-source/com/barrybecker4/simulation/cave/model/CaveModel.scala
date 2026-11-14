@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Communicates changing dynamic options to CaveProcessor and controls the rendering of the cave.
-  * @author Barry Becker
   */
 object CaveModel {
   val DEFAULT_SCALE_FACTOR: Double = 2.0

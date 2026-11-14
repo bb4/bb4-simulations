@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage
 
 /**
   * Draws the 2D cave model by applying the processor to it.
-  * @author Barry Becker
   */
 object CaveRenderer {
   private val FLOOR_COLOR = new Color(130, 255, 175)

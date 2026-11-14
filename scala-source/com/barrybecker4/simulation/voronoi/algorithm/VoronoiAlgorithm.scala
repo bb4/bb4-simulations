@@ -29,7 +29,6 @@ object VoronoiAlgorithm {
   * Builds a voronoi diagram with the following process:
   * - create a set of random points - either using poisson distribution, or uniform distribution
   * - optionally generate a Voronoi diagram based on the poisson points.
-  * @author Barry Becker
   */
 class VoronoiAlgorithm(panel: JComponent) {
 

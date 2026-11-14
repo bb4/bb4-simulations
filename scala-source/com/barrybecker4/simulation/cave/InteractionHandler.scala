@@ -14,7 +14,6 @@ object InteractionHandler {
 /**
   * Handle mouse interactions - converting them in to physical manifestations.
   * Using this handler, you can lower the cave walls.
-  * @author Barry Becker
   */
 class InteractionHandler(val cave: CaveModel, var scale: Double)
     extends MouseListener with MouseMotionListener {

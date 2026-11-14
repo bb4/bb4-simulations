@@ -12,7 +12,6 @@ import java.awt._
 
 /**
   * Renders a specified liquid environment.
-  * @author Barry Becker
   */
 object EnvironmentRenderer {
   // rendering style attributes

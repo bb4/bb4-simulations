@@ -6,7 +6,6 @@ package com.barrybecker4.simulation.spirograph.model
   * @param radius      radius of main circle
   * @param combinedRad main circle radius plus outer circle radius
   * @param position    position of spoke.
-  * @author Barry Becker
   */
 object ParametricEquations {
 

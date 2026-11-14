@@ -6,9 +6,7 @@ import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import javax.swing.{BoxLayout, JPanel}
 
 
-/**
-  * @author Barry Becker
-  */
+
 class ComplexMappingOptionsDialog(val parent1: Component, val simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 

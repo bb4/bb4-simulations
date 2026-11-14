@@ -14,7 +14,6 @@ import scala.compiletime.uninitialized
 /**
   * Use this modal dialog to let the user choose from among the
   * different snake options.
-  * @author Barry Becker
   */
 class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimulator)
   extends NewtonianSimOptionsDialog(parent, simulator) with ActionListener {

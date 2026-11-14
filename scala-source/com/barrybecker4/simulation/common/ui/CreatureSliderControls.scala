@@ -7,7 +7,6 @@ import com.barrybecker4.ui.sliders.SliderGroup
 /**
   * Slider groups used by population DynamicOptions panels.
   * `reset` and `setSliderListener` come from [[SliderGroup]].
-  * @author Barry Becker
   */
 trait CreatureSliderControls { self: SliderGroup =>
   def checkSliderChanged(sliderName: String, value: Double): Unit

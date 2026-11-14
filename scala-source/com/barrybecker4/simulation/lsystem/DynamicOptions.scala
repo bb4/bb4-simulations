@@ -26,8 +26,6 @@ import scala.compiletime.uninitialized
 /**
   * Dynamic controls for the RD simulation that will show on the right.
   * They change the behavior of the simulation while it is running.
-  *
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val NUM_ITERATIONS_SLIDER = "Num Iterations"

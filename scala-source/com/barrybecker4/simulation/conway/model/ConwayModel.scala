@@ -15,7 +15,6 @@ import ConwayModel._
 
 /**
   * Communicates changing dynamic options to ConwayProcessor and controls the rendering.
-  * @author Barry Becker
   */
 object ConwayModel {
   val DEFAULT_SCALE_FACTOR = 2

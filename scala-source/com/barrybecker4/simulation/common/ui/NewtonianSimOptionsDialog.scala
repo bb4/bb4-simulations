@@ -10,7 +10,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Options for Newtonian based simulations.
-  * @author Barry Becker
   */
 abstract class NewtonianSimOptionsDialog(parent: Component, simulator: Simulator)
   extends SimulatorOptionsDialog(parent, simulator) {

@@ -14,9 +14,7 @@ object GaussianStrategy {
   private val DEFAULT_VARIANCE = 0.1
 }
 
-/**
-  * @author Barry Becker
-  */
+
 class GaussianStrategy extends IncrementalGenerationStrategy {
 
   var mean: Double = GaussianStrategy.DEFAULT_MEAN

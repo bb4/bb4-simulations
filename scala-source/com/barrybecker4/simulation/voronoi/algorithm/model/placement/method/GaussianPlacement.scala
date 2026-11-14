@@ -14,8 +14,6 @@ object GaussianPlacement {
 
 /**
   * Everything we need to know to compute the Voronoi diagram.
-  *
-  * @author Barry Becker
   */
 class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
                        var numPoints: Int, rnd: Random) extends PlacementMethod {

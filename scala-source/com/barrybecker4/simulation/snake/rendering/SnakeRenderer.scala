@@ -7,7 +7,6 @@ import java.awt._
 
 /**
   * Responsible for drawing the snake onscreen.
-  * @author Barry Becker
   */
 class SnakeRenderer(val params: RenderingParameters) {
   private val segmentRenderer = new SegmentRenderer(params)

@@ -6,7 +6,6 @@ import com.barrybecker4.simulation.complexmapping.algorithm.functions._
 
 /**
   * Some functions that we can use to map complex numbers to new locations.
-  * @author Barry Becker
   */
 enum FunctionType(val name: String, val function: ComplexFunction):
 

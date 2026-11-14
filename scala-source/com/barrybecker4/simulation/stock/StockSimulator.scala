@@ -15,7 +15,6 @@ import scala.util.Random
 /**
   * Simulates the N stocks over M time periods (and other options).
   * Graphs the resulting distribution of values for the sample.
-  * @author Barry Becker
   */
 object StockSimulator {
   /**

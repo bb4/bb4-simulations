@@ -6,7 +6,6 @@ import java.awt.geom.Point2D
 
 /**
   * Hold parameters that define the current spirograph state.
-  * @author Barry Becker
   */
 class Parameters() {
 

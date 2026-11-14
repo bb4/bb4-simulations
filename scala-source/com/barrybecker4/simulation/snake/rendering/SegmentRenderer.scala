@@ -17,7 +17,6 @@ object SegmentRenderer {
 
 /**
   * Render a segment of a snakes body. It is composed of edges.
-  * @author Barry Becker
   */
 class SegmentRenderer private[rendering](val renderParams: RenderingParameters) {
   private val edgeRenderer = new EdgeRenderer(renderParams)

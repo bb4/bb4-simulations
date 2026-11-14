@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.fluid.rendering
 
 /**
   * Fluid rendering options
-  * @author Barry Becker
   */
 object RenderingOptions {
   /** scales the size of everything. Number of pixels on edge of cell.   */

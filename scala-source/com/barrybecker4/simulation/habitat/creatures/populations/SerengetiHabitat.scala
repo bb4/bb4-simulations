@@ -6,8 +6,6 @@ import com.barrybecker4.simulation.habitat.creatures.populations.{Population, Ha
 
 /**
   * Collection of creature populations that would appear on the Serengeti.
-  *
-  * @author Barry Becker
   */
 class SerengetiHabitat extends Habitat {
   override def addPopulations(): Unit = {

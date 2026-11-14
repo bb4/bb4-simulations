@@ -7,7 +7,6 @@ import java.awt.Color
 /**
   * Default colormap for visualization.
   * May be edited in the UI.
-  * @author Barry Becker
   */
 object DepthColorMap {
   private val VALUES: Array[Double] =

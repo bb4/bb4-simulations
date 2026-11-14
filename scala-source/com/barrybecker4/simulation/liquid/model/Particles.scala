@@ -6,7 +6,6 @@ import scala.util.Random
 
 /**
   * A set of particles in a grid. These particles represent the fluid.
-  * @author Barry Becker
   */
 object Particles {
   /** Ensure that the runs are the same  */

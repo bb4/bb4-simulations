@@ -17,7 +17,6 @@ object Profiler {
 /**
   * Singleton for simulation profiling.
   * For all simulation we would like to know calculation and rendering times.
-  * @author Barry Becker
   */
 class Profiler protected() extends com.barrybecker4.common.profile.Profiler {
   add(Profiler.CALCULATION)

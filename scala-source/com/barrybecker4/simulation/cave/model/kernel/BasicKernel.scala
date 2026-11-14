@@ -6,7 +6,6 @@ import BasicKernel.TOTAL_WEIGHT
 
 /**
   * Looks only at immediate neighbors
-  * @author Barry Becker
   */
 object BasicKernel {
   private val TOTAL_WEIGHT = 8

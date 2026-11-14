@@ -9,8 +9,6 @@ import scala.collection.immutable.Range.BigDecimal
 
 /**
   * Default colormap for Conway cell age. May be edited in the UI.
-  *
-  * @author Barry Becker
   */
 object ConwayColorMap {
   /** The color will not change beyond this timestep */

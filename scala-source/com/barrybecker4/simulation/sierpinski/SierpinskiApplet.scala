@@ -14,9 +14,7 @@ object SierpinskiApplet {
   }
 }
 
-/**
-  * @author Barry Becker
-  */
+
 class SierpinskiApplet() extends ApplicationApplet {
 
   override def createMainPanel: JPanel = {

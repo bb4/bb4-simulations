@@ -14,7 +14,6 @@ object Environment {
 
 /**
   * Dimensions of the environment
-  * @author Barry Becker
   */
 class Environment(val width: Int, val height: Int) {
 

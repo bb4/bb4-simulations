@@ -9,7 +9,6 @@ import javax.swing.event.MouseInputAdapter
 
 /**
   * Handle mouse interactions - converting them in to physical manifestations.
-  * @author Barry Becker
   */
 object InteractionHandler {
   private[ui] val DEFAULT_FORCE = 2.0

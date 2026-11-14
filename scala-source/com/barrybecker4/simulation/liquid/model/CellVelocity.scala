@@ -6,8 +6,6 @@ package com.barrybecker4.simulation.liquid.model
   * The u component heads out of the cell to the left, and
   * the v component heads out of the cell to the top.
   * velocities in x, y directions are defined at the center of each face.
-  *
-  * @author Barry Becker
   */
 class CellVelocity {
 

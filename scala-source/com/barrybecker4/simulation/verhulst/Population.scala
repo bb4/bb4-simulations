@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.verhulst
 
 /**
   * Everything we need to know about a population of creatures.
-  * @author Barry Becker
   */
 object Population {
   val DefaultMaxBirthRate: Double = 3.0

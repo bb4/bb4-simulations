@@ -12,8 +12,6 @@ import scala.util.Random
 /**
   * Everything we need to know about a creature.
   * There are many different sorts of creatures, but they are all represented by instance of this class.
-  *
-  * @author Barry Becker
   */
 object CreatureAttributes {
   /** when more hungary than this, pregnancy gets aborted */

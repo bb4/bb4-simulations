@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Dynamic controls for the Fluid simulation.
-  * @author Barry Becker
   */
 object WaterDynamicOptions {
 

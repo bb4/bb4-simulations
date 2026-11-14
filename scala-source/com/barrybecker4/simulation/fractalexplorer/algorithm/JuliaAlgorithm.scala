@@ -6,8 +6,6 @@ import com.barrybecker4.math.complex.ComplexNumberRange
 
 /**
   * Populates the FractalModel using the iterative Julia set algorithm.
-  *
-  * @author Barry Becker
   */
 object JuliaAlgorithm {
   val DEFAULT_JULIA_SEED: ComplexNumber = ComplexNumber(0.233, 0.5378)

@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.liquid.config
 
 /**
   * Different configurations to choose from.
-  * @author Barry Becker
   */
 enum ConfigurationEnum(val name: String, val description: String, val fileName: String):
 

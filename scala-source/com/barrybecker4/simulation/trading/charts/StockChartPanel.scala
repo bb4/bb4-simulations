@@ -11,7 +11,6 @@ import javax.swing._
 
 /**
   * Shows series of generated stock market simulations represented as height functions.
-  * @author Barry Becker
   */
 class StockChartPanel() extends JPanel {
 

@@ -14,7 +14,6 @@ import scala.compiletime.uninitialized
 
 /**
   * There are basic trading options, and then there is the trading strategy.
-  * @author Barry Becker
   */
 class TradingOptionsPanel() extends JPanel with ItemListener {
 

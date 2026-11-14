@@ -9,7 +9,6 @@ import BumpMapper._
 /**
   * This can be used to apply bump map rendering to a height field.
   * The constants at the top could be parameters to the constructor.
-  * @author Barry Becker
   */
 object BumpMapper {
   /** The angle at which light will hit the height field surface. Must be normalized to length 1. */

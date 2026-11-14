@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Singleton instance of logger.
-  * @author Barry Becker
   */
 object Logger {
 

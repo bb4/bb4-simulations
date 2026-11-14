@@ -17,7 +17,6 @@ import scala.compiletime.uninitialized
 /**
   * Configuration constraints and initial conditions to use while running the simulation.
   * Loaded from a JSON config file.
-  * @author Barry Becker
   */
 object Conditions {
   private val GSON = new Gson()

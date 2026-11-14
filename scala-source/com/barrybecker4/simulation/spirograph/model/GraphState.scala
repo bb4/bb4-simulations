@@ -15,7 +15,6 @@ object GraphState {
 
 /**
   * Holds shared state information for the spirograph. The view model.
-  * @author Barry Becker
   */
 class GraphState() extends ColorChangeListener {
 

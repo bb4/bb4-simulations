@@ -20,7 +20,6 @@ import scala.compiletime.uninitialized
 /**
   * Dynamic controls for the Voronoi that will show on the right.
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val MAX_POINTS_SLIDER = "Max num sample points (N)"

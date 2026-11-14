@@ -12,7 +12,6 @@ import scala.compiletime.uninitialized
   * Renders the SpiroGraph curve. May be interrupted.
   * @param state the spirograph state
   * @param graphPanel UI component to show the offline rendered image in when done.
-  * @author Barry Becker
   */
 class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
 

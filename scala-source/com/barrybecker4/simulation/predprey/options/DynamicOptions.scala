@@ -8,7 +8,6 @@ import com.barrybecker4.simulation.predprey.PredPreySimulator
 /**
   * Dynamic controls for the predator–prey simulation (sliders on the right).
   * They change the behavior of the simulation while it is running.
-  * @author Barry Becker
   */
 class DynamicOptions(simulator: PredPreySimulator)
   extends CreaturePopulationOptionsPanel(

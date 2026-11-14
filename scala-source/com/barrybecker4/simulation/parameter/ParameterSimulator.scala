@@ -13,7 +13,6 @@ import scala.util.Random
   * To see what kind of distribution of numbers you get.
   * If showRedistribution is true, then the plot should show uniform because
   * the redistribution of a function applied to that function should be uniform.
-  * @author Barry Becker
   */
 object ParameterSimulator:
 

@@ -14,7 +14,6 @@ object ZoomBox {
 
 /**
   * Represents the zoom box used to zoom into a rectangular region (corner positions while dragging).
-  * @author Barry Becker
   */
 class ZoomBox {
   private var firstCorner: Option[IntLocation] = None

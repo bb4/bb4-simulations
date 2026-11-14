@@ -10,7 +10,6 @@ import scala.collection.Seq
 
 /**
   * The expected binary operators in the text expression.
-  * @author Barry Becker
   */
 object LOperatorsDefinition {
 

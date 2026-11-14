@@ -19,7 +19,6 @@ import scala.util.Random
 /**
   * Physically base dynamic simulation of a trebuchet firing.
   * Try simulating using Breve.
-  * @author Barry Becker
   */
 object TrebuchetSimulator {
   private val DEFAULT_NUM_STEPS_PER_FRAME = 1

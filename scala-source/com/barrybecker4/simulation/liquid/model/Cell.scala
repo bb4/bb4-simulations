@@ -20,8 +20,6 @@ import com.barrybecker4.simulation.liquid.model.CellStatus
   *           v
   *
   *     |--- dx ---|
-  *
-  * @author Barry Becker
   */
 class Cell() {
   private var pressure = ATMOSPHERIC_PRESSURE // pressure at the center of the cell

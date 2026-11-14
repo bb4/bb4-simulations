@@ -12,7 +12,6 @@ import com.barrybecker4.ui.util.ColorMap
   * Maintains a rectilinear mesh of points that will get distorted by some function and displayed on an
   * image with a specified viewport. The dimensions of the viewport will be in the
   * same units as the original mesh.
-  * @author Barry Becker
   */
 case class MeshMappingModel(grid: Grid,
   function: ComplexFunction = IdentityFunction(), n: Int = 1,

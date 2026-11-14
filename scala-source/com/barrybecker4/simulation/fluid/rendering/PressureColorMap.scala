@@ -7,7 +7,6 @@ import java.awt._
 
 /**
   * Colormap for rendering pressures in a meaningful way.
-  * @author Barry Becker
   */
 object PressureColorMap {
   private val PRESSURE_VALUES = Array(0.0, 0.00001, 0.0001, 0.001, 0.005, 0.01, 0.02, 0.04, .1, 0.5, 1.0)

@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration
 
 /**
   * Different sorts of initial conditions for the Gray-Scott grid.
-  * @author Barry Becker
   */
 enum Initializer(name: String, initialU: Double = Initializer.INITIAL_U, initialV: Double = Initializer.INITIAL_V):
 

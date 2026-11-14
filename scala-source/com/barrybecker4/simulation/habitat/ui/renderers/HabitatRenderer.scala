@@ -9,7 +9,6 @@ import scala.compiletime.uninitialized
 
 /**
   * This class draws a the global habitat and all the creatures in it.
-  * @author Barry Becker
   */
 class HabitatRenderer private[habitat](var populations: Habitat) {
   private var width = 0

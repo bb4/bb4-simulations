@@ -14,8 +14,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Dynamic controls for the Conway simulation shown on the right.
-  *
-  * @author Barry Becker
   */
 object DynamicOptions {
   private val NUM_STEPS_PER_FRAME_SLIDER = "Num steps per frame"

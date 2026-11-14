@@ -6,7 +6,6 @@ import scala.util.Random
 
 /**
   * Data structure for representing an evolving cave system.
-  * @author Barry Becker
   */
 object Cave {
   private val RAND = new Random

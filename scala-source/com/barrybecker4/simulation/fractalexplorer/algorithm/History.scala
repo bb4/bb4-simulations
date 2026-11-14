@@ -5,7 +5,6 @@ import com.barrybecker4.math.complex.ComplexNumberRange
 
 /**
   * Stack of previous complex-plane ranges so the user can undo zooms.
-  * @author Barry Becker
   */
 class History {
   private var stack: List[ComplexNumberRange] = Nil

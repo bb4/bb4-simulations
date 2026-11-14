@@ -13,8 +13,6 @@ import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm
 /**
   * Create a zoom box while dragging.
   * Maintain aspect if control key or shift key while dragging.
-  *
-  * @author Barry Becker
   */
 class ZoomHandler(var algorithm: FractalAlgorithm)
   extends MouseListener with MouseMotionListener {

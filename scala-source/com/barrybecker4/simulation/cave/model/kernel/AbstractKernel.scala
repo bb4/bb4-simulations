@@ -5,7 +5,6 @@ import com.barrybecker4.simulation.cave.model.Cave
 
 /**
   * Looks only at immediate neighbors
-  * @author Barry Becker
   */
 abstract class AbstractKernel(var cave: Cave) extends Kernel {
   private[kernel] def isOffEdge(x: Int, y: Int): Boolean =

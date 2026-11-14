@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage
 /**
   * Responsible for converting a RectangularModel into an offscreen image.
   * This allows us to avoid threading issues when rendering because we can draw the whole image at once.
-  * @author Barry Becker
   */
 class RectangularModelImage(var model: RectangularModel, var cmap: ColorMap, val scale: Int) {
 

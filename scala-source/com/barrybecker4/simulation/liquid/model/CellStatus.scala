@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.liquid.model
 
 /**
   * Possible status of the cell. determined by what's in it.
-  * @author Barry Becker
   */
 enum CellStatus(val symbol: String) {
   case EMPTY extends CellStatus(".")

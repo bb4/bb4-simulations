@@ -7,7 +7,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Draws a Sierpinski triangle to a specified depth (recursive subdivision).
-  * @author Barry Becker
   */
 class TriangleRenderer(var styler: GraphicsStyler) {
   private var maxDepth = 1

@@ -11,7 +11,6 @@ import EnvironmentRenderer._
 
 /**
   * Renders a specified fluid environment.
-  * @author Barry Becker
   */
 object EnvironmentRenderer {
   val ContentOffsetPixels: Int = 10

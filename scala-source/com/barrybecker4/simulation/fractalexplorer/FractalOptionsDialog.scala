@@ -12,9 +12,7 @@ import java.awt._
 import scala.compiletime.uninitialized
 
 
-/**
-  * @author Barry Becker
-  */
+
 class FractalOptionsDialog(parent1: Component, simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 

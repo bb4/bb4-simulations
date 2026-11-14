@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.trading.options
 /**
   * Defaults for graphing options.
   * There are 3 graphs: stock market, investment, and profit histogram.
-  * @author Barry Becker
   */
 object GraphingOptions {
   private val DEFAULT_X_RESOLUTION = 2

@@ -16,8 +16,6 @@ import com.barrybecker4.simulation.common.PhysicsConstants.ATMOSPHERIC_PRESSURE
   * Improvements:
   *    - increase performance by only keeping track of particles near the surface.
   *    - allow configuring walls from file.
-  *
-  * @author Barry Becker
   */
 object GridUpdater {
   /**

@@ -10,9 +10,7 @@ import java.awt._
 import scala.compiletime.uninitialized
 
 
-/**
-  * @author Barry Becker
-  */
+
 class OptionsDialog(parent: Component, simulator: Simulator) extends SimulatorOptionsDialog(parent, simulator) {
 
   private var stockGenerationOptionsPanel: StockGenerationOptionsPanel = uninitialized

@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.lsystem.rendering
 
 /**
   * The current position and orientation used while rendering.
-  * @author Barry Becker
   */
 class OrientedPosition private[rendering](var x: Double, var y: Double, var angle: Double) {
 

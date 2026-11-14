@@ -7,7 +7,6 @@ import com.barrybecker4.simulation.trebuchet.model.TrebuchetConstants.HEIGHT
 
 /**
   * A physical piece of an object.
-  * @author Barry Becker
   */
 object RenderablePart {
   val BASE_Y = 450

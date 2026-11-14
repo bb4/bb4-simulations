@@ -10,7 +10,6 @@ import com.barrybecker4.simulation.habitat.creatures.populations.Population
 /**
   * Represents a set of sliders to associate with a creature population.
  *
-  * @author Barry Becker
   */
 object CreatureSliderGroup {
   private val SIZE_LABEL = " size"

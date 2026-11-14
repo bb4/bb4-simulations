@@ -25,7 +25,6 @@ object TradingSimulatorConsts {
   * Simulates applying a specific trading strategy to a simulated stock market time series.
   * There are strategies for both trading policies and time series generation representing the market.
   * Graphs the resulting distribution of expected profits given the assumptions of the model.
-  * @author Barry Becker
   */
 object TradingSimulator {
   def main(args: Array[String]): Unit = {

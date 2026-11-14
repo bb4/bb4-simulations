@@ -14,9 +14,7 @@ object SineStrategy { // radians
   private val DEFAULT_AMPLITUDE = 100
 }
 
-/**
-  * @author Barry Becker
-  */
+
 class SineStrategy extends IncrementalGenerationStrategy {
   /** Amount to increase after each time period if heads   */
   private var amplitudeField: NumberInput = uninitialized

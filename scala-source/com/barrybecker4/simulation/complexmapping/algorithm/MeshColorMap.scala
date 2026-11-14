@@ -7,7 +7,6 @@ import com.barrybecker4.ui.util.ColorMap
 
 /**
   * Default colormap for visualization. May be edited in the UI.
-  * @author Barry Becker
   */
 object MeshColorMap {
   private val MIN_VALUE = 0

@@ -7,7 +7,6 @@ import scala.collection.immutable.Range
 
 /**
   * Monotonic sample functions used to visualize inverses.
-  * @author Barry Becker
   */
 enum InverseFunctionType(val name: String, val func: Array[Double]):
 

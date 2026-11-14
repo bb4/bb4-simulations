@@ -4,7 +4,6 @@ package com.barrybecker4.simulation.snake.data
 
 /**
   * Different types of snakes to test.
-  * @author Barry Becker
   */
 enum SnakeType(val name: String, val snakeData: SnakeData):
 

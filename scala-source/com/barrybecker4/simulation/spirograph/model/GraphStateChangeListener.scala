@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.spirograph.model
 
 /**
   * Methods called when something about the graph has changed - either the defining parameters or if done rendering.
-  * @author Barry Becker
   */
 trait GraphStateChangeListener {
 

@@ -8,7 +8,6 @@ import javax.swing._
 
 /**
   * Show series history for line charts
-  * @author Barry Becker
   */
 class GraphingOptionsPanel() extends JPanel {
 

@@ -11,7 +11,6 @@ import scala.compiletime.uninitialized
 
 /**
   * Everything we need to know to compute the henon phase diagram.
-  * @author Barry Becker
   */
 class HenonModel private[algorithm](val width: Int, val height: Int,
                                     var params: TravelerParams, val uniformSeeds: Boolean, val connectPoints: Boolean,

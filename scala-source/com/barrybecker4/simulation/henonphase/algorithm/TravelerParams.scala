@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.henonphase.algorithm
 
 /**
   * Henon traveler params are immutable.
-  * @author Barry Becker
   */
 object TravelerParams {
   val DEFAULT_PHASE_ANGLE = 4.995

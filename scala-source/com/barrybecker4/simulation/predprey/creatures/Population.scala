@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.predprey.creatures
 
 /**
   * Everything we need to know about a population of creatures.
-  * @author Barry Becker
   */
 object Population {
   private val MAX_POPULATION = 100000

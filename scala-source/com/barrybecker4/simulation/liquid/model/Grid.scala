@@ -13,7 +13,6 @@ import java.text.DecimalFormat
   * adapted from work by Nick Foster.
   * See
   * http://physbam.stanford.edu/~fedkiw/papers/stanford2001-02.pdf
-  * @author Barry Becker
   */
 class Grid(var xDim: Int, var yDim: Int) {
 

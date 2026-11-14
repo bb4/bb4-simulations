@@ -15,7 +15,6 @@ import scala.collection.mutable.ListBuffer
   *              Something like "com.barrybecker4.simulation.trading.model.generationstrategy"
   * @param clzz the type of class to look for. e.g. classOf[GenerationStrategy]
   * @param defaultStrategies list of default strategies to always include in the list.
-  * @author Barry Becker
   */
 class StrategyPlugins[E <: StrategyPlugin](val packageName: String, val clzz: Class[?],
                                            val defaultStrategies: Seq[E]) {

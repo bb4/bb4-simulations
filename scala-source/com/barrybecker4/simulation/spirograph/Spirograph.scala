@@ -11,7 +11,6 @@ import java.awt._
   * That old spirograph game from the 70's brought into the computer age.
   * Based on work originally done by David Little.
   * http://www.math.psu.edu/dlittle/java/parametricequations/index.html
-  * @author Barry Becker
   */
 object Spirograph {
 

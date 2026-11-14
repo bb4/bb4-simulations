@@ -14,8 +14,6 @@ import com.barrybecker4.simulation.liquid.model.CellNeighbors
   * 5-8) Two of the 4 immediate neighbors is empty
   * 9-12) Three of the 4 immediate neighbors is empty
   * 13) isolated
-  *
-  * @author Barry Becker
   */
 object SurfaceVelocityUpdater {
   /** 4 if 2d, 6 if 3d */

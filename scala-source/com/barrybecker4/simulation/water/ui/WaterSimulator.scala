@@ -14,7 +14,6 @@ import scala.compiletime.uninitialized
   * Simulate waves in deep water.
   * Based on work by Gavin Miller (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.89.1204&rep=rep1&type=pdf)
   * Ported from my 1991 Turbo Pascal implementation.
-  * @author Barry Becker
   */
 object WaterSimulator {
   val DEFAULT_STEPS_PER_FRAME = 1

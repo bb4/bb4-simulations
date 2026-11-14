@@ -9,8 +9,6 @@ import scala.util.Random
 
 /**
   * Everything we need to know to compute the Voronoi diagram.
-  *
-  * @author Barry Becker
   */
 class RandomPlacement(val width: Int, val height: Int, margin: Int,
                       var numPoints: Int, rnd: Random) extends PlacementMethod {

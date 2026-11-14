@@ -10,7 +10,6 @@ import javax.swing.JPanel
 
 /**
   * Shows how much is invested and how much is held in reserve over time.
-  * @author Barry Becker
   */
 object InvestmentChartPanel {
   private val INVESTMENT_COLOR = new Color(200, 10, 30, 80)

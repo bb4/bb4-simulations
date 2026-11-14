@@ -9,7 +9,6 @@ import scala.math.round
 
 /**
   * Renders the moving water in its current state.
-  * @author Barry Becker
   */
 object EnvironmentRenderer {
   private val OFFSET = 10

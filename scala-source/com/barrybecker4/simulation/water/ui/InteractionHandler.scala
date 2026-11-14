@@ -12,7 +12,6 @@ import scala.math.abs
 
 /**
   * Handle mouse interactions - converting them in to physical manifestations.
-  * @author Barry Becker
   */
 class InteractionHandler private[ui](var env: Environment) extends MouseInputAdapter {
 

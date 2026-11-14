@@ -7,8 +7,6 @@ import java.awt._
 /**
   * Everything we need to know about the current rabbit population.
   * Rabbits are the prey in the simulation.
-  *
-  * @author Barry Becker
   */
 object Rabbits {
   val COLOR: Color = Color.BLUE

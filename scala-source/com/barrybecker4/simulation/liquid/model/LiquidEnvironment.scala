@@ -20,8 +20,6 @@ import scala.compiletime.uninitialized
   * Improvements:
   *    - increase performance by only keeping track of particles near the surface.
   *    - allow configuring walls from file.
-  *
-  * @author Barry Becker
   */
 object LiquidEnvironment {
   private val NUM_RAND_PARTS = 1

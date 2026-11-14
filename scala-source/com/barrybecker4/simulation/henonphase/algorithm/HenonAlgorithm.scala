@@ -20,7 +20,6 @@ object HenonAlgorithm {
 
 /**
   * Drives the Henon phase map iteration and rendering for a single run.
-  * @author Barry Becker
   */
 class HenonAlgorithm() {
 

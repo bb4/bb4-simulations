@@ -8,7 +8,6 @@ import com.barrybecker4.simulation.trading.model.plugin.StrategyPlugin
 
 /**
   * This naive strategy puts everything in the market at the start and sells it all at the end.
-  * @author Barry Becker
   */
 trait TradingStrategy extends StrategyPlugin {
   private var startingTotal = .0

@@ -7,7 +7,6 @@ import java.awt.Color
 
 /**
   * Default colormap for cave visualization. May be edited in the UI.
-  * @author Barry Becker
   */
 object CaveColorMap {
 
