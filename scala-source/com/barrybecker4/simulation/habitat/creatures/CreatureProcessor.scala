@@ -61,7 +61,7 @@ case class CreatureProcessor(creature: Creature) {
         a.hitPoints = cType.nutritionalValue
         a.hunger = Math.max(0, a.hunger - cType.eatRate)
         if (a.isEating && a.hunger == 0)
-          a.doneEating(cType.normalSpeed)
+          a.doneEating(cType.normalSpeed, creature.rnd)
       }
     }
 
@@ -78,7 +78,7 @@ case class CreatureProcessor(creature: Creature) {
         a.prey = nbrs.nearestPrey
         moveTowardPreyAndEatIfPossible(a.prey.get)
       } else {
-        a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend)
+        a.flock(cType, nbrs.flockFriends, nbrs.nearestFriend, creature.rnd)
       }
       moveToNewLocation(grid)
     }

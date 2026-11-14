@@ -1,11 +1,12 @@
 // Copyright by Barry G. Becker, 2016-2023. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.habitat.creatures.populations
 
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor, CreatureType, absMod}
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
 
 import javax.vecmath.Point2d
+
+import scala.util.Random
 
 
 /** Everything we need to know about a population of a certain kind of creature. */
@@ -13,14 +14,14 @@ object Population {
   private val SPAWN_RADIUS = 0.2
 
   /** Factory method to create an initial population of randomly distributed members. */
-  private[creatures] def createPopulation(creatureType: CreatureType, initialSize: Int) = {
-    val pop = new Population(creatureType)
+  private[creatures] def createPopulation(creatureType: CreatureType, initialSize: Int, rnd: Random) = {
+    val pop = new Population(creatureType, rnd)
     pop.createInitialSet(initialSize)
     pop
   }
 }
 
-class Population(var creatureType: CreatureType) {
+class Population(var creatureType: CreatureType, private val rnd: Random) {
   var creatures: Set[Creature] = Set[Creature]()
   private var initialSize = 0
 
@@ -35,8 +36,8 @@ class Population(var creatureType: CreatureType) {
   private def create(): Unit = {
     creatures = Set[Creature]()
     for (i <- 0 until initialSize)
-      val pos = new Point2d(MathUtil.RANDOM.nextDouble(), MathUtil.RANDOM.nextDouble())
-      creatures += new Creature(creatureType, pos)
+      val pos = new Point2d(rnd.nextDouble(), rnd.nextDouble())
+      creatures += new Creature(creatureType, pos, rnd)
   }
 
   /**
@@ -50,7 +51,7 @@ class Population(var creatureType: CreatureType) {
     val spawnLocations = creaturesLiveForTheDay(grid)
 
     for (newLocation <- spawnLocations) {
-      val newCreature = new Creature(creatureType, newLocation)
+      val newCreature = new Creature(creatureType, newLocation, rnd)
       creatures += newCreature
       grid.getCellForPosition(newLocation).addCreature(newCreature)
     }
@@ -68,8 +69,8 @@ class Population(var creatureType: CreatureType) {
     if (spawnRate > 0) {
       for (i <- 0 until spawnRate) {
         val loc = new Point2d(
-          absMod(MathUtil.RANDOM.nextDouble() * grid.getXDim),
-          absMod(MathUtil.RANDOM.nextDouble() * grid.getYDim)
+          absMod(rnd.nextDouble() * grid.getXDim),
+          absMod(rnd.nextDouble() * grid.getYDim)
         )
         spawnLocations +:= loc
       }
@@ -96,8 +97,8 @@ class Population(var creatureType: CreatureType) {
       if (spawn) {
         val loc = creature.getLocation
         spawnLocations +:= new Point2d(
-          absMod(loc.x + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble()),
-          absMod(loc.y + Population.SPAWN_RADIUS * MathUtil.RANDOM.nextDouble())
+          absMod(loc.x + Population.SPAWN_RADIUS * rnd.nextDouble()),
+          absMod(loc.y + Population.SPAWN_RADIUS * rnd.nextDouble())
         )
       }
     }

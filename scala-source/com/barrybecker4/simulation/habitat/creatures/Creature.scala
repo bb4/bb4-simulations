@@ -6,16 +6,18 @@ import com.barrybecker4.simulation.habitat.model.HabitatGrid
 import javax.vecmath.Point2d
 import javax.vecmath.Vector2d
 
+import scala.util.Random
+
 
 /**
   * Everything we need to know about a creature.
   * There are many different sorts of creatures, but they are all represented by instance of this class.
   */
-class Creature private[creatures](var cType: CreatureType, var location: Point2d) {
+class Creature private[creatures](var cType: CreatureType, var location: Point2d, val rnd: Random) {
 
   private val attributes =
     new CreatureAttributes(0, 0, 0,
-      cType.normalSpeed, randomDirection(), location, cType.nutritionalValue, false, false)
+      cType.normalSpeed, randomDirection(rnd), location, cType.nutritionalValue, false, false)
 
   def kill(): Unit = {
     attributes.speed = 0

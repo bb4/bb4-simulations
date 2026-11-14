@@ -10,6 +10,7 @@ import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import java.awt.Color
 import scala.collection.mutable.ArrayBuffer
 import scala.compiletime.uninitialized
+import scala.util.Random
 
 object Habitat {
   val HABITATS: Array[Habitat] = Array(new SerengetiHabitat, new CatRatHabitat, new SingleCreatureHabitat)
@@ -22,6 +23,7 @@ object Habitat {
   */
 abstract class Habitat extends ArrayBuffer[Population] {
 
+  protected val rnd = new Random(1)
   private var functionMap = Map[Population, CountFunction]()
   private var dayCount: Int = 0
   /** Avoid calling setMaxXValues on every paint when graph resolution unchanged. */
@@ -33,6 +35,7 @@ abstract class Habitat extends ArrayBuffer[Population] {
   def getName: String
 
   def reset(): Unit = {
+    rnd.setSeed(1)
     dayCount = 0
     grid = createHabitatGrid()
     for (pop <- this) pop.reset()

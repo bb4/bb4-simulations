@@ -6,6 +6,8 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureAttributes._
 
 import javax.vecmath.{Point2d, Vector2d}
 
+import scala.util.Random
+
 
 /**
   * Everything we need to know about a creature.
@@ -51,8 +53,8 @@ class CreatureAttributes private[creatures](
     * Move toward the center of mass of neighbors and turn in same direction as nearest friend.
     * @param friends nearby friends
     */
-  def flock(cType: CreatureType, friends: List[Creature], nearestFriend: Option[Creature]): Unit = {
-    val perturbedDirection = perturbDirection(direction)
+  def flock(cType: CreatureType, friends: List[Creature], nearestFriend: Option[Creature], rnd: Random): Unit = {
+    val perturbedDirection = perturbDirection(direction, rnd)
     if (nearestFriend.isEmpty || cType.flockTendancy == 0) {
       direction = perturbedDirection
     }
@@ -76,12 +78,12 @@ class CreatureAttributes private[creatures](
     speed = 0
   }
 
-  def doneEating(normalSpeed: Double): Unit = {
+  def doneEating(normalSpeed: Double, rnd: Random): Unit = {
     assert(prey.isDefined)
     prey.get.getAttributes.age = prey.get.cType.maxAge - DECOMPOSE_TIME
     prey = None
     isEating = false
     speed = normalSpeed
-    direction = randomDirection()
+    direction = randomDirection(rnd)
   }
 }

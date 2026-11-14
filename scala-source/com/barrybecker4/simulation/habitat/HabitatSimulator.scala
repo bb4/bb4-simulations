@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.habitat
 
 import com.barrybecker4.common.concurrency.ThreadUtil
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
@@ -46,7 +45,6 @@ class HabitatSimulator() extends Simulator("Habitat Simulation") {
     this.setPaused(true)
     // wait till actually paused. Not clean, but oh well.
     ThreadUtil.sleep(500)
-    MathUtil.RANDOM.setSeed(1)
     habitat.reset()
     options.reset()
     this.setPaused(false)

@@ -2,7 +2,7 @@
 
 package com.barrybecker4.simulation.habitat
 
-import com.barrybecker4.math.MathUtil
+import scala.util.Random
 
 package object creatures {
 
@@ -11,10 +11,10 @@ package object creatures {
 
   def absMod(value: Double): Double = (value + 1.0) % 1.0
 
-  def randomDirection() = TWO_PI * MathUtil.RANDOM.nextDouble()
+  def randomDirection(rnd: Random): Double = TWO_PI * rnd.nextDouble()
 
-  def perturbDirection(direction: Double): Double = {
-    val perturbation = 0.1 * TWO_PI * MathUtil.RANDOM.nextDouble()
+  def perturbDirection(direction: Double, rnd: Random): Double = {
+    val perturbation = 0.1 * TWO_PI * rnd.nextDouble()
     val perturbedDirection = direction + perturbation
     if (perturbedDirection < 0) perturbedDirection + TWO_PI
     else if (perturbedDirection > TWO_PI) perturbedDirection - TWO_PI

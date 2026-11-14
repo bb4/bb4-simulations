@@ -5,11 +5,13 @@ import com.barrybecker4.simulation.habitat.creatures.CreatureType
 import com.barrybecker4.simulation.habitat.model.HabitatGrid
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.util.Random
+
 class PopulationSuite extends AnyFunSuite {
 
   test("removeDead removes dead creatures from grid cells") {
     val grid = HabitatGrid(0.2)
-    val pop = Population.createPopulation(CreatureType.RAT, 2)
+    val pop = Population.createPopulation(CreatureType.RAT, 2, new Random(0))
     for (c <- pop.creatures) {
       grid.getCellForPosition(c.getLocation).addCreature(c)
     }

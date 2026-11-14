@@ -5,11 +5,13 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import javax.vecmath.Point2d
 
+import scala.util.Random
+
 
 class CreatureSuite extends AnyFunSuite {
   
   test("Creature toString") {
-    val creature = new Creature(CreatureType.CAT, new Point2d(2, 3))
+    val creature = new Creature(CreatureType.CAT, new Point2d(2, 3), new Random(0))
 
     assertResult("cat hunger=0 pregnant=0 hitPoints=25") {
       creature.toString
