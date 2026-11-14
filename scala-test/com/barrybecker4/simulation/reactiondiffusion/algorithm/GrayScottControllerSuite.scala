@@ -27,4 +27,59 @@ class GrayScottControllerSuite extends AnyFunSuite {
     assert(m.v(0).length == m.getHeight)
     val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
   }
+
+  test("new controller initializes H to H0") {
+    val controller = new GrayScottController(5, 5)
+    assert(controller.algorithm.getH == GrayScottModel.H0)
+  }
+
+  test("deferred resize preserves non-default H") {
+    val controller = new GrayScottController(10, 10)
+    controller.setH(0.5)
+    assert(controller.algorithm.getH == 0.5)
+
+    controller.setSize(20, 15)
+    controller.timeStep(0.05)
+
+    assert(controller.algorithm.getH == 0.5)
+  }
+
+  test("parallel and sequential timeStep match within epsilon") {
+    val sequential = new GrayScottController(24, 24)
+    val parallel = new GrayScottController(24, 24)
+    sequential.reset()
+    parallel.reset()
+    sequential.setParallelized(false)
+    parallel.setParallelized(true)
+
+    copyState(sequential.model, parallel.model)
+
+    val dt = 0.05
+    for (_ <- 0 until 5) {
+      sequential.timeStep(dt)
+      parallel.timeStep(dt)
+    }
+
+    val maxDiff = maxAbsDiff(sequential.model, parallel.model)
+    assert(maxDiff < 1e-9, s"max abs diff was $maxDiff")
+  }
+
+  private def copyState(from: GrayScottModel, to: GrayScottModel): Unit = {
+    require(from.getWidth == to.getWidth && from.getHeight == to.getHeight)
+    for (x <- 0 until from.getWidth; y <- 0 until from.getHeight) {
+      to.u(x)(y) = from.u(x)(y)
+      to.v(x)(y) = from.v(x)(y)
+      to.tmpU(x)(y) = from.tmpU(x)(y)
+      to.tmpV(x)(y) = from.tmpV(x)(y)
+    }
+  }
+
+  private def maxAbsDiff(a: GrayScottModel, b: GrayScottModel): Double = {
+    var max = 0.0
+    for (x <- 0 until a.getWidth; y <- 0 until a.getHeight) {
+      max = math.max(max, math.abs(a.u(x)(y) - b.u(x)(y)))
+      max = math.max(max, math.abs(a.v(x)(y) - b.v(x)(y)))
+    }
+    max
+  }
 }

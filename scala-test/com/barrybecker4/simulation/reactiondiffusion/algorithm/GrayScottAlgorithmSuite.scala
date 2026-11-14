@@ -18,4 +18,18 @@ class GrayScottAlgorithmSuite extends AnyFunSuite {
       assert(m.v(x)(y) >= -0.5 && m.v(x)(y) <= 2.0)
     }
   }
+
+  test("many sequential steps stay finite and within loose physical bounds") {
+    val c = new GrayScottController(16, 16)
+    c.reset()
+    c.setParallelized(false)
+    for (_ <- 0 until 50) c.timeStep(0.05)
+    val m = c.getModel
+    for (x <- 0 until m.getWidth; y <- 0 until m.getHeight) {
+      assert(!m.u(x)(y).isNaN && !m.u(x)(y).isInfinite)
+      assert(!m.v(x)(y).isNaN && !m.v(x)(y).isInfinite)
+      assert(m.u(x)(y) >= -0.5 && m.u(x)(y) <= 2.0)
+      assert(m.v(x)(y) >= -0.5 && m.v(x)(y) <= 2.0)
+    }
+  }
 }

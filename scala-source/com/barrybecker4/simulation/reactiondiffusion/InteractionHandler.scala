@@ -23,8 +23,6 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   private var currentY = 0
   private var brushRadius = GrayScottModel.DEFAULT_BRUSH_RADIUS
   private var brushStrength = GrayScottModel.DEFAULT_BRUSH_STRENGTH
-  private var lastX = 0
-  private var lastY = 0
   private var mouse1Down = false
   private var mouse3Down = false
 
@@ -37,8 +35,6 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     currentX = e.getX
     currentY = e.getY
     doBrush()
-    lastX = currentX
-    lastY = currentY
   }
 
   private def doBrush(): Unit = {
@@ -70,16 +66,13 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   /** Make waves or adds ink depending on which mouse key is being held down. */
   private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val amountToAdd = brushStrength * weight
-    // if the left mouse is down, make waves
-    if (mouse1Down) model.u(i)(j) += amountToAdd
-    else if (mouse3Down) model.v(i)(j) += amountToAdd
+    if (mouse1Down) model.addU(i, j, amountToAdd)
+    else if (mouse3Down) model.addV(i, j, amountToAdd)
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
-    lastX = currentX
-    lastY = currentY
   }
 
   /** The following methods implement MouseListener */

@@ -17,9 +17,10 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Ini
 final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   val model: GrayScottModel = new GrayScottModel(initialWidth, initialHeight)
   val algorithm = new GrayScottAlgorithm(model)
+  algorithm.setH(GrayScottModel.H0)
   setParallelized(true)
 
-  /** null if no new size has been requested. */
+  /** None if no new size has been requested. */
   private var requestedNewSize: Option[Dimension] = None
   private var parallelized = true
   def getModel: GrayScottModel = model
@@ -74,10 +75,10 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     prof.stopConcurrentCalculationTime()
     model.commitChanges()
     if (requestedNewSize.isDefined) {
-      // setSize reallocates u/v in sync with width/height (avoids paint AIOOBE on resize)
+      // setSize reallocates u/v in sync with width/height (avoids paint AIOOBE on resize).
+      // Preserve current H (and F/K stay as set on the model for size-only realloc in a later phase).
       model.setSize(requestedNewSize.get)
       requestedNewSize = None
-      algorithm.setH(GrayScottModel.H0)
     }
   }
 

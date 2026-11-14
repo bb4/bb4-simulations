@@ -27,6 +27,16 @@ class GrayScottModelSuite extends AnyFunSuite {
     assertResult(99) { GrayScottModel.getPeriodicXValue(-1, 100) }
   }
 
+  test("periodic max equals period wraps to zero") {
+    assertResult(0) { GrayScottModel.getPeriodicXValue(100, 100) }
+  }
+
+  test("periodic with max one") {
+    assertResult(0) { GrayScottModel.getPeriodicXValue(0, 1) }
+    assertResult(0) { GrayScottModel.getPeriodicXValue(1, 1) }
+    assertResult(0) { GrayScottModel.getPeriodicXValue(-1, 1) }
+  }
+
   test("commitChanges swaps u/tmpU and v/tmpV") {
     val m = new GrayScottModel(5, 5)
     val uBefore = m.u

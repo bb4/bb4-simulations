@@ -15,8 +15,12 @@ object GrayScottAlgorithm {
 }
 
 final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
+  private var h: Double = uninitialized
   private var duDivh2: Double = uninitialized
   private var dvDivh2: Double = uninitialized
+
+  /** Current grid spacing used for diffusion (`du/h²`, `dv/h²`). */
+  private[algorithm] def getH: Double = h
 
   def computeNextTimeStep(minX: Int, maxX: Int, dt: Double): Unit = {
     val u = model.tmpU
@@ -47,6 +51,7 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
   }
 
   def setH(h: Double): Unit = {
+    this.h = h
     val h2 = h * h
     duDivh2 = DU / h2
     dvDivh2 = DV / h2

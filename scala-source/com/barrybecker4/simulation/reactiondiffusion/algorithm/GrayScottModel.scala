@@ -122,4 +122,20 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
       v(x)(y) = initialV
     }
   }
+
+  /** Add chemical U at a point in both display and read buffers (for brush). */
+  def addU(x: Int, y: Int, amount: Double): Unit = {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      u(x)(y) += amount
+      tmpU(x)(y) += amount
+    }
+  }
+
+  /** Add chemical V at a point in both display and read buffers (for brush). */
+  def addV(x: Int, y: Int, amount: Double): Unit = {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+      v(x)(y) += amount
+      tmpV(x)(y) += amount
+    }
+  }
 }
