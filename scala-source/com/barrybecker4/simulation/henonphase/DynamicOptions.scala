@@ -2,6 +2,7 @@
 package com.barrybecker4.simulation.henonphase
 
 import com.barrybecker4.common.format.FormatUtil
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.simulation.henonphase.algorithm.HenonAlgorithm
 import com.barrybecker4.simulation.henonphase.algorithm.TravelerParams
 import com.barrybecker4.ui.legend.ContinuousColorLegend
@@ -51,9 +52,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   private var formulaText: JTextArea = uninitialized
   private var currentParams = new TravelerParams
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
   sliderGroup.setSliderListener(this)
   val legend = new ContinuousColorLegend(null, this.algorithm.getColorMap, true)
@@ -63,9 +62,7 @@ class DynamicOptions private[henonphase](var algorithm: HenonAlgorithm, var simu
   add(checkBoxes)
   add(Box.createVerticalStrut(10))
   add(legend)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
-  add(fill)
+  add(DynamicOptionsPanelSupport.createScrollFiller())
   add(createFormulaText)
 
 

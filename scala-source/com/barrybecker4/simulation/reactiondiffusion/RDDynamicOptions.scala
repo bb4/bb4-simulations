@@ -1,6 +1,7 @@
 /** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion
 
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import RDDynamicOptions._
@@ -66,9 +67,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
   initialize()
 
   private def initialize(): Unit = {
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-    setBorder(BorderFactory.createEtchedBorder)
-    setPreferredSize(new Dimension(300, 300))
+    DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
     sliderGroup = new SliderGroup(RDDynamicOptions.SLIDER_PROPS)
     sliderGroup.setSliderListener(this)
@@ -86,9 +85,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     add(Box.createVerticalStrut(SPACER_HT))
     add(createInitialConditionsDroplist())
 
-    val fill = new JPanel
-    fill.setPreferredSize(new Dimension(SPACER_HT, 1000))
-    add(fill)
+    add(DynamicOptionsPanelSupport.createScrollFiller(width = SPACER_HT))
   }
 
   private def createCheckBoxes = {
@@ -149,12 +146,8 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
       BorderFactory.createEmptyBorder(5, 5, 5, 5)
     )
 
-  private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) = {
-    val cb = new JCheckBox(label, initiallyChecked)
-    cb.setToolTipText(tooltip)
-    cb.addActionListener(this)
-    cb
-  }
+  private def createCheckBox(label: String, tooltip: String, initiallyChecked: Boolean) =
+    DynamicOptionsPanelSupport.createCheckBox(label, tooltip, initiallyChecked, this)
 
   def reset(): Unit = {
     sliderGroup.reset()

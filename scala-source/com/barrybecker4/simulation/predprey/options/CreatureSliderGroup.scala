@@ -1,6 +1,7 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.predprey.options
 
+import com.barrybecker4.simulation.common.ui.CreatureSliderControls
 import com.barrybecker4.simulation.predprey.creatures.Population
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
@@ -22,9 +23,11 @@ object CreatureSliderGroup:
       new SliderProperties(creatureName + DEATH_RATE_LABEL, 0, creaturePop.getMaxDeathRate, creaturePop.getInitialDeathRate, 1000.0)
     )
 
-class CreatureSliderGroup(creaturePop: Population) extends SliderGroup(CreatureSliderGroup.createSliderProperties(creaturePop)):
+class CreatureSliderGroup(creaturePop: Population)
+    extends SliderGroup(CreatureSliderGroup.createSliderProperties(creaturePop))
+    with CreatureSliderControls:
 
-  def update(): Unit = setSliderValue(0, creaturePop.getPopulation)
+  override def update(): Unit = setSliderValue(0, creaturePop.getPopulation)
 
   /**
     * One of the sliders was potentially moved.

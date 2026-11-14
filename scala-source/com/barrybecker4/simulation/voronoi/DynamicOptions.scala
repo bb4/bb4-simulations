@@ -6,6 +6,7 @@ import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacem
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
 
 import java.awt.event.{ActionEvent, ActionListener, ItemEvent, ItemListener}
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
@@ -43,9 +44,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   private var currentParams = new PoissonParams()
   private var distributionChoice: JComboBox[String] = uninitialized
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
   sliderGroup.setSliderListener(this)
   val checkBoxes: JPanel = createCheckBoxes
@@ -56,9 +55,7 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
   add(Box.createVerticalStrut(10))
   add(createPointDistributionDropdown)
 
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
-  add(fill)
+  add(DynamicOptionsPanelSupport.createScrollFiller())
 
 
   private def createCheckBoxes = {

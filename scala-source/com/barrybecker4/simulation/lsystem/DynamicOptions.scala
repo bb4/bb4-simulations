@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.lsystem
 
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.simulation.lsystem.model.LSystemModel
 import com.barrybecker4.ui.components.TextInput
 import com.barrybecker4.ui.sliders.SliderGroup
@@ -8,12 +9,10 @@ import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 import javax.swing.BorderFactory
 import javax.swing.Box
-import javax.swing.BoxLayout
 import javax.swing.JCheckBox
 import javax.swing.JPanel
 import javax.swing.JTextArea
 import java.awt.BorderLayout
-import java.awt.Dimension
 import java.awt.FlowLayout
 import java.awt.GridLayout
 import java.awt.event.ActionEvent
@@ -45,9 +44,7 @@ object DynamicOptions {
 
 class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator: LSystemExplorer)
     extends JPanel with ActionListener with KeyListener with SliderGroupChangeListener {
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
   private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   sliderGroup.setSliderListener(this)
   val checkBoxes: JPanel = createCheckBoxes
@@ -55,9 +52,7 @@ class DynamicOptions private[lsystem](var algorithm: LSystemModel, var simulator
   add(Box.createVerticalStrut(10))
   add(sliderGroup)
   add(checkBoxes)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(1, 1000))
-  add(fill)
+  add(DynamicOptionsPanelSupport.createScrollFiller())
   add(createFormulaText)
   private var useFixedSize: JCheckBox = uninitialized
   private var expression: TextInput = uninitialized

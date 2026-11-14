@@ -2,12 +2,12 @@
 package com.barrybecker4.simulation.complexmapping
 
 import java.awt.event.{ActionEvent, ActionListener}
-import java.awt.Dimension
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
 import javax.swing._
 import scala.compiletime.uninitialized
 import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_N}
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
 import DynamicOptions._
 
@@ -32,9 +32,7 @@ object DynamicOptions {
 class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplorer)
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
   private var functionChoice: JComboBox[String] = uninitialized
   var sliderGroup: SliderGroup = uninitialized
@@ -57,9 +55,7 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
     add(sliderGroup)
     add(javax.swing.Box.createVerticalStrut(10))
     add(legend)
-    val fill = new JPanel
-    fill.setPreferredSize(new Dimension(10, 1000))
-    add(fill)
+    add(DynamicOptionsPanelSupport.createScrollFiller(width = 10))
   }
 
   /** The dropdown menu at the top for selecting a mapping function. */

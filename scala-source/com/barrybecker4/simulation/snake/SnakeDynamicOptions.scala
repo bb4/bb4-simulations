@@ -1,11 +1,11 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.snake
 
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 import javax.swing._
-import java.awt._
 
 
 /**
@@ -27,15 +27,11 @@ object SnakeDynamicOptions {
 }
 
 class SnakeDynamicOptions private[snake](var snakeSim: SnakeSimulator) extends JPanel with SliderGroupChangeListener {
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
   private var sliderGroup = new SliderGroup(createSliderProperties)
   sliderGroup.setSliderListener(this)
   add(sliderGroup)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(10, 1000))
-  add(fill)
+  add(DynamicOptionsPanelSupport.createScrollFiller(width = 10))
 
   private def createSliderProperties: Array[SliderProperties] = {
     val params = new LocomotionParameters

@@ -1,11 +1,12 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fractalexplorer
 
-import java.awt.{BorderLayout, Dimension, GridLayout}
+import java.awt.{BorderLayout, GridLayout}
 import java.awt.event.{ActionEvent, ActionListener}
 import javax.swing._
 
 import com.barrybecker4.math.complex.ComplexNumberRange
+import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
 import com.barrybecker4.simulation.fractalexplorer.algorithm.FractalAlgorithm
 import com.barrybecker4.ui.legend.ContinuousColorLegend
 import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
@@ -43,9 +44,7 @@ class DynamicOptions private[fractalexplorer](simulator: FractalExplorer)
   private var coordinate2: JLabel = uninitialized
   private val backButton = new JButton("Go Back")
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
+  DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
   sliderGroup.setSliderListener(this)
   val legend = new ContinuousColorLegend(null, simulator.getColorMap, true)
@@ -57,9 +56,7 @@ class DynamicOptions private[fractalexplorer](simulator: FractalExplorer)
   add(createCoordinatesView)
   backButton.addActionListener(this)
   add(backButton)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(10, 1000))
-  add(fill)
+  add(DynamicOptionsPanelSupport.createScrollFiller(width = 10))
 
   def setCoordinates(range: ComplexNumberRange): Unit = {
     coordinate1.setText("c1: " + range.point1)

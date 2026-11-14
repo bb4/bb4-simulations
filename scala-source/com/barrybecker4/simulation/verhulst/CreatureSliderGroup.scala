@@ -1,5 +1,7 @@
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.verhulst
 
+import com.barrybecker4.simulation.common.ui.CreatureSliderControls
 import com.barrybecker4.ui.sliders.SliderGroup
 import com.barrybecker4.ui.sliders.SliderProperties
 
@@ -22,7 +24,8 @@ object CreatureSliderGroup {
 
 
 class CreatureSliderGroup(creaturePop: Population)
-    extends SliderGroup(CreatureSliderGroup.createSliderProperties(creaturePop)) {
+    extends SliderGroup(CreatureSliderGroup.createSliderProperties(creaturePop))
+    with CreatureSliderControls {
 
   /** One of the sliders was potentially moved. Check for match based on name. */
   def checkSliderChanged(sliderName: String, value: Double): Unit = {
