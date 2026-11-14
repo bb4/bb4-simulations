@@ -84,7 +84,6 @@ class FractalExplorer extends Simulator("Fractal Explorer") {
       if (!useFixedSize)
         algorithm.setSize(getWidth, getHeight)
       algorithm.timeStep(tStep)
-      options.foreach(_.setCoordinates(algorithm.getRange))
     }
     tStep
   }

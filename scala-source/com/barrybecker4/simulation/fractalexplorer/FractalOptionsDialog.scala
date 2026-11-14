@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer
 
 import com.barrybecker4.simulation.common.ui.Simulator
@@ -15,7 +15,7 @@ import scala.compiletime.uninitialized
 /**
   * @author Barry Becker
   */
-class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
+class FractalOptionsDialog(parent1: Component, simulator: Simulator)
     extends SimulatorOptionsDialog(parent1, simulator) {
 
   private var algorithmChoice: JComboBox[String] = uninitialized
@@ -27,44 +27,34 @@ class FractalOptionsDialog(val parent1: Component, val simulator: Simulator)
 
   override protected def createCustomParamPanel: JPanel = {
     setResizable(true)
-    val mainPanel = new JPanel(new BorderLayout)
+    val mainPanel = new JPanel
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS))
-    val label = new JLabel("Select a fractal algorithm to use:")
-    algorithmChoice = createAlgorithmDropdown
-    val panel = new JPanel
-    panel.add(label)
-    panel.add(algorithmChoice)
-    val cnPanel = new JPanel
-    juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED)
-    cnPanel.add(juliaSeedField)
-    mainPanel.add(panel, BorderLayout.NORTH)
-    mainPanel.add(cnPanel, BorderLayout.NORTH)
-    mainPanel
-  }
 
-  /**
-    * The dropdown menu at the top for selecting an algorithm for solving the puzzle.
-    * @return a dropdown/down component.
-    */
-  private def createAlgorithmDropdown = {
     algorithmChoice = new JComboBox[String]()
-    for (algorithm <- AlgorithmEnum.VALUES) {
+    for (algorithm <- AlgorithmEnum.VALUES)
       algorithmChoice.addItem(algorithm.getLabel)
-    }
     algorithmChoice.setSelectedIndex(FractalExplorer.DEFAULT_ALGORITHM_ENUM.ordinal)
-    algorithmChoice
+
+    val panel = new JPanel
+    panel.add(new JLabel("Select a fractal algorithm to use:"))
+    panel.add(algorithmChoice)
+
+    juliaSeedField = new ComplexNumberInput("Julia Seed: ", JuliaAlgorithm.DEFAULT_JULIA_SEED)
+    val cnPanel = new JPanel
+    cnPanel.add(juliaSeedField)
+
+    mainPanel.add(panel)
+    mainPanel.add(cnPanel)
+    mainPanel
   }
 
   override def getSimulator: FractalExplorer = super.getSimulator.asInstanceOf[FractalExplorer]
 
-  override protected def ok(): Unit = { // set the common rendering and global options
+  override protected def ok(): Unit = {
     val sim = getSimulator
-    val selected = algorithmChoice.getSelectedIndex
-    sim.setAlgorithm(AlgorithmEnum.VALUES(selected))
+    sim.setAlgorithm(AlgorithmEnum.VALUES(algorithmChoice.getSelectedIndex))
     sim.setJuliaSeed(juliaSeedField.getValue)
     setVisible(false)
     sim.repaint()
   }
 }
-
-

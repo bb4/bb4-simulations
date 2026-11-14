@@ -26,44 +26,47 @@ object DynamicOptions {
   private val TIMESTEP_SLIDER = "Num Rows per Frame"
   private val MIN_NUM_STEPS = (INITIAL_TIME_STEP / 10.0).toInt
   private val MAX_NUM_STEPS = (10.0 * INITIAL_TIME_STEP).toInt
-  private val SLIDER_PROPS = Array(new SliderProperties(ITER_SLIDER, 100, 10000, FractalAlgorithm.DEFAULT_MAX_ITERATIONS, 1), new SliderProperties(TIMESTEP_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, INITIAL_TIME_STEP, 1))
+  private val SLIDER_PROPS = Array(
+    new SliderProperties(ITER_SLIDER, 100, 10000, FractalAlgorithm.DEFAULT_MAX_ITERATIONS, 1),
+    new SliderProperties(TIMESTEP_SLIDER, MIN_NUM_STEPS, MAX_NUM_STEPS, INITIAL_TIME_STEP, 1)
+  )
 }
 
-class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
+class DynamicOptions private[fractalexplorer](simulator: FractalExplorer)
   extends JPanel with ActionListener with SliderGroupChangeListener {
 
-  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
-  setBorder(BorderFactory.createEtchedBorder)
-  setPreferredSize(new Dimension(300, 300))
-  private var sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
-  sliderGroup.setSliderListener(this)
-  val legend: ContinuousColorLegend = new ContinuousColorLegend(null, this.simulator.getColorMap, true)
-  val checkBoxes: JPanel = createCheckBoxes
-  val coordinates: JPanel = createCoordinatesView
-  add(sliderGroup)
-  add(Box.createVerticalStrut(10))
-  add(checkBoxes)
-  add(Box.createVerticalStrut(10))
-  add(legend)
-  add(coordinates)
-  private var backButton = new JButton("Go Back")
-  backButton.addActionListener(this)
-  add(backButton)
-  val fill = new JPanel
-  fill.setPreferredSize(new Dimension(10, 1000))
-  add(fill)
+  private val sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
   private var useConcurrency: JCheckBox = uninitialized
   private var useFixedSize: JCheckBox = uninitialized
   private var useRunLengthOptimization: JCheckBox = uninitialized
   private var coordinate1: JLabel = uninitialized
   private var coordinate2: JLabel = uninitialized
+  private val backButton = new JButton("Go Back")
+
+  setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
+  setBorder(BorderFactory.createEtchedBorder)
+  setPreferredSize(new Dimension(300, 300))
+
+  sliderGroup.setSliderListener(this)
+  val legend = new ContinuousColorLegend(null, simulator.getColorMap, true)
+  add(sliderGroup)
+  add(Box.createVerticalStrut(10))
+  add(createCheckBoxes)
+  add(Box.createVerticalStrut(10))
+  add(legend)
+  add(createCoordinatesView)
+  backButton.addActionListener(this)
+  add(backButton)
+  val fill = new JPanel
+  fill.setPreferredSize(new Dimension(10, 1000))
+  add(fill)
 
   def setCoordinates(range: ComplexNumberRange): Unit = {
     coordinate1.setText("c1: " + range.point1)
     coordinate2.setText("c2: " + range.point2)
   }
 
-  private def createCheckBoxes = {
+  private def createCheckBoxes: JPanel = {
     val algorithm = simulator.getAlgorithm
     useConcurrency = new JCheckBox("Parallel", algorithm.isParallelized)
     useConcurrency.setToolTipText("Take advantage of multiple processors for calculation and rendering if present.")
@@ -80,7 +83,7 @@ class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
     checkBoxes
   }
 
-  private def createCoordinatesView = {
+  private def createCoordinatesView: JPanel = {
     val view = new JPanel
     view.setLayout(new BorderLayout)
     coordinate1 = new JLabel("Upper Left: ")
@@ -90,30 +93,25 @@ class DynamicOptions private[fractalexplorer](var simulator: FractalExplorer)
     view
   }
 
-  def reset(): Unit = {
-    sliderGroup.reset()
-  }
+  def reset(): Unit = sliderGroup.reset()
 
-  /**
-    * One of the buttons was pressed.
-    */
-  override def actionPerformed(e: ActionEvent): Unit = { //RDRenderingOptions renderingOptions = simulator.getRenderingOptions();
+  override def actionPerformed(e: ActionEvent): Unit = {
     val algorithm = simulator.getAlgorithm
-    if (e.getSource eq useConcurrency) {
-      val isParallelized = !algorithm.isParallelized
-      algorithm.setParallelized(isParallelized)
-    }
-    else if (e.getSource eq useFixedSize) simulator.setUseFixedSize(useFixedSize.isSelected)
-    else if (e.getSource eq useRunLengthOptimization) algorithm.setUseRunLengthOptimization(useRunLengthOptimization.isSelected)
-    else if (e.getSource eq backButton) algorithm.goBack()
+    if (e.getSource eq useConcurrency)
+      algorithm.setParallelized(!algorithm.isParallelized)
+    else if (e.getSource eq useFixedSize)
+      simulator.setUseFixedSize(useFixedSize.isSelected)
+    else if (e.getSource eq useRunLengthOptimization)
+      algorithm.setUseRunLengthOptimization(useRunLengthOptimization.isSelected)
+    else if (e.getSource eq backButton)
+      algorithm.goBack()
   }
 
-  /**
-    * One of the sliders was moved.
-    */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     val algorithm = simulator.getAlgorithm
-    if (sliderName == DynamicOptions.ITER_SLIDER) algorithm.setMaxIterations(value.toInt)
-    else if (sliderName == DynamicOptions.TIMESTEP_SLIDER) simulator.setTimeStep(value)
+    if (sliderName == DynamicOptions.ITER_SLIDER)
+      algorithm.setMaxIterations(value.toInt)
+    else if (sliderName == DynamicOptions.TIMESTEP_SLIDER)
+      simulator.setTimeStep(value)
   }
 }

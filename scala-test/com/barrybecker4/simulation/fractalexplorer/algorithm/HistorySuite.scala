@@ -20,7 +20,14 @@ class HistorySuite extends AnyFunSuite {
     assert(!h.hasHistory)
   }
 
-  test("goBack restores previous range") {
+  test("goBack with empty history is a no-op") {
+    val alg = new MandelbrotAlgorithm()
+    val initial = alg.getRange
+    alg.goBack()
+    assert(alg.getRange == initial)
+  }
+
+  test("goBack restores previous range with single pop") {
     val alg = new MandelbrotAlgorithm()
     val r0 = range((0, 0), (1, 1))
     val r1 = range((2, 2), (3, 3))
@@ -28,5 +35,38 @@ class HistorySuite extends AnyFunSuite {
     alg.setRange(r1)
     alg.goBack()
     assert(alg.getRange == r0)
+  }
+
+  test("goBack after single zoom restores initial range") {
+    val alg = new MandelbrotAlgorithm()
+    val initial = alg.getRange
+    val zoomed = range((-0.5, -0.5), (0.5, 0.5))
+    alg.setRange(zoomed)
+    alg.goBack()
+    assert(alg.getRange == initial)
+  }
+
+  test("multi-zoom goBack walks back one level at a time") {
+    val alg = new MandelbrotAlgorithm()
+    val r0 = range((0, 0), (1, 1))
+    val r1 = range((2, 2), (3, 3))
+    val r2 = range((4, 4), (5, 5))
+    alg.setRange(r0)
+    alg.setRange(r1)
+    alg.setRange(r2)
+    alg.goBack()
+    assert(alg.getRange == r1)
+    alg.goBack()
+    assert(alg.getRange == r0)
+  }
+
+  test("extra goBack after exhausting history is a no-op") {
+    val alg = new MandelbrotAlgorithm()
+    val r0 = range((0, 0), (1, 1))
+    alg.setRange(r0)
+    alg.goBack()
+    val after = alg.getRange
+    alg.goBack()
+    assert(alg.getRange == after)
   }
 }

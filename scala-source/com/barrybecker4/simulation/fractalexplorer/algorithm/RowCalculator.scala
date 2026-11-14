@@ -15,10 +15,9 @@ object RowCalculator {
   private val N: Int = 7
 }
 
-class RowCalculator(algorithmToUse: FractalAlgorithm) {
-  private val algorithm: FractalAlgorithm = algorithmToUse
+class RowCalculator(algorithm: FractalAlgorithm) {
   private val model: FractalModel = algorithm.getModel
-  private var useRunLengthOpt =  false
+  private var useRunLengthOpt = false
 
   def getUseRunLengthOptimization: Boolean = useRunLengthOpt
 
@@ -78,7 +77,6 @@ class RowCalculator(algorithmToUse: FractalAlgorithm) {
         increment = RowCalculator.N
         fillShortRun(x, y, currentValue, x + RowCalculator.N)
       }
-      model.setValue(x, y, currentValue)
       x += increment
     }
   }

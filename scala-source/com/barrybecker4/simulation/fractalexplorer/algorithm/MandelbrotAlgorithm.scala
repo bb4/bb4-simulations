@@ -10,7 +10,7 @@ import com.barrybecker4.math.complex.ComplexNumberRange
   */
 object MandelbrotAlgorithm {
   private val INITIAL_RANGE: ComplexNumberRange =
-   ComplexNumberRange(new ComplexNumber(-2.1, -1.5), new ComplexNumber(1.1, 1.5))
+    ComplexNumberRange(ComplexNumber(-2.1, -1.5), ComplexNumber(1.1, 1.5))
 }
 
 class MandelbrotAlgorithm extends FractalAlgorithm(MandelbrotAlgorithm.INITIAL_RANGE) {

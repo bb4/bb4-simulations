@@ -10,9 +10,9 @@ import com.barrybecker4.math.complex.ComplexNumberRange
   * @author Barry Becker
   */
 object JuliaAlgorithm {
-  val DEFAULT_JULIA_SEED: ComplexNumber = new ComplexNumber(0.233, 0.5378)
+  val DEFAULT_JULIA_SEED: ComplexNumber = ComplexNumber(0.233, 0.5378)
   private val INITIAL_RANGE: ComplexNumberRange =
-    ComplexNumberRange(new ComplexNumber(-1.8, -1.7), new ComplexNumber(1.8, 1.7))
+    ComplexNumberRange(ComplexNumber(-1.8, -1.7), ComplexNumber(1.8, 1.7))
 }
 
 class JuliaAlgorithm extends FractalAlgorithm(JuliaAlgorithm.INITIAL_RANGE) {

@@ -1,20 +1,21 @@
-/** Copyright by Barry G. Becker, 2015. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2015-26. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.fractalexplorer.algorithm
 
 import com.barrybecker4.math.complex.ComplexNumberRange
 
 /**
-  * Maintains regions (ranges) in the complex space that were visited, so we can back up.
+  * Stack of previous complex-plane ranges so the user can undo zooms.
   * @author Barry Becker
   */
 class History {
-  /** range of bounding box in complex plane. */
-  private var stack: List[ComplexNumberRange] = List()
+  private var stack: List[ComplexNumberRange] = Nil
 
-  def addRangeToHistory(range: ComplexNumberRange): Unit = { stack = range :: stack }
+  def addRangeToHistory(range: ComplexNumberRange): Unit =
+    stack = range :: stack
+
   def hasHistory: Boolean = stack.nonEmpty
 
-  /** @return the last range viewed in the history */
+  /** @return the most recently pushed range; caller must ensure [[hasHistory]]. */
   def popLastRange: ComplexNumberRange = {
     val head = stack.head
     stack = stack.tail

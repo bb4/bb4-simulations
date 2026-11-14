@@ -13,9 +13,9 @@ enum AlgorithmEnum:
 
   def getLabel: String = AppContext.getLabel(toString)
 
-  def createInstance(): FractalAlgorithm =
-    if this == AlgorithmEnum.MANDELBROT then new MandelbrotAlgorithm()
-    else new JuliaAlgorithm()
+  def createInstance(): FractalAlgorithm = this match
+    case AlgorithmEnum.MANDELBROT => new MandelbrotAlgorithm()
+    case AlgorithmEnum.JULIA => new JuliaAlgorithm()
 
 
 object AlgorithmEnum:

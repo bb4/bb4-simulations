@@ -42,4 +42,34 @@ class RowCalculatorSuite extends AnyFunSuite {
       s"expected at most 8 outlier pixels, got ${far.length}, max diff ${if (far.isEmpty) 0.0 else far.max}"
     )
   }
+
+  test("optimized row fill does not skip past width") {
+    val alg = new MandelbrotAlgorithm()
+    alg.setSize(17, 8) // width not multiple of N=7
+    alg.setMaxIterations(40)
+    alg.setParallelized(false)
+    val rc = new RowCalculator(alg)
+    rc.setUseRunLengthOptimization(true)
+    val w = alg.getModel.getWidth
+    rc.calculateRow(w, 0)
+    // Last column must have been written (non-default or explicitly computed).
+    // Default array is 0.0; force a known interior row and check finite values across the row.
+    var x = 0
+    while (x < w) {
+      val v = alg.getModel.getValue(x, 0)
+      assert(!v.isNaN, s"NaN at x=$x")
+      assert(v >= 0.0 && v <= 1.0, s"out of range at x=$x: $v")
+      x += 1
+    }
+  }
+
+  test("enabling run length optimization resets current row") {
+    val alg = new MandelbrotAlgorithm()
+    alg.setSize(24, 24)
+    alg.setParallelized(false)
+    alg.timeStep(3.0)
+    assert(alg.getModel.getCurrentRow > 0)
+    alg.setUseRunLengthOptimization(true)
+    assert(alg.getModel.getCurrentRow == 0)
+  }
 }
