@@ -304,8 +304,8 @@ bb4 {
         command: 'bb4-simulator -panel_class com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
         panel_class: 'com.barrybecker4.simulation.funcinverse.FunctionInverseSimulator',
         description: 'Verify function inverses by plotting them.',
-        longDescription: 'Tests out functions and their inverses from  bb4-common. ' +
-                'There are a variety of functions to plot.',
+        longDescription: 'Tests out functions and their inverses from bb4-math, ' +
+                'plotted with bb4-ui. There are a variety of functions to plot.',
         deploy: false,
         createStartScript: false
 ])

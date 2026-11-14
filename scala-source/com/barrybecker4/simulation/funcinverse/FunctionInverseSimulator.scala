@@ -1,33 +1,27 @@
-// Copyright by Barry G. Becker, 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2018-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.funcinverse
 
-import java.awt.{Color, Graphics}
+import java.awt.Color
 import com.barrybecker4.math.function.ArrayFunction
-import com.barrybecker4.math.interpolation.InterpolationMethod
-import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
-
-import javax.swing.JPanel
-import com.barrybecker4.math.interpolation.LINEAR
-import scala.compiletime.uninitialized
+import com.barrybecker4.math.interpolation.{InterpolationMethod, LINEAR}
+import com.barrybecker4.simulation.common.ui.FunctionPlotSimulator
 
 
 /**
-  * To compare a function with its inverse.
+  * Compare a function with its inverse.
   * @author Barry Becker
   */
-class FunctionInverseSimulator extends Simulator("Function Inverse Simulator")  {
+class FunctionInverseSimulator extends FunctionPlotSimulator("Function Inverse Simulator") {
 
   private val FUNC_COLOR = new Color(0, 50, 180)
   private val INV_FUNC_COLOR = new Color(150, 10, 0)
 
-  private var func: FunctionType = FunctionType.QUADRATIC
+  private var func: InverseFunctionType = InverseFunctionType.QUADRATIC
   private var interpMethod: InterpolationMethod = LINEAR
-  private var funcRenderer: MultipleFunctionRenderer = uninitialized
 
   initFuncWithInverse()
 
-  def setFunction(func: FunctionType): Unit = {
+  def setFunction(func: InverseFunctionType): Unit = {
     this.func = func
     initFuncWithInverse()
   }
@@ -37,39 +31,27 @@ class FunctionInverseSimulator extends Simulator("Function Inverse Simulator")  
     initFuncWithInverse()
   }
 
-  def getFunctionType: FunctionType = func
+  def setFunctionAndInterpolation(func: InverseFunctionType, method: InterpolationMethod): Unit = {
+    this.func = func
+    this.interpMethod = method
+    initFuncWithInverse()
+  }
+
+  def getFunctionType: InverseFunctionType = func
 
   def getInterpolationMethod: InterpolationMethod = interpMethod
 
   protected def initFuncWithInverse(): Unit = {
     val theFunction = new ArrayFunction(func.func, interpMethod)
-    val inverseFunction = new ArrayFunction(theFunction.inverseFunctionMap, interpMethod)
-    funcRenderer = new MultipleFunctionRenderer(
+    // Plot the computed inverse samples directly — do not invert again.
+    val inverseFunction = ArrayFunction.fromSamples(theFunction.inverseFunctionMap, interpMethod)
+    setPlotFunctions(
       Seq(theFunction, inverseFunction),
       Some(Seq(FUNC_COLOR, INV_FUNC_COLOR))
     )
-    funcRenderer.setRightNormalizePercent(100)
   }
 
   override protected def createOptionsDialog = new FunctionOptionsDialog(frame, this)
 
-  override protected def getInitialTimeStep: Double = 1.0
-
-  /** @return to the initial state. */
   override protected def reset(): Unit = initFuncWithInverse()
-
-  override def timeStep: Double = tStep
-
-  override def createTopControls: JPanel = {
-    val controls = new JPanel
-    controls.add(createOptionsButton)
-    controls
-  }
-
-  override def paint(g: Graphics): Unit = {
-    if (g == null) return
-    super.paint(g)
-    funcRenderer.setSize(getWidth, getHeight)
-    funcRenderer.paint(g)
-  }
 }

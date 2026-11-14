@@ -12,10 +12,7 @@ object GraphInterpolation {
 
   def apply(base: Function, method: InterpolationMethod): Function =
     base match {
-      case af: ArrayFunction =>
-        // Use (samples, method) so bb4-math computes inverse via FunctionInverter; passing null
-        // inverse to the 3-arg constructor breaks inverse interpolation state in ArrayFunction.
-        new ArrayFunction(af.functionMap, method)
+      case af: ArrayFunction => af.withInterpolationMethod(method)
       case _: ErrorFunction => base
       case other =>
         throw new IllegalArgumentException("Unexpected function type: " + other.getClass.getName)

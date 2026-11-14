@@ -1,12 +1,11 @@
 // Copyright by Barry G. Becker, 2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.verhulst
 
-import java.awt.{Color, Graphics}
+import java.awt.Graphics
 
 import com.barrybecker4.math.function.CountFunction
 import com.barrybecker4.math.function.Function
-import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.graphing.GraphOptionsDialog
+import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
 import com.barrybecker4.ui.renderers.MultipleFunctionRenderer
 import javax.swing._
 
@@ -53,7 +52,7 @@ class VerhulstSimulator extends Simulator("Verhulst Simulation") {
     options
   }
 
-  override protected def createOptionsDialog = new GraphOptionsDialog(frame, this)
+  override protected def createOptionsDialog = new SimulatorOptionsDialog(frame, this)
 
   override def paint(g: Graphics): Unit = {
     graph.setSize(getWidth, getHeight)
