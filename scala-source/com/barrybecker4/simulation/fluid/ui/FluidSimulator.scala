@@ -15,14 +15,10 @@ import scala.compiletime.uninitialized
 /**
   * Simulate deep water.
   * Based on work by Jos Stam  (http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf)
-  *
-  * TODO: have fluid specific parameters
-  *   - number of cells (x,y) - auto-calculate the scale size based on the window size.
   */
 object FluidSimulator {
   val DEFAULT_STEPS_PER_FRAME = 1
-  /** if true it will save all the animation steps to file */
-  val INITIAL_TIME_STEP = 0.03 // initial time step
+  val INITIAL_TIME_STEP = 0.03
 
   private val BG_COLOR = Color.white
 }
@@ -32,12 +28,14 @@ class FluidSimulator() extends Simulator("Fluid") {
   private var envRenderer: EnvironmentRenderer = uninitialized
   private var handler: InteractionHandler = uninitialized
   private val environment: FluidEnvironment = new FluidEnvironment(10, 10)
+  private var lastCellW = -1
+  private var lastCellH = -1
 
   commonInit()
 
   private def commonInit(): Unit = {
     initCommonUI()
-    val scale = renderOptions.getScale.toInt
+    val scale = renderOptions.scale
     envRenderer = new EnvironmentRenderer(environment, renderOptions)
     setNumStepsPerFrame(FluidSimulator.DEFAULT_STEPS_PER_FRAME)
 
@@ -45,6 +43,8 @@ class FluidSimulator() extends Simulator("Fluid") {
     handler = new InteractionHandler(environment, scale, force, EnvironmentRenderer.ContentOffsetPixels)
     this.addMouseListener(handler)
     this.addMouseMotionListener(handler)
+    lastCellW = -1
+    lastCellH = -1
   }
 
   override protected def createOptionsDialog = new FluidOptionsDialog(frame, this)
@@ -55,10 +55,12 @@ class FluidSimulator() extends Simulator("Fluid") {
   def getInteractionHandler: InteractionHandler = handler
   override def getBackground: Color = FluidSimulator.BG_COLOR
   override protected def getInitialTimeStep: Double = FluidSimulator.INITIAL_TIME_STEP
-  override def setScale(scale: Double): Unit = { envRenderer.getOptions.setScale(scale) }
-  override def getScale: Double = envRenderer.getOptions.getScale
-  def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.setShowVelocities(show)}
-  def getShowVelocityVectors: Boolean = envRenderer.getOptions.getShowVelocities
+  override def setScale(scale: Double): Unit = {
+    renderOptions.scale = scale
+    handler.setScale(scale)
+    envRenderer.setEnvironment(environment)
+  }
+  override def getScale: Double = renderOptions.scale
 
   override def setPaused(bPaused: Boolean): Unit = {
     super.setPaused(bPaused)
@@ -68,7 +70,7 @@ class FluidSimulator() extends Simulator("Fluid") {
     }
   }
 
-  override protected def reset(): Unit = { // remove the listeners in order to prevent a memory leak.
+  override protected def reset(): Unit = {
     this.removeMouseListener(handler)
     this.removeMouseMotionListener(handler)
     environment.reset()
@@ -91,10 +93,17 @@ class FluidSimulator() extends Simulator("Fluid") {
   override def paint(g: Graphics): Unit = synchronized {
     if (g == null) return
 
-    val s = renderOptions.getScale
+    val s = renderOptions.scale
     val cellW = math.max(1, (getWidth / s).toInt - 2)
     val cellH = math.max(1, (getHeight / s).toInt - 2)
-    environment.setSize(cellW, cellH)
+    if (cellW != lastCellW || cellH != lastCellH) {
+      environment.setSize(cellW, cellH)
+      envRenderer.setEnvironment(environment)
+      handler.setEnvironment(environment)
+      handler.setScale(s)
+      lastCellW = cellW
+      lastCellH = cellH
+    }
 
     val g2 = g.asInstanceOf[Graphics2D]
     Profiler.getInstance.startRenderingTime()

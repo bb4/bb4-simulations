@@ -4,10 +4,11 @@ package com.barrybecker4.simulation.common.ui
 import com.barrybecker4.common.app.{AppContext, ClassLoaderSingleton, CommandLineOptions}
 import com.barrybecker4.ui.animation.AnimationPanel
 import com.barrybecker4.ui.application.ApplicationApplet
-import com.barrybecker4.ui.util.{GUIUtil, Log}
+import com.barrybecker4.ui.util.Log
 
 import javax.swing.JPanel
 import java.awt.BorderLayout
+import java.util
 import com.barrybecker4.common.i18n.LocaleType
 import SimulatorApplet.*
 
@@ -16,6 +17,12 @@ object SimulatorApplet {
   val RUN_OPTIMIZATION = false
   val DEFAULT_SIMULATOR = "com.barrybecker4.simulation.fractalexplorer.FractalExplorer"
 
+  /** Bundles needed for sim UI labels and shared Profiler formatting. */
+  val MESSAGE_BUNDLES: List[String] = List(
+    "com.barrybecker4.simulation.common.ui.message",
+    "com.barrybecker4.ui.message",
+    "com.barrybecker4.common.i18n.message"
+  )
 
   def createSimulationFromClassName(className: String): Simulator = {
     if (className == null) return null
@@ -48,9 +55,7 @@ class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationAppl
     }
     if (options.contains("locale")) { // then a locale has been specified
       val localeName = options.getValueForOption("locale", "ENGLISH")
-      AppContext.initialize(localeName,
-        List("com.barrybecker4.ui.message", "com.barrybecker4.simulation.common.ui.message"),
-        new Log)
+      AppContext.initialize(localeName, SimulatorApplet.MESSAGE_BUNDLES, new Log)
     }
   }
 
@@ -63,6 +68,12 @@ class SimulatorApplet(args: Seq[String], sim: Simulator) extends ApplicationAppl
   def this(sim: Simulator) = {
     this(Seq[String](), sim)
   }
+
+  /**
+    * Include common.i18n so Profiler.print (e.g. on pause/reset) can resolve PROFILER_TIME_LINE.
+    */
+  override protected def getResourceList: util.List[String] =
+    new util.ArrayList(util.Arrays.asList(SimulatorApplet.MESSAGE_BUNDLES*))
 
   override def getName: String = simulator.getName
 

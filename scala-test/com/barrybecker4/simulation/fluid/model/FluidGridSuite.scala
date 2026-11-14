@@ -8,32 +8,37 @@ import org.scalatest.funsuite.AnyFunSuite
   */
 class FluidGridSuite extends AnyFunSuite {
 
+  private def filledField(g: Grid): Array[Double] = {
+    val x = new Array[Double](g.rowStride * (g.dimY + 2))
+    for (i <- 1 to g.dimX; j <- 1 to g.dimY) x(g.idx(i, j)) = 10 * i + j
+    x
+  }
+
   test("setBoundary NEITHER copies orthogonal boundary values into padding") {
     val g = new Grid(3, 3)
-    val x = Array.ofDim[Double](5, 5)
-    for (i <- 1 to 3; j <- 1 to 3) x(i)(j) = 10 * i + j
+    val x = filledField(g)
     g.setBoundary(Boundary.NEITHER, x)
-    assert(x(0)(2) === x(1)(2))
-    assert(x(4)(2) === x(3)(2))
-    assert(x(2)(0) === x(2)(1))
-    assert(x(2)(4) === x(2)(3))
+    assert(x(g.idx(0, 2)) === x(g.idx(1, 2)))
+    assert(x(g.idx(4, 2)) === x(g.idx(3, 2)))
+    assert(x(g.idx(2, 0)) === x(g.idx(2, 1)))
+    assert(x(g.idx(2, 4)) === x(g.idx(2, 3)))
   }
 
   test("setBoundary VERTICAL negates horizontal padding for vertical walls") {
     val g = new Grid(2, 2)
-    val x = Array.ofDim[Double](4, 4)
-    for (i <- 1 to 2; j <- 1 to 2) x(i)(j) = i + j * 0.1
+    val x = new Array[Double](g.rowStride * (g.dimY + 2))
+    for (i <- 1 to 2; j <- 1 to 2) x(g.idx(i, j)) = i + j * 0.1
     g.setBoundary(Boundary.VERTICAL, x)
-    assert(x(0)(1) === -x(1)(1))
-    assert(x(3)(1) === -x(2)(1))
+    assert(x(g.idx(0, 1)) === -x(g.idx(1, 1)))
+    assert(x(g.idx(3, 1)) === -x(g.idx(2, 1)))
   }
 
   test("setBoundary HORIZONTAL negates vertical padding for horizontal walls") {
     val g = new Grid(2, 2)
-    val x = Array.ofDim[Double](4, 4)
-    for (i <- 1 to 2; j <- 1 to 2) x(i)(j) = i + j * 0.1
+    val x = new Array[Double](g.rowStride * (g.dimY + 2))
+    for (i <- 1 to 2; j <- 1 to 2) x(g.idx(i, j)) = i + j * 0.1
     g.setBoundary(Boundary.HORIZONTAL, x)
-    assert(x(1)(0) === -x(1)(1))
-    assert(x(1)(3) === -x(1)(2))
+    assert(x(g.idx(1, 0)) === -x(g.idx(1, 1)))
+    assert(x(g.idx(1, 3)) === -x(g.idx(1, 2)))
   }
 }

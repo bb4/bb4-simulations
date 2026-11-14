@@ -1,11 +1,10 @@
-// Copyright by Barry G. Becker, 2016-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import com.barrybecker4.simulation.fluid.rendering.EnvironmentRenderer
 import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.event.MouseMotionListener
+import javax.swing.event.MouseInputAdapter
 
 
 /**
@@ -30,7 +29,7 @@ class InteractionHandler private[ui](
     var scale: Double,
     var force: Double = InteractionHandler.DEFAULT_FORCE,
     var renderContentOffsetPixels: Int = EnvironmentRenderer.ContentOffsetPixels
-) extends MouseListener with MouseMotionListener {
+) extends MouseInputAdapter {
 
   private var sourceDensity: Double = InteractionHandler.DEFAULT_SOURCE_DENSITY
   private var currentX = 0
@@ -41,6 +40,8 @@ class InteractionHandler private[ui](
   private var mouse3Down = false
 
   def setForce(force: Double): Unit = { this.force = force }
+  def setScale(scale: Double): Unit = { this.scale = scale }
+  def setEnvironment(env: FluidEnvironment): Unit = { this.env = env }
   private[ui] def setSourceDensity(sourceDensity: Double): Unit = { this.sourceDensity = sourceDensity }
 
   override def mouseDragged(e: MouseEvent): Unit = {
@@ -51,7 +52,7 @@ class InteractionHandler private[ui](
     val i = (ax / scale).toInt
     val j = (ay / scale).toInt
     for ((ii, jj) <- InteractionHandler.dragStencilIndices(i, j, env.getWidth, env.getHeight)) {
-      val weight = if (ii == i && jj == j) 1.0f else 0.3f
+      val weight = if (ii == i && jj == j) 1.0 else 0.3
       applyChange(ii, jj, weight)
     }
     lastX = currentX
@@ -60,14 +61,13 @@ class InteractionHandler private[ui](
 
   /** Make waves or adds ink depending on which mouse key is being held down. */
   private def applyChange(i: Int, j: Int, weight: Double): Unit = {
-    // if the left mouse is down, make waves
     if (mouse1Down) {
       val fu = weight * force * (currentX - lastX) / scale
       val fv = weight * force * (currentY - lastY) / scale
       env.incrementU(i, j, fu)
       env.incrementV(i, j, fv)
     }
-    else if (mouse3Down) { // if the right mouse is down, add ink (density)
+    else if (mouse3Down) {
       env.incrementDensity(i, j, weight * sourceDensity)
     }
   }
@@ -79,10 +79,6 @@ class InteractionHandler private[ui](
     lastY = currentY
   }
 
-  /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent): Unit = {}
-
-  /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
     mouse1Down = e.getButton == MouseEvent.BUTTON1
     mouse3Down = e.getButton == MouseEvent.BUTTON3
@@ -92,6 +88,4 @@ class InteractionHandler private[ui](
     if (e.getButton == MouseEvent.BUTTON1) mouse1Down = false
     else if (e.getButton == MouseEvent.BUTTON3) mouse3Down = false
   }
-  override def mouseEntered(e: MouseEvent): Unit = {}
-  override def mouseExited(e: MouseEvent): Unit = {}
 }

@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.ui
 
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
@@ -29,8 +29,9 @@ object FluidDynamicOptions {
   private val MIN_STEPS = Math.ceil(FluidSimulator.DEFAULT_STEPS_PER_FRAME / 10.0)
   private val MAX_STEPS = 20.0 * FluidSimulator.DEFAULT_STEPS_PER_FRAME
   private val SLIDER_PROPS = Array(
-    new SliderProperties(DR_SLIDER, 0, 10.0, FluidEnvironment.DEFAULT_DIFFUSION_RATE, 100.0),
-    new SliderProperties(VISC_SLIDER, 0, 50.0, FluidEnvironment.DEFAULT_VISCOSITY, 100.0),
+    // Same a = dt·param·W·H scaling as viscosity; keep the slider in the light range.
+    new SliderProperties(DR_SLIDER, 0, 0.01, FluidEnvironment.DEFAULT_DIFFUSION_RATE, 10000.0),
+    new SliderProperties(VISC_SLIDER, 0, 0.01, FluidEnvironment.DEFAULT_VISCOSITY, 10000.0),
     new SliderProperties(FORCE_SLIDER, 0.01, 3.0, InteractionHandler.DEFAULT_FORCE, 100.0),
     new SliderProperties(SD_SLIDER, 0.01, 4.0, InteractionHandler.DEFAULT_SOURCE_DENSITY, 100.0),
     new SliderProperties(NUM_ITERATIONS_SLIDER, 1, 100, FluidEnvironment.DEFAULT_NUM_SOLVER_ITERATIONS, 1.0),
@@ -69,9 +70,9 @@ class FluidDynamicOptions private[ui](var simulator: FluidSimulator) extends JPa
       renderOpts.isParallelized)
     useLinearInterpolation = createCheckBox(
       "Use linear interpolation", "If checked, use linear interpolation when rendering, to give a smoother look.",
-      renderOpts.getUseLinearInterpolation)
-    showVelocities = createCheckBox("Show velocities", "if checked, show velocity vectors", renderOpts.getShowVelocities)
-    showGrid = createCheckBox("Show grid", "Draw the background grid that shows the cells.", renderOpts.getShowGrid)
+      renderOpts.useLinearInterpolation)
+    showVelocities = createCheckBox("Show velocities", "if checked, show velocity vectors", renderOpts.showVelocities)
+    showGrid = createCheckBox("Show grid", "Draw the background grid that shows the cells.", renderOpts.showGrid)
     val checkBoxes = new JPanel(new GridLayout(0, 2))
     checkBoxes.add(useConcurrentRendering)
     checkBoxes.add(useLinearInterpolation)
@@ -90,24 +91,20 @@ class FluidDynamicOptions private[ui](var simulator: FluidSimulator) extends JPa
 
   def reset(): Unit = {
     sliderGroup.reset()
-    // make sure we honor current check selections
     val renderOpts = simulator.getRenderer.getOptions
-    renderOpts.setShowGrid(showGrid.isSelected)
-    renderOpts.setShowVelocities(showVelocities.isSelected)
-    renderOpts.setUseLinearInterpolation(useLinearInterpolation.isSelected)
+    renderOpts.showGrid = showGrid.isSelected
+    renderOpts.showVelocities = showVelocities.isSelected
+    renderOpts.useLinearInterpolation = useLinearInterpolation.isSelected
   }
 
-  /** One of the buttons was pressed */
   override def actionPerformed(e: ActionEvent): Unit = {
-    val renderer = simulator.getRenderer
-    val renderOpts = renderer.getOptions
+    val renderOpts = simulator.getRenderer.getOptions
     if (e.getSource eq useConcurrentRendering) renderOpts.isParallelized = !renderOpts.isParallelized
-    else if (e.getSource eq useLinearInterpolation) renderOpts.setUseLinearInterpolation(!renderOpts.getUseLinearInterpolation)
-    else if (e.getSource eq showVelocities) renderOpts.setShowVelocities(!renderOpts.getShowVelocities)
-    else if (e.getSource eq showGrid) renderOpts.setShowGrid(!renderOpts.getShowGrid)
+    else if (e.getSource eq useLinearInterpolation) renderOpts.useLinearInterpolation = !renderOpts.useLinearInterpolation
+    else if (e.getSource eq showVelocities) renderOpts.showVelocities = !renderOpts.showVelocities
+    else if (e.getSource eq showGrid) renderOpts.showGrid = !renderOpts.showGrid
   }
 
-  /** One of the sliders was moved. */
   override def sliderChanged(sliderIndex: Int, sliderName: String, value: Double): Unit = {
     sliderName match {
       case FluidDynamicOptions.VISC_SLIDER => simulator.getEnvironment.setViscosity(value)

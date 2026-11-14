@@ -1,12 +1,13 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.fluid.rendering
 
 import com.barrybecker4.simulation.common.rendering.RectangularModelImage
 import com.barrybecker4.simulation.fluid.model.FluidEnvironment
 import java.awt.Color
 import java.awt.Graphics2D
-import EnvironmentRenderer._
 import scala.collection.parallel.CollectionConverters._
+import EnvironmentRenderer._
+
 
 /**
   * Renders a specified fluid environment.
@@ -22,77 +23,99 @@ object EnvironmentRenderer {
 
 final class EnvironmentRenderer(var env: FluidEnvironment, var options: RenderingOptions) {
 
-  private val modelImage = new RectangularModelImage(env, PRESSURE_COLOR_MAP, options.getScale.toInt)
+  private var modelImage = new RectangularModelImage(env, PRESSURE_COLOR_MAP, options.scale.toInt)
+  private var workers: Array[RenderWorker] = Array.empty
+  private var workersImage: RectangularModelImage = modelImage
 
   def getColorMap: PressureColorMap = PRESSURE_COLOR_MAP
   def getOptions: RenderingOptions = options
 
-  /** Render the Environment on the screen. */
-  def render(g: Graphics2D): Unit = {
-    // draw the cells colored by ---pressure--- val
-    if (options.getShowPressures) concurrentRenderPressures(g)
-    // outer boundary
-    val scale = options.getScale
-    g.drawRect(ContentOffsetPixels,
-      ContentOffsetPixels, (env.getWidth * scale).toInt, (env.getHeight * scale).toInt)
-
-    // draw the ---velocity--- field (and status)
-    if (options.getShowVelocities) drawVectors(g)
-    if (options.getShowGrid) drawGrid(g)
+  def setEnvironment(env: FluidEnvironment): Unit = {
+    this.env = env
+    modelImage = new RectangularModelImage(env, PRESSURE_COLOR_MAP, options.scale.toInt)
+    workers = Array.empty
   }
 
-  /** If the render options say to use parallelism, then we will render the pressures concurrently. */
-  private def concurrentRenderPressures(g2: Graphics2D): Boolean = {
+  /** Render the Environment on the screen. */
+  def render(g: Graphics2D): Unit = {
+    if (options.showPressures) renderPressures(g)
+    val scale = options.scale
+    g.drawRect(ContentOffsetPixels,
+      ContentOffsetPixels, (env.getWidth * scale).toInt, (env.getHeight * scale).toInt)
+    if (options.showVelocities) drawVectors(g)
+    if (options.showGrid) drawGrid(g)
+  }
+
+  private def renderPressures(g2: Graphics2D): Unit = {
     val height = env.getHeight
-    modelImage.setUseLinearInterpolation(options.getUseLinearInterpolation)
-    val numProcs = Runtime.getRuntime.availableProcessors()
+    modelImage.setUseLinearInterpolation(options.useLinearInterpolation)
 
-    val workers = Array.ofDim[Runnable](numProcs)
-    val range = height / numProcs
-    for (i <- 0 until numProcs - 1) {
-      val offset = i * range
-      workers(i) = new RenderWorker(modelImage, offset, offset + range)
+    if (options.isParallelized) {
+      val numProcs = math.max(1, Runtime.getRuntime.availableProcessors())
+      ensureWorkers(numProcs)
+      val range = height / numProcs
+      var i = 0
+      while (i < numProcs - 1) {
+        val offset = i * range
+        workers(i).setRange(offset, offset + range)
+        i += 1
+      }
+      workers(numProcs - 1).setRange(range * (numProcs - 1), height)
+      workers.par.foreach(_.run())
+    } else {
+      modelImage.updateImage(0, height)
     }
-    // leftover in the last strip, or all of it if only one processor.
-    val currentRow = range * (numProcs - 1)
-    workers(numProcs - 1)  = new RenderWorker(modelImage, currentRow, height)
-
-    // blocks until all Callables are done running.
-    if (options.isParallelized) workers.par.foreach(_.run())
-    else workers.foreach(_.run())
 
     g2.drawImage(modelImage.getImage, ContentOffsetPixels, ContentOffsetPixels, null)
   }
 
+  private def ensureWorkers(n: Int): Unit = {
+    if (workers.length != n || (workersImage ne modelImage)) {
+      workers = Array.tabulate(n)(_ => new RenderWorker(modelImage))
+      workersImage = modelImage
+    }
+  }
+
   private def drawGrid(g: Graphics2D): Unit = {
     g.setColor(GRID_COLOR)
-    val scale = options.getScale
+    val scale = options.scale
     val rightEdgePos = (scale * env.getWidth).toInt
     val bottomEdgePos = (scale * env.getHeight).toInt
-    for (j <- 0 until env.getHeight) { //  -----
+    var j = 0
+    while (j <= env.getHeight) {
       val ypos = (j * scale).toInt
       g.drawLine(ContentOffsetPixels, ypos + ContentOffsetPixels, rightEdgePos + ContentOffsetPixels, ypos + ContentOffsetPixels)
+      j += 1
     }
-    for (i <- 0 until env.getWidth) { //  ||||
+    var i = 0
+    while (i <= env.getWidth) {
       val xpos = (i * scale).toInt
       g.drawLine(xpos + ContentOffsetPixels,
         ContentOffsetPixels, xpos + ContentOffsetPixels, bottomEdgePos + ContentOffsetPixels)
+      i += 1
     }
   }
 
   private def drawVectors(g: Graphics2D): Unit = {
     g.setColor(VECTOR_COLOR)
-    val scale = options.getScale
-    for (j <- 0 until env.getHeight) {
-      for (i <- 0 until env.getWidth) {
+    val scale = options.scale
+    var j = 1
+    while (j <= env.getHeight) {
+      var i = 1
+      while (i <= env.getWidth) {
         val u = env.getU(i, j)
         val v = env.getV(i, j)
-        val x = (scale * i).toInt + ContentOffsetPixels
-        val y = (scale * j).toInt + ContentOffsetPixels
+        // Map solver cells 1..N onto the same 0-based pixel plane as getValue/render
+        val px = i - 1
+        val py = j - 1
+        val x = (scale * px).toInt + ContentOffsetPixels
+        val y = (scale * py).toInt + ContentOffsetPixels
         g.drawLine(x, y,
-          (scale * i + VECTOR_SCALE * u).toInt + ContentOffsetPixels,
-          (scale * j + VECTOR_SCALE * v).toInt + ContentOffsetPixels)
+          (scale * px + VECTOR_SCALE * u).toInt + ContentOffsetPixels,
+          (scale * py + VECTOR_SCALE * v).toInt + ContentOffsetPixels)
+        i += 1
       }
+      j += 1
     }
   }
 }
