@@ -1,10 +1,11 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.simulation.common.rendering.bumps.BumpMapper
 import com.barrybecker4.simulation.common.rendering.bumps.HeightField
 import com.barrybecker4.ui.util.ColorMap
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
+import java.awt.Color
 
 
 /**
@@ -21,9 +22,9 @@ class RenderingColorModel private[rendering](var model: GrayScottModel, var cmap
     *
     * @return the color to use.
     */
-  private[rendering] def getColorForPosition(x: Int, y: Int) = {
+  private[rendering] def getColorForPosition(x: Int, y: Int): Color = {
     val concentration = heightMap.getValue(x, y)
-    var colorForValue = cmap.getColorForValue(concentration)
+    val colorForValue = cmap.getColorForValue(concentration)
     if (options.getHeightScale != 0) {
       val htScale = options.getHeightScale
       bmapper.adjustForLighting(colorForValue, x, y, heightMap, htScale, options.getSpecular, BumpMapper.DEFAULT_LIGHT_SOURCE_DIR)
@@ -34,9 +35,12 @@ class RenderingColorModel private[rendering](var model: GrayScottModel, var cmap
     override def getWidth: Int = model.getWidth
     override def getHeight: Int = model.getHeight
 
-    override def getValue(x: Int, y: Int): Double =
-      (if (options.isShowingU) model.u(x, y) else 0.0) +
-        (if (options.isShowingV) model.v(x, y) else 0.0)
+    override def getValue(x: Int, y: Int): Double = {
+      val raw =
+        (if (options.isShowingU) model.u(x, y) else 0.0) +
+          (if (options.isShowingV) model.v(x, y) else 0.0)
+      // Keep combined U+V (and brush overshoot) inside the colormap domain [0, 1].
+      math.max(0.0, math.min(1.0, raw))
+    }
   }
-
 }

@@ -1,62 +1,81 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.common.rendering.ColorRect
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.{GrayScottModel, StripPartition}
 import java.awt.Graphics2D
+import java.awt.image.BufferedImage
 import scala.collection.parallel.CollectionConverters._
 
 
 /**
-  * Renders the state of the GrayScottController model to the screen.
+  * Renders the Gray-Scott model. Workers only write disjoint pixel ranges;
+  * the calling thread performs a single blit via [[blit]].
   */
 abstract class RDRenderer private[rendering](var model: GrayScottModel,
                                              val cmap: ColorMap, var options: RDRenderingOptions)  {
 
   private val renderingModel = new RenderingColorModel(model, cmap, options)
+  private var pixels: Array[Int] = Array.empty
+  private var image: BufferedImage = uninitializedImage()
+  private var workers: Array[RenderWorker] = Array.empty
 
   def getColorMap: ColorMap = renderingModel.getColorMap
 
-  /** Draw the model representing the current state of the GrayScottController rd implementation. */
+  /** Draw the current state of the model. */
   def render(g2: Graphics2D): Unit = {
     val width = model.getWidth
-    val numProcs = Runtime.getRuntime.availableProcessors
-    val range = width / numProcs
+    val height = model.getHeight
+    if (width <= 0 || height <= 0) return
 
-    val workers = for (i <- 0 until numProcs) yield {
-      if (i < numProcs - 1) {
-        val offset = i * range
-        new RenderWorker(offset, offset + range, this, g2)
-      } else {
-        // leftover in the last strip, or all of it if only one processor.
-        val currentX = range * (numProcs - 1)
-        new RenderWorker(currentX, width, this, g2)
-      }
+    ensureBuffers(width, height)
+    val numProcs = math.max(1, Runtime.getRuntime.availableProcessors)
+    ensureWorkers(numProcs)
+    val ranges = StripPartition.ranges(width, numProcs)
+    var i = 0
+    while (i < ranges.length) {
+      val (minX, maxX) = ranges(i)
+      workers(i).setRange(minX, maxX)
+      i += 1
     }
+    val active = workers.take(ranges.length)
+    if (options.isParallelized) active.par.foreach(_.run())
+    else active.foreach(_.run())
 
-    if (options.isParallelized)
-      workers.par.foreach(x => x.run())
-    else workers.foreach(x => x.run())
-    postRender(g2)
+    image.setRGB(0, 0, width, height, pixels, 0, width)
+    blit(image, g2)
   }
 
-  /** Determine the colors for a rectangular strip of pixels.
-    * @return array of colors that will be used to define an image for quick rendering.
-    */
-  def getColorRect(minX: Int, maxX: Int): ColorRect = {
-    val ymax = model.getHeight
-    val colorRect = new ColorRect(maxX - minX, ymax)
-
-    for (x <- minX until maxX)
-      for (y <- 0 until ymax)
-        colorRect.setColor(x - minX, y, renderingModel.getColorForPosition(x, y))
-    colorRect
+  /** Fill columns `[minX, maxX)` into the shared pixel buffer (thread-safe for disjoint strips). */
+  private[rendering] def fillStrip(minX: Int, maxX: Int): Unit = {
+    val height = model.getHeight
+    val width = model.getWidth
+    var x = minX
+    while (x < maxX) {
+      var y = 0
+      while (y < height) {
+        pixels(y * width + x) = renderingModel.getColorForPosition(x, y).getRGB
+        y += 1
+      }
+      x += 1
+    }
   }
 
-  /** Renders a rectangular strip of pixels. This is fast and does not need to be synchronized.  */
-  def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D): Unit
+  /** Present the completed image (main thread only). */
+  protected def blit(image: BufferedImage, g2: Graphics2D): Unit
 
-  /**  Follow up step after rendering. Does nothing by default. */
-  protected def postRender(g2: Graphics2D): Unit
+  private def ensureBuffers(width: Int, height: Int): Unit = {
+    val size = width * height
+    if (pixels.length != size) pixels = Array.ofDim[Int](size)
+    if (image.getWidth != width || image.getHeight != height)
+      image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+  }
+
+  private def ensureWorkers(n: Int): Unit = {
+    if (workers.length != n)
+      workers = Array.tabulate(n)(_ => new RenderWorker(this))
+  }
+
+  private def uninitializedImage(): BufferedImage =
+    new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 }

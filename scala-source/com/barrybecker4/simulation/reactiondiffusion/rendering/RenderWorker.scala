@@ -1,19 +1,20 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering
-
-import java.awt._
 
 
 /**
-  * Renders one of the rectangular strips.
+  * Fills one column strip of the shared pixel buffer. Does not touch Graphics2D.
   */
-class RenderWorker private[rendering](var minX: Int, var maxX: Int, var renderer: RDRenderer, var g2: Graphics2D)
-  extends Runnable {
+final class RenderWorker private[rendering](renderer: RDRenderer) extends Runnable {
+  private var minX = 0
+  private var maxX = 0
+
+  def setRange(minX: Int, maxX: Int): Unit = {
+    this.minX = minX
+    this.maxX = maxX
+  }
 
   override def run(): Unit = {
-    if (maxX - minX > 0) {
-      val colorRect = renderer.getColorRect(minX, maxX)
-      renderer.renderStrip(minX, colorRect, g2)
-    }
+    if (maxX > minX) renderer.fillStrip(minX, maxX)
   }
 }

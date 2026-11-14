@@ -120,7 +120,7 @@ class RDDynamicOptions private[reactiondiffusion](var gs: GrayScottController, v
     val choicePanel = new JPanel()
     val label = new JLabel("Initial conditions: ")
     initialConditionsDroplist = new JComboBox[Initializer]
-    for (initializer <- Initializer.VALUES) {
+    for (initializer <- Initializer.values) {
       initialConditionsDroplist.addItem(initializer)
     }
     initialConditionsDroplist.setSelectedItem(Initializer.DEFAULT_INITIALIZER)

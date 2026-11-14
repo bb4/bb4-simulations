@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2016-2019. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.reactiondiffusion
 
 import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
@@ -8,6 +8,9 @@ import InteractionHandler.SQRT2
 
 object InteractionHandler {
   val SQRT2: Double = Math.sqrt(2)
+
+  private enum BrushAction:
+    case AddU, AddV
 }
 
 /**
@@ -23,12 +26,11 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   private var currentY = 0
   private var brushRadius = GrayScottModel.DEFAULT_BRUSH_RADIUS
   private var brushStrength = GrayScottModel.DEFAULT_BRUSH_STRENGTH
-  private var mouse1Down = false
-  private var mouse3Down = false
+  private var brushAction: Option[InteractionHandler.BrushAction] = None
 
-  def setScale(scale: Double): Unit = {this.scale = scale }
-  def setBrushRadius(rad: Int): Unit = { brushRadius = rad}
-  def setBrushStrength(strength: Double): Unit = {brushStrength = strength}
+  def setScale(scale: Double): Unit = { this.scale = scale }
+  def setBrushRadius(rad: Int): Unit = { brushRadius = rad }
+  def setBrushStrength(strength: Double): Unit = { brushStrength = strength }
 
   /** adds chemical U or V depending on the button pressed. */
   override def mouseDragged(e: MouseEvent): Unit = {
@@ -38,6 +40,7 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   }
 
   private def doBrush(): Unit = {
+    if (brushAction.isEmpty) return
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
     val width = model.getWidth
@@ -62,11 +65,13 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     1.0 / distance - minWt
   }
 
-  /** Make waves or adds ink depending on which mouse key is being held down. */
   private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val amountToAdd = brushStrength * weight
-    if (mouse1Down) model.addU(i, j, amountToAdd)
-    else if (mouse3Down) model.addV(i, j, amountToAdd)
+    brushAction match {
+      case Some(InteractionHandler.BrushAction.AddU) => model.addU(i, j, amountToAdd)
+      case Some(InteractionHandler.BrushAction.AddV) => model.addV(i, j, amountToAdd)
+      case None => ()
+    }
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
@@ -74,18 +79,19 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     currentY = e.getY
   }
 
-  /** The following methods implement MouseListener */
   override def mouseClicked(e: MouseEvent): Unit = { doBrush() }
 
-  /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
-    mouse1Down = e.getButton == MouseEvent.BUTTON1
-    mouse3Down = e.getButton == MouseEvent.BUTTON3
+    brushAction = e.getButton match {
+      case MouseEvent.BUTTON1 => Some(InteractionHandler.BrushAction.AddU)
+      case MouseEvent.BUTTON3 => Some(InteractionHandler.BrushAction.AddV)
+      case _ => None
+    }
   }
 
   override def mouseReleased(e: MouseEvent): Unit = {
-    if (e.getButton == MouseEvent.BUTTON1) mouse1Down = false
-    else if (e.getButton == MouseEvent.BUTTON3) mouse3Down = false
+    if (e.getButton == MouseEvent.BUTTON1 || e.getButton == MouseEvent.BUTTON3)
+      brushAction = None
   }
   override def mouseEntered(e: MouseEvent): Unit = {}
   override def mouseExited(e: MouseEvent): Unit = {}

@@ -10,6 +10,7 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Ini
 /**
   * Runs the Gray-Scott step: all cells in parallel x-strips when `setParallelized(true)`,
   * then `commitChanges` on the model. Boundaries are fully periodic (no separate edge pass).
+  * Oversized `dt` is clamped to [[GrayScottAlgorithm.maxStableDt]].
   *
   * @param initialWidth  width of computational space.
   * @param initialHeight height of computational space.
@@ -23,6 +24,8 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   /** None if no new size has been requested. */
   private var requestedNewSize: Option[Dimension] = None
   private var parallelized = true
+  private var workers: Array[Worker] = Array.empty
+
   def getModel: GrayScottModel = model
 
   /** doesn't change the size immediately since running threads may
@@ -41,7 +44,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   def setH(h: Double): Unit = { algorithm.setH(h) }
 
   /** Set this to true if you want to run the version
-    * that will partition the task of computing the next timeStop
+    * that will partition the task of computing the next time step
     * into smaller pieces that can be run on different threads.
     * This should speed things up on a multi-core computer.
     */
@@ -51,25 +54,24 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
 
   /** Advance one time step increment.
     * New u/v are calculated from tmpU/tmpV, then buffers are swapped via commitChanges.
-    * @param dt time step in seconds.
+    * @param dt time step in seconds (clamped to the explicit Euler stability limit).
     */
   def timeStep(dt: Double): Unit = {
+    val safeDt = math.min(dt, GrayScottAlgorithm.maxStableDt(algorithm.getH))
     val numThreads = math.max(1, Runtime.getRuntime.availableProcessors())
-    val workers = Array.ofDim[Runnable](numThreads)
-    val width = model.getWidth
-    val range = width / numThreads
+    ensureWorkers(numThreads)
+    val ranges = StripPartition.ranges(model.getWidth, numThreads)
     val prof = RDProfiler.getInstance
     prof.startConcurrentCalculationTime()
     var i = 0
-    while (i < numThreads - 1) {
-      val offset = i * range
-      workers(i) = new Worker(offset, offset + range, dt)
+    while (i < ranges.length) {
+      val (minX, maxX) = ranges(i)
+      workers(i).setRange(minX, maxX, safeDt)
       i += 1
     }
-    workers(numThreads - 1) = new Worker(range * (numThreads - 1), width, dt)
-
-    if (parallelized) workers.par.foreach(w => w.run())
-    else workers.foreach(w => w.run())
+    val active = if (workers.length == ranges.length) workers else workers.take(ranges.length)
+    if (parallelized) active.par.foreach(_.run())
+    else active.foreach(_.run())
 
     prof.stopConcurrentCalculationTime()
     model.commitChanges()
@@ -81,8 +83,24 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     }
   }
 
+  private def ensureWorkers(n: Int): Unit = {
+    if (workers.length != n) {
+      workers = Array.tabulate(n)(_ => new Worker)
+    }
+  }
+
   /** Runs one column strip `[minX, maxX)`. */
-  private class Worker(minX: Int, maxX: Int, dt: Double) extends Runnable {
+  private final class Worker extends Runnable {
+    private var minX = 0
+    private var maxX = 0
+    private var dt = 0.0
+
+    def setRange(minX: Int, maxX: Int, dt: Double): Unit = {
+      this.minX = minX
+      this.maxX = maxX
+      this.dt = dt
+    }
+
     override def run(): Unit = {
       algorithm.computeNextTimeStep(minX, maxX, dt)
     }

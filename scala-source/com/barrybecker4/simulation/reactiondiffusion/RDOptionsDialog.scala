@@ -31,7 +31,7 @@ class RDOptionsDialog private[reactiondiffusion](parent: Component, simulator: S
       "If checked, rendering graphics to an offscreen buffer before copying to the screen.",
       sim.getUseOffScreenRendering)
     useParallelRenderingCheckbox = createCheckBox("Use parallel rendering",
-      "Rendering will take advantage of as many cores/threads that are avaialble.",
+      "Rendering will take advantage of as many cores/threads that are available.",
       sim.getRenderingOptions.isParallelized)
     panel.add(showProfilingCheckbox)
     panel.add(offscreenRenderingCheckbox)

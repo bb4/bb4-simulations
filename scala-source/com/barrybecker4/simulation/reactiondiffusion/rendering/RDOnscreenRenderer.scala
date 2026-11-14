@@ -1,23 +1,19 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.rendering
 
 import com.barrybecker4.ui.util.ColorMap
-import com.barrybecker4.simulation.common.rendering.ColorRect
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
 import java.awt._
+import java.awt.image.BufferedImage
 
 
 /**
-  * Renders the state of the GrayScottController model to the screen.
+  * Blits the completed image directly to the on-screen Graphics2D (main thread only).
   */
 class RDOnscreenRenderer(model: GrayScottModel, cmap: ColorMap, options: RDRenderingOptions)
   extends RDRenderer(model, cmap, options) {
 
-  /** Renders a rectangular strip of pixels. */
-  override def renderStrip(minX: Int, rect: ColorRect, g2: Graphics2D): Unit = {
-    val img = rect.getAsImage
-    if (g2 != null) g2.drawImage(img, minX, 0, null)
+  override protected def blit(image: BufferedImage, g2: Graphics2D): Unit = {
+    if (g2 != null) g2.drawImage(image, 0, 0, null)
   }
-
-  override protected def postRender(g2: Graphics2D): Unit = {}
 }

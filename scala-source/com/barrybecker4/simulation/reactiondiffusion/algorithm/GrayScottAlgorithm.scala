@@ -9,8 +9,17 @@ import scala.compiletime.uninitialized
   */
 object GrayScottAlgorithm {
   /** Diffusion rates of the 2 chemicals. */
-  private val DU: Double = 2.0e-1
-  private val DV: Double = 1.0e-1
+  private[algorithm] val DU: Double = 2.0e-1
+  private[algorithm] val DV: Double = 1.0e-1
+
+  /**
+    * Explicit Euler bound for a 5-point Laplacian:
+    * `dt * max(DU, DV) / h² < 1/4`.
+    */
+  def maxStableDt(h: Double): Double = {
+    require(h > 0.0, s"h must be positive, got $h")
+    0.25 * h * h / math.max(DU, DV)
+  }
 }
 
 final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
@@ -31,6 +40,8 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
     val uWrite = model.uWrite
     val vWrite = model.vWrite
     val height = model.getHeight
+    val f = model.getF
+    val k = model.getK
     var x = minX
     while (x < maxX) {
       var y = 0
@@ -38,8 +49,8 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
         val uv = uRead(x, y)
         val vv = vRead(x, y)
         val uv2 = uv * vv * vv
-        uWrite.update(x, y, calcNew(uv, uRead.laplacian(x, y), duDivh2, useF = true, uv2, dt))
-        vWrite.update(x, y, calcNew(vv, vRead.laplacian(x, y), dvDivh2, useF = false, uv2, dt))
+        uWrite.update(x, y, updateU(uv, uRead.laplacian(x, y), uv2, f, dt))
+        vWrite.update(x, y, updateV(vv, vRead.laplacian(x, y), uv2, k, dt))
         y += 1
       }
       x += 1
@@ -53,9 +64,9 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
     dvDivh2 = GrayScottAlgorithm.DV / h2
   }
 
-  private def calcNew(txy: Double, lap: Double, dDivh2: Double, useF: Boolean, uv2: Double, dt: Double): Double = {
-    val c = if (useF) model.getF * (1.0 - txy) - uv2
-            else uv2 - model.getK * txy
-    txy + dt * (dDivh2 * lap + c)
-  }
+  private def updateU(u: Double, lap: Double, uv2: Double, f: Double, dt: Double): Double =
+    u + dt * (duDivh2 * lap + f * (1.0 - u) - uv2)
+
+  private def updateV(v: Double, lap: Double, uv2: Double, k: Double, dt: Double): Double =
+    v + dt * (dvDivh2 * lap + uv2 - k * v)
 }
