@@ -33,7 +33,7 @@ class Environment(val width: Int, val height: Int) {
   def resume(): Unit = { paused = false }
 
   private def initBoundary(): Unit = {
-    val yrat = height / 400
+    val yrat = height / 400.0
     for (i <- 0 until width) {
       val ht = yrat * (50.0 + 20.0 * sin(0.018 * i) + i / 5.0)
       h0(i) = ht
