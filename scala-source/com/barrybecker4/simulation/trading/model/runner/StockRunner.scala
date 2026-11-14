@@ -38,8 +38,6 @@ class StockRunner(var tradingOpts: TradingOptions) {
     position = tradingStrategy.finalizeInvestment(stockPrices(numPeriods))
     investValues(numPeriods) = 0
     reserveValues(numPeriods) = position.reserve
-    //println("*** final sell = " + finalSell
-    //        + " reserve = " + reserve + " totalGain = " + totalGain + " ending stock price = " + stockPrice);
 
     val domain = Range(0.0, stockPrices.length.toDouble - 1.0) // Range(0, 1) //
     new StockRunResult(

@@ -17,6 +17,7 @@ object PoissonGrid {
   * See https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
   */
 case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Double, rnd: Random = RND) {
+  private val DEBUG = false
   private val cellSize: Double = radius / Math.sqrt(2)
   private val xBins: Int = (width / cellSize + 1).toInt
   private val yBins: Int = (height / cellSize + 1).toInt
@@ -61,7 +62,7 @@ case class PoissonGrid(width: Double, height: Double, margin: Double, radius: Do
       y = point.y + randomRadius * Math.sin(randomAngle)
       ct += 1
     }
-    if (ct > 3) println("Warning ct = " + ct)
+    if (DEBUG && ct > 3) println("Warning ct = " + ct)
     new Point(x, y)
   }
 

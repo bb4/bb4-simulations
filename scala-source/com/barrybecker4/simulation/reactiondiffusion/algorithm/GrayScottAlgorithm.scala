@@ -22,12 +22,10 @@ final class GrayScottAlgorithm private[algorithm](model: GrayScottModel)  {
     val u = model.tmpU
     val v = model.tmpV
     val height = model.getHeight
-    //println(s"minX=$minX maxX=$maxX ht=$height")
     for (x <- minX to maxX)
       for (y <- 1 until height - 1) {
         val vval = v(x)(y)
         val uv2 = u(x)(y) * vval * vval
-        //if (uv2 > 10.0) println("error uv2 = " + uv2 + " u = " + u(x)(y) + " v=" + vval)
         model.u(x)(y) = calcNewCenter(u, x, y, duDivh2, useF = true, uv2, dt)
         model.v(x)(y) = calcNewCenter(v, x, y, dvDivh2, useF = false, uv2, dt)
       }

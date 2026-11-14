@@ -13,10 +13,7 @@ trait DungeonGeneratorStrategy {
   
   def generateDungeon(options: DungeonOptions): DungeonModel = {
     val rnd = new Random(0)
-    val startTime = System.currentTimeMillis()
-    val model = doGeneration(options, rnd)
-    println(this.getClass.getSimpleName + ": "  + (System.currentTimeMillis() - startTime) / 1000.0)
-    model
+    doGeneration(options, rnd)
   }
   
   def doGeneration(options: DungeonOptions, rnd: Random): DungeonModel

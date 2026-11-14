@@ -48,7 +48,6 @@ trait TradingStrategy extends StrategyPlugin {
     assert(stockPrice > 0, "The stockPrice needs to be > 0. It was " + stockPrice)
     reserve -= amountToInvest
     val sharesToBuy = amountToInvest / stockPrice
-    //println(" + buying $" + amountToInvest + " which is " + sharesToBuy + " shares @" + stockPrice);
     sharesOwned += sharesToBuy
     invested = sharesOwned * stockPrice
     priceAtLastTransaction = stockPrice
@@ -63,7 +62,6 @@ trait TradingStrategy extends StrategyPlugin {
     reserve += sharesToSell * stockPrice
     invested = sharesOwned * stockPrice
     priceAtLastTransaction = stockPrice
-    //println(" - selling $" + (sharesToSell * stockPrice) + " which is " + sharesToSell + " shares @" + stockPrice)
   }
 
   /** The UI to allow the user to configure the options */

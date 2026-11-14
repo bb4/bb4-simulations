@@ -26,7 +26,6 @@ class PoissonPlacement(
 
   //assert(numPoints > params.k, "numPoints " + numPoints + " must be larger than " + params.k)
   activeList = ActiveList(numPoints + params.k)
-  println("width = " + width + " height = " + height)
 
   // Select the initial x0 point.
   activePoint = new Point(width * rnd.nextDouble(), height * rnd.nextDouble())
@@ -51,7 +50,6 @@ class PoissonPlacement(
         count += 1
       }
     }
-    //println("numPoints = " + count)
   }
 
 }

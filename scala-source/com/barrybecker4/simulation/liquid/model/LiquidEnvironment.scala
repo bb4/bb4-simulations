@@ -91,7 +91,6 @@ class LiquidEnvironment(val configFile: String) {
     grid.updateCellStatus()
     if (!advectionOnly) { // Compute velocities for all full cells.
       gridUpdater.updateVelocity(timeStep, conditions.getGravity)
-      ////println(grid.toString());
       // Compute the pressure for all Full Cells.
       gridUpdater.updatePressure(timeStep)
       // Re-calculate velocities for Surface cells.

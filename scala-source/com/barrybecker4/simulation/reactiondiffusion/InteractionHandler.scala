@@ -71,8 +71,6 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   /** Make waves or adds ink depending on which mouse key is being held down. */
   private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val amountToAdd = brushStrength * weight
-    //println("m1 = " + mouse1Down + " m3 = " + mouse3Down + " amountToAdd " + amountToAdd +
-    // " at " + i + " " + j + " curY=" + model.u(i)(j) + " curV=" + model.v(i)(j))
     // if the left mouse is down, make waves
     if (mouse1Down) model.u(i)(j) += amountToAdd
     else if (mouse3Down) model.v(i)(j) += amountToAdd

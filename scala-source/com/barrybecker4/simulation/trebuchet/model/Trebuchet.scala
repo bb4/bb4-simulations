@@ -146,9 +146,6 @@ class Trebuchet() {
 
   private def checkProjectileRelease(slingAngle: Double): Unit =
     if (!projectile.isReleased && slingAngle >= (PI + sling.getReleaseAngle)) {
-      println("##########################################################################")
-      println("released!  slingAngle = " + slingAngle + " sling release angle = " + sling.getReleaseAngle)
-      println("##########################################################################")
       projectile.isReleased = true
     }
 
@@ -164,8 +161,6 @@ class Trebuchet() {
       val r = projectile.getDistanceFrom(lever.getFulcrumPosition)
       dragTorque = r * projectile.getMass * GRAVITY * cos(PI - angle - slingAngle) * sin(angle)
     }
-    //println("torque= primaryTorque("+primaryTorque+")" +
-    //        " + dragTorque("+dragTorque+")= "+(primaryTorque+dragTorque));
     primaryTorque + dragTorque
   }
 

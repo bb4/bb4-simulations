@@ -112,7 +112,6 @@ class VoronoiAlgorithm(panel: JComponent) {
     */
   def nextStep(): Boolean = synchronized {
     if (restartRequested) {
-      println("Restarting!")
       restartRequested = false
       finished = false
       iterations = 0

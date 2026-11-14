@@ -1,6 +1,7 @@
 // Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.compute
 
+import com.barrybecker4.simulation.liquid.Logger
 import com.barrybecker4.simulation.liquid.model.Cell
 import com.barrybecker4.simulation.liquid.model.CellDimensions
 import com.barrybecker4.simulation.liquid.model.CellNeighbors
@@ -74,7 +75,7 @@ class SurfaceVelocityUpdater(var pressure0: Double) {
     */
   private def dissipateOverflow(cell: Cell, numSurfaces: Int, overflow: Double, neighbors: CellNeighbors): Unit = {
     if (Math.abs(overflow) > 100)
-      println("dissipating large overflow =" + overflow)
+      Logger.log(1, "dissipating large overflow =" + overflow)
     var count = 0
     val overflowX = dims.dx * overflow / numSurfaces
     val overflowY = dims.dy * overflow / numSurfaces
