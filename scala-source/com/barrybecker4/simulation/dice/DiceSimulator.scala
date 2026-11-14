@@ -3,11 +3,12 @@ package com.barrybecker4.simulation.dice
 
 import com.barrybecker4.common.app.AppContext
 import com.barrybecker4.common.format.IntegerFormatter
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.math.function.LinearFunction
 import com.barrybecker4.simulation.common.ui.DistributionSimulator
 import com.barrybecker4.ui.renderers.HistogramRenderer
 import com.barrybecker4.ui.util.Log
+
+import scala.util.Random
 
 
 /**
@@ -27,6 +28,7 @@ object DiceSimulator {
 class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
 
   private val options = new DiceOptions
+  private val rnd = new Random
   AppContext.initialize("ENGLISH", List("com.barrybecker4.ui.message"), new Log)
   initHistogram()
 
@@ -52,5 +54,5 @@ class DiceSimulator() extends DistributionSimulator("Dice Histogram") {
   override protected def createOptionsDialog = new DiceOptionsDialog(frame, this)
 
   override protected def getXPositionToIncrement: Double =
-    DiceRollLogic.rollSum(options.numDice, options.numSides, MathUtil.RANDOM)
+    DiceRollLogic.rollSum(options.numDice, options.numSides, rnd)
 }

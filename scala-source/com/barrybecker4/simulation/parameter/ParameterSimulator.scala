@@ -1,11 +1,12 @@
 // Copyright by Barry G. Becker, 2017 - 2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.parameter
 
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.math.function.LinearFunction
 import com.barrybecker4.optimization.parameter.types.Parameter
 import com.barrybecker4.simulation.common.ui.DistributionSimulator
 import com.barrybecker4.ui.renderers.HistogramRenderer
+
+import scala.util.Random
 
 
 /**
@@ -43,6 +44,7 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram"):
   /** initialize with some default */
   private var parameter = ParameterDistributionType.fromOrdinal(0).param
   private[parameter] var showRedistribution = true
+  private val rnd = new Random
   initHistogram()
 
   def setParameter(parameter: Parameter): Unit =
@@ -71,9 +73,9 @@ class ParameterSimulator() extends DistributionSimulator("Parameter Histogram"):
     * Otherwise, samples uniformly on the raw numeric range.
     */
   override protected def getXPositionToIncrement: Double =
-    if showRedistribution then parameter.randomizeValue(MathUtil.RANDOM).getValue
+    if showRedistribution then parameter.randomizeValue(rnd).getValue
     else
-      val v = parameter.minValue + MathUtil.RANDOM.nextDouble() * parameter.range
+      val v = parameter.minValue + rnd.nextDouble() * parameter.range
       parameter.setValue(v).getValue
 
 end ParameterSimulator

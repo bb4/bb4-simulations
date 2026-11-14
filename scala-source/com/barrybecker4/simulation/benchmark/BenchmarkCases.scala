@@ -1,7 +1,6 @@
 // Copyright by Barry G. Becker, 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.benchmark
 
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.optimization.Optimizer
 import com.barrybecker4.optimization.optimizee.{EvaluationBudgetExceededException, Optimizee}
 import com.barrybecker4.optimization.parameter.{NumericParameterArray, ParameterArray}
@@ -59,7 +58,6 @@ object BenchmarkCases {
     * returned value is missing.
     */
   def run(benchCase: BenchmarkCase, seed: Long, maxEvaluations: Int): Double = {
-    MathUtil.RANDOM.setSeed(seed)
     val strategy = OptimizationStrategyType.valueOf(benchCase.algorithm)
     val rnd = new Random(seed)
     benchCase.app match {
