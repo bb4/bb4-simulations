@@ -4,15 +4,10 @@ package com.barrybecker4.simulation.parameter
 import com.barrybecker4.optimization.parameter.redistribution._
 import com.barrybecker4.optimization.parameter.types.{BooleanParameter, DoubleParameter, IntegerParameter, Parameter}
 
-/** Discrete bin counts for enum case initializers; must not read the enum companion during static init. */
-private object Consts:
-  val NumDiscretes: Int = 10
-  val NumDiscretesM1: Int = NumDiscretes - 1
-
 /**
   * Different types of parameter distributions to test.
-  * Since we apply a redistribution to the original skewed distribution,
-  * we expect the result to be close to a uniform distribution.
+  * With [[ParameterSimulator.showRedistribution]] true, the histogram shows the forward
+  * redistributed (skewed) shape; with it false, setValue/getValue round-trips toward uniform.
   */
 enum ParameterDistributionType(val name: String, val param: Parameter):
 
@@ -25,7 +20,7 @@ enum ParameterDistributionType(val name: String, val param: Parameter):
   case GAUSSIAN_NARROWER extends ParameterDistributionType("Gaussian (narrower)",
     ParameterDistributionType.doubleGaussian(5.0, 0.5, 0.1))
   case GAUSSIAN_NARROWEST extends ParameterDistributionType("Gaussian (narrowest)",
-    ParameterDistributionType.doubleGaussian(5.0, 0.5, 0.01)) // still has a problem
+    ParameterDistributionType.doubleGaussian(5.0, 0.5, 0.01))
   case GAUSSIAN_WIDE extends ParameterDistributionType("Gaussian (wide)",
     ParameterDistributionType.doubleGaussian(5.0, 0.5, 0.8))
   case UNIFORM extends ParameterDistributionType("Uniform",
@@ -61,27 +56,26 @@ enum ParameterDistributionType(val name: String, val param: Parameter):
   case SPECIAL_UNIFORM_SEVERAL extends ParameterDistributionType("Special Uniform Several",
     ParameterDistributionType.doubleUniformRedist(5.0,
       Array(0.1, 0.3, 0.8, 0.832), Array(0.01, 0.02, 0.01, 0.01)))
+  // Discrete counts use literals here so enum static init does not read the companion.
   case DISCRETE_UNIFORM extends ParameterDistributionType("Uniform discrete",
-    ParameterDistributionType.integerUniform(Consts.NumDiscretesM1))
+    ParameterDistributionType.integerUniform(9))
   case SPECIFIC_DISCRETE_1 extends ParameterDistributionType("Uniform discrete1",
-    ParameterDistributionType.integerDiscrete(Consts.NumDiscretesM1,
-      DiscreteRedistribution(Consts.NumDiscretes, Array(3), Array(0.8))))
+    ParameterDistributionType.integerDiscrete(9,
+      DiscreteRedistribution(10, Array(3), Array(0.8))))
   case SPECIFIC_DISCRETE_2 extends ParameterDistributionType("Uniform discrete (0, 4)",
-    ParameterDistributionType.integerDiscrete(Consts.NumDiscretesM1,
-      DiscreteRedistribution(Consts.NumDiscretes, Array(0, 4), Array(0.3, 0.3))))
+    ParameterDistributionType.integerDiscrete(9,
+      DiscreteRedistribution(10, Array(0, 4), Array(0.3, 0.3))))
   case SPECIFIC_DISCRETE_ALL extends ParameterDistributionType("Uniform discrete (all)",
     ParameterDistributionType.integerDiscrete(3,
       DiscreteRedistribution(4, Array(0, 1, 2, 3), Array(0.25, 0.25, 0.25, 0.25))))
   case SPECIFIC_DISCRETE_3 extends ParameterDistributionType("Uniform discrete (1, 2, 6)",
-    ParameterDistributionType.integerDiscrete(Consts.NumDiscretesM1,
-      DiscreteRedistribution(Consts.NumDiscretes, Array(1, 2, 6), Array(0.3, 0.3, 0.3))))
+    ParameterDistributionType.integerDiscrete(9,
+      DiscreteRedistribution(10, Array(1, 2, 6), Array(0.3, 0.3, 0.3))))
   case SPECIFIC_DISCRETE_3a extends ParameterDistributionType("Uniform discrete3a",
-    ParameterDistributionType.integerDiscrete(Consts.NumDiscretesM1,
-      // Keep special-probability sum < 1 when the last special is below the parameter max.
-      // With sum == 1, UniformRedistribution's final CDF point at x=1 is nudged by
-      // MathUtil.EPS (1e-16), which does not advance a Double at 1.0 and fails
-      // PiecewiseFunction's strictly-increasing x check (bb4-optimization 2.1).
-      DiscreteRedistribution(Consts.NumDiscretes, Array(1, 2, 6), Array(0.2, 0.5, 0.2))))
+    // Special-prob sum may be 1 with last special below max; UniformRedistribution reserves
+    // a final gap so PiecewiseFunction x samples stay strictly increasing.
+    ParameterDistributionType.integerDiscrete(9,
+      DiscreteRedistribution(10, Array(1, 2, 6), Array(0.2, 0.5, 0.3))))
   case BOOLEAN extends ParameterDistributionType("Boolean Uniform", ParameterDistributionType.booleanUniform)
   case BOOLEAN_SKEWED extends ParameterDistributionType("Boolean Skewed",
     ParameterDistributionType.booleanSkewed(0.8))
@@ -91,8 +85,10 @@ end ParameterDistributionType
 object ParameterDistributionType:
 
   private[parameter] val DefaultName = "Param"
-  private[parameter] val NumDiscretes: Int = Consts.NumDiscretes
-  private[parameter] val NumDiscretesM1: Int = Consts.NumDiscretesM1
+
+  /** Must match discrete literals used in enum cases above. */
+  private[parameter] val NumDiscretes: Int = 10
+  private[parameter] val NumDiscretesM1: Int = NumDiscretes - 1
 
   private[parameter] def doubleUniform(max: Double): DoubleParameter =
     new DoubleParameter(0, 0, max, DefaultName)
