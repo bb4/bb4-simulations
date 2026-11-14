@@ -5,14 +5,14 @@ import com.barrybecker4.math.complex.ComplexNumber
 import GammaFunction._
 
 object GammaFunction {
-  private val ZERO = ComplexNumber(0, 0)
+  private val ZERO = ComplexNumber(0)
   private val NAN = ComplexNumber(Double.NaN, Double.NaN)
   private val G = 7
   private val P = Array(
     0.99999999999980993, 676.5203681218851, -1259.1392167224028,
     771.32342877765313, -176.61502916214059, 12.507343278686905,
     -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7
-  ).map(ComplexNumber(_, 0))
+  ).map(ComplexNumber(_))
 }
 
 /**

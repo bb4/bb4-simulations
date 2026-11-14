@@ -43,7 +43,7 @@ case class ZetaAnalyticExtensionFunction() extends ComplexFunction {
 
   private def continuanceInCriticalRegion(s: ComplexNumber, n: Int): ComplexNumber = {
     val num = etaFun.compute(s, n)
-    val denominator = ComplexNumber(1.0, 0).subtract(ComplexNumber(2.0, 0).divide(ComplexNumber.pow(2.0, s)))
+    val denominator = ComplexNumber(1.0).subtract(ComplexNumber(2.0).divide(ComplexNumber.pow(2.0, s)))
     num.divide(denominator)
   }
 

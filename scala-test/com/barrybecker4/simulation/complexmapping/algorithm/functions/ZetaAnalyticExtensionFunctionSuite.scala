@@ -13,7 +13,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   /** Alternating series for η, computed in-test so a shared eta bug cannot pass zeta tests. */
   private def etaAlternatingSum(s: ComplexNumber, n: Int): ComplexNumber = {
-    var sum = ComplexNumber(0, 0)
+    var sum = ComplexNumber(0)
     for (k <- 1 to n) {
       val term = ComplexNumber.pow(k.toDouble, s).reciprocal
       sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)
@@ -29,7 +29,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   test("z(2) with n=1000 approaches pi^2/6") {
     assertComplexApprox(
-      ComplexNumber(math.Pi * math.Pi / 6.0, 0),
+      ComplexNumber(math.Pi * math.Pi / 6.0),
       fun.compute(ComplexNumber(2.0), 1000),
       tol = 2e-3
     )
@@ -49,7 +49,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
 
   test("z(-1) with n=1000 approaches -1/12") {
     assertComplexApprox(
-      ComplexNumber(-1.0 / 12.0, 0),
+      ComplexNumber(-1.0 / 12.0),
       fun.compute(ComplexNumber(-1), 1000),
       tol = 1e-4
     )
@@ -58,7 +58,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
   test("z(-2) with n=50 is a trivial zero") {
     assertComplexApprox(
       ComplexNumber(0, 0),
-      fun.compute(ComplexNumber(-2, 0), 50),
+      fun.compute(ComplexNumber(-2), 50),
       tol = 1e-8
     )
   }
@@ -66,7 +66,7 @@ class ZetaAnalyticExtensionFunctionSuite extends AnyFunSuite with ComplexMapping
   test("z(-3) with n=200 approaches +1/120") {
     assertComplexApprox(
       ComplexNumber(1.0 / 120.0, 0),
-      fun.compute(ComplexNumber(-3, 0), 200),
+      fun.compute(ComplexNumber(-3), 200),
       tol = 1e-5
     )
   }

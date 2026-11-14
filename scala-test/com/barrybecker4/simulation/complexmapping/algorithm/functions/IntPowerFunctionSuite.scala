@@ -10,11 +10,11 @@ class IntPowerFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertion
   private val fun = IntPowerFunction()
 
   test("2^2 = 4") {
-    assertComplexApprox(ComplexNumber(4, 0), fun.compute(ComplexNumber(2, 0), 2))
+    assertComplexApprox(ComplexNumber(4), fun.compute(ComplexNumber(2), 2))
   }
 
   test("i^2 = -1") {
-    assertComplexApprox(ComplexNumber(-1, 0), fun.compute(ComplexNumber(0, 1), 2))
+    assertComplexApprox(ComplexNumber(-1), fun.compute(ComplexNumber(0, 1), 2))
   }
 
   test("(1+i)^2 = 2i") {

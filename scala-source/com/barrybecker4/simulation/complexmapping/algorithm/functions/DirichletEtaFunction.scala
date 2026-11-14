@@ -18,7 +18,7 @@ case class DirichletEtaFunction() extends ComplexFunction {
     * @return the result of applying the function
     */
   override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
-    if (n < 1) ComplexNumber(0, 0)
+    if (n < 1) ComplexNumber(0)
     else if (s.real > 0.0) ordinaryPartialSum(s, n)
     else holderMean(s, n)
   }
@@ -41,7 +41,7 @@ case class DirichletEtaFunction() extends ComplexFunction {
   private def holderMean(s: ComplexNumber, n: Int): ComplexNumber = {
     val order = math.min(MAX_HOLDER_ORDER, math.max(1, math.floor(-s.real).toInt + 1))
     val partials = new Array[ComplexNumber](n)
-    var sum = ComplexNumber(0, 0)
+    var sum = ComplexNumber(0)
     for (k <- 1 to n) {
       val term = ComplexNumber.pow(k.toDouble, s).reciprocal
       sum = if (k % 2 == 1) sum.add(term) else sum.subtract(term)
@@ -51,10 +51,10 @@ case class DirichletEtaFunction() extends ComplexFunction {
     var seq = partials
     for (_ <- 1 to order) {
       val next = new Array[ComplexNumber](seq.length)
-      var prefix = ComplexNumber(0, 0)
+      var prefix = ComplexNumber(0)
       for (i <- seq.indices) {
         prefix = prefix.add(seq(i))
-        next(i) = prefix.divide(ComplexNumber((i + 1).toDouble, 0))
+        next(i) = prefix.divide(ComplexNumber((i + 1).toDouble))
       }
       seq = next
     }

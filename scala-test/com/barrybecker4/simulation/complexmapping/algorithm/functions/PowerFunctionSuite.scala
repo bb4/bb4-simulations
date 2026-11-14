@@ -10,7 +10,7 @@ class PowerFunctionSuite extends AnyFunSuite with ComplexMappingTestAssertions {
   private val fun = PowerFunction()
 
   test("2^2 = 4") {
-    assertComplexApprox(ComplexNumber(4, 0), fun.compute(ComplexNumber(2, 0), 2))
+    assertComplexApprox(ComplexNumber(4), fun.compute(ComplexNumber(2), 2))
   }
 
   test("2^i is finite and non-trivial") {

@@ -11,33 +11,33 @@ class EscapeIterationSuite extends AnyFunSuite {
   implicit val doubleEq: Equality[Double] = TolerantNumerics.tolerantDoubleEquality(EPS)
 
   test("interior origin reaches max iterations → 1.0") {
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(0, 0), ComplexNumber(0, 0), 25)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(0), ComplexNumber(0), 25)
     assert(v === 1.0)
   }
 
   test("point already outside radius escapes with 0 iterations → 0.0") {
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.0, 0), ComplexNumber(0, 0), 100)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.0), ComplexNumber(0), 100)
     assert(v === 0.0)
   }
 
   test("maxIterations = 1: non-escaping seed yields 1.0") {
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(0, 0), ComplexNumber(0, 0), 1)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(0), ComplexNumber(0), 1)
     assert(v === 1.0)
   }
 
   test("maxIterations = 1: already escaped seed yields 0.0") {
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(3, 0), ComplexNumber(0, 0), 1)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(3), ComplexNumber(0), 1)
     assert(v === 0.0)
   }
 
   test("quick escape far from set is low normalized value") {
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.5, 0), ComplexNumber(2.5, 0), 100)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.5), ComplexNumber(2.5), 100)
     assert(v === 0.0)
   }
 
   test("|z| exactly 2 does not enter loop → 0.0") {
     // Escape when mag² >= 4, so |z| == 2 is already escaped.
-    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.0, 0), ComplexNumber(-1, 0), 50)
+    val v = EscapeIteration.normalizedEscapeTime(ComplexNumber(2.0), ComplexNumber(-1), 50)
     assert(v === 0.0)
   }
 }

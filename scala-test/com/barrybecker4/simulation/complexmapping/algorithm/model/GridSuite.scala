@@ -19,7 +19,7 @@ class GridSuite extends AnyFunSuite {
   test("transform with interpolation 1 applies full function") {
     val mesh = Array(Array(new MeshPoint(2.0, 0.0, 0.5)))
     val grid = Grid(mesh)
-    val out = grid.transform(IntPowerFunction(), 2, 1.0)
+    val out = grid.transform(IntPowerFunction(), 2)
     assert(out(0, 0).x == 4.0)
     assert(out(0, 0).y == 0.0)
   }
@@ -51,7 +51,7 @@ class GridSuite extends AnyFunSuite {
   test("transform with default interpolation 1 matches explicit 1.0") {
     val grid = new Grid(bounds, 1.0, 1.0)
     val a = grid.transform(IdentityFunction(), 1)
-    val b = grid.transform(IdentityFunction(), 1, 1.0)
+    val b = grid.transform(IdentityFunction(), 1)
     assert(a.width == b.width && a.height == b.height)
     for (i <- 0 until a.width; j <- 0 until a.height) {
       assert(a(i, j).x == b(i, j).x)

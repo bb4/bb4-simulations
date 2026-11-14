@@ -16,7 +16,7 @@ case class RiemannZetaFunction() extends ComplexFunction {
   override def compute(s: ComplexNumber, n: Int): ComplexNumber = {
     if (s.real < 1) ComplexNumber(Double.NaN, Double.NaN)
     else {
-      var sum: ComplexNumber = ComplexNumber(0, 0)
+      var sum: ComplexNumber = ComplexNumber(0)
       for (i <- 1 to n)
         sum = sum.add(ComplexNumber.pow(i.toDouble, s).reciprocal)
       sum
