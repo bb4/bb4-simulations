@@ -3,7 +3,7 @@ package com.barrybecker4.simulation.reactiondiffusion
 
 import java.awt.event.{MouseEvent, MouseListener, MouseMotionListener}
 
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.{ConcentrationField, GrayScottModel}
 import InteractionHandler.SQRT2
 
 object InteractionHandler {
@@ -40,16 +40,15 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   private def doBrush(): Unit = {
     val i = (currentX / scale).toInt
     val j = (currentY / scale).toInt
-    // apply the change to a convolution kernel area
-    val startX = Math.max(1, i - brushRadius)
-    val stopX = Math.min(model.getWidth - 1, i + brushRadius)
-    val startY = Math.max(1, j - brushRadius)
-    val stopY = Math.min(model.getHeight - 1, j + brushRadius)
-    // adjust by this so that there is not a discontinuity at the periphery
-    val minWt = 0.9 / (SQRT2 * brushRadius )
-    for (ii <- startX to stopX)
-      for (jj <- startY to stopY) {
-        val weight = getWeight(i, j, ii, jj, minWt)
+    val width = model.getWidth
+    val height = model.getHeight
+    // Periodic brush: stamp wraps around edges with the toroidal grid.
+    val minWt = 0.9 / (SQRT2 * brushRadius)
+    for (dx <- -brushRadius to brushRadius)
+      for (dy <- -brushRadius to brushRadius) {
+        val ii = ConcentrationField.wrap(i + dx, width)
+        val jj = ConcentrationField.wrap(j + dy, height)
+        val weight = getWeight(i, j, i + dx, j + dy, minWt)
         applyChange(ii, jj, weight)
       }
   }

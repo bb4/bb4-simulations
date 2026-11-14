@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * Resize is deferred until timeStep; applying it must keep model dimensions
-  * consistent with u/v so rendering cannot AIOOBE.
+  * consistent with concentration fields so rendering cannot AIOOBE.
   */
 class GrayScottControllerSuite extends AnyFunSuite {
 
@@ -14,18 +14,13 @@ class GrayScottControllerSuite extends AnyFunSuite {
     controller.setSize(20, 15)
     // Not applied yet
     assert(controller.model.getWidth == 10)
-    assert(controller.model.u.length == 10)
 
     controller.timeStep(1.0)
 
     val m = controller.model
     assert(m.getWidth == 20)
     assert(m.getHeight == 15)
-    assert(m.u.length == m.getWidth)
-    assert(m.u(0).length == m.getHeight)
-    assert(m.v.length == m.getWidth)
-    assert(m.v(0).length == m.getHeight)
-    val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
+    val _ = m.u(m.getWidth - 1, m.getHeight - 1) + m.v(m.getWidth - 1, m.getHeight - 1)
   }
 
   test("new controller initializes H to H0") {
@@ -52,7 +47,7 @@ class GrayScottControllerSuite extends AnyFunSuite {
     sequential.setParallelized(false)
     parallel.setParallelized(true)
 
-    copyState(sequential.model, parallel.model)
+    parallel.model.copyConcentrationsFrom(sequential.model)
 
     val dt = 0.05
     for (_ <- 0 until 5) {
@@ -64,21 +59,22 @@ class GrayScottControllerSuite extends AnyFunSuite {
     assert(maxDiff < 1e-9, s"max abs diff was $maxDiff")
   }
 
-  private def copyState(from: GrayScottModel, to: GrayScottModel): Unit = {
-    require(from.getWidth == to.getWidth && from.getHeight == to.getHeight)
-    for (x <- 0 until from.getWidth; y <- 0 until from.getHeight) {
-      to.u(x)(y) = from.u(x)(y)
-      to.v(x)(y) = from.v(x)(y)
-      to.tmpU(x)(y) = from.tmpU(x)(y)
-      to.tmpV(x)(y) = from.tmpV(x)(y)
-    }
+  test("edge cells are updated under fully periodic step") {
+    val c = new GrayScottController(8, 8)
+    c.reset()
+    c.setParallelized(false)
+    // Distinct edge value so a step must change it if edges are included.
+    // After commit, the newly written state is in tmp* (display lags one swap).
+    c.model.initializePoint(0, 0, 0.7, 0.2)
+    c.timeStep(0.05)
+    assert(c.model.tmpU(0, 0) != 0.7, s"tmpU remained ${c.model.tmpU(0, 0)}")
   }
 
   private def maxAbsDiff(a: GrayScottModel, b: GrayScottModel): Double = {
     var max = 0.0
     for (x <- 0 until a.getWidth; y <- 0 until a.getHeight) {
-      max = math.max(max, math.abs(a.u(x)(y) - b.u(x)(y)))
-      max = math.max(max, math.abs(a.v(x)(y) - b.v(x)(y)))
+      max = math.max(max, math.abs(a.u(x, y) - b.u(x, y)))
+      max = math.max(max, math.abs(a.v(x, y) - b.v(x, y)))
     }
     max
   }

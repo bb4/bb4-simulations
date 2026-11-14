@@ -1,20 +1,16 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
-  * @author Barry
-  */
 class GrayScottModelSuite extends AnyFunSuite {
 
-
   test("periodic mid") {
-    assertResult(10 ) { GrayScottModel.getPeriodicXValue(10, 100) }
+    assertResult(10) { GrayScottModel.getPeriodicXValue(10, 100) }
   }
 
   test("periodic low") {
-    assertResult(93 ) { GrayScottModel.getPeriodicXValue(-7, 100) }
+    assertResult(93) { GrayScottModel.getPeriodicXValue(-7, 100) }
   }
 
   test("periodic high") {
@@ -37,46 +33,55 @@ class GrayScottModelSuite extends AnyFunSuite {
     assertResult(0) { GrayScottModel.getPeriodicXValue(-1, 1) }
   }
 
-  test("commitChanges swaps u/tmpU and v/tmpV") {
+  test("commitChanges swaps u/tmpU and v/tmpV field references") {
     val m = new GrayScottModel(5, 5)
-    val uBefore = m.u
+    val uBefore = m.uWrite
     val tmpUBefore = m.tmpU
-    val vBefore = m.v
+    val vBefore = m.vWrite
     val tmpVBefore = m.tmpV
     m.commitChanges()
-    assert(m.u eq tmpUBefore)
+    assert(m.uWrite eq tmpUBefore)
     assert(m.tmpU eq uBefore)
-    assert(m.v eq tmpVBefore)
+    assert(m.vWrite eq tmpVBefore)
     assert(m.tmpV eq vBefore)
   }
 
   test("initializePoint sets u, v, tmpU, tmpV for in-bounds") {
     val m = new GrayScottModel(5, 5)
     m.initializePoint(2, 3, 0.123, 0.456)
-    assert(m.u(2)(3) == 0.123)
-    assert(m.v(2)(3) == 0.456)
-    assert(m.tmpU(2)(3) == 0.123)
-    assert(m.tmpV(2)(3) == 0.456)
+    assert(m.u(2, 3) == 0.123)
+    assert(m.v(2, 3) == 0.456)
+    assert(m.tmpU(2, 3) == 0.123)
+    assert(m.tmpV(2, 3) == 0.456)
   }
 
   test("initializePoint ignores out-of-bounds") {
     val m = new GrayScottModel(5, 5)
-    val before = m.u(2)(2)
+    val before = m.u(2, 2)
     m.initializePoint(5, 2, 99, 99)
     m.initializePoint(2, -1, 99, 99)
-    assert(m.u(2)(2) == before)
+    assert(m.u(2, 2) == before)
   }
 
-  test("setSize keeps width/height consistent with u/v array dimensions") {
+  test("setSize keeps width/height consistent and corner access works") {
     val m = new GrayScottModel(10, 10)
+    m.setF(0.03)
+    m.setK(0.06)
     m.setSize(new java.awt.Dimension(20, 15))
     assert(m.getWidth == 20)
     assert(m.getHeight == 15)
-    assert(m.u.length == m.getWidth)
-    assert(m.u(0).length == m.getHeight)
-    assert(m.v.length == m.getWidth)
-    assert(m.v(0).length == m.getHeight)
-    // Corner access must not throw (the resize crash when painting).
-    val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
+    val _ = m.u(m.getWidth - 1, m.getHeight - 1) + m.v(m.getWidth - 1, m.getHeight - 1)
+    // size-only reallocate preserves F/K
+    assert(m.getF == 0.03)
+    assert(m.getK == 0.06)
+  }
+
+  test("resetState restores default F and K") {
+    val m = new GrayScottModel(8, 8)
+    m.setF(0.03)
+    m.setK(0.06)
+    m.resetState()
+    assert(m.getF == GrayScottModel.F0)
+    assert(m.getK == GrayScottModel.K0)
   }
 }

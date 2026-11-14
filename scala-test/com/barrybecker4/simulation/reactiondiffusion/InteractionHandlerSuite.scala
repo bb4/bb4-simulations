@@ -1,7 +1,7 @@
 /** Copyright by Barry G. Becker, 2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT */
 package com.barrybecker4.simulation.reactiondiffusion
 
-import com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottController
+import com.barrybecker4.simulation.reactiondiffusion.algorithm.{GrayScottController, GrayScottModel}
 import java.awt.event.MouseEvent
 import javax.swing.JPanel
 import org.scalatest.funsuite.AnyFunSuite
@@ -19,14 +19,14 @@ class InteractionHandlerSuite extends AnyFunSuite {
     val model = controller.model
     val x = 2
     val y = 2
-    val uBefore = model.u(x)(y)
+    val uBefore = model.u(x, y)
 
     brush(model, x, y, MouseEvent.BUTTON1)
-    val uBrushed = model.u(x)(y)
+    val uBrushed = model.u(x, y)
     assert(uBrushed != uBefore)
 
     controller.timeStep(0.0)
-    assert(model.u(x)(y) == uBrushed)
+    assert(model.u(x, y) == uBrushed)
   }
 
   test("right brush persists across a zero timeStep") {
@@ -36,18 +36,27 @@ class InteractionHandlerSuite extends AnyFunSuite {
     val model = controller.model
     val x = 2
     val y = 2
-    val vBefore = model.v(x)(y)
+    val vBefore = model.v(x, y)
 
     brush(model, x, y, MouseEvent.BUTTON3)
-    val vBrushed = model.v(x)(y)
+    val vBrushed = model.v(x, y)
     assert(vBrushed != vBefore)
 
     controller.timeStep(0.0)
-    assert(model.v(x)(y) == vBrushed)
+    assert(model.v(x, y) == vBrushed)
   }
 
-  private def brush(model: com.barrybecker4.simulation.reactiondiffusion.algorithm.GrayScottModel,
-                    x: Int, y: Int, button: Int): Unit = {
+  test("brush near edge wraps and affects corner cell") {
+    val controller = new GrayScottController(20, 20)
+    controller.reset()
+    val model = controller.model
+    val uBefore = model.u(0, 0)
+    // Brush centered just outside the corner so wrap hits (0,0)
+    brush(model, 0, 0, MouseEvent.BUTTON1)
+    assert(model.u(0, 0) != uBefore)
+  }
+
+  private def brush(model: GrayScottModel, x: Int, y: Int, button: Int): Unit = {
     val handler = new InteractionHandler(model, 1.0)
     handler.setBrushRadius(2)
     handler.setBrushStrength(0.5)

@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
 import com.barrybecker4.simulation.reactiondiffusion.RDProfiler
@@ -8,8 +8,8 @@ import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration.Ini
 
 
 /**
-  * Runs the Gray-Scott step: interior cells in parallel strips when `setParallelized(true)`,
-  * periodic edge updates in a separate worker, then `commitChanges` on the model.
+  * Runs the Gray-Scott step: all cells in parallel x-strips when `setParallelized(true)`,
+  * then `commitChanges` on the model. Boundaries are fully periodic (no separate edge pass).
   *
   * @param initialWidth  width of computational space.
   * @param initialHeight height of computational space.
@@ -50,24 +50,23 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
   def setInitializer(initializer: Initializer): Unit = model.setInitializer(initializer)
 
   /** Advance one time step increment.
-    * u and v are calculated based on tmpU and tmpV, then the result is committed to tmpU and tmpV.
+    * New u/v are calculated from tmpU/tmpV, then buffers are swapped via commitChanges.
     * @param dt time step in seconds.
     */
   def timeStep(dt: Double): Unit = {
-    val numThreads = Runtime.getRuntime.availableProcessors()
-    val workers = Array.ofDim[Runnable](numThreads + 1)
-    val range = model.getWidth / numThreads
+    val numThreads = math.max(1, Runtime.getRuntime.availableProcessors())
+    val workers = Array.ofDim[Runnable](numThreads)
+    val width = model.getWidth
+    val range = width / numThreads
     val prof = RDProfiler.getInstance
     prof.startConcurrentCalculationTime()
-    for (i <- 0 until numThreads - 1) {
+    var i = 0
+    while (i < numThreads - 1) {
       val offset = i * range
-      workers(i) = new Worker(1 + offset, offset + range, dt)
+      workers(i) = new Worker(offset, offset + range, dt)
+      i += 1
     }
-    val minXEdge = range * (numThreads - 1) + 1
-    val maxXEdge = model.getWidth - 2
-    workers(numThreads - 1) = new Worker(minXEdge, maxXEdge, dt)
-    // also add the border calculations in a separate thread.
-    workers(numThreads) = new EdgeWorker(dt)
+    workers(numThreads - 1) = new Worker(range * (numThreads - 1), width, dt)
 
     if (parallelized) workers.par.foreach(w => w.run())
     else workers.foreach(w => w.run())
@@ -76,22 +75,16 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     model.commitChanges()
     if (requestedNewSize.isDefined) {
       // setSize reallocates u/v in sync with width/height (avoids paint AIOOBE on resize).
-      // Preserve current H (and F/K stay as set on the model for size-only realloc in a later phase).
+      // Preserves current H; F/K preserved by size-only reallocate.
       model.setSize(requestedNewSize.get)
       requestedNewSize = None
     }
   }
 
-  /**  Runs one of the chunks. */
-  private class Worker(minX: Int, maxX: Int,  dt: Double) extends Runnable {
+  /** Runs one column strip `[minX, maxX)`. */
+  private class Worker(minX: Int, maxX: Int, dt: Double) extends Runnable {
     override def run(): Unit = {
       algorithm.computeNextTimeStep(minX, maxX, dt)
-    }
-  }
-
-  private class EdgeWorker(dt: Double) extends Runnable {
-    override def run(): Unit = {
-      algorithm.computeNewEdgeValues(dt)
     }
   }
 }

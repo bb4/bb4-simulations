@@ -1,7 +1,8 @@
-/** Copyright by Barry G. Becker, 2000-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.reactiondiffusion.algorithm
 
-import GrayScottModel._
+import GrayScottModel.*
+import ConcentrationField.wrap
 import java.awt._
 import com.barrybecker4.simulation.reactiondiffusion.algorithm.configuration._
 import scala.compiletime.uninitialized
@@ -9,6 +10,7 @@ import scala.compiletime.uninitialized
 
 /**
   * Data structure for the Gray-Scott algorithm.
+  * Double-buffered flat concentration fields with fully periodic topology.
   * @author Barry Becker.
   */
 object GrayScottModel {
@@ -25,10 +27,8 @@ object GrayScottModel {
   /** The amount of impact that the brush has. */
   val DEFAULT_BRUSH_STRENGTH = 0.3
 
-  /** Periodic boundary conditions (index in `[0, max)`).
-    * @param max period; must be positive.
-    */
-  def getPeriodicXValue(x: Int, max: Int): Int = java.lang.Math.floorMod(x, max)
+  /** Periodic boundary conditions (index in `[0, max)`). Prefer [[ConcentrationField.wrap]]. */
+  def getPeriodicXValue(x: Int, max: Int): Int = wrap(x, max)
 }
 
 /**
@@ -39,12 +39,13 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
 
   var initializer: Initializer = Initializer.DEFAULT_INITIALIZER
 
-  /** concentrations of the 2 chemicals, u and v. */
-  var u: Array[Array[Double]] = uninitialized
-  var v: Array[Array[Double]] = uninitialized
+  /** Display / write buffers (after each step these hold the latest committed state once swapped). */
+  private var uField: ConcentrationField = uninitialized
+  private var vField: ConcentrationField = uninitialized
 
-  private[algorithm] var tmpU: Array[Array[Double]] = uninitialized
-  private[algorithm] var tmpV: Array[Array[Double]] = uninitialized
+  /** Read buffers for the Jacobi step. */
+  private[algorithm] var tmpU: ConcentrationField = uninitialized
+  private[algorithm] var tmpV: ConcentrationField = uninitialized
 
   private var k: Double = uninitialized
   private var f: Double = uninitialized
@@ -53,9 +54,15 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   def getWidth: Int = width
   def getHeight: Int = height
 
-  /** Updates dimensions and reallocates concentration grids so they stay in sync. */
+  def u(x: Int, y: Int): Double = uField(x, y)
+  def v(x: Int, y: Int): Double = vField(x, y)
+
+  private[algorithm] def uWrite: ConcentrationField = uField
+  private[algorithm] def vWrite: ConcentrationField = vField
+
+  /** Updates dimensions and reallocates concentration grids so they stay in sync. Preserves F/K. */
   def setSize(requestedNewSize: Dimension): Unit =
-    reallocate(requestedNewSize.width, requestedNewSize.height)
+    reallocate(requestedNewSize.width, requestedNewSize.height, resetParams = false)
 
   def setInitializer(init: Initializer): Unit = {
     initializer = init
@@ -68,44 +75,34 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
   def setK(k: Double): Unit = {this.k = k}
   private[algorithm] def getK = k
 
-  /** Exchange the u, v fields with the tmp versions.  */
+  /** Exchange the u, v fields with the tmp versions. */
   private[algorithm] def commitChanges(): Unit = {
     var temp = tmpU
-    tmpU = u
-    u = temp
+    tmpU = uField
+    uField = temp
     temp = tmpV
-    tmpV = v
-    v = temp
+    tmpV = vField
+    vField = temp
   }
 
-  private[algorithm] def getNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int): Double =
-    tmp(x + 1)(y) +
-      tmp(x - 1)(y) +
-      tmp(x)(y + 1) +
-      tmp(x)(y - 1)
-
-  private[algorithm] def getEdgeNeighborSum(tmp: Array[Array[Double]], x: Int, y: Int): Double =
-    tmp(getPeriodicXValue(x + 1, width))(y) +
-      tmp(getPeriodicXValue(x - 1, width))(y) +
-      tmp(x)(getPeriodicXValue(y + 1, height)) +
-      tmp(x)(getPeriodicXValue(y - 1, height))
-
-  /** Create some initial pattern of chemical that represents the initial condition. */
-  private[algorithm] def resetState(): Unit = reallocate(width, height)
+  /** Create some initial pattern of chemical that represents the initial condition. Resets F/K. */
+  private[algorithm] def resetState(): Unit = reallocate(width, height, resetParams = true)
 
   /**
     * Allocate new grids, then publish width/height. Publishing size before the
     * arrays exist lets AWT paint index past the old u/v (resize AIOOBE).
     */
-  private def reallocate(w: Int, h: Int): Unit = {
-    f = F0
-    k = K0
-    val newU = Array.ofDim[Double](w, h)
-    val newV = Array.ofDim[Double](w, h)
-    val newTmpU = Array.ofDim[Double](w, h)
-    val newTmpV = Array.ofDim[Double](w, h)
-    u = newU
-    v = newV
+  private def reallocate(w: Int, h: Int, resetParams: Boolean): Unit = {
+    if (resetParams) {
+      f = F0
+      k = K0
+    }
+    val newU = new ConcentrationField(w, h)
+    val newV = new ConcentrationField(w, h)
+    val newTmpU = new ConcentrationField(w, h)
+    val newTmpV = new ConcentrationField(w, h)
+    uField = newU
+    vField = newV
     tmpU = newTmpU
     tmpV = newTmpV
     width = w
@@ -116,26 +113,35 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
 
   def initializePoint(x: Int, y: Int, initialU: Double, initialV: Double): Unit = {
     if (x >= 0 && x < width && y >= 0 && y < height) {
-      tmpU(x)(y) = initialU
-      tmpV(x)(y) = initialV
-      u(x)(y) = initialU
-      v(x)(y) = initialV
+      tmpU.update(x, y, initialU)
+      tmpV.update(x, y, initialV)
+      uField.update(x, y, initialU)
+      vField.update(x, y, initialV)
     }
   }
 
   /** Add chemical U at a point in both display and read buffers (for brush). */
   def addU(x: Int, y: Int, amount: Double): Unit = {
     if (x >= 0 && x < width && y >= 0 && y < height) {
-      u(x)(y) += amount
-      tmpU(x)(y) += amount
+      uField.add(x, y, amount)
+      tmpU.add(x, y, amount)
     }
   }
 
   /** Add chemical V at a point in both display and read buffers (for brush). */
   def addV(x: Int, y: Int, amount: Double): Unit = {
     if (x >= 0 && x < width && y >= 0 && y < height) {
-      v(x)(y) += amount
-      tmpV(x)(y) += amount
+      vField.add(x, y, amount)
+      tmpV.add(x, y, amount)
     }
+  }
+
+  /** Copy all concentration buffers from another same-sized model (tests). */
+  private[algorithm] def copyConcentrationsFrom(other: GrayScottModel): Unit = {
+    require(width == other.width && height == other.height)
+    uField.copyFrom(other.uField)
+    vField.copyFrom(other.vField)
+    tmpU.copyFrom(other.tmpU)
+    tmpV.copyFrom(other.tmpV)
   }
 }

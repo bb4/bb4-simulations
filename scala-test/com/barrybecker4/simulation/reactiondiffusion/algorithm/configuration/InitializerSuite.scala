@@ -16,8 +16,8 @@ class InitializerSuite extends AnyFunSuite {
       var minV = Double.MaxValue
       var maxV = Double.MinValue
       for (x <- 0 until model.getWidth; y <- 0 until model.getHeight) {
-        val u = model.u(x)(y)
-        val v = model.v(x)(y)
+        val u = model.u(x, y)
+        val v = model.v(x, y)
         assert(!u.isNaN && !v.isNaN)
         minU = math.min(minU, u)
         maxU = math.max(maxU, u)
@@ -36,12 +36,12 @@ class InitializerSuite extends AnyFunSuite {
     val model = new GrayScottModel(80, 80)
     model.setInitializer(Initializer.CirclesInitializer)
     // Corner should remain background after stampSquare + circles
-    assert(model.u(0)(0) == 1.0)
-    assert(model.v(0)(0) == 0.0)
+    assert(model.u(0, 0) == 1.0)
+    assert(model.v(0, 0) == 0.0)
     // A point near the first circle center should be seeded
     val cx = 80 / 4 + 40
     val cy = 80 / 4 + 30
-    assert(model.u(cx)(cy) == Initializer.INITIAL_U)
-    assert(model.v(cx)(cy) == Initializer.INITIAL_V)
+    assert(model.u(cx, cy) == Initializer.INITIAL_U)
+    assert(model.v(cx, cy) == Initializer.INITIAL_V)
   }
 }
