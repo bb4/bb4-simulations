@@ -48,6 +48,50 @@ class TriDiagonalMatrixSolverSuite extends AnyFunSuite {
     assert(x(1).isFinite)
   }
 
+  /** 1×1 last (only) pivot must use the same abs/eps guard as other rows. */
+  test("tiny last-row pivot is clamped with sign preserved") {
+    val eps = 1e-6
+    val s = TriDiagonalMatrixSolver(eps)
+    val a = Array(Array(0.0, -1e-12, 0.0))
+    val rhs = Array(1.0)
+    val x = Array(0.0)
+    s.solve(a, rhs, x)
+    assert(math.abs(x(0) - (-1.0 / eps)) < 1e-9)
+  }
+
+  /** Near-zero negative pivot must become -eps, not +eps. */
+  test("near-zero negative pivot keeps sign when clamped") {
+    val eps = 1e-6
+    val s = TriDiagonalMatrixSolver(eps)
+    val a = Array(Array(0.0, -1e-12, 0.0), Array(0.0, 1.0, 0.0))
+    val rhs = Array(1.0, 2.0)
+    val x = Array(0.0, 0.0)
+    s.solve(a, rhs, x)
+    assert(math.abs(x(0) - (-1.0 / eps)) < 1e-9)
+    assert(math.abs(x(1) - 2.0) < 1e-9)
+  }
+
+  /** A legitimately negative pivot must not be replaced by +eps. */
+  test("large negative pivot is left unchanged") {
+    val eps = 1e-6
+    val s = TriDiagonalMatrixSolver(eps)
+    // Diagonal: first pivot -2 hits the forward-elim guard; if wrongly replaced by +eps, x blows up.
+    // System: [-2, 0; 0, 1] x = [2, 3] → x = [-1, 3]
+    val a = Array(Array(0.0, -2.0, 0.0), Array(0.0, 1.0, 0.0))
+    val rhs = Array(2.0, 3.0)
+    val x = Array(0.0, 0.0)
+    s.solve(a, rhs, x)
+    assert(math.abs(x(0) - (-1.0)) < 1e-10)
+    assert(math.abs(x(1) - 3.0) < 1e-10)
+  }
+
+  test("empty system is a no-op") {
+    val a = Array.empty[Array[Double]]
+    val rhs = Array.empty[Double]
+    val x = Array.empty[Double]
+    solver.solve(a, rhs, x)
+  }
+
   test("solve leaves residual near zero for diagonally dominant systems") {
     val rng = new Random(42)
     for (n <- Seq(1, 2, 5, 20)) {
