@@ -129,7 +129,9 @@ final class EnvironmentRenderer(var env: LiquidEnvironment) {
     val maxY = getMaxY
 
     for (p <- env.getParticles) {
-      if (options.getShowVelocities) {
+      val cell = grid.getCell(p.x.toInt, p.y.toInt)
+      // Skip markers in empty/obstacle cells (status can lag briefly after injection).
+      if (!cell.isEmpty && !cell.isObstacle) {
         val vel = interpolator.findVelocity(p)
         p.get(a)
         val x = (scale * a(0)) + EnvironmentRenderer.OFFSET

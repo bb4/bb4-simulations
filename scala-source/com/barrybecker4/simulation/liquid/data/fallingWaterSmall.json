@@ -1,0 +1,11 @@
+{
+  "gridWidth": 5,
+  "gridHeight": 5,
+  "cellSize": 1.0,
+  "gravity": -9.8,
+  "liquid": {
+    "regions": [
+      { "start": [2, 2], "stop": [4, 4] }
+    ]
+  }
+}

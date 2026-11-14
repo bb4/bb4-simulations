@@ -379,7 +379,6 @@ dependencies {
     implementation bb4Libs.optimization
     implementation bb4Libs.ui
     implementation bb4Libs.common
-    implementation bb4Libs.xml
     implementation bb4Libs.math
 }
 

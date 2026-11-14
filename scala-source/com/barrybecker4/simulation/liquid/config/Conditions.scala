@@ -1,27 +1,26 @@
-// Copyright by Barry G. Becker, 2016-2017. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2016-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.liquid.config
 
 import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.common.geometry.Location
 import com.barrybecker4.common.util.FileUtil
-import com.barrybecker4.xml.DomUtil
-import org.w3c.dom.Document
-import org.w3c.dom.Node
-import org.w3c.dom.Node.ELEMENT_NODE
+import com.barrybecker4.simulation.liquid.config.json.{EnvironmentJson, LiquidJson, RegionJson, SourceJson, WallJson}
+import com.google.gson.Gson
 import javax.vecmath.Vector2d
-import java.net.URL
+
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 
 import scala.compiletime.uninitialized
 
 
 /**
   * Configuration constraints and initial conditions to use while running the simulation.
-  * Loaded from a config file.
+  * Loaded from a JSON config file.
   * @author Barry Becker
   */
 object Conditions {
-  private val START = "start"
-  private val STOP = "stop"
+  private val GSON = new Gson()
 }
 
 /**
@@ -30,8 +29,12 @@ object Conditions {
 class Conditions(val configFile: String) { // use a default if null passed in.
   private var walls: Seq[Wall] = uninitialized
   val file: String = if (configFile == null) ConfigurationEnum.BASIC.fileName else configFile
-  val url: URL = FileUtil.getURL(file)
-  val document: Document = DomUtil.parseXML(url)
+  private val url = FileUtil.getURL(file)
+  private val env: EnvironmentJson = {
+    val reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)
+    try Conditions.GSON.fromJson(reader, classOf[EnvironmentJson])
+    finally reader.close()
+  }
 
   private var gridWidth = 0
   private var gridHeight = 0
@@ -42,114 +45,50 @@ class Conditions(val configFile: String) { // use a default if null passed in.
   /** Parsed from config; reserved until sink physics is implemented. */
   private var sinks: List[Region] = uninitialized
   private var initialLiquidRegions: List[Region] = uninitialized
-  parseFromDocument(document)
+  parseFromJson(env)
 
-  private def parseFromDocument(document: Document): Unit = {
-    val envRoot = document.getDocumentElement
-    // environment element
-    val children = envRoot.getChildNodes
-    gridWidth = DomUtil.getAttribute(envRoot, "gridWidth").toInt
-    gridHeight = DomUtil.getAttribute(envRoot, "gridHeight").toInt
-    cellSize = DomUtil.getAttribute(envRoot, "cellSize").toDouble
-    gravity = DomUtil.getAttribute(envRoot, "gravity").toDouble
-    val num = children.getLength
-    // #comment nodes are skipped
-    for (i <- 0 until num)  {
-      val n = children.item(i)
-      val name = n.getNodeName
-      //String name = DomUtil.getAttribute(n, "name");
-      if ("walls" == name) parseWalls(n) else if ("liquid" == name) parseLiquidRegions(n)
-    }
+  private def parseFromJson(env: EnvironmentJson): Unit = {
+    gridWidth = env.gridWidth
+    gridHeight = env.gridHeight
+    cellSize = env.cellSize
+    gravity = env.gravity
+    walls = Option(env.walls).getOrElse(Array.empty[WallJson]).map(parseWall).toSeq
+    val liquid = Option(env.liquid).getOrElse(LiquidJson(null, null, null))
+    sources = Option(liquid.sources).getOrElse(Array.empty[SourceJson]).map(parseSource).toList
+    sinks = Option(liquid.sinks).getOrElse(Array.empty[RegionJson]).map(parseRegion).toList
+    initialLiquidRegions = Option(liquid.regions).getOrElse(Array.empty[RegionJson]).map(parseRegion).toList
   }
 
-  /**
-    * parses xml of this form
-    * <pre>
-    * <walls>
-    * <wall start="15,10" stop="15,15" />
-    * ...
-    * </walls>
-    * </pre>
-    */
-  private def parseWalls(wallsNode: Node): Unit = {
-    walls = elementChildren(wallsNode, "wall").map(n =>
-      new Wall(parseLocation(n, Conditions.START), parseLocation(n, Conditions.STOP)))
-  }
+  private def parseWall(w: WallJson) =
+    new Wall(parseLocation(w.start), parseLocation(w.stop))
 
-  private def elementChildren(parent: Node, localName: String): IndexedSeq[Node] = {
-    val children = parent.getChildNodes
-    (0 until children.getLength).map(children.item).filter { n =>
-      n.getNodeType == ELEMENT_NODE && localName == n.getNodeName
-    }
-  }
-
-  /**
-    * Parses xml of this form
-    * <pre>
-    * <liquid>
-    * <source start="5, 6" velocity="30.0,0.0" />
-    * <region start="1,25" stop="20, 31" />
-    * </liquid>
-    * </pre>
-    */
-  private def parseLiquidRegions(wallsNode: Node): Unit = {
-    sources = List[Source]()
-    sinks = List[Region]()
-    initialLiquidRegions = List[Region]()
-    val children = wallsNode.getChildNodes
-    val num = children.getLength
-    for (i <- 0 until num) {
-      val n = children.item(i)
-      if (n.getNodeType != ELEMENT_NODE) () // skip whitespace / comment text
-      else {
-        val name = n.getNodeName
-        if ("source" == name) {
-          val source = parseSource(n)
-          sources +:= source
-        }
-        else if ("sink" == name) {
-          val sink = parseRegion(n)
-          sinks +:= sink
-        }
-        else if ("region" == name) {
-          val region = parseRegion(n)
-          initialLiquidRegions +:= region
-        }
-      }
-    }
-  }
-
-  private def parseSource(sourceNode: Node) = {
-    val startTime = DomUtil.getAttribute(sourceNode, "startTime", "0").toDouble
-    val duration = DomUtil.getAttribute(sourceNode, "duration", "-1").toDouble
-    val repeatInterval = DomUtil.getAttribute(sourceNode, "repeatInterval", "-1").toDouble
-    new Source(parseLocation(sourceNode, Conditions.START),
-      parseLocation(sourceNode, Conditions.STOP), parseVector(sourceNode, "velocity"),
+  private def parseSource(s: SourceJson) = {
+    val startTime = if (s.startTime == null) 0.0 else s.startTime.doubleValue
+    val duration = if (s.duration == null) -1.0 else s.duration.doubleValue
+    val repeatInterval = if (s.repeatInterval == null) -1.0 else s.repeatInterval.doubleValue
+    new Source(parseLocation(s.start), parseLocation(s.stop), parseVector(s.velocity),
       startTime, duration, repeatInterval)
   }
 
-  private def parseRegion(node: Node) = new Region(parseLocation(node, Conditions.START), parseLocation(node, Conditions.STOP))
+  private def parseRegion(r: RegionJson) =
+    new Region(parseLocation(r.start), parseLocation(r.stop))
 
-  private def parseLocation(n: Node, locationAttribute: String): Location = {
-    val locationString = DomUtil.getAttribute(n, locationAttribute, null)
-    if (locationString == null) return null
-    val commaPos = locationString.indexOf(",")
-    assert(commaPos != -1)
-    val xPos = locationString.substring(0, commaPos).toInt
-    val yPos = locationString.substring(commaPos + 1).toInt
-    // verify that it is within the bounds of the grid
+  /**
+    * @param coords `[x, y]` from JSON; stored as [[IntLocation]](y, x) to match prior XML parsing.
+    */
+  private def parseLocation(coords: Array[Int]): Location = {
+    if (coords == null) return null
+    assert(coords.length == 2, "location must be [x, y]")
+    val xPos = coords(0)
+    val yPos = coords(1)
     assert(xPos <= this.gridWidth && xPos > 0, "invalid xpos = " + xPos)
     assert(yPos <= this.gridHeight && yPos > 0, "invalid ypos = " + yPos)
     IntLocation(yPos, xPos)
   }
 
-  private def parseVector(n: Node, vecAttribute: String) = {
-    val vecString = DomUtil.getAttribute(n, vecAttribute)
-    val commaPos = vecString.indexOf(",")
-    assert(commaPos != -1)
-    val x = vecString.substring(0, commaPos).toDouble
-    val y = vecString.substring(commaPos + 1).toDouble
-    new Vector2d(x, y)
+  private def parseVector(coords: Array[Double]) = {
+    assert(coords != null && coords.length == 2, "velocity must be [vx, vy]")
+    new Vector2d(coords(0), coords(1))
   }
 
   def getWalls: Seq[Wall] = walls

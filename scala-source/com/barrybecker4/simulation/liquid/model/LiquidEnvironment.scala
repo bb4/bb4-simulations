@@ -60,6 +60,8 @@ class LiquidEnvironment(val configFile: String) {
     setInitialLiquid()
     grid.setBoundaries()
     setConstraints()
+    // Sources / initial liquid add particles without setting status; refresh before first paint/step.
+    grid.updateCellStatus()
   }
 
   def getWidth: Int = grid.getXDimension + 2
@@ -85,6 +87,8 @@ class LiquidEnvironment(val configFile: String) {
     grid.updateCellStatus()
     // Set up obstacle conditions for the free surface and obstacle cells
     setConstraints()
+    // Spigots inject particles into cells that may still be EMPTY; refresh status before physics/render.
+    grid.updateCellStatus()
     if (!advectionOnly) { // Compute velocities for all full cells.
       gridUpdater.updateVelocity(timeStep, conditions.getGravity)
       ////println(grid.toString());

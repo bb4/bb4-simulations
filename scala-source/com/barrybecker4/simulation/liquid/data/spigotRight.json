@@ -1,0 +1,11 @@
+{
+  "gridWidth": 21,
+  "gridHeight": 15,
+  "cellSize": 10.0,
+  "gravity": -98,
+  "liquid": {
+    "sources": [
+      { "start": [5, 12], "velocity": [10.0, 0.0] }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "gridWidth": 3,
+  "gridHeight": 3,
+  "cellSize": 10.0,
+  "gravity": -9.8,
+  "liquid": {
+    "sources": [
+      {
+        "start": [1, 1],
+        "velocity": [10.0, 0.0],
+        "startTime": 0.5,
+        "duration": 1.0,
+        "repeatInterval": 3.0
+      }
+    ]
+  }
+}
