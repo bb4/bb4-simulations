@@ -78,11 +78,13 @@ class WaterSimulator() extends Simulator("Water") {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
 
-    if (!oldDimensions.equals(this.getSize())) {
-      env = new Environment(this.getWidth, this.getHeight)
-      envRenderer.setEnvironment(env)
-      handler.setEnvironment(env)
-      oldDimensions = this.getSize()
+    EnvSize.envDims(getWidth, getHeight, rendering.EnvironmentRenderer.OFFSET) match {
+      case Some((w, h)) if w != oldDimensions.width || h != oldDimensions.height =>
+        env = new Environment(w, h)
+        envRenderer.setEnvironment(env)
+        handler.setEnvironment(env)
+        oldDimensions = new Dimension(w, h)
+      case _ => // not sized yet, or unchanged
     }
     envRenderer.render(g2)
   }

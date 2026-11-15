@@ -12,7 +12,7 @@ import scala.math.round
   * @author Barry Becker
   */
 object EnvironmentRenderer {
-  private val OFFSET = 10
+  private[water] val OFFSET = 10
   private val GROUND_COLOR = new Color(90, 60, 50)
   private val WATER_COLOR = new Color(90, 210, 255)
   private val VECTOR_COLOR = new Color(20, 40, 160)
