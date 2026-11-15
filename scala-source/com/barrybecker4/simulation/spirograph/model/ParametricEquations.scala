@@ -1,17 +1,19 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph.model
 
 /**
-  * Represents 2 parametric equations for defining the epicycloid curve (IOW, a spirograph curve).
-  * @param radius      radius of main circle
-  * @param combinedRad main circle radius plus outer circle radius
-  * @param position    position of spoke.
+  * Display-only parametric equation strings for the UI labels.
+  * Numeric drawing uses [[SpirographMath]], not these strings.
+  *
+  * @param rollingRadius secondary/rolling circle radius (R2 from the sliders)
+  * @param combinedRad   main + rolling radius (R1 + R2)
+  * @param position      pen offset along the rolling-circle spoke
   */
 object ParametricEquations {
 
-  def apply(radius: Int, combinedRad: Int, position: Int): ParametricEquations = {
-    val (xEq, yEq) = computeStrings(radius, combinedRad, position)
-    new ParametricEquations(radius, combinedRad, position, xEq, yEq)
+  def apply(rollingRadius: Int, combinedRad: Int, position: Int): ParametricEquations = {
+    val (xEq, yEq) = computeStrings(rollingRadius, combinedRad, position)
+    new ParametricEquations(xEq, yEq)
   }
 
   private def computeStrings(radius: Int, combinedRad: Int, position: Int): (String, String) =
@@ -46,9 +48,6 @@ object ParametricEquations {
 }
 
 final class ParametricEquations private[model] (
-  val radius: Int,
-  val combinedRad: Int,
-  val position: Int,
   val xEquation: String,
   val yEquation: String,
 )

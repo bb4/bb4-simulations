@@ -1,7 +1,8 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph
 
 import com.barrybecker4.simulation.spirograph.model.Parameters
+import com.barrybecker4.simulation.spirograph.model.SpirographMath
 import java.awt._
 
 
@@ -32,7 +33,6 @@ class DecorationRenderer(var params: Parameters) {
     drawCircleAndDot(g)
   }
 
-  /** Draw axes */
   private def drawAxes(g: Graphics2D): Unit = {
     g.setColor(DecorationRenderer.AXES_COLOR)
     g.setStroke(DecorationRenderer.AXES_STROKE)
@@ -40,7 +40,6 @@ class DecorationRenderer(var params: Parameters) {
     g.drawLine(0, height >> 1, width, height >> 1)
   }
 
-  /** Draw central circle. */
   private def drawCentralCircle(g: Graphics2D): Unit = {
     g.setColor(DecorationRenderer.CIRCLE_COLOR)
     g.setStroke(DecorationRenderer.CIRCLE_STROKE)
@@ -55,11 +54,11 @@ class DecorationRenderer(var params: Parameters) {
   }
 
   private def drawCircle2(g: Graphics2D): Unit = {
-    val center = params.getCenter(width, height)
+    val (cx, cy) = SpirographMath.center(width, height, params.r1, params.r2, params.theta)
     val sign = params.sign
     val r2 = params.r2
-    val ox = (center.getX - sign * r2).toInt
-    val oy = (center.getY - sign * r2).toInt
+    val ox = (cx - sign * r2).toInt
+    val oy = (cy - sign * r2).toInt
     val dim = (2 * sign * r2).toInt
     g.setColor(DecorationRenderer.CIRCLE_COLOR)
     g.drawOval(ox, oy, dim, dim)
@@ -69,17 +68,18 @@ class DecorationRenderer(var params: Parameters) {
 
   private def drawLineAndDot(g: Graphics2D): Unit = {
     g.setColor(DecorationRenderer.CIRCLE_COLOR)
-    val center = params.getCenter(width, height)
+    val (cx, cy) = SpirographMath.center(width, height, params.r1, params.r2, params.theta)
     var side = params.sign
     val pos = params.pos
     val r2 = params.r2
     val phi = params.phi
-    val dotPos = new Point((center.getX + pos * Math.cos(phi)).toInt, (center.getY - pos * Math.sin(phi)).toInt)
+    val (px, py) = SpirographMath.penPoint(cx, cy, pos, phi)
+    val dotPos = new Point(px.toInt, py.toInt)
     if (pos < 0) side = -side
     g.setStroke(DecorationRenderer.SPOKE_STROKE)
     if (params.y > 0) {
-      val startX = (center.getX + side * r2 * Math.cos(phi)).toInt
-      val startY = (center.getY - side * r2 * Math.sin(phi)).toInt
+      val startX = (cx + side * r2 * Math.cos(phi)).toInt
+      val startY = (cy - side * r2 * Math.sin(phi)).toInt
       g.drawLine(startX, startY, dotPos.x, dotPos.y)
     }
     drawDot(g, dotPos)

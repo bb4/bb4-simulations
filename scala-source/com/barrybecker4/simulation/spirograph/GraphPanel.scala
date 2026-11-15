@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph
 
 import com.barrybecker4.common.concurrency.ThreadUtil
@@ -16,7 +16,7 @@ object GraphPanel {
 /**
   * Panel to contain the SpiroGraph curve and control its rendering.
   * Adapted from David Little's original work.
-  * Rendering happens in a separate thread. Note use of monitor for locking.
+  * Slow draws run on a worker thread; pause is a busy-wait sleep loop.
   * @author David Little
   */
 class GraphPanel(var state: GraphState) extends JPanel with Runnable {
@@ -80,9 +80,7 @@ class GraphPanel(var state: GraphState) extends JPanel with Runnable {
     thread = new Thread(this)
   }
 
-  /** Does nothing if not paused.
-    * If paused, it will discontinue processing on this thread until pauseLock is released.
-    */
+  /** Busy-waits while paused so the render thread yields until resume. */
   def waitIfPaused(): Unit =
       while (paused) ThreadUtil.sleep(200)
 

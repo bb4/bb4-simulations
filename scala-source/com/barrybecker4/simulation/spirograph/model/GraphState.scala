@@ -1,7 +1,6 @@
 /** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph.model
 
-import com.barrybecker4.math.MathUtil
 import com.barrybecker4.ui.sliders.ColorChangeListener
 import java.awt.Color
 import scala.compiletime.uninitialized
@@ -77,11 +76,8 @@ class GraphState() extends ColorChangeListener {
   }
 
   /** @return the number of complete revolutions needed until the curve will overwrite itself. */
-  def getNumRevolutions: Int = {
-    val sign = params.sign
-    val gcd = MathUtil.gcd(params.r1.toLong, (sign * params.r2).toLong)
-    ((sign * params.r2) / gcd).toInt
-  }
+  def getNumRevolutions: Int =
+    SpirographMath.numRevolutions(params.r1, params.r2)
 
   /** reset to initial values. */
   def reset(): Unit = params.resetAngle()

@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph
 
 import com.barrybecker4.simulation.spirograph.model.GraphState
@@ -22,6 +22,12 @@ import scala.compiletime.uninitialized
 class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   extends JPanel with ActionListener with GraphStateChangeListener {
 
+  // Declare before create* helpers so later initializers do not wipe assigned refs.
+  private var xFunction: JLabel = uninitialized
+  private var yFunction: JLabel = uninitialized
+  private var hideButton: GradientButton = uninitialized
+  private var drawButton: GradientButton = uninitialized
+
   setBorder(BorderFactory.createEmptyBorder(4, 4, 12, 3))
   this.state.addStateListener(this)
   setLayout(new BoxLayout(this, BoxLayout.Y_AXIS))
@@ -36,10 +42,6 @@ class ControlPanel(var graphPanel: GraphPanel, var state: GraphState)
   add(fill)
   add(createFunctionPanel)
   parameterChanged()
-  private var xFunction: JLabel = uninitialized
-  private var yFunction: JLabel = uninitialized
-  private var hideButton: GradientButton = uninitialized
-  private var drawButton: GradientButton = uninitialized
 
   private def createButtonGroup = {
     val bp = new JPanel(new BorderLayout)

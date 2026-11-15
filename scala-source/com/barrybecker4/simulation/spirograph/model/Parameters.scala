@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2011. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph.model
 
 import java.awt.geom.Point2D
@@ -17,18 +17,20 @@ class Parameters() {
   var pos = .0f
   /** angle of the main circle for current state. */
   var theta = .0f
-  /** @return angle of the outer secondary circle for current state. */
+  /** angle of the outer secondary circle for current state. */
   var phi = .0f
   var x = .0f
   var y = .0f
 
   def initialize(width: Int, height: Int): Unit = {
     resetAngle()
-    x = (width >> 1) + r1 + (r2 + sign) + pos
-    y = (height >> 1).toFloat
+    val (cx, cy) = SpirographMath.center(width, height, r1, r2, 0f)
+    val (px, py) = SpirographMath.penPoint(cx, cy, pos, 0f)
+    x = px
+    y = py
   }
 
-  def sign: Int = if (r2 < 0) -1 else 1
+  def sign: Int = SpirographMath.sign(r2)
 
   /** Reset to initial values. */
   def resetAngle(): Unit = {
@@ -36,8 +38,10 @@ class Parameters() {
     phi = 0.0f
   }
 
-  def getCenter(width: Int, height: Int): Point2D =
-    new Point2D.Double((width >> 1) + (r1 + r2) * Math.cos(theta), (height >> 1) - (r1 + r2) * Math.sin(theta))
+  def getCenter(width: Int, height: Int): Point2D = {
+    val (cx, cy) = SpirographMath.center(width, height, r1, r2, theta)
+    new Point2D.Double(cx, cy)
+  }
 
   /** Set our values from another parameters instance. */
   def copyFrom(other: Parameters): Unit = {

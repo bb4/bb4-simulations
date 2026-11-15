@@ -1,4 +1,4 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph
 
 import com.barrybecker4.simulation.spirograph.model.GraphState
@@ -8,21 +8,15 @@ import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.ui.sliders.SliderProperties
 
 
+/** Slider indices into [[ControlSliderGroup.SLIDER_PROPS]] (declaration order). */
+enum SliderId:
+  case Radius1, Radius2, Position, Velocity, LineWidth, Segments
+
 /**
-  * That old spirograph game from the 70's brought into the computer age
-  * Based on work originally done by David Little.
-  *
-  * Use checkboxes instead of buttons for
-  *  - show decoration (was show axis)
+  * Slider controls for spirograph radii, pen position, speed, and stroke.
   */
-object ControlSliderGroup { // slider indices
-  private val RADIUS1 = 0
-  private val RADIUS2 = 1
-  private val POSITION = 2
-  private val VELOCITY = 3
-  private val LINE_WIDTH = 4
-  private val SEGMENTS = 5
-  /** Initialize the sliders in the group */
+object ControlSliderGroup {
+
   private val SLIDER_PROPS = Array(
     new SliderProperties("Radius1", 5, 255, 60),
     new SliderProperties("Radius2", -59, 200, 60),
@@ -34,12 +28,12 @@ object ControlSliderGroup { // slider indices
 
   def createGraphState: GraphState = {
     val state = new GraphState
-    state.params.r1 = SLIDER_PROPS(RADIUS1).getInitialValue.toFloat
-    state.params.r2 = SLIDER_PROPS(RADIUS2).getInitialValue.toFloat
-    state.params.pos = SLIDER_PROPS(POSITION).getInitialValue.toFloat
-    state.setVelocity(SLIDER_PROPS(VELOCITY).getInitialValue.toInt)
-    state.lineWidth = SLIDER_PROPS(LINE_WIDTH).getInitialValue.toInt
-    state.numSegmentsPerRev = SLIDER_PROPS(SEGMENTS).getInitialValue.toInt
+    state.params.r1 = SLIDER_PROPS(SliderId.Radius1.ordinal).getInitialValue.toFloat
+    state.params.r2 = SLIDER_PROPS(SliderId.Radius2.ordinal).getInitialValue.toFloat
+    state.params.pos = SLIDER_PROPS(SliderId.Position.ordinal).getInitialValue.toFloat
+    state.setVelocity(SLIDER_PROPS(SliderId.Velocity.ordinal).getInitialValue.toInt)
+    state.lineWidth = SLIDER_PROPS(SliderId.LineWidth.ordinal).getInitialValue.toInt
+    state.numSegmentsPerRev = SLIDER_PROPS(SliderId.Segments.ordinal).getInitialValue.toInt
     state
   }
 }
@@ -49,31 +43,30 @@ class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
 
   setSliderListener(this)
 
-  def getRadius2Value: Double = getSliderValue(ControlSliderGroup.RADIUS2)
+  def getRadius2Value: Double = getSliderValue(SliderId.Radius2.ordinal)
 
   /** Implements SliderChangeListener interface.
     * See SliderGroup
     * Maintains constraints between sliders.
     */
   override def sliderChanged(src: Int, sliderName: String, sliderValue: Double): Unit = {
-    // I know that all the sliders are integer based.
     val value = sliderValue.toFloat
-    if (src == ControlSliderGroup.RADIUS1) {
-      var n: Float = getSliderValueAsInt(ControlSliderGroup.RADIUS2).toFloat
-      if (n < 2 - value) {
-        n = 1 - value
-        setSliderValue(ControlSliderGroup.RADIUS2, n)
-        state.setR2(n.toFloat)
-      }
-      setSliderMinimum(ControlSliderGroup.RADIUS2, 2 - value)
-      state.setR1(value.toFloat)
+    SliderId.fromOrdinal(src) match {
+      case SliderId.Radius1 =>
+        var n: Float = getSliderValueAsInt(SliderId.Radius2.ordinal).toFloat
+        if (n < 2 - value) {
+          n = 1 - value
+          setSliderValue(SliderId.Radius2.ordinal, n)
+          state.setR2(n)
+        }
+        setSliderMinimum(SliderId.Radius2.ordinal, 2 - value)
+        state.setR1(value)
+      case SliderId.Radius2 => state.setR2(value)
+      case SliderId.Position => state.setPos(value)
+      case SliderId.Velocity => state.setVelocity(value.toInt)
+      case SliderId.LineWidth => state.lineWidth = value.toInt
+      case SliderId.Segments => state.numSegmentsPerRev = value.toInt
     }
-    else if (src == ControlSliderGroup.RADIUS2) state.setR2(value)
-    else if (src == ControlSliderGroup.POSITION) state.setPos(value)
-    else if (src == ControlSliderGroup.VELOCITY) state.setVelocity(value.toInt)
-    else if (src == ControlSliderGroup.LINE_WIDTH) state.lineWidth = value.toInt
-    else if (src == ControlSliderGroup.SEGMENTS) state.numSegmentsPerRev = value.toInt
-    else throw new IllegalArgumentException("Unexpected slider index=" + src)
     autoUpdate()
   }
 
@@ -85,11 +78,11 @@ class ControlSliderGroup(var graphPanel: GraphPanel, var state: GraphState)
     else graphPanel.repaint()
   }
 
-  /** @return the x and y parametric equations in a 2 element list.*/
+  /** @return the x and y parametric equations for the equation labels. */
   def getEquations: ParametricEquations = {
-    val rad = getSliderValueAsInt(ControlSliderGroup.RADIUS2)
-    val combinedRad = getSliderValueAsInt(ControlSliderGroup.RADIUS1) + rad
-    val pos = getSliderValueAsInt(ControlSliderGroup.POSITION)
+    val rad = getSliderValueAsInt(SliderId.Radius2.ordinal)
+    val combinedRad = getSliderValueAsInt(SliderId.Radius1.ordinal) + rad
+    val pos = getSliderValueAsInt(SliderId.Position.ordinal)
     ParametricEquations(rad, combinedRad, pos)
   }
 }

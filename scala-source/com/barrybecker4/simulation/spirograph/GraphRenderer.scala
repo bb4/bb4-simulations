@@ -1,7 +1,8 @@
-/** Copyright by Barry G. Becker, 2000-2018. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
+/** Copyright by Barry G. Becker, 2000-2026. Licensed under MIT License: http://www.opensource.org/licenses/MIT  */
 package com.barrybecker4.simulation.spirograph
 
 import com.barrybecker4.simulation.spirograph.model.GraphState
+import com.barrybecker4.simulation.spirograph.model.SpirographMath
 import com.barrybecker4.common.concurrency.ThreadUtil
 import com.barrybecker4.ui.renderers.OfflineGraphics
 import java.awt._
@@ -31,11 +32,12 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
       // avoid degenerate (divide by 0 case) curves.
       if (r2 == 0) return
       val revs = state.getNumRevolutions
-      val n = 1.0f + state.numSegmentsPerRev * Math.abs(p / r2)
-
-      val limit = (n * revs + 0.5).toInt
+      val n = SpirographMath.segmentsPerPass(state.numSegmentsPerRev, p, r2)
+      val limit = SpirographMath.segmentLimit(n, revs)
+      val stroke = new BasicStroke(state.lineWidth.toFloat / GraphState.INITIAL_LINE_WIDTH.toFloat)
+      getOfflineGraphics.setStroke(stroke)
       while (count < limit && !aborted) {
-        drawSegment(count, revs, n)
+        drawSegment(count, n)
         count += 1
       }
     } finally {
@@ -55,8 +57,9 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
   /** Sets the center point. */
   def setPoint(pos: Float, phi: Float): Unit = {
     val center = state.params.getCenter(graphPanel.getWidth, graphPanel.getHeight)
-    state.params.x = (center.getX + pos * Math.cos(phi)).toFloat
-    state.params.y = (center.getY - pos * Math.sin(phi)).toFloat
+    val (x, y) = SpirographMath.penPoint(center.getX, center.getY, pos, phi)
+    state.params.x = x
+    state.params.y = y
   }
 
   /** Stop the rendering as quickly as possible */
@@ -68,14 +71,14 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
   /** Draw a small line segment that makes up the larger spiral curve.
     * Drawn into the offline image.
     */
-  private def drawSegment(count: Int, revs: Int, n: Float): Unit = {
+  private def drawSegment(count: Int, n: Float): Unit = {
     val r1 = state.params.r1
     val r2 = state.params.r2
     val p = state.params.pos
     getOfflineGraphics.setColor(state.color)
-    updateThetaForStep(count, revs, n)
+    state.params.theta = SpirographMath.theta(count, n)
     if (r2 == 0) return
-    state.params.phi = state.params.theta * (1.0f + r1 / r2)
+    state.params.phi = SpirographMath.phi(state.params.theta, r1, r2)
     setPoint(p, state.params.phi)
     graphPanel.waitIfPaused()
     strokeAndDrawLine()
@@ -86,16 +89,9 @@ class GraphRenderer(var state: GraphState, var graphPanel: GraphPanel) {
     state.recordValues()
   }
 
-  private def updateThetaForStep(count: Int, revs: Int, n: Float): Unit =
-    if (count == (n * revs + 0.5).toInt) state.params.theta = 0.0f
-    else state.params.theta = (2.0f * Math.PI * count / n).toFloat
-
-  private def strokeAndDrawLine(): Unit = {
-    val stroke = new BasicStroke(state.lineWidth.toFloat / GraphState.INITIAL_LINE_WIDTH.toFloat)
-    getOfflineGraphics.setStroke(stroke)
+  private def strokeAndDrawLine(): Unit =
     getOfflineGraphics.drawLine(state.oldParams.x.toInt, state.oldParams.y.toInt,
       state.params.x.toInt, state.params.y.toInt)
-  }
 
   private def doSmallDelay(): Unit = ThreadUtil.sleep(state.getDelayMillis)
 
