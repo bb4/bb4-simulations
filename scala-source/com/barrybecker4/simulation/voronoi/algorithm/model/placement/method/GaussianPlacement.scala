@@ -13,14 +13,13 @@ object GaussianPlacement {
 }
 
 /**
-  * Everything we need to know to compute the Voronoi diagram.
-  *
-  * @author Barry Becker
+  * Places sample points with a truncated Gaussian distribution around the canvas center.
   */
 class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
                        var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private val randomPoints = ArrayBuffer.empty[Point]
+  private val bounds = PlacementBounds(margin, width, height)
   rnd.setSeed(0)
 
   def getSamples: IndexedSeq[Point] = randomPoints.toIndexedSeq
@@ -28,10 +27,11 @@ class GaussianPlacement(val width: Int, val height: Int, val margin: Int,
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
     var count: Int = 0
-    val w = width - 2 * margin
-    val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints += new Point(w * getGaussianInBounds + margin, h * getGaussianInBounds + margin)
+      randomPoints += new Point(
+        bounds.innerWidth * getGaussianInBounds + bounds.margin,
+        bounds.innerHeight * getGaussianInBounds + bounds.margin
+      )
       count += 1
     }
   }

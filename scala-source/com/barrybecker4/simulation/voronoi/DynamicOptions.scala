@@ -65,7 +65,6 @@ class DynamicOptions private[voronoi](var algorithm: VoronoiAlgorithm, var simul
     showVoronoiDiagram.addActionListener(this)
 
     val checkBoxes = new JPanel(new GridLayout(0, 1))
-    //checkBoxes.add(useConcurrency);
     checkBoxes.add(useFixedSize)
     checkBoxes.add(showVoronoiDiagram)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)

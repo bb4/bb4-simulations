@@ -9,7 +9,7 @@ import scala.compiletime.uninitialized
 
 
 /**
-  * Everything we need to know to compute the Voronoi diagram.
+  * Bridson-style Poisson-disc sample placement within the canvas.
   *
   * @author Barry Becker
   */

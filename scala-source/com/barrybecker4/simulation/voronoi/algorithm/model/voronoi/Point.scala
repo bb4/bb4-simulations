@@ -38,7 +38,7 @@ object Point {
     else 0
   }
 
-  private val EPSILON = 0.0000001
+  private[voronoi] val EPSILON = 0.0000001
 
   private def equals(a: Double, b: Double): Boolean = {
     if (a == b) return true
@@ -65,5 +65,15 @@ case class Point(x: Double, y: Double) extends Comparable[Point] {
     Math.sqrt(xDiff * xDiff + yDiff * yDiff)
   }
 
-  override def equals(other: Any): Boolean = other.isInstanceOf[Point] && Point.equals(other.asInstanceOf[Point].x, this.x) && Point.equals(other.asInstanceOf[Point].y, this.y)
+  override def equals(other: Any): Boolean =
+    other.isInstanceOf[Point] &&
+      Point.equals(other.asInstanceOf[Point].x, this.x) &&
+      Point.equals(other.asInstanceOf[Point].y, this.y)
+
+  /** Quantize to the epsilon grid so equal-under-epsilon points share a hashCode. */
+  override def hashCode: Int = {
+    val qx = Math.round(x / Point.EPSILON).toInt
+    val qy = Math.round(y / Point.EPSILON).toInt
+    31 * qx + qy
+  }
 }

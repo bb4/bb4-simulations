@@ -63,10 +63,16 @@ class VoronoiGeometry {
       arcs.maxBefore(arcToSearchFor)
   }
 
+  /**
+    * Debug overlay only — not true Voronoi cell boundaries.
+    * Collects finite edge endpoints around each site, sorts by angle, and
+    * interpolates toward the site. Unbounded edges and connectivity are ignored.
+    */
   def getPolygonsForPoints: Iterable[Seq[Point]] = {
     pointToEdgesMap.keys.map(getPolygonPointsForSite).filter(_.size > 2)
   }
 
+  /** See [[getPolygonsForPoints]] — angle-sorted endpoint sketch, not a cell walk. */
   private def getPolygonPointsForSite(site: Point): Seq[Point] = {
     val edges: Set[VoronoiEdge] = pointToEdgesMap(site)
     var points: Set[Point] = Set()

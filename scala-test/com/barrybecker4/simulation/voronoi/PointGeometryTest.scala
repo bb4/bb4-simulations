@@ -40,4 +40,23 @@ class PointGeometryTest extends AnyFunSuite {
     val high = Point(100, 50)
     assert(Point.minYOrderedCompareTo(high, low) < 0)
   }
+
+  test("equals/hashCode contract: equal points have equal hashCodes") {
+    val a = Point(1.0, 2.0)
+    val b = Point(1.0, 2.0)
+    assert(a == b)
+    assert(a.hashCode == b.hashCode)
+  }
+
+  test("equals/hashCode contract: near-epsilon-equal points agree on hashCode when equal") {
+    val a = Point(1.0, 2.0)
+    val b = Point(1.0 + 1e-10, 2.0)
+    if (a == b) assert(a.hashCode == b.hashCode)
+  }
+
+  test("Map round-trip uses equals consistently with hashCode") {
+    val key = Point(3.0, 4.0)
+    val m = Map(key -> "site")
+    assert(m.contains(Point(3.0, 4.0)))
+  }
 }

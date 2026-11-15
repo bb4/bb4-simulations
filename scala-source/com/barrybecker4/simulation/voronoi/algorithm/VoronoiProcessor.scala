@@ -30,13 +30,15 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     processNext(100000000)
   }
 
-  // or some steps at a time
+  /**
+    * Advance the sweep by up to `numSteps` events.
+    * Renders at most once per call (after the batch) so the shared image buffer
+    * is not cleared mid-frame while Swing paints — that was causing flicker.
+    * @return true when the diagram is complete
+    */
   def processNext(numSteps: Int): Boolean = {
-
     var ct = 0
     while (events.nonEmpty && ct < numSteps) {
-      if (renderer.isDefined)
-        renderer.get.draw(points, geometry, sweepLoc)
       val event = events.head
       events = events.tail
       sweepLoc = event.p.y
@@ -46,12 +48,14 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
 
     if (events.isEmpty) {
       this.sweepLoc = -INFINITY_MARGIN // hack to draw negative infinite points
-
       for (bp <- geometry.getBreakPoints)
         bp.finish()
-      return true
+      true
+    } else {
+      // One coherent frame for this batch; final frame is drawn by VoronoiAlgorithm via show()
+      renderer.foreach(_.draw(points, geometry, sweepLoc))
+      false
     }
-    false
   }
 
 
@@ -62,6 +66,10 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
     for (site <- points) {
       if ((site.x < 0) || site.y < 0)
         throw new IllegalArgumentException("Invalid site in input, sites must be greater than 0")
+    }
+    if (points.distinct.length != points.length)
+      throw new IllegalArgumentException("Invalid site in input, coincident sites are not allowed")
+    for (site <- points) {
       events.add(SiteEvent(site))
     }
   }
@@ -79,8 +87,8 @@ class VoronoiProcessor(val points: IndexedSeq[Point], val renderer: Option[Voron
       case a: Arc => a
       case other  => throw new IllegalStateException(s"Expected Arc, got ${other.getClass.getSimpleName}")
     }
-    // Deal with the degenerate case where the first two points are at the same y value
-    if (!geometry.hasArcs && arcAbove.site.y == point.y) {
+    // Degenerate case: second site shares y with the single beach-line arc
+    if (geometry.getArcs.size == 1 && arcAbove.site.y == point.y) {
       updateGeometryWhenTwoPointsAtSameY(arcAbove, point)
       return
     }

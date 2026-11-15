@@ -7,6 +7,8 @@ import com.barrybecker4.simulation.voronoi.algorithm.VoronoiProcessor
 
 
 class CircleEvent(val arc: Arc, p: Point, val vert: Point) extends SiteEvent(p) {
+  override protected def eventKind: Int = 1
+
   override def handleEvent(v: VoronoiProcessor): Unit = {
     v.handleCircleEvent(p, arc, vert)
   }

@@ -1,8 +1,6 @@
 // Copyright by Barry G. Becker, 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.voronoi.algorithm.model.placement.method
 
-import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams.*
-
 /**
   * Parameters for Poisson-disc point placement (minimum separation radius and local sample count).
   * @author Barry Becker

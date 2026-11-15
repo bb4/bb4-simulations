@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.voronoi.rendering
 import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
-import java.awt.{BasicStroke, Color, Dimension, Polygon}
+import java.awt.{BasicStroke, Color, Dimension}
 import java.awt.image.BufferedImage
 import javax.swing.JComponent
 
@@ -13,7 +13,6 @@ import VoronoiRenderer.*
 
 object VoronoiRenderer {
 
-  val MARGIN: Int = 120
   val INFINITY_MARGIN: Double = 10000.0
   val RADIUS: Double = 1.0
 
@@ -21,54 +20,59 @@ object VoronoiRenderer {
   private[voronoi] val POINT_COLOR = Color.YELLOW
   private[voronoi] val LINE_COLOR = Color.WHITE
   private[voronoi] val BREAK_COLOR = new Color(255, 110, 55)
-  private[voronoi] val POLYGON_FILL_COLOR = new Color(100, 70, 225, 50)
-  private[voronoi] val POLYGON_EDGE_COLOR = new Color(140, 90, 255, 210)
   private[voronoi] val BACKGROUND_COLOR = Color.BLACK
   private[voronoi] val STROKE: BasicStroke = new BasicStroke(0.5f)
   private[voronoi] val BREAK_STROKE: BasicStroke = new BasicStroke(1.0f)
   private[voronoi] val PARABOLA_INC = 2
 }
 
+/**
+  * Offline image buffer for Voronoi animation. All buffer mutations and
+  * [[getImage]] are synchronized so the EDT paint path never samples a
+  * half-cleared frame (which caused flicker during the Fortune sweep).
+  */
 class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) extends IPointRenderer {
   private val offlineGraphics = new OfflineGraphics(new Dimension(width, height), BACKGROUND_COLOR)
 
-  def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = {
-    drawPoints(sites)
+  /** Final diagram: sites + completed edges (no beach-line debug overlay). */
+  def show(sites: IndexedSeq[Point], edgeList: IndexedSeq[VoronoiEdge]): Unit = synchronized {
+    clearUnlocked()
+    drawPointsUnlocked(sites)
     setColor(LINE_COLOR)
     setStroke(STROKE)
-    for (e <- edgeList) {
-      if (e.p1 != null && e.p2 != null) {
-        val topY = if (e.p1.y == Double.PositiveInfinity) height + INFINITY_MARGIN
-        else e.p1.y // HACK to draw from infinity
-        drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
-      }
+    for (e <- edgeList if e.p1 != null && e.p2 != null) {
+      val topY = topYForEdgeDraw(e.p1.y)
+      drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
     }
   }
 
-  def drawPoints(samples: Seq[Point]): Unit = {
-    setColor(POINT_COLOR)
-    for (point <- samples) {
-      fillCircle(point, RADIUS)
-    }
+  def drawPoints(samples: Seq[Point]): Unit = synchronized {
+    drawPointsUnlocked(samples)
   }
 
-  def getImage: BufferedImage = offlineGraphics.getOfflineImage.get
+  def getImage: BufferedImage = synchronized {
+    offlineGraphics.getOfflineImage.get
+  }
 
-  def draw(sites: IndexedSeq[Point], geometry: VoronoiGeometry, sweepLoc: Double): Unit = {
-    clear()
-    drawSiteMarkers(sites)
+  /**
+    * In-progress Fortune sweep frame: sites, beach line, breakpoints, and
+    * finished edge segments. Omits the approximate polygon overlay (not real
+    * cells) which produced blotchy fills and amplified flicker.
+    */
+  def draw(sites: IndexedSeq[Point], geometry: VoronoiGeometry, sweepLoc: Double): Unit = synchronized {
+    clearUnlocked()
+    drawPointsUnlocked(sites)
     drawBreakPointsLayer(geometry)
     drawArcParabolas(geometry)
     drawCompletedEdges(geometry)
     drawSweepLine(sweepLoc)
-    for (poly <- geometry.getPolygonsForPoints)
-      drawPolygon(poly)
   }
 
-  private def drawSiteMarkers(sites: IndexedSeq[Point]): Unit = {
+  private def drawPointsUnlocked(samples: Seq[Point]): Unit = {
     setColor(POINT_COLOR)
-    for (p <- sites)
-      fillCircle(p, RADIUS)
+    for (point <- samples) {
+      fillCircle(point, RADIUS)
+    }
   }
 
   private def drawBreakPointsLayer(geometry: VoronoiGeometry): Unit = {
@@ -85,6 +89,7 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
 
   private def drawCompletedEdges(geometry: VoronoiGeometry): Unit = {
     setColor(LINE_COLOR)
+    setStroke(STROKE)
     for (e <- geometry.getEdgeList if e.p1 != null && e.p2 != null) {
       val topY = topYForEdgeDraw(e.p1.y)
       drawLine(e.p1.x, topY, e.p2.x, e.p2.y)
@@ -96,9 +101,13 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
     else p1y
 
   private def drawSweepLine(sweepLoc: Double): Unit =
-    drawLine(-INFINITY_MARGIN, sweepLoc, height + INFINITY_MARGIN, sweepLoc)
+    drawLine(-INFINITY_MARGIN, sweepLoc, width + INFINITY_MARGIN, sweepLoc)
 
-  def clear(): Unit = {
+  def clear(): Unit = synchronized {
+    clearUnlocked()
+  }
+
+  private def clearUnlocked(): Unit = {
     offlineGraphics.clear()
   }
 
@@ -107,14 +116,6 @@ class VoronoiRenderer(val width: Int, val height: Int, val panel: JComponent) ex
     val y: Int = p.y.toInt
     val rad = radius.toInt
     offlineGraphics.fillCircle(x, y, rad)
-  }
-
-  private def drawPolygon(points: Seq[Point]): Unit = {
-    def polygon: Polygon = new Polygon(points.map(_.x.toInt).toArray, points.map(_.y.toInt).toArray, points.length)
-    setColor(POLYGON_FILL_COLOR)
-    offlineGraphics.fillPolygon(polygon)
-    setColor(POLYGON_EDGE_COLOR)
-    offlineGraphics.drawPolygon(polygon)
   }
 
   private def drawBreakPoint(bp: BreakPoint): Unit = {

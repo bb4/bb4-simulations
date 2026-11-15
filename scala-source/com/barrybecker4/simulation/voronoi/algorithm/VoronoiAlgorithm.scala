@@ -8,7 +8,6 @@ import javax.swing.JComponent
 
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.PointPlacementModel
 import com.barrybecker4.simulation.voronoi.algorithm.model.placement.method.PoissonParams
-import com.barrybecker4.simulation.voronoi.algorithm.model.voronoi.Point
 import com.barrybecker4.simulation.voronoi.rendering.VoronoiRenderer
 
 import VoronoiAlgorithm.*
@@ -19,7 +18,6 @@ import scala.compiletime.uninitialized
 object VoronoiAlgorithm {
   val DEFAULT_MAX_POINTS = 100
   val DEFAULT_STEPS_PER_FRAME = 1
-  val DEFAULT_USE_POISSON = true
   val DEFAULT_SHOW_VORONOI_DIAGRAM = true
   private val DEFAULT_SIZE = 200
   
@@ -87,9 +85,9 @@ class VoronoiAlgorithm(panel: JComponent) {
 
   def getImage: BufferedImage = voronoiRenderer.getImage
 
-  def setNumSamplePoints(newNumTravelors: Int): Unit = {
-    if (newNumTravelors != maxPoints) {
-      maxPoints = newNumTravelors
+  def setNumSamplePoints(newNumPoints: Int): Unit = {
+    if (newNumPoints != maxPoints) {
+      maxPoints = newNumPoints
       requestRestart(pointModel.getWidth, pointModel.getHeight)
     }
   }

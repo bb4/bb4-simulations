@@ -8,14 +8,13 @@ import scala.util.Random
 
 
 /**
-  * Everything we need to know to compute the Voronoi diagram.
-  *
-  * @author Barry Becker
+  * Places sample points uniformly at random within the margin-inset rectangle.
   */
 class RandomPlacement(val width: Int, val height: Int, margin: Int,
                       var numPoints: Int, rnd: Random) extends PlacementMethod {
 
   private val randomPoints = ArrayBuffer.empty[Point]
+  private val bounds = PlacementBounds(margin, width, height)
   rnd.setSeed(0)
 
   def getSamples: IndexedSeq[Point] = randomPoints.toIndexedSeq
@@ -23,10 +22,11 @@ class RandomPlacement(val width: Int, val height: Int, margin: Int,
   /** @param numPoints number of points to add on this increment */
   def increment(numPoints: Int): Unit = synchronized {
     var count: Int = 0
-    val w = width - 2 * margin
-    val h = height - 2 * margin
     while (count < numPoints) {
-      randomPoints += new Point(margin + w * rnd.nextDouble(), margin + h * rnd.nextDouble())
+      randomPoints += new Point(
+        bounds.margin + bounds.innerWidth * rnd.nextDouble(),
+        bounds.margin + bounds.innerHeight * rnd.nextDouble()
+      )
       count += 1
     }
   }

@@ -3,7 +3,6 @@ package com.barrybecker4.simulation.voronoi
 
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.{Simulator, SimulatorOptionsDialog}
-import com.barrybecker4.simulation.voronoi.DynamicOptions
 import com.barrybecker4.simulation.voronoi.algorithm.VoronoiAlgorithm
 
 import javax.swing.*
@@ -15,10 +14,6 @@ import scala.compiletime.uninitialized
 /**
   * @author Barry Becker.
   */
-object VoronoiExplorer {
-  protected val DEFAULT_STEPS_PER_FRAME = 1
-}
-
 class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
 
   private var algorithm: VoronoiAlgorithm = uninitialized
@@ -39,7 +34,7 @@ class VoronoiExplorer() extends Simulator("Voronoi Explorer") {
 
   override protected def reset(): Unit = {
     algorithm.reset()
-    setNumStepsPerFrame(VoronoiExplorer.DEFAULT_STEPS_PER_FRAME)
+    setNumStepsPerFrame(VoronoiAlgorithm.DEFAULT_STEPS_PER_FRAME)
     if (options != null) options.reset()
   }
 
