@@ -38,6 +38,8 @@ abstract class WfcModel(name: String,
   private var ready: Boolean = false
   private var iterationCt = 0
   private var result: Option[Boolean] = None
+  /** Cached render; cleared whenever the wave changes. */
+  private var cachedImage: BufferedImage = uninitialized
 
   def getName: String = name
   def onBoundary(x: Int, y: Int): Boolean
@@ -57,6 +59,7 @@ abstract class WfcModel(name: String,
     */
   def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
     ready = false
+    invalidateGraphics()
     if (wave == null) {
       wave = new Wave(FMX, FMY, allowInconsistencies)
       wave.init(tCounter, weights)
@@ -96,6 +99,7 @@ abstract class WfcModel(name: String,
         result match {
           case Some(ok) =>
             ready = true
+            invalidateGraphics()
             if (!ok && WfcDebug.enabled) {
               println("*** Inconsistent state. No solution found!")
             }
@@ -103,6 +107,7 @@ abstract class WfcModel(name: String,
           case None =>
             wave.propagate(onBoundary, weights, propagator)
             iterationCt += 1
+            invalidateGraphics()
             if (iterationCt % 100 == 0 && WfcDebug.enabled) println(s"$iterationCt, ")
         }
       }
@@ -110,6 +115,20 @@ abstract class WfcModel(name: String,
       None
   }
 
-  def clear(): Unit = wave.clear(tCounter, weights, propagator)
-  def graphics(): BufferedImage
+  def clear(): Unit = {
+    invalidateGraphics()
+    wave.clear(tCounter, weights, propagator)
+  }
+
+  /** Rendered view of the current wave; reused until the wave changes. */
+  final def graphics(): BufferedImage = {
+    assert(this.isReady)
+    if (cachedImage == null) cachedImage = renderGraphics()
+    cachedImage
+  }
+
+  protected def invalidateGraphics(): Unit = { cachedImage = null }
+
+  /** Subclasses build a fresh image of the current wave state. */
+  protected def renderGraphics(): BufferedImage
 }

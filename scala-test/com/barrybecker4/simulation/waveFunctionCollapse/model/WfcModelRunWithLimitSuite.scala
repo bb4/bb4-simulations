@@ -21,7 +21,7 @@ class WfcModelRunWithLimitSuite extends AnyFunSuite {
 
     override def onBoundary(x: Int, y: Int): Boolean = false
 
-    override def graphics(): BufferedImage =
+    override protected def renderGraphics(): BufferedImage =
       new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 
     override def advance(steps: Int): Option[Boolean] = outcome

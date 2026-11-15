@@ -18,8 +18,8 @@ class OverlappingModel(val name: String, width: Int, height: Int,
 
   periodic = periodicOutput
   private var ground: Int = 0
-  private val bitmap: BufferedImage = readImage(s"samples/$name.png")
-  private val patternExtractor = PatternExtractor(bitmap, imageParams)
+  // Seed bitmap is only needed during pattern extraction — do not retain it.
+  private val patternExtractor = PatternExtractor(readImage(s"samples/$name.png"), imageParams)
   private val N = imageParams.N
 
   // Solver grid is pixel size / scale (not raw pixel width/height).
@@ -69,10 +69,7 @@ class OverlappingModel(val name: String, width: Int, height: Int,
     }
   }
 
-  def graphics(): BufferedImage = {
-    assert(this.isReady)
-    imageExtractor.getImage(wave)
-  }
+  protected def renderGraphics(): BufferedImage = imageExtractor.getImage(wave)
 
   override def toString: String = {
     s"OverlappingModel($getName periodicOutput=$periodicOutput ${imageParams.toString} limit=$limit)"

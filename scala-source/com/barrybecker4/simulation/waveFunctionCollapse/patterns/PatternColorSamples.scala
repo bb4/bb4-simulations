@@ -7,9 +7,8 @@ import com.barrybecker4.simulation.waveFunctionCollapse.model.ByteArray
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-case class PatternColorSamples(bitmap: BufferedImage, N: Int) {
-
-  private val samples: PatternSamples = PatternSamples(bitmap, N)
+/** Color indexing helpers for overlapping patterns. Does not retain the seed bitmap. */
+class PatternColorSamples private (private val samples: PatternSamples, private val N: Int) {
 
   private val numColors: Int = samples.colors.size
   private val w: Long = Math.pow(numColors.toDouble, (N * N).toDouble).toLong
@@ -37,7 +36,6 @@ case class PatternColorSamples(bitmap: BufferedImage, N: Int) {
     for (i <- result.indices) {
       power /= numColors
       var count = 0
-
       while (residue >= power) {
         residue -= power
         count += 1
@@ -46,4 +44,9 @@ case class PatternColorSamples(bitmap: BufferedImage, N: Int) {
     }
     result
   }
+}
+
+object PatternColorSamples {
+  def apply(bitmap: BufferedImage, N: Int): PatternColorSamples =
+    new PatternColorSamples(PatternSamples(bitmap, N), N)
 }

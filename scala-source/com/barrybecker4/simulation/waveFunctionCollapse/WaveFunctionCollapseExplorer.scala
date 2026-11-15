@@ -20,22 +20,36 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
 
   private var wfcModel: Option[WfcModel] = None
   private var options: Option[DynamicOptions] = None
+  /** Debounce rapid resize events so we do not allocate many Wave solvers mid-drag. */
+  private val resizeDebounce = new Timer(150, _ => applyPanelSizeToModel())
+  resizeDebounce.setRepeats(false)
+
+  private val resizeListener = new ComponentAdapter {
+    override def componentResized(ce: ComponentEvent): Unit = {
+      if (options.isDefined) resizeDebounce.restart()
+    }
+  }
+
   commonInit()
 
   private def commonInit(): Unit = {
     initCommonUI()
-    val self = this
-    this.addComponentListener(new ComponentAdapter {
-      override def componentResized(ce: ComponentEvent): Unit = {
-        options.foreach { opts =>
-          val size: Dimension = self.getSize
-          if (size.width != opts.getWidth || size.height != opts.getHeight) {
-            if (WfcDebug.enabled) println("resized so rerunning...")
-            opts.setDimensions(size)
-          }
+    // Register once — reset() must not add duplicate listeners (that was a leak).
+    removeComponentListener(resizeListener)
+    addComponentListener(resizeListener)
+  }
+
+  private def applyPanelSizeToModel(): Unit = {
+    options.foreach { opts =>
+      val size = getSize
+      if (size.width > 0 && size.height > 0) {
+        val current = opts.getOutputDimensions
+        if (size.width != current.width || size.height != current.height) {
+          if (WfcDebug.enabled) println(s"resized ${current.width}x${current.height} -> ${size.width}x${size.height}")
+          opts.setDimensions(size)
         }
       }
-    })
+    }
   }
 
   def setModel(m: WfcModel): Unit = {
@@ -54,15 +68,12 @@ class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse E
   override def timeStep: Double = {
     if (!isPaused) {
       for {
-        _ <- wfcModel
+        model <- wfcModel
         opts <- options
       } {
         val result = opts.advanceModel()
-        this.invalidate()
-        if (result.isDefined) {
-          this.repaint()
-          this.setPaused(true)
-        }
+        this.repaint()
+        if (result.isDefined) this.setPaused(true)
       }
     }
     tStep

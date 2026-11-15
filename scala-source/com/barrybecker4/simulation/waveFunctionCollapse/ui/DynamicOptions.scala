@@ -31,6 +31,24 @@ object DynamicOptions {
   private val SLIDER_PROPS = Array(
     new SliderProperties(STEPS_PER_FRAME_SLIDER, 1, 500, DEFAULT_NUM_STEPS_PER_FRAME, 1.0)
   )
+
+  /**
+    * Cap the pixel size fed into the solver. Wave memory is O(cells × tiles × 4);
+    * a full-screen window otherwise easily allocates hundreds of MB per rebuild.
+    */
+  private[waveFunctionCollapse] val MAX_SOLVER_EDGE = 1024
+
+  /** Shrink `panelSize` so neither edge exceeds [[MAX_SOLVER_EDGE]], preserving aspect ratio. */
+  private[waveFunctionCollapse] def solverPixelSize(panelSize: Dimension): Dimension = {
+    val w = math.max(1, panelSize.width)
+    val h = math.max(1, panelSize.height)
+    val maxEdge = math.max(w, h)
+    if (maxEdge <= MAX_SOLVER_EDGE) new Dimension(w, h)
+    else {
+      val s = maxEdge.toDouble / MAX_SOLVER_EDGE
+      new Dimension(math.max(1, (w / s).toInt), math.max(1, (h / s).toInt))
+    }
+  }
 }
 
 class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCollapseExplorer)
@@ -136,8 +154,13 @@ class DynamicOptions private[waveFunctionCollapse](var simulator: WaveFunctionCo
     rootPanel
   }
 
+  /** Panel/output pixel size last requested (not the Swing preferred size of this options panel). */
+  def getOutputDimensions: Dimension = new Dimension(dimensions)
+
   def setDimensions(dims: Dimension): Unit = {
-    dimensions = dims
+    val capped = DynamicOptions.solverPixelSize(dims)
+    if (capped.width == dimensions.width && capped.height == dimensions.height) return
+    dimensions = capped
     runModel()
   }
 

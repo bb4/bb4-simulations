@@ -9,40 +9,15 @@ import java.awt.image.BufferedImage
 import scala.collection.mutable
 
 
-case class PatternSamples(bitmap: BufferedImage, N: Int) {
+/** Sample grid derived from a seed image. The [[BufferedImage]] is not retained. */
+class PatternSamples private (
+  private val smx: Int,
+  private val smy: Int,
+  private val sample: Array[ByteArray],
+  val colors: Seq[Color],
+  private val N: Int
+) {
 
-  private val smx: Int = bitmap.getWidth
-  private val smy: Int = bitmap.getHeight
-  private val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
-  val colors: Seq[Color] = initialize(bitmap)
-
-  private def initialize(bitmap: BufferedImage): Seq[Color] = {
-    val start1 = System.currentTimeMillis()
-    val palette = mutable.ArrayBuffer[Color]()
-    val colorToIndex = mutable.HashMap[Color, Int]()
-    for (y <- 0 until smy) {
-      for (x <- 0 until smx) {
-        val color = new Color(bitmap.getRGB(x, y))
-        val i = colorToIndex.get(color) match {
-          case Some(idx) => idx
-          case None =>
-            val idx = palette.size
-            palette += color
-            colorToIndex(color) = idx
-            idx
-        }
-        sample(x)(y) = i.toByte
-      }
-    }
-    if (WfcDebug.enabled)
-      println("done calc sample in " + (System.currentTimeMillis() - start1) / 1000.0)
-    palette.toSeq
-  }
-
-  /**
-    * @param symmetry how many of the 8 dihedral variants to compute (1, 2, 4, or 8).
-    *                 Matches mxgmn: only the first `symmetry` slots are used by the extractor.
-    */
   def getPatternSymmetries(x: Int, y: Int, symmetry: Int = 8): Array[ByteArray] = {
     require(symmetry >= 1 && symmetry <= 8)
     val ps: Array[ByteArray] = Array.ofDim(symmetry)
@@ -61,23 +36,42 @@ case class PatternSamples(bitmap: BufferedImage, N: Int) {
     ps
   }
 
-  private def rotate(p: ByteArray): ByteArray = {
+  private def rotate(p: ByteArray): ByteArray =
     pattern((x, y) => p(N - 1 - y + x * N))
-  }
 
-  private def reflect(p: ByteArray): ByteArray = {
+  private def reflect(p: ByteArray): ByteArray =
     pattern((x, y) => p(N - 1 - x + y * N))
-  }
 
-  private def patternFromSample(x: Int, y: Int): ByteArray = {
+  private def patternFromSample(x: Int, y: Int): ByteArray =
     pattern((dx, dy) => sample((x + dx) % smx)((y + dy) % smy))
-  }
 
   private def pattern(passedInFunc: (Int, Int) => Byte): ByteArray = {
     val result: ByteArray = new Array(N * N)
-    for (y <- 0 until N)
-      for (x <- 0 until N)
-        result(x + y * N) = passedInFunc(x, y)
+    for (y <- 0 until N; x <- 0 until N)
+      result(x + y * N) = passedInFunc(x, y)
     result
+  }
+}
+
+object PatternSamples {
+  def apply(bitmap: BufferedImage, N: Int): PatternSamples = {
+    val smx = bitmap.getWidth
+    val smy = bitmap.getHeight
+    val sample: Array[ByteArray] = Array.ofDim[Byte](smx, smy)
+    val start1 = System.currentTimeMillis()
+    val palette = mutable.ArrayBuffer[Color]()
+    val colorToIndex = mutable.HashMap[Color, Int]()
+    for (y <- 0 until smy; x <- 0 until smx) {
+      val color = new Color(bitmap.getRGB(x, y))
+      val i = colorToIndex.getOrElseUpdate(color, {
+        val idx = palette.size
+        palette += color
+        idx
+      })
+      sample(x)(y) = i.toByte
+    }
+    if (WfcDebug.enabled)
+      println("done calc sample in " + (System.currentTimeMillis() - start1) / 1000.0)
+    new PatternSamples(smx, smy, sample, palette.toSeq, N)
   }
 }

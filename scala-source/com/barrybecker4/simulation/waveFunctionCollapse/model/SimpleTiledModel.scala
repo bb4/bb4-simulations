@@ -184,10 +184,7 @@ class SimpleTiledModel(
     !periodic && (x < 0 || y < 0 || x >= FMX || y >= FMY)
   }
 
-  def graphics(): BufferedImage = {
-    assert(this.isReady)
-    imageExtractor.getImage(wave)
-  }
+  protected def renderGraphics(): BufferedImage = imageExtractor.getImage(wave)
 
   def textOutput(): String = {
     val result = new StringBuilder()
