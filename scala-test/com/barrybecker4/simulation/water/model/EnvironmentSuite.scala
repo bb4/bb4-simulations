@@ -17,17 +17,27 @@ class EnvironmentSuite extends AnyFunSuite {
     }
   }
 
-  test("initial profile has water below 400px and scales with height") {
+  test("default initial environment is SlopingBeach and scales with height") {
     val h = 200
     val envH = new Environment(64, h)
     val env2H = new Environment(64, 2 * h)
 
+    assert(envH.getInitialEnvironment == InitialEnvironment.SlopingBeach)
     assert(envH.floor.indices.exists(i => envH.floor(i) > envH.h1(i)))
 
     for (i <- 0 until envH.width) {
       assert(math.abs(env2H.h1(i) - 2.0 * envH.h1(i)) < 1e-9, s"h1 at $i")
       assert(math.abs(env2H.floor(i) - 2.0 * envH.floor(i)) < 1e-9, s"floor at $i")
     }
+  }
+
+  test("reset applies newly selected initial environment") {
+    val env = new Environment(32, 200, InitialEnvironment.SlopingBeach)
+    env.setInitialEnvironment(InitialEnvironment.FlatPool)
+    env.reset()
+    assert(env.getInitialEnvironment == InitialEnvironment.FlatPool)
+    assert(env.floor.forall(_ == env.floor(0)))
+    assert(env.h1.forall(_ == env.h1(0)))
   }
 
   test("integrate produces finite state after reset") {

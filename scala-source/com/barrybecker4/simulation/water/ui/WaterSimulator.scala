@@ -4,7 +4,7 @@ package com.barrybecker4.simulation.water.ui
 import java.awt._
 import com.barrybecker4.simulation.common.Profiler
 import com.barrybecker4.simulation.common.ui.Simulator
-import com.barrybecker4.simulation.water.model.Environment
+import com.barrybecker4.simulation.water.model.{Environment, InitialEnvironment}
 import com.barrybecker4.simulation.water.rendering
 
 import scala.compiletime.uninitialized
@@ -23,7 +23,8 @@ object WaterSimulator {
 
 class WaterSimulator() extends Simulator("Water") {
 
-  private var env: Environment = new Environment(320, 200)
+  private var initialEnvironment: InitialEnvironment = InitialEnvironment.SlopingBeach
+  private var env: Environment = new Environment(320, 200, initialEnvironment)
   private val renderOptions = new rendering.RenderingOptions
   private var envRenderer: rendering.EnvironmentRenderer = uninitialized
   private var handler: InteractionHandler = uninitialized
@@ -32,6 +33,7 @@ class WaterSimulator() extends Simulator("Water") {
 
   private def commonInit(): Unit = {
     initCommonUI()
+    env.setInitialEnvironment(initialEnvironment)
     env.reset()
     envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
     setNumStepsPerFrame(WaterDynamicOptions.DEFAULT_STEPS_PER_FRAME)
@@ -48,6 +50,14 @@ class WaterSimulator() extends Simulator("Water") {
 
   override def getBackground: Color = WaterSimulator.BG_COLOR
   override protected def getInitialTimeStep: Double = WaterSimulator.INITIAL_TIME_STEP
+
+  def getInitialEnvironment: InitialEnvironment = initialEnvironment
+
+  def setInitialEnvironment(ie: InitialEnvironment): Unit = {
+    initialEnvironment = ie
+    env.setInitialEnvironment(ie)
+    env.reset()
+  }
 
   def setViscosity(v: Double): Unit = {env.setViscosity(v)}
   def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.showVelocities = show}
@@ -80,7 +90,7 @@ class WaterSimulator() extends Simulator("Water") {
 
     EnvSize.envDims(getWidth, getHeight, rendering.EnvironmentRenderer.OFFSET) match {
       case Some((w, h)) if w != oldDimensions.width || h != oldDimensions.height =>
-        env = new Environment(w, h)
+        env = new Environment(w, h, initialEnvironment)
         envRenderer.setEnvironment(env)
         handler.setEnvironment(env)
         oldDimensions = new Dimension(w, h)

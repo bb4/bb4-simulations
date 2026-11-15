@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.water.model
 
 import Environment._
-import scala.math.{cos, sin}
 
 
 object Environment {
@@ -18,7 +17,10 @@ object Environment {
   * Dimensions of the environment
   * @author Barry Becker
   */
-class Environment(val width: Int, val height: Int) {
+class Environment(
+    val width: Int,
+    val height: Int,
+    private var initialEnvironment: InitialEnvironment = InitialEnvironment.SlopingBeach) {
 
   val h0, h1, floor = Array.ofDim[Double](width)
   private var viscosity: Double = 0.0
@@ -43,23 +45,19 @@ class Environment(val width: Int, val height: Int) {
   var xStep: Int = 1
   reset()
 
-  def reset(): Unit = initBoundary()
+  def getInitialEnvironment: InitialEnvironment = initialEnvironment
+
+  def setInitialEnvironment(ie: InitialEnvironment): Unit = { initialEnvironment = ie }
+
+  def reset(): Unit =
+    initialEnvironment.fill(h0, h1, floor, width, height)
+
   def setViscosity(v: Double): Unit = { viscosity = v }
   def pause(): Unit = { paused = true }
   def resume(): Unit = { paused = false }
 
   def adjustFloor(i: Int, delta: Double): Unit = { floor(i) += delta }
   def adjustWaterSurface(i: Int, delta: Double): Unit = { h1(i) += delta }
-
-  private def initBoundary(): Unit = {
-    val yrat = height / 400.0
-    for (i <- 0 until width) {
-      val ht = yrat * (50.0 + 20.0 * sin(0.018 * i) + i / 5.0)
-      h0(i) = ht
-      h1(i) = ht
-      floor(i) = yrat * (180.0 + 42.0 * cos(0.01 * i) + i / 8.0)
-    }
-  }
 
   def integrate(dt: Double): Unit = {
     if (paused) return
