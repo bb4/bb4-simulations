@@ -58,7 +58,7 @@ class SnakeUpdaterTest extends AnyFunSuite {
     assert(!snake.isStable)
   }
 
-  test("very large timestep returns a reduced step when integration is unstable") {
+  test("very large timestep returns a reduced step and does not explode positions") {
     val (snake, updater) = sharedSnakeAndUpdater()
     updater.getLocomotionParams.springK = 4.0
     updater.getLocomotionParams.massScale = 0.1
@@ -68,10 +68,14 @@ class SnakeUpdaterTest extends AnyFunSuite {
       dt = updater.stepForward(snake, dt)
       i += 1
     }
+    val c0 = snake.getCenter
     val huge = 50.0
     val next = updater.stepForward(snake, huge)
-    assert(next < huge, s"expected halved timestep, got $next")
+    assert(next < huge, s"expected reduced timestep, got $next")
     assert(!next.isNaN)
+    val c1 = snake.getCenter
+    val jump = math.hypot(c1.x - c0.x, c1.y - c0.y)
+    assert(jump < 500.0, s"center jumped by $jump under huge dt — positions should not integrate unstable steps")
   }
 
   test("default locomotion stays finite and stable over many steps") {

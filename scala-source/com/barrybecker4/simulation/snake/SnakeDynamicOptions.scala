@@ -42,7 +42,7 @@ class SnakeDynamicOptions private[snake](var snakeSim: SnakeSimulator) extends J
       new SliderProperties(SnakeDynamicOptions.SPRING_CONST_SLIDER, 0.1, 4.0, params.springK, 100),
       new SliderProperties(SnakeDynamicOptions.SPRING_DAMPING_SLIDER, 0.1, 4.0, params.springDamping, 100),
       new SliderProperties(SnakeDynamicOptions.SCALE_SLIDER, 0.2, 2.0, snakeSim.getScale, 100),
-      new SliderProperties(SnakeDynamicOptions.TIMESTEP_SLIDER, 0.001, 0.5, SnakeSimulator.INITIAL_TIME_STEP, 1000))
+      new SliderProperties(SnakeDynamicOptions.TIMESTEP_SLIDER, 0.001, SnakeUpdater.MaxTimeStep, SnakeSimulator.INITIAL_TIME_STEP, 1000))
   }
 
   def reset(): Unit = { sliderGroup.reset() }

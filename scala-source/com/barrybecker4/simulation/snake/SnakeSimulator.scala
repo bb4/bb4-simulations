@@ -24,8 +24,11 @@ import scala.util.Random
   * Simulates the motion of a snake.
   */
 object SnakeSimulator {
-  /** the amount to advance the animation in time for each frame in seconds. */
-  protected val NUM_STEPS_PER_FRAME = 200
+  /**
+    * Physics steps per rendered frame. Kept moderate so default locomotion is watchable;
+    * fitness evaluation uses its own step counts and does not depend on this.
+    */
+  protected val NUM_STEPS_PER_FRAME = 40
 
   private val PARAMS = IndexedSeq[Parameter](
     new DoubleParameter(LocomotionParameters.WAVE_SPEED, 0.0001, 0.02, "wave speed"),
@@ -48,6 +51,42 @@ object SnakeSimulator {
   private val YDIM = 10
   private val CELL_SIZE = 80.0
   private val GRID_COLOR = new Color(0, 0, 60, 100)
+
+  /** Preferred panel size in pixels (also used as fallback before the component is realized). */
+  private[snake] val PreferredWidth: Int = (CELL_SIZE * XDIM).toInt
+  private[snake] val PreferredHeight: Int = (CELL_SIZE * YDIM).toInt
+
+  /**
+    * Combined user zoom and window-relative scale. Growing the window enlarges grid and snake together.
+    */
+  private[snake] def effectiveScale(userScale: Double, panelWidth: Int, panelHeight: Int): Double = {
+    val s = if (userScale <= 0) RenderingParameters.SCALE else userScale
+    val w = math.max(panelWidth, 1).toDouble
+    val h = math.max(panelHeight, 1).toDouble
+    val windowScale = math.min(w / PreferredWidth, h / PreferredHeight)
+    s * windowScale
+  }
+
+  /**
+    * Graphics translation so a world point `(centerX, centerY)` drawn with `screen = scale * world`
+    * lands at the panel center. Does not mutate snake physics state.
+    */
+  private[snake] def cameraTranslation(
+    panelWidth: Int,
+    panelHeight: Int,
+    scale: Double,
+    centerX: Double,
+    centerY: Double
+  ): (Double, Double) =
+    (panelWidth / 2.0 - scale * centerX, panelHeight / 2.0 - scale * centerY)
+
+  /** Number of grid cells needed to cover the panel for the given pixel cell size. */
+  private[snake] def gridCellCounts(panelWidth: Int, panelHeight: Int, cellSizePx: Double): (Int, Int) = {
+    val cs = math.max(cellSizePx, 1.0)
+    val xDim = math.max(1, math.ceil(panelWidth / cs).toInt + 1)
+    val yDim = math.max(1, math.ceil(panelHeight / cs).toInt + 1)
+    (xDim, yDim)
+  }
 
   /** Physics steps per round when estimating locomotion fitness (no rendering). */
   private val FitnessStepsPerRound = 400
@@ -92,19 +131,19 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
     this(SnakeType.LONG_SNAKE.snakeData)
   }
 
-  override protected def reset(): Unit = {
+  override protected def reset(): Unit = synchronized {
     snake.reset()
     reinitializeViewAndClock()
   }
   override protected def getInitialTimeStep: Double = SnakeSimulator.INITIAL_TIME_STEP
 
-  def setSnakeData(snakeData: SnakeData): Unit = {
+  def setSnakeData(snakeData: SnakeData): Unit = synchronized {
     snake = Snake(snakeData, updater.getLocomotionParams)
     commonInit()
     reinitializeViewAndClock()
   }
 
-  /** Align camera/scroll state and physics clock with the current [[snake]] (after reset or new geometry). */
+  /** Align scroll/speed tracking and physics clock with the current [[snake]] (after reset or new geometry). */
   private def reinitializeViewAndClock(): Unit = {
     updater.resetSimulationTime()
     oldCenter = new Point2d(snake.getCenter)
@@ -113,50 +152,52 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
     tStep = getInitialTimeStep
   }
 
+  /** Panel size for rendering; prefer actual size once realized. */
+  private def viewPanelSize: (Int, Int) = {
+    val w = if (getWidth > 0) getWidth else SnakeSimulator.PreferredWidth
+    val h = if (getHeight > 0) getHeight else SnakeSimulator.PreferredHeight
+    (w, h)
+  }
+
   private def commonInit(): Unit = {
     renderer = new SnakeRenderer(renderParams)
     setNumStepsPerFrame(SnakeSimulator.NUM_STEPS_PER_FRAME)
-    this.setPreferredSize(
-      new Dimension(
-        (SnakeSimulator.CELL_SIZE * SnakeSimulator.XDIM).toInt,
-        (SnakeSimulator.CELL_SIZE * SnakeSimulator.YDIM).toInt
-      )
-    )
+    this.setPreferredSize(new Dimension(SnakeSimulator.PreferredWidth, SnakeSimulator.PreferredHeight))
     initCommonUI()
   }
 
   def getLocomotionParams: LocomotionParameters = updater.getLocomotionParams
-  override def setScale(scale: Double): Unit = {
+  override def setScale(scale: Double): Unit = synchronized {
     renderParams.scale = scale
   }
 
-  override def getScale: Double = renderParams.scale
-  override def setShowVelocityVectors(show: Boolean): Unit = {
+  override def getScale: Double = synchronized { renderParams.scale }
+  override def setShowVelocityVectors(show: Boolean): Unit = synchronized {
     renderParams.showVelocityVectors = show
   }
 
-  override def getShowVelocityVectors: Boolean = renderParams.showVelocityVectors
-  override def setShowForceVectors(show: Boolean): Unit = {
+  override def getShowVelocityVectors: Boolean = synchronized { renderParams.showVelocityVectors }
+  override def setShowForceVectors(show: Boolean): Unit = synchronized {
     renderParams.showForceVectors = show
   }
 
-  override def getShowForceVectors: Boolean = renderParams.showForceVectors
-  override def setDrawMesh(use: Boolean): Unit = {
+  override def getShowForceVectors: Boolean = synchronized { renderParams.showForceVectors }
+  override def setDrawMesh(use: Boolean): Unit = synchronized {
     renderParams.drawMesh = use
   }
 
-  override def getDrawMesh: Boolean = renderParams.drawMesh
-  override def setStaticFriction(staticFriction: Double): Unit = {
+  override def getDrawMesh: Boolean = synchronized { renderParams.drawMesh }
+  override def setStaticFriction(staticFriction: Double): Unit = synchronized {
     updater.getLocomotionParams.staticFriction = staticFriction
   }
 
-  override def getStaticFriction: Double = updater.getLocomotionParams.staticFriction
-  override def setDynamicFriction(dynamicFriction: Double): Unit = {
+  override def getStaticFriction: Double = synchronized { updater.getLocomotionParams.staticFriction }
+  override def setDynamicFriction(dynamicFriction: Double): Unit = synchronized {
     updater.getLocomotionParams.dynamicFriction = dynamicFriction
   }
 
-  override def getDynamicFriction: Double = updater.getLocomotionParams.dynamicFriction
-  def setDirection(direction: Double): Unit = {
+  override def getDynamicFriction: Double = synchronized { updater.getLocomotionParams.dynamicFriction }
+  def setDirection(direction: Double): Unit = synchronized {
     updater.getLocomotionParams.direction = direction
   }
 
@@ -167,26 +208,47 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
     optimizer.doOptimization(SnakeSimulator.SearchStrategy, SnakeSimulator.INITIAL_PARAMS, SnakeSimulator.FitnessRange)
   }
 
-  override def timeStep: Double = {
+  override def timeStep: Double = synchronized {
     if (!isPaused) tStep = updater.stepForward(snake, tStep)
     tStep
   }
 
-  override def paint(g: Graphics): Unit = {
+  /**
+    * Camera is applied only to [[Graphics2D]] (no particle mutation), so window resize cannot
+    * race with the animation thread and tear the snake apart. Grid and snake share [[effectiveScale]].
+    */
+  override def paint(g: Graphics): Unit = synchronized {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, if (getAntialiasing) RenderingHints.VALUE_ANTIALIAS_ON
     else RenderingHints.VALUE_ANTIALIAS_OFF)
     val newCenter = snake.getCenter
+    // Physics motion since last frame (for grid scroll + speed readout)
     val distanceDelta = new Vector2d(oldCenter.x - newCenter.x, oldCenter.y - newCenter.y)
-    velocity = distanceDelta.length / (getNumStepsPerFrame * tStep)
+    velocity = distanceDelta.length / (getNumStepsPerFrame * math.max(tStep, 1e-9))
     distance.add(distanceDelta)
+    oldCenter.set(newCenter.x, newCenter.y)
+
+    val (w, h) = viewPanelSize
+    val scale = SnakeSimulator.effectiveScale(renderParams.scale, w, h)
+    val cellSizePx = SnakeSimulator.CELL_SIZE * scale
+    val (xDim, yDim) = SnakeSimulator.gridCellCounts(w, h, cellSizePx)
+    val gridOffset = new Vector2d(distance.x * scale, distance.y * scale)
     val bgRenderer = new BackgroundGridRenderer(gridColor)
-    bgRenderer.drawGridBackground(g2, SnakeSimulator.CELL_SIZE, SnakeSimulator.XDIM, SnakeSimulator.YDIM, distance)
-    // draw the snake on the grid
-    snake.translate(distanceDelta)
-    renderer.render(snake, g2)
-    oldCenter = snake.getCenter
+    bgRenderer.drawGridBackground(g2, cellSizePx, xDim, yDim, gridOffset)
+
+    // Temporarily put effective scale into params so edge drawing matches window zoom.
+    val userScale = renderParams.scale
+    val (tx, ty) = SnakeSimulator.cameraTranslation(w, h, scale, newCenter.x, newCenter.y)
+    val prior = g2.getTransform
+    try {
+      renderParams.scale = scale
+      g2.translate(tx, ty)
+      renderer.render(snake, g2)
+    } finally {
+      g2.setTransform(prior)
+      renderParams.scale = userScale
+    }
   }
 
   override protected def createOptionsDialog = new SnakeOptionsDialog(frame, this)
@@ -196,13 +258,14 @@ class SnakeSimulator(val snakeData: SnakeData) extends NewtonianSimulator("Snake
     * Implements the Optimizee interface: fitness from average center speed over physics steps only
     * (does not depend on [[paint]] or display refresh).
     */
-  override def evaluateFitness(params: ParameterArray): Double = {
+  override def evaluateFitness(params: ParameterArray): Double = synchronized {
     val locoParams = updater.getLocomotionParams
     locoParams.waveSpeed = params.get(0).getValue
     locoParams.waveAmplitude = params.get(1).getValue
     locoParams.wavePeriod = params.get(2).getValue
     snake.reset()
     updater.resetSimulationTime()
+    oldCenter = new Point2d(snake.getCenter)
     val (stable, bestSpeed) = runFitnessConvergence()
     if (!stable) SnakeSimulator.UnstableFitnessPenalty
     else SnakeSimulator.fitnessFromSpeed(bestSpeed)
