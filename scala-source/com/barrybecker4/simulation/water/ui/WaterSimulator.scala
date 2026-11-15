@@ -17,7 +17,6 @@ import scala.compiletime.uninitialized
   * @author Barry Becker
   */
 object WaterSimulator {
-  val DEFAULT_STEPS_PER_FRAME = 1
   val INITIAL_TIME_STEP = 0.0004
   private val BG_COLOR = Color.white
 }
@@ -35,7 +34,6 @@ class WaterSimulator() extends Simulator("Water") {
     initCommonUI()
     env.reset()
     envRenderer = new rendering.EnvironmentRenderer(env, renderOptions)
-    //setPreferredSize(new Dimension(env.width, env.height))
     setNumStepsPerFrame(WaterDynamicOptions.DEFAULT_STEPS_PER_FRAME)
     handler = new InteractionHandler(env)
     this.addMouseListener(handler)
@@ -52,8 +50,8 @@ class WaterSimulator() extends Simulator("Water") {
   override protected def getInitialTimeStep: Double = WaterSimulator.INITIAL_TIME_STEP
 
   def setViscosity(v: Double): Unit = {env.setViscosity(v)}
-  def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.setShowVelocities(show)}
-  def getShowVelocityVectors: Boolean = envRenderer.getOptions.getShowVelocities
+  def setShowVelocityVectors(show: Boolean): Unit = { envRenderer.getOptions.showVelocities = show}
+  def getShowVelocityVectors: Boolean = envRenderer.getOptions.showVelocities
 
   override def setPaused(bPaused: Boolean): Unit = {
     super.setPaused(bPaused)
@@ -71,16 +69,16 @@ class WaterSimulator() extends Simulator("Water") {
   }
 
   /** @return a new recommended time step change. */
-  override def timeStep: Double = {
+  override def timeStep: Double = synchronized {
     if (!isPaused) tStep = envRenderer.stepForward(tStep)
     tStep
   }
 
-  override def paint(g: Graphics): Unit = {
+  override def paint(g: Graphics): Unit = synchronized {
     if (g == null) return
     val g2 = g.asInstanceOf[Graphics2D]
 
-    if (env == null || !oldDimensions.equals(this.getSize())) {
+    if (!oldDimensions.equals(this.getSize())) {
       env = new Environment(this.getWidth, this.getHeight)
       envRenderer.setEnvironment(env)
       handler.setEnvironment(env)

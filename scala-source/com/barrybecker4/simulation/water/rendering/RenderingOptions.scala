@@ -3,13 +3,9 @@ package com.barrybecker4.simulation.water.rendering
 
 
 /**
-  * Fluid rendering options
+  * Water rendering options
   * @author Barry Becker
   */
 class RenderingOptions() {
-
-  private var showVelocities = false
-
-  def setShowVelocities(show: Boolean): Unit = { showVelocities = show}
-  def getShowVelocities: Boolean = showVelocities
+  var showVelocities = false
 }

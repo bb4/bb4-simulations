@@ -11,7 +11,7 @@ import scala.compiletime.uninitialized
 
 
 /**
-  * Dynamic controls for the Fluid simulation.
+  * Dynamic controls for the Water simulation.
   * @author Barry Becker
   */
 object WaterDynamicOptions {
@@ -51,7 +51,7 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
   private def createCheckBoxes = {
     val renderOpts = simulator.getRenderer.getOptions
     showVelocities = createCheckBox("Show velocities",
-      "if checked, show velocity vectors", renderOpts.getShowVelocities)
+      "if checked, show velocity vectors", renderOpts.showVelocities)
     val checkBoxes = new JPanel(new GridLayout(0, 2))
     checkBoxes.add(showVelocities)
     checkBoxes.setBorder(BorderFactory.createEtchedBorder)
@@ -69,14 +69,14 @@ class WaterDynamicOptions private[ui](var simulator: WaterSimulator)
     sliderGroup.reset()
     // make sure we honor current check selections
     val renderOpts = simulator.getRenderer.getOptions
-    renderOpts.setShowVelocities(showVelocities.isSelected)
+    renderOpts.showVelocities = showVelocities.isSelected
   }
 
   /** One of the buttons was pressed */
   override def actionPerformed(e: ActionEvent): Unit = {
     val renderer = simulator.getRenderer
     val renderOpts = renderer.getOptions
-    if (e.getSource eq showVelocities) renderOpts.setShowVelocities(showVelocities.isSelected)
+    if (e.getSource eq showVelocities) renderOpts.showVelocities = showVelocities.isSelected
   }
 
   /** One of the sliders was moved. */

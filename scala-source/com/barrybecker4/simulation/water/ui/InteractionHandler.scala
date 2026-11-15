@@ -10,17 +10,26 @@ import InteractionMath.X_SCALE
 
 import scala.math.abs
 
+enum EditTarget {
+  case Floor, Water
+}
+
 /**
-  * Handle mouse interactions - converting them in to physical manifestations.
+  * Handle mouse interactions - converting them into physical manifestations.
+  *
+  * Uses [[Environment.pause]] / [[Environment.resume]] during a drag so the
+  * integrator does not advance while the user reshapes terrain or water.
+  * That is separate from the UI [[com.barrybecker4.simulation.common.ui.Simulator]]
+  * pause flag, which stops the whole animation loop.
+  *
   * @author Barry Becker
   */
 class InteractionHandler private[ui](var env: Environment) extends MouseInputAdapter {
 
   private var currentX = 0
   private var currentY = 0
-  private var lastX = 0
   private var lastY = 0
-  private var ground = false
+  private var editTarget: EditTarget = EditTarget.Water
   private var xpos = 0
   private val gaussFunc = new ErrorFunction()
   setEnvironment(env)
@@ -37,14 +46,17 @@ class InteractionHandler private[ui](var env: Environment) extends MouseInputAda
   override def mouseMoved(e: MouseEvent): Unit = {
     currentX = e.getX
     currentY = e.getY
-    lastX = currentX
     lastY = currentY
   }
 
   override def mousePressed(e: MouseEvent): Unit = {
     env.pause()
-    val col = (currentX / env.xStep).max(0).min(env.width - 1)
-    ground = currentY > env.floor(col)
+    currentX = e.getX
+    currentY = e.getY
+    val col = InteractionHandler.columnAt(currentX, env.xStep, env.width)
+    editTarget =
+      if (currentY > env.floor(col)) EditTarget.Floor
+      else EditTarget.Water
     xpos = col
   }
 
@@ -61,18 +73,24 @@ class InteractionHandler private[ui](var env: Environment) extends MouseInputAda
       applyTerrainOrWaterDelta(i, ydiff, heightDelta)
     }
 
-    lastX = currentX
     lastY = currentY
     env.resume()
   }
 
   private def applyTerrainOrWaterDelta(i: Int, ydiff: Int, heightDelta: Double): Unit = {
-    if (ground) {
-      if (ydiff > 0) env.floor(i) += heightDelta
-      else env.floor(i) -= heightDelta
-    } else {
-      if (ydiff > 0) env.h1(i) += heightDelta / X_SCALE
-      else env.h1(i) -= heightDelta / X_SCALE
+    editTarget match {
+      case EditTarget.Floor =>
+        if (ydiff > 0) env.adjustFloor(i, heightDelta)
+        else env.adjustFloor(i, -heightDelta)
+      case EditTarget.Water =>
+        if (ydiff > 0) env.adjustWaterSurface(i, heightDelta / X_SCALE)
+        else env.adjustWaterSurface(i, -heightDelta / X_SCALE)
     }
   }
+}
+
+object InteractionHandler {
+  /** Map a pixel x-coordinate to a clamped column index. */
+  private[water] def columnAt(pixelX: Int, xStep: Int, width: Int): Int =
+    (pixelX / xStep).max(0).min(width - 1)
 }

@@ -110,4 +110,72 @@ class EnvironmentSuite extends AnyFunSuite {
     assert(env.h1(4).isFinite)
     assert(env.h1(3) <= env.floor(3) + 1e-5)
   }
+
+  test("conservation handles more than 31 disconnected wet islands") {
+    // Alternating wet/dry columns: even = wet, odd = dry → 40 wet islands (> MAX_CON 31)
+    val width = 80
+    val env = new Environment(width, 200)
+    for (i <- 0 until width) {
+      env.floor(i) = 100.0
+      if (i % 2 == 0) {
+        env.h0(i) = 50.0
+        env.h1(i) = 50.0
+      } else {
+        env.h0(i) = 100.0
+        env.h1(i) = 100.0
+      }
+    }
+    env.runConservationStep()
+    for (i <- 0 until width) {
+      assert(env.h0(i).isFinite, s"h0 at $i")
+      assert(env.h1(i).isFinite, s"h1 at $i")
+    }
+  }
+
+  test("integrate preserves total volume across two separated pools") {
+    val env = new Environment(20, 200)
+    for (i <- 0 until env.width) {
+      env.floor(i) = 100.0
+      env.h0(i) = 100.0
+      env.h1(i) = 100.0
+    }
+    // Left pool columns 1-4, right pool columns 12-15; dry land between
+    for (i <- 1 to 4) {
+      env.h0(i) = 50.0
+      env.h1(i) = 50.0
+    }
+    for (i <- 12 to 15) {
+      env.h0(i) = 60.0
+      env.h1(i) = 60.0
+    }
+    // Mild surface perturbation in each pool
+    env.h1(2) = 45.0
+    env.h0(2) = 45.0
+    env.h1(13) = 55.0
+    env.h0(13) = 55.0
+
+    def volume: Double =
+      (0 until env.width).map(i => math.max(0.0, env.floor(i) - env.h1(i))).sum
+
+    val before = volume
+    env.integrate(dt)
+    val after = volume
+    assert(math.abs(after - before) < 1e-6, s"volume before=$before after=$after")
+  }
+
+  test("large time step keeps state finite") {
+    val largeDt = 0.05
+    val env = new Environment(32, 200)
+    env.reset()
+    for (i <- 0 until env.width by 5) {
+      env.h1(i) = env.h1(i) - 3.0
+      env.h0(i) = env.h1(i)
+    }
+    for (_ <- 0 until 30) env.integrate(largeDt)
+    for (i <- 0 until env.width) {
+      assert(env.h0(i).isFinite, s"h0 at $i")
+      assert(env.h1(i).isFinite, s"h1 at $i")
+      assert(env.floor(i).isFinite, s"floor at $i")
+    }
+  }
 }

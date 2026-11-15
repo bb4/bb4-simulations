@@ -12,7 +12,8 @@ package com.barrybecker4.simulation.water.model
   */
 case class TriDiagonalMatrixSolver(eps: Double = 0.0000001) {
 
-  /** Solve for x in A * x = rhs (overwrites `rhs` during elimination).
+  /** Solve for x in A * x = rhs.
+    * Overwrites `array` and `rhs` during elimination; callers must not reuse them as inputs afterward.
     * @param array the tri-diagonal N×3 matrix
     * @param rhs right hand side vector
     * @param x the solution

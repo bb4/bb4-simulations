@@ -6,10 +6,12 @@ import scala.math.{cos, sin}
 
 
 object Environment {
-  private val MAX_CON = 31  // max number of connected regions
   private val GRAVITY = 9.8
   private val DX = 0.02
   private val EPS = 0.000000123
+
+  /** Upper bound on wet runs for width columns (alternating + trailing empty slot). */
+  private def maxRegions(width: Int): Int = (width / 2) + 2
 }
 
 /**
@@ -23,6 +25,20 @@ class Environment(val width: Int, val height: Int) {
   private val triSolver = TriDiagonalMatrixSolver(EPS)
   private var paused = false
 
+  // Reused integrate workspaces (avoid per-step allocation)
+  private val triArray = Array.fill[Double](width, 3)(0)
+  private val rhs = Array.ofDim[Double](width)
+  private val d = Array.ofDim[Double](width)
+  private val dist = Array.ofDim[Double](width)
+
+  // Reused conservation region buffers
+  private val regionCap = maxRegions(width)
+  private val oldVolume = Array.ofDim[Double](regionCap)
+  private val newVolume = Array.ofDim[Double](regionCap)
+  private val ct = Array.ofDim[Int](regionCap)
+  private val start = Array.ofDim[Int](regionCap)
+  private val stop = Array.ofDim[Int](regionCap)
+
   /** Number of pixels in x direction for every discrete bin */
   var xStep: Int = 1
   reset()
@@ -31,6 +47,9 @@ class Environment(val width: Int, val height: Int) {
   def setViscosity(v: Double): Unit = { viscosity = v }
   def pause(): Unit = { paused = true }
   def resume(): Unit = { paused = false }
+
+  def adjustFloor(i: Int, delta: Double): Unit = { floor(i) += delta }
+  def adjustWaterSurface(i: Int, delta: Double): Unit = { h1(i) += delta }
 
   private def initBoundary(): Unit = {
     val yrat = height / 400.0
@@ -44,19 +63,17 @@ class Environment(val width: Int, val height: Int) {
 
   def integrate(dt: Double): Unit = {
     if (paused) return
-    val array = Array.fill[Double](width, 3)(0)
-    val rhs, d, dist = Array.fill[Double](width)(0)
 
-    computeDistAndRhs(rhs, dist)
+    computeDistAndRhs()
     val c = 0.5 * GRAVITY * (dt * dt) / (DX * DX)
-    fillDFromDist(c, dist, d)
-    fillTridiagonalCoefficients(d, array)
+    fillDFromDist(c)
+    fillTridiagonalCoefficients()
     copyH1ToH0()
-    triSolver.solve(array, rhs, h1)
+    triSolver.solve(triArray, rhs, h1)
     conserveVolume()
   }
 
-  private def computeDistAndRhs(rhs: Array[Double], dist: Array[Double]): Unit = {
+  private def computeDistAndRhs(): Unit = {
     for (i <- 0 until width) {
       dist(i) = floor(i) - h1(i)
       if (dist(i) < 0) dist(i) = 0
@@ -64,23 +81,23 @@ class Environment(val width: Int, val height: Int) {
     }
   }
 
-  private def fillDFromDist(c: Double, dist: Array[Double], d: Array[Double]): Unit = {
+  private def fillDFromDist(c: Double): Unit = {
     for (i <- 0 until width - 1)
       d(i) = c * (dist(i) + dist(i + 1))
   }
 
-  private def fillTridiagonalCoefficients(d: Array[Double], array: Array[Array[Double]]): Unit = {
-    var a = array(0)
+  private def fillTridiagonalCoefficients(): Unit = {
+    var a = triArray(0)
     a(0) = 1.0         // unused
     a(1) = 1.0 + d(0)  // left boundary
     a(2) = -d(0)
     for (i <- 1 until width - 1) {
-      a = array(i)
+      a = triArray(i)
       a(0) = -d(i - 1)
       a(1) = 1.0 + d(i - 1) + d(i)
       a(2) = -d(i)
     }
-    a = array(width - 1)
+    a = triArray(width - 1)
     a(0) = -d(width - 2)   // right boundary
     a(1) = 1.0 + d(width - 2)
     a(2) = 1.0            // unused
@@ -96,21 +113,18 @@ class Environment(val width: Int, val height: Int) {
 
   /** conserve volume over the connected regions  */
   private def conserveVolume(): Unit = {
-    val oldVolume, newVolume = Array.fill[Double](MAX_CON)(0)
-    val ct, start, stop = Array.fill[Int](MAX_CON)(0)
+    java.util.Arrays.fill(oldVolume, 0.0)
+    java.util.Arrays.fill(newVolume, 0.0)
+    java.util.Arrays.fill(ct, 0)
+    java.util.Arrays.fill(start, 0)
+    java.util.Arrays.fill(stop, 0)
 
-    val connect = scanConnectedRegions(oldVolume, newVolume, ct, start, stop)
-    applyVolumeAdjustments(connect, oldVolume, newVolume, ct, start, stop)
+    val connect = scanConnectedRegions()
+    applyVolumeAdjustments(connect)
     clampWaterAboveFloor()
   }
 
-  private def scanConnectedRegions(
-      oldVolume: Array[Double],
-      newVolume: Array[Double],
-      ct: Array[Int],
-      start: Array[Int],
-      stop: Array[Int]
-  ): Int = {
+  private def scanConnectedRegions(): Int = {
     var i = 0
     var connect = 0
     while (i < width) {
@@ -130,14 +144,7 @@ class Environment(val width: Int, val height: Int) {
     connect
   }
 
-  private def applyVolumeAdjustments(
-      connect: Int,
-      oldVolume: Array[Double],
-      newVolume: Array[Double],
-      ct: Array[Int],
-      start: Array[Int],
-      stop: Array[Int]
-  ): Unit = {
+  private def applyVolumeAdjustments(connect: Int): Unit = {
     for (j <- 0 until connect if ct(j) > 0) {
       val adjust = (newVolume(j) - oldVolume(j)) / ct(j)
       for (i <- start(j) to stop(j))
