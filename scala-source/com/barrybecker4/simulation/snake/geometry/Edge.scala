@@ -10,6 +10,8 @@ object Edge {
   /** Defaults used when spring constants are not supplied (e.g. tests). */
   val DefaultSpringK: Double = 0.8
   val DefaultSpringDamping: Double = 1.2
+  /** Below this length, direction is undefined; return zero force. */
+  private val MinLengthForForce: Double = 1e-12
 }
 
 /**
@@ -56,6 +58,11 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
   def getForce(springK: Double, springDamping: Double): Vector2d = {
     force.set(secondParticle)
     force.sub(firstParticle)
+    length = force.length
+    if (length < Edge.MinLengthForForce) {
+      force.set(0.0, 0.0)
+      return force
+    }
     direction.set(force)
     direction.normalize()
     // adjust the force by the damping term
@@ -63,7 +70,6 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
     dampingVec.sub(firstParticle.velocity)
     val halfEffectiveL = effectiveLength / 2.0
     val damp = springDamping * dampingVec.dot(direction)
-    length = force.length
     // never let the force get too great or too small
     if (length > 2.0 * effectiveLength)
       force.scale(-springK * (effectiveLength - length) * (effectiveLength - length) / effectiveLength - damp)
