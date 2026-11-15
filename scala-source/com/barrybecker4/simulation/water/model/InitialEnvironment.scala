@@ -24,10 +24,10 @@ enum InitialEnvironment(val displayName: String):
     this match {
       case SlopingBeach =>
         for (i <- 0 until width) {
-          val ht = yrat * (50.0 + 20.0 * sin(0.018 * i) + i / 5.0)
+          val ht = yrat * (50.0 + 10.0 * sin(0.018 * i) + i / 7.0)
           h0(i) = ht
           h1(i) = ht
-          floor(i) = yrat * (180.0 + 42.0 * cos(0.01 * i) + i / 8.0)
+          floor(i) = yrat * (180.0 + 32.0 * cos(0.01 * i) + i / 12.0)
         }
       case FlatPool =>
         val floorY = yrat * 200.0
