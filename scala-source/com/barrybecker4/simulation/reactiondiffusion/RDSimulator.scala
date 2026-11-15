@@ -71,7 +71,8 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
   override protected def createOptionsDialog = new RDOptionsDialog(frame, this)
   override protected def getInitialTimeStep: Double = RDSimulator.INITIAL_TIME_STEP
 
-  override def timeStep: Double = {
+  /** Synchronized with [[paint]] so resize reallocate cannot race rendering (see FluidSimulator). */
+  override def timeStep: Double = synchronized {
     if (!isPaused) {
       RDProfiler.getInstance.startCalculationTime()
       grayScott.timeStep(tStep)
@@ -80,7 +81,8 @@ class RDSimulator() extends Simulator("Reaction Diffusion") {
     tStep
   }
 
-  override def paint(g: Graphics): Unit = {
+  /** Synchronized so that paint is not called until call to timestep is done */
+  override def paint(g: Graphics): Unit = synchronized {
     super.paint(g)
     RDProfiler.getInstance.startRenderingTime()
     viewer.paint(g)

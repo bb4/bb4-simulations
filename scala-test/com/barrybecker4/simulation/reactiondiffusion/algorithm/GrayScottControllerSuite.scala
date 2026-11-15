@@ -27,4 +27,47 @@ class GrayScottControllerSuite extends AnyFunSuite {
     assert(m.v(0).length == m.getHeight)
     val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
   }
+
+  /**
+    * Reproduces the resize paint crash: EDT-style reads of u(width-1) while the
+    * animation thread applies a deferred shrink via timeStep. Without locking,
+    * width can still reflect the old size after u has already been replaced.
+    */
+  test("concurrent paint-style reads stay in bounds across resize timeSteps") {
+    val controller = new GrayScottController(128, 128)
+    @volatile var running = true
+    @volatile var failure: Option[Throwable] = None
+
+    val reader = new Thread(() => {
+      try {
+        while (running) {
+          // Same access pattern as RDViewer.paint / RenderingColorModel during paint.
+          controller.withModel { m =>
+            val w = m.getWidth
+            val h = m.getHeight
+            if (w > 0 && h > 0) {
+              val _ = m.u(w - 1)(h - 1) + m.v(w - 1)(h - 1)
+            }
+          }
+        }
+      } catch {
+        case e: Exception => failure = Some(e)
+      }
+    }, "rd-paint-reader")
+    reader.start()
+
+    try {
+      for (i <- 0 until 200) {
+        val w = 80 + (i % 60)
+        val h = 80 + ((i * 3) % 60)
+        controller.setSize(w, h)
+        controller.timeStep(1.0)
+      }
+    } finally {
+      running = false
+      reader.join(5000)
+    }
+
+    failure.foreach(t => fail(t))
+  }
 }

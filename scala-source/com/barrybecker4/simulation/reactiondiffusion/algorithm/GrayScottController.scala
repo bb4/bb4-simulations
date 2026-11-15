@@ -29,11 +29,19 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     * be using the current array. Wait until the current timeStep completes
     * before reinitializing with the new size.
     */
-  def setSize(width: Int, height: Int): Unit = {
+  def setSize(width: Int, height: Int): Unit = synchronized {
     requestedNewSize = Some(new Dimension(width, height))
   }
 
-  def reset(): Unit = {
+  /**
+    * Run a read (e.g. paint) against the model without concurrent reallocate.
+    * Shares the lock with [[timeStep]] so resize cannot replace u/v mid-read.
+    */
+  def withModel[A](body: GrayScottModel => A): A = synchronized {
+    body(model)
+  }
+
+  def reset(): Unit = synchronized {
     algorithm.setH(GrayScottModel.H0)
     model.resetState()
   }
@@ -53,7 +61,7 @@ final class GrayScottController(initialWidth: Int, initialHeight: Int) {
     * u and v are calculated based on tmpU and tmpV, then the result is committed to tmpU and tmpV.
     * @param dt time step in seconds.
     */
-  def timeStep(dt: Double): Unit = {
+  def timeStep(dt: Double): Unit = synchronized {
     val numThreads = Runtime.getRuntime.availableProcessors()
     val workers = Array.ofDim[Runnable](numThreads + 1)
     val range = model.getWidth / numThreads

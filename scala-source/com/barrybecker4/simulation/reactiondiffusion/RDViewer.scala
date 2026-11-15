@@ -43,7 +43,8 @@ class RDViewer private[reactiondiffusion](var grayScott: GrayScottController, va
   def paint(g: Graphics): Unit = {
     checkDimensions()
     val g2 = g.asInstanceOf[Graphics2D]
-    getRenderer.get.render(g2)
+    // Hold the controller lock for the whole render so timeStep cannot reallocate u/v mid-paint.
+    grayScott.withModel(_ => getRenderer.get.render(g2))
   }
 
   /** Sets to new size if needed. */
