@@ -61,7 +61,7 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
 
   private def buildWaveTypeCombo(): JComboBox[WaveType] = {
     val waveModel = new DefaultComboBoxModel[WaveType]()
-    WaveType.VALUES.foreach(w => waveModel.addElement(w))
+    WaveType.values.foreach(w => waveModel.addElement(w))
     val combo = new JComboBox[WaveType](waveModel)
     combo.setToolTipText("Select a type of wave form to use for muscle contractions.")
     combo

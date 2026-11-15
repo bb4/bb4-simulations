@@ -30,7 +30,6 @@ object Segment {
   private[geometry] val NUM_PARTICLES = 5
   /** index of the center particle */
   private[geometry] val CENTER_INDEX = 4
-  private val EPS = 0.00001
   private val MASS_SCALE = 1.0
 
   def getPos(segmentInFront: Segment, length: Double): Point2d = {
@@ -59,9 +58,8 @@ class Segment(width1: Double, width2: Double, var length: Double,
   protected var particleMass: Double = 0
   /** The unit directional spinal vector */
   protected var direction = new Vector2d(0, 0)
-  /** temporary vector to aid in calculations (saves creating a lot of new vector objects)  */
+  /** Scratch vector for [[translate]] (avoids per-call allocation). */
   private val velocityVec = new Vector2d(0, 0)
-  private val changeVec = new Vector2d(0, 0)
 
   commonInit(width1, width2, pos, segmentIndex, snake)
 
@@ -90,9 +88,8 @@ class Segment(width1: Double, width2: Double, var length: Double,
     val segmentMass: Double = (width1 + width2) * halfLength
     baseParticleMass = Segment.MASS_SCALE * segmentMass / 3
     particleMass = scaledParticleMass(snake)
-    val scale = 1.0 //snake.getRenderingParams().getScale();
-    particles(0) = new Particle(pos.x - halfLength, pos.y + scale * width2 / 2.0, particleMass)
-    particles(3) = new Particle(pos.x - halfLength, pos.y - scale * width2 / 2.0, particleMass)
+    particles(0) = new Particle(pos.x - halfLength, pos.y + width2 / 2.0, particleMass)
+    particles(3) = new Particle(pos.x - halfLength, pos.y - width2 / 2.0, particleMass)
     particles(Segment.CENTER_INDEX) = new Particle(pos.x, pos.y, particleMass)
   }
 
@@ -104,7 +101,7 @@ class Segment(width1: Double, width2: Double, var length: Double,
     particleMass = scaledParticleMass(snake)
     var i = 0
     while (i < NUM_PARTICLES) {
-      if particles(i) != null then particles(i).mass = particleMass
+      particles(i).mass = particleMass
       i += 1
     }
   }
@@ -164,11 +161,9 @@ class Segment(width1: Double, width2: Double, var length: Double,
     val waveSpeed = params.waveSpeed
     val amplitude = params.waveAmplitude
     val period = params.wavePeriod
-    //Vector2d muscleForce = v;
     val theta = segmentIndex.toDouble / period - waveSpeed * time
-    var offset: Double = 0
     val dir = params.direction
-    offset = amplitude * (params.waveType.calculateOffset(theta) - dir)
+    val offset = amplitude * (params.waveType.calculateOffset(theta) - dir)
     val contractionLeft = 1.0 + offset
     val contractionRight = 1.0 - offset
     if (contractionRight < 0) {

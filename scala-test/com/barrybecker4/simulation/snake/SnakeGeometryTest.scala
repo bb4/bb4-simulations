@@ -5,10 +5,8 @@ import com.barrybecker4.simulation.snake.data.SnakeType
 import org.scalatest.funsuite.AnyFunSuite
 
 /**
-  * Geometry / widths characterization. Does not remap widths — documents current behavior.
-  *
-  * Intended contract (SnakeData): widths.length == numSegments + 1 cross-sections;
-  * segment i should use front widths(i) and rear widths(i+1).
+  * Geometry / widths: segment i rear cross-section uses widths(i+1)
+  * (SnakeData: widths.length == numSegments + 1).
   */
 class SnakeGeometryTest extends AnyFunSuite {
 
@@ -37,40 +35,16 @@ class SnakeGeometryTest extends AnyFunSuite {
     }
   }
 
-  test("characterize rear half-width vs widths(i) for TEST_SNAKE (current behavior)") {
+  test("each segment rear half-width matches widths(i+1) for TEST_SNAKE") {
     val data = SnakeType.TEST_SNAKE.snakeData
     val snake = Snake(data, new LocomotionParameters)
-    val actualRears = (0 until data.numSegments).map(i => rearHalfWidth(snake, i))
-
-    // Head rear uses widths(1) — matches intended segment-0 rear.
-    assert(
-      math.abs(actualRears(0) - data.widths(1)) < 1e-6,
-      s"head rear=${actualRears(0)}, widths(1)=${data.widths(1)}"
-    )
-
-    // Intended: segment i rear == widths(i+1).
-    val intendedRears = (0 until data.numSegments).map(i => data.widths(i + 1))
-    val matchesIntended =
-      actualRears.zip(intendedRears).forall { case (a, e) => math.abs(a - e) < 1e-6 }
-
-    // Document: last width entry is unused by current construction.
-    val lastWidth = data.widths(data.numSegments)
-    val usesLastWidth = actualRears.exists(w => math.abs(w - lastWidth) < 1e-6)
-    assert(
-      !usesLastWidth || matchesIntended,
-      "If last width is used, geometry should match intended mapping"
-    )
-
-    // Body segment 1 rear currently equals widths(1) (same as head rear), not widths(2).
-    assert(
-      math.abs(actualRears(1) - data.widths(1)) < 1e-6,
-      s"current body[1] rear=${actualRears(1)}; expected current behavior widths(1)=${data.widths(1)}"
-    )
-    assert(
-      math.abs(actualRears(1) - data.widths(2)) > 1e-6,
-      "characterization: body[1] rear currently differs from intended widths(2)"
-    )
-
-    assert(!matchesIntended, "if this fails, width indexing already matches intended — update design")
+    for (i <- 0 until data.numSegments) {
+      val actual = rearHalfWidth(snake, i)
+      val expected = data.widths(i + 1)
+      assert(
+        math.abs(actual - expected) < 1e-6,
+        s"segment $i rear=$actual, expected widths(${i + 1})=$expected"
+      )
+    }
   }
 }

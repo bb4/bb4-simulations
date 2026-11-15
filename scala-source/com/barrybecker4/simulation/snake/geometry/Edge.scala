@@ -2,28 +2,24 @@
 package com.barrybecker4.simulation.snake.geometry
 
 import javax.vecmath.Vector2d
-import java.awt.geom.Line2D
-import java.awt.geom.Rectangle2D
 
 
 object Edge {
   /** Defaults used when spring constants are not supplied (e.g. tests). */
   val DefaultSpringK: Double = 0.8
   val DefaultSpringDamping: Double = 1.2
-  /** Below this length, direction is undefined; return zero force. */
+  /** Below this length, direction is undefined; return zero force / skip normalize. */
   private val MinLengthForForce: Double = 1e-12
 }
 
 /**
-  * Constructor - assumes defaults for the spring constant and damping
-  * @param firstParticle particle that anchors one end of the
+  * Spring edge between two particles (also used as a muscle when contracted).
+  * @param firstParticle particle that anchors one end of the edge
   * @param secondParticle particle that anchors the other end of the edge
   */
 class Edge private[geometry](val firstParticle: Particle, val secondParticle: Particle) {
 
-  private val segment = new Line2D.Double(firstParticle.x, firstParticle.y, secondParticle.x, secondParticle.y)
-
-  /** these act like temporary variables for some calculations avoiding many object constructions */
+  /** Scratch vectors to avoid per-call allocation in [[getForce]] / [[getDirection]]. */
   private val direction = new Vector2d
   private val force = new Vector2d
   private val dampingVec = new Vector2d
@@ -33,7 +29,7 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
   /** usually the effectiveLength is the same as restingLength except when muscular contraction are happening  */
   var effectiveLength: Double = restingLength
   /** the current magnitude of the spring */
-  var length: Double = restingLength // current magnitude
+  var length: Double = restingLength
 
 
   /**
@@ -83,18 +79,17 @@ class Edge private[geometry](val firstParticle: Particle, val secondParticle: Pa
     force
   }
 
-  /** A unit vector in the direction p2-p1 */
+  /** A unit vector in the direction p2-p1; zero vector if the edge has collapsed. */
   def getDirection: Vector2d = {
     direction.set(secondParticle)
     direction.sub(firstParticle)
-    direction.normalize()
+    if (direction.length < Edge.MinLengthForForce) direction.set(0.0, 0.0)
+    else direction.normalize()
     direction
   }
 
-  def intersects(rect: Rectangle2D.Double): Boolean = segment.intersects(rect)
-
   /**
-    * find the result of taking the dot product of this edge iwth another
+    * find the result of taking the dot product of this edge with another
     * @param edge to dot this edge with
     * @return the dot product
     */

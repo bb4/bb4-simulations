@@ -17,7 +17,7 @@ Phase 2 must not change locomotion physics except where Phase 1 already fixed a 
 
 **Recommended strategy:** Algorithm-core first — tests around edge springs, muscles, stability, timestep adaptation, shared locomotion params, and fitness; then dead-code removal and practical Scala 3 cleanup. Avoid brittle Swing UI tests.
 
-**Widths decision (user choice C):** Investigate first. Add a characterization test for current vs intended `SnakeData.widths` mapping. Do not remapping geometry until the user approves after seeing results.
+**Widths decision:** Investigated in Phase 1; remapped in Phase 2 (approved after instability report). Segment `i` rear uses `widths(i + 1)`.
 
 ---
 
@@ -127,6 +127,14 @@ Skip:
 ### Still out of scope
 
 New snake types as features, skin/texture, collision, multi-snake, hill-climbing UI changes, packages outside snake.
+
+### Phase 2 results (implemented)
+
+- **Width indexing fixed** in `Snake.resetFromData`; `SnakeData` requires `widths.length == numSegments + 1`; geometry tests assert intended mapping.
+- **Integrator:** `SegmentUpdater.updateVelocities` no longer applies acceleration deltas above `MaxVelocityDelta` (was exploding the snake while only shrinking the *next* timestep).
+- Removed dead `Segment.EPS` / unused `changeVec`, stale `Edge` `Line2D` + `intersects`, dead scale comments, redundant `1.0 * timeStep`.
+- `WaveType.values` in options dialog; `Edge.getDirection` safe on collapsed edges; friction EPS naming cleanup.
+- New regression: default locomotion stays finite and stable over 2000 steps.
 
 ### Done when
 

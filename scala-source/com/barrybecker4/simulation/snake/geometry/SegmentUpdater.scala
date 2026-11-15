@@ -8,7 +8,9 @@ import com.barrybecker4.simulation.snake.geometry.Segment.NUM_PARTICLES
 
 
 object SegmentUpdater {
-  private val EPS = 0.00001
+  private val VelocityEps = 0.00001
+  /** Acceleration*dt magnitude above which the step is considered unstable. */
+  private[geometry] val MaxVelocityDelta = 100.0
 }
 
 /**
@@ -112,9 +114,9 @@ class SegmentUpdater() {
     val forceMag = velocityVec.length
     changeVec.set(particles(i).velocity)
     val velMag = changeVec.length
-    if (velMag > SegmentUpdater.EPS) {
+    if (velMag > SegmentUpdater.VelocityEps) {
       applyDynamicFriction(segment, particles, i, params, changeVec)
-    } else if (velMag <= SegmentUpdater.EPS && forceMag > SegmentUpdater.EPS) {
+    } else if (forceMag > SegmentUpdater.VelocityEps) {
       applyStaticFriction(particles, i, params)
     } else {
       zeroCenterForceAndVelocity(particles, i)
@@ -130,7 +132,7 @@ class SegmentUpdater() {
     velDir: Vector2d
   ): Unit = {
     velDir.normalize()
-    var frictionalForce = -particles(i).mass * params.dynamicFriction
+    val frictionalForce = -particles(i).mass * params.dynamicFriction
     changeVec.set(velDir)
     changeVec.scale(frictionalForce)
     val spineDir = segment.getSpinalDirection
@@ -190,11 +192,14 @@ class SegmentUpdater() {
         velocityVec.set(particles(i).velocity)
         changeVec.set(particles(i).acceleration)
         changeVec.scale(timeStep)
-        if (changeVec.length > 100.0) {
+        if (changeVec.length > SegmentUpdater.MaxVelocityDelta) {
+          // Signal a smaller timestep for the next step; do not apply this huge delta
+          // (applying it was blowing the snake apart before the adaptive step could help).
           unstable = true
+        } else {
+          velocityVec.add(changeVec)
+          particles(i).velocity.set(velocityVec)
         }
-        velocityVec.add(changeVec)
-        particles(i).velocity.set(velocityVec)
       }
     }
     unstable

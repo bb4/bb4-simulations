@@ -30,7 +30,7 @@ class SnakeUpdater private[snake]() {
     updateParticlePositions(timeStep)
     time += timeStep
     if (unstable) timeStep / 2
-    else 1.0 * timeStep
+    else timeStep
   }
 
   /**  Parameters controlling the movement (i.e. locomotion) */

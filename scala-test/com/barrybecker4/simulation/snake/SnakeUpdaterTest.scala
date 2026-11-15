@@ -70,7 +70,20 @@ class SnakeUpdaterTest extends AnyFunSuite {
     }
     val huge = 50.0
     val next = updater.stepForward(snake, huge)
-    assert(next <= huge)
+    assert(next < huge, s"expected halved timestep, got $next")
     assert(!next.isNaN)
+  }
+
+  test("default locomotion stays finite and stable over many steps") {
+    val (snake, updater) = sharedSnakeAndUpdater()
+    var dt = SnakeSimulator.INITIAL_TIME_STEP
+    var i = 0
+    while (i < 2000) {
+      dt = updater.stepForward(snake, dt)
+      i += 1
+    }
+    assert(snake.isStable)
+    val c = snake.getCenter
+    assert(!c.x.isNaN && !c.y.isNaN)
   }
 }

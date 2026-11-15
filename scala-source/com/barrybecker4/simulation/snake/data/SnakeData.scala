@@ -2,7 +2,16 @@
 package com.barrybecker4.simulation.snake.data
 
 /**
-  * Snake data is defined by the width of the transverse cross-sectional edges (of which there are num segments+1).
-  * The magnitude of each segment is the same as its longer width.
+  * Snake geometry preset.
+  *
+  * @param numSegments   number of body segments (including head)
+  * @param segmentLength length of each segment along the spine
+  * @param widths        transverse cross-section widths; must have length `numSegments + 1`.
+  *                      Segment `i` uses front width `widths(i)` and rear width `widths(i + 1)`.
   */
-case class SnakeData(numSegments: Int, segmentLength: Int, widths: Array[Double])
+case class SnakeData(numSegments: Int, segmentLength: Int, widths: Array[Double]) {
+  require(
+    widths.length == numSegments + 1,
+    s"widths.length=${widths.length}, expected numSegments+1=${numSegments + 1}"
+  )
+}

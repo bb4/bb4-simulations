@@ -10,22 +10,7 @@ import scala.compiletime.uninitialized
 
 
 /**
-  * Data structure and methods for representing a single dynamic snake
-  * The geometry of the snake is defined by SnakeData
-  * General Improvements:
-  *    - auto optimize with hill-climbing (let the snake learn how to move faster on its own)
-  *    - add texture for snake skin
-  *    - collision detection, walls, multiple snakes
-  *    - goal directed path search
-  *
-  * Performance Improvements:
-  *    - profile (where is the time spent? rendering or computation)
-  *    - only draw every nth frame
-  *    - run OptimizeIt
-  * 3/2011 (java version) frames per second for basic snake = 64.5. Speed = 0.32
-  * 3/2017 (ported to scala) frames per second for basic snake = 185.5. Speed = 0.36
-  *
-  * Use a hardcoded static data interface to initialize so it can be easily run in an applet without using resources.
+  * A single dynamic snake whose geometry comes from [[SnakeData]].
   * @param snakeData defines the snake geometry
   * @param locomotionParams shared parameters for mass, springs, and locomotion (same object as [[SnakeSimulator]]'s updater)
   */
@@ -63,15 +48,15 @@ class Snake(val snakeData: SnakeData, val locomotionParams: LocomotionParameters
     var segment: Segment = new HeadSegment(width1, width2, segmentLength, new Point2d(length, 320.0), this)
     this.segment(0) = segment
     var segmentInFront = segment
+    // Segment i uses front cross-section widths(i) and rear widths(i+1).
     width1 = width2
-    for (i <- 1 until numSegments - 1) {
-      width2 = snakeData.widths(i)
+    for (i <- 1 until numSegments) {
+      width2 = snakeData.widths(i + 1)
       segment = new Segment(width1, width2, segmentLength, segmentInFront, i, this)
       this.segment(i) = segment
       segmentInFront = segment
       width1 = width2
     }
-    this.segment(numSegments - 1) = new Segment(width1, width2, segmentLength, segmentInFront, numSegments - 1, this)
   }
 
   /** @return the center point of the snake */
