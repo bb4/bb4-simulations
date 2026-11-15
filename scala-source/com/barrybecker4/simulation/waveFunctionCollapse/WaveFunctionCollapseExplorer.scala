@@ -16,10 +16,6 @@ import java.awt.event.{ComponentAdapter, ComponentEvent}
   * Interactively explores generating Wave Function Collapse procedural modeling.
   * @author Barry Becker.
   */
-object WaveFunctionCollapseExplorer {
-  protected val INITIAL_TIME_STEP = 10.0
-}
-
 class WaveFunctionCollapseExplorer() extends Simulator("Wave Function Collapse Explorer") {
 
   private var wfcModel: Option[WfcModel] = None

@@ -45,5 +45,6 @@ class WfcModelFactorySuite extends AnyFunSuite {
     )
     assert(model.isInstanceOf[SimpleTiledModel])
     assert(model.getName == "Summer")
+    assert(model.asInstanceOf[SimpleTiledModel].limit == 5)
   }
 }

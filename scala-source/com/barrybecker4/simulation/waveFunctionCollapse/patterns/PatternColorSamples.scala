@@ -14,7 +14,8 @@ case class PatternColorSamples(bitmap: BufferedImage, N: Int) {
   private val numColors: Int = samples.colors.size
   private val w: Long = Math.pow(numColors.toDouble, (N * N).toDouble).toLong
 
-  def  getPatternSymmetries(x: Int, y: Int): Array[ByteArray] = samples.getPatternSymmetries(x, y)
+  def getPatternSymmetries(x: Int, y: Int, symmetry: Int = 8): Array[ByteArray] =
+    samples.getPatternSymmetries(x, y, symmetry)
 
   def colors: Seq[Color] = samples.colors
 
@@ -41,10 +42,8 @@ case class PatternColorSamples(bitmap: BufferedImage, N: Int) {
         residue -= power
         count += 1
       }
-      //assert (count < 256 && count >= 0, s"count = $count")
       result(i) = count.toByte
     }
-    //assert(result.forall(x => x >= 0), "One of the values was negative in " +  result.mkString(", ") + s"\n indices=${result.indices.mkString(", ")}")
     result
   }
 }

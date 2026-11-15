@@ -1,21 +1,10 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.wave
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.PropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.StubPropagator
 import org.scalatest.funsuite.AnyFunSuite
 
 class WaveSuite extends AnyFunSuite {
-
-  /** Each adjacency list has the same length so `clear` can fill compatibility counts. */
-  private final class StubPropagator(tCounter: Int, compatLen: Int) extends PropagatorState {
-    locally {
-      for (d <- 0 to 3) {
-        state(d) = Array.fill(tCounter)(null)
-        for (t <- 0 until tCounter)
-          state(d)(t) = Array.fill(compatLen)(0)
-      }
-    }
-  }
 
   test("ban removes one option and records stack entry") {
     val w = new Wave(1, 1)

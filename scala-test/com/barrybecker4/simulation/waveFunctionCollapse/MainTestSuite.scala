@@ -13,8 +13,6 @@ import java.io.File
 import java.net.URLDecoder
 import scala.collection.mutable
 import scala.io.Source
-import scala.util.boundary
-import scala.util.boundary.break
 
 
 object MainTestSuite {
@@ -25,29 +23,11 @@ class MainTestSuite extends AnyFunSuite {
 
   test("overlappingModelTestConsistency") {
     val image = generateOverlappingImage()
-    if (image == null) {
-      fail("Image was null")
-    }
 
-    val actualHexes = new mutable.HashMap[String, Int]()
-    for (x <- 0 until image.getWidth()) {
-      for (y <- 0 until image.getHeight()) {
-        val color = new Color(image.getRGB(x, y))
-        val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
-        actualHexes(hex) = actualHexes.getOrElse(hex, 0) + 1
-      }
-    }
-
-    val expectedHexes = new mutable.HashMap[String, Int]()
-    val src = getResource("overlapping_hex.txt")
-
-    for (hex <- src.getLines()) {
-      expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
-    }
-    src.close()
+    val actualHexes = histogram(image)
+    val expectedHexes = loadExpectedHistogram("overlapping_hex.txt")
 
     assertResult(expectedHexes.keys.size) { actualHexes.keys.size }
-
     for (h <- expectedHexes.keys) {
       assertResult(expectedHexes(h), "did not match for " + h) { actualHexes(h) }
     }
@@ -63,49 +43,26 @@ class MainTestSuite extends AnyFunSuite {
       limit = 0,
       scale = 1
     )
-
-    boundary:
-      for (_ <- 0 until 2; k <- 0 until 10) {
-        val finished = model.runWithLimit(SEED)
-        if (finished) break(model.graphics())
-      }
-      null
+    assert(model.runWithLimit(SEED), s"Overlapping Skyline failed to collapse with fixed seed $SEED")
+    model.graphics()
   }
 
   test("simpleTileModelTestConsistency") {
     val image = generateSimpleImage()
-    if (image == null) {
-      fail("Image was null")
-    }
 
-    val actualHexes = new mutable.HashMap[String, Int]()
-    for (x <- 0 until image.getWidth) {
-      for (y <- 0 until image.getHeight) {
-        val color = new Color(image.getRGB(x, y))
-        val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
-        actualHexes(hex) = actualHexes.getOrElse(hex, 0) + 1
-      }
-    }
-
-    val expectedHexes = new mutable.HashMap[String, Int]()
-    val src = getResource("simple.txt")
-    for (hex <- src.getLines()) {
-      expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
-    }
-    src.close()
+    val actualHexes = histogram(image)
+    val expectedHexes = loadExpectedHistogram("simple.txt")
 
     assertResult(expectedHexes.keys.size,
       s"Unexpected number of keys. The keys(${actualHexes.keys}) - should have been (${expectedHexes.keys})") {
       actualHexes.keys.size
     }
-
     for (h <- expectedHexes.keys) {
       assertResult(expectedHexes(h)) { actualHexes(h) }
     }
   }
 
   private def generateSimpleImage(): BufferedImage = {
-    // null subset = all tiles (matches historic golden); named subsets are covered in SimpleTiledSubsetSuite.
     val model = new SimpleTiledModel(
       name = "Knots",
       width = 24,
@@ -116,18 +73,32 @@ class MainTestSuite extends AnyFunSuite {
       limit = 0,
       allowInconsistencies = false
     )
+    assert(model.runWithLimit(SEED), s"SimpleTiled Knots failed to collapse with fixed seed $SEED")
+    model.graphics()
+  }
 
-    boundary:
-      for (_ <- 0 until 2; k <- 0 until 10) {
-        val finished = model.runWithLimit(SEED)
-        if (finished) break(model.graphics())
-      }
-      null
+  private def histogram(image: BufferedImage): mutable.HashMap[String, Int] = {
+    val actualHexes = new mutable.HashMap[String, Int]()
+    for (x <- 0 until image.getWidth; y <- 0 until image.getHeight) {
+      val color = new Color(image.getRGB(x, y))
+      val hex = String.format("%02X%02X%02X", color.getRed, color.getGreen, color.getBlue)
+      actualHexes(hex) = actualHexes.getOrElse(hex, 0) + 1
+    }
+    actualHexes
+  }
+
+  private def loadExpectedHistogram(fileName: String): mutable.HashMap[String, Int] = {
+    val expectedHexes = new mutable.HashMap[String, Int]()
+    val src = getResource(fileName)
+    for (hex <- src.getLines()) {
+      expectedHexes(hex) = expectedHexes.getOrElse(hex, 0) + 1
+    }
+    src.close()
+    expectedHexes
   }
 
   private def getResource(fileName: String): Source = {
-    // The extra URLDecoder is needed for Jenkins because it puts %20 in the path instead of spaces.
-    val file = new File(URLDecoder.decode(getClass().getResource(fileName).getFile(), "UTF-8"))
+    val file = new File(URLDecoder.decode(getClass.getResource(fileName).getFile, "UTF-8"))
     Source.fromFile(file)
   }
 }

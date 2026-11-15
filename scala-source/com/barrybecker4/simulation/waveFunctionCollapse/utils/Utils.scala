@@ -6,23 +6,37 @@ object Utils {
 
   /**
     * Picks an index from a weighted distribution.
-    * Normalizes `array` in place (mutates weights to sum to 1); if the sum was 0, assigns uniform weights first.
+    * Mutates `array` in place to a normalized CDF-friendly distribution
+    * (caller should treat contents as scratch after the call).
+    * If the sum was 0, assigns uniform weights first.
     *
     * @return sampled index for random `r` in [0, 1]
     */
   def randomFromArray(array: Array[Double], r: Double): Int = {
-    var sum: Double = array.sum
-
-    if (sum == 0.0) {
-      for (j <- array.indices) array(j) = 1.0
-      sum = array.sum
+    var sum: Double = 0.0
+    var j = 0
+    while (j < array.length) {
+      sum += array(j)
+      j += 1
     }
 
-    for (j <- array.indices) array(j) /= sum
+    if (sum == 0.0) {
+      j = 0
+      while (j < array.length) {
+        array(j) = 1.0
+        j += 1
+      }
+      sum = array.length.toDouble
+    }
+
+    j = 0
+    while (j < array.length) {
+      array(j) /= sum
+      j += 1
+    }
 
     var i = 0
     var x = 0.0
-
     while (i < array.length) {
       x += array(i)
       if (r <= x) return i

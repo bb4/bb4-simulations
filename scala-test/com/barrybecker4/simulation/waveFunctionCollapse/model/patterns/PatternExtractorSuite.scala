@@ -1,8 +1,8 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model.patterns
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.{OverlappingImageParams, OverlappingModel}
-import com.barrybecker4.simulation.waveFunctionCollapse.patterns.{PatternExtractor, PatternSamples}
+import com.barrybecker4.simulation.waveFunctionCollapse.model.OverlappingImageParams
+import com.barrybecker4.simulation.waveFunctionCollapse.patterns.PatternExtractor
 import com.barrybecker4.simulation.waveFunctionCollapse.utils.FileUtil
 import org.scalatest.funsuite.AnyFunSuite
 

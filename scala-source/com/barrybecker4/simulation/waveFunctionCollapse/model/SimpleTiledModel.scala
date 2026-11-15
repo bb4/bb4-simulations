@@ -1,4 +1,4 @@
-// Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
+// Copyright by Barry G. Becker, 2021-2027. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
 import com.barrybecker4.simulation.waveFunctionCollapse.model.imageExtractors.SimpleTiledImageExtractor
@@ -16,11 +16,11 @@ import scala.compiletime.uninitialized
 object SimpleTiledModel {
 
   /**
-    * @return `null` when `subsetName` is null (caller uses all tiles).
-    *         Otherwise the base tile names belonging to the named subset from `data.json`.
+    * @return `None` when `subsetName` is null (caller uses all tiles).
+    *         Otherwise, the base tile names belonging to the named subset from `data.json`.
     */
-  def resolveSubsetTileNames(subsetName: String, dataset: SampleSet): Seq[String] = {
-    if (subsetName == null) return null
+  def resolveSubsetTileNames(subsetName: String, dataset: SampleSet): Option[Seq[String]] = {
+    if (subsetName == null) return None
     if (dataset.subsets == null || dataset.subsets.isEmpty)
       throw new IllegalArgumentException("Subsets are required in data.json when a subset name is selected.")
 
@@ -32,23 +32,9 @@ object SimpleTiledModel {
       case Some(subset) =>
         if (subset.tiles == null || subset.tiles.isEmpty)
           throw new IllegalArgumentException(s"Subset '$subsetName' has no tiles in data.json.")
-        subset.tiles.map(_.name).toSeq
+        Some(subset.tiles.map(_.name).toSeq)
     }
   }
-
-  private def symmetryCardinalityAndOps(sym: String): (Int, Int => Int, Int => Int) =
-    sym match {
-      case "L" =>
-        (4, i => (i + 1) % 4, i => if (i % 2 == 0) i + 1 else i - 1)
-      case "T" =>
-        (4, i => (i + 1) % 4, i => if (i % 2 == 0) i else 4 - i)
-      case "I" =>
-        (2, i => 1 - i, i => i)
-      case "\\" =>
-        (2, i => 1 - i, i => 1 - i)
-      case _ =>
-        (1, i => i, i => i)
-    }
 }
 
 class SimpleTiledModel(
@@ -57,13 +43,13 @@ class SimpleTiledModel(
   var isPeriodic: Boolean, var black: Boolean,
   val limit: Int = 0,
   val allowInconsistencies: Boolean = false
-) extends WfcModel(name, width, height, limit) {
+) extends WfcModel(name, limit, allowInconsistencies) {
 
   private var tiles: Seq[Array[Color]] = uninitialized
   private var tilenames: Seq[String] = uninitialized
   private var tilesize: Int = 0
+  private var imageExtractor: SimpleTiledImageExtractor = uninitialized
   private val useSubset = subsetName != null
-
 
   processFile(getSampleTiledData(name))
 
@@ -76,21 +62,23 @@ class SimpleTiledModel(
       simpleTiled.getPeriodic,
       simpleTiled.getBlack,
       simpleTiled.getLimit,
-      true)
+      allowInconsistencies = false)
   }
 
   def processFile(data: SampleTiledData): Unit = {
     val dataset = data.set
     this.periodic = isPeriodic
     tilesize = if (dataset.size != null) dataset.size.toInt else 16
-    dimensions = new Dimension(Math.max(1, width / tilesize), Math.max(1, height / tilesize))
+    FMX = Math.max(1, width / tilesize)
+    FMY = Math.max(1, height / tilesize)
+    dimensions = new Dimension(FMX, FMY)
 
-    val subsetTileNames: Seq[String] = SimpleTiledModel.resolveSubsetTileNames(subsetName, dataset)
+    val subsetTileNames = SimpleTiledModel.resolveSubsetTileNames(subsetName, dataset)
     processTiles(dataset, subsetTileNames)
   }
 
   private def tileFun(passedInFunc: (Int, Int) => Color): Array[Color] = {
-    val result: Array[Color] = Array.fill(tilesize * tilesize)(null)
+    val result: Array[Color] = Array.ofDim(tilesize * tilesize)
     for (y <- 0 until tilesize)
       for (x <- 0 until tilesize)
         result(x + y * tilesize) = passedInFunc(x, y)
@@ -154,7 +142,7 @@ class SimpleTiledModel(
     }
   }
 
-  private def processTiles(dataset: SampleSet, subsetTileNames: Seq[String]): Unit = {
+  private def processTiles(dataset: SampleSet, subsetTileNames: Option[Seq[String]]): Unit = {
     tiles = Seq()
     tilenames = Seq()
     val unique = if (dataset.unique != null) dataset.unique.toBoolean else false
@@ -162,12 +150,15 @@ class SimpleTiledModel(
     val action = mutable.ArrayBuffer[IntArray]()
 
     val firstOccurrence = new mutable.HashMap[String, Int]()
+    val subsetFilter = subsetTileNames.orNull
 
     for (tile <- dataset.tiles) {
       val tileName = tile.name
-      if (!useSubset || subsetTileNames.contains(tileName)) {
-        val sym = if (tile.symmetry != null) tile.symmetry else "X"
-        val (cardinality, a, b) = SimpleTiledModel.symmetryCardinalityAndOps(sym)
+      if (!useSubset || subsetTileNames.exists(_.contains(tileName))) {
+        val sym = TileSymmetry.fromJson(if (tile.symmetry != null) tile.symmetry else "X")
+        val cardinality = sym.cardinality
+        val a = sym.rotate
+        val b = sym.reflect
 
         tCounter = action.size
         firstOccurrence(tileName) = tCounter
@@ -185,16 +176,16 @@ class SimpleTiledModel(
     tCounter = action.size
     weights = tempStationary.toArray
 
-    propagator = new SimpleTiledPropagatorState(tCounter, action.toSeq, dataset.neighbors, firstOccurrence, subsetTileNames)
+    propagator = new SimpleTiledPropagatorState(tCounter, action.toSeq, dataset.neighbors, firstOccurrence, subsetFilter)
+    imageExtractor = new SimpleTiledImageExtractor(dimensions, tCounter, tilesize, tiles, weights, black)
   }
 
   def onBoundary(x: Int, y: Int): Boolean = {
     !periodic && (x < 0 || y < 0 || x >= FMX || y >= FMY)
   }
 
-  def graphics(): BufferedImage  = {
+  def graphics(): BufferedImage = {
     assert(this.isReady)
-    val imageExtractor = new SimpleTiledImageExtractor(dimensions, tCounter, tilesize, tiles, weights, black)
     imageExtractor.getImage(wave)
   }
 
@@ -203,9 +194,9 @@ class SimpleTiledModel(
     for (x <- 0 until FMX) {
       for (y <- 0 until FMY) {
         val name = tilenames(wave.get(x + y * FMX).observed)
-        result.append (name).append ("\n")
+        result.append(name).append("\n")
       }
     }
-    result.toString ()
+    result.toString()
   }
 }

@@ -14,19 +14,26 @@ import java.awt.image.BufferedImage
 class OverlappingModel(val name: String, width: Int, height: Int,
   periodicOutput: Boolean, imageParams: OverlappingImageParams,
   val limit: Int = 0, val allowInconsistencies: Boolean = true, val scale: Int = 2
-) extends WfcModel(name, width, height, limit, allowInconsistencies) {
+) extends WfcModel(name, limit, allowInconsistencies) {
 
   periodic = periodicOutput
   private var ground: Int = 0
   private val bitmap: BufferedImage = readImage(s"samples/$name.png")
   private val patternExtractor = PatternExtractor(bitmap, imageParams)
-  dimensions = new Dimension(width / scale, height / scale)
   private val N = imageParams.N
+
+  // Solver grid is pixel size / scale (not raw pixel width/height).
+  FMX = Math.max(1, width / scale)
+  FMY = Math.max(1, height / scale)
+  dimensions = new Dimension(FMX, FMY)
 
   tCounter = patternExtractor.tCounter
   ground = patternExtractor.ground
   weights = patternExtractor.weights
   propagator = new OverlappingPropagatorState(tCounter, patternExtractor.patterns, N)
+
+  private lazy val imageExtractor = new OverlappingImageExtractor(
+    dimensions, N, tCounter, patternExtractor.patterns, patternExtractor.colors, scale, onBoundary)
 
   def this(overlapping: Overlapping) = {
     this(
@@ -62,10 +69,8 @@ class OverlappingModel(val name: String, width: Int, height: Int,
     }
   }
 
-  def graphics(): BufferedImage  = {
+  def graphics(): BufferedImage = {
     assert(this.isReady)
-    val imageExtractor = new OverlappingImageExtractor(dimensions, N, tCounter,
-      patternExtractor.patterns, patternExtractor.colors, scale, onBoundary)
     imageExtractor.getImage(wave)
   }
 

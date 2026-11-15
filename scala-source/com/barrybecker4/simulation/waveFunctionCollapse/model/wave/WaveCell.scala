@@ -14,7 +14,7 @@ class WaveCell(
 
   def updateEntropy(weight: Double, weightLogWeight: Double): Unit = {
     var sum = sumOfWeights
-    assert(sum > 0, s"sumOfWeights must stay positive, got $sumOfWeights")
+    assert(sum > 0, s"sumOfWeights must stay positive before ban, got $sumOfWeights")
     entropy += sumOfWeightLogWeights / sum - Math.log(sum)
 
     sumOfOnes -= 1
@@ -22,6 +22,11 @@ class WaveCell(
     sumOfWeightLogWeights -= weightLogWeight
 
     sum = sumOfWeights
-    entropy -= sumOfWeightLogWeights / sum - Math.log(sum)
+    if (sum > 0) {
+      entropy -= sumOfWeightLogWeights / sum - Math.log(sum)
+    } else {
+      // Domain emptied (contradiction path); entropy unused when sumOfOnes == 0.
+      entropy = 0
+    }
   }
 }

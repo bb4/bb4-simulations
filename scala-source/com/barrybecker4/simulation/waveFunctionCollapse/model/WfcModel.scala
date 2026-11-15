@@ -15,10 +15,18 @@ import scala.util.boundary.break
 /**
   * For a good explanation of the algorithm, see
   * https://escholarship.org/content/qt1fb9k44q/qt1fb9k44q_noSplash_1c5dcf5090d4595f7605b2653c89b245.pdf?t=qwpcsb
+  *
+  * `FMX`/`FMY` are the wave **grid** width/height in cells (not pixel size).
+  * Subclasses set them before the first `runWithLimit` / `startRun`.
   */
 abstract class WfcModel(name: String,
-                        val FMX: Int, val FMY: Int,
-                        limit: Int, allowInconsistencies: Boolean = true) {
+                        limit: Int,
+                        allowInconsistencies: Boolean = true) {
+
+  /** Grid width in cells (solver coordinates). */
+  protected var FMX: Int = uninitialized
+  /** Grid height in cells (solver coordinates). */
+  protected var FMY: Int = uninitialized
 
   protected var wave: Wave = uninitialized
   protected var propagator: PropagatorState = uninitialized
@@ -35,6 +43,13 @@ abstract class WfcModel(name: String,
   def onBoundary(x: Int, y: Int): Boolean
   def isReady: Boolean = ready
 
+  /** Number of cells in the wave (for tests / diagnostics). */
+  def waveSize: Int = if (wave == null) 0 else wave.size()
+
+  def tileCount: Int = tCounter
+
+  def cellSumOfOnes(i: Int): Int = wave.get(i).sumOfOnes
+
   /**
     * Runs the solver for up to `limit` observe/propagate steps (or 10M if limit is 0).
     *
@@ -43,7 +58,7 @@ abstract class WfcModel(name: String,
   def runWithLimit(seed: Int, limit: Int = this.limit): Boolean = {
     ready = false
     if (wave == null) {
-      wave = new Wave(dimensions.width, dimensions.height, allowInconsistencies)
+      wave = new Wave(FMX, FMY, allowInconsistencies)
       wave.init(tCounter, weights)
     }
 
@@ -62,13 +77,10 @@ abstract class WfcModel(name: String,
   }
 
   /**
-    * function Solve(adjacencies, wave_matrix):
+    * Solver step order (observe then propagate), matching the reference stack-based WFC:
     *   loop while no contradiction:
-    *     wave_matrix := Propagate(wave_matrix, adjacencies)
-    *     if all domains collapsed:
-    *       return wave_matrix
-    *     wave_matrix := Observe(wave_matrix)
-    *   throw error: generation attempt failed
+    *     observe (collapse one cell) — may return done / contradiction
+    *     propagate adjacency constraints
     *
     * @return None if not done computing, return true if done successfully; false if done unsuccessfully
     */
@@ -79,18 +91,20 @@ abstract class WfcModel(name: String,
         break(None)
       }
 
-      for (i <- 0 until steps) {
+      for (_ <- 0 until steps) {
         result = wave.observe(tCounter, weights, onBoundary, random)
-        if (result.isDefined) {
-          ready = true
-          if (!result.get && WfcDebug.enabled) {
-            println("*** Inconsistent state. No solution found!")
-          }
-          break(result)
+        result match {
+          case Some(ok) =>
+            ready = true
+            if (!ok && WfcDebug.enabled) {
+              println("*** Inconsistent state. No solution found!")
+            }
+            break(result)
+          case None =>
+            wave.propagate(onBoundary, weights, propagator)
+            iterationCt += 1
+            if (iterationCt % 100 == 0 && WfcDebug.enabled) println(s"$iterationCt, ")
         }
-        wave.propagate(onBoundary, weights, propagator)
-        iterationCt += 1
-        if (iterationCt % 100 == 0 && WfcDebug.enabled) println(s"$iterationCt, ")
       }
       if (WfcDebug.enabled) println(s"iteration=$iterationCt")
       None

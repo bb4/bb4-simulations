@@ -8,13 +8,13 @@ class SimpleTiledSubsetSuite extends AnyFunSuite {
 
   test("resolveSubsetTileNames null uses all-tiles path") {
     val data = getSampleTiledData("Circuit").set
-    assert(SimpleTiledModel.resolveSubsetTileNames(null, data) == null)
+    assert(SimpleTiledModel.resolveSubsetTileNames(null, data).isEmpty)
   }
 
   test("resolveSubsetTileNames Debug subset is smaller than Turnless") {
     val data = getSampleTiledData("Circuit").set
-    val debug = SimpleTiledModel.resolveSubsetTileNames("Debug", data)
-    val turnless = SimpleTiledModel.resolveSubsetTileNames("Turnless", data)
+    val debug = SimpleTiledModel.resolveSubsetTileNames("Debug", data).get
+    val turnless = SimpleTiledModel.resolveSubsetTileNames("Turnless", data).get
     assert(debug.size == 2)
     assert(debug.toSet == Set("substrate", "turn"))
     assert(turnless.size > debug.size)

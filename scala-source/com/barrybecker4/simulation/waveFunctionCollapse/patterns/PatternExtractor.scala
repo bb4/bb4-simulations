@@ -7,39 +7,31 @@ import com.barrybecker4.simulation.waveFunctionCollapse.utils.WfcDebug
 import java.awt.Color
 import java.awt.image.BufferedImage
 import scala.collection.mutable
-import scala.compiletime.uninitialized
 
 
 /**
-  * Used by OverlappingModel to extract patterns from image
+  * Used by OverlappingModel to extract patterns from image.
+  * Symmetry variants are counted as separate patterns (matches mxgmn/WFC).
   */
 case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImageParams) {
 
-  var patterns: Array[ByteArray] = uninitialized
-  var weights: DoubleArray = uninitialized
-  var ground: Int = 0
-  var tCounter: Int = 0
-
   private val smx: Int = bitmap.getWidth
   private val smy: Int = bitmap.getHeight
-
   private val patternColorSamples = PatternColorSamples(bitmap, imageParams.N)
   private val N = imageParams.N
 
-  initialize()
+  private val (weightsMap, ordering) = collectPatternWeights()
+
+  val tCounter: Int = weightsMap.size
+  val ground: Int = (imageParams.groundParam + tCounter) % tCounter
+  val patterns: Array[ByteArray] = Array.ofDim(tCounter)
+  val weights: DoubleArray = Array.ofDim(tCounter)
+
+  fillPatternsFromWeights(weightsMap, ordering)
 
   def colors: Seq[Color] = patternColorSamples.colors
 
-  private def initialize(): Unit = {
-    val (weightsMap, ordering) = collectPatternWeights()
-    tCounter = weightsMap.size
-    ground = (imageParams.groundParam + tCounter) % tCounter
-    patterns = Array.fill(tCounter)(null)
-    this.weights = Array.fill(tCounter)(0)
-    fillPatternsFromWeights(weightsMap, ordering)
-  }
-
-  /** Scan the sample image and count each canonical pattern index (symmetry variants). */
+  /** Scan the sample image and count each pattern index (including symmetry variants). */
   private def collectPatternWeights(): (mutable.Map[Long, Int], mutable.ArrayBuffer[Long]) = {
     val weightsMap: mutable.Map[Long, Int] = new mutable.HashMap[Long, Int]()
     val ordering = mutable.ArrayBuffer[Long]()
@@ -47,11 +39,12 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
     if (WfcDebug.enabled) println("sym = " + imageParams.symmetry)
     val start = System.currentTimeMillis()
     val periodicInput = imageParams.periodicInput
+    val symmetry = imageParams.symmetry
     for (y <- 0 until (if (periodicInput) smy else smy - N + 1)) {
       for (x <- 0 until (if (periodicInput) smx else smx - N + 1)) {
-        val patternSymmetries = patternColorSamples.getPatternSymmetries(x, y)
+        val patternSymmetries = patternColorSamples.getPatternSymmetries(x, y, symmetry)
 
-        for (k <- 0 until imageParams.symmetry) {
+        for (k <- 0 until symmetry) {
           val ind: Long = patternColorSamples.index(patternSymmetries(k))
           if (weightsMap.contains(ind)) {
             weightsMap(ind) += 1
@@ -72,11 +65,9 @@ case class PatternExtractor(bitmap: BufferedImage, imageParams: OverlappingImage
       ordering: mutable.ArrayBuffer[Long]): Unit = {
     var counter = 0
     for (orderItem <- ordering) {
-      val pattern = patternColorSamples.patternFromIndex(orderItem)
-      this.patterns(counter) = pattern
-      this.weights(counter) = weightsMap.getOrElse(orderItem, 0).toDouble
+      patterns(counter) = patternColorSamples.patternFromIndex(orderItem)
+      weights(counter) = weightsMap.getOrElse(orderItem, 0).toDouble
       counter += 1
     }
   }
-
 }

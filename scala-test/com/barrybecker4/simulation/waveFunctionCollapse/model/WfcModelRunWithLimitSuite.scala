@@ -1,7 +1,7 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.waveFunctionCollapse.model
 
-import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.PropagatorState
+import com.barrybecker4.simulation.waveFunctionCollapse.model.propagation.StubPropagator
 import org.scalatest.funsuite.AnyFunSuite
 
 import java.awt.Dimension
@@ -9,19 +9,11 @@ import java.awt.image.BufferedImage
 
 class WfcModelRunWithLimitSuite extends AnyFunSuite {
 
-  private final class StubPropagator(tCounter: Int, compatLen: Int) extends PropagatorState {
-    locally {
-      for (d <- 0 to 3) {
-        state(d) = Array.fill(tCounter)(null)
-        for (t <- 0 until tCounter)
-          state(d)(t) = Array.fill(compatLen)(0)
-      }
-    }
-  }
-
   private class AdvanceOverrideModel(outcome: Option[Boolean])
-      extends WfcModel("stub", 1, 1, limit = 100, allowInconsistencies = true) {
+      extends WfcModel("stub", limit = 100, allowInconsistencies = true) {
 
+    FMX = 1
+    FMY = 1
     dimensions = new Dimension(1, 1)
     tCounter = 1
     weights = Array(1.0)

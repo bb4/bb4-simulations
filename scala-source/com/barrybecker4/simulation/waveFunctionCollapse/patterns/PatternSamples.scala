@@ -39,16 +39,25 @@ case class PatternSamples(bitmap: BufferedImage, N: Int) {
     palette.toSeq
   }
 
-  def getPatternSymmetries(x: Int, y: Int): Array[ByteArray] = {
-    val ps: Array[ByteArray] = Array.fill(8)(null)
+  /**
+    * @param symmetry how many of the 8 dihedral variants to compute (1, 2, 4, or 8).
+    *                 Matches mxgmn: only the first `symmetry` slots are used by the extractor.
+    */
+  def getPatternSymmetries(x: Int, y: Int, symmetry: Int = 8): Array[ByteArray] = {
+    require(symmetry >= 1 && symmetry <= 8)
+    val ps: Array[ByteArray] = Array.ofDim(symmetry)
     ps(0) = patternFromSample(x, y)
-    ps(1) = reflect(ps(0))
-    ps(2) = rotate(ps(0))
-    ps(3) = reflect(ps(2))
-    ps(4) = rotate(ps(2))
-    ps(5) = reflect(ps(4))
-    ps(6) = rotate(ps(4))
-    ps(7) = reflect(ps(6))
+    if (symmetry > 1) ps(1) = reflect(ps(0))
+    if (symmetry > 2) {
+      ps(2) = rotate(ps(0))
+      ps(3) = reflect(ps(2))
+    }
+    if (symmetry > 4) {
+      ps(4) = rotate(ps(2))
+      ps(5) = reflect(ps(4))
+      ps(6) = rotate(ps(4))
+      ps(7) = reflect(ps(6))
+    }
     ps
   }
 

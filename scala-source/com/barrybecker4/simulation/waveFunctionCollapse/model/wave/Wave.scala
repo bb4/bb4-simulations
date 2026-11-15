@@ -37,6 +37,8 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
   private var sumOfWeightLogWeights: Double = 0
   private var startingEntropy: Double = 0
   private var stackSize: Int = 0
+  /** Scratch buffer for weighted sampling in [[observe]] (avoids per-step allocation). */
+  private var distribution: DoubleArray = uninitialized
   var hasObserved = false
 
   def get(i: Int): WaveCell = waveCells(i)
@@ -65,6 +67,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
     stackCell = Array.ofDim(cap)
     stackTile = Array.ofDim(cap)
     stackSize = 0
+    distribution = Array.ofDim[Double](tCounter)
   }
 
 
@@ -101,7 +104,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       val waveCell = waveCells(i)
       var t = 0
       while (t < tCounter) {
-        if (waveCell.enabled != null && waveCell.enabled(t)) {
+        if (waveCell.enabled(t)) {
           waveCell.observed = t
           t = tCounter
         } else t += 1
@@ -114,15 +117,14 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       tCounter: Int,
       weights: DoubleArray,
       random: Random): Unit = {
-    val distribution = Array.fill(tCounter)(0.0)
     for (t <- 0 until tCounter)
       distribution(t) =
-        if (waveCells(minEntropyIdx).enabled != null && waveCells(minEntropyIdx).enabled(t)) weights(t) else 0.0
+        if (waveCells(minEntropyIdx).enabled(t)) weights(t) else 0.0
 
     val r = Utils.randomFromArray(distribution, random.nextDouble())
     val waveCell = waveCells(minEntropyIdx)
     for (t <- 0 until tCounter)
-      if (waveCell.enabled != null && waveCell.enabled(t) != (t == r))
+      if (waveCell.enabled(t) != (t == r))
         ban(minEntropyIdx, t, weights)
   }
 
@@ -161,17 +163,17 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
     if (i >= waveCells.length) return
     val waveCell = waveCells(i)
 
-    if (allowInconsistencies && waveCells(i).sumOfOnes == 1) {
+    if (allowInconsistencies && waveCell.sumOfOnes == 1) {
       return
     }
 
-    if (waveCell.enabled != null)
-      waveCell.enabled(t) = false
+    // Already banned (e.g. duplicate stack drain) — skip entropy update.
+    if (!waveCell.enabled(t)) return
 
-    if (waveCell.compatible != null) {
-      val comp = waveCell.compatible(t)
-      for (d <- 0 to 3) comp(d) = 0
-    }
+    waveCell.enabled(t) = false
+
+    val comp = waveCell.compatible(t)
+    for (d <- 0 to 3) comp(d) = 0
 
     stackCell(stackSize) = i
     stackTile(stackSize) = t
@@ -185,15 +187,14 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
       stackSize -= 1
       val cellIdx = stackCell(stackSize)
       val tileIdx = stackTile(stackSize)
-      doPropagation((cellIdx, tileIdx), onBoundary, weights, propState)
+      doPropagation(cellIdx, tileIdx, onBoundary, weights, propState)
     }
   }
 
   private def doPropagation(
-    e1: (Int, Int), onBoundary: (Int, Int) => Boolean,
+    i1: Int, tileIdx: Int, onBoundary: (Int, Int) => Boolean,
     weights: DoubleArray, propState: PropagatorState): Unit = {
 
-    val i1 = e1._1
     val x1 = i1 % FMX
     val y1 = i1 / FMX
 
@@ -209,16 +210,17 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
         else if (y2 >= FMY) y2 -= FMY
 
         val i2 = x2 + y2 * FMX
-        val p = propState.get(d, e1._2)
+        val p = propState.get(d, tileIdx)
         val compat = waveCells(i2).compatible
 
-        for (l <- 0 until (if (p == null) 0 else p.length)) {
-          val t2 = p(l)
-          val comp = if (compat == null) null else compat(t2)
-
-          if (comp != null) {
+        if (p != null) {
+          var l = 0
+          while (l < p.length) {
+            val t2 = p(l)
+            val comp = compat(t2)
             comp(d) -= 1
             if (comp(d) == 0) ban(i2, t2, weights)
+            l += 1
           }
         }
       }
@@ -226,6 +228,7 @@ class Wave(val FMX: Int, val FMY: Int, allowInconsistencies: Boolean = true) {
   }
 
   def clear(tCounter: Int, weights: DoubleArray, propagator: PropagatorState): Unit = {
+    hasObserved = false
     for (i <- 0 until size()) {
       val waveCell = waveCells(i)
       for (t <- 0 until tCounter) {
