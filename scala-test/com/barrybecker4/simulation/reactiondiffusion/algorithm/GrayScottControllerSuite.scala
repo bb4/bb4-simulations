@@ -70,4 +70,27 @@ class GrayScottControllerSuite extends AnyFunSuite {
 
     failure.foreach(t => fail(t))
   }
+
+  /**
+    * Brush strokes must survive into the next timeStep source buffer. Adding only
+    * to u (the old InteractionHandler path) is overwritten when the step reads tmpU.
+    */
+  test("addU brush elevates concentration through a following timeStep") {
+    val brushed = new GrayScottController(32, 32)
+    val control = new GrayScottController(32, 32)
+    brushed.timeStep(1.0)
+    control.timeStep(1.0)
+
+    val x = 16
+    val y = 16
+    brushed.model.addU(x, y, 0.8)
+
+    brushed.timeStep(1.0)
+    control.timeStep(1.0)
+
+    val brushedConc = brushed.model.tmpU(x)(y) + brushed.model.u(x)(y)
+    val controlConc = control.model.tmpU(x)(y) + control.model.u(x)(y)
+    assert(brushedConc > controlConc + 0.1,
+      s"expected brushed concentration ($brushedConc) to exceed control ($controlConc)")
+  }
 }

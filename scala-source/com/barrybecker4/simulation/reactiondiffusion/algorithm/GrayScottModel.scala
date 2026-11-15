@@ -122,4 +122,22 @@ final class GrayScottModel(var width: Int, var height: Int) extends Initializabl
       v(x)(y) = initialV
     }
   }
+
+  /**
+    * Add chemical U at a cell for both the painted buffer and the timeStep source.
+    * Updating only `u` is wiped on the next step (algorithm reads `tmpU`).
+    */
+  def addU(x: Int, y: Int, amount: Double): Unit = {
+    u(x)(y) += amount
+    tmpU(x)(y) += amount
+  }
+
+  /**
+    * Add chemical V at a cell for both the painted buffer and the timeStep source.
+    * Updating only `v` is wiped on the next step (algorithm reads `tmpV`).
+    */
+  def addV(x: Int, y: Int, amount: Double): Unit = {
+    v(x)(y) += amount
+    tmpV(x)(y) += amount
+  }
 }

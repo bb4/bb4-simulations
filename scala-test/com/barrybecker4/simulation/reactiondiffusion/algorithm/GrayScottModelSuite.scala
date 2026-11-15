@@ -69,4 +69,27 @@ class GrayScottModelSuite extends AnyFunSuite {
     // Corner access must not throw (the resize crash when painting).
     val _ = m.u(m.getWidth - 1)(m.getHeight - 1) + m.v(m.getWidth - 1)(m.getHeight - 1)
   }
+
+  /**
+    * Brush must update both the painted buffer (u/v) and the timeStep source
+    * (tmpU/tmpV). Writing only u/v is wiped on the next step because the
+    * algorithm reads tmp* and overwrites u/v.
+    */
+  test("addU and addV update both painted and source concentration buffers") {
+    val m = new GrayScottModel(8, 8)
+    val x = 3
+    val y = 4
+    val beforeU = m.u(x)(y)
+    val beforeTmpU = m.tmpU(x)(y)
+    val beforeV = m.v(x)(y)
+    val beforeTmpV = m.tmpV(x)(y)
+
+    m.addU(x, y, 0.4)
+    m.addV(x, y, 0.25)
+
+    assert(m.u(x)(y) == beforeU + 0.4)
+    assert(m.tmpU(x)(y) == beforeTmpU + 0.4)
+    assert(m.v(x)(y) == beforeV + 0.25)
+    assert(m.tmpV(x)(y) == beforeTmpV + 0.25)
+  }
 }

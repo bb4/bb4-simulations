@@ -68,12 +68,11 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
     1.0 / distance - minWt
   }
 
-  /** Make waves or adds ink depending on which mouse key is being held down. */
+  /** Adds U (left) or V (right) to both painted and timeStep source buffers. */
   private def applyChange(i: Int, j: Int, weight: Double): Unit = {
     val amountToAdd = brushStrength * weight
-    // if the left mouse is down, make waves
-    if (mouse1Down) model.u(i)(j) += amountToAdd
-    else if (mouse3Down) model.v(i)(j) += amountToAdd
+    if (mouse1Down) model.addU(i, j, amountToAdd)
+    else if (mouse3Down) model.addV(i, j, amountToAdd)
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
@@ -84,7 +83,14 @@ class InteractionHandler(var model: GrayScottModel, var scale: Double)
   }
 
   /** The following methods implement MouseListener */
-  override def mouseClicked(e: MouseEvent): Unit = { doBrush() }
+  override def mouseClicked(e: MouseEvent): Unit = {
+    // mouseReleased clears button flags before click; restore from the click event.
+    mouse1Down = e.getButton == MouseEvent.BUTTON1
+    mouse3Down = e.getButton == MouseEvent.BUTTON3
+    doBrush()
+    mouse1Down = false
+    mouse3Down = false
+  }
 
   /** Remember the mouse button that is pressed. */
   override def mousePressed(e: MouseEvent): Unit = {
