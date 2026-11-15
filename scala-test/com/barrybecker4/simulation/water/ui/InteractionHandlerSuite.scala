@@ -6,11 +6,24 @@ import org.scalatest.funsuite.AnyFunSuite
 class InteractionHandlerSuite extends AnyFunSuite {
 
   test("columnAt clamps pixel x to valid column indices") {
-    assert(InteractionHandler.columnAt(0, 1, 10) == 0)
-    assert(InteractionHandler.columnAt(5, 1, 10) == 5)
-    assert(InteractionHandler.columnAt(100, 1, 10) == 9)
-    assert(InteractionHandler.columnAt(-3, 1, 10) == 0)
-    assert(InteractionHandler.columnAt(20, 4, 10) == 5)
+    assert(InteractionHandler.columnAt(0, 1, 10, 0) == 0)
+    assert(InteractionHandler.columnAt(5, 1, 10, 0) == 5)
+    assert(InteractionHandler.columnAt(100, 1, 10, 0) == 9)
+    assert(InteractionHandler.columnAt(-3, 1, 10, 0) == 0)
+    assert(InteractionHandler.columnAt(20, 4, 10, 0) == 5)
+  }
+
+  test("columnAt subtracts offset before dividing by xStep") {
+    val offset = 10
+    assert(InteractionHandler.columnAt(10, 1, 10, offset) == 0)
+    assert(InteractionHandler.columnAt(15, 1, 10, offset) == 5)
+    assert(InteractionHandler.columnAt(0, 1, 10, offset) == 0) // left of content
+    assert(InteractionHandler.columnAt(100, 1, 10, offset) == 9)
+  }
+
+  test("envYFromPixel subtracts offset") {
+    assert(InteractionHandler.envYFromPixel(50, 10) == 40)
+    assert(InteractionHandler.envYFromPixel(5, 10) == -5)
   }
 
   test("adjustFloor and adjustWaterSurface mutate the intended arrays") {

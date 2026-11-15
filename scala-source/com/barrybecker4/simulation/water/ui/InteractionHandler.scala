@@ -6,6 +6,7 @@ import javax.swing.event.MouseInputAdapter
 
 import com.barrybecker4.math.function.ErrorFunction
 import com.barrybecker4.simulation.water.model.Environment
+import com.barrybecker4.simulation.water.rendering.EnvironmentRenderer
 import InteractionMath.X_SCALE
 
 import scala.math.abs
@@ -53,9 +54,10 @@ class InteractionHandler private[ui](var env: Environment) extends MouseInputAda
     env.pause()
     currentX = e.getX
     currentY = e.getY
-    val col = InteractionHandler.columnAt(currentX, env.xStep, env.width)
+    val offset = EnvironmentRenderer.OFFSET
+    val col = InteractionHandler.columnAt(currentX, env.xStep, env.width, offset)
     editTarget =
-      if (currentY > env.floor(col)) EditTarget.Floor
+      if (InteractionHandler.envYFromPixel(currentY, offset) > env.floor(col)) EditTarget.Floor
       else EditTarget.Water
     xpos = col
   }
@@ -90,7 +92,11 @@ class InteractionHandler private[ui](var env: Environment) extends MouseInputAda
 }
 
 object InteractionHandler {
-  /** Map a pixel x-coordinate to a clamped column index. */
-  private[water] def columnAt(pixelX: Int, xStep: Int, width: Int): Int =
-    (pixelX / xStep).max(0).min(width - 1)
+  /** Map a pixel x-coordinate to a clamped column index, accounting for render inset. */
+  private[water] def columnAt(pixelX: Int, xStep: Int, width: Int, offset: Int): Int =
+    ((pixelX - offset) / xStep).max(0).min(width - 1)
+
+  /** Map a pixel y-coordinate into environment vertical space. */
+  private[water] def envYFromPixel(pixelY: Int, offset: Int): Int =
+    pixelY - offset
 }
