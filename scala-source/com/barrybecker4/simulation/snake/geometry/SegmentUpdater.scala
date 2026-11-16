@@ -106,7 +106,7 @@ class SegmentUpdater() {
     *
     * @param params locomotion params controlled by sliders
     */
-  def updateFrictionalForce(segment: Segment, params: LocomotionParameters): Unit = {
+  def updateFrictionalForce(segment: Segment, params: LocomotionParameters, time: Double): Unit = {
     val i = CENTER_INDEX
     val particles = segment.particles
     velocityVec.set(particles(i).force)
@@ -120,6 +120,8 @@ class SegmentUpdater() {
     } else {
       zeroCenterForceAndVelocity(particles, i)
     }
+    val scale = params.gaitType.gait.frictionScale(segment.segmentIndex, params, time)
+    if (scale != 1.0) changeVec.scale(scale)
     particles(i).frictionalForce.set(changeVec)
   }
 

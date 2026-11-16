@@ -161,21 +161,16 @@ class Segment(width1: Double, width2: Double, var length: Double,
   /**
     * Contract the muscles on the left and right of the segment.
     * Don't contract the nose because there are no muscles there.
+    * Contraction pattern is determined by [[LocomotionParameters.gaitType]].
     */
   def contractMuscles(params: LocomotionParameters, time: Double): Unit = {
-    val waveSpeed = params.waveSpeed
-    val amplitude = params.waveAmplitude
-    val period = params.wavePeriod
-    //Vector2d muscleForce = v;
-    val theta = segmentIndex.toDouble / period - waveSpeed * time
-    var offset: Double = 0
-    val dir = params.direction
-    offset = amplitude * (params.waveType.calculateOffset(theta) - dir)
-    val contractionLeft = 1.0 + offset
-    val contractionRight = 1.0 - offset
+    val (contractionLeft, contractionRight) =
+      params.gaitType.gait.sideContractions(segmentIndex, params, time)
     if (contractionRight < 0) {
       throw new IllegalArgumentException("Error contractionRight is less than 0 = " + contractionRight)
-      //contractionRight = 0.0;
+    }
+    if (contractionLeft < 0) {
+      throw new IllegalArgumentException("Error contractionLeft is less than 0 = " + contractionLeft)
     }
     edges(0).setContraction(contractionLeft)
     edges(2).setContraction(contractionRight)

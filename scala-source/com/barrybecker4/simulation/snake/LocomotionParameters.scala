@@ -2,7 +2,8 @@
 package com.barrybecker4.simulation.snake
 
 import com.barrybecker4.math.function.{SINE_WAVE, WaveType}
-import LocomotionParameters._
+import com.barrybecker4.simulation.snake.gait.GaitType
+
 
 /**
   * Tweakable snake parameters that define locomotion.
@@ -11,7 +12,7 @@ import LocomotionParameters._
 object LocomotionParameters { // I used simulated annealing to come up with these optimal parameter values
   // When I originally started the snake's speed was about .21 using my best guess.
   // After optimization the snake's speed is about .33
-  private[snake] val WAVE_SPEED = 0.00478 // .04  before optimization
+  private[snake] val WAVE_SPEED = 0.002 
   private[snake] val WAVE_AMPLITUDE = 0.026877 // .04
   private[snake] val WAVE_PERIOD = 3.6346 // 3.0
 
@@ -29,6 +30,7 @@ object LocomotionParameters { // I used simulated annealing to come up with thes
 /**
   * @param direction  hard left = 1.0; hard right = -1.0; straight = 0
   * @param waveType genarl shape of the wave pattern
+  * @param gaitType locomotion gait (undulatory, rectilinear, side-winding, concertina)
   * @param useFriction if true, then friction is used
   * @param waveSpeed the speed at which the muscular contraction wave travels down the body of the snake
   * @param waveAmplitude scale factor for the force function (must be greater than 0 and less than 1.0)
@@ -41,6 +43,7 @@ object LocomotionParameters { // I used simulated annealing to come up with thes
 class LocomotionParameters(
    var direction: Double = 0,
    var waveType: WaveType = SINE_WAVE,
+   var gaitType: GaitType = GaitType.HORIZONTAL_UNDULATORY,
    var useFriction: Boolean = USE_FRICTION,
    var waveSpeed: Double = LocomotionParameters.WAVE_SPEED,
    var waveAmplitude: Double = LocomotionParameters.WAVE_AMPLITUDE,

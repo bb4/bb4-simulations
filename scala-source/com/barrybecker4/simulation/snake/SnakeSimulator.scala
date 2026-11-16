@@ -41,7 +41,8 @@ object SnakeSimulator {
     new NumericParameterArray(PARAMS, 5, rnd)
 
   /** initial time step */
-  val INITIAL_TIME_STEP = 0.2
+  /** Smaller than the historical 0.2 default so gaits stay stable and visually slower. */
+  val INITIAL_TIME_STEP = 0.05
   // size of the background grid
   // note the ground should move, not the snake so that the snake always remains visible.
   private val XDIM = 12

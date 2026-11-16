@@ -25,7 +25,7 @@ class SnakeUpdater private[snake]() {
     this.snake = snake
     snake.syncParticleMassesFromLocomotionParams()
     updateParticleForces()
-    if (locomotionParams.useFriction) updateFrictionalForces()
+    if (locomotionParams.useFriction) updateFrictionalForces(time)
     updateParticleAccelerations()
     val unstable = updateParticleVelocities(timeStep)
     updateParticlePositions(timeStep)
@@ -54,9 +54,9 @@ class SnakeUpdater private[snake]() {
   }
 
   /** update accelerations */
-  private def updateFrictionalForces(): Unit = {
+  private def updateFrictionalForces(time: Double): Unit = {
     for (i <- 0 until snake.getNumSegments)
-      segmentUpdater.updateFrictionalForce(snake.getSegment(i), locomotionParams)
+      segmentUpdater.updateFrictionalForce(snake.getSegment(i), locomotionParams, time)
   }
 
   private def updateParticleAccelerations(): Unit = {

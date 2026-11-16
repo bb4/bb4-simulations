@@ -37,14 +37,14 @@ class SnakeDynamicOptions private[snake](var snakeSim: SnakeSimulator) extends J
     val params = new LocomotionParameters
     Array[SliderProperties](//                                     MIN  MAX   INITIAL   SCALE
       new SliderProperties(SnakeDynamicOptions.DIRECTION_SLIDER, -1.0, 1.0, params.direction, 100),
-      new SliderProperties(SnakeDynamicOptions.WAVE_SPEED_SLIDER, 0.00001, 0.01, params.waveSpeed, 1000),
+      new SliderProperties(SnakeDynamicOptions.WAVE_SPEED_SLIDER, 0.00001, 0.005, params.waveSpeed, 10000),
       new SliderProperties(SnakeDynamicOptions.WAVE_AMPLITUDE_SLIDER, 0.000, 0.3, params.waveAmplitude, 100),
       new SliderProperties(SnakeDynamicOptions.WAVE_PERIOD_SLIDER, .5, 10.0, params.wavePeriod, 100),
       new SliderProperties(SnakeDynamicOptions.MASS_SCALE_SLIDER, 0.1, 6.0, params.massScale, 100),
       new SliderProperties(SnakeDynamicOptions.SPRING_CONST_SLIDER, 0.1, 4.0, params.springK, 100),
       new SliderProperties(SnakeDynamicOptions.SPRING_DAMPING_SLIDER, 0.1, 4.0, params.springDamping, 100),
       new SliderProperties(SnakeDynamicOptions.SCALE_SLIDER, 0.2, 2.0, snakeSim.getScale, 100),
-      new SliderProperties(SnakeDynamicOptions.TIMESTEP_SLIDER, 0.001, 0.5, SnakeSimulator.INITIAL_TIME_STEP, 1000))
+      new SliderProperties(SnakeDynamicOptions.TIMESTEP_SLIDER, 0.0001, 0.5, SnakeSimulator.INITIAL_TIME_STEP, 10000))
   }
 
   def reset(): Unit = { sliderGroup.reset() }

@@ -41,4 +41,29 @@ class SnakeSimulationTest extends AnyFunSuite {
       }
     }
   }
+
+  test("stepForward smoke for each gait: no NaN in particle positions") {
+    import com.barrybecker4.simulation.snake.gait.GaitType
+    for (gait <- GaitType.VALUES) {
+      val updater = new SnakeUpdater()
+      val lp = updater.getLocomotionParams
+      lp.gaitType = gait
+      val snake = Snake(SnakeType.TEST_SNAKE.snakeData, lp)
+      var dt = 0.2
+      var i = 0
+      while (i < 50) {
+        dt = updater.stepForward(snake, dt)
+        i += 1
+      }
+      for (si <- 0 until snake.getNumSegments) {
+        val seg = snake.getSegment(si)
+        for (pj <- 0 until 5) {
+          val p = seg.particles(pj)
+          if (p != null) {
+            assert(!p.x.isNaN && !p.y.isNaN, s"NaN with gait $gait")
+          }
+        }
+      }
+    }
+  }
 }

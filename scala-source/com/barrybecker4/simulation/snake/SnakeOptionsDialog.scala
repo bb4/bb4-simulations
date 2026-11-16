@@ -4,6 +4,7 @@ package com.barrybecker4.simulation.snake
 import com.barrybecker4.math.function.WaveType
 import com.barrybecker4.simulation.common.ui.NewtonianSimOptionsDialog
 import com.barrybecker4.simulation.snake.data.SnakeType
+import com.barrybecker4.simulation.snake.gait.GaitType
 import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
@@ -21,6 +22,7 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
 
   /** type of snake to show.   */
   private var snakeCombo: JComboBox[String] = uninitialized
+  private var gaitTypeCombo: JComboBox[GaitType] = uninitialized
   private var waveTypeCombo: JComboBox[WaveType] = uninitialized
   // snake numeric param options controls
   private var waveSpeedField: NumberInput = uninitialized
@@ -37,10 +39,13 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     val snakeParamPanel = new JPanel
     snakeParamPanel.setLayout(new BoxLayout(snakeParamPanel, BoxLayout.Y_AXIS))
     snakeParamPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder, "Snake Parameters"))
+    val params = getSimulator.asInstanceOf[SnakeSimulator].getLocomotionParams
     snakeCombo = buildSnakeTypeCombo()
+    gaitTypeCombo = buildGaitTypeCombo(params.gaitType)
     waveTypeCombo = buildWaveTypeCombo()
-    buildNumericFields(getSimulator.asInstanceOf[SnakeSimulator].getLocomotionParams)
+    buildNumericFields(params)
     snakeParamPanel.add(snakeCombo)
+    snakeParamPanel.add(gaitTypeCombo)
     snakeParamPanel.add(waveTypeCombo)
     snakeParamPanel.add(waveSpeedField)
     snakeParamPanel.add(waveAmplitudeField)
@@ -57,6 +62,15 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     val snakeModel = new DefaultComboBoxModel[String](SnakeType.values.map(_.name))
     val combo = new JComboBox[String](snakeModel)
     combo.setToolTipText("Select a type of snake to show.")
+    combo
+  }
+
+  private def buildGaitTypeCombo(current: GaitType): JComboBox[GaitType] = {
+    val gaitModel = new DefaultComboBoxModel[GaitType]()
+    GaitType.VALUES.foreach(g => gaitModel.addElement(g))
+    val combo = new JComboBox[GaitType](gaitModel)
+    combo.setSelectedItem(current)
+    combo.setToolTipText("Select a locomotion gait for the snake.")
     combo
   }
 
@@ -95,6 +109,7 @@ class SnakeOptionsDialog private[snake](parent: Component, simulator: SnakeSimul
     params.springK = springKField.getValue
     params.springDamping = springDampingField.getValue
     params.waveType = waveTypeCombo.getSelectedItem.asInstanceOf[WaveType]
+    params.gaitType = gaitTypeCombo.getSelectedItem.asInstanceOf[GaitType]
     val snakeData = SnakeType.fromOrdinal(snakeCombo.getSelectedIndex).snakeData
     simulator.setSnakeData(snakeData)
   }
