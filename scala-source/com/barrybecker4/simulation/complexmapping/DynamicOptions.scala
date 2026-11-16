@@ -8,7 +8,7 @@ import javax.swing._
 import scala.compiletime.uninitialized
 import ComplexMappingExplorer.{DEFAULT_INTERPOLATION_VAL, DEFAULT_MESH_DETAIL, DEFAULT_N}
 import com.barrybecker4.simulation.common.ui.DynamicOptionsPanelSupport
-import com.barrybecker4.simulation.complexmapping.algorithm.FunctionType
+import com.barrybecker4.simulation.complexmapping.algorithm.{DomainColorMode, FunctionType}
 import DynamicOptions._
 
 /**
@@ -23,9 +23,18 @@ object DynamicOptions {
   private val MESH_DETAIL_SLIDER = "Mesh granularity"
   private val SLIDER_DEBOUNCE_MS = 80
   private val SLIDER_PROPS = Array(
-    new SliderProperties(EXPONENT_SLIDER, 1, 1000, DEFAULT_N, 1),
-    new SliderProperties(INTERPOLATION_SLIDER, 0.0, 1.0, DEFAULT_INTERPOLATION_VAL, 200),
-    new SliderProperties(MESH_DETAIL_SLIDER, 0.01, 0.4, DEFAULT_MESH_DETAIL, 100),
+    new SliderProperties(
+      EXPONENT_SLIDER, 1, 1000, DEFAULT_N, 1,
+      "Series / iteration depth for ζ, η, and Γ accuracy (larger N is slower but more accurate)."
+    ),
+    new SliderProperties(
+      INTERPOLATION_SLIDER, 0.0, 1.0, DEFAULT_INTERPOLATION_VAL, 200,
+      "Blend between the original mesh (0) and the fully mapped mesh (1). Affects the right pane only."
+    ),
+    new SliderProperties(
+      MESH_DETAIL_SLIDER, 0.01, 0.4, DEFAULT_MESH_DETAIL, 100,
+      "Sample step for the domain heatmap and mesh cell size (smaller = finer, slower)."
+    ),
   )
 }
 
@@ -35,6 +44,9 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   DynamicOptionsPanelSupport.configureVerticalOptionsPanel(this)
 
   private var functionChoice: JComboBox[String] = uninitialized
+  private var domainColorChoice: JComboBox[String] = uninitialized
+  private var magnitudeLegend: ContinuousColorLegend = uninitialized
+  private var argumentLegend: ContinuousColorLegend = uninitialized
   var sliderGroup: SliderGroup = uninitialized
   private var pendingSliderName: String = uninitialized
   private var pendingSliderValue: Double = 0.0
@@ -46,15 +58,23 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
   private def createUI(): Unit = {
     sliderGroup = new SliderGroup(DynamicOptions.SLIDER_PROPS)
     sliderGroup.setSliderListener(this)
-    val legend: ContinuousColorLegend =
-      new ContinuousColorLegend("Value color map", this.simulator.getColorMap, true)
+    magnitudeLegend = new ContinuousColorLegend("Domain log |f|", simulator.getMagnitudeColorMap, true)
+    argumentLegend = new ContinuousColorLegend("Domain arg(f)", simulator.getArgumentColorMap, true)
+    val meshLegend: ContinuousColorLegend =
+      new ContinuousColorLegend("Mesh source quadrant", this.simulator.getColorMap, true)
     functionChoice = createFunctionDropdown
+    domainColorChoice = createDomainColorDropdown
 
-    add(new JLabel("Function to apply to a grid in the complex plane:"))
+    add(new JLabel("Function to apply:"))
     add(functionChoice)
+    add(new JLabel("Domain color mode:"))
+    add(domainColorChoice)
     add(sliderGroup)
     add(javax.swing.Box.createVerticalStrut(10))
-    add(legend)
+    add(magnitudeLegend)
+    add(argumentLegend)
+    add(meshLegend)
+    updateDomainLegendVisibility()
     add(DynamicOptionsPanelSupport.createScrollFiller(width = 10))
   }
 
@@ -66,15 +86,41 @@ class DynamicOptions private[complexmapping](var simulator: ComplexMappingExplor
       combo.addItem(func.name)
     }
     combo.setSelectedIndex(FunctionType.values.indexOf(ComplexMappingExplorer.DEFAULT_FUNCTION))
+    combo.setToolTipText(
+      "Complex function applied to the mesh (right) and sampled on the critical-strip domain heatmap (left). " +
+        "Analytic extension of Zeta is best for seeing non-trivial zeros."
+    )
     combo
+  }
+
+  private def createDomainColorDropdown: JComboBox[String] = {
+    val combo = new JComboBox[String]()
+    combo.addActionListener(this)
+    for (mode <- DomainColorMode.values) {
+      combo.addItem(mode.label)
+    }
+    combo.setSelectedIndex(DomainColorMode.values.indexOf(ComplexMappingExplorer.DEFAULT_DOMAIN_COLOR_MODE))
+    combo.setToolTipText(
+      "Color the domain pane by log magnitude (zeros appear dark) or by argument/phase (zeros show as phase singularities)."
+    )
+    combo
+  }
+
+  private def updateDomainLegendVisibility(): Unit = {
+    val mag = simulator.getDomainColorMode == DomainColorMode.Magnitude
+    magnitudeLegend.setVisible(mag)
+    argumentLegend.setVisible(!mag)
   }
 
   def reset(): Unit = sliderGroup.reset()
 
-  /** Function combo selection applies immediately. */
+  /** Function / color-mode combo selection applies immediately. */
   override def actionPerformed(e: ActionEvent): Unit = {
     if (e.getSource == functionChoice) {
       simulator.setFunction(FunctionType.values(functionChoice.getSelectedIndex).function)
+    } else if (e.getSource == domainColorChoice) {
+      simulator.setDomainColorMode(DomainColorMode.values(domainColorChoice.getSelectedIndex))
+      updateDomainLegendVisibility()
     }
   }
 
