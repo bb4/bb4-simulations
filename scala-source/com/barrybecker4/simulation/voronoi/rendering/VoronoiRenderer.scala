@@ -21,7 +21,7 @@ object VoronoiRenderer {
   private[voronoi] val LINE_COLOR = Color.WHITE
   private[voronoi] val BREAK_COLOR = new Color(255, 110, 55)
   private[voronoi] val BACKGROUND_COLOR = Color.BLACK
-  private[voronoi] val STROKE: BasicStroke = new BasicStroke(0.5f)
+  private[voronoi] val STROKE: BasicStroke = new BasicStroke(1f)
   private[voronoi] val BREAK_STROKE: BasicStroke = new BasicStroke(1.0f)
   private[voronoi] val PARABOLA_INC = 2
 }
