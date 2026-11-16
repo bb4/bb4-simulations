@@ -1,16 +1,14 @@
 // Copyright by Barry G. Becker, 2021. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.rendering
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
-import com.barrybecker4.simulation.dungeon.model.{Corridor, Decoration, DungeonModel, Room}
+import com.barrybecker4.simulation.dungeon.model.DungeonModel
 import com.barrybecker4.simulation.dungeon.rendering.DungeonRenderer.BACKGROUND_COLOR
 import com.barrybecker4.simulation.dungeon.rendering.helpers.*
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
 import java.awt.image.BufferedImage
-import java.awt.{BasicStroke, Color, Dimension, Graphics}
-
+import java.awt.{Color, Dimension}
 
 object DungeonRenderer {
   private val BACKGROUND_COLOR = Color.WHITE

@@ -2,13 +2,11 @@
 package com.barrybecker4.simulation.trebuchet
 
 import com.barrybecker4.simulation.common.ui.NewtonianSimOptionsDialog
-import com.barrybecker4.simulation.trebuchet.model.Trebuchet
 import com.barrybecker4.ui.components.NumberInput
 import javax.swing._
 import java.awt._
 import java.awt.event.ActionListener
 import scala.compiletime.uninitialized
-
 
 /**
   * Use this modal dialog to let the user choose from among the

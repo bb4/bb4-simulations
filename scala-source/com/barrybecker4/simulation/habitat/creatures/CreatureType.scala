@@ -2,8 +2,6 @@
 package com.barrybecker4.simulation.habitat.creatures
 
 import java.awt.Color
-import com.barrybecker4.simulation.habitat.creatures.CreatureType._
-
 
 /**
   * Everything we need to know about all the different sorts of creatures.

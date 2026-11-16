@@ -1,10 +1,8 @@
 package com.barrybecker4.simulation.dungeon.rendering.helpers
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
-import com.barrybecker4.simulation.dungeon.model.{Corridor, Decoration}
+import com.barrybecker4.simulation.dungeon.model.Corridor
 import com.barrybecker4.ui.renderers.OfflineGraphics
-
 
 // todo: add ability to draw polygon to offline renderer
 case class CorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {

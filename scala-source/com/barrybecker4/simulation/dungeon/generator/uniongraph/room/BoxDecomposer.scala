@@ -4,12 +4,10 @@ package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.math.random.SkewedRandom
 import com.barrybecker4.simulation.dungeon.generator.organic.room.RandomRoomCreator.adjustToMaxAspect
-import com.barrybecker4.simulation.dungeon.generator.uniongraph.room.BoxDecomposer.RND
 import com.barrybecker4.simulation.dungeon.model.Room
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 
 import scala.util.Random
-
 
 object BoxDecomposer {
   private val RND: Random = Random(0)

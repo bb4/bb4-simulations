@@ -1,10 +1,8 @@
 package com.barrybecker4.simulation.dungeon.ui
 
 import com.barrybecker4.common.app.AppContext
-import com.barrybecker4.simulation.dungeon.ui.DynamicOptions
-import com.barrybecker4.simulation.dungeon.model.DungeonModel
 import com.barrybecker4.simulation.dungeon.ui.DungeonOptionsChangedListener
-import com.barrybecker4.ui.sliders.{SliderGroup, SliderGroupChangeListener, SliderProperties}
+import com.barrybecker4.ui.sliders.SliderGroupChangeListener
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.generator.GeneratorStrategyEnum
 
@@ -13,7 +11,6 @@ import java.awt.event.*
 import javax.swing.*
 
 import scala.compiletime.uninitialized
-
 
 /**
  * Dynamic controls for the Dungeon generator that will show on the right.

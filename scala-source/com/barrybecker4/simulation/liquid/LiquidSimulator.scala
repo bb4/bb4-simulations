@@ -7,14 +7,12 @@ import com.barrybecker4.simulation.liquid.config.ConfigurationEnum
 import com.barrybecker4.simulation.liquid.model.LiquidEnvironment
 import com.barrybecker4.simulation.liquid.rendering.EnvironmentRenderer
 import com.barrybecker4.simulation.liquid.rendering.RenderingOptions
-import com.barrybecker4.ui.util.GUIUtil
 import javax.swing._
 import java.awt._
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 
 import scala.compiletime.uninitialized
-
 
 /**
   * Main class for particle liquid simulation.

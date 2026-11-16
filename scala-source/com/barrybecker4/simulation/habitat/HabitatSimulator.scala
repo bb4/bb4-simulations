@@ -6,18 +6,17 @@ import com.barrybecker4.math.MathUtil
 import com.barrybecker4.simulation.common.ui.Simulator
 import com.barrybecker4.simulation.common.ui.SimulatorApplet
 import com.barrybecker4.simulation.common.ui.SimulatorOptionsDialog
-import com.barrybecker4.simulation.habitat.creatures.populations.{CatRatHabitat, Habitat, SerengetiHabitat}
+import com.barrybecker4.simulation.habitat.creatures.populations.Habitat
 import com.barrybecker4.simulation.habitat.ui.options.DynamicOptions
 import com.barrybecker4.ui.util.GUIUtil
-import com.barrybecker4.simulation.habitat.creatures.{Creature, CreatureProcessor}
+import com.barrybecker4.simulation.habitat.creatures.CreatureProcessor
 import com.barrybecker4.simulation.habitat.ui.renderers.CreatureRenderer
 
 import javax.swing.*
 import java.awt.*
-import com.barrybecker4.simulation.habitat.ui.{HabitatPanel, HabitatSplitPanel, PopulationGraphPanel}
+import com.barrybecker4.simulation.habitat.ui.HabitatSplitPanel
 
 import scala.compiletime.uninitialized
-
 
 /**
   * Simulates foxes (predators) and rabbits (prey) in the wild.

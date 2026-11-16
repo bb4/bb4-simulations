@@ -2,7 +2,6 @@
 package com.barrybecker4.simulation.dungeon.generator.organic.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.generator.organic.room.RoomGenerator.RND
 import com.barrybecker4.simulation.dungeon.generator.organic.room.sprout.{RoomAndCorridor, SproutLocation, SproutLocationFinder}
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.util.Intersector
@@ -12,7 +11,6 @@ import com.barrybecker4.simulation.dungeon.model.Orientation.*
 import scala.collection.immutable.Queue
 import scala.compiletime.uninitialized
 import scala.util.Random
-
 
 object RoomGenerator {
   private val RND: Random = Random(0)
@@ -25,7 +23,6 @@ case class RoomGenerator(options: DungeonOptions, rnd: Random = RND) {
   private val roomOptions = options.roomOptions
   private val minPaddedDim = roomOptions.getMinPaddedDim
   private val connectivity = options.connectivity
-
 
   def generateRooms(): DungeonMap = {
 

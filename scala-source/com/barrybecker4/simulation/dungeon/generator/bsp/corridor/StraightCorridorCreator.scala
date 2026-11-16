@@ -6,9 +6,6 @@ import StraightCorridorCreator.*
 import com.barrybecker4.simulation.dungeon.model.{Corridor, Orientation, Path, Room}
 import com.barrybecker4.simulation.dungeon.model.Orientation.*
 
-import java.awt.Color
-
-
 object StraightCorridorCreator {
   val MIN_OVERLAP: Int = 3
 }

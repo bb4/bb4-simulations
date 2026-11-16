@@ -3,12 +3,10 @@ package com.barrybecker4.simulation.dungeon.model.options
 
 import com.barrybecker4.simulation.dungeon.generator.DungeonGeneratorStrategy
 import com.barrybecker4.simulation.dungeon.generator.uniongraph.UnionGraphDungeonGenerator
-import com.barrybecker4.simulation.dungeon.model.options.{DungeonOptions, RoomOptions}
-import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions.*
+import com.barrybecker4.simulation.dungeon.model.options.RoomOptions
 import com.barrybecker4.simulation.dungeon.model.Decoration
 
 import java.awt.{Color, Dimension}
-
 
 object DungeonOptions {
   val DEFAULT_DIMENSIONS = new Dimension(50, 50)

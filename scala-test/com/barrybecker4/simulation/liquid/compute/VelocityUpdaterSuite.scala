@@ -3,10 +3,8 @@ package com.barrybecker4.simulation.liquid.compute
 
 import javax.vecmath.Vector2d
 
-import com.barrybecker4.simulation.liquid.model._
-import org.junit.jupiter.api.Assertions.{assertEquals, assertTrue}
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.scalatest.funsuite.AnyFunSuite
-import VelocityUpdaterSuite._
 import scala.compiletime.uninitialized
 
 /**

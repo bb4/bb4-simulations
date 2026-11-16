@@ -3,13 +3,10 @@ package com.barrybecker4.simulation.dungeon.generator.bsp.room
 
 import com.barrybecker4.common.geometry.{Box, IntLocation}
 import com.barrybecker4.simulation.dungeon.generator.bsp.tree.{BspBranchNode, BspLeafNode, BspNode}
-import RoomGenerator.*
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{Orientation, Room}
 
-import java.awt.{Color, Dimension}
 import scala.util.Random
-
 
 object RoomGenerator {
   private val RND: Random = Random(0)

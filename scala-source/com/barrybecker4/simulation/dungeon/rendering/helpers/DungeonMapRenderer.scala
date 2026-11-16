@@ -5,11 +5,9 @@ import com.barrybecker4.common.geometry.IntLocation
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Room}
 import com.barrybecker4.simulation.dungeon.rendering.helpers.DungeonMapRenderer.{CORRIDOR_COLOR, ROOM_COLOR}
-import com.barrybecker4.simulation.dungeon.rendering.helpers.GridRenderer.{GRID_COLOR, GRID_STROKE}
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
-import java.awt.{BasicStroke, Color}
-
+import java.awt.Color
 
 object DungeonMapRenderer {
   private val ROOM_COLOR = new Color(255, 0, 10, 60)

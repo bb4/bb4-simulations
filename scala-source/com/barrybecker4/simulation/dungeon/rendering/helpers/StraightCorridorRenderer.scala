@@ -7,9 +7,6 @@ import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions.DECORATI
 import com.barrybecker4.simulation.dungeon.model.options.DungeonOptions
 import com.barrybecker4.ui.renderers.OfflineGraphics
 
-import java.awt.Color
-
-
 case class StraightCorridorRenderer(g: OfflineGraphics, options: DungeonOptions) {
 
   def drawCorridor(corridor: Corridor): Unit = {

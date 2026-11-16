@@ -1,15 +1,13 @@
 // Copyright by Barry G. Becker, 2021 - 2022. Licensed under MIT License: http://www.opensource.org/licenses/MIT
 package com.barrybecker4.simulation.dungeon.generator.uniongraph.room
 
-import com.barrybecker4.common.geometry.{Box, IntLocation}
-import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Orientation, Path, Room}
-import com.barrybecker4.simulation.dungeon.model.Orientation.*
+import com.barrybecker4.common.geometry.IntLocation
+import com.barrybecker4.simulation.dungeon.model.{Corridor, DungeonMap, Room}
 import com.barrybecker4.simulation.dungeon.model.util.Intersector
 
 import java.awt.Dimension
 import scala.compiletime.uninitialized
 import scala.util.Random
-
 
 object RoomJoiner {
   private val RND = Random(0)
